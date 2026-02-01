@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<link rel="icon" type="image/04" href="../images/favicon.svg?v=2025.04">
+<title>Bar Charts</title>
+<style>
+@import url(https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap);@keyframes reveal{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}:root{--bg-base:#f8fafc;--bg-surface:#ffffff;--bg-grid:rgba(0, 0, 0, 0.05);--text-main:#334155;--text-heading:#0f172a;--accent-primary:#4f46e5;--accent-secondary:#06b6d4;--accent-glow:rgba(79, 70, 229, 0.1);--border-color:#e2e8f0;--note-color:#4f46e5;--tip-color:#10b981;--warning-color:#f59e0b;--caution-color:#ef4444;--important-color:#8b5cf6;--font-heading:'Syne', sans-serif;--font-body:'Outfit', sans-serif;--font-mono:'JetBrains Mono', monospace;--content-max-width:1100px}:root.dark-mode{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}}body{background-color:var(--bg-base);background-image:radial-gradient(var(--bg-grid) 1px,transparent 1px);background-size:30px 30px;background-attachment:fixed;color:var(--text-main);font-family:var(--font-body);line-height:1.6;margin:0;padding:0;-webkit-font-smoothing:antialiased}#content,#footer,#footnotes,#header>h1:first-child,.details{opacity:0;animation:reveal .8s cubic-bezier(.16,1,.3,1) forwards}#content,#footnotes,#header{padding:2rem 1.5rem}#content,#footer,#footnotes,#header{max-width:var(--content-max-width);margin:0 auto}#toc.toc2{position:fixed!important}#header>h1:first-child{font-family:var(--font-heading);font-size:3.5rem;font-weight:800;color:var(--text-heading);letter-spacing:-.04em;line-height:1;margin-bottom:2rem;background:linear-gradient(to bottom right,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}#toc,.details{margin-bottom:3rem}.details,a{color:var(--accent-primary)}.details{display:flex;gap:2rem;font-size:.875rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);color:var(--text-heading);font-weight:700;margin-top:3rem;margin-bottom:1rem;line-height:1.2}h2{font-size:2rem;border-bottom:1px solid var(--border-color);padding-bottom:.5rem}a{text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:hover{border-bottom-color:var(--accent-primary);text-shadow:0 0 15px var(--accent-glow)}#toc{background:var(--bg-surface);backdrop-filter:blur(12px);border:1px solid var(--border-color);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000}#toc:not(.toc2){max-width:var(--content-max-width);margin:2rem auto}#toc.toc2,.admonitionblock{background:var(--bg-surface);border:1px solid var(--border-color)}#toc.toc2{backdrop-filter:blur(12px);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000;transform:none!important;animation:none!important;opacity:1!important}#toctitle,.admonitionblock .title{text-transform:uppercase;font-size:.75rem}#toc a:hover,#toctitle{color:var(--accent-primary)}#toctitle{font-family:var(--font-heading);font-weight:800;letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}#toctitle::after{content:"";flex:1;height:1px;background:var(--border-color)}#toc ul{list-style:none;padding:0;margin:0}#toc li{margin-bottom:.5rem}#toc a{color:var(--text-main);font-size:.9rem;border:0}#toc a:hover{padding-left:4px}.admonitionblock{margin:2rem 0;border-radius:.75rem;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;flex-direction:row;align-items:stretch}.admonitionblock td.icon{width:4rem;min-width:4rem;padding:1.5rem 0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.02)}.admonitionblock td.icon .fa-note::before,.admonitionblock td.icon .icon-note::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--note-color)}.admonitionblock td.icon .fa-lightbulb::before,.admonitionblock td.icon .icon-tip::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--tip-color)}.admonitionblock td.icon .fa-exclamation-triangle::before,.admonitionblock td.icon .icon-warning::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--warning-color)}.admonitionblock td.icon .fa-fire::before,.admonitionblock td.icon .icon-caution::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--caution-color)}.admonitionblock td.icon .fa-exclamation-circle::before,.admonitionblock td.icon .icon-important::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--important-color)}.admonitionblock td.content{padding:1.5rem;font-size:.95rem;flex:1}.admonitionblock .title{font-weight:700;letter-spacing:.1em;margin-bottom:.75rem;display:block}.admonitionblock.note{border-left:4px solid var(--note-color)}.admonitionblock.note .title{color:var(--note-color)}.admonitionblock.tip{border-left:4px solid var(--tip-color)}.admonitionblock.tip .title{color:var(--tip-color)}.admonitionblock.warning{border-left:4px solid var(--warning-color)}.admonitionblock.warning .title{color:var(--warning-color)}.admonitionblock.caution{border-left:4px solid var(--caution-color)}.admonitionblock.caution .title{color:var(--caution-color)}.admonitionblock.important{border-left:4px solid var(--important-color)}.admonitionblock.important .title{color:var(--important-color)}:root.dark-mode .admonitionblock td.content,:root.dark-mode-auto .admonitionblock td.content{color:var(--text-main)}.listingblock pre{background:#0f172a!important;color:#f8fafc!important;padding:1.5rem!important;border-radius:.75rem;font-family:var(--font-mono);font-size:.875rem;border:1px solid #1e293b;box-shadow:0 20px 25px -5px rgba(0,0,0,.2);position:relative;overflow:hidden}:root.dark-mode .listingblock pre{background:#020617!important;border-color:var(--border-color)}@media (prefers-color-scheme:dark){:root.dark-mode-auto .listingblock pre{background:#020617!important;border-color:var(--border-color)}}.listingblock pre::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent-primary),var(--accent-secondary));opacity:.5}code{font-family:var(--font-mono);padding:.2em .4em;border-radius:.25rem;color:var(--accent-primary);font-size:.9em}.exampleblock,.sidebarblock,table{background:var(--bg-surface);border:1px solid var(--border-color);margin:2rem 0}table{width:100%;border-collapse:collapse;border-radius:.75rem;overflow:hidden}th{background:var(--border-color);color:var(--text-heading);text-align:left;padding:1rem;font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.05em}#footer,td{padding:1rem;border-top:1px solid var(--border-color);font-size:.9rem}code,tr:hover td{background:var(--accent-glow)}.exampleblock,.sidebarblock{border-radius:1rem;padding:2rem}#footer,th{font-size:.875rem}#footer{margin-top:4rem;padding:4rem 1.5rem;text-align:center;color:var(--text-main)}#footer-text{opacity:.6}@media (max-width:1279px){#header>h1:first-child{font-size:2.5rem}.details{flex-direction:column;gap:.5rem}body.toc2{padding-left:0!important;padding-right:0!important}#toc.toc2{position:relative!important;width:auto!important;left:0!important;right:0!important;top:0!important;margin:0 1.5rem 3rem!important;max-height:none!important}}@media (min-width:1280px){body.toc2.toc-left{padding-left:24rem!important;padding-right:0!important}body.toc2.toc-left #toc.toc2{left:1rem;right:auto}body.toc2.toc-right{padding-right:24rem!important;padding-left:0!important}body.toc2.toc-right #toc.toc2{right:1rem;left:auto}#toc.toc2{position:fixed!important;width:20rem;top:2rem;height:auto;max-height:calc(100vh - 4rem);overflow-y:auto}body.toc2.toc-right .reading-time{right:auto!important;left:2rem!important}#content,#footer,#footnotes,#header{max-width:900px;margin-left:auto;margin-right:auto}body.toc2.toc-left #content,body.toc2.toc-left #header{margin-left:2rem}body.toc2.toc-right #content,body.toc2.toc-right #header{margin-right:2rem}}.theme-toggle{position:fixed;bottom:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border-color);box-shadow:0 10px 25px -5px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all .3s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(0,0,0,.2);border-color:var(--accent-primary)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all .3s ease}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0;border-top:1px solid var(--border-color)}.nav-container{max-width:var(--content-max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-body);font-weight:600;font-size:.9rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:.5rem;background:var(--bg-surface);border:1px solid var(--border-color);transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);border-bottom:1px solid var(--border-color)}.nav-next:hover,.nav-prev:hover{color:var(--bg-surface);background:var(--accent-primary);border-color:var(--accent-primary);transform:translateY(-2px);box-shadow:0 10px 15px -3px var(--accent-glow)}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.mermaid{background:var(--bg-surface);padding:2rem;border:1px solid var(--border-color);border-radius:1rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);margin:2rem 0}.mermaid .cluster rect{fill:var(--bg-base)!important;fill-opacity:.5!important;stroke:var(--border-color)!important;backdrop-filter:blur(4px)}.mermaid text{font-family:var(--font-body)!important;letter-spacing:-.01em}.mermaid .active,.mermaid .task0{fill:var(--accent-primary)!important;stroke:var(--accent-secondary)!important}:root.dark-mode .mermaid .loopText,:root.dark-mode .mermaid .messageText,:root.dark-mode .mermaid .noteText,:root.dark-mode .mermaid .sectionTitle,:root.dark-mode .mermaid .taskText{fill:var(--text-heading)!important;color:var(--text-heading)!important;stroke:none!important}:root.dark-mode .mermaid .messageLine0,:root.dark-mode .mermaid .messageLine1{stroke:var(--accent-secondary)!important;stroke-opacity:.6}:root.dark-mode .mermaid .actor,:root.dark-mode .mermaid .note{fill:var(--bg-surface)!important;stroke:var(--accent-primary)!important}:root.dark-mode .mermaid .noteText>tspan{fill:var(--accent-primary)!important}:root.dark-mode .mermaid text.actor>tspan{fill:var(--text-heading)!important;font-weight:600}:root.dark-mode .mermaid .edgeLabel,:root.dark-mode .mermaid .edgeLabel rect{fill:var(--bg-base)!important;color:var(--text-main)!important}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+        --docops-bg: #0f172a;
+        --docops-card-bg: rgba(30, 41, 59, 0.7);
+        --docops-accent: #38bdf8;
+        --docops-accent-glow: rgba(56, 189, 248, 0.3);
+        --docops-text: #f1f5f9;
+        --docops-text-dim: #94a3b8;
+        --docops-border: rgba(255, 255, 255, 0.1);
+        --docops-glass: blur(12px);
+        --docops-font-main: 'Outfit', system-ui, sans-serif;
+        --docops-font-mono: 'JetBrains Mono', monospace;
+    }
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+</style>
+
+<!--slide show style-->
+<style>
+    /* Slideshow Container */
+    .docops-slideshow {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 8px 8px 0px var(--accent-pink, #f472b6); /* Rule #4: 8pt grid adjustment */
+        margin: 3rem 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    /* Progress Bar (The "Movement" Indicator) */
+    .slideshow-progress-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(0,0,0,0.05);
+        z-index: 30;
+    }
+    .slideshow-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-primary);
+        transition: width linear;
+    }
+
+    /* Slide Counter */
+    .slideshow-counter {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-family: var(--docops-font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        opacity: 0.5;
+        z-index: 20;
+        letter-spacing: 0.2em;
+    }
+    .docops-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+
+    .docops-slide.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+    }
+
+    .slide-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-title {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        color: var(--accent-secondary);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+    }
+
+    .slide-image {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .slide-image svg {
+        max-width: 100%;
+        max-height: 100%;
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
+
+    /* Navigation Dots */
+    .slideshow-nav {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px; /* Rule #4: 8pt grid (1.5 * 8) */
+        z-index: 10;
+    }
+
+    .nav-dot {
+        width: 8px; /* Rule #4: 8px */
+        height: 8px;
+        background: transparent;
+        border: 1.5px solid var(--accent-primary);
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-dot.active {
+        background: var(--accent-primary);
+        width: 24px; /* Distinctive shape change for active state */
+        border-color: var(--accent-primary);
+    }
+
+</style>
+
+<!--gallery showcase style-->
+<style>
+    /* Showcase Gallery Layout */
+    .docops-workbench-showcase {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        perspective: 1000px;
+    }
+
+    .workbench-item {
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 6px 6px 0px var(--accent-pink);
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: itemSlideIn 0.6s ease forwards;
+    }
+
+    .workbench-item:hover {
+        transform: translate(-4px, -4px) rotate(0.5deg);
+        box-shadow: 12px 12px 0px var(--accent-pink);
+        border-color: var(--accent-secondary);
+    }
+
+    /* Workbench Chrome (Header) */
+    .workbench-chrome {
+        background: #1a1a2e;
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--accent-primary);
+    }
+
+    .workbench-kind {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--accent-secondary);
+        font-weight: 500;
+    }
+
+    .workbench-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--accent-primary);
+        color: #fff;
+        font-family: var(--font-heading);
+        font-size: 0.6rem;
+        padding: 2px 8px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--accent-primary);
+        color: #fff;
+    }
+
+    /* Canvas & Content */
+    .workbench-canvas {
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+    }
+
+    .workbench-canvas svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.5s ease;
+    }
+
+    .workbench-footer {
+        padding: 0.75rem 1rem;
+        background: rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .workbench-title {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-heading);
+    }
+
+    /* Modal System */
+    .showcase-modal {
+        position: fixed; /* Lock to viewport, ignore page scroll */
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 5000; /* Significant jump to stay on top of everything */
+        display: none;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; /* Lock container */
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(13, 13, 18, 0.98); /* Near opaque for focus */
+        backdrop-filter: blur(20px);
+        z-index: 5001;
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        z-index: 5002;
+        background: var(--bg-base);
+        border: 4px solid var(--accent-secondary);
+        box-shadow: 25px 25px 0px var(--accent-pink);
+        width: 95%;
+        max-width: 1200px;
+        max-height: 90vh; /* Stay within viewport */
+        display: flex;
+        flex-direction: column;
+        animation: brutalistReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes brutalistReveal {
+        from { transform: scale(0.9) translateY(30px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .showcase-modal-body {
+        padding: 3rem;
+        overflow-y: auto; /* Internal scrolling only */
+        flex: 1;
+        display: block; /* Important for scroll calculations */
+    }
+
+    /* Centering Fix for SVG diagrams */
+    .modal-svg-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        width: 100%;
+    }
+
+    .modal-svg-wrapper svg {
+        max-width: 100%;
+        height: auto !important; /* Allow natural aspect ratio */
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    /* Body locking when modal is open */
+    body.modal-open {
+        overflow: hidden !important;
+        padding-right: 15px; /* Prevent layout shift from scrollbar removal */
+    }
+</style>
+<!--Slide show script-->
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const slideshows = document.querySelectorAll('.docops-slideshow');
+
+        slideshows.forEach(ss => {
+            const slides = ss.querySelectorAll('.docops-slide');
+            if (slides.length === 0) return; // Skip empty slideshows
+
+            const interval = parseInt(ss.dataset.interval) || 5000;
+            let currentIndex = 0;
+
+            // Add Progress Bar
+            const progressCont = document.createElement('div');
+            progressCont.className = 'slideshow-progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'slideshow-progress-bar';
+            progressCont.appendChild(progressBar);
+            ss.appendChild(progressCont);
+
+            // Add Counter
+            const counter = document.createElement('div');
+            counter.className = 'slideshow-counter';
+            ss.appendChild(counter);
+
+            // Create navigation dots
+            const nav = document.createElement('div');
+            nav.className = 'slideshow-nav';
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(i);
+                };
+                nav.appendChild(dot);
+            });
+            ss.appendChild(nav);
+
+            function updateCounter() {
+                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+
+            function resetProgress() {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${interval}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 50);
+            }
+
+            function goToSlide(index) {
+                slides[currentIndex].classList.remove('active');
+                nav.children[currentIndex].classList.remove('active');
+
+                currentIndex = index;
+
+                slides[currentIndex].classList.add('active');
+                nav.children[currentIndex].classList.add('active');
+                updateCounter();
+                resetProgress();
+            }
+
+            function nextSlide() {
+                let next = (currentIndex + 1) % slides.length;
+                goToSlide(next);
+            }
+
+            // Initial State
+            updateCounter();
+            resetProgress();
+
+            // Start autoplay
+            let slideTimer = setInterval(nextSlide, interval);
+
+            // Pause on hover
+            ss.addEventListener('mouseenter', () => {
+                clearInterval(slideTimer);
+                progressBar.style.opacity = '0.3';
+            });
+            ss.addEventListener('mouseleave', () => {
+                slideTimer = setInterval(nextSlide, interval);
+                progressBar.style.opacity = '1';
+                resetProgress();
+            });
+        });
+    });
+</script>
+<!-- Showcase Gallery Script -->
+<script>
+    window.showcaseGallery = {
+        // Track TOC state so we can restore it exactly as it was
+        tocWasActive: false,
+
+        hideTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            if (toc) {
+                // Save current state
+                this.tocWasActive = toc.classList.contains('toc-active');
+                // Force hide
+                toc.classList.remove('toc-active');
+            }
+            if (toggle) {
+                toggle.classList.remove('active');
+                toggle.style.display = 'none'; // Completely remove from UI during modal
+            }
+            document.body.classList.add('modal-open');
+        },
+
+        restoreTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            document.body.classList.remove('modal-open');
+
+            if (toggle) {
+                toggle.style.display = 'flex'; // Bring toggle back
+            }
+
+            // Restore TOC to its previous state (if it was open, re-open it)
+            if (toc && this.tocWasActive) {
+                toc.classList.add('toc-active');
+                if (toggle) {
+                    toggle.classList.add('active');
+                    toggle.querySelector('span').textContent = 'CLOSE';
+                }
+            } else if (toggle) {
+                toggle.querySelector('span').textContent = 'CONTENTS';
+            }
+        },
+
+        showContent(itemId, title, kind, content) {
+            const modal = document.getElementById('showcase-content-modal');
+            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            modal.querySelector('.showcase-content-code').textContent = content;
+
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        expandItem(itemId, title) {
+            const item = document.getElementById(itemId);
+            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            const modal = document.getElementById('showcase-gallery-modal');
+
+            modal.querySelector('.showcase-modal-title').textContent = title;
+            modal.querySelector('.showcase-modal-body').innerHTML =
+                `<div class="modal-svg-wrapper">${svgContent}</div>`;
+
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        closeContentModal() {
+            document.getElementById('showcase-content-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        closeModal() {
+            document.getElementById('showcase-gallery-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        copyContent() {
+            const code = document.querySelector('.showcase-content-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.showcase-copy-btn');
+                const oldText = btn.textContent;
+                btn.textContent = 'COPIED! ✅';
+                setTimeout(() => btn.textContent = oldText, 2000);
+            });
+        }
+    };
+
+    // Escape key to close modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            showcaseGallery.closeModal();
+            showcaseGallery.closeContentModal();
+        }
+    });
+</script>
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            // Updated to target the nested <g> tag per ui.md rules
+            const target = container.querySelector('.docops-transform-group') || container.querySelector('svg');
+            if (!target) return;
+
+            let currentZoom = parseFloat(target.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            target.dataset.zoom = currentZoom;
+            target.style.transform = `scale(${currentZoom})`;
+            target.style.transformOrigin = "center center";
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+        },
+
+        closeCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            container.style.display = 'none';
+        },
+        async loadCsvData(id) {
+            const svgContainer = document.getElementById(id);
+            const svg = svgContainer.querySelector('svg');
+
+            if (!svg) {
+                console.error('No SVG found');
+                return;
+            }
+
+            try {
+                // Method 1: Standard metadata with type
+                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                    return;
+                }
+
+                // Method 2: Custom csv-data element
+                csvMetadata = svg.querySelector('metadata csv-data');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                // Method 3: Data attribute
+                const csvDataAttr = svg.getAttribute('data-csv');
+                if (csvDataAttr) {
+                    const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                console.error('No CSV data found in SVG');
+            } catch (error) {
+                console.error('Failed to parse CSV data:', error);
+            }
+        },
+
+        renderCsvTable(container, csvData, tableId) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+                return;
+            }
+
+            // Generate a unique table ID if not provided or make existing ID unique
+            const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+            const table = document.createElement('table');
+            table.className = 'csv-table';
+            table.id = uniqueTableId;
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            csvData.headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+
+            // Add button cell to header
+            const buttonTh = document.createElement('th');
+            buttonTh.className = 'csv-header-button-cell';
+
+            // Create copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'csv-copy-button';
+            copyButton.textContent = 'Copy';
+            copyButton.title = 'Copy as Tab-Delimited';
+            copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+            buttonTh.appendChild(copyButton);
+            headerRow.appendChild(buttonTh);
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create body
+            const tbody = document.createElement('tbody');
+
+            csvData.rows.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                // Add empty cell for button column
+                const emptyTd = document.createElement('td');
+                tr.appendChild(emptyTd);
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            container.innerHTML = '';
+            container.appendChild(table);
+            const tableElement = document.getElementById(uniqueTableId);
+            if (tableElement) {
+                tableElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+
+
+        },
+
+        copyCsvAsTabDelimited(csvData) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                console.error('Invalid CSV data for copying');
+                return;
+            }
+
+            // Create tab-delimited string
+            let tabDelimitedData = '';
+
+            // Add headers
+            tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+            // Add rows
+            csvData.rows.forEach(row => {
+                tabDelimitedData += row.join('\t') + '\n';
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(tabDelimitedData).then(() => {
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            }).catch(err => {
+                console.error('Failed to copy to clipboard:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = tabDelimitedData;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    // Provide visual feedback
+                    const buttons = document.querySelectorAll('.csv-copy-button');
+                    buttons.forEach(button => {
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        button.style.background = '#28a745';
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.background = '#007acc';
+                        }, 2000);
+                    });
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed:', fallbackErr);
+                    alert('Copy failed. Please select and copy the data manually.');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+
+
+<script>
+    class ThemeToggleTop {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            this.createToggleButton();
+            this.loadSavedTheme();
+            this.setupEventListeners();
+        }
+
+        createToggleButton() {
+            const button = document.createElement('button');
+            button.className = 'theme-toggle';
+            button.setAttribute('aria-label', 'Toggle theme');
+            button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+            document.body.appendChild(button);
+            this.toggleButton = button;
+        }
+
+        setupEventListeners() {
+            this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+            // Listen for system theme changes only when in auto mode
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (this.getThemePreference() === 'auto') {
+                    this.updateTheme();
+                }
+            });
+        }
+
+        toggleTheme() {
+            const currentTheme = this.getThemePreference();
+            let newTheme;
+
+            switch (currentTheme) {
+                case 'light':
+                    newTheme = 'dark';
+                    break;
+                case 'dark':
+                    newTheme = 'auto';
+                    break;
+                case 'auto':
+                    newTheme = 'light';
+                    break;
+                default:
+                    // Check current state of the document
+                    const root = document.documentElement;
+                    if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                        newTheme = 'light';
+                    } else {
+                        newTheme = 'dark';
+                    }
+            }
+
+            this.setTheme(newTheme);
+        }
+
+        setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            this.updateTheme();
+        }
+
+        getThemePreference() {
+            const saved = localStorage.getItem('theme');
+            if (saved) {
+                return saved;
+            }
+
+            // If no saved preference, detect current state from DOM
+            const root = document.documentElement;
+            if (root.classList.contains('dark-mode')) {
+                return 'dark';
+            } else if (root.classList.contains('dark-mode-auto')) {
+                return 'auto';
+            }
+            return 'light';
+        }
+
+        updateTheme() {
+            const theme = this.getThemePreference();
+            const root = document.documentElement;
+
+            // Remove existing theme classes
+            root.classList.remove('dark-mode', 'dark-mode-auto');
+
+            switch (theme) {
+                case 'dark':
+                    root.classList.add('dark-mode');
+                    break;
+                case 'auto':
+                    root.classList.add('dark-mode-auto');
+                    break;
+                // 'light' theme uses default styles
+            }
+
+            // Update button aria-label
+            const themeNames = {
+                light: 'light',
+                dark: 'dark',
+                auto: 'auto (follows system)'
+            };
+            this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+        }
+
+        loadSavedTheme() {
+            this.updateTheme();
+        }
+    }
+
+    // Initialize theme toggle when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+    } else {
+        new ThemeToggleTop();
+    }
+</script>
+<style>
+    #footer-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+        border-top: 1px solid var(--docops-border);
+        font-family: var(--docops-font-main);
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--docops-accent);
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-link:hover {
+        color: #fff;
+        background: var(--docops-accent-glow);
+        border-color: var(--docops-accent);
+        box-shadow: 0 0 15px var(--docops-accent-glow);
+    }
+
+    .nav-link.next::after { content: ' →'; }
+    .nav-link.prev::before { content: '← '; }
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--modal-overlay-bg); /* Use variable */
+        backdrop-filter: blur(15px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10000;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        position: relative;
+        width: 90vw;
+        height: 85vh;
+        background: var(--modal-content-bg); /* Use variable */
+        border: 1px solid var(--modal-content-border); /* Use variable */
+        box-shadow: var(--modal-shadow);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        transform: scale(0.8) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    #modalSvgContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #modalSvgContainer svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .close-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--docops-accent);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10002;
+    }
+
+    .close-button:hover {
+        background: var(--docops-accent);
+    }
+    .modal-zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 8px 12px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .modal-zoom-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 4px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+    }
+
+    .modal-zoom-level {
+        color: white;
+        font-family: var(--docops-font-mono);
+        font-size: 12px;
+        min-width: 45px;
+        text-align: center;
+    }
+</style>
+<script>
+
+    // Zoom state
+    let modalZoomLevel = 1;
+    const MODAL_ZOOM_MIN = 0.25;
+    const MODAL_ZOOM_MAX = 4;
+    const MODAL_ZOOM_STEP = 0.25;
+
+    function openModal(container) {
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+
+        if (!modalOverlay || !modalSvgContainer) {
+            console.error("Modal elements not found in DOM");
+            return;
+        }
+        // Reset zoom level
+        modalZoomLevel = 1;
+        updateZoomDisplay();
+
+        // Clone the SVG from the clicked container
+        const svg = container.querySelector('svg');
+        const svgClone = svg.cloneNode(true);
+        svgClone.style.transform = 'scale(1)';
+        svgClone.style.transition = 'transform 0.2s ease';
+
+        // Clear previous content and add new SVG
+        modalSvgContainer.innerHTML = '';
+        modalSvgContainer.appendChild(svgClone);
+
+        // Show modal with animation
+        modalOverlay.classList.add('active');
+
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        modalZoomLevel = 1;
+    }
+
+    function closeModalOnBackdrop(event) {
+        // Only close if clicking the overlay itself, not the content
+        if (event.target === modalOverlay) {
+            closeModal();
+        }
+    }
+
+    function modalZoomIn() {
+        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomOut() {
+        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomReset() {
+        modalZoomLevel = 1;
+        applyModalZoom();
+    }
+
+    function applyModalZoom() {
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+        const svg = modalSvgContainer.querySelector('svg');
+        if (svg) {
+            // Same here: use concatenation
+            svg.style.transform = "scale(" + modalZoomLevel + ")";
+        }
+        updateZoomDisplay();
+    }
+
+    function updateZoomDisplay() {
+        const display = document.getElementById('modalZoomLevel');
+        if (display) {
+            // Change from template literal to standard concatenation
+            // to avoid issues with Kotlin/Asciidoctor interpolation
+            display.textContent = Math.round(modalZoomLevel * 100) + "%";
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+    const docopsCopy = {
+        url: (btn) => {
+            const url = btn.closest('.docops-media-card').getAttribute('data-url');
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        svg: (btn) => {
+            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+            navigator.clipboard.writeText(svg).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        png: (btn) => {
+            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(blob => {
+                    const item = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([item]);
+                    const originalText = btn.innerText;
+                    btn.innerText = 'COPIED!';
+                    setTimeout(() => btn.innerText = originalText, 2000);
+                });
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        }
+    };
+
+</script>
+
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+<script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>Bar Charts</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#top">1. Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_key_features">1.1. Key Features</a></li>
+</ul>
+</li>
+<li><a href="#_simple_bar_chart">2. Simple Bar Chart</a></li>
+<li><a href="#_grouped_bar_chart">3. Grouped Bar Chart</a></li>
+<li><a href="#_cylinder_style_3d_effect">4. Cylinder Style (3D Effect)</a></li>
+<li><a href="#_common_use_cases">5. Common Use Cases</a></li>
+<li><a href="#_format_options">6. Format Options</a>
+<ul class="sectlevel2">
+<li><a href="#_simple_bar_chart_2">6.1. Simple Bar Chart</a></li>
+<li><a href="#_grouped_bar_chart_2">6.2. Grouped Bar Chart</a></li>
+<li><a href="#_common_options">6.3. Common Options</a></li>
+<li><a href="#_custom_colors">6.4. Custom Colors</a></li>
+</ul>
+</li>
+<li><a href="#_best_practices">7. Best Practices</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="top">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Bar charts turn category comparisons into visual rankings. Whether you&#8217;re tracking sales by region, comparing quarterly performance, or visualizing survey results, bar charts make differences immediately scannable.</p>
+</div>
+<div class="sect2">
+<h3 id="_key_features">1.1. Key Features</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Vertical &amp; horizontal layouts</strong> - Choose the orientation that fits your data</p>
+</li>
+<li>
+<p><strong>Grouped comparisons</strong> - Show multiple series side-by-side</p>
+</li>
+<li>
+<p><strong>Cylinder style</strong> - 3D effect for presentations</p>
+</li>
+<li>
+<p><strong>Auto-sorting</strong> - Rank by value for clearer insights</p>
+</li>
+<li>
+<p><strong>Dark mode support</strong> - Optimized for both light and dark themes</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_simple_bar_chart">2. Simple Bar Chart</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Perfect for single-series comparisons:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,bar]
+----
+title=Monthly Sales Performance
+yLabel=Revenue ($)
+xLabel=Month
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-8eaa6b06f5a2b461" data-theme="light" data-original-content="title=Monthly Sales Performance
+yLabel=Revenue ($)
+xLabel=Month
+type=R
+---
+January | 120.0
+February | 334.0
+March | 455.0
+April | 244.0
+May | 256.0
+June | 223.0" data-kind="bar">
+<?xml version="1.0" encoding="UTF-8"?><svg width="506.2499999936719" height="281.2499999964844" viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" id="id_37fbe805-4e42-4130-861e-ebaf9ec33401">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value"],"rows":[["January","120.0"],["February","334.0"],["March","455.0"],["April","244.0"],["May","256.0"],["June","223.0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_37fbe805-4e42-4130-861e-ebaf9ec33401" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_37fbe805-4e42-4130-861e-ebaf9ec33401" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_37fbe805-4e42-4130-861e-ebaf9ec33401" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_37fbe805-4e42-4130-861e-ebaf9ec33401" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><!-- Glass effect gradients --><linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Highlight gradient --><linearGradient id="glassHighlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" /><stop offset="60%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Radial gradient for realistic light reflections --><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></radialGradient><!-- Enhanced drop shadow filter for glass bars --><filter id="glassDropShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.2)"/></filter><!-- Frosted glass blur filter --><filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" /></filter><!-- Inner shadow for depth --><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="2" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.2)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter><!-- Glow filter for hover effect --><filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/><feColorMatrix in="blur" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#id_37fbe805-4e42-4130-861e-ebaf9ec33401 .glass-bar { transition: all 0.3s ease; } #id_37fbe805-4e42-4130-861e-ebaf9ec33401 .glass-bar:hover { filter: url(#glow); transform: scale(1.02); cursor: pointer; } #id_37fbe805-4e42-4130-861e-ebaf9ec33401 text { font-family: Arial, Helvetica, sans-serif; }</style></defs><rect width="100%" height="100%" fill="#ffffff" rx="15" ry="15"/><line x1="100" y1="380" x2="800" y2="380" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="100" y1="305" x2="800" y2="305" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="100" y1="230" x2="800" y2="230" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="100" y1="155" x2="800" y2="155" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="100" y1="80" x2="800" y2="80" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><!-- Y-axis --><line x1="100" y1="80" x2="100" y2="380" stroke="#2563eb" stroke-width="2" stroke-opacity="0.5"/><!-- X-axis --><line x1="100" y1="380" x2="800" y2="380" stroke="#2563eb" stroke-width="2" stroke-opacity="0.5"/><text x="85" y="384" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="end" fill="#4338ca">0</text><line x1="95" y1="380" x2="100" y2="380" stroke="#4338ca" stroke-width="1" stroke-opacity="0.6"/><text x="85" y="309" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="end" fill="#4338ca">25</text><line x1="95" y1="305" x2="100" y2="305" stroke="#4338ca" stroke-width="1" stroke-opacity="0.6"/><text x="85" y="234" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="end" fill="#4338ca">50</text><line x1="95" y1="230" x2="100" y2="230" stroke="#4338ca" stroke-width="1" stroke-opacity="0.6"/><text x="85" y="159" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="end" fill="#4338ca">75</text><line x1="95" y1="155" x2="100" y2="155" stroke="#4338ca" stroke-width="1" stroke-opacity="0.6"/><text x="85" y="84" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="end" fill="#4338ca">100</text><line x1="95" y1="80" x2="100" y2="80" stroke="#4338ca" stroke-width="1" stroke-opacity="0.6"/><text x="30" y="230" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#4338ca" transform="rotate(-90, 30, 230)">Revenue ($)</text><defs><linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ff2c9f"/><stop offset="100%" stop-color="#c51d6a"/></linearGradient></defs><g class="glass-bar"><!-- Base rectangle with gradient --><rect x="170" y="300.8791208791209" width="60" height="79.12087912087912" rx="6" ry="6" fill="url(#gradient1)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="79.12087912087912" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="300.8791208791209" dur="1s" fill="freeze"/></rect><!-- Glass overlay with transparency --><rect x="170" y="300.8791208791209" width="60" height="79.12087912087912" rx="6" ry="6" fill="url(#glassOverlay)" filter="url(#glassBlur)"><animate attributeName="height" from="0" to="79.12087912087912" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="300.8791208791209" dur="1s" fill="freeze"/></rect><!-- Top highlight for shine --><rect x="173" y="303.8791208791209" width="54" height="19.78021978021978" rx="4" ry="4" fill="url(#glassHighlight)"><animate attributeName="y" from="377" to="303.8791208791209" dur="1s" fill="freeze"/></rect></g><!-- Create wrapped label text --><text x="200" y="405" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="middle" fill="#4338ca">January</text><text x="200" y="290.8791208791209" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#111111">120</text><defs><linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#880adb"/><stop offset="100%" stop-color="#5b0792"/></linearGradient></defs><g class="glass-bar"><!-- Base rectangle with gradient --><rect x="270" y="159.7802197802198" width="60" height="220.2197802197802" rx="6" ry="6" fill="url(#gradient2)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="220.2197802197802" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="159.7802197802198" dur="1s" fill="freeze"/></rect><!-- Glass overlay with transparency --><rect x="270" y="159.7802197802198" width="60" height="220.2197802197802" rx="6" ry="6" fill="url(#glassOverlay)" filter="url(#glassBlur)"><animate attributeName="height" from="0" to="220.2197802197802" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="159.7802197802198" dur="1s" fill="freeze"/></rect><!-- Top highlight for shine --><rect x="273" y="162.7802197802198" width="54" height="20.0" rx="4" ry="4" fill="url(#glassHighlight)"><animate attributeName="y" from="377" to="162.7802197802198" dur="1s" fill="freeze"/></rect></g><!-- Create wrapped label text --><text x="300" y="405" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="middle" fill="#4338ca">February</text><text x="300" y="149.7802197802198" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#111111">334</text><defs><linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#450ec3"/><stop offset="100%" stop-color="#2e0982"/></linearGradient></defs><g class="glass-bar"><!-- Base rectangle with gradient --><rect x="370" y="80.0" width="60" height="300.0" rx="6" ry="6" fill="url(#gradient3)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="300.0" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="80.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with transparency --><rect x="370" y="80.0" width="60" height="300.0" rx="6" ry="6" fill="url(#glassOverlay)" filter="url(#glassBlur)"><animate attributeName="height" from="0" to="300.0" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="80.0" dur="1s" fill="freeze"/></rect><!-- Top highlight for shine --><rect x="373" y="83.0" width="54" height="20.0" rx="4" ry="4" fill="url(#glassHighlight)"><animate attributeName="y" from="377" to="83.0" dur="1s" fill="freeze"/></rect></g><!-- Create wrapped label text --><text x="400" y="405" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="middle" fill="#4338ca">March</text><text x="400" y="70.0" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#111111">455</text><defs><linearGradient id="gradient4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#5074ff"/><stop offset="100%" stop-color="#354dbe"/></linearGradient></defs><g class="glass-bar"><!-- Base rectangle with gradient --><rect x="470" y="219.12087912087912" width="60" height="160.87912087912088" rx="6" ry="6" fill="url(#gradient4)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="160.87912087912088" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="219.12087912087912" dur="1s" fill="freeze"/></rect><!-- Glass overlay with transparency --><rect x="470" y="219.12087912087912" width="60" height="160.87912087912088" rx="6" ry="6" fill="url(#glassOverlay)" filter="url(#glassBlur)"><animate attributeName="height" from="0" to="160.87912087912088" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="219.12087912087912" dur="1s" fill="freeze"/></rect><!-- Top highlight for shine --><rect x="473" y="222.12087912087912" width="54" height="20.0" rx="4" ry="4" fill="url(#glassHighlight)"><animate attributeName="y" from="377" to="222.12087912087912" dur="1s" fill="freeze"/></rect></g><!-- Create wrapped label text --><text x="500" y="405" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="middle" fill="#4338ca">April</text><text x="500" y="209.12087912087912" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#111111">244</text><defs><linearGradient id="gradient5" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#5bf1ff"/><stop offset="100%" stop-color="#3ca0c0"/></linearGradient></defs><g class="glass-bar"><!-- Base rectangle with gradient --><rect x="570" y="211.2087912087912" width="60" height="168.7912087912088" rx="6" ry="6" fill="url(#gradient5)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="168.7912087912088" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="211.2087912087912" dur="1s" fill="freeze"/></rect><!-- Glass overlay with transparency --><rect x="570" y="211.2087912087912" width="60" height="168.7912087912088" rx="6" ry="6" fill="url(#glassOverlay)" filter="url(#glassBlur)"><animate attributeName="height" from="0" to="168.7912087912088" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="211.2087912087912" dur="1s" fill="freeze"/></rect><!-- Top highlight for shine --><rect x="573" y="214.2087912087912" width="54" height="20.0" rx="4" ry="4" fill="url(#glassHighlight)"><animate attributeName="y" from="377" to="214.2087912087912" dur="1s" fill="freeze"/></rect></g><!-- Create wrapped label text --><text x="600" y="405" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="middle" fill="#4338ca">May</text><text x="600" y="201.2087912087912" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#111111">256</text><defs><linearGradient id="gradient6" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#00fffe"/><stop offset="100%" stop-color="#00c4a9"/></linearGradient></defs><g class="glass-bar"><!-- Base rectangle with gradient --><rect x="670" y="232.96703296703296" width="60" height="147.03296703296704" rx="6" ry="6" fill="url(#gradient6)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="147.03296703296704" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="232.96703296703296" dur="1s" fill="freeze"/></rect><!-- Glass overlay with transparency --><rect x="670" y="232.96703296703296" width="60" height="147.03296703296704" rx="6" ry="6" fill="url(#glassOverlay)" filter="url(#glassBlur)"><animate attributeName="height" from="0" to="147.03296703296704" dur="1s" fill="freeze"/><animate attributeName="y" from="380" to="232.96703296703296" dur="1s" fill="freeze"/></rect><!-- Top highlight for shine --><rect x="673" y="235.96703296703296" width="54" height="20.0" rx="4" ry="4" fill="url(#glassHighlight)"><animate attributeName="y" from="377" to="235.96703296703296" dur="1s" fill="freeze"/></rect></g><!-- Create wrapped label text --><text x="700" y="405" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="middle" fill="#4338ca">June</text><text x="700" y="222.96703296703296" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#111111">223</text><text x="450" y="430" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#4338ca">Month</text><!-- Title --><text x="450" y="40" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#111111">Monthly Sales Performance</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-8eaa6b06f5a2b461')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-8eaa6b06f5a2b461">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-8eaa6b06f5a2b461')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-8eaa6b06f5a2b461')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-8eaa6b06f5a2b461')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-8eaa6b06f5a2b461')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-8eaa6b06f5a2b461')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-8eaa6b06f5a2b461')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-8eaa6b06f5a2b461')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-8eaa6b06f5a2b461" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-8eaa6b06f5a2b461')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-8eaa6b06f5a2b461">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_grouped_bar_chart">3. Grouped Bar Chart</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Compare multiple series across categories:</p>
+</div>
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls" id="svgviewer-1b735d49b5a74c6a" data-theme="light" data-original-content="title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+paletteType=OCEAN_BREEZE
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0" data-kind="bargroup">
+<?xml version="1.0" encoding="UTF-8"?><svg id="id_a1d270afb7ab432387697429401c14b1" width="449.999999994375" height="382.4999999952188" viewBox="0 0 800 680" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: Bar Group Chart'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Group","Label","Value"],"rows":[["Product A","Q1","5000.0"],["Product A","Q2","7000.0"],["Product A","Q3","8000.0"],["Product A","Q4","6000.0"],["Product B","Q1","6000.0"],["Product B","Q2","8000.0"],["Product B","Q3","7000.0"],["Product B","Q4","9000.0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="svgGradientColor_0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#26828b"/><stop offset="100%" stop-color="#00575f"/></linearGradient><linearGradient id="svgGradientColor_1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#95cdc7"/><stop offset="100%" stop-color="#689d98"/></linearGradient><linearGradient id="svgGradientColor_2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#eff7f9"/><stop offset="100%" stop-color="#bdc4c7"/></linearGradient><linearGradient id="svgGradientColor_3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffe2d8"/><stop offset="100%" stop-color="#ccb0a8"/></linearGradient><linearGradient id="backGrad_a1d270afb7ab432387697429401c14b1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#D988B9"/><stop offset="100%" stop-color="#975f81"/></linearGradient><linearGradient id="grad1" x2="0%" y2="100%"><stop class="stop1" offset="0%" stop-color="#f6f6f5"/><stop class="stop2" offset="50%" stop-color="#f2f1f0"/><stop class="stop3" offset="100%" stop-color="#EEEDEB"/></linearGradient><linearGradient id="linearGradient_1025473d2de9464da7a0ea73be1e3ddd" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#D988B9"/><stop offset="100%" stop-color="#975f81"/></linearGradient><!-- Glass effect gradients --><linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.2);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Highlight gradient --><linearGradient id="glassHighlight" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.7);stop-opacity:1" /><stop offset="60%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient><!-- Radial gradient for realistic light reflections --><radialGradient id="glassRadial" cx="30%" cy="30%" r="70%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.5);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></radialGradient><pattern id="tenthGrid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="silver" stroke-width="0.5"/></pattern><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#tenthGrid)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" stroke-width="1"/></pattern><filter id="Bevel" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/><feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="10" result="specOut" lighting-color="white"><fePointLight x="-5000" y="-10000" z="20000"/></feSpecularLighting><feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/><feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/></filter><filter id="Bevel3" filterUnits="objectBoundingBox" x="-10%" y="-10%" width="150%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="0.2" result="blur"/><feSpecularLighting in="blur" surfaceScale="10" specularConstant="3.5" specularExponent="10" result="specOut" lighting-color="#ffffff"><fePointLight x="-5000" y="-10000" z="0000"/></feSpecularLighting><feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut2"/><feComposite in="SourceGraphic" in2="specOut2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/></filter><!-- Enhanced drop shadow filter for glass bars --><filter id="glassDropShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.2)"/></filter><!-- Frosted glass blur filter --><filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" /></filter><!-- Inner shadow for depth --><filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%"><feOffset dx="0" dy="2"/><feGaussianBlur stdDeviation="2" result="offset-blur"/><feFlood flood-color="rgba(0,0,0,0.2)"/><feComposite in2="offset-blur" operator="in"/><feComposite in2="SourceGraphic" operator="over"/></filter><!-- Glow filter for hover effect --><filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/><feColorMatrix in="blur" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="dropShadow" filterUnits="userSpaceOnUse" width="150%" height="150%"><feGaussianBlur in="SourceAlpha" stdDeviation="2"/><feOffset dx="2" dy="2"/><feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#id_a1d270afb7ab432387697429401c14b1 .glass-bar { transition: all 0.3s ease; } #id_a1d270afb7ab432387697429401c14b1 .glass-bar:hover { filter: url(#glow); transform: scale(1.02); cursor: pointer; }</style></defs><rect width='100%' height='100%' fill='#FAFBFD' rx="15" ry="15"/><line x1="90" y1="108" x2="800" y2="108" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="90" y1="216" x2="800" y2="216" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="90" y1="324" x2="800" y2="324" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="90" y1="432" x2="800" y2="432" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/><line x1="160" y1="12" x2="160" y2="500" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5"/><line x1="320" y1="12" x2="320" y2="500" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5"/><line x1="480" y1="12" x2="480" y2="500" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5"/><line x1="640" y1="12" x2="640" y2="500" stroke="#2563eb" stroke-width="1" stroke-dasharray="5,5"/><line x1="90" x2="800" y1="500" y2="500" stroke="#2563eb" stroke-width="2"/><g><rect x="127" y="10" width="546" height="40" rx="10" ry="10" fill="#ffffff" opacity="0.1" stroke="#2563eb" stroke-width="1"/><text x="400" y="38" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; text-anchor: middle; font-size: 24px; font-weight: bold;">Annual Product Sales Report</text></g><text x="400" y="650" style="font-family: Arial, Helvetica, sans-serif; fill: #4338ca; text-anchor: middle; font-size: 14px; font-weight: bold;">Quarters</text><text x="250" y="-40" style="font-family: Arial, Helvetica, sans-serif; fill: #4338ca; text-anchor: middle; font-size: 14px; font-weight: bold;" transform="rotate(90)">Sales (USD)</text><g transform='translate(163.0,0)'><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="110.0" y="250.0" width="40.0" height="250.0" rx="6" ry="6" fill="url(#svgGradientColor_0)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="250.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="250.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="110.0" y="250.0" width="40.0" height="250.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="250.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="250.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="113.0" y="253.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="253.0" dur="1s" fill="freeze"/></rect></g><text x="130.0" y="242.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">5.0k</text><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="150.5" y="150.0" width="40.0" height="350.0" rx="6" ry="6" fill="url(#svgGradientColor_1)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="350.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="150.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="150.5" y="150.0" width="40.0" height="350.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="350.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="150.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="153.5" y="153.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="153.0" dur="1s" fill="freeze"/></rect></g><text x="170.5" y="142.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">7.0k</text><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="191.0" y="100.0" width="40.0" height="400.0" rx="6" ry="6" fill="url(#svgGradientColor_2)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="400.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="100.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="191.0" y="100.0" width="40.0" height="400.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="400.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="100.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="194.0" y="103.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="103.0" dur="1s" fill="freeze"/></rect></g><text x="211.0" y="92.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">8.0k</text><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="231.5" y="200.0" width="40.0" height="300.0" rx="6" ry="6" fill="url(#svgGradientColor_3)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="300.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="200.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="231.5" y="200.0" width="40.0" height="300.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="300.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="200.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="234.5" y="203.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="203.0" dur="1s" fill="freeze"/></rect></g><text x="251.5" y="192.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">6.0k</text><text x="200.0" y="505.0" style="font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle; fill: #4338ca;" ><tspan x='200.0' dy='14' style="font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle; fill: #4338ca;">Product</tspan><tspan x='200.0' dy='14' style="font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle; fill: #4338ca;">A</tspan></text><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="292.0" y="200.0" width="40.0" height="300.0" rx="6" ry="6" fill="url(#svgGradientColor_0)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="300.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="200.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="292.0" y="200.0" width="40.0" height="300.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="300.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="200.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="295.0" y="203.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="203.0" dur="1s" fill="freeze"/></rect></g><text x="312.0" y="192.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">6.0k</text><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="332.5" y="100.0" width="40.0" height="400.0" rx="6" ry="6" fill="url(#svgGradientColor_1)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="400.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="100.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="332.5" y="100.0" width="40.0" height="400.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="400.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="100.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="335.5" y="103.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="103.0" dur="1s" fill="freeze"/></rect></g><text x="352.5" y="92.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">8.0k</text><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="373.0" y="150.0" width="40.0" height="350.0" rx="6" ry="6" fill="url(#svgGradientColor_2)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="350.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="150.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="373.0" y="150.0" width="40.0" height="350.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="350.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="150.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="376.0" y="153.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="153.0" dur="1s" fill="freeze"/></rect></g><text x="393.0" y="142.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">7.0k</text><g class="glass-bar"><!-- Base rectangle with outer radius --><rect x="413.5" y="50.0" width="40.0" height="450.0" rx="6" ry="6" fill="url(#svgGradientColor_3)" filter="url(#glassDropShadow)" stroke="rgba(255,255,255,0.3)" stroke-width="1"><animate attributeName="height" from="0" to="450.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="50.0" dur="1s" fill="freeze"/></rect><!-- Glass overlay with NO gap = NO radius needed --><rect x="413.5" y="50.0" width="40.0" height="450.0" rx="6" ry="6" fill="url(#glassOverlay)" pointer-events="none"><animate attributeName="height" from="0" to="450.0" dur="1s" fill="freeze"/><animate attributeName="y" from="500" to="50.0" dur="1s" fill="freeze"/></rect><!-- Top highlight with proper inner radius calculation --><!-- Gap = 3px, so inner radius = 6 - 3 = 3px --><rect x="416.5" y="53.0" width="34.0" height="20.0" rx="3" ry="3" fill="url(#glassHighlight)" pointer-events="none"><animate attributeName="y" from="497" to="53.0" dur="1s" fill="freeze"/></rect></g><text x="433.5" y="42.0" style="font-family: Arial,Helvetica, sans-serif; font-size:12px;; fill: #111111; text-anchor: middle; font-weight: bold;">9.0k</text><text x="382.0" y="505.0" style="font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle; fill: #4338ca;" ><tspan x='382.0' dy='14' style="font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle; fill: #4338ca;">Product</tspan><tspan x='382.0' dy='14' style="font-family: Arial,Helvetica, sans-serif; font-size:14px; text-anchor:middle; fill: #4338ca;">B</tspan></text></g> <line x1="100" x2="108" y1="250.0" y2="250.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="253.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">5.0k</text> <line x1="100" x2="108" y1="225.0" y2="225.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="228.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">5.5k</text> <line x1="100" x2="108" y1="200.0" y2="200.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="203.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">6.0k</text> <line x1="100" x2="108" y1="175.0" y2="175.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="178.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">6.5k</text> <line x1="100" x2="108" y1="150.0" y2="150.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="153.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">7.0k</text> <line x1="100" x2="108" y1="125.0" y2="125.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="128.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">7.5k</text> <line x1="100" x2="108" y1="100.0" y2="100.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="103.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">8.0k</text> <line x1="100" x2="108" y1="75.0" y2="75.0" stroke="#2563eb" stroke-width="3"/><text x="90" y="78.0" text-anchor="end" style="font-family: Arial, Helvetica, sans-serif; fill: #111111; font-size:10px; text-anchor:end">8.5k</text><defs><filter id="legendShadow_a1d270afb7ab432387697429401c14b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="4"/><feOffset dx="0" dy="2" result="offsetBlur"/><feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect x="144" y="560" width="512" height="64" rx="12" ry="12" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" filter="url(#legendShadow_a1d270afb7ab432387697429401c14b1)"/><rect x="160" y="576" width="16" height="16" rx="4" ry="4" fill="url(#svgGradientColor_0)"/><text x="184" y="588" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="start" fill="#111111">Q1</text><rect x="280" y="576" width="16" height="16" rx="4" ry="4" fill="url(#svgGradientColor_1)"/><text x="304" y="588" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="start" fill="#111111">Q2</text><rect x="400" y="576" width="16" height="16" rx="4" ry="4" fill="url(#svgGradientColor_2)"/><text x="424" y="588" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="start" fill="#111111">Q3</text><rect x="520" y="576" width="16" height="16" rx="4" ry="4" fill="url(#svgGradientColor_3)"/><text x="544" y="588" font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="start" fill="#111111">Q4</text></svg>
+<div class="svg-floating-controls">
+<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1b735d49b5a74c6a')" title="Controls">⚙️</button>
+<div class="svg-controls-panel" id="controls-panel-svgviewer-1b735d49b5a74c6a">
+<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1b735d49b5a74c6a')" title="Zoom In">🔍+</button>
+<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1b735d49b5a74c6a')" title="Zoom Out">🔍-</button>
+<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1b735d49b5a74c6a')" title="Reset Zoom">⚪</button>
+
+<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1b735d49b5a74c6a')" title="Toggle Fullscreen">⛶</button>
+
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1b735d49b5a74c6a')" title="Copy as SVG">📋 SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1b735d49b5a74c6a')" title="Copy as PNG">📋 PNG</button>
+
+<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-1b735d49b5a74c6a')" title="Show CSV Data">📊 CSV</button>
+</div>
+</div>
+<div class="csv-container" id="csv-container-svgviewer-1b735d49b5a74c6a" style="display: none;">
+    <div class="csv-header">
+        <span>CSV Data</span>
+        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-1b735d49b5a74c6a')" title="Close CSV">×</button>
+    </div>
+    <div class="csv-content" id="csv-content-svgviewer-1b735d49b5a74c6a">
+        <div class="csv-loading">Loading CSV data...</div>
+    </div>
+</div>
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cylinder_style_3d_effect">4. Cylinder Style (3D Effect)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add depth for presentation decks:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,bar]
+----
+title=Quarterly Revenue
+yLabel=Revenue ($)
+type=C
+vBar=true
+---
+Q1 | 50000
+Q2 | 65000
+Q3 | 70000
+Q4 | 80000
+----</code></pre>
+</div>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_use_cases">5. Common Use Cases</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Sales dashboards</strong> - Compare revenue across time periods or regions</p>
+</li>
+<li>
+<p><strong>Survey results</strong> - Show response distributions and rankings</p>
+</li>
+<li>
+<p><strong>Performance metrics</strong> - Track KPIs against targets or benchmarks</p>
+</li>
+<li>
+<p><strong>Resource allocation</strong> - Visualize budget or headcount by department</p>
+</li>
+<li>
+<p><strong>A/B test results</strong> - Compare variant performance side-by-side</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_format_options">6. Format Options</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_simple_bar_chart_2">6.1. Simple Bar Chart</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,bar]
+----
+title=Chart Title
+yLabel=Y-Axis Label
+xLabel=X-Axis Label
+type=R
+vBar=false
+sorted=true
+---
+Category 1 | 120.0
+Category 2 | 334.0
+Category 3 | 455.0
+----</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grouped_bar_chart_2">6.2. Grouped Bar Chart</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,bargroup]
+----
+title=Chart Title
+yLabel=Y-Axis Label
+xLabel=X-Axis Label
+paletteType=OCEAN_BREEZE
+vBar=false
+---
+Group 1 | Category 1 | 5000.0
+Group 1 | Category 2 | 7000.0
+Group 2 | Category 1 | 6000.0
+Group 2 | Category 2 | 8000.0
+----</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_common_options">6.3. Common Options</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>type</code> - R (regular), C (cylinder)</p>
+</li>
+<li>
+<p><code>vBar=true</code> - Vertical bars (default: horizontal)</p>
+</li>
+<li>
+<p><code>sorted=true</code> - Sort bars by value</p>
+</li>
+<li>
+<p><code>useDark=true</code> - Enable dark theme</p>
+</li>
+<li>
+<p><code>scale=1.5</code> - Increase chart size</p>
+</li>
+<li>
+<p><code>paletteType</code> - OCEAN_BREEZE, CORPORATE, SUNSET (for grouped charts)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_custom_colors">6.4. Custom Colors</h3>
+<div class="paragraph">
+<p>Add color as third column:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Category 1 | 120.0 | #3498db
+Category 2 | 334.0 | #e74c3c</code></pre>
+</div>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices">7. Best Practices</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Use horizontal bars for long labels</strong> - Easier to read category names</p>
+</li>
+<li>
+<p><strong>Sort by value for rankings</strong> - Add <code>sorted=true</code> to highlight top/bottom performers</p>
+</li>
+<li>
+<p><strong>Group related series</strong> - Use bargroup for before/after or plan vs. actual comparisons</p>
+</li>
+<li>
+<p><strong>Limit groups to 3-5</strong> - More than 5 series creates visual clutter</p>
+</li>
+<li>
+<p><strong>Use cylinder style sparingly</strong> - Best for high-level executive summaries, not detailed analysis</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For time-series data (monthly trends), use vertical bars (<code>vBar=true</code>) with months on the X-axis. For category comparisons (regions, products), use horizontal bars with sorted values for instant ranking.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+<style>
+/* Reading Time Styles */
+.reading-time {
+    position: fixed;
+    top: 1.5rem;
+    right: 2rem;
+    background: var(--bg-base); /* Uses the dynamic background variable */
+    backdrop-filter: blur(12px);
+    border: 2px solid var(--accent-secondary);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    z-index: 1005;
+    
+    /* Double-accent shadow follows the light/dark mode logic */
+    box-shadow: 6px 6px 0px var(--accent-pink);
+    
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-main); /* Switches between grey and dark slate */
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reading-time p {
+    margin: 0 !important;
+    font-weight: 600;
+}
+
+/* Light Mode specific opacity tweak */
+body.light-mode .reading-time {
+    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
+}
+</style>
+<div class="reading-time">
+    <p>📖 1 min read • 401 words</p>
+</div>
+<style>
+.listingblock {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.listingblock:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #999;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: rgba(45, 45, 45, 0.9);
+        color: #fff;
+        border-color: #666;
+    }
+    
+    .copy-button:hover {
+        background: rgba(45, 45, 45, 1);
+        border-color: #999;
+    }
+}
+
+</style>
+<script type="text/javascript">
+// Simple clipboard functionality without external dependencies
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise((resolve, reject) => {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject();
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy buttons to all code blocks
+    const codeBlocks = document.querySelectorAll('pre.highlight, div.listingblock pre, .literalblock pre');
+
+    codeBlocks.forEach(function(block, index) {
+        // Create wrapper div if it doesn't exist
+        let wrapper = block.closest('.listingblock, .literalblock');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'listingblock';
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+        }
+
+        // Add copy button
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.title = 'Copy to clipboard';
+
+        // Insert button
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(button);
+
+        // Add click handler
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the text content of the code block
+            const code = block.textContent || block.innerText;
+
+            copyToClipboard(code).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.backgroundColor = '#28a745';
+
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(function() {
+                button.innerHTML = '❌ Error';
+                button.style.backgroundColor = '#dc3545';
+
+                setTimeout(function() {
+                    button.innerHTML = '📋 Copy';
+                    button.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-content" id="modalContent">
+        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+        <!-- The JS specifically fails because this ID is missing -->
+        <div id="modalSvgContainer"></div>
+
+        <div class="modal-zoom-controls">
+            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+        </div>
+    </div>
+</div>
+<script>
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+        // Typography - Matching pro-style.css
+        fontFamily: "'Outfit', sans-serif",
+        fontSize: "14px",
+        
+        // Colors - Using your CSS Variables
+        primaryColor: 'var(--bg-surface)',
+        primaryTextColor: 'var(--text-main)',
+        primaryBorderColor: 'var(--accent-primary)',
+        lineColor: 'var(--accent-secondary)',
+        secondaryColor: 'var(--bg-base)',
+        tertiaryColor: 'var(--bg-surface)',
+        
+        // Specific Element Overrides
+        nodeBorder: 'var(--accent-primary)',
+        clusterBkg: 'var(--bg-base)',
+        clusterBorder: 'var(--border-color)',
+        titleColor: 'var(--text-heading)',
+        edgeLabelBackground: 'var(--bg-surface)',
+        
+        // Sequence Diagram specific
+        actorBkg: 'var(--bg-surface)',
+        actorBorder: 'var(--accent-primary)',
+        actorTextColor: 'var(--text-heading)',
+        noteBkgColor: 'var(--accent-glow)',
+        noteTextColor: 'var(--accent-primary)',
+    },
+    // Custom CSS for "AI Assistant" flair
+    themeCSS: `
+        .node rect, .node circle, .node ellipse, .node polygon {
+            stroke-width: 2px;
+            filter: drop-shadow(2px 2px 0px var(--accent-glow));
+        }
+        .label-container {
+            fill: var(--bg-surface);
+        }
+        .edgePath .path {
+            stroke: var(--accent-secondary) !important;
+            stroke-width: 1.5px !important;
+        }
+        .marker {
+            fill: var(--accent-secondary) !important;
+            stroke: var(--accent-secondary) !important;
+        }
+        text.titleText {
+            font-family: 'Syne', sans-serif !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+        }
+    `
+});
+</script>
+</body>
+</html>

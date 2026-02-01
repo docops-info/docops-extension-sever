@@ -1,0 +1,2698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<link rel="icon" type="image/04" href="../images/favicon.svg?v=2025.04">
+<title>DocOps Extension Server</title>
+<style>
+@import url(https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap);@keyframes reveal{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}:root{--bg-base:#f8fafc;--bg-surface:#ffffff;--bg-grid:rgba(0, 0, 0, 0.05);--text-main:#334155;--text-heading:#0f172a;--accent-primary:#4f46e5;--accent-secondary:#06b6d4;--accent-glow:rgba(79, 70, 229, 0.1);--border-color:#e2e8f0;--note-color:#4f46e5;--tip-color:#10b981;--warning-color:#f59e0b;--caution-color:#ef4444;--important-color:#8b5cf6;--font-heading:'Syne', sans-serif;--font-body:'Outfit', sans-serif;--font-mono:'JetBrains Mono', monospace;--content-max-width:1100px}:root.dark-mode{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}}body{background-color:var(--bg-base);background-image:radial-gradient(var(--bg-grid) 1px,transparent 1px);background-size:30px 30px;background-attachment:fixed;color:var(--text-main);font-family:var(--font-body);line-height:1.6;margin:0;padding:0;-webkit-font-smoothing:antialiased}#content,#footer,#footnotes,#header>h1:first-child,.details{opacity:0;animation:reveal .8s cubic-bezier(.16,1,.3,1) forwards}#content,#footnotes,#header{padding:2rem 1.5rem}#content,#footer,#footnotes,#header{max-width:var(--content-max-width);margin:0 auto}#toc.toc2{position:fixed!important}#header>h1:first-child{font-family:var(--font-heading);font-size:3.5rem;font-weight:800;color:var(--text-heading);letter-spacing:-.04em;line-height:1;margin-bottom:2rem;background:linear-gradient(to bottom right,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}#toc,.details{margin-bottom:3rem}.details,a{color:var(--accent-primary)}.details{display:flex;gap:2rem;font-size:.875rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);color:var(--text-heading);font-weight:700;margin-top:3rem;margin-bottom:1rem;line-height:1.2}h2{font-size:2rem;border-bottom:1px solid var(--border-color);padding-bottom:.5rem}a{text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:hover{border-bottom-color:var(--accent-primary);text-shadow:0 0 15px var(--accent-glow)}#toc{background:var(--bg-surface);backdrop-filter:blur(12px);border:1px solid var(--border-color);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000}#toc:not(.toc2){max-width:var(--content-max-width);margin:2rem auto}#toc.toc2,.admonitionblock{background:var(--bg-surface);border:1px solid var(--border-color)}#toc.toc2{backdrop-filter:blur(12px);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000;transform:none!important;animation:none!important;opacity:1!important}#toctitle,.admonitionblock .title{text-transform:uppercase;font-size:.75rem}#toc a:hover,#toctitle{color:var(--accent-primary)}#toctitle{font-family:var(--font-heading);font-weight:800;letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}#toctitle::after{content:"";flex:1;height:1px;background:var(--border-color)}#toc ul{list-style:none;padding:0;margin:0}#toc li{margin-bottom:.5rem}#toc a{color:var(--text-main);font-size:.9rem;border:0}#toc a:hover{padding-left:4px}.admonitionblock{margin:2rem 0;border-radius:.75rem;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;flex-direction:row;align-items:stretch}.admonitionblock td.icon{width:4rem;min-width:4rem;padding:1.5rem 0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.02)}.admonitionblock td.icon .fa-note::before,.admonitionblock td.icon .icon-note::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--note-color)}.admonitionblock td.icon .fa-lightbulb::before,.admonitionblock td.icon .icon-tip::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--tip-color)}.admonitionblock td.icon .fa-exclamation-triangle::before,.admonitionblock td.icon .icon-warning::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--warning-color)}.admonitionblock td.icon .fa-fire::before,.admonitionblock td.icon .icon-caution::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--caution-color)}.admonitionblock td.icon .fa-exclamation-circle::before,.admonitionblock td.icon .icon-important::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--important-color)}.admonitionblock td.content{padding:1.5rem;font-size:.95rem;flex:1}.admonitionblock .title{font-weight:700;letter-spacing:.1em;margin-bottom:.75rem;display:block}.admonitionblock.note{border-left:4px solid var(--note-color)}.admonitionblock.note .title{color:var(--note-color)}.admonitionblock.tip{border-left:4px solid var(--tip-color)}.admonitionblock.tip .title{color:var(--tip-color)}.admonitionblock.warning{border-left:4px solid var(--warning-color)}.admonitionblock.warning .title{color:var(--warning-color)}.admonitionblock.caution{border-left:4px solid var(--caution-color)}.admonitionblock.caution .title{color:var(--caution-color)}.admonitionblock.important{border-left:4px solid var(--important-color)}.admonitionblock.important .title{color:var(--important-color)}:root.dark-mode .admonitionblock td.content,:root.dark-mode-auto .admonitionblock td.content{color:var(--text-main)}.listingblock pre{background:#0f172a!important;color:#f8fafc!important;padding:1.5rem!important;border-radius:.75rem;font-family:var(--font-mono);font-size:.875rem;border:1px solid #1e293b;box-shadow:0 20px 25px -5px rgba(0,0,0,.2);position:relative;overflow:hidden}:root.dark-mode .listingblock pre{background:#020617!important;border-color:var(--border-color)}@media (prefers-color-scheme:dark){:root.dark-mode-auto .listingblock pre{background:#020617!important;border-color:var(--border-color)}}.listingblock pre::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent-primary),var(--accent-secondary));opacity:.5}code{font-family:var(--font-mono);padding:.2em .4em;border-radius:.25rem;color:var(--accent-primary);font-size:.9em}.exampleblock,.sidebarblock,table{background:var(--bg-surface);border:1px solid var(--border-color);margin:2rem 0}table{width:100%;border-collapse:collapse;border-radius:.75rem;overflow:hidden}th{background:var(--border-color);color:var(--text-heading);text-align:left;padding:1rem;font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.05em}#footer,td{padding:1rem;border-top:1px solid var(--border-color);font-size:.9rem}code,tr:hover td{background:var(--accent-glow)}.exampleblock,.sidebarblock{border-radius:1rem;padding:2rem}#footer,th{font-size:.875rem}#footer{margin-top:4rem;padding:4rem 1.5rem;text-align:center;color:var(--text-main)}#footer-text{opacity:.6}@media (max-width:1279px){#header>h1:first-child{font-size:2.5rem}.details{flex-direction:column;gap:.5rem}body.toc2{padding-left:0!important;padding-right:0!important}#toc.toc2{position:relative!important;width:auto!important;left:0!important;right:0!important;top:0!important;margin:0 1.5rem 3rem!important;max-height:none!important}}@media (min-width:1280px){body.toc2.toc-left{padding-left:24rem!important;padding-right:0!important}body.toc2.toc-left #toc.toc2{left:1rem;right:auto}body.toc2.toc-right{padding-right:24rem!important;padding-left:0!important}body.toc2.toc-right #toc.toc2{right:1rem;left:auto}#toc.toc2{position:fixed!important;width:20rem;top:2rem;height:auto;max-height:calc(100vh - 4rem);overflow-y:auto}body.toc2.toc-right .reading-time{right:auto!important;left:2rem!important}#content,#footer,#footnotes,#header{max-width:900px;margin-left:auto;margin-right:auto}body.toc2.toc-left #content,body.toc2.toc-left #header{margin-left:2rem}body.toc2.toc-right #content,body.toc2.toc-right #header{margin-right:2rem}}.theme-toggle{position:fixed;bottom:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border-color);box-shadow:0 10px 25px -5px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all .3s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(0,0,0,.2);border-color:var(--accent-primary)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all .3s ease}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0;border-top:1px solid var(--border-color)}.nav-container{max-width:var(--content-max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-body);font-weight:600;font-size:.9rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:.5rem;background:var(--bg-surface);border:1px solid var(--border-color);transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);border-bottom:1px solid var(--border-color)}.nav-next:hover,.nav-prev:hover{color:var(--bg-surface);background:var(--accent-primary);border-color:var(--accent-primary);transform:translateY(-2px);box-shadow:0 10px 15px -3px var(--accent-glow)}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.mermaid{background:var(--bg-surface);padding:2rem;border:1px solid var(--border-color);border-radius:1rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);margin:2rem 0}.mermaid .cluster rect{fill:var(--bg-base)!important;fill-opacity:.5!important;stroke:var(--border-color)!important;backdrop-filter:blur(4px)}.mermaid text{font-family:var(--font-body)!important;letter-spacing:-.01em}.mermaid .active,.mermaid .task0{fill:var(--accent-primary)!important;stroke:var(--accent-secondary)!important}:root.dark-mode .mermaid .loopText,:root.dark-mode .mermaid .messageText,:root.dark-mode .mermaid .noteText,:root.dark-mode .mermaid .sectionTitle,:root.dark-mode .mermaid .taskText{fill:var(--text-heading)!important;color:var(--text-heading)!important;stroke:none!important}:root.dark-mode .mermaid .messageLine0,:root.dark-mode .mermaid .messageLine1{stroke:var(--accent-secondary)!important;stroke-opacity:.6}:root.dark-mode .mermaid .actor,:root.dark-mode .mermaid .note{fill:var(--bg-surface)!important;stroke:var(--accent-primary)!important}:root.dark-mode .mermaid .noteText>tspan{fill:var(--accent-primary)!important}:root.dark-mode .mermaid text.actor>tspan{fill:var(--text-heading)!important;font-weight:600}:root.dark-mode .mermaid .edgeLabel,:root.dark-mode .mermaid .edgeLabel rect{fill:var(--bg-base)!important;color:var(--text-main)!important}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+        --docops-bg: #0f172a;
+        --docops-card-bg: rgba(30, 41, 59, 0.7);
+        --docops-accent: #38bdf8;
+        --docops-accent-glow: rgba(56, 189, 248, 0.3);
+        --docops-text: #f1f5f9;
+        --docops-text-dim: #94a3b8;
+        --docops-border: rgba(255, 255, 255, 0.1);
+        --docops-glass: blur(12px);
+        --docops-font-main: 'Outfit', system-ui, sans-serif;
+        --docops-font-mono: 'JetBrains Mono', monospace;
+    }
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+</style>
+
+<!--slide show style-->
+<style>
+    /* Slideshow Container */
+    .docops-slideshow {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 8px 8px 0px var(--accent-pink, #f472b6); /* Rule #4: 8pt grid adjustment */
+        margin: 3rem 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    /* Progress Bar (The "Movement" Indicator) */
+    .slideshow-progress-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(0,0,0,0.05);
+        z-index: 30;
+    }
+    .slideshow-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-primary);
+        transition: width linear;
+    }
+
+    /* Slide Counter */
+    .slideshow-counter {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-family: var(--docops-font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        opacity: 0.5;
+        z-index: 20;
+        letter-spacing: 0.2em;
+    }
+    .docops-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+
+    .docops-slide.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+    }
+
+    .slide-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-title {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        color: var(--accent-secondary);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+    }
+
+    .slide-image {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .slide-image svg {
+        max-width: 100%;
+        max-height: 100%;
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
+
+    /* Navigation Dots */
+    .slideshow-nav {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px; /* Rule #4: 8pt grid (1.5 * 8) */
+        z-index: 10;
+    }
+
+    .nav-dot {
+        width: 8px; /* Rule #4: 8px */
+        height: 8px;
+        background: transparent;
+        border: 1.5px solid var(--accent-primary);
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-dot.active {
+        background: var(--accent-primary);
+        width: 24px; /* Distinctive shape change for active state */
+        border-color: var(--accent-primary);
+    }
+
+</style>
+
+<!--gallery showcase style-->
+<style>
+    /* Showcase Gallery Layout */
+    .docops-workbench-showcase {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        perspective: 1000px;
+    }
+
+    .workbench-item {
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 6px 6px 0px var(--accent-pink);
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: itemSlideIn 0.6s ease forwards;
+    }
+
+    .workbench-item:hover {
+        transform: translate(-4px, -4px) rotate(0.5deg);
+        box-shadow: 12px 12px 0px var(--accent-pink);
+        border-color: var(--accent-secondary);
+    }
+
+    /* Workbench Chrome (Header) */
+    .workbench-chrome {
+        background: #1a1a2e;
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--accent-primary);
+    }
+
+    .workbench-kind {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--accent-secondary);
+        font-weight: 500;
+    }
+
+    .workbench-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--accent-primary);
+        color: #fff;
+        font-family: var(--font-heading);
+        font-size: 0.6rem;
+        padding: 2px 8px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--accent-primary);
+        color: #fff;
+    }
+
+    /* Canvas & Content */
+    .workbench-canvas {
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+    }
+
+    .workbench-canvas svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.5s ease;
+    }
+
+    .workbench-footer {
+        padding: 0.75rem 1rem;
+        background: rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .workbench-title {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-heading);
+    }
+
+    /* Modal System */
+    .showcase-modal {
+        position: fixed; /* Lock to viewport, ignore page scroll */
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 5000; /* Significant jump to stay on top of everything */
+        display: none;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; /* Lock container */
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(13, 13, 18, 0.98); /* Near opaque for focus */
+        backdrop-filter: blur(20px);
+        z-index: 5001;
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        z-index: 5002;
+        background: var(--bg-base);
+        border: 4px solid var(--accent-secondary);
+        box-shadow: 25px 25px 0px var(--accent-pink);
+        width: 95%;
+        max-width: 1200px;
+        max-height: 90vh; /* Stay within viewport */
+        display: flex;
+        flex-direction: column;
+        animation: brutalistReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes brutalistReveal {
+        from { transform: scale(0.9) translateY(30px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .showcase-modal-body {
+        padding: 3rem;
+        overflow-y: auto; /* Internal scrolling only */
+        flex: 1;
+        display: block; /* Important for scroll calculations */
+    }
+
+    /* Centering Fix for SVG diagrams */
+    .modal-svg-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        width: 100%;
+    }
+
+    .modal-svg-wrapper svg {
+        max-width: 100%;
+        height: auto !important; /* Allow natural aspect ratio */
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    /* Body locking when modal is open */
+    body.modal-open {
+        overflow: hidden !important;
+        padding-right: 15px; /* Prevent layout shift from scrollbar removal */
+    }
+</style>
+<!--Slide show script-->
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const slideshows = document.querySelectorAll('.docops-slideshow');
+
+        slideshows.forEach(ss => {
+            const slides = ss.querySelectorAll('.docops-slide');
+            if (slides.length === 0) return; // Skip empty slideshows
+
+            const interval = parseInt(ss.dataset.interval) || 5000;
+            let currentIndex = 0;
+
+            // Add Progress Bar
+            const progressCont = document.createElement('div');
+            progressCont.className = 'slideshow-progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'slideshow-progress-bar';
+            progressCont.appendChild(progressBar);
+            ss.appendChild(progressCont);
+
+            // Add Counter
+            const counter = document.createElement('div');
+            counter.className = 'slideshow-counter';
+            ss.appendChild(counter);
+
+            // Create navigation dots
+            const nav = document.createElement('div');
+            nav.className = 'slideshow-nav';
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(i);
+                };
+                nav.appendChild(dot);
+            });
+            ss.appendChild(nav);
+
+            function updateCounter() {
+                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+
+            function resetProgress() {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${interval}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 50);
+            }
+
+            function goToSlide(index) {
+                slides[currentIndex].classList.remove('active');
+                nav.children[currentIndex].classList.remove('active');
+
+                currentIndex = index;
+
+                slides[currentIndex].classList.add('active');
+                nav.children[currentIndex].classList.add('active');
+                updateCounter();
+                resetProgress();
+            }
+
+            function nextSlide() {
+                let next = (currentIndex + 1) % slides.length;
+                goToSlide(next);
+            }
+
+            // Initial State
+            updateCounter();
+            resetProgress();
+
+            // Start autoplay
+            let slideTimer = setInterval(nextSlide, interval);
+
+            // Pause on hover
+            ss.addEventListener('mouseenter', () => {
+                clearInterval(slideTimer);
+                progressBar.style.opacity = '0.3';
+            });
+            ss.addEventListener('mouseleave', () => {
+                slideTimer = setInterval(nextSlide, interval);
+                progressBar.style.opacity = '1';
+                resetProgress();
+            });
+        });
+    });
+</script>
+<!-- Showcase Gallery Script -->
+<script>
+    window.showcaseGallery = {
+        // Track TOC state so we can restore it exactly as it was
+        tocWasActive: false,
+
+        hideTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            if (toc) {
+                // Save current state
+                this.tocWasActive = toc.classList.contains('toc-active');
+                // Force hide
+                toc.classList.remove('toc-active');
+            }
+            if (toggle) {
+                toggle.classList.remove('active');
+                toggle.style.display = 'none'; // Completely remove from UI during modal
+            }
+            document.body.classList.add('modal-open');
+        },
+
+        restoreTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            document.body.classList.remove('modal-open');
+
+            if (toggle) {
+                toggle.style.display = 'flex'; // Bring toggle back
+            }
+
+            // Restore TOC to its previous state (if it was open, re-open it)
+            if (toc && this.tocWasActive) {
+                toc.classList.add('toc-active');
+                if (toggle) {
+                    toggle.classList.add('active');
+                    toggle.querySelector('span').textContent = 'CLOSE';
+                }
+            } else if (toggle) {
+                toggle.querySelector('span').textContent = 'CONTENTS';
+            }
+        },
+
+        showContent(itemId, title, kind, content) {
+            const modal = document.getElementById('showcase-content-modal');
+            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            modal.querySelector('.showcase-content-code').textContent = content;
+
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        expandItem(itemId, title) {
+            const item = document.getElementById(itemId);
+            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            const modal = document.getElementById('showcase-gallery-modal');
+
+            modal.querySelector('.showcase-modal-title').textContent = title;
+            modal.querySelector('.showcase-modal-body').innerHTML =
+                `<div class="modal-svg-wrapper">${svgContent}</div>`;
+
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        closeContentModal() {
+            document.getElementById('showcase-content-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        closeModal() {
+            document.getElementById('showcase-gallery-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        copyContent() {
+            const code = document.querySelector('.showcase-content-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.showcase-copy-btn');
+                const oldText = btn.textContent;
+                btn.textContent = 'COPIED! ✅';
+                setTimeout(() => btn.textContent = oldText, 2000);
+            });
+        }
+    };
+
+    // Escape key to close modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            showcaseGallery.closeModal();
+            showcaseGallery.closeContentModal();
+        }
+    });
+</script>
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            // Updated to target the nested <g> tag per ui.md rules
+            const target = container.querySelector('.docops-transform-group') || container.querySelector('svg');
+            if (!target) return;
+
+            let currentZoom = parseFloat(target.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            target.dataset.zoom = currentZoom;
+            target.style.transform = `scale(${currentZoom})`;
+            target.style.transformOrigin = "center center";
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+        },
+
+        closeCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            container.style.display = 'none';
+        },
+        async loadCsvData(id) {
+            const svgContainer = document.getElementById(id);
+            const svg = svgContainer.querySelector('svg');
+
+            if (!svg) {
+                console.error('No SVG found');
+                return;
+            }
+
+            try {
+                // Method 1: Standard metadata with type
+                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                    return;
+                }
+
+                // Method 2: Custom csv-data element
+                csvMetadata = svg.querySelector('metadata csv-data');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                // Method 3: Data attribute
+                const csvDataAttr = svg.getAttribute('data-csv');
+                if (csvDataAttr) {
+                    const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                console.error('No CSV data found in SVG');
+            } catch (error) {
+                console.error('Failed to parse CSV data:', error);
+            }
+        },
+
+        renderCsvTable(container, csvData, tableId) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+                return;
+            }
+
+            // Generate a unique table ID if not provided or make existing ID unique
+            const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+            const table = document.createElement('table');
+            table.className = 'csv-table';
+            table.id = uniqueTableId;
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            csvData.headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+
+            // Add button cell to header
+            const buttonTh = document.createElement('th');
+            buttonTh.className = 'csv-header-button-cell';
+
+            // Create copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'csv-copy-button';
+            copyButton.textContent = 'Copy';
+            copyButton.title = 'Copy as Tab-Delimited';
+            copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+            buttonTh.appendChild(copyButton);
+            headerRow.appendChild(buttonTh);
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create body
+            const tbody = document.createElement('tbody');
+
+            csvData.rows.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                // Add empty cell for button column
+                const emptyTd = document.createElement('td');
+                tr.appendChild(emptyTd);
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            container.innerHTML = '';
+            container.appendChild(table);
+            const tableElement = document.getElementById(uniqueTableId);
+            if (tableElement) {
+                tableElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+
+
+        },
+
+        copyCsvAsTabDelimited(csvData) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                console.error('Invalid CSV data for copying');
+                return;
+            }
+
+            // Create tab-delimited string
+            let tabDelimitedData = '';
+
+            // Add headers
+            tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+            // Add rows
+            csvData.rows.forEach(row => {
+                tabDelimitedData += row.join('\t') + '\n';
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(tabDelimitedData).then(() => {
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            }).catch(err => {
+                console.error('Failed to copy to clipboard:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = tabDelimitedData;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    // Provide visual feedback
+                    const buttons = document.querySelectorAll('.csv-copy-button');
+                    buttons.forEach(button => {
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        button.style.background = '#28a745';
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.background = '#007acc';
+                        }, 2000);
+                    });
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed:', fallbackErr);
+                    alert('Copy failed. Please select and copy the data manually.');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+
+
+<script>
+    class ThemeToggleTop {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            this.createToggleButton();
+            this.loadSavedTheme();
+            this.setupEventListeners();
+        }
+
+        createToggleButton() {
+            const button = document.createElement('button');
+            button.className = 'theme-toggle';
+            button.setAttribute('aria-label', 'Toggle theme');
+            button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+            document.body.appendChild(button);
+            this.toggleButton = button;
+        }
+
+        setupEventListeners() {
+            this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+            // Listen for system theme changes only when in auto mode
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (this.getThemePreference() === 'auto') {
+                    this.updateTheme();
+                }
+            });
+        }
+
+        toggleTheme() {
+            const currentTheme = this.getThemePreference();
+            let newTheme;
+
+            switch (currentTheme) {
+                case 'light':
+                    newTheme = 'dark';
+                    break;
+                case 'dark':
+                    newTheme = 'auto';
+                    break;
+                case 'auto':
+                    newTheme = 'light';
+                    break;
+                default:
+                    // Check current state of the document
+                    const root = document.documentElement;
+                    if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                        newTheme = 'light';
+                    } else {
+                        newTheme = 'dark';
+                    }
+            }
+
+            this.setTheme(newTheme);
+        }
+
+        setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            this.updateTheme();
+        }
+
+        getThemePreference() {
+            const saved = localStorage.getItem('theme');
+            if (saved) {
+                return saved;
+            }
+
+            // If no saved preference, detect current state from DOM
+            const root = document.documentElement;
+            if (root.classList.contains('dark-mode')) {
+                return 'dark';
+            } else if (root.classList.contains('dark-mode-auto')) {
+                return 'auto';
+            }
+            return 'light';
+        }
+
+        updateTheme() {
+            const theme = this.getThemePreference();
+            const root = document.documentElement;
+
+            // Remove existing theme classes
+            root.classList.remove('dark-mode', 'dark-mode-auto');
+
+            switch (theme) {
+                case 'dark':
+                    root.classList.add('dark-mode');
+                    break;
+                case 'auto':
+                    root.classList.add('dark-mode-auto');
+                    break;
+                // 'light' theme uses default styles
+            }
+
+            // Update button aria-label
+            const themeNames = {
+                light: 'light',
+                dark: 'dark',
+                auto: 'auto (follows system)'
+            };
+            this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+        }
+
+        loadSavedTheme() {
+            this.updateTheme();
+        }
+    }
+
+    // Initialize theme toggle when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+    } else {
+        new ThemeToggleTop();
+    }
+</script>
+<style>
+    #footer-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+        border-top: 1px solid var(--docops-border);
+        font-family: var(--docops-font-main);
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--docops-accent);
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-link:hover {
+        color: #fff;
+        background: var(--docops-accent-glow);
+        border-color: var(--docops-accent);
+        box-shadow: 0 0 15px var(--docops-accent-glow);
+    }
+
+    .nav-link.next::after { content: ' →'; }
+    .nav-link.prev::before { content: '← '; }
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--modal-overlay-bg); /* Use variable */
+        backdrop-filter: blur(15px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10000;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        position: relative;
+        width: 90vw;
+        height: 85vh;
+        background: var(--modal-content-bg); /* Use variable */
+        border: 1px solid var(--modal-content-border); /* Use variable */
+        box-shadow: var(--modal-shadow);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        transform: scale(0.8) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    #modalSvgContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #modalSvgContainer svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .close-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--docops-accent);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10002;
+    }
+
+    .close-button:hover {
+        background: var(--docops-accent);
+    }
+    .modal-zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 8px 12px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .modal-zoom-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 4px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+    }
+
+    .modal-zoom-level {
+        color: white;
+        font-family: var(--docops-font-mono);
+        font-size: 12px;
+        min-width: 45px;
+        text-align: center;
+    }
+</style>
+<script>
+
+    // Zoom state
+    let modalZoomLevel = 1;
+    const MODAL_ZOOM_MIN = 0.25;
+    const MODAL_ZOOM_MAX = 4;
+    const MODAL_ZOOM_STEP = 0.25;
+
+    function openModal(container) {
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+
+        if (!modalOverlay || !modalSvgContainer) {
+            console.error("Modal elements not found in DOM");
+            return;
+        }
+        // Reset zoom level
+        modalZoomLevel = 1;
+        updateZoomDisplay();
+
+        // Clone the SVG from the clicked container
+        const svg = container.querySelector('svg');
+        const svgClone = svg.cloneNode(true);
+        svgClone.style.transform = 'scale(1)';
+        svgClone.style.transition = 'transform 0.2s ease';
+
+        // Clear previous content and add new SVG
+        modalSvgContainer.innerHTML = '';
+        modalSvgContainer.appendChild(svgClone);
+
+        // Show modal with animation
+        modalOverlay.classList.add('active');
+
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        modalZoomLevel = 1;
+    }
+
+    function closeModalOnBackdrop(event) {
+        // Only close if clicking the overlay itself, not the content
+        if (event.target === modalOverlay) {
+            closeModal();
+        }
+    }
+
+    function modalZoomIn() {
+        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomOut() {
+        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomReset() {
+        modalZoomLevel = 1;
+        applyModalZoom();
+    }
+
+    function applyModalZoom() {
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+        const svg = modalSvgContainer.querySelector('svg');
+        if (svg) {
+            // Same here: use concatenation
+            svg.style.transform = "scale(" + modalZoomLevel + ")";
+        }
+        updateZoomDisplay();
+    }
+
+    function updateZoomDisplay() {
+        const display = document.getElementById('modalZoomLevel');
+        if (display) {
+            // Change from template literal to standard concatenation
+            // to avoid issues with Kotlin/Asciidoctor interpolation
+            display.textContent = Math.round(modalZoomLevel * 100) + "%";
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+    const docopsCopy = {
+        url: (btn) => {
+            const url = btn.closest('.docops-media-card').getAttribute('data-url');
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        svg: (btn) => {
+            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+            navigator.clipboard.writeText(svg).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        png: (btn) => {
+            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(blob => {
+                    const item = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([item]);
+                    const originalText = btn.innerText;
+                    btn.innerText = 'COPIED!';
+                    setTimeout(() => btn.innerText = originalText, 2000);
+                });
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        }
+    };
+
+</script>
+
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+<script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<h1>DocOps Extension Server</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_transform_your_documentation_with_powerful_visualizations">1. Transform Your Documentation with Powerful Visualizations</a>
+<ul class="sectlevel2">
+<li><a href="#_why_docops_extension_server">1.1. Why DocOps Extension Server?</a>
+<ul class="sectlevel3">
+<li><a href="#_instant_visual_impact">1.1.1. 🚀 <strong>Instant Visual Impact</strong></a></li>
+<li><a href="#_zero_learning_curve">1.1.2. 💡 <strong>Zero Learning Curve</strong></a></li>
+<li><a href="#_enterprise_performance">1.1.3. ⚡ <strong>Enterprise Performance</strong></a></li>
+<li><a href="#_professional_design">1.1.4. 🎨 <strong>Professional Design</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_what_you_can_create">2. What You Can Create</a>
+<ul class="sectlevel2">
+<li><a href="#_dynamic_charts_analytics">2.1. 📊 <strong>Dynamic Charts &amp; Analytics</strong></a></li>
+<li><a href="#_️_strategic_planning">2.2. 🗺️ <strong>Strategic Planning</strong></a></li>
+<li><a href="#_️_architecture_design">2.3. 🏗️ <strong>Architecture &amp; Design</strong></a></li>
+<li><a href="#_business_documentation">2.4. 📋 <strong>Business Documentation</strong></a></li>
+</ul>
+</li>
+<li><a href="#_real_world_success_stories">3. Real-World Success Stories</a>
+<ul class="sectlevel2">
+<li><a href="#_enterprise_use_cases">3.1. 🏢 <strong>Enterprise Use Cases</strong></a></li>
+<li><a href="#_business_impact">3.2. 💼 <strong>Business Impact</strong></a></li>
+</ul>
+</li>
+<li><a href="#_getting_started_in_minutes">4. Getting Started in Minutes</a>
+<ul class="sectlevel2">
+<li><a href="#_1_simple_integration">4.1. 1. <strong>Simple Integration</strong></a></li>
+<li><a href="#_or_integrate_with_your_existing_asciidoc_pipeline">4.2. Or integrate with your existing AsciiDoc pipeline</a></li>
+<li><a href="#_2_write_once_visualize_everywhere">4.3. 2. <strong>Write Once, Visualize Everywhere</strong></a></li>
+<li><a href="#_3_professional_results">4.4. 3. <strong>Professional Results</strong></a></li>
+</ul>
+</li>
+<li><a href="#_technical_excellence">5. Technical Excellence</a>
+<ul class="sectlevel2">
+<li><a href="#_built_for_developers">5.1. 🔧 <strong>Built for Developers</strong></a></li>
+<li><a href="#_️_enterprise_security">5.2. 🛡️ <strong>Enterprise Security</strong></a></li>
+<li><a href="#_performance_optimized">5.3. 📈 <strong>Performance Optimized</strong></a></li>
+</ul>
+</li>
+<li><a href="#_pricing_licensing">6. Pricing &amp; Licensing</a>
+<ul class="sectlevel2">
+<li><a href="#_open_source_foundation">6.1. 🆓 <strong>Open Source Foundation</strong></a></li>
+<li><a href="#_enterprise_support">6.2. 💼 <strong>Enterprise Support</strong></a></li>
+</ul>
+</li>
+<li><a href="#_ready_to_transform_your_documentation">7. Ready to Transform Your Documentation?</a>
+<ul class="sectlevel2">
+<li><a href="#_whats_next">7.1. What&#8217;s Next?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="693.5624999913305" height="227.81249999715234" viewBox="0 0 1233.0 405.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_f690ed9b-0695-4d11-9491-3ec0b357808a" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["ADR","adr.html","Architecture Decision Records","documentation","#6366f1","true","false"],["Architecture","arch.html","DocOps Implementation Architecture","documentation","#6366f1","true","false"],["Badges & Shield","shield.html","Shield Documentation","documentation","#6366f1","true","false"],["Buttons","buttons.html","Button Documentation","documentation","#6366f1","true","false"],["Callout","callout.html","Callout Documentation","documentation","#6366f1","true","false"],["Charts","charts.html","Charts Documentation","documentation","#6366f1","true","false"],["Connectors","connectors.html","Connector Documentation","documentation","#6366f1","true","false"],["Domain Visualization","domain.html","Domain Visualization Documentation","documentation","#6366f1","true","false"],["Gherkin","gherkin.html","Gherkin Format support for DocOps","documentation","#6366f1","true","false"],["Metrics Card","metricscard.html","Metrics Card Documentation","documentation","#6366f1","true","false"],["Placemat","placemat.html","Placemat Documentation","documentation","#6366f1","true","false"],["Planner","planner.html","Project Planner Documentation","documentation","#6366f1","true","false"],["Quadrant","quadrant.html","Quadrant Chart Documentation","documentation","#6366f1","true","false"],["Release Strategy","releasestrategy.html","Release Strategy Documentation","documentation","#6366f1","true","false"],["Roadmap","roadmap.html","Roadmap Documentation","documentation","#6366f1","true","false"],["Scorecard","scorecard.html","Scorecard Documentation","documentation","#6366f1","true","false"],["Story","story.html","What is DocOps","documentation","#6366f1","true","false"],["Timeline","timeline.html","Timeline Documentation","documentation","#6366f1","true","false"],["Todo","todo.html","Todo Documentation","documentation","#6366f1","true","false"],["Tree Chart","treechart.html","Tree Chart Documentation","documentation","#6366f1","true","false"],["Treemap","treemap.html","Treemap Documentation","documentation","#6366f1","true","false"],["VCard","vcard.html","VCards","documentation","#6366f1","true","false"],["Word Cloud","wordcloud.html","Word Cloud Documentation","documentation","#6366f1","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><!-- Background Atmosphere Pattern --><pattern id="dotPattern_f690ed9b-0695-4d11-9491-3ec0b357808a" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.15" /></pattern><filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><!-- Glass Reflection Gradient --><linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="white" stop-opacity="0.4"/><stop offset="50%" stop-color="white" stop-opacity="0.05"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient><filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="5" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/></filter><radialGradient id="raisedButton_a0a895f6-3a9a-4b7b-bbe7-378400dcc9f7" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad0-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_8714c8b3-f492-4140-939c-752d6cf4b1f7" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad1-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_8ee98955-c4d3-4ad1-b8f3-8118a6663ce0" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad2-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d7b2081c-613c-429f-b864-a2d3b1aefc11" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad3-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_e27c2e22-3daa-4548-8926-9e9455e06fbe" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad4-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_ed039650-9378-4dd4-a79e-1832c2e5ac5a" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad5-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_2585e476-5f6c-4da6-9226-d7375d70a36f" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad6-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_a4163148-8927-41c2-b1e3-9cb114a81f9f" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad7-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_8608a3e1-9c9d-4da0-8c79-1a2ab7d64ce6" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad8-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_f5388de6-5f92-4606-9bd7-203344705312" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad9-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_2718c3d3-9832-4858-8f83-e607788c61b3" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad10-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_d115199a-a32e-4fa2-9109-abe6b0ab6431" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad11-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_eabb226e-f625-4b2c-89d9-da1375833a55" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad12-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_b826b37b-50e8-44d3-9fd5-ec05c57d7279" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad13-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_4d234e7a-5ddc-4491-9d8e-6a5befe3f8a7" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad14-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_4c516a39-a28a-49ae-bd49-0857566b39b8" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad15-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_e23631d7-3b40-42ed-a2c7-cdefccc9a5fc" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad16-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_7ec937f1-81b0-45e6-95b0-2665a1b3ee95" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad17-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_db929a9e-79ea-42a2-9e39-ce2c08c93b6d" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad18-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_3e80f65c-7d99-40ec-94f0-0d0adbbe6357" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad19-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_5879b234-1ad2-4f85-9808-ff9798768f12" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad20-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_6e359beb-147e-4ff3-9e2e-3392bb2b4d97" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad21-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><radialGradient id="raisedButton_98e92a31-85b9-49fb-bafe-0fb752dee0ed" cx="35%" cy="30%" r="65%"><stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" /><stop offset="100%" style="stop-color:#3b3d90;stop-opacity:1" /></radialGradient><linearGradient id="nnneon-grad22-f690ed9b-0695-4d11-9491-3ec0b357808a" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4547a8"/></linearGradient><style>.orb-group { cursor: pointer; } .orb-group .moving-group { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); } .glow-ring { transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease; stroke-dasharray: 400; stroke-dashoffset: 400; opacity: 0.2; } .orb-group:hover .glow-ring { stroke-dashoffset: 0; opacity: 1; } .orb-text { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; pointer-events: none; }</style></defs><!-- Apply atmospheric pattern background --><rect width="1233.0" height="405.0" fill="url(#dotPattern_f690ed9b-0695-4d11-9491-3ec0b357808a)" rx="12" pointer-events="none"/><g transform="scale(1.0)"><g transform="translate(70,65)" onclick="window.open('adr.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a0a895f6-3a9a-4b7b-bbe7-378400dcc9f7)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> ADR</tspan></text></g></g><g transform="translate(200,65)" onclick="window.open('arch.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_8714c8b3-f492-4140-939c-752d6cf4b1f7)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Architecture</tspan></text></g></g><g transform="translate(330,65)" onclick="window.open('shield.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_8ee98955-c4d3-4ad1-b8f3-8118a6663ce0)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Badges &amp;</tspan><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;">Shield</tspan></text></g></g><g transform="translate(460,65)" onclick="window.open('buttons.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d7b2081c-613c-429f-b864-a2d3b1aefc11)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Buttons</tspan></text></g></g><g transform="translate(590,65)" onclick="window.open('callout.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e27c2e22-3daa-4548-8926-9e9455e06fbe)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Callout</tspan></text></g></g><g transform="translate(720,65)" onclick="window.open('charts.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_ed039650-9378-4dd4-a79e-1832c2e5ac5a)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Charts</tspan></text></g></g><g transform="translate(850,65)" onclick="window.open('connectors.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_2585e476-5f6c-4da6-9226-d7375d70a36f)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Connectors</tspan></text></g></g><g transform="translate(980,65)" onclick="window.open('domain.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_a4163148-8927-41c2-b1e3-9cb114a81f9f)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Domain</tspan><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;">Visualization</tspan></text></g></g><g transform="translate(1110,65)" onclick="window.open('gherkin.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_8608a3e1-9c9d-4da0-8c79-1a2ab7d64ce6)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Gherkin</tspan></text></g></g><g transform="translate(70,195)" onclick="window.open('metricscard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_f5388de6-5f92-4606-9bd7-203344705312)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Metrics Card</tspan></text></g></g><g transform="translate(200,195)" onclick="window.open('placemat.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_2718c3d3-9832-4858-8f83-e607788c61b3)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Placemat</tspan></text></g></g><g transform="translate(330,195)" onclick="window.open('planner.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_d115199a-a32e-4fa2-9109-abe6b0ab6431)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Planner</tspan></text></g></g><g transform="translate(460,195)" onclick="window.open('quadrant.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_eabb226e-f625-4b2c-89d9-da1375833a55)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Quadrant</tspan></text></g></g><g transform="translate(590,195)" onclick="window.open('releasestrategy.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_b826b37b-50e8-44d3-9fd5-ec05c57d7279)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-12" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Release</tspan><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;">Strategy</tspan></text></g></g><g transform="translate(720,195)" onclick="window.open('roadmap.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_4d234e7a-5ddc-4491-9d8e-6a5befe3f8a7)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Roadmap</tspan></text></g></g><g transform="translate(850,195)" onclick="window.open('scorecard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_4c516a39-a28a-49ae-bd49-0857566b39b8)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Scorecard</tspan></text></g></g><g transform="translate(980,195)" onclick="window.open('story.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_e23631d7-3b40-42ed-a2c7-cdefccc9a5fc)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Story</tspan></text></g></g><g transform="translate(1110,195)" onclick="window.open('timeline.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_7ec937f1-81b0-45e6-95b0-2665a1b3ee95)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Timeline</tspan></text></g></g><g transform="translate(70,330)" onclick="window.open('todo.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_db929a9e-79ea-42a2-9e39-ce2c08c93b6d)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Todo</tspan></text></g></g><g transform="translate(200,330)" onclick="window.open('treechart.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_3e80f65c-7d99-40ec-94f0-0d0adbbe6357)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Tree Chart</tspan></text></g></g><g transform="translate(330,330)" onclick="window.open('treemap.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_5879b234-1ad2-4f85-9808-ff9798768f12)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Treemap</tspan></text></g></g><g transform="translate(460,330)" onclick="window.open('vcard.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_6e359beb-147e-4ff3-9e2e-3392bb2b4d97)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> VCard</tspan></text></g></g><g transform="translate(590,330)" onclick="window.open('wordcloud.html', '_top')" style="cursor: pointer;" class="orb-group"><!-- STATIC LAYER: The Glow Ring stays behind --><circle r="62" cx="0" cy="0" fill="none" stroke="#6366f1" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/><g class="moving-group"><!-- SHIFTING LAYER: The Shadow --><circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/><!-- SHIFTING LAYER: The Orb --><circle r="55" cx="0" cy="0" fill="url(#raisedButton_98e92a31-85b9-49fb-bafe-0fb752dee0ed)" stroke="#6366f1" stroke-width="1.5"/><!-- Glass Shine Reflection (Hidden for PDF) --><circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/><!-- Top-Left Specular Highlight Dot --><circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/></g><!-- Content --><g class="moving-group"><text x="0" y="-6" text-anchor="middle" class="orb-text" style="fill: #111111; font-family: Arial, Helvetica, sans-serif"><tspan x="0" dy="12" style="font-family: 'Outfit', sans-serif; font-size: 11px; fill: #fcfcfc; font-weight: bold;"> Word Cloud</tspan></text></g></g></g></svg></div></div></div></div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_transform_your_documentation_with_powerful_visualizations">1. Transform Your Documentation with Powerful Visualizations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>DocOps Extension Server</strong> is the ultimate solution for creating rich, interactive documentation that captivates your audience and communicates complex ideas with clarity. Say goodbye to static documentation and hello to dynamic, engaging content that drives results.</p>
+</div>
+<div class="paragraph lead">
+<p><strong>Turn your documentation into a competitive advantage with over 20+ visualization types, seamless integration, and enterprise-grade performance.</strong></p>
+</div>
+<div class="sect2">
+<h3 id="_why_docops_extension_server">1.1. Why DocOps Extension Server?</h3>
+<div class="sect3">
+<h4 id="_instant_visual_impact">1.1.1. 🚀 <strong>Instant Visual Impact</strong></h4>
+<div class="paragraph">
+<p>Transform boring text into compelling visuals in seconds. Our server supports <strong>20+ visualization types</strong> including roadmaps, timelines, charts, scorecards, and architectural diagrams - all generated from simple text markup.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_zero_learning_curve">1.1.2. 💡 <strong>Zero Learning Curve</strong></h4>
+<div class="paragraph">
+<p>Built for <strong>AsciiDoc</strong> - the documentation format you already know and love. No complex tools, no proprietary formats. Just add a simple block directive and watch your content come to life.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enterprise_performance">1.1.3. ⚡ <strong>Enterprise Performance</strong></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Sub-second rendering</strong> with optimized SVG generation</p>
+</li>
+<li>
+<p><strong>Scalable architecture</strong> handling thousands of concurrent requests</p>
+</li>
+<li>
+<p><strong>Production-ready</strong> with comprehensive monitoring and error handling</p>
+</li>
+<li>
+<p><strong>RESTful API</strong> for seamless integration with your existing tools</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_professional_design">1.1.4. 🎨 <strong>Professional Design</strong></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Modern, responsive designs</strong> that look great on any device</p>
+</li>
+<li>
+<p><strong>Dark/Light theme support</strong> for brand consistency</p>
+</li>
+<li>
+<p><strong>Customizable colors and styling</strong> to match your corporate identity</p>
+</li>
+<li>
+<p><strong>Publication-ready output</strong> for reports, presentations, and web</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_you_can_create">2. What You Can Create</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dynamic_charts_analytics">2.1. 📊 <strong>Dynamic Charts &amp; Analytics</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Bar Charts, Pie Charts, Line Charts</strong> - Transform your data into insights</p>
+</li>
+<li>
+<p><strong>Comparison Charts</strong> - Show competitive advantages clearly</p>
+</li>
+<li>
+<p><strong>Metrics Cards</strong> - Highlight KPIs and performance indicators</p>
+</li>
+<li>
+<p><strong>Word Clouds</strong> - Visualize trends and themes</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_️_strategic_planning">2.2. 🗺️ <strong>Strategic Planning</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Product Roadmaps</strong> - Communicate your vision with timeline precision</p>
+</li>
+<li>
+<p><strong>Release Strategies</strong> - Plan and track feature delivery</p>
+</li>
+<li>
+<p><strong>Project Timelines</strong> - Keep stakeholders aligned on progress</p>
+</li>
+<li>
+<p><strong>Planning Boards</strong> - Organize tasks and milestones visually</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_️_architecture_design">2.3. 🏗️ <strong>Architecture &amp; Design</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>System Architecture Diagrams</strong> - Document your technical landscape</p>
+</li>
+<li>
+<p><strong>Process Flow Diagrams</strong> - Map out workflows and procedures</p>
+</li>
+<li>
+<p><strong>Connector Diagrams</strong> - Show system integrations and dependencies</p>
+</li>
+<li>
+<p><strong>Swimlane Diagrams</strong> - Clarify roles and responsibilities</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_business_documentation">2.4. 📋 <strong>Business Documentation</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Scorecards</strong> - Track performance against objectives</p>
+</li>
+<li>
+<p><strong>Feature Comparison</strong> - Help customers choose the right solution</p>
+</li>
+<li>
+<p><strong>Decision Records (ADR)</strong> - Document architectural decisions</p>
+</li>
+<li>
+<p><strong>Callouts &amp; Annotations</strong> - Highlight important information</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_real_world_success_stories">3. Real-World Success Stories</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_enterprise_use_cases">3.1. 🏢 <strong>Enterprise Use Cases</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Product Teams</strong> use roadmaps to align stakeholders on feature priorities</p>
+</li>
+<li>
+<p><strong>Engineering Teams</strong> leverage architecture diagrams for system documentation</p>
+</li>
+<li>
+<p><strong>Marketing Teams</strong> create compelling comparison charts for sales materials</p>
+</li>
+<li>
+<p><strong>Executive Teams</strong> track progress with dynamic scorecards and dashboards</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_business_impact">3.2. 💼 <strong>Business Impact</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>50% reduction</strong> in documentation creation time</p>
+</li>
+<li>
+<p><strong>3x improvement</strong> in stakeholder engagement</p>
+</li>
+<li>
+<p><strong>Zero maintenance</strong> overhead - content updates automatically</p>
+</li>
+<li>
+<p><strong>Universal compatibility</strong> - works with any AsciiDoc toolchain</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_getting_started_in_minutes">4. Getting Started in Minutes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_1_simple_integration">4.1. 1. <strong>Simple Integration</strong></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Docker deployment
+docker run -p 8080:8080 docops/extension-server</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_or_integrate_with_your_existing_asciidoc_pipeline">4.2. Or integrate with your existing AsciiDoc pipeline</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_2_write_once_visualize_everywhere">4.3. 2. <strong>Write Once, Visualize Everywhere</strong></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_3_professional_results">4.4. 3. <strong>Professional Results</strong></h3>
+<div class="paragraph">
+<p>Your text automatically transforms into beautiful, interactive visualizations that scale perfectly across all devices and platforms.</p>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_technical_excellence">5. Technical Excellence</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_built_for_developers">5.1. 🔧 <strong>Built for Developers</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>RESTful API</strong> with OpenAPI specification</p>
+</li>
+<li>
+<p><strong>Kotlin/Spring Boot</strong> architecture for reliability</p>
+</li>
+<li>
+<p><strong>SVG output</strong> for crisp, scalable graphics</p>
+</li>
+<li>
+<p><strong>Comprehensive error handling</strong> and validation</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_️_enterprise_security">5.2. 🛡️ <strong>Enterprise Security</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Stateless architecture</strong> for horizontal scaling</p>
+</li>
+<li>
+<p><strong>Input validation</strong> and sanitization</p>
+</li>
+<li>
+<p><strong>CORS support</strong> for cross-origin requests</p>
+</li>
+<li>
+<p><strong>Health checks</strong> and monitoring endpoints</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_performance_optimized">5.3. 📈 <strong>Performance Optimized</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cached rendering</strong> for frequently accessed content</p>
+</li>
+<li>
+<p><strong>Efficient parsing</strong> with minimal memory footprint</p>
+</li>
+<li>
+<p><strong>Parallel processing</strong> for bulk operations</p>
+</li>
+<li>
+<p><strong>CDN-friendly</strong> static asset generation</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pricing_licensing">6. Pricing &amp; Licensing</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_open_source_foundation">6.1. 🆓 <strong>Open Source Foundation</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>MIT License</strong> - Use freely in commercial projects</p>
+</li>
+<li>
+<p><strong>Community support</strong> through GitHub discussions</p>
+</li>
+<li>
+<p><strong>Regular updates</strong> and security patches</p>
+</li>
+<li>
+<p><strong>Extensive documentation</strong> and examples</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_enterprise_support">6.2. 💼 <strong>Enterprise Support</strong></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Professional services</strong> for custom integrations</p>
+</li>
+<li>
+<p><strong>Training workshops</strong> for your team</p>
+</li>
+<li>
+<p><strong>Priority support</strong> with SLA guarantees</p>
+</li>
+<li>
+<p><strong>Custom visualization development</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ready_to_transform_your_documentation">7. Ready to Transform Your Documentation?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Join developers and organizations who have already discovered the power of DocOps Extension Server.</p>
+</div>
+<div class="sect2">
+<h3 id="_whats_next">7.1. What&#8217;s Next?</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><a href="tutorial.html">📚 Tutorial</a></strong> - Step-by-step guide to your first visualization</p>
+</li>
+<li>
+<p><strong><a href="examples.html">💡 Examples</a></strong> - Comprehensive gallery of use cases</p>
+</li>
+<li>
+<p><strong><a href="arch.html">🏗️ Architecture</a></strong> - Technical deep dive and integration guide</p>
+</li>
+<li>
+<p><strong><a href="roadmap.html">🗺️ Roadmap</a></strong> - See what&#8217;s coming next</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+<style>
+/* Reading Time Styles */
+.reading-time {
+    position: fixed;
+    top: 1.5rem;
+    right: 2rem;
+    background: var(--bg-base); /* Uses the dynamic background variable */
+    backdrop-filter: blur(12px);
+    border: 2px solid var(--accent-secondary);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    z-index: 1005;
+    
+    /* Double-accent shadow follows the light/dark mode logic */
+    box-shadow: 6px 6px 0px var(--accent-pink);
+    
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-main); /* Switches between grey and dark slate */
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reading-time p {
+    margin: 0 !important;
+    font-weight: 600;
+}
+
+/* Light Mode specific opacity tweak */
+body.light-mode .reading-time {
+    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
+}
+</style>
+<div class="reading-time">
+    <p>📖 3 min read • 925 words</p>
+</div>
+<style>
+.listingblock {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.listingblock:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #999;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: rgba(45, 45, 45, 0.9);
+        color: #fff;
+        border-color: #666;
+    }
+    
+    .copy-button:hover {
+        background: rgba(45, 45, 45, 1);
+        border-color: #999;
+    }
+}
+
+</style>
+<script type="text/javascript">
+// Simple clipboard functionality without external dependencies
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise((resolve, reject) => {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject();
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy buttons to all code blocks
+    const codeBlocks = document.querySelectorAll('pre.highlight, div.listingblock pre, .literalblock pre');
+
+    codeBlocks.forEach(function(block, index) {
+        // Create wrapper div if it doesn't exist
+        let wrapper = block.closest('.listingblock, .literalblock');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'listingblock';
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+        }
+
+        // Add copy button
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.title = 'Copy to clipboard';
+
+        // Insert button
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(button);
+
+        // Add click handler
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the text content of the code block
+            const code = block.textContent || block.innerText;
+
+            copyToClipboard(code).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.backgroundColor = '#28a745';
+
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(function() {
+                button.innerHTML = '❌ Error';
+                button.style.backgroundColor = '#dc3545';
+
+                setTimeout(function() {
+                    button.innerHTML = '📋 Copy';
+                    button.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-content" id="modalContent">
+        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+        <!-- The JS specifically fails because this ID is missing -->
+        <div id="modalSvgContainer"></div>
+
+        <div class="modal-zoom-controls">
+            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+        </div>
+    </div>
+</div>
+<script>
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+        // Typography - Matching pro-style.css
+        fontFamily: "'Outfit', sans-serif",
+        fontSize: "14px",
+        
+        // Colors - Using your CSS Variables
+        primaryColor: 'var(--bg-surface)',
+        primaryTextColor: 'var(--text-main)',
+        primaryBorderColor: 'var(--accent-primary)',
+        lineColor: 'var(--accent-secondary)',
+        secondaryColor: 'var(--bg-base)',
+        tertiaryColor: 'var(--bg-surface)',
+        
+        // Specific Element Overrides
+        nodeBorder: 'var(--accent-primary)',
+        clusterBkg: 'var(--bg-base)',
+        clusterBorder: 'var(--border-color)',
+        titleColor: 'var(--text-heading)',
+        edgeLabelBackground: 'var(--bg-surface)',
+        
+        // Sequence Diagram specific
+        actorBkg: 'var(--bg-surface)',
+        actorBorder: 'var(--accent-primary)',
+        actorTextColor: 'var(--text-heading)',
+        noteBkgColor: 'var(--accent-glow)',
+        noteTextColor: 'var(--accent-primary)',
+    },
+    // Custom CSS for "AI Assistant" flair
+    themeCSS: `
+        .node rect, .node circle, .node ellipse, .node polygon {
+            stroke-width: 2px;
+            filter: drop-shadow(2px 2px 0px var(--accent-glow));
+        }
+        .label-container {
+            fill: var(--bg-surface);
+        }
+        .edgePath .path {
+            stroke: var(--accent-secondary) !important;
+            stroke-width: 1.5px !important;
+        }
+        .marker {
+            fill: var(--accent-secondary) !important;
+            stroke: var(--accent-secondary) !important;
+        }
+        text.titleText {
+            font-family: 'Syne', sans-serif !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+        }
+    `
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-container">
+    <a href="gherkin.html" class="nav-prev">&larr; Gherkin</a>
+          <a href="metricscard.html" class="nav-next">Metrics Cards &rarr;</a>
+  </div>
+</nav>
+</body>
+</html>

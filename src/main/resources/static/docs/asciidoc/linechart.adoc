@@ -1,0 +1,136 @@
+include::_base.adoc[]
+= Line Charts
+
+[[top]]
+== Introduction
+
+Line charts reveal trends over time. Whether tracking daily metrics, monthly performance, or quarterly growth, line charts make patterns, peaks, and valleys immediately visible. Multiple series let you compare related trends side-by-side.
+
+=== Key Features
+
+* *Multi-series support* - Compare up to 6 trends on one chart
+* *Smooth or angular lines* - Choose the visual style that fits your data
+* *Auto-scaled axes* - Smart axis ranges based on your data
+* *Interactive legend* - Toggle series visibility
+* *Area fill option* - Emphasize volume under the curve
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Simple Line Chart
+
+Single-series trend over time:
+
+[source,asciidoc]
+....
+[docops,line]
+----
+title=Monthly Revenue Trend
+width=800
+---
+Revenue | Jan | 40
+Revenue | Feb | 70
+Revenue | Mar | 90
+Revenue | Apr | 85
+Revenue | May | 110
+Revenue | Jun | 125
+----
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Multi-Series Comparison
+
+Track multiple metrics on one chart:
+
+[docops,line,controls=true]
+----
+include::charts/data/line1.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Smooth Lines with Area Fill
+
+Emphasize trends with curved lines and area shading:
+
+[source,asciidoc]
+....
+[docops,line]
+----
+title=User Growth Over Time
+width=800
+smoothLines=true
+showArea=true
+---
+Active Users | Week 1 | 1200
+Active Users | Week 2 | 1450
+Active Users | Week 3 | 1680
+Active Users | Week 4 | 1920
+Active Users | Week 5 | 2100
+----
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Performance tracking* - Monitor KPIs over weeks, months, or quarters
+* *Trend analysis* - Identify seasonal patterns or growth trajectories
+* *Before/after comparisons* - Show impact of changes or interventions
+* *Forecasting visualization* - Display historical data with projected values
+* *Multi-metric dashboards* - Compare related trends (e.g., sales vs. costs)
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Format
+
+[source,asciidoc]
+....
+[docops,line]
+----
+title=Chart Title
+width=800
+smoothLines=false
+showArea=true
+useDark=false
+---
+Series 1 | Jan | 40
+Series 1 | Feb | 70
+Series 2 | Jan | 22
+Series 2 | Feb | 33
+----
+....
+
+=== Common Options
+
+* `smoothLines=true` - Curved lines (default: false for angular)
+* `showArea=true` - Fill area under lines (default: true)
+* `useDark=true` - Dark theme
+* `width=800` - Chart width (default: 900)
+* `backgroundColor=#F5F5F5` - Custom background color
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+* *Use consistent time intervals* - Don't skip months or mix weekly/monthly data
+* *Limit to 4-6 series* - More lines create visual confusion
+* *Choose smooth lines for trends* - Angular lines for exact data points
+* *Start Y-axis at zero* - Unless showing small variations in large numbers
+* *Label key inflection points* - Annotate major changes or milestones
+
+[TIP]
+====
+For volatile data (daily stock prices), use smooth lines to show overall trend. For discrete measurements (monthly sales), use angular lines to represent actual data points accurately.
+====
+
+[.back-to-top]
+<<top, 🔝>>

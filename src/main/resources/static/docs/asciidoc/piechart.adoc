@@ -1,0 +1,339 @@
+include::_base.adoc[]
+= Pie Charts
+
+[[top]]
+== Introduction
+
+Pie charts show proportions of a whole at a glance. Perfect for market share, budget breakdowns, or any data where the parts sum to 100%. The modern donut style adds visual polish while maintaining clarity.
+
+=== Key Features
+
+* *Classic pie or modern donut* - Choose the style that fits your aesthetic
+* *Auto percentages* - Labels show both values and calculated percentages
+* *Interactive legend* - Hover effects for engagement
+* *Glass morphism design* - Modern, polished appearance
+* *Dark mode support* - Seamless light/dark theme switching
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Simple Pie Chart
+
+Default pie with automatic colors:
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+legend=false
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
+----
+....
+
+[docops,pieslice,controls=true]
+----
+include::charts/data/pie1.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Donut Chart with Legend
+
+Modern style with detailed legend cards:
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+title=Market Share by Region
+legend=true
+donut=true
+percentages=true
+---
+North America | 35
+Europe | 28
+Asia Pacific | 22
+Latin America | 10
+Middle East & Africa | 5
+----
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Dark Mode Donut
+
+Optimized for dark-themed documentation:
+
+[source,asciidoc]
+....
+[docops,pieslice, useDark=true]
+----
+title=Budget Allocation
+legend=true
+donut=true
+percentages=true
+---
+Engineering | 40
+Marketing | 25
+Sales | 20
+Operations | 10
+Admin | 5
+----
+....
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Market share analysis* - Show competitive positioning by segment
+* *Budget breakdowns* - Visualize spending allocation across departments
+* *Survey results* - Display response distribution for single-choice questions
+* *Resource allocation* - Show headcount or asset distribution
+* *Portfolio composition* - Illustrate investment or product mix
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Format
+
+[source,asciidoc]
+....
+[docops,pieslice]
+----
+title=Chart Title
+legend=true
+donut=true
+percentages=true
+---
+Category 1 | 30
+Category 2 | 25
+Category 3 | 20
+Category 4 | 15
+Category 5 | 10
+----
+....
+
+=== Common Options
+
+* `donut=true` - Modern donut style (default: false for classic pie)
+* `legend=true` - Show interactive legend with percentages (default: true)
+* `percentages=true` - Display % labels on slices (default: true)
+* `hover=true` - Enable hover effects (default: true)
+* `useDark=true` - Dark theme
+* `width=600` - Chart width (default: 500)
+* `height=600` - Chart height (default: 500)
+
+=== Custom Colors
+
+Add color as third column:
+
+[source]
+----
+Category 1 | 30 | #3498db
+Category 2 | 25 | #e74c3c
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+* *Limit slices to 5-7* - More slices become hard to distinguish visually
+* *Order by size* - Place largest slice at 12 o'clock, descend clockwise
+* *Use donut for modern docs* - The donut style looks more polished and less dated
+* *Show percentages for small slices* - Values under 10% are hard to judge by area alone
+* *Avoid pie charts for time series* - Use line or bar charts for trends over time
+
+[TIP]
+====
+If you have more than 7 categories, group smaller slices into an "Other" category. Pie charts lose effectiveness when slices become too thin to label clearly.
+====
+
+[.back-to-top]
+<<top, 🔝>>
+
+== 🥧 Multi-Pie Display
+
+_Compact percentage indicators for dashboards and summaries_
+
+*Key features:*
+
+* Compact radial percentage displays
+* Multiple pies in horizontal layout
+* Custom base and outline colors
+* Minimal space footprint
+* Perfect for dashboards and summary cards
+
+=== Default Example
+
+Simple multi-pie for category breakdown:
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+---
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+....
+
+[docops,pie,useDark=false]
+----
+baseColor=#A6AEBF
+outlineColor=#FA4032
+scale=1
+---
+Toys | 14
+Furniture | 43
+Home Decoration | 15
+Electronics | 28
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Focused Examples
+
+==== Dark Mode Dashboard
+
+[source,asciidoc]
+....
+[docops,pie,useDark=true]
+----
+baseColor=#6B7280
+outlineColor=#10B981
+scale=1.2
+---
+API | 68
+Database | 52
+Cache | 91
+Storage | 37
+----
+....
+
+[docops,pie,useDark=true]
+----
+baseColor=#6B7280
+outlineColor=#10B981
+scale=1.2
+---
+API | 68
+Database | 52
+Cache | 91
+Storage | 37
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+==== Scaled for Cards
+
+[source,asciidoc]
+....
+[docops,pie]
+----
+baseColor=#E5E7EB
+outlineColor=#3B82F6
+scale=0.8
+---
+Q1 | 85
+Q2 | 92
+Q3 | 78
+Q4 | 95
+----
+....
+
+[docops,pie]
+----
+baseColor=#E5E7EB
+outlineColor=#3B82F6
+scale=0.8
+---
+Q1 | 85
+Q2 | 92
+Q3 | 78
+Q4 | 95
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Common Use Cases
+
+* *Dashboard metrics* - Compact KPI indicators in summary views
+* *Progress indicators* - Multiple completion percentages side-by-side
+* *Resource utilization* - CPU, memory, disk at-a-glance
+* *Score cards* - Test pass rates, coverage metrics
+* *Quarterly summaries* - Performance across time periods
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Format Options
+
+==== Basic Structure
+[source,asciidoc]
+....
+[docops,pie]
+----
+baseColor=#colorHex
+outlineColor=#colorHex
+scale=1.0
+---
+Label | Value
+Label | Value
+----
+....
+
+[cols="1,2"]
+|===
+|Option |Purpose
+
+|baseColor
+|Background circle color (hex)
+
+|outlineColor
+|Filled arc color (hex)
+
+|scale
+|Size multiplier (default: 1.0)
+
+|useDark=true
+|Dark theme
+|===
+
+[.back-to-top]
+<<top, 🔝>>
+
+=== Best Practices
+
+* *Limit to 4-6 pies* - More pies become cluttered horizontally
+* *Use semantic colors* - Green outline for success, red for warnings
+* *Keep labels short* - 1-2 words for clean layout
+* *Scale for context* - 0.8 for cards, 1.2 for hero metrics
+* *Group related metrics* - Similar categories (all performance, all quarterly)
+* *Show percentages only* - Values should be 0-100 for radial display
+
+[TIP]
+====
+*For dashboards:* Use scale=0.9 with consistent baseColor/outlineColor across all metrics. This creates a unified visual language where users instantly recognize "green outline = healthy, red outline = attention needed."
+====
+
+[.back-to-top]
+<<top, 🔝>>
