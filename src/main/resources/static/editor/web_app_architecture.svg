@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" style="background: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 100%);">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#0080ff;stop-opacity:0.6" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#f7931e;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:0.6" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="500" y="40" font-family="'JetBrains Mono', monospace" font-size="28" font-weight="800" fill="#00f5ff" text-anchor="middle" letter-spacing="2">
+    WEB APP ARCHITECTURE
+  </text>
+  <line x1="300" y1="50" x2="700" y2="50" stroke="#00f5ff" stroke-width="2" opacity="0.3"/>
+
+  <!-- Layer 1: Frontend (HTML/CSS/JS) -->
+  <g transform="translate(100, 100)">
+    <rect width="800" height="120" rx="12" fill="#1a2332" stroke="#2d3f5f" stroke-width="2" filter="url(#shadow)"/>
+    <text x="20" y="30" font-family="'Outfit', sans-serif" font-size="14" fill="#64748b" font-weight="700" letter-spacing="1">LAYER 1: FRONTEND</text>
+    
+    <!-- HTML Box -->
+    <g transform="translate(50, 50)">
+      <rect width="180" height="50" rx="8" fill="url(#grad1)" filter="url(#glow)"/>
+      <text x="90" y="22" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" fill="#0a0e17" text-anchor="middle">HTML</text>
+      <text x="90" y="38" font-family="'Outfit', sans-serif" font-size="10" fill="#0a0e17" text-anchor="middle" opacity="0.8">Structure &amp; Layout</text>
+    </g>
+    
+    <!-- CSS Box -->
+    <g transform="translate(260, 50)">
+      <rect width="180" height="50" rx="8" fill="url(#grad1)" filter="url(#glow)"/>
+      <text x="90" y="22" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" fill="#0a0e17" text-anchor="middle">CSS</text>
+      <text x="90" y="38" font-family="'Outfit', sans-serif" font-size="10" fill="#0a0e17" text-anchor="middle" opacity="0.8">Styling &amp; Animation</text>
+    </g>
+    
+    <!-- JavaScript Box -->
+    <g transform="translate(470, 50)">
+      <rect width="280" height="50" rx="8" fill="url(#grad1)" filter="url(#glow)"/>
+      <text x="140" y="22" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700" fill="#0a0e17" text-anchor="middle">JAVASCRIPT</text>
+      <text x="140" y="38" font-family="'Outfit', sans-serif" font-size="10" fill="#0a0e17" text-anchor="middle" opacity="0.8">Invokes Kotlin WASM Module</text>
+    </g>
+  </g>
+
+  <!-- Arrow down -->
+  <g transform="translate(500, 230)">
+    <line x1="0" y1="0" x2="0" y2="40" stroke="#00f5ff" stroke-width="3" marker-end="url(#arrowhead)"/>
+    <text x="15" y="25" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">invokes</text>
+  </g>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#00f5ff" />
+    </marker>
+  </defs>
+
+  <!-- Layer 2: viz-core (Kotlin) compiled to WASM -->
+  <g transform="translate(100, 280)">
+    <rect width="800" height="140" rx="12" fill="#1a2332" stroke="#2d3f5f" stroke-width="2" filter="url(#shadow)"/>
+    <text x="20" y="30" font-family="'Outfit', sans-serif" font-size="14" fill="#64748b" font-weight="700" letter-spacing="1">LAYER 2: KOTLIN MODULE</text>
+    
+    <!-- viz-core module -->
+    <g transform="translate(100, 50)">
+      <rect width="600" height="70" rx="10" fill="url(#grad2)" stroke="#ff8c42" stroke-width="2"/>
+      <text x="300" y="28" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="800" fill="#0a0e17" text-anchor="middle">viz-core MODULE</text>
+      <text x="300" y="48" font-family="'Outfit', sans-serif" font-size="11" fill="#0a0e17" text-anchor="middle" opacity="0.9">Kotlin code compiled to</text>
+      
+      <!-- WASM badge -->
+      <rect x="220" y="55" width="70" height="20" rx="4" fill="#0a0e17" opacity="0.6"/>
+      <text x="255" y="68" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="700" fill="#ffd700" text-anchor="middle">WASM</text>
+      
+      <text x="300" y="68" font-family="'Outfit', sans-serif" font-size="11" fill="#0a0e17" text-anchor="middle" opacity="0.9">or JVM library</text>
+    </g>
+    
+    <!-- Note -->
+    <text x="750" y="90" font-family="'JetBrains Mono', monospace" font-size="9" fill="#64748b" text-anchor="end" opacity="0.7">Can also be</text>
+    <text x="750" y="102" font-family="'JetBrains Mono', monospace" font-size="9" fill="#64748b" text-anchor="end" opacity="0.7">JVM library</text>
+  </g>
+
+  <!-- Arrow down (bundling) -->
+  <g transform="translate(500, 430)">
+    <line x1="0" y1="0" x2="0" y2="40" stroke="#f7931e" stroke-width="3" marker-end="url(#arrowhead2)" stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset" from="10" to="0" dur="1s" repeatCount="indefinite"/>
+    </line>
+    <text x="15" y="25" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">bundled</text>
+  </g>
+  
+  <defs>
+    <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#f7931e" />
+    </marker>
+  </defs>
+
+  <!-- Layer 3: Standalone Web App -->
+  <g transform="translate(100, 480)">
+    <rect width="800" height="100" rx="12" fill="#1a2332" stroke="#2d3f5f" stroke-width="2" filter="url(#shadow)"/>
+    <text x="20" y="30" font-family="'Outfit', sans-serif" font-size="14" fill="#64748b" font-weight="700" letter-spacing="1">LAYER 3: PACKAGED APPLICATION</text>
+    
+    <!-- Standalone App -->
+    <g transform="translate(150, 45)">
+      <rect width="500" height="45" rx="8" fill="url(#grad3)"/>
+      <text x="250" y="20" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="800" fill="#ffffff" text-anchor="middle">STANDALONE WEB APP</text>
+      <text x="250" y="36" font-family="'Outfit', sans-serif" font-size="11" fill="#ffffff" text-anchor="middle" opacity="0.9">HTML + CSS + JS + WASM (bundled)</text>
+    </g>
+  </g>
+
+  <!-- Arrow down (deployment) -->
+  <g transform="translate(500, 590)">
+    <line x1="0" y1="0" x2="0" y2="40" stroke="#a855f7" stroke-width="3" marker-end="url(#arrowhead3)"/>
+    <text x="15" y="25" font-family="'JetBrains Mono', monospace" font-size="11" fill="#64748b">deployed</text>
+  </g>
+  
+  <defs>
+    <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#a855f7" />
+    </marker>
+  </defs>
+
+  <!-- Layer 4: Nginx Server -->
+  <g transform="translate(100, 640)">
+    <rect width="800" height="50" rx="12" fill="#0d4f2b" stroke="#10b981" stroke-width="2" filter="url(#shadow)"/>
+    <path d="M 400,15 L 415,35 L 385,35 Z" fill="#10b981" opacity="0.3"/>
+    <text x="430" y="33" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="800" fill="#10b981" text-anchor="middle">NGINX SERVER</text>
+    <text x="700" y="33" font-family="'Outfit', sans-serif" font-size="10" fill="#86efac" text-anchor="middle" opacity="0.8">(Static File Hosting)</text>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="80" cy="100" r="3" fill="#00f5ff" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="920" cy="280" r="3" fill="#f7931e" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="80" cy="480" r="3" fill="#a855f7" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="920" cy="640" r="3" fill="#10b981" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

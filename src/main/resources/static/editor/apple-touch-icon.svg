@@ -1,0 +1,35 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" rx="40" fill="#0A2540"/>
+  <defs>
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0099CC;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Document "D" shape -->
+  <path d="M45 45h50c20 0 35 15 35 35s-15 35-35 35H45V45z" fill="url(#docGrad)" filter="url(#glow)"/>
+  
+  <!-- Bar chart visualization emerging from document -->
+  <g opacity="0.9">
+    <rect x="45" y="125" width="15" height="20" rx="2" fill="#00D4FF"/>
+    <rect x="65" y="115" width="15" height="30" rx="2" fill="#00D4FF"/>
+    <rect x="85" y="105" width="15" height="40" rx="2" fill="#00D4FF"/>
+    <rect x="105" y="95" width="15" height="50" rx="2" fill="#00D4FF"/>
+    <rect x="125" y="80" width="15" height="65" rx="2" fill="#00D4FF"/>
+  </g>
+  
+  <!-- Subtle connecting dots -->
+  <circle cx="52" cy="125" r="2" fill="#00D4FF" opacity="0.4"/>
+  <circle cx="72" cy="115" r="2" fill="#00D4FF" opacity="0.4"/>
+  <circle cx="92" cy="105" r="2" fill="#00D4FF" opacity="0.4"/>
+  <circle cx="112" cy="95" r="2" fill="#00D4FF" opacity="0.4"/>
+  <circle cx="132" cy="80" r="2" fill="#00D4FF" opacity="0.4"/>
+</svg>

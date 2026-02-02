@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.svg">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="./favicon-32x32.svg">
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="./favicon-16x16.svg">
+    <link rel="manifest" href="./manifest.json">
+    <title>DocOps Viz | System Explorer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Outfit:wght@300;600;800&display=swap');
+
+        :root {
+            --bg-color: #05070A;
+            --panel-bg: #0E121A;
+            --text-color: #E2E8F0;
+            --accent-color: #00F5FF;
+            --accent-dim: rgba(0, 245, 255, 0.15);
+            --border-color: #1E293B;
+            --sidebar-width: 340px;
+            --radius: 12px;
+        }
+
+        [data-theme='light'] {
+            --bg-color: #F8FAFC;
+            --panel-bg: #FFFFFF;
+            --text-color: #0F172A;
+            --accent-color: #3B82F6;
+            --accent-dim: rgba(59, 130, 246, 0.1);
+            --border-color: #E2E8F0;
+        }
+
+        html, body {
+            width: 100%; height: 100%; margin: 0; padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* SIDEBAR STYLES */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-header h1 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        .explorer-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .category-group { margin-bottom: 24px; }
+        .category-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-color);
+            opacity: 0.4;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .category-label::after { content: ""; flex: 1; height: 1px; background: var(--border-color); }
+
+        .sample-list { display: flex; flex-direction: column; gap: 2px; }
+        .sample-item {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-color);
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .sample-item:hover {
+            background: var(--accent-dim);
+            opacity: 1;
+            color: var(--accent-color);
+            transform: translateX(4px);
+        }
+        .sample-item.active {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        /* EDITOR PANE */
+        .editor-section {
+            padding: 24px;
+            background: rgba(0,0,0,0.2);
+            border-top: 1px solid var(--border-color);
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            color: var(--text-color);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            padding: 12px;
+            box-sizing: border-box;
+            resize: none;
+            outline: none;
+        }
+        textarea:focus { border-color: var(--accent-color); }
+
+        /* PREVIEW AREA */
+        .preview-pane {
+            flex: 1;
+            padding: 40px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            background-image:
+                    radial-gradient(circle at 2px 2px, var(--border-color) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+
+        #svgOutput {
+            margin: auto;
+        }
+        #svgOutput svg {
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.3));
+            animation: svgAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes svgAppear {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* UI ELEMENTS */
+        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .btn {
+            padding: 12px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: var(--panel-bg);
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--accent-color); color: var(--bg-color); border: none; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .btn:active { transform: translateY(0); }
+
+        .theme-switch {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .theme-switch:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-dim);
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1>DocOps_Viz<span style="font-weight: 300; opacity: 0.5">Explorer</span></h1>
+        </div>
+
+        <div class="explorer-content" id="explorer">
+
+        </div>
+
+        <div class="editor-section">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <label style="font-size: 0.7rem; font-weight: 800; opacity: 0.5; text-transform: uppercase;">Live Payload</label>
+                <span id="duration-label" style="font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; opacity: 0.5;"></span>
+                <span id="kind-badge" style="font-size: 0.6rem; background: var(--accent-color); color: var(--bg-color); padding: 2px 6px; border-radius: 4px; font-weight: 800;">ADR</span>
+            </div>
+            <textarea id="payloadInput" spellcheck="false"></textarea>
+
+            <div class="btn-row">
+                <button id="copySvgBtn" class="btn">Copy SVG</button>
+                <button id="copyPngBtn" class="btn">Copy PNG</button>
+            </div>
+            <button id="showDataBtn" class="btn" style="width: 100%; margin-top: 8px; display: none;">Inspect Data</button>
+        </div>
+    </aside>
+
+    <main class="preview-pane">
+        <button class="theme-switch" id="themeToggle">Switch Theme</button>
+        <div id="svgOutput"></div>
+    </main>
+</div>
+
+<script type="module">
+    let wasmModule;
+    let currentKind = 'adr';
+
+    const catalog = {
+        adr: ["adr2.txt", "adr3.txt", "elasticsearch.txt", "adr5.txt"],
+        badge: ["badge1.txt", "badge2.txt", "badge8.txt"],
+        bar: ["bar1.txt", "bar2.txt", "bar3.txt", "bar4.txt", "bar5.txt"],
+        bargroup: ["bargroup1.txt", "bargroup2.txt", "bargroup3.txt", "bargroup4.txt"],
+        button: ["button1.json", "button2.json", "button3.json", "button4.json", "button5.json", "button6.json", "button7.json"],
+        callout: ["callout1.txt", "callout2.txt"],
+        connector: ["connector1.txt", "connector2.json", "connector3.json"],
+        domain: ["domain1.txt", "domain2.txt", "domain3.txt", "domain4.txt"],
+        gauge: ["gauge1.txt", "gauge2.txt", "gauge3.txt", "gauge4.txt","gauge5.txt","gauge6.txt","gauge7.txt"],
+        gherkin: ["basic.feature", "gherkin4.json","shoppingcart.feature", "userlogin.feature"],
+        line: ["line1.txt", "line2.txt", "line5.txt"],
+        metrics: ["metrics1.txt", "metrics3.txt"],
+        pie: ["pie1.txt", "pie2.txt", "pie5.txt"],
+        pieslice: ["pie1.txt", "pie3.txt", "pie5.txt", "pie6.txt"],
+        placemat: ["placemat1.json", "placemat2.json", "placemat3.json"],
+        planner: ["planner1.txt", "planner2.txt", "planner3.txt"],
+        release: ["release1.json", "release2.json", "release3.json"],
+        scorecard: ["scorecard1.txt", "scorecard2.txt", "scorecard3.txt"],
+        timeline: ["timeline1.txt", "timeline2.txt", "timeline3.txt", "timeline4.txt"],
+        treechart: ["treechart1.txt", "treechart2.txt", "treechart3.txt"],
+        treemap: ["treemap1.txt", "treemap2.txt", "treemap3.txt"],
+        wordcloud: ["wordcloud1.txt", "wordcloud2.txt", "wordcloud3.txt"]
+    };
+
+    async function init() {
+        try {
+            await import('./webApp.js');
+            wasmModule = await globalThis.webApp;
+            buildExplorer();
+            // Load first sample by default
+            loadSample('adr', 'adr2.txt');
+        } catch (e) {
+            console.error("Wasm initialization failed", e);
+        }
+    }
+
+    function buildExplorer() {
+        const container = document.getElementById('explorer');
+        Object.entries(catalog).forEach(([kind, files]) => {
+            const group = document.createElement('div');
+            group.className = 'category-group';
+            group.innerHTML = `<div class="category-label">${kind}</div>`;
+
+            const list = document.createElement('div');
+            list.className = 'sample-list';
+
+            files.forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'sample-item';
+                item.innerHTML = `<span>${file}</span><span style="font-size:10px; opacity:0.3">→</span>`;
+                item.onclick = () => loadSample(kind, file, item);
+                list.appendChild(item);
+            });
+
+            group.appendChild(list);
+            container.appendChild(group);
+        });
+    }
+
+    async function loadSample(kind, file, element) {
+        if(element) {
+            document.querySelectorAll('.sample-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        currentKind = kind;
+        document.getElementById('kind-badge').innerText = kind.toUpperCase();
+
+        try {
+            const response = await fetch(`./samples/${kind}/${file}`);
+            const text = await response.text();
+            document.getElementById('payloadInput').value = text;
+            triggerGeneration();
+        } catch (e) {
+            console.error("Fetch error", e);
+        }
+    }
+
+    function triggerGeneration() {
+        if (!wasmModule) return;
+        const payload = document.getElementById('payloadInput').value;
+        const isDark = document.body.getAttribute('data-theme') !== 'light';
+
+        const context = {
+            payload: payload,
+            useDark: isDark,
+            title: currentKind.toUpperCase(),
+            type: "SVG"
+        };
+
+        try {
+            const resp = JSON.parse(wasmModule.generateSvg(currentKind, JSON.stringify(context)));
+            if (resp.status.code === 0) {
+                document.getElementById('svgOutput').innerHTML = resp.svg;
+                document.getElementById('showDataBtn').style.display = resp.csvResponse ? 'block' : 'none';
+                document.getElementById('duration-label').innerText = resp.duration ? `${resp.duration}ms` : '';
+
+                // Store CSV for inspection
+                if(resp.csvResponse) {
+                    document.getElementById('showDataBtn').onclick = () => {
+                        console.log("CSV Data:", resp.csvResponse);
+                        alert("Data logged to console. In a real app, this would open a modal.");
+                    };
+                }
+            }
+        } catch (e) {
+            console.error("Generation failed", e);
+        }
+    }
+
+    // Event Listeners
+    document.getElementById('payloadInput').oninput = triggerGeneration;
+
+    document.getElementById('themeToggle').onclick = () => {
+        const current = document.body.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', next);
+        triggerGeneration();
+    };
+    document.getElementById('copySvgBtn').onclick = () => {
+        const svg = document.querySelector('#svgOutput svg')?.outerHTML;
+        if(svg) {
+            navigator.clipboard.writeText(svg);
+            const originalText = document.getElementById('copySvgBtn').innerText;
+            document.getElementById('copySvgBtn').innerText = "Copied!";
+            setTimeout(() => document.getElementById('copySvgBtn').innerText = originalText, 2000);
+        }
+    };
+
+    const fontCache = new Map();
+
+    async function fetchAndInlineFonts(svgElement) {
+        const clonedSvg = svgElement.cloneNode(true);
+        const styleElements = clonedSvg.querySelectorAll('style');
+
+        for (const styleEl of styleElements) {
+            let cssText = styleEl.textContent || '';
+
+            // Find @import url(...) for Google Fonts
+            const importRegex = /@import\s+url\(['"](https:\/\/fonts\.googleapis\.com[^'"]+)['"]\);?/g;
+            const imports = [...cssText.matchAll(importRegex)];
+
+            for (const match of imports) {
+                const importUrl = match[1];
+
+                try {
+                    // Fetch the Google Fonts CSS
+                    let fontCss;
+                    if (fontCache.has(importUrl)) {
+                        fontCss = fontCache.get(importUrl);
+                    } else {
+                        const fontCssResponse = await fetch(importUrl, {
+                            headers: {
+                                // Request woff2 format (most efficient)
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                            }
+                        });
+                        fontCss = await fontCssResponse.text();
+
+                        // Find and inline all font file URLs
+                        const fontUrlRegex = /url\((https:\/\/fonts\.gstatic\.com[^)]+)\)/g;
+                        const fontUrls = [...fontCss.matchAll(fontUrlRegex)];
+
+                        for (const fontMatch of fontUrls) {
+                            const fontFileUrl = fontMatch[1];
+                            try {
+                                const fontResponse = await fetch(fontFileUrl);
+                                const fontBlob = await fontResponse.blob();
+                                const dataUri = await new Promise(resolve => {
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => resolve(reader.result);
+                                    reader.readAsDataURL(fontBlob);
+                                });
+                                fontCss = fontCss.split(fontFileUrl).join(dataUri);
+                            } catch (e) {
+                                console.warn('Could not fetch font file:', fontFileUrl);
+                            }
+                        }
+                        fontCache.set(importUrl, fontCss);
+                    }
+
+                    // Replace @import with inlined @font-face rules
+                    cssText = cssText.replace(match[0], fontCss);
+                } catch (e) {
+                    console.warn('Could not process font import:', importUrl, e);
+                }
+            }
+
+            // Remove filter properties (they don't render in canvas)
+            cssText = cssText.replace(/filter:\s*[^;]+;/g, '');
+
+            // Remove animations (they cause issues with static capture)
+            cssText = cssText.replace(/@keyframes[^{]+\{[^}]+\{[^}]+\}[^}]*\}/g, '');
+            cssText = cssText.replace(/animation:\s*[^;]+;/g, '');
+
+            styleEl.textContent = cssText;
+        }
+
+        // Remove inline filter styles
+        clonedSvg.querySelectorAll('[class*="accent-line"]').forEach(el => {
+            el.removeAttribute('filter');
+            el.style.filter = '';
+        });
+
+        // Set opacity to 1 for entry elements (remove animation effect)
+        clonedSvg.querySelectorAll('.entry').forEach(el => {
+            el.style.opacity = '1';
+            el.style.animation = 'none';
+        });
+
+        return clonedSvg;
+    }
+
+    document.getElementById('copyPngBtn').onclick = async () => {
+        const svgElement = document.querySelector('#svgOutput svg');
+        if (!svgElement) return;
+
+        const btn = document.getElementById('copyPngBtn');
+        const originalText = btn.innerText;
+        btn.innerText = "Loading fonts...";
+
+        try {
+            // 1. Inline fonts and clean up CSS
+            const processedSvg = await fetchAndInlineFonts(svgElement);
+
+            btn.innerText = "Rendering...";
+
+            // 2. Get dimensions
+            const rect = svgElement.getBoundingClientRect();
+            const width = Math.ceil(rect.width);
+            const height = Math.ceil(rect.height);
+
+            // Set explicit dimensions
+            processedSvg.setAttribute('width', width);
+            processedSvg.setAttribute('height', height);
+
+            // 3. Serialize with XML declaration
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(processedSvg);
+            svgString = '<?xml version="1.0" encoding="UTF-8"?>' + svgString;
+
+            // 4. Create canvas
+            const canvas = document.createElement('canvas');
+            const scale = 2;
+            canvas.width = width * scale;
+            canvas.height = height * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(scale, scale);
+
+            // 5. Fill background (match SVG's canvas color)
+            ctx.fillStyle = "#020617";
+            ctx.fillRect(0, 0, width, height);
+
+            // 6. Load and draw
+            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+
+            const img = new Image();
+
+            await new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = (e) => {
+                    console.error('Image load error:', e);
+                    reject(new Error('SVG rendering failed'));
+                };
+                img.src = url;
+            });
+
+            ctx.drawImage(img, 0, 0, width, height);
+            URL.revokeObjectURL(url);
+
+            // 7. Export to PNG
+            const pngBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+
+            // 8. Copy or download
+            try {
+                await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+                btn.innerHTML = `<span style="color: var(--accent-color)">✓ Copied!</span>`;
+            } catch (clipErr) {
+                const link = document.createElement('a');
+                link.download = `${currentKind}-${Date.now()}.png`;
+                link.href = URL.createObjectURL(pngBlob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+                btn.innerText = "Downloaded!";
+            }
+
+            setTimeout(() => btn.innerText = originalText, 2000);
+
+        } catch (err) {
+            console.error("PNG Capture failed:", err);
+            btn.innerText = "Failed";
+            setTimeout(() => btn.innerText = originalText, 2000);
+        }
+    };
+
+
+
+    init();
+</script>
+</body>
+</html>
+
