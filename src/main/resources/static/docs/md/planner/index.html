@@ -1,112 +1,98 @@
             <!DOCTYPE html>
-            <html lang="en" data-theme="light">
+            <html lang="en" data-theme="dark">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>index</title>
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Bento:wght@700;900&family=Outfit:wght@300;400&family=JetBrains+Mono&display=swap');
 
 .markdown-body {
-    /* Design-Tricks System */
-    --base-hue: 220;
-    --primary: hsl(var(--base-hue), 90%, 56%);
-    /* Lighter: -15% Sat, +25% Brightness */
-    --primary-light: hsl(var(--base-hue), 75%, 81%);
-    /* Darker: +15% Sat, -25% Brightness */
-    --primary-dark: hsl(var(--base-hue), 100%, 31%);
-    
-    --bg: #FAFBFC; /* design-tricks.md: Never pure white */
-    --card-bg: #FFFFFF;
-    --text-main: #1A1F26;
-    --text-muted: #64748B;
+    --primary: #38BDF8;
+    --primary-glow: rgba(56, 189, 248, 0.15);
+    --bg: #0A0E27; /* design-tricks.md: Recommended dark bg */
+    --card-bg: #161B33; /* Rule #6: increased brightness from bg */
     
     background-color: var(--bg);
-    color: var(--text-main);
-    font-family: 'Instrument Sans', sans-serif;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 48px; /* 8pt grid: 6 * 8 */
-    border-radius: 24px;
+    color: #E2E8F0;
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.7;
+    max-width: 850px;
+    margin: 64px auto;
+    padding: 48px;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Typography Rules from design-tricks.md */
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+/* Headlines with Tracking Rules */
+.markdown-body h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--text-main);
-    margin-top: 32px; /* 8pt grid */
-    margin-bottom: 16px;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.03em; /* Rule #2: Text over 70px */
+    line-height: 0.95;
+    background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
 }
 
-.markdown-body h1 { 
-    font-size: 48px; 
-    letter-spacing: -0.01em; /* Rule #2 */
-    font-weight: 800;
-}
-
-.markdown-body h2 { 
-    font-size: 32px; 
-    font-weight: 700;
-}
-
-/* 8pt Grid Spacing */
-.markdown-body p, .markdown-body ul, .markdown-body pre {
-    margin-bottom: 24px;
-}
-
-/* "3x more obvious" Primary Elements */
-.markdown-body a {
+.markdown-body h2 {
+    font-size: 32px;
+    letter-spacing: -0.01em;
     color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 2px solid var(--primary-light);
-    transition: all 0.2s ease;
+    margin-top: 48px;
 }
 
-.markdown-body a:hover {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    border-radius: 4px;
+/* Motion: High-impact reveal (ui.md) */
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Card Depth without Shadows (Rule #6) */
-.markdown-body blockquote {
-    background: #F1F5F9; /* Adjusted brightness/saturation from bg */
-    border-left: 4px solid var(--primary);
-    padding: 16px 24px;
-    margin: 32px 0;
-    border-radius: 0 12px 12px 0;
-    font-style: italic;
+.markdown-body > * {
+    animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-/* Code Blocks */
+/* Rounded Corners (Rule #4) */
 .markdown-body pre {
-    background: #1E293B;
-    color: #F8FAFC;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 20px; /* Outer */
+}
+
+.markdown-body code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    overflow-x: auto;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 8px; /* Inner: 20px - 12px gap */
 }
 
-/* Ensure nested <code> doesn't override <pre> contrast */
-.markdown-body pre code {
-    color: inherit;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: 1.55;
-    white-space: pre; /* keep the ASCII block crisp */
+/* Tables (ui.md style) */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 32px 0;
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-/* If the renderer wraps tokens in spans, keep them readable too */
-.markdown-body pre code span {
-    color: inherit;
+.markdown-body th {
+    background: rgba(255,255,255,0.05);
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
 }
+
+.markdown-body td {
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
                 </style>
                 <style>
                 .svg-container {
@@ -115,10 +101,15 @@
     justify-content: center;
     align-items: center;
     background: rgba(255, 255, 255, 0.01);
-    /* Force default cursor to remove the zoom/search icon */
     cursor: default !important;
-    width: 100%;
-    max-width: 100%;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+.svg-container svg {
+
+    height: auto;
+    display: block;
 }
 
 .markdown-body img {
@@ -137,11 +128,143 @@
 
 /* Ensure the DocOps specific media cards respect the boundary */
 .docops-media-card {
-    max-width: 100%;
-    overflow: hidden;
+    position: relative;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 970px;
 }
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-data-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+    border-top: 1px solid var(--accent-primary);
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.docops-data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+.docops-data-actions {
+    display: flex;
+    gap: 12px;
+}
+.docops-action-btn {
+    background: rgba(126, 87, 255, 0.1);
+    border: 1px solid rgba(126, 87, 255, 0.3);
+    color: var(--accent-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docops-action-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    border-color: var(--accent-primary);
+}
+
+.docops-data-header span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+}
+
+/* ui.md: Distinctive Table Design */
+.docops-data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.docops-data-table th {
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-primary);
+    font-weight: 500;
+}
+
+/* ui.md: Motion - Staggered Row Entry */
+.docops-data-table tr {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: rowSlideIn 0.4s ease forwards;
+}
+
+@keyframes rowSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.docops-data-table td {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.docops-data-table tr:hover td {
+    background: rgba(126, 87, 255, 0.1);
+    color: #fff;
+}
+
+.docops-container {
+    display: inline-block;
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: center;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
                 </style>
                 <style>
                 /* Theme Variables */
@@ -196,45 +319,7 @@
     --btn-border: rgba(106, 61, 232, 0.4);
 }
 
-.docops-container {
-    display: inline-block;
-}
-.docops-media-card {
-    position: relative;
-    display: inline-block;
-    margin: 2rem 0;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    width: 100%;
-    max-width: 100%;
-}
 
-.docops-media-card:hover {
-    transform: translateY(-4px);
-}
-
-.docops-control-bar {
-    display: flex;
-    background: var(--control-bar-bg);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid var(--control-bar-border);
-    padding: 8px;
-    gap: 8px;
-    justify-content: flex-end;
-}
-
-@media (prefers-color-scheme: light) {
-    .docops-control-bar {
-        background: rgba(255, 255, 255, 0.7);
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    .docops-btn {
-        border-color: rgba(126, 87, 255, 0.6);
-        color: #6a3de8;
-    }
-}
 
 .docops-btn {
     background: transparent;
@@ -609,106 +694,11 @@
 }
                 </style>
                 <style>
-                      
-        .docops-data-panel {
-            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
-            border-top: 1px solid var(--accent-primary);
-            padding: 2rem;
-            max-height: 400px;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .docops-data-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 1rem;
-        }
-        .docops-data-actions {
-            display: flex;
-            gap: 12px;
-        }
-        .docops-action-btn {
-            background: rgba(126, 87, 255, 0.1);
-            border: 1px solid rgba(126, 87, 255, 0.3);
-            color: var(--accent-secondary);
-            font-family: 'Syne', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 6px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .docops-action-btn:hover {
-            background: var(--accent-primary);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
-            border-color: var(--accent-primary);
-        }
-
-        .docops-data-header span {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ui.md: Distinctive Table Design */
-        .docops-data-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-        }
-
-        .docops-data-table th {
-            color: #fff;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 2px solid var(--accent-primary);
-            font-weight: 500;
-        }
-
-        /* ui.md: Motion - Staggered Row Entry */
-        .docops-data-table tr {
-            opacity: 0;
-            transform: translateX(-10px);
-            animation: rowSlideIn 0.4s ease forwards;
-        }
-
-        @keyframes rowSlideIn {
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .docops-data-table td {
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            color: #94a3b8;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .docops-data-table tr:hover td {
-            background: rgba(126, 87, 255, 0.1);
-            color: #fff;
-        }
-        
-                    @media (prefers-color-scheme: dark) {
-                        body {
-                            background-color: #f5f5f5;
-                        }
-                    }
+                      @media (prefers-color-scheme: dark) {
+                          body {
+                              background-color: #0d1117;
+                          }
+                      }
                 </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
                 
@@ -755,10 +745,10 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAAAAAAAA_0WQS3IDIQxE9z6FLpBDJPYmi1S5nFxAAz1jyiAREHF8-wjnt0QPXjd6INErvXC7wOiEDm7hvCPaq8QRjIKWCkumjVg433rqTp8jxNJ6I-O2-UMeMUECHB2wJgENSe8D1JFzko2qJrG-eyDBp9Gx6V1-wAey1uKyGdnABqpNTe1Wp-wN3eia7EyrhtFpazrqLHD6Tlm4I5IKrUBcOFw8Ibuk_fxoRu-5VE6b3Lvd86j8wTIvJ87Tecws1DX4kQpiYurWnG-3CRsqt9kOvVNDhkfPD0X1Hk-jex0H0_G_hOV3XDQi-_wVYbgkSbKZsg6J3sLBY-8oS4bv27mByxc8RpnWmQEAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAAAAAAAA_0WQS3IDIQxE9z6FLpBDJPYmi1S5nFxAAz1jyiAREHF8-wjnt0QPXjd6INErvXC7wOiEDm7hvCPaq8QRjIKWCkumjVg433rqTp8jxNJ6I-O2-UMeMUECHB2wJgENSe8D1JFzko2qJrG-eyDBp9Gx6V1-wAey1uKyGdnABqpNTe1Wp-wN3eia7EyrhtFpazrqLHD6Tlm4I5IKrUBcOFw8Ibuk_fxoRu-5VE6b3Lvd86j8wTIvJ87Tecws1DX4kQpiYurWnG-3CRsqt9kOvVNDhkfPD0X1Hk-jex0H0_G_hOV3XDQi-_wVYbgkSbKZsg6J3sLBY-8oS4bv27mByxc8RpnWmQEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="899.99999998875" height="241.87499999697658" viewBox="0 0 1600 430" id="id_736992f9eb304741abece7e350d3b263" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","  Conduct competitor analysis\n  Identify target audience\n  Define unique selling points","true"],["next","2","  Create prototype\n  Test with focus groups\n  Refine based on feedback","true"],["later","3","  Develop marketing materials\n  Plan social media strategy\n  Prepare press releases","true"],["done","4","  Define business model\n  Secure initial funding\n  Assemble core team\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap'); #id_736992f9eb304741abece7e350d3b263 .planner-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_736992f9eb304741abece7e350d3b263 .column-title { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_736992f9eb304741abece7e350d3b263 .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; } #id_736992f9eb304741abece7e350d3b263 .card-body { font-family: 'Outfit', sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol></defs><rect width="100%" height="100%" fill="#f8fafc"/><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#e2e8f0" opacity="0.5"/></pattern><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#09090b"></text><rect y="15" width="60" height="5" fill="#ef4444" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Market Research</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Conduct competitor analysis</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Identify target audience</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Define unique selling points</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Product Development</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Create prototype</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Test with focus groups</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Refine based on feedback</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Marketing Campaign</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Develop marketing materials</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Plan social media strategy</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Prepare press releases</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Business Plan</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Define business model</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Secure initial funding</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Assemble core team</text><text x="0.0" y="90.0" class="card-body" fill="#4b5563"></text></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="899.99999998875" height="241.87499999697658" viewBox="0 0 1600 430" id="id_ec06ead7500d47ea8d7ca913361fb09a" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","  Conduct competitor analysis\n  Identify target audience\n  Define unique selling points","true"],["next","2","  Create prototype\n  Test with focus groups\n  Refine based on feedback","true"],["later","3","  Develop marketing materials\n  Plan social media strategy\n  Prepare press releases","true"],["done","4","  Define business model\n  Secure initial funding\n  Assemble core team\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap'); #id_ec06ead7500d47ea8d7ca913361fb09a .planner-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_ec06ead7500d47ea8d7ca913361fb09a .column-title { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_ec06ead7500d47ea8d7ca913361fb09a .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; } #id_ec06ead7500d47ea8d7ca913361fb09a .card-body { font-family: 'Outfit', sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol></defs><rect width="100%" height="100%" fill="#09090b"/><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#27272a" opacity="0.5"/></pattern><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#f4f4f5"></text><rect y="15" width="60" height="5" fill="#ef4444" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Market Research</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Conduct competitor analysis</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Identify target audience</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Define unique selling points</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Product Development</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Create prototype</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Test with focus groups</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Refine based on feedback</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Marketing Campaign</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Develop marketing materials</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Plan social media strategy</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Prepare press releases</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Business Plan</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Define business model</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Secure initial funding</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Assemble core team</text><text x="0.0" y="90.0" class="card-body" fill="#71717a"></text></g></g></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -779,10 +769,10 @@
 </div>
 <hr />
 <h2 id="release-planning-example">Release Planning Example</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAAAAAAAA_02QTW4CMQyF95ziXYBDtBUgJBYV5QKejGEsghM5DgO3rwe66Paz_X68hpYZn-yEI9Moyq2tgK2otAlFh0IW9IJzLnMMDiVdUU3SwlzYlu1jVzRO3cSfML4Lz6s1lB-O3QcO1DVNsfbdh7yojiX1G6uTS9HgJyMJgV5rMYcz3QJulIbMGCTnsAq5TM6GnZXZJ2welU0WkcX_7RDOZzajHPnKxV4qJ27-v8WdTOh9FBKkI0SdY3mJ0sJlLMrYlq7jHwJ-2NErvvaoUjnS8HLdnN5tjDNTY6SJ0zWIx3Svze3VEakY48YeL2u_Ro-u-G0BAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAAAAAAAA_02QTW4CMQyF95ziXYBDtBUgJBYV5QKejGEsghM5DgO3rwe66Paz_X68hpYZn-yEI9Moyq2tgK2otAlFh0IW9IJzLnMMDiVdUU3SwlzYlu1jVzRO3cSfML4Lz6s1lB-O3QcO1DVNsfbdh7yojiX1G6uTS9HgJyMJgV5rMYcz3QJulIbMGCTnsAq5TM6GnZXZJ2welU0WkcX_7RDOZzajHPnKxV4qJ27-v8WdTOh9FBKkI0SdY3mJ0sJlLMrYlq7jHwJ-2NErvvaoUjnS8HLdnN5tjDNTY6SJ0zWIx3Svze3VEakY48YeL2u_Ro-u-G0BAAA%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="899.99999998875" height="241.87499999697658" viewBox="0 0 1600 430" id="id_183fce8d8b1b469da5d63e3981ef215a" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","  Finish onboarding flow\n  Lock pricing tiers\n  Run security review","true"],["next","2","  Publish documentation\n  Train support team\n  Enable billing","true"],["later","3","  Launch referral program\n  Test onboarding variants\n  Expand integrations","true"],["done","4","  Set up CI pipeline\n  Establish release checklist\n  Instrument core metrics\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap'); #id_183fce8d8b1b469da5d63e3981ef215a .planner-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_183fce8d8b1b469da5d63e3981ef215a .column-title { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_183fce8d8b1b469da5d63e3981ef215a .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; } #id_183fce8d8b1b469da5d63e3981ef215a .card-body { font-family: 'Outfit', sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol></defs><rect width="100%" height="100%" fill="#f8fafc"/><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#e2e8f0" opacity="0.5"/></pattern><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#09090b"></text><rect y="15" width="60" height="5" fill="#ef4444" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Beta Readiness</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Finish onboarding flow</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Lock pricing tiers</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Run security review</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">GA Launch</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Publish documentation</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Train support team</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Enable billing</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Growth Experiments</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Launch referral program</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Test onboarding variants</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Expand integrations</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Foundations</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">  Set up CI pipeline</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">  Establish release checklist</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">  Instrument core metrics</text><text x="0.0" y="90.0" class="card-body" fill="#4b5563"></text></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="899.99999998875" height="241.87499999697658" viewBox="0 0 1600 430" id="id_7d4853827e7540d0b0eb22a57e91eb5e" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","  Finish onboarding flow\n  Lock pricing tiers\n  Run security review","true"],["next","2","  Publish documentation\n  Train support team\n  Enable billing","true"],["later","3","  Launch referral program\n  Test onboarding variants\n  Expand integrations","true"],["done","4","  Set up CI pipeline\n  Establish release checklist\n  Instrument core metrics\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap'); #id_7d4853827e7540d0b0eb22a57e91eb5e .planner-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_7d4853827e7540d0b0eb22a57e91eb5e .column-title { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_7d4853827e7540d0b0eb22a57e91eb5e .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; } #id_7d4853827e7540d0b0eb22a57e91eb5e .card-body { font-family: 'Outfit', sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol></defs><rect width="100%" height="100%" fill="#09090b"/><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#27272a" opacity="0.5"/></pattern><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#f4f4f5"></text><rect y="15" width="60" height="5" fill="#ef4444" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Beta Readiness</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Finish onboarding flow</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Lock pricing tiers</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Run security review</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">GA Launch</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Publish documentation</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Train support team</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Enable billing</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Growth Experiments</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Launch referral program</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Test onboarding variants</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Expand integrations</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Foundations</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">  Set up CI pipeline</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">  Establish release checklist</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">  Instrument core metrics</text><text x="0.0" y="90.0" class="card-body" fill="#71717a"></text></g></g></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>

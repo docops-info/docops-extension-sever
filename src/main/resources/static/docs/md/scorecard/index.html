@@ -1,112 +1,98 @@
             <!DOCTYPE html>
-            <html lang="en" data-theme="light">
+            <html lang="en" data-theme="dark">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>index</title>
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Bento:wght@700;900&family=Outfit:wght@300;400&family=JetBrains+Mono&display=swap');
 
 .markdown-body {
-    /* Design-Tricks System */
-    --base-hue: 220;
-    --primary: hsl(var(--base-hue), 90%, 56%);
-    /* Lighter: -15% Sat, +25% Brightness */
-    --primary-light: hsl(var(--base-hue), 75%, 81%);
-    /* Darker: +15% Sat, -25% Brightness */
-    --primary-dark: hsl(var(--base-hue), 100%, 31%);
-    
-    --bg: #FAFBFC; /* design-tricks.md: Never pure white */
-    --card-bg: #FFFFFF;
-    --text-main: #1A1F26;
-    --text-muted: #64748B;
+    --primary: #38BDF8;
+    --primary-glow: rgba(56, 189, 248, 0.15);
+    --bg: #0A0E27; /* design-tricks.md: Recommended dark bg */
+    --card-bg: #161B33; /* Rule #6: increased brightness from bg */
     
     background-color: var(--bg);
-    color: var(--text-main);
-    font-family: 'Instrument Sans', sans-serif;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 48px; /* 8pt grid: 6 * 8 */
-    border-radius: 24px;
+    color: #E2E8F0;
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.7;
+    max-width: 850px;
+    margin: 64px auto;
+    padding: 48px;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Typography Rules from design-tricks.md */
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+/* Headlines with Tracking Rules */
+.markdown-body h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--text-main);
-    margin-top: 32px; /* 8pt grid */
-    margin-bottom: 16px;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.03em; /* Rule #2: Text over 70px */
+    line-height: 0.95;
+    background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
 }
 
-.markdown-body h1 { 
-    font-size: 48px; 
-    letter-spacing: -0.01em; /* Rule #2 */
-    font-weight: 800;
-}
-
-.markdown-body h2 { 
-    font-size: 32px; 
-    font-weight: 700;
-}
-
-/* 8pt Grid Spacing */
-.markdown-body p, .markdown-body ul, .markdown-body pre {
-    margin-bottom: 24px;
-}
-
-/* "3x more obvious" Primary Elements */
-.markdown-body a {
+.markdown-body h2 {
+    font-size: 32px;
+    letter-spacing: -0.01em;
     color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 2px solid var(--primary-light);
-    transition: all 0.2s ease;
+    margin-top: 48px;
 }
 
-.markdown-body a:hover {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    border-radius: 4px;
+/* Motion: High-impact reveal (ui.md) */
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Card Depth without Shadows (Rule #6) */
-.markdown-body blockquote {
-    background: #F1F5F9; /* Adjusted brightness/saturation from bg */
-    border-left: 4px solid var(--primary);
-    padding: 16px 24px;
-    margin: 32px 0;
-    border-radius: 0 12px 12px 0;
-    font-style: italic;
+.markdown-body > * {
+    animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-/* Code Blocks */
+/* Rounded Corners (Rule #4) */
 .markdown-body pre {
-    background: #1E293B;
-    color: #F8FAFC;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 20px; /* Outer */
+}
+
+.markdown-body code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    overflow-x: auto;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 8px; /* Inner: 20px - 12px gap */
 }
 
-/* Ensure nested <code> doesn't override <pre> contrast */
-.markdown-body pre code {
-    color: inherit;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: 1.55;
-    white-space: pre; /* keep the ASCII block crisp */
+/* Tables (ui.md style) */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 32px 0;
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-/* If the renderer wraps tokens in spans, keep them readable too */
-.markdown-body pre code span {
-    color: inherit;
+.markdown-body th {
+    background: rgba(255,255,255,0.05);
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
 }
+
+.markdown-body td {
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
                 </style>
                 <style>
                 .svg-container {
@@ -115,10 +101,15 @@
     justify-content: center;
     align-items: center;
     background: rgba(255, 255, 255, 0.01);
-    /* Force default cursor to remove the zoom/search icon */
     cursor: default !important;
-    width: 100%;
-    max-width: 100%;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+.svg-container svg {
+
+    height: auto;
+    display: block;
 }
 
 .markdown-body img {
@@ -137,11 +128,143 @@
 
 /* Ensure the DocOps specific media cards respect the boundary */
 .docops-media-card {
-    max-width: 100%;
-    overflow: hidden;
+    position: relative;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 970px;
 }
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-data-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+    border-top: 1px solid var(--accent-primary);
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.docops-data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+.docops-data-actions {
+    display: flex;
+    gap: 12px;
+}
+.docops-action-btn {
+    background: rgba(126, 87, 255, 0.1);
+    border: 1px solid rgba(126, 87, 255, 0.3);
+    color: var(--accent-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docops-action-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    border-color: var(--accent-primary);
+}
+
+.docops-data-header span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+}
+
+/* ui.md: Distinctive Table Design */
+.docops-data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.docops-data-table th {
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-primary);
+    font-weight: 500;
+}
+
+/* ui.md: Motion - Staggered Row Entry */
+.docops-data-table tr {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: rowSlideIn 0.4s ease forwards;
+}
+
+@keyframes rowSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.docops-data-table td {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.docops-data-table tr:hover td {
+    background: rgba(126, 87, 255, 0.1);
+    color: #fff;
+}
+
+.docops-container {
+    display: inline-block;
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: center;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
                 </style>
                 <style>
                 /* Theme Variables */
@@ -196,45 +319,7 @@
     --btn-border: rgba(106, 61, 232, 0.4);
 }
 
-.docops-container {
-    display: inline-block;
-}
-.docops-media-card {
-    position: relative;
-    display: inline-block;
-    margin: 2rem 0;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    width: 100%;
-    max-width: 100%;
-}
 
-.docops-media-card:hover {
-    transform: translateY(-4px);
-}
-
-.docops-control-bar {
-    display: flex;
-    background: var(--control-bar-bg);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid var(--control-bar-border);
-    padding: 8px;
-    gap: 8px;
-    justify-content: flex-end;
-}
-
-@media (prefers-color-scheme: light) {
-    .docops-control-bar {
-        background: rgba(255, 255, 255, 0.7);
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    .docops-btn {
-        border-color: rgba(126, 87, 255, 0.6);
-        color: #6a3de8;
-    }
-}
 
 .docops-btn {
     background: transparent;
@@ -609,106 +694,11 @@
 }
                 </style>
                 <style>
-                      
-        .docops-data-panel {
-            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
-            border-top: 1px solid var(--accent-primary);
-            padding: 2rem;
-            max-height: 400px;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .docops-data-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 1rem;
-        }
-        .docops-data-actions {
-            display: flex;
-            gap: 12px;
-        }
-        .docops-action-btn {
-            background: rgba(126, 87, 255, 0.1);
-            border: 1px solid rgba(126, 87, 255, 0.3);
-            color: var(--accent-secondary);
-            font-family: 'Syne', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 6px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .docops-action-btn:hover {
-            background: var(--accent-primary);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
-            border-color: var(--accent-primary);
-        }
-
-        .docops-data-header span {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ui.md: Distinctive Table Design */
-        .docops-data-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-        }
-
-        .docops-data-table th {
-            color: #fff;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 2px solid var(--accent-primary);
-            font-weight: 500;
-        }
-
-        /* ui.md: Motion - Staggered Row Entry */
-        .docops-data-table tr {
-            opacity: 0;
-            transform: translateX(-10px);
-            animation: rowSlideIn 0.4s ease forwards;
-        }
-
-        @keyframes rowSlideIn {
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .docops-data-table td {
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            color: #94a3b8;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .docops-data-table tr:hover td {
-            background: rgba(126, 87, 255, 0.1);
-            color: #fff;
-        }
-        
-                    @media (prefers-color-scheme: dark) {
-                        body {
-                            background-color: #f5f5f5;
-                        }
-                    }
+                      @media (prefers-color-scheme: dark) {
+                          body {
+                              background-color: #0d1117;
+                          }
+                      }
                 </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
                 
@@ -755,10 +745,10 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_31UTXPbNhC981fsJT1ZnsbTaccHH-REmmpqJR5JOXVyWIJLEiN8MFhAsjr58V2AlO00tU6igN23H-89RB0N3W19G48YCDZkCJngcHP92_WvMIMlYUxy8Qvcpw62yVoMp4pTHUviWncBo_YO2uAtPFCH6gTbE0eyED2sfUPBwTyoXkdSGaqazWZV9XdNrQ_0tRpx7hfLz5vFVLZETAHXkmb5a3V3d_fcyzbKL1cfMexLAdj1ZAm-w1oza9dBOwVi20rNfJKYAtDTQEGTU1Stk4l6ZtB1CTtBTMPgQxSITz4CHlAbrA1dgdFWF4DO-BoNBELVV_PmgILSwJZQJoOlNpECS_o9slbA47F35nQFbPwRpLBMY3NWtXgqtWQ7jx-XknMey0lpbQcjs7hITbU7-tkSVfQB5in2cqjVuOvvUliloOMJDsk4Clhrk__Rk-bI1fxxBRuMBA_n9vNgMASfOcgI2KF2LKPWspmy3L-cPzpYMSfi6sF32kHUlnySpsqhYHzhPGUb6FuSbswJjO86WYMEVWuyPsgJ4Z5BkhvkvvYYmtztqIealLcCVDbiD8JIrlDJ9gjSYDw2oHwIaZiGzBcSLTk5js-XUrCR4TOrJala-zpDfFkVUIPDMI68kjWGFhVBHfyenBACdoxt6KAVZQ1FrLPglXdu2k0T_MDndNlflFlf37eiDuGLq4WVr0ybbidmuFyO1cdlZVIDKdKHfCr0CvUoeGlohCCuNlTE0FFmscBTCL5oabwaIbNaphjKPIqezGlyErbS59lI8-VusfnBR-X6tY0-0fGsOYZ504jUfrbS6kWIcNSxHx00BGopZAcBY57obSMVYHh_A-c7HnEwRW9lUiUcTGq84Kcliki1a0TYsr4CYHNFaQ7aEgW-yIV_stWfuutn3xIWY-QjGgMKiEosbYAsZTCFh0tm233ePQI6aW-9nWW1NHCznP_g1f9zXNaPMbrL8im8PT8mLwuNWuYsrMjzykI5e3MQvDcMuCV54LKK0clG7SjM3IZUOonOjqHI9aIZN_KEjWneCQCXBVr9DzVXYMe8xJnL2e9_vHvbnFlFqk9uL9uY7nm0eZlOy_BdeaFUT2rPb5pURpZGWB-yKVl3rtz3mMzzaM1Fm354ORq8L-bLXAWKoTxQorTXTF02bZ6KSoSwk5-IcZrb2-vbd9KfkTYFNbN5yblzPjklHfw3oGCJeztxHkMMqPZS9l8l4aX7gwcAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_31UTXPbNhC981fsJT1ZnsbTaccHH-REmmpqJR5JOXVyWIJLEiN8MFhAsjr58V2AlO00tU6igN23H-89RB0N3W19G48YCDZkCJngcHP92_WvMIMlYUxy8Qvcpw62yVoMp4pTHUviWncBo_YO2uAtPFCH6gTbE0eyED2sfUPBwTyoXkdSGaqazWZV9XdNrQ_0tRpx7hfLz5vFVLZETAHXkmb5a3V3d_fcyzbKL1cfMexLAdj1ZAm-w1oza9dBOwVi20rNfJKYAtDTQEGTU1Stk4l6ZtB1CTtBTMPgQxSITz4CHlAbrA1dgdFWF4DO-BoNBELVV_PmgILSwJZQJoOlNpECS_o9slbA47F35nQFbPwRpLBMY3NWtXgqtWQ7jx-XknMey0lpbQcjs7hITbU7-tkSVfQB5in2cqjVuOvvUliloOMJDsk4Clhrk__Rk-bI1fxxBRuMBA_n9vNgMASfOcgI2KF2LKPWspmy3L-cPzpYMSfi6sF32kHUlnySpsqhYHzhPGUb6FuSbswJjO86WYMEVWuyPsgJ4Z5BkhvkvvYYmtztqIealLcCVDbiD8JIrlDJ9gjSYDw2oHwIaZiGzBcSLTk5js-XUrCR4TOrJala-zpDfFkVUIPDMI68kjWGFhVBHfyenBACdoxt6KAVZQ1FrLPglXdu2k0T_MDndNlflFlf37eiDuGLq4WVr0ybbidmuFyO1cdlZVIDKdKHfCr0CvUoeGlohCCuNlTE0FFmscBTCL5oabwaIbNaphjKPIqezGlyErbS59lI8-VusfnBR-X6tY0-0fGsOYZ504jUfrbS6kWIcNSxHx00BGopZAcBY57obSMVYHh_A-c7HnEwRW9lUiUcTGq84Kcliki1a0TYsr4CYHNFaQ7aEgW-yIV_stWfuutn3xIWY-QjGgMKiEosbYAsZTCFh0tm233ePQI6aW-9nWW1NHCznP_g1f9zXNaPMbrL8im8PT8mLwuNWuYsrMjzykI5e3MQvDcMuCV54LKK0clG7SjM3IZUOonOjqHI9aIZN_KEjWneCQCXBVr9DzVXYMe8xJnL2e9_vHvbnFlFqk9uL9uY7nm0eZlOy_BdeaFUT2rPb5pURpZGWB-yKVl3rtz3mMzzaM1Fm354ORq8L-bLXAWKoTxQorTXTF02bZ6KSoSwk5-IcZrb2-vbd9KfkTYFNbN5yblzPjklHfw3oGCJeztxHkMMqPZS9l8l4aX7gwcAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="1024" height="1090" viewBox="0 0 1024 1090.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Feature Status","Dark Mode Theme","Missing feature affecting user experience"],["BEFORE","Feature Status","Multi-language Support","Not available, limiting global reach"],["BEFORE","Feature Status","Advanced Search Filters","Basic search only, slow performance"],["BEFORE","Feature Status","Export to PDF","Feature not implemented"],["BEFORE","Feature Status","Two-Factor Authentication","Security vulnerability exists"],["BEFORE","Feature Status","API Rate Limiting","No protection against abuse"],["BEFORE","Known Issues","Login timeout issues","Users frequently logged out"],["BEFORE","Known Issues","Memory leaks in dashboard","System becomes slow over time"],["BEFORE","Known Issues","File upload corruption","Files sometimes corrupted during upload"],["BEFORE","Known Issues","Mobile UI overlapping","Interface broken on mobile devices"],["BEFORE","Known Issues","Database connection drops","Intermittent connection failures"],["BEFORE","Known Issues","Email notifications failing","Users not receiving important updates"],["BEFORE","Known Issues","Report generation errors","Reports fail to generate properly"],["AFTER","New Features Added","Dark Mode Theme","Implemented with user preference saving"],["AFTER","New Features Added","Multi-language Support","Added 12 languages with automatic detection"],["AFTER","New Features Added","Advanced Search Filters","Fast indexing with multiple filter options"],["AFTER","New Features Added","Export to PDF","High-quality PDF export with custom templates"],["AFTER","New Features Added","Two-Factor Authentication","TOTP and SMS-based 2FA implemented"],["AFTER","New Features Added","API Rate Limiting","Intelligent rate limiting with user tiers"],["AFTER","Bugs Resolved","Login timeout issues","Session management completely rewritten"],["AFTER","Bugs Resolved","Memory leaks in dashboard","React components optimized, memory usage -67%"],["AFTER","Bugs Resolved","File upload corruption","New chunked upload system with integrity checks"],["AFTER","Bugs Resolved","Mobile UI overlapping","Responsive design overhaul completed"],["AFTER","Bugs Resolved","Database connection drops","Connection pooling and retry logic implemented"],["AFTER","Bugs Resolved","Email notifications failing","New email service with 99.9% delivery rate"],["AFTER","Bugs Resolved","Report generation errors","Async report generation with progress tracking"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_3eaa90223cb5424bb6d7ec5291dac467" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1"/></pattern><style>.main-title_3eaa90223cb5424bb6d7ec5291dac467 { font-family: Arial, Helvetica, sans-serif; font-size: 16.0px; fill: #111111; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_3eaa90223cb5424bb6d7ec5291dac467 { font-family: Arial, Helvetica, sans-serif; font-size: 14.0px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_3eaa90223cb5424bb6d7ec5291dac467 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #4338ca; } .item-desc_3eaa90223cb5424bb6d7ec5291dac467 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #4338ca; } .meta-text_3eaa90223cb5424bb6d7ec5291dac467 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #4338ca; opacity: 0.5; } @keyframes slideUp_3eaa90223cb5424bb6d7ec5291dac467 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_3eaa90223cb5424bb6d7ec5291dac467 { animation: slideUp_3eaa90223cb5424bb6d7ec5291dac467 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_3eaa90223cb5424bb6d7ec5291dac467 { animation-delay: 0.1s; } .delay-2_3eaa90223cb5424bb6d7ec5291dac467 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#grid_3eaa90223cb5424bb6d7ec5291dac467)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#2563eb" rx="2"/><text x="16" y="28" class="main-title_3eaa90223cb5424bb6d7ec5291dac467">Software Release v2.4.0 - Feature &amp; Bug Summary —</text><text x="16" y="60" class="main-title_3eaa90223cb5424bb6d7ec5291dac467">Migration from Legacy System to Modern Architecture</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_3eaa90223cb5424bb6d7ec5291dac467 delay-1_3eaa90223cb5424bb6d7ec5291dac467"><rect width="450" height="838" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#2563eb" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_3eaa90223cb5424bb6d7ec5291dac467" style="fill: #2563eb">01_BEFORE v2.4.0</text><text x="24" y="80" class="sec-header_3eaa90223cb5424bb6d7ec5291dac467" style="fill: #2563eb">Feature Status</text><circle cx="32" cy="115" r="4" fill="#2563eb"/><text x="52" y="119" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Dark Mode Theme</text><text x="52" y="137" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Missing feature affecting user experience</text><circle cx="32" cy="163" r="4" fill="#2563eb"/><text x="52" y="167" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Multi-language Support</text><text x="52" y="185" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Not available, limiting global reach</text><circle cx="32" cy="211" r="4" fill="#2563eb"/><text x="52" y="215" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Advanced Search Filters</text><text x="52" y="233" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Basic search only, slow performance</text><circle cx="32" cy="259" r="4" fill="#2563eb"/><text x="52" y="263" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Export to PDF</text><text x="52" y="281" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Feature not implemented</text><circle cx="32" cy="307" r="4" fill="#2563eb"/><text x="52" y="311" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Two-Factor Authentication</text><text x="52" y="329" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Security vulnerability exists</text><circle cx="32" cy="355" r="4" fill="#2563eb"/><text x="52" y="359" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">API Rate Limiting</text><text x="52" y="377" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// No protection against abuse</text><text x="24" y="433" class="sec-header_3eaa90223cb5424bb6d7ec5291dac467" style="fill: #2563eb">Known Issues</text><circle cx="32" cy="468" r="4" fill="#2563eb"/><text x="52" y="472" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Login timeout issues</text><text x="52" y="490" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Users frequently logged out</text><circle cx="32" cy="516" r="4" fill="#2563eb"/><text x="52" y="520" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Memory leaks in dashboard</text><text x="52" y="538" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// System becomes slow over time</text><circle cx="32" cy="564" r="4" fill="#2563eb"/><text x="52" y="568" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">File upload corruption</text><text x="52" y="586" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Files sometimes corrupted during upload</text><circle cx="32" cy="612" r="4" fill="#2563eb"/><text x="52" y="616" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Mobile UI overlapping</text><text x="52" y="634" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Interface broken on mobile devices</text><circle cx="32" cy="660" r="4" fill="#2563eb"/><text x="52" y="664" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Database connection drops</text><text x="52" y="682" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Intermittent connection failures</text><circle cx="32" cy="708" r="4" fill="#2563eb"/><text x="52" y="712" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Email notifications failing</text><text x="52" y="730" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Users not receiving important updates</text><circle cx="32" cy="756" r="4" fill="#2563eb"/><text x="52" y="760" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Report generation errors</text><text x="52" y="778" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Reports fail to generate properly</text></g></g><g transform="translate(492, 596.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#2563eb" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_3eaa90223cb5424bb6d7ec5291dac467 delay-2_3eaa90223cb5424bb6d7ec5291dac467"><rect width="450" height="908" fill="#ffffff" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_3eaa90223cb5424bb6d7ec5291dac467" style="fill: #10b981">02_AFTER v2.4.0</text><text x="24" y="80" class="sec-header_3eaa90223cb5424bb6d7ec5291dac467" style="fill: #10b981">New Features Added</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Dark Mode Theme</text><text x="52" y="137" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Implemented with user preference saving</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Multi-language Support</text><text x="52" y="185" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Added 12 languages with automatic detection</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Advanced Search Filters</text><text x="52" y="233" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Fast indexing with multiple filter options</text><path d="M24,259 L30,265 L40,255" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="263" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Export to PDF</text><text x="52" y="281" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// High-quality PDF export with custom</text><text x="52" y="295" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">templates</text><path d="M24,321 L30,327 L40,317" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="325" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Two-Factor Authentication</text><text x="52" y="343" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// TOTP and SMS-based 2FA implemented</text><path d="M24,369 L30,375 L40,365" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="373" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">API Rate Limiting</text><text x="52" y="391" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Intelligent rate limiting with user tiers</text><text x="24" y="447" class="sec-header_3eaa90223cb5424bb6d7ec5291dac467" style="fill: #10b981">Bugs Resolved</text><path d="M24,482 L30,488 L40,478" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="486" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Login timeout issues</text><text x="52" y="504" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Session management completely rewritten</text><path d="M24,530 L30,536 L40,526" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="534" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Memory leaks in dashboard</text><text x="52" y="552" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// React components optimized, memory usage</text><text x="52" y="566" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">-67%</text><path d="M24,592 L30,598 L40,588" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="596" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">File upload corruption</text><text x="52" y="614" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// New chunked upload system with integrity</text><text x="52" y="628" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">checks</text><path d="M24,654 L30,660 L40,650" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="658" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Mobile UI overlapping</text><text x="52" y="676" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Responsive design overhaul completed</text><path d="M24,702 L30,708 L40,698" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="706" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Database connection drops</text><text x="52" y="724" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Connection pooling and retry logic</text><text x="52" y="738" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">implemented</text><path d="M24,764 L30,770 L40,760" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="768" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Email notifications failing</text><text x="52" y="786" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// New email service with 99.9% delivery rate</text><path d="M24,812 L30,818 L40,808" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="816" class="item-text_3eaa90223cb5424bb6d7ec5291dac467">Report generation errors</text><text x="52" y="834" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">// Async report generation with progress</text><text x="52" y="848" class="item-desc_3eaa90223cb5424bb6d7ec5291dac467">tracking</text></g></g><text x="40" y="1070.0" class="meta-text_3eaa90223cb5424bb6d7ec5291dac467">SCORECARD_REF: 3EAA // SCALE: 1.0 // THEME: ClassicLightTheme</text></svg>
+<svg width="1024" height="1090" viewBox="0 0 1024 1090.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Feature Status","Dark Mode Theme","Missing feature affecting user experience"],["BEFORE","Feature Status","Multi-language Support","Not available, limiting global reach"],["BEFORE","Feature Status","Advanced Search Filters","Basic search only, slow performance"],["BEFORE","Feature Status","Export to PDF","Feature not implemented"],["BEFORE","Feature Status","Two-Factor Authentication","Security vulnerability exists"],["BEFORE","Feature Status","API Rate Limiting","No protection against abuse"],["BEFORE","Known Issues","Login timeout issues","Users frequently logged out"],["BEFORE","Known Issues","Memory leaks in dashboard","System becomes slow over time"],["BEFORE","Known Issues","File upload corruption","Files sometimes corrupted during upload"],["BEFORE","Known Issues","Mobile UI overlapping","Interface broken on mobile devices"],["BEFORE","Known Issues","Database connection drops","Intermittent connection failures"],["BEFORE","Known Issues","Email notifications failing","Users not receiving important updates"],["BEFORE","Known Issues","Report generation errors","Reports fail to generate properly"],["AFTER","New Features Added","Dark Mode Theme","Implemented with user preference saving"],["AFTER","New Features Added","Multi-language Support","Added 12 languages with automatic detection"],["AFTER","New Features Added","Advanced Search Filters","Fast indexing with multiple filter options"],["AFTER","New Features Added","Export to PDF","High-quality PDF export with custom templates"],["AFTER","New Features Added","Two-Factor Authentication","TOTP and SMS-based 2FA implemented"],["AFTER","New Features Added","API Rate Limiting","Intelligent rate limiting with user tiers"],["AFTER","Bugs Resolved","Login timeout issues","Session management completely rewritten"],["AFTER","Bugs Resolved","Memory leaks in dashboard","React components optimized, memory usage -67%"],["AFTER","Bugs Resolved","File upload corruption","New chunked upload system with integrity checks"],["AFTER","Bugs Resolved","Mobile UI overlapping","Responsive design overhaul completed"],["AFTER","Bugs Resolved","Database connection drops","Connection pooling and retry logic implemented"],["AFTER","Bugs Resolved","Email notifications failing","New email service with 99.9% delivery rate"],["AFTER","Bugs Resolved","Report generation errors","Async report generation with progress tracking"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_796e901b336e4ec1a4a45c75a82c8894" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1"/></pattern><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .main-title_796e901b336e4ec1a4a45c75a82c8894 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13.913044px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_796e901b336e4ec1a4a45c75a82c8894 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12.173913px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_796e901b336e4ec1a4a45c75a82c8894 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #22d3ee; } .item-desc_796e901b336e4ec1a4a45c75a82c8894 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #22d3ee; } .meta-text_796e901b336e4ec1a4a45c75a82c8894 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #22d3ee; opacity: 0.5; } @keyframes slideUp_796e901b336e4ec1a4a45c75a82c8894 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_796e901b336e4ec1a4a45c75a82c8894 { animation: slideUp_796e901b336e4ec1a4a45c75a82c8894 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_796e901b336e4ec1a4a45c75a82c8894 { animation-delay: 0.1s; } .delay-2_796e901b336e4ec1a4a45c75a82c8894 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#grid_796e901b336e4ec1a4a45c75a82c8894)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#38bdf8" rx="2"/><text x="16" y="28" class="main-title_796e901b336e4ec1a4a45c75a82c8894">Software Release v2.4.0 - Feature &amp; Bug Summary —</text><text x="16" y="60" class="main-title_796e901b336e4ec1a4a45c75a82c8894">Migration from Legacy System to Modern Architecture</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_796e901b336e4ec1a4a45c75a82c8894 delay-1_796e901b336e4ec1a4a45c75a82c8894"><rect width="450" height="838" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#38bdf8" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_796e901b336e4ec1a4a45c75a82c8894" style="fill: #38bdf8">01_BEFORE v2.4.0</text><text x="24" y="80" class="sec-header_796e901b336e4ec1a4a45c75a82c8894" style="fill: #38bdf8">Feature Status</text><circle cx="32" cy="115" r="4" fill="#38bdf8"/><text x="52" y="119" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Dark Mode Theme</text><text x="52" y="137" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Missing feature affecting user experience</text><circle cx="32" cy="163" r="4" fill="#38bdf8"/><text x="52" y="167" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Multi-language Support</text><text x="52" y="185" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Not available, limiting global reach</text><circle cx="32" cy="211" r="4" fill="#38bdf8"/><text x="52" y="215" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Advanced Search Filters</text><text x="52" y="233" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Basic search only, slow performance</text><circle cx="32" cy="259" r="4" fill="#38bdf8"/><text x="52" y="263" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Export to PDF</text><text x="52" y="281" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Feature not implemented</text><circle cx="32" cy="307" r="4" fill="#38bdf8"/><text x="52" y="311" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Two-Factor Authentication</text><text x="52" y="329" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Security vulnerability exists</text><circle cx="32" cy="355" r="4" fill="#38bdf8"/><text x="52" y="359" class="item-text_796e901b336e4ec1a4a45c75a82c8894">API Rate Limiting</text><text x="52" y="377" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// No protection against abuse</text><text x="24" y="433" class="sec-header_796e901b336e4ec1a4a45c75a82c8894" style="fill: #38bdf8">Known Issues</text><circle cx="32" cy="468" r="4" fill="#38bdf8"/><text x="52" y="472" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Login timeout issues</text><text x="52" y="490" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Users frequently logged out</text><circle cx="32" cy="516" r="4" fill="#38bdf8"/><text x="52" y="520" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Memory leaks in dashboard</text><text x="52" y="538" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// System becomes slow over time</text><circle cx="32" cy="564" r="4" fill="#38bdf8"/><text x="52" y="568" class="item-text_796e901b336e4ec1a4a45c75a82c8894">File upload corruption</text><text x="52" y="586" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Files sometimes corrupted during upload</text><circle cx="32" cy="612" r="4" fill="#38bdf8"/><text x="52" y="616" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Mobile UI overlapping</text><text x="52" y="634" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Interface broken on mobile devices</text><circle cx="32" cy="660" r="4" fill="#38bdf8"/><text x="52" y="664" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Database connection drops</text><text x="52" y="682" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Intermittent connection failures</text><circle cx="32" cy="708" r="4" fill="#38bdf8"/><text x="52" y="712" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Email notifications failing</text><text x="52" y="730" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Users not receiving important updates</text><circle cx="32" cy="756" r="4" fill="#38bdf8"/><text x="52" y="760" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Report generation errors</text><text x="52" y="778" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Reports fail to generate properly</text></g></g><g transform="translate(492, 596.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_796e901b336e4ec1a4a45c75a82c8894 delay-2_796e901b336e4ec1a4a45c75a82c8894"><rect width="450" height="908" fill="#0f172a" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_796e901b336e4ec1a4a45c75a82c8894" style="fill: #10b981">02_AFTER v2.4.0</text><text x="24" y="80" class="sec-header_796e901b336e4ec1a4a45c75a82c8894" style="fill: #10b981">New Features Added</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Dark Mode Theme</text><text x="52" y="137" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Implemented with user preference saving</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Multi-language Support</text><text x="52" y="185" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Added 12 languages with automatic detection</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Advanced Search Filters</text><text x="52" y="233" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Fast indexing with multiple filter options</text><path d="M24,259 L30,265 L40,255" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="263" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Export to PDF</text><text x="52" y="281" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// High-quality PDF export with custom</text><text x="52" y="295" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">templates</text><path d="M24,321 L30,327 L40,317" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="325" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Two-Factor Authentication</text><text x="52" y="343" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// TOTP and SMS-based 2FA implemented</text><path d="M24,369 L30,375 L40,365" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="373" class="item-text_796e901b336e4ec1a4a45c75a82c8894">API Rate Limiting</text><text x="52" y="391" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Intelligent rate limiting with user tiers</text><text x="24" y="447" class="sec-header_796e901b336e4ec1a4a45c75a82c8894" style="fill: #10b981">Bugs Resolved</text><path d="M24,482 L30,488 L40,478" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="486" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Login timeout issues</text><text x="52" y="504" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Session management completely rewritten</text><path d="M24,530 L30,536 L40,526" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="534" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Memory leaks in dashboard</text><text x="52" y="552" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// React components optimized, memory usage</text><text x="52" y="566" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">-67%</text><path d="M24,592 L30,598 L40,588" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="596" class="item-text_796e901b336e4ec1a4a45c75a82c8894">File upload corruption</text><text x="52" y="614" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// New chunked upload system with integrity</text><text x="52" y="628" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">checks</text><path d="M24,654 L30,660 L40,650" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="658" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Mobile UI overlapping</text><text x="52" y="676" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Responsive design overhaul completed</text><path d="M24,702 L30,708 L40,698" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="706" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Database connection drops</text><text x="52" y="724" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Connection pooling and retry logic</text><text x="52" y="738" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">implemented</text><path d="M24,764 L30,770 L40,760" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="768" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Email notifications failing</text><text x="52" y="786" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// New email service with 99.9% delivery rate</text><path d="M24,812 L30,818 L40,808" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="816" class="item-text_796e901b336e4ec1a4a45c75a82c8894">Report generation errors</text><text x="52" y="834" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">// Async report generation with progress</text><text x="52" y="848" class="item-desc_796e901b336e4ec1a4a45c75a82c8894">tracking</text></g></g><text x="40" y="1070.0" class="meta-text_796e901b336e4ec1a4a45c75a82c8894">SCORECARD_REF: 796E // SCALE: 1.0 // THEME: ProDarkTheme</text></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -779,10 +769,10 @@
 </div>
 <hr />
 <h2 id="program-improvement-example">Program Improvement Example</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_3WRQW8TQQyF7_MrfMkxHFpAveRQ1EQggZZu2xPqwTvrDdbOjhePJ1FQfzyzmwaiALeRnu333jfGFmh1fw1fA1onOkBNgbHhwHaAT8OosqOBoiWXcmPz9IOd9L1oD-hVUgKOnWIyzd6yEmBswUQCx61bLpfOfWuo3KdndzzyYb2p6jXcX8_qq_iGjYb07FarFfxxqTn1yT2Q7tgTGA8k2RK8wEbpRy7ZoM1afGAk7CEItq6KS48hAAbSefQjb79DFE7HZB2G8holsfGOkrujMchh6gkqITTo-7L0BWPGMC-kIPs5VjWSorHEItxRY67OsRHpJ5MqW4tGLYjCwClN3asmleCnKi_wmQeeRkzRT5l94au4pVdI2BnpidHt5nFd_0Y0S-eEzn-nZAmliVL7L1A1tdkX0-YA728Wf9N5e7WAjvakMJYo_8Nxm02GuR9HuCoNY7YyfEnladwqtkU4I_M0HsFMKH05qxj4Z8l6Sefxggqgwc27xS8tFYUGpgIAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_3WRQW8TQQyF7_MrfMkxHFpAveRQ1EQggZZu2xPqwTvrDdbOjhePJ1FQfzyzmwaiALeRnu333jfGFmh1fw1fA1onOkBNgbHhwHaAT8OosqOBoiWXcmPz9IOd9L1oD-hVUgKOnWIyzd6yEmBswUQCx61bLpfOfWuo3KdndzzyYb2p6jXcX8_qq_iGjYb07FarFfxxqTn1yT2Q7tgTGA8k2RK8wEbpRy7ZoM1afGAk7CEItq6KS48hAAbSefQjb79DFE7HZB2G8holsfGOkrujMchh6gkqITTo-7L0BWPGMC-kIPs5VjWSorHEItxRY67OsRHpJ5MqW4tGLYjCwClN3asmleCnKi_wmQeeRkzRT5l94au4pVdI2BnpidHt5nFd_0Y0S-eEzn-nZAmliVL7L1A1tdkX0-YA728Wf9N5e7WAjvakMJYo_8Nxm02GuR9HuCoNY7YyfEnladwqtkU4I_M0HsFMKH05qxj4Z8l6Sefxggqgwc27xS8tFYUGpgIAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="1024" height="636" viewBox="0 0 1024 636.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Stability Risks","Service timeouts","Frequent during peak load"],["BEFORE","Stability Risks","On-call alerts","High noise and false positives"],["BEFORE","Stability Risks","Deployment rollback","Manual and slow"],["BEFORE","Operational Debt","Runbooks","Outdated or missing"],["BEFORE","Operational Debt","Observability","Limited tracing coverage"],["AFTER","Improvements Delivered","Service timeouts","Reduced by 68%"],["AFTER","Improvements Delivered","On-call alerts","42% fewer pages"],["AFTER","Improvements Delivered","Deployment rollback","Automated in 2 minutes"],["AFTER","Operational Upgrades","Runbooks","Updated and centralized"],["AFTER","Operational Upgrades","Observability","Tracing coverage at 85%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_850c36f0d9584324b3b0e011ff863aa5" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1"/></pattern><style>.main-title_850c36f0d9584324b3b0e011ff863aa5 { font-family: Arial, Helvetica, sans-serif; font-size: 16.0px; fill: #111111; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_850c36f0d9584324b3b0e011ff863aa5 { font-family: Arial, Helvetica, sans-serif; font-size: 14.0px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_850c36f0d9584324b3b0e011ff863aa5 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #4338ca; } .item-desc_850c36f0d9584324b3b0e011ff863aa5 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #4338ca; } .meta-text_850c36f0d9584324b3b0e011ff863aa5 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #4338ca; opacity: 0.5; } @keyframes slideUp_850c36f0d9584324b3b0e011ff863aa5 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_850c36f0d9584324b3b0e011ff863aa5 { animation: slideUp_850c36f0d9584324b3b0e011ff863aa5 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_850c36f0d9584324b3b0e011ff863aa5 { animation-delay: 0.1s; } .delay-2_850c36f0d9584324b3b0e011ff863aa5 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#grid_850c36f0d9584324b3b0e011ff863aa5)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#2563eb" rx="2"/><text x="16" y="28" class="main-title_850c36f0d9584324b3b0e011ff863aa5">Q3 Platform Reliability Improvements — Stability work</text><text x="16" y="60" class="main-title_850c36f0d9584324b3b0e011ff863aa5">across infrastructure and tooling</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_850c36f0d9584324b3b0e011ff863aa5 delay-1_850c36f0d9584324b3b0e011ff863aa5"><rect width="450" height="454" fill="#ffffff" stroke="#2563eb" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#2563eb" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_850c36f0d9584324b3b0e011ff863aa5" style="fill: #2563eb">01_BEFORE Q3</text><text x="24" y="80" class="sec-header_850c36f0d9584324b3b0e011ff863aa5" style="fill: #2563eb">Stability Risks</text><circle cx="32" cy="115" r="4" fill="#2563eb"/><text x="52" y="119" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Service timeouts</text><text x="52" y="137" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Frequent during peak load</text><circle cx="32" cy="163" r="4" fill="#2563eb"/><text x="52" y="167" class="item-text_850c36f0d9584324b3b0e011ff863aa5">On-call alerts</text><text x="52" y="185" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// High noise and false positives</text><circle cx="32" cy="211" r="4" fill="#2563eb"/><text x="52" y="215" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Deployment rollback</text><text x="52" y="233" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Manual and slow</text><text x="24" y="289" class="sec-header_850c36f0d9584324b3b0e011ff863aa5" style="fill: #2563eb">Operational Debt</text><circle cx="32" cy="324" r="4" fill="#2563eb"/><text x="52" y="328" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Runbooks</text><text x="52" y="346" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Outdated or missing</text><circle cx="32" cy="372" r="4" fill="#2563eb"/><text x="52" y="376" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Observability</text><text x="52" y="394" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Limited tracing coverage</text></g></g><g transform="translate(492, 369.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#2563eb" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_850c36f0d9584324b3b0e011ff863aa5 delay-2_850c36f0d9584324b3b0e011ff863aa5"><rect width="450" height="454" fill="#ffffff" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_850c36f0d9584324b3b0e011ff863aa5" style="fill: #10b981">02_AFTER Q3</text><text x="24" y="80" class="sec-header_850c36f0d9584324b3b0e011ff863aa5" style="fill: #10b981">Improvements Delivered</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Service timeouts</text><text x="52" y="137" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Reduced by 68%</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_850c36f0d9584324b3b0e011ff863aa5">On-call alerts</text><text x="52" y="185" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// 42% fewer pages</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Deployment rollback</text><text x="52" y="233" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Automated in 2 minutes</text><text x="24" y="289" class="sec-header_850c36f0d9584324b3b0e011ff863aa5" style="fill: #10b981">Operational Upgrades</text><path d="M24,324 L30,330 L40,320" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="328" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Runbooks</text><text x="52" y="346" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Updated and centralized</text><path d="M24,372 L30,378 L40,368" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="376" class="item-text_850c36f0d9584324b3b0e011ff863aa5">Observability</text><text x="52" y="394" class="item-desc_850c36f0d9584324b3b0e011ff863aa5">// Tracing coverage at 85%</text></g></g><text x="40" y="616.0" class="meta-text_850c36f0d9584324b3b0e011ff863aa5">SCORECARD_REF: 850C // SCALE: 1.0 // THEME: ClassicLightTheme</text></svg>
+<svg width="1024" height="636" viewBox="0 0 1024 636.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Stability Risks","Service timeouts","Frequent during peak load"],["BEFORE","Stability Risks","On-call alerts","High noise and false positives"],["BEFORE","Stability Risks","Deployment rollback","Manual and slow"],["BEFORE","Operational Debt","Runbooks","Outdated or missing"],["BEFORE","Operational Debt","Observability","Limited tracing coverage"],["AFTER","Improvements Delivered","Service timeouts","Reduced by 68%"],["AFTER","Improvements Delivered","On-call alerts","42% fewer pages"],["AFTER","Improvements Delivered","Deployment rollback","Automated in 2 minutes"],["AFTER","Operational Upgrades","Runbooks","Updated and centralized"],["AFTER","Operational Upgrades","Observability","Tracing coverage at 85%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_c278ed92b9324ec5b8c425fb493ce218" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1"/></pattern><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .main-title_c278ed92b9324ec5b8c425fb493ce218 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13.913044px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_c278ed92b9324ec5b8c425fb493ce218 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12.173913px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_c278ed92b9324ec5b8c425fb493ce218 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #22d3ee; } .item-desc_c278ed92b9324ec5b8c425fb493ce218 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #22d3ee; } .meta-text_c278ed92b9324ec5b8c425fb493ce218 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #22d3ee; opacity: 0.5; } @keyframes slideUp_c278ed92b9324ec5b8c425fb493ce218 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_c278ed92b9324ec5b8c425fb493ce218 { animation: slideUp_c278ed92b9324ec5b8c425fb493ce218 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_c278ed92b9324ec5b8c425fb493ce218 { animation-delay: 0.1s; } .delay-2_c278ed92b9324ec5b8c425fb493ce218 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#grid_c278ed92b9324ec5b8c425fb493ce218)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#38bdf8" rx="2"/><text x="16" y="28" class="main-title_c278ed92b9324ec5b8c425fb493ce218">Q3 Platform Reliability Improvements — Stability work</text><text x="16" y="60" class="main-title_c278ed92b9324ec5b8c425fb493ce218">across infrastructure and tooling</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_c278ed92b9324ec5b8c425fb493ce218 delay-1_c278ed92b9324ec5b8c425fb493ce218"><rect width="450" height="454" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#38bdf8" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_c278ed92b9324ec5b8c425fb493ce218" style="fill: #38bdf8">01_BEFORE Q3</text><text x="24" y="80" class="sec-header_c278ed92b9324ec5b8c425fb493ce218" style="fill: #38bdf8">Stability Risks</text><circle cx="32" cy="115" r="4" fill="#38bdf8"/><text x="52" y="119" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Service timeouts</text><text x="52" y="137" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Frequent during peak load</text><circle cx="32" cy="163" r="4" fill="#38bdf8"/><text x="52" y="167" class="item-text_c278ed92b9324ec5b8c425fb493ce218">On-call alerts</text><text x="52" y="185" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// High noise and false positives</text><circle cx="32" cy="211" r="4" fill="#38bdf8"/><text x="52" y="215" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Deployment rollback</text><text x="52" y="233" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Manual and slow</text><text x="24" y="289" class="sec-header_c278ed92b9324ec5b8c425fb493ce218" style="fill: #38bdf8">Operational Debt</text><circle cx="32" cy="324" r="4" fill="#38bdf8"/><text x="52" y="328" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Runbooks</text><text x="52" y="346" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Outdated or missing</text><circle cx="32" cy="372" r="4" fill="#38bdf8"/><text x="52" y="376" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Observability</text><text x="52" y="394" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Limited tracing coverage</text></g></g><g transform="translate(492, 369.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_c278ed92b9324ec5b8c425fb493ce218 delay-2_c278ed92b9324ec5b8c425fb493ce218"><rect width="450" height="454" fill="#0f172a" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_c278ed92b9324ec5b8c425fb493ce218" style="fill: #10b981">02_AFTER Q3</text><text x="24" y="80" class="sec-header_c278ed92b9324ec5b8c425fb493ce218" style="fill: #10b981">Improvements Delivered</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Service timeouts</text><text x="52" y="137" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Reduced by 68%</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_c278ed92b9324ec5b8c425fb493ce218">On-call alerts</text><text x="52" y="185" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// 42% fewer pages</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Deployment rollback</text><text x="52" y="233" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Automated in 2 minutes</text><text x="24" y="289" class="sec-header_c278ed92b9324ec5b8c425fb493ce218" style="fill: #10b981">Operational Upgrades</text><path d="M24,324 L30,330 L40,320" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="328" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Runbooks</text><text x="52" y="346" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Updated and centralized</text><path d="M24,372 L30,378 L40,368" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="376" class="item-text_c278ed92b9324ec5b8c425fb493ce218">Observability</text><text x="52" y="394" class="item-desc_c278ed92b9324ec5b8c425fb493ce218">// Tracing coverage at 85%</text></g></g><text x="40" y="616.0" class="meta-text_c278ed92b9324ec5b8c425fb493ce218">SCORECARD_REF: C278 // SCALE: 1.0 // THEME: ProDarkTheme</text></svg>
 </div>
 <figcaption></figcaption>
 </figure>

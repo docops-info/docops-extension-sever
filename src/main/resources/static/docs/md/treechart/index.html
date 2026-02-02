@@ -1,112 +1,98 @@
             <!DOCTYPE html>
-            <html lang="en" data-theme="light">
+            <html lang="en" data-theme="dark">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>index</title>
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Bento:wght@700;900&family=Outfit:wght@300;400&family=JetBrains+Mono&display=swap');
 
 .markdown-body {
-    /* Design-Tricks System */
-    --base-hue: 220;
-    --primary: hsl(var(--base-hue), 90%, 56%);
-    /* Lighter: -15% Sat, +25% Brightness */
-    --primary-light: hsl(var(--base-hue), 75%, 81%);
-    /* Darker: +15% Sat, -25% Brightness */
-    --primary-dark: hsl(var(--base-hue), 100%, 31%);
-    
-    --bg: #FAFBFC; /* design-tricks.md: Never pure white */
-    --card-bg: #FFFFFF;
-    --text-main: #1A1F26;
-    --text-muted: #64748B;
+    --primary: #38BDF8;
+    --primary-glow: rgba(56, 189, 248, 0.15);
+    --bg: #0A0E27; /* design-tricks.md: Recommended dark bg */
+    --card-bg: #161B33; /* Rule #6: increased brightness from bg */
     
     background-color: var(--bg);
-    color: var(--text-main);
-    font-family: 'Instrument Sans', sans-serif;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 48px; /* 8pt grid: 6 * 8 */
-    border-radius: 24px;
+    color: #E2E8F0;
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.7;
+    max-width: 850px;
+    margin: 64px auto;
+    padding: 48px;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Typography Rules from design-tricks.md */
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+/* Headlines with Tracking Rules */
+.markdown-body h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--text-main);
-    margin-top: 32px; /* 8pt grid */
-    margin-bottom: 16px;
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.03em; /* Rule #2: Text over 70px */
+    line-height: 0.95;
+    background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
 }
 
-.markdown-body h1 { 
-    font-size: 48px; 
-    letter-spacing: -0.01em; /* Rule #2 */
-    font-weight: 800;
-}
-
-.markdown-body h2 { 
-    font-size: 32px; 
-    font-weight: 700;
-}
-
-/* 8pt Grid Spacing */
-.markdown-body p, .markdown-body ul, .markdown-body pre {
-    margin-bottom: 24px;
-}
-
-/* "3x more obvious" Primary Elements */
-.markdown-body a {
+.markdown-body h2 {
+    font-size: 32px;
+    letter-spacing: -0.01em;
     color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 2px solid var(--primary-light);
-    transition: all 0.2s ease;
+    margin-top: 48px;
 }
 
-.markdown-body a:hover {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    border-radius: 4px;
+/* Motion: High-impact reveal (ui.md) */
+@keyframes reveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Card Depth without Shadows (Rule #6) */
-.markdown-body blockquote {
-    background: #F1F5F9; /* Adjusted brightness/saturation from bg */
-    border-left: 4px solid var(--primary);
-    padding: 16px 24px;
-    margin: 32px 0;
-    border-radius: 0 12px 12px 0;
-    font-style: italic;
+.markdown-body > * {
+    animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-/* Code Blocks */
+/* Rounded Corners (Rule #4) */
 .markdown-body pre {
-    background: #1E293B;
-    color: #F8FAFC;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
     padding: 24px;
-    border-radius: 16px;
+    border-radius: 20px; /* Outer */
+}
+
+.markdown-body code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    overflow-x: auto;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 8px; /* Inner: 20px - 12px gap */
 }
 
-/* Ensure nested <code> doesn't override <pre> contrast */
-.markdown-body pre code {
-    color: inherit;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: 1.55;
-    white-space: pre; /* keep the ASCII block crisp */
+/* Tables (ui.md style) */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 32px 0;
+    background: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-/* If the renderer wraps tokens in spans, keep them readable too */
-.markdown-body pre code span {
-    color: inherit;
+.markdown-body th {
+    background: rgba(255,255,255,0.05);
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
 }
+
+.markdown-body td {
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
                 </style>
                 <style>
                 .svg-container {
@@ -115,10 +101,15 @@
     justify-content: center;
     align-items: center;
     background: rgba(255, 255, 255, 0.01);
-    /* Force default cursor to remove the zoom/search icon */
     cursor: default !important;
-    width: 100%;
-    max-width: 100%;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+.svg-container svg {
+
+    height: auto;
+    display: block;
 }
 
 .markdown-body img {
@@ -137,11 +128,143 @@
 
 /* Ensure the DocOps specific media cards respect the boundary */
 .docops-media-card {
-    max-width: 100%;
-    overflow: hidden;
+    position: relative;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 970px;
 }
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-data-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+    border-top: 1px solid var(--accent-primary);
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.docops-data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+.docops-data-actions {
+    display: flex;
+    gap: 12px;
+}
+.docops-action-btn {
+    background: rgba(126, 87, 255, 0.1);
+    border: 1px solid rgba(126, 87, 255, 0.3);
+    color: var(--accent-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docops-action-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    border-color: var(--accent-primary);
+}
+
+.docops-data-header span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+}
+
+/* ui.md: Distinctive Table Design */
+.docops-data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.docops-data-table th {
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-primary);
+    font-weight: 500;
+}
+
+/* ui.md: Motion - Staggered Row Entry */
+.docops-data-table tr {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: rowSlideIn 0.4s ease forwards;
+}
+
+@keyframes rowSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.docops-data-table td {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.docops-data-table tr:hover td {
+    background: rgba(126, 87, 255, 0.1);
+    color: #fff;
+}
+
+.docops-container {
+    display: inline-block;
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: center;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
                 </style>
                 <style>
                 /* Theme Variables */
@@ -196,45 +319,7 @@
     --btn-border: rgba(106, 61, 232, 0.4);
 }
 
-.docops-container {
-    display: inline-block;
-}
-.docops-media-card {
-    position: relative;
-    display: inline-block;
-    margin: 2rem 0;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    width: 100%;
-    max-width: 100%;
-}
 
-.docops-media-card:hover {
-    transform: translateY(-4px);
-}
-
-.docops-control-bar {
-    display: flex;
-    background: var(--control-bar-bg);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid var(--control-bar-border);
-    padding: 8px;
-    gap: 8px;
-    justify-content: flex-end;
-}
-
-@media (prefers-color-scheme: light) {
-    .docops-control-bar {
-        background: rgba(255, 255, 255, 0.7);
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    .docops-btn {
-        border-color: rgba(126, 87, 255, 0.6);
-        color: #6a3de8;
-    }
-}
 
 .docops-btn {
     background: transparent;
@@ -609,106 +694,11 @@
 }
                 </style>
                 <style>
-                      
-        .docops-data-panel {
-            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
-            border-top: 1px solid var(--accent-primary);
-            padding: 2rem;
-            max-height: 400px;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .docops-data-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 1rem;
-        }
-        .docops-data-actions {
-            display: flex;
-            gap: 12px;
-        }
-        .docops-action-btn {
-            background: rgba(126, 87, 255, 0.1);
-            border: 1px solid rgba(126, 87, 255, 0.3);
-            color: var(--accent-secondary);
-            font-family: 'Syne', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 6px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .docops-action-btn:hover {
-            background: var(--accent-primary);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
-            border-color: var(--accent-primary);
-        }
-
-        .docops-data-header span {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* ui.md: Distinctive Table Design */
-        .docops-data-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-        }
-
-        .docops-data-table th {
-            color: #fff;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 2px solid var(--accent-primary);
-            font-weight: 500;
-        }
-
-        /* ui.md: Motion - Staggered Row Entry */
-        .docops-data-table tr {
-            opacity: 0;
-            transform: translateX(-10px);
-            animation: rowSlideIn 0.4s ease forwards;
-        }
-
-        @keyframes rowSlideIn {
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .docops-data-table td {
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            color: #94a3b8;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .docops-data-table tr:hover td {
-            background: rgba(126, 87, 255, 0.1);
-            color: #fff;
-        }
-        
-                    @media (prefers-color-scheme: dark) {
-                        body {
-                            background-color: #f5f5f5;
-                        }
-                    }
+                      @media (prefers-color-scheme: dark) {
+                          body {
+                              background-color: #0d1117;
+                          }
+                      }
                 </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
                 
@@ -755,10 +745,10 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAAAAAAAA_3VQQQqDQAy87yv2A4Kn0osH2eqhIKXYDwQbdkOXrKyxpX19FWlF0bkkzJCZIULiMbtEC0wfEAqsjYMo6kV3cdkxTZVDsk6yw7AmSaJMcVF6gLlNc0TBlhgxEltdAYPF-NdG1MgUoj7hE31oV-I2e-53Tq75ZsRA_1qs-ZzBvzuZWpdz65IYuMFNu7xpQs8CLAt6OiHwS9NqNq0gPlD2HjGrdYujD3XLABNYkEWbiCAhfgGKO9GinwEAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAAAAAAAA_3VQQQqDQAy87yv2A4Kn0osH2eqhIKXYDwQbdkOXrKyxpX19FWlF0bkkzJCZIULiMbtEC0wfEAqsjYMo6kV3cdkxTZVDsk6yw7AmSaJMcVF6gLlNc0TBlhgxEltdAYPF-NdG1MgUoj7hE31oV-I2e-53Tq75ZsRA_1qs-ZzBvzuZWpdz65IYuMFNu7xpQs8CLAt6OiHwS9NqNq0gPlD2HjGrdYujD3XLABNYkEWbiCAhfgGKO9GinwEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width='1270' height='1000' viewBox='0 0 1270 1000' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["CEO"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#f8fafc' /><circle cx='635' cy='500' r='635' fill='#818cf8' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 209.0,620.0 209.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 318.0,620.0 318.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 427.0,620.0 427.0,675.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 536.0,620.0 536.0,675.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 645.0,620.0 645.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 754.0,620.0 754.0,675.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 863.0,620.0 863.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 972.0,620.0 972.0,675.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 1081.0,620.0 1081.0,675.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>CEO</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>CTO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Engineering</text><text x='318.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='209.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='209.0' cy='720.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Senior</text><text x='209.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='318.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='318.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='427.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='427.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Junior</text><text x='427.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Developer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>QA Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='536.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='536.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>QA Engineer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='645.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>QA Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>CFO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Finance</text><text x='754.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='754.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='754.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Accountant</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='863.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='863.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Financial</text><text x='863.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>CMO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Marketing</text><text x='972.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='972.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='972.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Marketing</text><text x='972.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Specialist</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='1081.0' cy='720.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='1081.0' cy='720.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Content</text><text x='1081.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Creator</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#0f172a" font-weight="700">ORGANIZATION CHART</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='1270' height='1000' viewBox='0 0 1270 1000' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["CEO"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#020617' /><circle cx='635' cy='500' r='635' fill='#7000ff' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 209.0,620.0 209.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 318.0,620.0 318.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 427.0,620.0 427.0,675.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 536.0,620.0 536.0,675.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 645.0,620.0 645.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 754.0,620.0 754.0,675.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 863.0,620.0 863.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 972.0,620.0 972.0,675.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 1081.0,620.0 1081.0,675.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>CEO</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>CTO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Engineering</text><text x='318.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='209.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='209.0' cy='720.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Senior</text><text x='209.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='318.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='318.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='427.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='427.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Junior</text><text x='427.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>QA Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='536.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='536.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>QA Engineer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='645.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>QA Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>CFO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Finance</text><text x='754.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='754.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='754.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Accountant</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='863.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='863.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Financial</text><text x='863.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>CMO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Marketing</text><text x='972.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='972.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='972.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Marketing</text><text x='972.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Specialist</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='1081.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='1081.0' cy='720.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Content</text><text x='1081.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Creator</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#ffffff" font-weight="700">ORGANIZATION CHART</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -779,10 +769,10 @@
 </div>
 <hr />
 <h2 id="product-taxonomy-example">Product Taxonomy Example</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAAAAAAAA_1WNSwrCQBBE93OKuUAgCIKbLOJnIagEFFx3xk6mYTIdOh1Nbu8nELV2r6hHKWnArBC-9U7tBQaO3IzmQTf12SpNjUeqvWbLRWqSJDFFAK1YGmNf2bCgPaPcyWH3ad7Je_UzrCkEivXMJ1aqyIESx0nZgoI9wIgyj64g6LnvfsU8QhiV3CTthhaFMDr8SljavG1nPnJJAf-qfVSsZfp-AsrpsNz5AAAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAAAAAAAA_1WNSwrCQBBE93OKuUAgCIKbLOJnIagEFFx3xk6mYTIdOh1Nbu8nELV2r6hHKWnArBC-9U7tBQaO3IzmQTf12SpNjUeqvWbLRWqSJDFFAK1YGmNf2bCgPaPcyWH3ad7Je_UzrCkEivXMJ1aqyIESx0nZgoI9wIgyj64g6LnvfsU8QhiV3CTthhaFMDr8SljavG1nPnJJAf-qfVSsZfp-AsrpsNz5AAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width='1140' height='800' viewBox='0 0 1140 800' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Platform"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#f8fafc' /><circle cx='570' cy='400' r='570' fill='#818cf8' opacity='0.05' filter='blur(120px)' /><path class='link' d='M580.0,165.0 C580.0,220.0 340.0,220.0 340.0,275.0' /><path class='link' d='M340.0,365.0 C340.0,420.0 206.66666666666669,420.0 206.66666666666669,475.0' /><path class='link' d='M340.0,365.0 C340.0,420.0 313.33333333333337,420.0 313.33333333333337,475.0' /><path class='link' d='M340.0,365.0 C340.0,420.0 420.0,420.0 420.0,475.0' /><path class='link' d='M580.0,165.0 C580.0,220.0 580.0,220.0 580.0,275.0' /><path class='link' d='M580.0,365.0 C580.0,420.0 526.6666666666667,420.0 526.6666666666667,475.0' /><path class='link' d='M580.0,365.0 C580.0,420.0 633.3333333333334,420.0 633.3333333333334,475.0' /><path class='link' d='M580.0,165.0 C580.0,220.0 820.0,220.0 820.0,275.0' /><path class='link' d='M820.0,365.0 C820.0,420.0 740.0,420.0 740.0,475.0' /><path class='link' d='M820.0,365.0 C820.0,420.0 846.6666666666667,420.0 846.6666666666667,475.0' /><path class='link' d='M820.0,365.0 C820.0,420.0 953.3333333333334,420.0 953.3333333333334,475.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='580.0' cy='120.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='580.0' cy='120.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='580.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Platform</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='340.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='340.0' cy='320.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='340.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Core Services</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='206.66666666666669' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='206.66666666666669' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='206.66666666666669' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Auth</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='313.33333333333337' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='313.33333333333337' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='313.33333333333337' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Billing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='420.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='420.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='420.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'></text><text x='420.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Notifications</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='580.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='580.0' cy='320.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='580.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Data Layer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='526.6666666666667' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='526.6666666666667' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='526.6666666666667' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Warehousing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='633.3333333333334' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='633.3333333333334' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='633.3333333333334' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Analytics</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='820.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='820.0' cy='320.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='820.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Experience</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='740.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='740.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='740.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Web App</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='846.6666666666667' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='846.6666666666667' cy='520.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='846.6666666666667' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Mobile App</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='953.3333333333334' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='953.3333333333334' cy='520.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='953.3333333333334' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Integrations</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#0f172a" font-weight="700">PRODUCT TAXONOMY</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='1140' height='800' viewBox='0 0 1140 800' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Platform"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#020617' /><circle cx='570' cy='400' r='570' fill='#7000ff' opacity='0.05' filter='blur(120px)' /><path class='link' d='M580.0,165.0 C580.0,220.0 340.0,220.0 340.0,275.0' /><path class='link' d='M340.0,365.0 C340.0,420.0 206.66666666666669,420.0 206.66666666666669,475.0' /><path class='link' d='M340.0,365.0 C340.0,420.0 313.33333333333337,420.0 313.33333333333337,475.0' /><path class='link' d='M340.0,365.0 C340.0,420.0 420.0,420.0 420.0,475.0' /><path class='link' d='M580.0,165.0 C580.0,220.0 580.0,220.0 580.0,275.0' /><path class='link' d='M580.0,365.0 C580.0,420.0 526.6666666666667,420.0 526.6666666666667,475.0' /><path class='link' d='M580.0,365.0 C580.0,420.0 633.3333333333334,420.0 633.3333333333334,475.0' /><path class='link' d='M580.0,165.0 C580.0,220.0 820.0,220.0 820.0,275.0' /><path class='link' d='M820.0,365.0 C820.0,420.0 740.0,420.0 740.0,475.0' /><path class='link' d='M820.0,365.0 C820.0,420.0 846.6666666666667,420.0 846.6666666666667,475.0' /><path class='link' d='M820.0,365.0 C820.0,420.0 953.3333333333334,420.0 953.3333333333334,475.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='580.0' cy='120.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='580.0' cy='120.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='580.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Platform</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='340.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='340.0' cy='320.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='340.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Core Services</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='206.66666666666669' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='206.66666666666669' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='206.66666666666669' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Auth</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='313.33333333333337' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='313.33333333333337' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='313.33333333333337' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Billing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='420.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='420.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='420.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'></text><text x='420.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Notifications</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='580.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='580.0' cy='320.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='580.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Data Layer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='526.6666666666667' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='526.6666666666667' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='526.6666666666667' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Warehousing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='633.3333333333334' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='633.3333333333334' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='633.3333333333334' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Analytics</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='820.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='820.0' cy='320.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='820.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Experience</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='740.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='740.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='740.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Web App</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='846.6666666666667' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='846.6666666666667' cy='520.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='846.6666666666667' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Mobile App</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='953.3333333333334' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='953.3333333333334' cy='520.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='953.3333333333334' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Integrations</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#ffffff" font-weight="700">PRODUCT TAXONOMY</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
