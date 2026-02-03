@@ -74,6 +74,7 @@ abstract class AbstractGaugeMaker : GaugeMaker {
         val glowIntensity = if (isDark) "4" else "2"
         val shadowIntensity = if (isDark) "0.3" else "0.15"
 
+        //language=css
         return """
         <defs>
             <style>
@@ -134,6 +135,15 @@ abstract class AbstractGaugeMaker : GaugeMaker {
                 
                 .animated-digit {
                     animation: digitFlip 0.6s ease-out 1.2s both;
+                }
+                @keyframes fillGrow {
+                    0% { width: 0; }
+                    100% { width: var(--fill-width); }
+                }
+                
+                .animated-fill {
+                    transform-origin: left center;
+                    animation: fillGrow 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
                 }
                 """ else ""}
                 
