@@ -10,6 +10,7 @@ import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import java.io.File
+import java.io.Serializable
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -20,7 +21,7 @@ import kotlin.uuid.Uuid
 class PieChartImproved {
 
     private var theme = ThemeFactory.getTheme(false)
-    fun makePieSvg(payload: String, csvResponse: CsvResponse, isPdf: Boolean, useDark: Boolean): String {
+    fun makePieSvg(payload: String,  isPdf: Boolean, useDark: Boolean): Pair<String, List<PieSegment>> {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
         val display = SliceDisplay(
@@ -66,7 +67,7 @@ class PieChartImproved {
             }.toMutableList()
             // Construct the PieSlices wrapper
             val pieSlicesObj = PieSlices(title = title, slices = slices, display = display)
-            return maker.makeDonut(pieSlices = pieSlicesObj)
+            return Pair(maker.makeDonut(pieSlices = pieSlicesObj), pieData)
         }
         if(!isDonut) {
             val maker = PieSliceMakerImproved()
@@ -78,7 +79,7 @@ class PieChartImproved {
                 )
             }.toMutableList()
             val pieSlicesObj = PieSlices(title = title, slices = slices, display = display)
-            return maker.makePie(pieSlices = pieSlicesObj)
+            return Pair(maker.makePie(pieSlices = pieSlicesObj), pieData)
         }
         // Generate SVG
         val svg = generatePieChartSvg(
@@ -93,8 +94,8 @@ class PieChartImproved {
             isDonut, darkMode, isPdf = isPdf, display = display
         )
 
-        csvResponse.update(payloadToSimpleCsv(pieData))
-        return svg.trimIndent()
+
+        return Pair(svg.trimIndent(), pieData)
     }
 
 
@@ -601,17 +602,11 @@ class PieChartImproved {
     /**
      * Convert input payload to simple CSV format (just label and value)
      */
-    private fun payloadToSimpleCsv(pieData: List<PieSegment>): CsvResponse {
-        val headers = listOf("Label", "Value")
-        val rows = pieData.map { segment ->
-            listOf(segment.label, segment.value.toString())
-        }
-        return CsvResponse(headers, rows)
-    }
 
 
 
-    private data class PieSegment(val label: String, val value: Double, val color: String? = null)
+
+    data class PieSegment(val label: String, val value: Double, val color: String? = null)
 
     private data class SegmentWithAngles(
         val segment: PieSegment,
@@ -622,18 +617,3 @@ class PieChartImproved {
     )
 }
 
-fun main() {
-    val payload = """legend=false
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10""".trimIndent()
-    val pieChartImproved = PieChartImproved()
-    val csvResponse = CsvResponse(mutableListOf(), mutableListOf())
-    val svg = pieChartImproved.makePieSvg(payload, csvResponse, false, false)
-
-    val f = File("gen/pie_not_donut.svg")
-    f.writeBytes(svg.toByteArray())
-}

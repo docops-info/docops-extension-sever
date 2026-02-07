@@ -694,18 +694,173 @@
 }
                 </style>
                 <style>
-                      @media (prefers-color-scheme: dark) {
-                          body {
-                              background-color: #0d1117;
+                          @media (prefers-color-scheme: dark) {
+                              body {
+                                  background-color: #0d1117;
+                              }
                           }
-                      }
-                </style>
+                          
+                          /* Consistent Modal Styles matching AsciiDoc implementation */
+                          .svg-modal-overlay {
+                              display: none;
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(15, 20, 25, 0.95);
+                              backdrop-filter: blur(8px);
+                              z-index: 2147483647;
+                              align-items: center;
+                              justify-content: center;
+                              padding: 40px;
+                              box-sizing: border-box;
+                          }
+                          .svg-modal-overlay.active {
+                              display: flex;
+                          }
+                          .svg-modal-content {
+                              width: 95vw;
+                              max-width: 1400px;
+                              height: 90vh;
+                              background: var(--docops-card-bg, #1e293b);
+                              border-radius: 20px;
+                              padding: 48px 24px 24px 24px;
+                              position: relative;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              display: flex;
+                              flex-direction: column;
+                              overflow: hidden;
+                              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                              animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                          }
+                          .svg-modal-close {
+                              position: absolute;
+                              top: 12px;
+                              right: 12px;
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border: none;
+                              width: 36px;
+                              height: 36px;
+                              border-radius: 50%;
+                              font-size: 24px;
+                              cursor: pointer;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              transition: all 0.2s ease;
+                              z-index: 10;
+                          }
+                          .svg-modal-close:hover {
+                              background: rgba(255,255,255,0.2);
+                              transform: rotate(90deg);
+                          }
+                          .svg-modal-body {
+                              flex: 1;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 100%;
+                              height: 100%;
+                              overflow: auto;
+                              padding: 10px;
+                          }
+                          .svg-modal-body svg {
+                              max-width: 100%;
+                              max-height: 100%;
+                              width: auto;
+                              height: auto;
+                              object-fit: contain;
+                          }
+                          @keyframes scaleInModal {
+                              from { opacity: 0; transform: scale(0.9); }
+                              to { opacity: 1; transform: scale(1); }
+                          }
+                          /* CSV Modal Styles */
+                          #globalCsvModal .csv-table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              color: #e2e8f0;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 13px;
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table th {
+                              text-align: left;
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              position: sticky;
+                              top: 0;
+                          }
+                          #globalCsvModal .csv-table td {
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              color: #cbd5e1;
+                          }
+                          #globalCsvModal .csv-table tr {
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table tr:hover {
+                              background: rgba(255,255,255,0.05);
+                          }
+                          /* Sliding Controls Styles (Consistent with Asciidoctor) */
+                          .svg-with-controls {
+                              position: relative;
+                              display: inline-block;
+                              border-radius: 8px;
+                              overflow: hidden;
+                          }
+                          .svg-bottom-controls {
+                              position: absolute;
+                              bottom: 12px;
+                              left: 50%;
+                              transform: translateX(-50%) translateY(150%);
+                              display: flex;
+                              gap: 6px;
+                              background: rgba(15, 20, 30, 0.85);
+                              padding: 6px 8px;
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              opacity: 0;
+                              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                              z-index: 100;
+                              backdrop-filter: blur(8px);
+                              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                          }
+                          .svg-with-controls:hover .svg-bottom-controls {
+                              opacity: 1;
+                              transform: translateX(-50%) translateY(0);
+                          }
+                          .svg-control-btn {
+                              background: transparent;
+                              border: 1px solid rgba(255,255,255,0.15);
+                              color: #94a3b8;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 10px;
+                              font-weight: 600;
+                              padding: 4px 10px;
+                              border-radius: 4px;
+                              cursor: pointer;
+                              transition: all 0.2s;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                          }
+                          .svg-control-btn:hover {
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border-color: rgba(255,255,255,0.3);
+                              transform: translateY(-1px);
+                          }
+                    </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
                 
             </head>
             <body>
-                <article class="markdown-body">
-                    <h1 id="badges-and-shields">Badges and Shields</h1>
+                    <article class="markdown-body">
+                        <h1 id="badges-and-shields">Badges and Shields</h1>
 <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 32px; margin-bottom: 48px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
   <div style="display: flex; align-items: center; gap: 24px;">
     <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 20px; border-radius: 12px;">
@@ -755,10 +910,10 @@
 </div>
 <h2 id="default-style">Default Style</h2>
 <p>The classic badge style perfect for project metrics and status indicators.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_zXMOw6AIBAE0J5r0BM-skitsbPyBCqSGA2bIMZmDy8WVlO8menxSSfO4SIl9EjEN682MMQBlIyaTWXO1bSwR8UYVyXdn2zAfFykhfkMpAvtQlwagACsw1TyvtwF676xteC8tU37P79D7UWbeQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_zXMOw6AIBAE0J5r0BM-skitsbPyBCqSGA2bIMZmDy8WVlO8menxSSfO4SIl9EjEN682MMQBlIyaTWXO1bSwR8UYVyXdn2zAfFykhfkMpAvtQlwagACsw1TyvtwF676xteC8tU37P79D7UWbeQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width='496.71667' height='22' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img' aria-label='Badge Collection'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Downloads","1.2M","","#e91e63","#6610f2","","#ffffff","false"],["Stars","12.5k","","#ffc107","#ffc107","","#ffffff","false"],["Forks","2.3k","","#607d8b","#0366d6","","#ffffff","false"],["Contributors","45","","#795548","#6610f2","","#ffffff","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><linearGradient id='a' x2='0' y2='100%'><stop offset='0' stop-opacity='.1' stop-color='#EEE'/><stop offset='1' stop-opacity='.1'/></linearGradient><linearGradient id="label_c2bd0ba236704f778b5d37d40fa1b591" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e91e63"/><stop offset="100%" stop-color="#a31545"/></linearGradient><linearGradient id="message_c2bd0ba236704f778b5d37d40fa1b591" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_c2bd0ba236704f778b5d37d40fa1b591'><rect width='140.39331' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_c5b4e12c9fa7402cbdb1efdfd63df898" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><linearGradient id="message_c5b4e12c9fa7402cbdb1efdfd63df898" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><mask id='mask_c5b4e12c9fa7402cbdb1efdfd63df898'><rect width='109.30002' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_52abf8e0dad74d428a864dad9b9700c7" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#607d8b"/><stop offset="100%" stop-color="#435761"/></linearGradient><linearGradient id="message_52abf8e0dad74d428a864dad9b9700c7" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0366d6"/><stop offset="100%" stop-color="#024795"/></linearGradient><mask id='mask_52abf8e0dad74d428a864dad9b9700c7'><rect width='103.36001' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_2cc6bd8c7d424563851c3578cb35724e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#795548"/><stop offset="100%" stop-color="#543b32"/></linearGradient><linearGradient id="message_2cc6bd8c7d424563851c3578cb35724e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_2cc6bd8c7d424563851c3578cb35724e'><rect width='135.66335' height='20' rx='3.0' fill='#FFF'/></mask></defs><style>/* Base badge styles */ svg { shape-rendering: crispEdges; } text { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; } /* Theme-aware styles */ @media (prefers-color-scheme: dark) { .badge-shape rect { filter: brightness(0.9); } } @media (prefers-color-scheme: light) { .badge-shape rect { filter: brightness(1); } } /* Hover effect for linked badges */ a { text-decoration: none; } a:hover { text-decoration: underline; } .badge-link:hover { opacity: 0.9; transition: opacity 0.2s ease; } /* Ensure animations degrade gracefully */ @media (prefers-reduced-motion: reduce) { a:hover, .badge-link:hover { transition: none; } }</style><g transform='translate(0.0,0)'><svg width='140.39331' height='20' viewBox='0 0 140.39331 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Downloads: 1.2M" class=""><title>Downloads: 1.2M</title><desc>Badge showing Downloads with value 1.2M</desc><!-- Badge shape with mask --><g mask='url(#mask_c2bd0ba236704f778b5d37d40fa1b591)' ><!-- Label background --><rect x='0' y='0' width='89.31831' height='20' fill='url(#label_c2bd0ba236704f778b5d37d40fa1b591)'/><!-- Message background --><rect x='89.31831' y='0' width='51.075' height='20' fill='url(#message_c2bd0ba236704f778b5d37d40fa1b591)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='140.39331' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Downloads</text><!-- Message text --><text x='99.31831' y='14' fill='#ffffff' style='font-weight: 400;'>1.2M</text></g><!-- Logo/icon --></svg></g><g transform='translate(142.39331,0)'><svg width='109.30002' height='20' viewBox='0 0 109.30002 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Stars: 12.5k" class=""><title>Stars: 12.5k</title><desc>Badge showing Stars with value 12.5k</desc><!-- Badge shape with mask --><g mask='url(#mask_c5b4e12c9fa7402cbdb1efdfd63df898)' ><!-- Label background --><rect x='0' y='0' width='54.118347' height='20' fill='url(#label_c5b4e12c9fa7402cbdb1efdfd63df898)'/><!-- Message background --><rect x='54.118347' y='0' width='55.18167' height='20' fill='url(#message_c5b4e12c9fa7402cbdb1efdfd63df898)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='109.30002' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Stars</text><!-- Message text --><text x='64.11835' y='14' fill='#ffffff' style='font-weight: 400;'>12.5k</text></g><!-- Logo/icon --></svg></g><g transform='translate(253.69333,0)'><svg width='103.36001' height='20' viewBox='0 0 103.36001 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Forks: 2.3k" class=""><title>Forks: 2.3k</title><desc>Badge showing Forks with value 2.3k</desc><!-- Badge shape with mask --><g mask='url(#mask_52abf8e0dad74d428a864dad9b9700c7)' ><!-- Label background --><rect x='0' y='0' width='55.951668' height='20' fill='url(#label_52abf8e0dad74d428a864dad9b9700c7)'/><!-- Message background --><rect x='55.951668' y='0' width='47.40834' height='20' fill='url(#message_52abf8e0dad74d428a864dad9b9700c7)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='103.36001' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Forks</text><!-- Message text --><text x='65.95167' y='14' fill='#ffffff' style='font-weight: 400;'>2.3k</text></g><!-- Logo/icon --></svg></g><g transform='translate(359.05334,0)'><svg width='135.66335' height='20' viewBox='0 0 135.66335 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Contributors: 45" class=""><title>Contributors: 45</title><desc>Badge showing Contributors with value 45</desc><!-- Badge shape with mask --><g mask='url(#mask_2cc6bd8c7d424563851c3578cb35724e)' ><!-- Label background --><rect x='0' y='0' width='100.116684' height='20' fill='url(#label_2cc6bd8c7d424563851c3578cb35724e)'/><!-- Message background --><rect x='100.116684' y='0' width='35.546665' height='20' fill='url(#message_2cc6bd8c7d424563851c3578cb35724e)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='135.66335' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Contributors</text><!-- Message text --><text x='110.116684' y='14' fill='#ffffff' style='font-weight: 400;'>45</text></g><!-- Logo/icon --></svg></g></svg>
+<svg width='496.71667' height='22' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role='img' aria-label='Badge Collection'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Downloads","1.2M","","#e91e63","#6610f2","","#ffffff","false"],["Stars","12.5k","","#ffc107","#ffc107","","#ffffff","false"],["Forks","2.3k","","#607d8b","#0366d6","","#ffffff","false"],["Contributors","45","","#795548","#6610f2","","#ffffff","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><linearGradient id='a' x2='0' y2='100%'><stop offset='0' stop-opacity='.1' stop-color='#EEE'/><stop offset='1' stop-opacity='.1'/></linearGradient><linearGradient id="label_ec673bc5038e4665a4016eb05f866b5f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e91e63"/><stop offset="100%" stop-color="#a31545"/></linearGradient><linearGradient id="message_ec673bc5038e4665a4016eb05f866b5f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_ec673bc5038e4665a4016eb05f866b5f'><rect width='140.39331' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_dd30b8b948f2406198e291fa93868ece" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><linearGradient id="message_dd30b8b948f2406198e291fa93868ece" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ffc107"/><stop offset="100%" stop-color="#b28704"/></linearGradient><mask id='mask_dd30b8b948f2406198e291fa93868ece'><rect width='109.30002' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_5242e31f50524a3d8b5afbe850184dd0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#607d8b"/><stop offset="100%" stop-color="#435761"/></linearGradient><linearGradient id="message_5242e31f50524a3d8b5afbe850184dd0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0366d6"/><stop offset="100%" stop-color="#024795"/></linearGradient><mask id='mask_5242e31f50524a3d8b5afbe850184dd0'><rect width='103.36001' height='20' rx='3.0' fill='#FFF'/></mask><linearGradient id="label_f82370831a3c423db8d04ff9b0245e73" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#795548"/><stop offset="100%" stop-color="#543b32"/></linearGradient><linearGradient id="message_f82370831a3c423db8d04ff9b0245e73" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#6610f2"/><stop offset="100%" stop-color="#470ba9"/></linearGradient><mask id='mask_f82370831a3c423db8d04ff9b0245e73'><rect width='135.66335' height='20' rx='3.0' fill='#FFF'/></mask></defs><style>/* Base badge styles */ svg { shape-rendering: crispEdges; } text { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; } /* Theme-aware styles */ @media (prefers-color-scheme: dark) { .badge-shape rect { filter: brightness(0.9); } } @media (prefers-color-scheme: light) { .badge-shape rect { filter: brightness(1); } } /* Hover effect for linked badges */ a { text-decoration: none; } a:hover { text-decoration: underline; } .badge-link:hover { opacity: 0.9; transition: opacity 0.2s ease; } /* Ensure animations degrade gracefully */ @media (prefers-reduced-motion: reduce) { a:hover, .badge-link:hover { transition: none; } }</style><g transform='translate(0.0,0)'><svg width='140.39331' height='20' viewBox='0 0 140.39331 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Downloads: 1.2M" class=""><title>Downloads: 1.2M</title><desc>Badge showing Downloads with value 1.2M</desc><!-- Badge shape with mask --><g mask='url(#mask_ec673bc5038e4665a4016eb05f866b5f)' ><!-- Label background --><rect x='0' y='0' width='89.31831' height='20' fill='url(#label_ec673bc5038e4665a4016eb05f866b5f)'/><!-- Message background --><rect x='89.31831' y='0' width='51.075' height='20' fill='url(#message_ec673bc5038e4665a4016eb05f866b5f)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='140.39331' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Downloads</text><!-- Message text --><text x='99.31831' y='14' fill='#ffffff' style='font-weight: 400;'>1.2M</text></g><!-- Logo/icon --></svg></g><g transform='translate(142.39331,0)'><svg width='109.30002' height='20' viewBox='0 0 109.30002 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Stars: 12.5k" class=""><title>Stars: 12.5k</title><desc>Badge showing Stars with value 12.5k</desc><!-- Badge shape with mask --><g mask='url(#mask_dd30b8b948f2406198e291fa93868ece)' ><!-- Label background --><rect x='0' y='0' width='54.118347' height='20' fill='url(#label_dd30b8b948f2406198e291fa93868ece)'/><!-- Message background --><rect x='54.118347' y='0' width='55.18167' height='20' fill='url(#message_dd30b8b948f2406198e291fa93868ece)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='109.30002' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Stars</text><!-- Message text --><text x='64.11835' y='14' fill='#ffffff' style='font-weight: 400;'>12.5k</text></g><!-- Logo/icon --></svg></g><g transform='translate(253.69333,0)'><svg width='103.36001' height='20' viewBox='0 0 103.36001 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Forks: 2.3k" class=""><title>Forks: 2.3k</title><desc>Badge showing Forks with value 2.3k</desc><!-- Badge shape with mask --><g mask='url(#mask_5242e31f50524a3d8b5afbe850184dd0)' ><!-- Label background --><rect x='0' y='0' width='55.951668' height='20' fill='url(#label_5242e31f50524a3d8b5afbe850184dd0)'/><!-- Message background --><rect x='55.951668' y='0' width='47.40834' height='20' fill='url(#message_5242e31f50524a3d8b5afbe850184dd0)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='103.36001' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Forks</text><!-- Message text --><text x='65.95167' y='14' fill='#ffffff' style='font-weight: 400;'>2.3k</text></g><!-- Logo/icon --></svg></g><g transform='translate(359.05334,0)'><svg width='135.66335' height='20' viewBox='0 0 135.66335 20' xmlns='http://www.w3.org/2000/svg' xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Contributors: 45" class=""><title>Contributors: 45</title><desc>Badge showing Contributors with value 45</desc><!-- Badge shape with mask --><g mask='url(#mask_f82370831a3c423db8d04ff9b0245e73)' ><!-- Label background --><rect x='0' y='0' width='100.116684' height='20' fill='url(#label_f82370831a3c423db8d04ff9b0245e73)'/><!-- Message background --><rect x='100.116684' y='0' width='35.546665' height='20' fill='url(#message_f82370831a3c423db8d04ff9b0245e73)'/><!-- Subtle gradient overlay for depth --><rect x='0' y='0' width='135.66335' height='20' fill='url(#a)' opacity='0.1'/></g><!-- Text elements with natural sizing --><g aria-hidden='true' fill='#ffffff' font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size='11' ><!-- Label text --><text x='10.0' y='14' fill='#ffffff' style='font-weight: 500;'>Contributors</text><!-- Message text --><text x='110.116684' y='14' fill='#ffffff' style='font-weight: 400;'>45</text></g><!-- Logo/icon --></svg></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -772,10 +927,10 @@
 </div>
 <h2 id="minimal-style">Minimal Style</h2>
 <p>Clean, lightweight badges with subtle styling.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi19fX08_R19OEqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIAD1LgNzWQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi19fX08_R19OEqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIAD1LgNzWQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="190" height="28" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .border-line { stroke: rgba(255,255,255,0.2); } .text-all { fill: #f5f5f5; } .divider { stroke: rgba(255,255,255,0.15); } } @media (prefers-color-scheme: light) { .border-line { stroke: rgba(0,0,0,0.15); } .text-all { fill: #171717; } .divider { stroke: rgba(0,0,0,0.1); } }</style></defs><g transform="translate(0, 0)"><rect x="0.5" y="0.5" width="189" height="27" rx="4" fill="none" class="border-line" stroke-width="1"/><line class="divider" x1="95" y1="6" x2="95" y2="22" stroke-width="1"/><text class="text-all" x="47" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="10" font-weight="500" letter-spacing="0.3">MADE WITH</text><text class="text-all" x="142" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="11" font-weight="600">Kotlin</text></g></svg>
+<svg width="190" height="28" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .border-line { stroke: rgba(255,255,255,0.2); } .text-all { fill: #f5f5f5; } .divider { stroke: rgba(255,255,255,0.15); } } @media (prefers-color-scheme: light) { .border-line { stroke: rgba(0,0,0,0.15); } .text-all { fill: #171717; } .divider { stroke: rgba(0,0,0,0.1); } }</style></defs><g transform="translate(0, 0)"><rect x="0.5" y="0.5" width="189" height="27" rx="4" fill="none" class="border-line" stroke-width="1"/><line class="divider" x1="95" y1="6" x2="95" y2="22" stroke-width="1"/><text class="text-all" x="47" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="10" font-weight="500" letter-spacing="0.3">MADE WITH</text><text class="text-all" x="142" y="18" text-anchor="middle" font-family="'Söhne', 'Helvetica Now', sans-serif" font-size="11" font-weight="600">Kotlin</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -789,10 +944,10 @@
 </div>
 <h2 id="brutalist-style">Brutalist Style</h2>
 <p>Bold, high-contrast badges with sharp edges for maximum impact.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1dQoKDXH08QwO4SrJSM1NtU0sLcnnKi5ITM7MS7c1NODS1dXl8k1MSVUIzyzJqPHOL8nJzKupUTYwMzQ2TqpRNktLNjExrLHJBkvY1SinJYMgAAHMwGVbAAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1dQoKDXH08QwO4SrJSM1NtU0sLcnnKi5ITM7MS7c1NODS1dXl8k1MSVUIzyzJqPHOL8nJzKupUTYwMzQ2TqpRNktLNjExrLHJBkvY1SinJYMgAAHMwGVbAAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="200" height="40" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-main { fill: #18181b; } .bg-accent { fill: #fbbf24; } .text-label { fill: #fafafa; } .text-value { fill: #18181b; } .shadow-box { fill: rgba(251, 191, 36, 0.2); } } @media (prefers-color-scheme: light) { .bg-main { fill: #fafafa; } .bg-accent { fill: #f59e0b; } .text-label { fill: #18181b; } .text-value { fill: #fefce8; } .shadow-box { fill: rgba(245, 158, 11, 0.15); } }</style></defs><g transform="translate(0, 0)"><rect class="shadow-box" x="4" y="4" width="196" height="36"/><rect class="bg-main" x="0" y="0" width="110.00000000000001" height="40" stroke="#18181b" stroke-width="2"/><rect class="bg-accent" x="110.00000000000001" y="0" width="89.99999999999999" height="40" stroke="#18181b" stroke-width="2"/><text class="text-label" x="55.00000000000001" y="25" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="13" font-weight="900" letter-spacing="1">MADE WITH</text><text class="text-value" x="155.0" y="26" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="16" font-weight="900">Kotlin</text></g></svg>
+<svg width="200" height="40" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-main { fill: #18181b; } .bg-accent { fill: #fbbf24; } .text-label { fill: #fafafa; } .text-value { fill: #18181b; } .shadow-box { fill: rgba(251, 191, 36, 0.2); } } @media (prefers-color-scheme: light) { .bg-main { fill: #fafafa; } .bg-accent { fill: #f59e0b; } .text-label { fill: #18181b; } .text-value { fill: #fefce8; } .shadow-box { fill: rgba(245, 158, 11, 0.15); } }</style></defs><g transform="translate(0, 0)"><rect class="shadow-box" x="4" y="4" width="196" height="36"/><rect class="bg-main" x="0" y="0" width="110.00000000000001" height="40" stroke="#18181b" stroke-width="2"/><rect class="bg-accent" x="110.00000000000001" y="0" width="89.99999999999999" height="40" stroke="#18181b" stroke-width="2"/><text class="text-label" x="55.00000000000001" y="25" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="13" font-weight="900" letter-spacing="1">MADE WITH</text><text class="text-value" x="155.0" y="26" text-anchor="middle" font-family="'Archivo Black', sans-serif" font-size="16" font-weight="900">Kotlin</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -806,10 +961,10 @@
 </div>
 <h2 id="glassmorphic-style">Glassmorphic Style</h2>
 <p>Modern, frosted-glass effect with translucent backgrounds.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_x3JsQrCMBAA0P2-QugcMKZ0Mv6AuLg4x_TaHKa5kJyIch8vyhufvCv6NYfeN241UQRJuKEPT2HoNUQqq7cHmKlhFOLiEzf6cJGQoWK78ss7MMbAJcy4u5EkPbNkKqrDfrLO3XWYljiOVo-Pf5x0WOLPF4m25z98AAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_x3JsQrCMBAA0P2-QugcMKZ0Mv6AuLg4x_TaHKa5kJyIch8vyhufvCv6NYfeN241UQRJuKEPT2HoNUQqq7cHmKlhFOLiEzf6cJGQoWK78ss7MMbAJcy4u5EkPbNkKqrDfrLO3XWYljiOVo-Pf5x0WOLPF4m25z98AAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="180" height="32" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-left { fill: rgba(255,255,255,0.08); } .bg-right { fill: rgba(74, 222, 128, 0.15); } .text-left { fill: #e5e7eb; } .text-right { fill: #4ade80; } .border { stroke: rgba(255,255,255,0.12); } .glow { filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3)); } } @media (prefers-color-scheme: light) { .bg-left { fill: rgba(0,0,0,0.04); } .bg-right { fill: rgba(34, 197, 94, 0.12); } .text-left { fill: #374151; } .text-right { fill: #16a34a; } .border { stroke: rgba(0,0,0,0.08); } .glow { filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.2)); } }</style></defs><g transform="translate(0, 0)"><rect class="bg-left" x="0" y="0" width="84.6" height="32" rx="6"/><rect class="bg-right glow" x="84.6" y="0" width="95.4" height="32" rx="6"/><rect class="border" x="0.5" y="0.5" width="179" height="31" rx="5.5" fill="none" stroke-width="1"/><text class="text-left" x="42.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="600">Made With</text><text class="text-right" x="132.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="700">Kotlin</text></g></svg>
+<svg width="180" height="32" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .bg-left { fill: rgba(255,255,255,0.08); } .bg-right { fill: rgba(74, 222, 128, 0.15); } .text-left { fill: #e5e7eb; } .text-right { fill: #4ade80; } .border { stroke: rgba(255,255,255,0.12); } .glow { filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3)); } } @media (prefers-color-scheme: light) { .bg-left { fill: rgba(0,0,0,0.04); } .bg-right { fill: rgba(34, 197, 94, 0.12); } .text-left { fill: #374151; } .text-right { fill: #16a34a; } .border { stroke: rgba(0,0,0,0.08); } .glow { filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.2)); } }</style></defs><g transform="translate(0, 0)"><rect class="bg-left" x="0" y="0" width="84.6" height="32" rx="6"/><rect class="bg-right glow" x="84.6" y="0" width="95.4" height="32" rx="6"/><rect class="border" x="0.5" y="0.5" width="179" height="31" rx="5.5" fill="none" stroke-width="1"/><text class="text-left" x="42.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="600">Made With</text><text class="text-right" x="132.3" y="20" text-anchor="middle" font-family="'SF Pro Display', -apple-system, system-ui, sans-serif" font-size="12" font-weight="700">Kotlin</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -823,10 +978,10 @@
 </div>
 <h2 id="neon-style">Neon Style</h2>
 <p>Eye-catching badges with glowing neon effects.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1zUvNz-MqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIACZR8ejVgAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1zUvNz-MqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIACZR8ejVgAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="160" height="36" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .outline { stroke: #a855f7; fill: rgba(168, 85, 247, 0.08); } .label { fill: #c4b5fd; } .value { fill: #e9d5ff; } .divider { stroke: #a855f7; } .glow { filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5)); } } @media (prefers-color-scheme: light) { .outline { stroke: #7c3aed; fill: rgba(124, 58, 237, 0.05); } .label { fill: #6d28d9; } .value { fill: #5b21b6; } .divider { stroke: #7c3aed; } .glow { filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.25)); } }</style></defs><g transform="translate(0, 0)"><rect class="outline glow" x="2" y="2" width="156" height="32" rx="18" stroke-width="2"/><line class="divider" x1="80" y1="8" x2="80" y2="28" stroke-width="1.5" stroke-linecap="round"/><text class="label" x="40" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">MADE WITH</text><text class="value" x="120" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="12" font-weight="700">KOTLIN</text></g></svg>
+<svg width="160" height="36" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Message","URL","Label Color","Message Color","Logo","Font Color","Is PDF"],"rows":[["Made With","Kotlin","","#06133b","#6fc441","<kotlin>","#fcfcfc","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@media (prefers-color-scheme: dark) { .outline { stroke: #a855f7; fill: rgba(168, 85, 247, 0.08); } .label { fill: #c4b5fd; } .value { fill: #e9d5ff; } .divider { stroke: #a855f7; } .glow { filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.5)); } } @media (prefers-color-scheme: light) { .outline { stroke: #7c3aed; fill: rgba(124, 58, 237, 0.05); } .label { fill: #6d28d9; } .value { fill: #5b21b6; } .divider { stroke: #7c3aed; } .glow { filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.25)); } }</style></defs><g transform="translate(0, 0)"><rect class="outline glow" x="2" y="2" width="156" height="32" rx="18" stroke-width="2"/><line class="divider" x1="80" y1="8" x2="80" y2="28" stroke-width="1.5" stroke-linecap="round"/><text class="label" x="40" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="11" font-weight="600" letter-spacing="0.5">MADE WITH</text><text class="value" x="120" y="22" text-anchor="middle" font-family="'Outfit', sans-serif" font-size="12" font-weight="700">KOTLIN</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
@@ -910,151 +1065,189 @@
   <p style="color: #4f46e5; font-weight: 600; margin: 8px 0 0 0;">Start creating custom badges with the DocOps badge extension</p>
 </div>
 
-                </article>
-                <!-- Modal Overlay -->
-                <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
-                    <div class="modal-content" id="modalContent">
-                        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
-                        <div id="modalSvgContainer"></div>
-                        <div class="modal-zoom-controls">
-                            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
-                            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
-                            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
-                            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+                    </article>
+                    
+                    <!-- Global Shared Modal for Markdown View -->
+                    <div class="svg-modal-overlay" id="globalSvgModal" onclick="if(event.target === this) closeGlobalModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalModal()">×</button>
+                            <div id="globalModalBody" class="svg-modal-body"></div>
                         </div>
                     </div>
-                </div>
-                <script>
-                    const modalOverlay = document.getElementById('modalOverlay');
-                    const modalSvgContainer = document.getElementById('modalSvgContainer');
-                    
-                    // Zoom state
-                    let modalZoomLevel = 1;
-                    const MODAL_ZOOM_MIN = 0.25;
-                    const MODAL_ZOOM_MAX = 4;
-                    const MODAL_ZOOM_STEP = 0.25;
 
-                    function openModal(container) {
-                        // Reset zoom level
-                        modalZoomLevel = 1;
-                        updateZoomDisplay();
+                    <!-- Global Shared Modal for Data View -->
+                    <div class="svg-modal-overlay" id="globalCsvModal" onclick="if(event.target === this) closeGlobalCsvModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalCsvModal()">×</button>
+                            <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+                            </div>
+                            <div id="globalCsvModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Unified Modal Logic for Markdown
+                        function openModal(container) {
+                            const modal = document.getElementById('globalSvgModal');
+                            const targetContainer = document.getElementById('globalModalBody');
+                            
+                            // Find SVG in the container passed from the button
+                            const sourceSvg = container.querySelector ? container.querySelector('svg') : container; 
+                            
+                            if (sourceSvg && targetContainer) {
+                                targetContainer.innerHTML = '';
+                                const clone = sourceSvg.cloneNode(true);
+                                
+                                // Reset dimensions to allow CSS to control scaling
+                                clone.removeAttribute('width');
+                                clone.removeAttribute('height');
+                                clone.style.width = '100%';
+                                clone.style.height = '100%';
+                                
+                                targetContainer.appendChild(clone);
+                                modal.classList.add('active');
+                                document.body.style.overflow = 'hidden';
+                            }
+                        }
+
+                        function closeGlobalModal() {
+                            const modal = document.getElementById('globalSvgModal');
+                            if (modal) {
+                                modal.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
+                        }
                         
-                        // Clone the SVG from the clicked container
-                        const svg = container.querySelector('svg');
-                        const svgClone = svg.cloneNode(true);
-                        svgClone.style.transform = 'scale(1)';
-                        svgClone.style.transition = 'transform 0.2s ease';
-
-                        // Clear previous content and add new SVG
-                        modalSvgContainer.innerHTML = '';
-                        modalSvgContainer.appendChild(svgClone);
-
-                        // Show modal with animation
-                        modalOverlay.classList.add('active');
-
-                        // Prevent body scroll when modal is open
-                        document.body.style.overflow = 'hidden';
-                    }
-
-                    function closeModal() {
-                        modalOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                        modalZoomLevel = 1;
-                    }
-
-                    function closeModalOnBackdrop(event) {
-                        // Only close if clicking the overlay itself, not the content
-                        if (event.target === modalOverlay) {
-                            closeModal();
+                        function closeGlobalCsvModal() {
+                            const modal = document.getElementById('globalCsvModal');
+                            if (modal) {
+                                modal.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
                         }
-                    }
-                    
-                    function modalZoomIn() {
-                        if (modalZoomLevel < MODAL_ZOOM_MAX) {
-                            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
-                            applyModalZoom();
-                        }
-                    }
-                    
-                    function modalZoomOut() {
-                        if (modalZoomLevel > MODAL_ZOOM_MIN) {
-                            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
-                            applyModalZoom();
-                        }
-                    }
-                    
-                    function modalZoomReset() {
-                        modalZoomLevel = 1;
-                        applyModalZoom();
-                    }
-                    
-                    function applyModalZoom() {
-                        const svg = modalSvgContainer.querySelector('svg');
-                        if (svg) {
-                            svg.style.transform = `scale(${modalZoomLevel})`;
-                        }
-                        updateZoomDisplay();
-                    }
-                    
-                    function updateZoomDisplay() {
-                        const display = document.getElementById('modalZoomLevel');
-                        if (display) {
-                            display.textContent = `${Math.round(modalZoomLevel * 100)}%`;
-                        }
-                    }
 
-                    // Close modal with Escape key
-                    document.addEventListener('keydown', function(event) {
-                        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                            closeModal();
-                        }
-                    });
-                    const docopsCopy = {
-                        url: (btn) => {
-                                const url = btn.closest('.docops-media-card').getAttribute('data-url');
-                                navigator.clipboard.writeText(url).then(() => {
+                        // Close modal with Escape key
+                        document.addEventListener('keydown', function(event) {
+                            if (event.key === 'Escape') {
+                                closeGlobalModal();
+                                closeGlobalCsvModal();
+                            }
+                        });
+                        
+                        const docopsData = {
+                            toggle: function(btn) {
+                                const container = btn.closest('.docops-media-card');
+                                const svg = container.querySelector('.svg-container svg') || container.querySelector('svg');
+                                
+                                if (!svg) return;
+                                
+                                let csvData = null;
+                                
+                                // Method 1: Standard metadata with type
+                                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                                if (csvMetadata) {
+                                    try {
+                                        csvData = JSON.parse(csvMetadata.textContent.trim());
+                                    } catch(e) { console.error("Error parsing CSV JSON", e); }
+                                }
+
+                                // Method 2: Custom csv-data element
+                                if (!csvData) {
+                                    csvMetadata = svg.querySelector('metadata csv-data');
+                                    if (csvMetadata) {
+                                        try {
+                                            csvData = JSON.parse(csvMetadata.textContent.trim());
+                                        } catch(e) {}
+                                    }
+                                }
+
+                                // Method 3: Data attribute
+                                if (!csvData) {
+                                    const csvDataAttr = svg.getAttribute('data-csv');
+                                    if (csvDataAttr) {
+                                        try {
+                                            csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                                        } catch(e) {}
+                                    }
+                                }
+                                
+                                if (csvData) {
+                                    const modal = document.getElementById('globalCsvModal');
+                                    const body = document.getElementById('globalCsvModalBody');
+                                    
+                                    let html = '<table class="csv-table">';
+                                     if (csvData.headers) {
+                                        html += '<thead><tr>';
+                                        csvData.headers.forEach(h => html += '<th>' + h + '</th>');
+                                        html += '</tr></thead>';
+                                    }
+                                    if (csvData.rows) {
+                                        html += '<tbody>';
+                                        csvData.rows.forEach(row => {
+                                            html += '<tr>';
+                                            row.forEach(cell => html += '<td>' + cell + '</td>');
+                                            html += '</tr>';
+                                        });
+                                        html += '</tbody>';
+                                    }
+                                    html += '</table>';
+                                    
+                                    body.innerHTML = html;
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                } else {
+                                    console.log("No CSV data found in SVG");
+                                }
+                            }
+                        };
+                        
+                        const docopsCopy = {
+                            url: (btn) => {
+                                    const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                },
+                            svg: (btn) => {
+                                const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                                navigator.clipboard.writeText(svg).then(() => {
                                     const originalText = btn.innerText;
                                     btn.innerText = 'COPIED!';
                                     setTimeout(() => btn.innerText = originalText, 2000);
                                 });
                             },
-                        svg: (btn) => {
-                            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
-                            navigator.clipboard.writeText(svg).then(() => {
-                                const originalText = btn.innerText;
-                                btn.innerText = 'COPIED!';
-                                setTimeout(() => btn.innerText = originalText, 2000);
-                            });
-                        },
-                        png: (btn) => {
-                            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
-                            const svgData = new XMLSerializer().serializeToString(svgElement);
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            const img = new Image();
+                            png: (btn) => {
+                                const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                                const svgData = new XMLSerializer().serializeToString(svgElement);
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                const img = new Image();
                             
-                            img.onload = () => {
-                                canvas.width = img.width;
-                                canvas.height = img.height;
-                                ctx.drawImage(img, 0, 0);
-                                canvas.toBlob(blob => {
-                                    const item = new ClipboardItem({ "image/png": blob });
-                                    navigator.clipboard.write([item]);
-                                    const originalText = btn.innerText;
-                                    btn.innerText = 'COPIED!';
-                                    setTimeout(() => btn.innerText = originalText, 2000);
-                                });
-                            };
-                            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-                        }
-                    };
+                                img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(blob => {
+                                        const item = new ClipboardItem({ "image/png": blob });
+                                        navigator.clipboard.write([item]);
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                };
+                                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            }
+                        };
                     
-                </script>
-                <script>
-                    mermaid.initialize({ startOnLoad: true });
-                </script>
-                <script>
-                (() => {
+                    </script>
+                    <script>
+                        mermaid.initialize({ startOnLoad: true });
+                    </script>
+                    <script>
+                    (() => {
     let divs = document.getElementsByClassName("adm-block");
     for (let i = 0; i < divs.length; i++) {
         let div = divs[i];
@@ -1079,7 +1272,7 @@
         }
     }
 })();
-                const docopsData = {
+                    const docopsData = {
     toggle(btn) {
         const card = btn.closest('.docops-media-card');
         const panel = card.querySelector('.docops-data-panel');
@@ -1190,7 +1383,7 @@
     }
 
 };
-                </script>
+                    </script>
                 
-            </body>
-            </html>
+                </body>
+                </html>

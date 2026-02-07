@@ -694,18 +694,173 @@
 }
                 </style>
                 <style>
-                      @media (prefers-color-scheme: dark) {
-                          body {
-                              background-color: #0d1117;
+                          @media (prefers-color-scheme: dark) {
+                              body {
+                                  background-color: #0d1117;
+                              }
                           }
-                      }
-                </style>
+                          
+                          /* Consistent Modal Styles matching AsciiDoc implementation */
+                          .svg-modal-overlay {
+                              display: none;
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(15, 20, 25, 0.95);
+                              backdrop-filter: blur(8px);
+                              z-index: 2147483647;
+                              align-items: center;
+                              justify-content: center;
+                              padding: 40px;
+                              box-sizing: border-box;
+                          }
+                          .svg-modal-overlay.active {
+                              display: flex;
+                          }
+                          .svg-modal-content {
+                              width: 95vw;
+                              max-width: 1400px;
+                              height: 90vh;
+                              background: var(--docops-card-bg, #1e293b);
+                              border-radius: 20px;
+                              padding: 48px 24px 24px 24px;
+                              position: relative;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              display: flex;
+                              flex-direction: column;
+                              overflow: hidden;
+                              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                              animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                          }
+                          .svg-modal-close {
+                              position: absolute;
+                              top: 12px;
+                              right: 12px;
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border: none;
+                              width: 36px;
+                              height: 36px;
+                              border-radius: 50%;
+                              font-size: 24px;
+                              cursor: pointer;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              transition: all 0.2s ease;
+                              z-index: 10;
+                          }
+                          .svg-modal-close:hover {
+                              background: rgba(255,255,255,0.2);
+                              transform: rotate(90deg);
+                          }
+                          .svg-modal-body {
+                              flex: 1;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 100%;
+                              height: 100%;
+                              overflow: auto;
+                              padding: 10px;
+                          }
+                          .svg-modal-body svg {
+                              max-width: 100%;
+                              max-height: 100%;
+                              width: auto;
+                              height: auto;
+                              object-fit: contain;
+                          }
+                          @keyframes scaleInModal {
+                              from { opacity: 0; transform: scale(0.9); }
+                              to { opacity: 1; transform: scale(1); }
+                          }
+                          /* CSV Modal Styles */
+                          #globalCsvModal .csv-table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              color: #e2e8f0;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 13px;
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table th {
+                              text-align: left;
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              position: sticky;
+                              top: 0;
+                          }
+                          #globalCsvModal .csv-table td {
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              color: #cbd5e1;
+                          }
+                          #globalCsvModal .csv-table tr {
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table tr:hover {
+                              background: rgba(255,255,255,0.05);
+                          }
+                          /* Sliding Controls Styles (Consistent with Asciidoctor) */
+                          .svg-with-controls {
+                              position: relative;
+                              display: inline-block;
+                              border-radius: 8px;
+                              overflow: hidden;
+                          }
+                          .svg-bottom-controls {
+                              position: absolute;
+                              bottom: 12px;
+                              left: 50%;
+                              transform: translateX(-50%) translateY(150%);
+                              display: flex;
+                              gap: 6px;
+                              background: rgba(15, 20, 30, 0.85);
+                              padding: 6px 8px;
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              opacity: 0;
+                              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                              z-index: 100;
+                              backdrop-filter: blur(8px);
+                              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                          }
+                          .svg-with-controls:hover .svg-bottom-controls {
+                              opacity: 1;
+                              transform: translateX(-50%) translateY(0);
+                          }
+                          .svg-control-btn {
+                              background: transparent;
+                              border: 1px solid rgba(255,255,255,0.15);
+                              color: #94a3b8;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 10px;
+                              font-weight: 600;
+                              padding: 4px 10px;
+                              border-radius: 4px;
+                              cursor: pointer;
+                              transition: all 0.2s;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                          }
+                          .svg-control-btn:hover {
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border-color: rgba(255,255,255,0.3);
+                              transform: translateY(-1px);
+                          }
+                    </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
                 
             </head>
             <body>
-                <article class="markdown-body">
-                    <h1 id="information-callouts">Information Callouts</h1>
+                    <article class="markdown-body">
+                        <h1 id="information-callouts">Information Callouts</h1>
 <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 32px; margin-bottom: 48px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
   <div style="display: flex; align-items: center; gap: 24px;">
     <div style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); padding: 20px; border-radius: 12px;">
@@ -779,19 +934,19 @@
 <h2 id="callout-types">Callout Types</h2>
 <h3 id="systematic-process-callouts">Systematic Process Callouts</h3>
 <p>Visualize multi-step processes with clear phases, actions, results, and improvement notes. Ideal for documenting workflows, problem-solving approaches, and systematic methodologies.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_12SQY7bMAxF9z4FLxDMvkAX06QoAnSATGaCdqvIdExEFlWJchoghy8ppx2kG4OQqc_3PyUkAT_BGw9ycRlhgzMGThNGgV1mj6V0ck34uVyL4OSEfLdarbrd6ArCDZ69EEct9lhqEC22U8o8oyl0e_xVKbe66K9vTkbMUIt-ImJfwMUeFmXIj70bFEcB-8fznn1tbDonzhxmBIz9yhQLoMuBVJoi6BxId_wNFjoZ4jqjE_w7z2U_kqCXqraN47B9OvyEvnUbwTv6MZJ3AUpCT4OW5nWBvijSkN2E1nnQKCZWmeWyTqd4pniCC-dzGTkZxEeuLaPQHMGgSAqgot5z7u2S8P8Db_BDheyf5x51toxQIwkIlhbWNnr1phTJUTbjJ0Wb7ELRBEyje9dWO7jBDvPAeYLX5-akbUOnYxIXPTbNpfFLPWn6ibMsnmcXqG9IemzbttHPVXiyWFsAdhm8kpjjFPh6N7zH0PjUm9L1dXk1GGfKHO8930m36VIKd98POTX1zMeq-uvt03oDiRIGiti9OIqCscHf4IU1GNYQFpft1OAH-g1USm0LexN3DP9eQsuT44nNNn08X-v8WqyVyghHFNGkBn23R-fPEFj3-gewt6yxPwMAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_12SQY7bMAxF9z4FLxDMvkAX06QoAnSATGaCdqvIdExEFlWJchoghy8ppx2kG4OQqc_3PyUkAT_BGw9ycRlhgzMGThNGgV1mj6V0ck34uVyL4OSEfLdarbrd6ArCDZ69EEct9lhqEC22U8o8oyl0e_xVKbe66K9vTkbMUIt-ImJfwMUeFmXIj70bFEcB-8fznn1tbDonzhxmBIz9yhQLoMuBVJoi6BxId_wNFjoZ4jqjE_w7z2U_kqCXqraN47B9OvyEvnUbwTv6MZJ3AUpCT4OW5nWBvijSkN2E1nnQKCZWmeWyTqd4pniCC-dzGTkZxEeuLaPQHMGgSAqgot5z7u2S8P8Db_BDheyf5x51toxQIwkIlhbWNnr1phTJUTbjJ0Wb7ELRBEyje9dWO7jBDvPAeYLX5-akbUOnYxIXPTbNpfFLPWn6ibMsnmcXqG9IemzbttHPVXiyWFsAdhm8kpjjFPh6N7zH0PjUm9L1dXk1GGfKHO8930m36VIKd98POTX1zMeq-uvt03oDiRIGiti9OIqCscHf4IU1GNYQFpft1OAH-g1USm0LexN3DP9eQsuT44nNNn08X-v8WqyVyghHFNGkBn23R-fPEFj3-gewt6yxPwMAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_8d282160a9cd493fa2d1e5e6a5e9cfd6" width="800" height="840" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 840">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_8d282160a9cd493fa2d1e5e6a5e9cfd6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_8d282160a9cd493fa2d1e5e6a5e9cfd6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_8d282160a9cd493fa2d1e5e6a5e9cfd6 { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_8d282160a9cd493fa2d1e5e6a5e9cfd6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_8d282160a9cd493fa2d1e5e6a5e9cfd6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_8d282160a9cd493fa2d1e5e6a5e9cfd6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_8d282160a9cd493fa2d1e5e6a5e9cfd6" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_8d282160a9cd493fa2d1e5e6a5e9cfd6)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 840 M760 0 L760 840" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_8d282160a9cd493fa2d1e5e6a5e9cfd6">Software Development Process</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="660" fill="url(#spineGrad_8d282160a9cd493fa2d1e5e6a5e9cfd6)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8d282160a9cd493fa2d1e5e6a5e9cfd6">1</text><text x="55" y="15" class="phase_8d282160a9cd493fa2d1e5e6a5e9cfd6">Requirements</text><text x="55" y="38" class="action_8d282160a9cd493fa2d1e5e6a5e9cfd6">Gather user needs and system requirements</text><g transform="translate(55, 52)"><rect width="287.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8d282160a9cd493fa2d1e5e6a5e9cfd6">Detailed requirements document</text></g><rect x="426.0" y="10" width="324.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="588.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Involve end-users earlier in the process</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8d282160a9cd493fa2d1e5e6a5e9cfd6">2</text><text x="55" y="15" class="phase_8d282160a9cd493fa2d1e5e6a5e9cfd6">Design</text><text x="55" y="38" class="action_8d282160a9cd493fa2d1e5e6a5e9cfd6">Create system architecture and UI/UX designs</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8d282160a9cd493fa2d1e5e6a5e9cfd6">Technical specifications and wireframes</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Use more design thinking workshops</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8d282160a9cd493fa2d1e5e6a5e9cfd6">3</text><text x="55" y="15" class="phase_8d282160a9cd493fa2d1e5e6a5e9cfd6">Development</text><text x="55" y="38" class="action_8d282160a9cd493fa2d1e5e6a5e9cfd6">Implement features according to specifications</text><g transform="translate(55, 52)"><rect width="270.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8d282160a9cd493fa2d1e5e6a5e9cfd6">Working code with unit tests</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Increase pair programming sessions</text></g><g transform="translate(50, 470)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8d282160a9cd493fa2d1e5e6a5e9cfd6">4</text><text x="55" y="15" class="phase_8d282160a9cd493fa2d1e5e6a5e9cfd6">Testing</text><text x="55" y="38" class="action_8d282160a9cd493fa2d1e5e6a5e9cfd6">Perform QA and user acceptance testing</text><g transform="translate(55, 52)"><rect width="321.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8d282160a9cd493fa2d1e5e6a5e9cfd6">Bug reports and validation results</text></g><rect x="546.0" y="10" width="204.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="648.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Automate more test cases</text></g><g transform="translate(50, 580)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8d282160a9cd493fa2d1e5e6a5e9cfd6">5</text><text x="55" y="15" class="phase_8d282160a9cd493fa2d1e5e6a5e9cfd6">Deployment</text><text x="55" y="38" class="action_8d282160a9cd493fa2d1e5e6a5e9cfd6">Release to production environment</text><g transform="translate(55, 52)"><rect width="168.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8d282160a9cd493fa2d1e5e6a5e9cfd6">Live application</text></g><rect x="456.0" y="10" width="294.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="603.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Implement more robust CI/CD pipeline</text></g><g transform="translate(50, 690)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8d282160a9cd493fa2d1e5e6a5e9cfd6">6</text><text x="55" y="15" class="phase_8d282160a9cd493fa2d1e5e6a5e9cfd6">Maintenance</text><text x="55" y="38" class="action_8d282160a9cd493fa2d1e5e6a5e9cfd6">Monitor performance and fix issues</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8d282160a9cd493fa2d1e5e6a5e9cfd6">Stable system with ongoing improvements</text></g><rect x="493.5" y="10" width="256.5" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="621.75" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Establish better feedback loops</text></g></svg>
+<svg id="ID_c7ee66497a58497b90a43dfeb40dcee8" width="800" height="840" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 840">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_c7ee66497a58497b90a43dfeb40dcee8 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_c7ee66497a58497b90a43dfeb40dcee8 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_c7ee66497a58497b90a43dfeb40dcee8 { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_c7ee66497a58497b90a43dfeb40dcee8 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_c7ee66497a58497b90a43dfeb40dcee8 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_c7ee66497a58497b90a43dfeb40dcee8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_c7ee66497a58497b90a43dfeb40dcee8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_c7ee66497a58497b90a43dfeb40dcee8)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 840 M760 0 L760 840" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_c7ee66497a58497b90a43dfeb40dcee8">Software Development Process</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="660" fill="url(#spineGrad_c7ee66497a58497b90a43dfeb40dcee8)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_c7ee66497a58497b90a43dfeb40dcee8">1</text><text x="55" y="15" class="phase_c7ee66497a58497b90a43dfeb40dcee8">Requirements</text><text x="55" y="38" class="action_c7ee66497a58497b90a43dfeb40dcee8">Gather user needs and system requirements</text><g transform="translate(55, 52)"><rect width="287.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_c7ee66497a58497b90a43dfeb40dcee8">Detailed requirements document</text></g><rect x="426.0" y="10" width="324.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="588.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Involve end-users earlier in the process</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_c7ee66497a58497b90a43dfeb40dcee8">2</text><text x="55" y="15" class="phase_c7ee66497a58497b90a43dfeb40dcee8">Design</text><text x="55" y="38" class="action_c7ee66497a58497b90a43dfeb40dcee8">Create system architecture and UI/UX designs</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_c7ee66497a58497b90a43dfeb40dcee8">Technical specifications and wireframes</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Use more design thinking workshops</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_c7ee66497a58497b90a43dfeb40dcee8">3</text><text x="55" y="15" class="phase_c7ee66497a58497b90a43dfeb40dcee8">Development</text><text x="55" y="38" class="action_c7ee66497a58497b90a43dfeb40dcee8">Implement features according to specifications</text><g transform="translate(55, 52)"><rect width="270.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_c7ee66497a58497b90a43dfeb40dcee8">Working code with unit tests</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Increase pair programming sessions</text></g><g transform="translate(50, 470)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_c7ee66497a58497b90a43dfeb40dcee8">4</text><text x="55" y="15" class="phase_c7ee66497a58497b90a43dfeb40dcee8">Testing</text><text x="55" y="38" class="action_c7ee66497a58497b90a43dfeb40dcee8">Perform QA and user acceptance testing</text><g transform="translate(55, 52)"><rect width="321.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_c7ee66497a58497b90a43dfeb40dcee8">Bug reports and validation results</text></g><rect x="546.0" y="10" width="204.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="648.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Automate more test cases</text></g><g transform="translate(50, 580)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_c7ee66497a58497b90a43dfeb40dcee8">5</text><text x="55" y="15" class="phase_c7ee66497a58497b90a43dfeb40dcee8">Deployment</text><text x="55" y="38" class="action_c7ee66497a58497b90a43dfeb40dcee8">Release to production environment</text><g transform="translate(55, 52)"><rect width="168.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_c7ee66497a58497b90a43dfeb40dcee8">Live application</text></g><rect x="456.0" y="10" width="294.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="603.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Implement more robust CI/CD pipeline</text></g><g transform="translate(50, 690)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_c7ee66497a58497b90a43dfeb40dcee8">6</text><text x="55" y="15" class="phase_c7ee66497a58497b90a43dfeb40dcee8">Maintenance</text><text x="55" y="38" class="action_c7ee66497a58497b90a43dfeb40dcee8">Monitor performance and fix issues</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_c7ee66497a58497b90a43dfeb40dcee8">Stable system with ongoing improvements</text></g><rect x="493.5" y="10" width="256.5" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="621.75" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Establish better feedback loops</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -812,19 +967,19 @@
 <hr />
 <h3 id="metrics-callouts">Metrics Callouts</h3>
 <p>Display key performance indicators, business metrics, and quantitative data in an organized, scannable format. Perfect for dashboards, reports, and performance summaries.</p>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_zWNTW_CMBBE7_sr9kBvBAU3lA-JQ5tKqIdQmkjcrTBQq45d2ZvQoP74Jki97XszmhUjFhv-UKxSlfFLG41DjHxAOPvQaFeDpP_GtoEEU0dKkoSK-82_fNS2BZXo4FoMPFGzrKBd8Ff5HHC-eqA9rpy3UXyDEEe3eKJ_5hICJ8a7IVhnQ_lQcVX7MG4tFT13CPoCfoW2XJnb_cV8Mc3SlCptETnvazvaR8Un3UcqdPiCGHfh8v1t9DP18weOlTel4wAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_zWNTW_CMBBE7_sr9kBvBAU3lA-JQ5tKqIdQmkjcrTBQq45d2ZvQoP74Jki97XszmhUjFhv-UKxSlfFLG41DjHxAOPvQaFeDpP_GtoEEU0dKkoSK-82_fNS2BZXo4FoMPFGzrKBd8Ff5HHC-eqA9rpy3UXyDEEe3eKJ_5hICJ8a7IVhnQ_lQcVX7MG4tFT13CPoCfoW2XJnb_cV8Mc3SlCptETnvazvaR8Un3UcqdPiCGHfh8v1t9DP18weOlTel4wAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_d89c650e44104fbe98a068126ca8b989" width="800" height="900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_d89c650e44104fbe98a068126ca8b989 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .metric-key_d89c650e44104fbe98a068126ca8b989 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: #94A3B8; text-transform: uppercase; letter-spacing: 1px; } .metric-val_d89c650e44104fbe98a068126ca8b989 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: #F8FAFC; }</style><linearGradient id="bgGrad_d89c650e44104fbe98a068126ca8b989" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_d89c650e44104fbe98a068126ca8b989)" rx="24"/><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_d89c650e44104fbe98a068126ca8b989">Q2 2024 Business Performance</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">Revenue</text><g transform="translate(20, 30)"><rect width="87.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">$2.4M</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">Growth</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">18%</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">New Customers</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">156</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">Customer Retention</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">94%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">NPS Score</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">72</text></g></g><g transform="translate(50, 590)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">Average Deal Size</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">$15,400</text></g></g><g transform="translate(50, 680)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">Sales Cycle</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">32 days</text></g></g><g transform="translate(50, 770)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_d89c650e44104fbe98a068126ca8b989">Marketing ROI</text><g transform="translate(20, 30)"><rect width="78.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_d89c650e44104fbe98a068126ca8b989">3.2x</text></g></g></svg>
+<svg id="ID_e39bed08fae041b686afd127f4ab5947" width="800" height="900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_e39bed08fae041b686afd127f4ab5947 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .metric-key_e39bed08fae041b686afd127f4ab5947 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: #94A3B8; text-transform: uppercase; letter-spacing: 1px; } .metric-val_e39bed08fae041b686afd127f4ab5947 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: #F8FAFC; }</style><linearGradient id="bgGrad_e39bed08fae041b686afd127f4ab5947" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_e39bed08fae041b686afd127f4ab5947)" rx="24"/><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_e39bed08fae041b686afd127f4ab5947">Q2 2024 Business Performance</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">Revenue</text><g transform="translate(20, 30)"><rect width="87.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">$2.4M</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">Growth</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">18%</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">New Customers</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">156</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">Customer Retention</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">94%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">NPS Score</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">72</text></g></g><g transform="translate(50, 590)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">Average Deal Size</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">$15,400</text></g></g><g transform="translate(50, 680)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">Sales Cycle</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">32 days</text></g></g><g transform="translate(50, 770)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_e39bed08fae041b686afd127f4ab5947">Marketing ROI</text><g transform="translate(20, 30)"><rect width="78.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_e39bed08fae041b686afd127f4ab5947">3.2x</text></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -873,19 +1028,19 @@
 <hr />
 <h2 id="syntax-and-configuration">Syntax and Configuration</h2>
 <h3 id="basic-syntax">Basic Syntax</h3>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_yvJLMlJtVKIzC8tUnBOzMnJLy1RCAGJKXDp6upylVQWpNoWVxaXpOYmlmQm1-SmlhRlJhdzRYckJgHVuCSWJMYCAMLZ3UpDAAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_yvJLMlJtVKIzC8tUnBOzMnJLy1RCAGJKXDp6upylVQWpNoWVxaXpOYmlmQm1-SmlhRlJhdzRYckJgHVuCSWJMYCAMLZ3UpDAAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_4609ee7b810b43eb970f615a1d4cc008" width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_4609ee7b810b43eb970f615a1d4cc008 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_4609ee7b810b43eb970f615a1d4cc008 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_4609ee7b810b43eb970f615a1d4cc008 { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_4609ee7b810b43eb970f615a1d4cc008 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_4609ee7b810b43eb970f615a1d4cc008 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_4609ee7b810b43eb970f615a1d4cc008" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_4609ee7b810b43eb970f615a1d4cc008" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_4609ee7b810b43eb970f615a1d4cc008)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 600 M760 0 L760 600" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_4609ee7b810b43eb970f615a1d4cc008">Your Callout Title</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="0" fill="url(#spineGrad_4609ee7b810b43eb970f615a1d4cc008)" opacity="0.3"/><!-- Steps --></svg>
+<svg id="ID_df142040acf7449e818689a84a458bbb" width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_df142040acf7449e818689a84a458bbb { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_df142040acf7449e818689a84a458bbb { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_df142040acf7449e818689a84a458bbb { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_df142040acf7449e818689a84a458bbb { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_df142040acf7449e818689a84a458bbb { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_df142040acf7449e818689a84a458bbb" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_df142040acf7449e818689a84a458bbb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_df142040acf7449e818689a84a458bbb)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 600 M760 0 L760 600" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_df142040acf7449e818689a84a458bbb">Your Callout Title</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="0" fill="url(#spineGrad_df142040acf7449e818689a84a458bbb)" opacity="0.3"/><!-- Steps --></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -896,19 +1051,19 @@
 </div>
 </div>
 <h3 id="systematic-callout-example">Systematic Callout Example</h3>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_02QQUsEMQyF7_MrcvE4IAgigodhRdgFURb8Adk2MxvsNGObrlb2x5vOKngL7z2-vERZA93DIyoeMBO8LMozf6OyRNhJSZEqdFoXesg1K83muK7v--712PJnGNyaPcOecglqw3ZekpxopqgwRAw1cza523pTeGTykIN8wkehxNSsJynRww0cRK1OJPfe1Dfjt0wF440cKME2evriODXc4L2RnMyLZFYCbt6Ku72-ghGtbfq341kiq6RLDErGiWCD7vhLs9JhrWzMPXlr7MxsB94ZLQh6SOTL37Gb1eR4wsD-8q2sCZWm-gNaNArwUwEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_02QQUsEMQyF7_MrcvE4IAgigodhRdgFURb8Adk2MxvsNGObrlb2x5vOKngL7z2-vERZA93DIyoeMBO8LMozf6OyRNhJSZEqdFoXesg1K83muK7v--712PJnGNyaPcOecglqw3ZekpxopqgwRAw1cza523pTeGTykIN8wkehxNSsJynRww0cRK1OJPfe1Dfjt0wF440cKME2evriODXc4L2RnMyLZFYCbt6Ku72-ghGtbfq341kiq6RLDErGiWCD7vhLs9JhrWzMPXlr7MxsB94ZLQh6SOTL37Gb1eR4wsD-8q2sCZWm-gNaNArwUwEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_6a6600ed03a44dea99f9b50bd44ba9d6" width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_6a6600ed03a44dea99f9b50bd44ba9d6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_6a6600ed03a44dea99f9b50bd44ba9d6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_6a6600ed03a44dea99f9b50bd44ba9d6 { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_6a6600ed03a44dea99f9b50bd44ba9d6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_6a6600ed03a44dea99f9b50bd44ba9d6 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_6a6600ed03a44dea99f9b50bd44ba9d6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_6a6600ed03a44dea99f9b50bd44ba9d6" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_6a6600ed03a44dea99f9b50bd44ba9d6)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 600 M760 0 L760 600" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_6a6600ed03a44dea99f9b50bd44ba9d6">Database Optimization Journey</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="330" fill="url(#spineGrad_6a6600ed03a44dea99f9b50bd44ba9d6)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6a6600ed03a44dea99f9b50bd44ba9d6">1</text><text x="55" y="15" class="phase_6a6600ed03a44dea99f9b50bd44ba9d6">Identified slow queries</text><text x="55" y="38" class="action_6a6600ed03a44dea99f9b50bd44ba9d6">Found 3 bottlenecks</text><g transform="translate(55, 52)"><rect width="261.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_6a6600ed03a44dea99f9b50bd44ba9d6">Use query profiler Indexing</text></g><rect x="726.0" y="10" width="24.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="738.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;"></text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6a6600ed03a44dea99f9b50bd44ba9d6">2</text><text x="55" y="15" class="phase_6a6600ed03a44dea99f9b50bd44ba9d6">Added composite indexes</text><text x="55" y="38" class="action_6a6600ed03a44dea99f9b50bd44ba9d6">60% faster queries</text><g transform="translate(55, 52)"><rect width="261.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_6a6600ed03a44dea99f9b50bd44ba9d6">Monitor index usage Caching</text></g><rect x="726.0" y="10" width="24.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="738.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;"></text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6a6600ed03a44dea99f9b50bd44ba9d6">3</text><text x="55" y="15" class="phase_6a6600ed03a44dea99f9b50bd44ba9d6">Implemented Redis cache</text><text x="55" y="38" class="action_6a6600ed03a44dea99f9b50bd44ba9d6">80% load reduction</text><g transform="translate(55, 52)"><rect width="261.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_6a6600ed03a44dea99f9b50bd44ba9d6">Cache invalidation strategy</text></g></g></svg>
+<svg id="ID_0fd643c29f2c490f8b6765ddead4aa86" width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_0fd643c29f2c490f8b6765ddead4aa86 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_0fd643c29f2c490f8b6765ddead4aa86 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_0fd643c29f2c490f8b6765ddead4aa86 { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_0fd643c29f2c490f8b6765ddead4aa86 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_0fd643c29f2c490f8b6765ddead4aa86 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_0fd643c29f2c490f8b6765ddead4aa86" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_0fd643c29f2c490f8b6765ddead4aa86" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_0fd643c29f2c490f8b6765ddead4aa86)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 600 M760 0 L760 600" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_0fd643c29f2c490f8b6765ddead4aa86">Database Optimization Journey</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="330" fill="url(#spineGrad_0fd643c29f2c490f8b6765ddead4aa86)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_0fd643c29f2c490f8b6765ddead4aa86">1</text><text x="55" y="15" class="phase_0fd643c29f2c490f8b6765ddead4aa86">Identified slow queries</text><text x="55" y="38" class="action_0fd643c29f2c490f8b6765ddead4aa86">Found 3 bottlenecks</text><g transform="translate(55, 52)"><rect width="261.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_0fd643c29f2c490f8b6765ddead4aa86">Use query profiler Indexing</text></g><rect x="726.0" y="10" width="24.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="738.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;"></text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_0fd643c29f2c490f8b6765ddead4aa86">2</text><text x="55" y="15" class="phase_0fd643c29f2c490f8b6765ddead4aa86">Added composite indexes</text><text x="55" y="38" class="action_0fd643c29f2c490f8b6765ddead4aa86">60% faster queries</text><g transform="translate(55, 52)"><rect width="261.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_0fd643c29f2c490f8b6765ddead4aa86">Monitor index usage Caching</text></g><rect x="726.0" y="10" width="24.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="738.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;"></text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_0fd643c29f2c490f8b6765ddead4aa86">3</text><text x="55" y="15" class="phase_0fd643c29f2c490f8b6765ddead4aa86">Implemented Redis cache</text><text x="55" y="38" class="action_0fd643c29f2c490f8b6765ddead4aa86">80% load reduction</text><g transform="translate(55, 52)"><rect width="261.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_0fd643c29f2c490f8b6765ddead4aa86">Cache invalidation strategy</text></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -919,19 +1074,19 @@
 </div>
 </div>
 <h3 id="metrics-callout-example">Metrics Callout Example</h3>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_zWNTW_CMBBE7_sr9kBvBAU3lA-JQ5tKqIdQmkjcrTBQq45d2ZvQoP74Jki97XszmhUjFhv-UKxSlfFLG41DjHxAOPvQaFeDpP_GtoEEU0dKkoSK-82_fNS2BZXo4FoMPFGzrKBd8Ff5HHC-eqA9rpy3UXyDEEe3eKJ_5hICJ8a7IVhnQ_lQcVX7MG4tFT13CPoCfoW2XJnb_cV8Mc3SlCptETnvazvaR8Un3UcqdPiCGHfh8v1t9DP18weOlTel4wAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_zWNTW_CMBBE7_sr9kBvBAU3lA-JQ5tKqIdQmkjcrTBQq45d2ZvQoP74Jki97XszmhUjFhv-UKxSlfFLG41DjHxAOPvQaFeDpP_GtoEEU0dKkoSK-82_fNS2BZXo4FoMPFGzrKBd8Ff5HHC-eqA9rpy3UXyDEEe3eKJ_5hICJ8a7IVhnQ_lQcVX7MG4tFT13CPoCfoW2XJnb_cV8Mc3SlCptETnvazvaR8Un3UcqdPiCGHfh8v1t9DP18weOlTel4wAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_9627d6475d984e2992e92118ca121f3c" width="800" height="900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_9627d6475d984e2992e92118ca121f3c { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .metric-key_9627d6475d984e2992e92118ca121f3c { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: #94A3B8; text-transform: uppercase; letter-spacing: 1px; } .metric-val_9627d6475d984e2992e92118ca121f3c { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: #F8FAFC; }</style><linearGradient id="bgGrad_9627d6475d984e2992e92118ca121f3c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_9627d6475d984e2992e92118ca121f3c)" rx="24"/><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_9627d6475d984e2992e92118ca121f3c">Q2 2024 Business Performance</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">Revenue</text><g transform="translate(20, 30)"><rect width="87.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">$2.4M</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">Growth</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">18%</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">New Customers</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">156</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">Customer Retention</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">94%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">NPS Score</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">72</text></g></g><g transform="translate(50, 590)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">Average Deal Size</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">$15,400</text></g></g><g transform="translate(50, 680)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">Sales Cycle</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">32 days</text></g></g><g transform="translate(50, 770)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_9627d6475d984e2992e92118ca121f3c">Marketing ROI</text><g transform="translate(20, 30)"><rect width="78.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_9627d6475d984e2992e92118ca121f3c">3.2x</text></g></g></svg>
+<svg id="ID_4d6326d2b7cd479da6393b49adce170f" width="800" height="900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_4d6326d2b7cd479da6393b49adce170f { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .metric-key_4d6326d2b7cd479da6393b49adce170f { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: #94A3B8; text-transform: uppercase; letter-spacing: 1px; } .metric-val_4d6326d2b7cd479da6393b49adce170f { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: #F8FAFC; }</style><linearGradient id="bgGrad_4d6326d2b7cd479da6393b49adce170f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_4d6326d2b7cd479da6393b49adce170f)" rx="24"/><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_4d6326d2b7cd479da6393b49adce170f">Q2 2024 Business Performance</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">Revenue</text><g transform="translate(20, 30)"><rect width="87.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">$2.4M</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">Growth</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">18%</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">New Customers</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">156</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">Customer Retention</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">94%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">NPS Score</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">72</text></g></g><g transform="translate(50, 590)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">Average Deal Size</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">$15,400</text></g></g><g transform="translate(50, 680)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">Sales Cycle</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">32 days</text></g></g><g transform="translate(50, 770)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_4d6326d2b7cd479da6393b49adce170f">Marketing ROI</text><g transform="translate(20, 30)"><rect width="78.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_4d6326d2b7cd479da6393b49adce170f">3.2x</text></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -981,19 +1136,19 @@ Team Size | 85
 Product Launches | 3
 [/docops]
 </code></pre>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_0WPMU8DMQyF9_wKL4yRkFgQEsPRiaHi1A5IbCExV4skjmJfUav78fgOVWy23_PnZyXN-AS7zHOCPU09KHGFsfPUUcTppeGzXESxmBKd996NpyAICwxx8y5wQJmzWvFaWuczFqzqxhxqpTqtRhFjYYK4neG27okJR8wY1YTh_WjtzqaUsEMxHPnN7f5DLbA3eILH-zvgLxDsZ4q4cj6wMyT-qUplTfaCqobpnPNniN_QLIt7s7OFrjfWgaaTeqGrEamKhvrHejB6ZFHomObbh8Os7CWGvD7UOFMklF8CemEwPAEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_0WPMU8DMQyF9_wKL4yRkFgQEsPRiaHi1A5IbCExV4skjmJfUav78fgOVWy23_PnZyXN-AS7zHOCPU09KHGFsfPUUcTppeGzXESxmBKd996NpyAICwxx8y5wQJmzWvFaWuczFqzqxhxqpTqtRhFjYYK4neG27okJR8wY1YTh_WjtzqaUsEMxHPnN7f5DLbA3eILH-zvgLxDsZ4q4cj6wMyT-qUplTfaCqobpnPNniN_QLIt7s7OFrjfWgaaTeqGrEamKhvrHejB6ZFHomObbh8Os7CWGvD7UOFMklF8CemEwPAEAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_79987aa21df7475a8d6f3a2e7d55015b" width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_79987aa21df7475a8d6f3a2e7d55015b { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_79987aa21df7475a8d6f3a2e7d55015b { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_79987aa21df7475a8d6f3a2e7d55015b { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_79987aa21df7475a8d6f3a2e7d55015b { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_79987aa21df7475a8d6f3a2e7d55015b { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_79987aa21df7475a8d6f3a2e7d55015b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_79987aa21df7475a8d6f3a2e7d55015b" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_79987aa21df7475a8d6f3a2e7d55015b)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 600 M760 0 L760 600" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_79987aa21df7475a8d6f3a2e7d55015b">Cloud Migration Progress</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="330" fill="url(#spineGrad_79987aa21df7475a8d6f3a2e7d55015b)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_79987aa21df7475a8d6f3a2e7d55015b">1</text><text x="55" y="15" class="phase_79987aa21df7475a8d6f3a2e7d55015b">Planning</text><text x="55" y="38" class="action_79987aa21df7475a8d6f3a2e7d55015b">Assessed cloud options</text><g transform="translate(55, 52)"><rect width="134.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_79987aa21df7475a8d6f3a2e7d55015b">Selected AWS</text></g><rect x="576.0" y="10" width="174.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="663.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Consider multi-cloud</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_79987aa21df7475a8d6f3a2e7d55015b">2</text><text x="55" y="15" class="phase_79987aa21df7475a8d6f3a2e7d55015b">Migration</text><text x="55" y="38" class="action_79987aa21df7475a8d6f3a2e7d55015b">Moved 80% of services</text><g transform="translate(55, 52)"><rect width="142.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_79987aa21df7475a8d6f3a2e7d55015b">Zero downtime</text></g><rect x="576.0" y="10" width="174.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="663.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Better rollback plan</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_79987aa21df7475a8d6f3a2e7d55015b">3</text><text x="55" y="15" class="phase_79987aa21df7475a8d6f3a2e7d55015b">Optimization</text><text x="55" y="38" class="action_79987aa21df7475a8d6f3a2e7d55015b">Right-sized instances</text><g transform="translate(55, 52)"><rect width="185.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_79987aa21df7475a8d6f3a2e7d55015b">30% cost reduction</text></g><rect x="568.5" y="10" width="181.5" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="659.25" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Auto-scaling policies</text></g></svg>
+<svg id="ID_8025be611e4849719b02c1043f2562bc" width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_8025be611e4849719b02c1043f2562bc { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .phase_8025be611e4849719b02c1043f2562bc { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: #F8FAFC; } .action_8025be611e4849719b02c1043f2562bc { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: #94A3B8; } .result_8025be611e4849719b02c1043f2562bc { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: #2DD4BF; } .step-num_8025be611e4849719b02c1043f2562bc { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: #A855F7; }</style><linearGradient id="bgGrad_8025be611e4849719b02c1043f2562bc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient><linearGradient id="spineGrad_8025be611e4849719b02c1043f2562bc" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A855F7" /><stop offset="100%" stop-color="#2DD4BF" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_8025be611e4849719b02c1043f2562bc)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M40 0 L40 600 M760 0 L760 600" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_8025be611e4849719b02c1043f2562bc">Cloud Migration Progress</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="330" fill="url(#spineGrad_8025be611e4849719b02c1043f2562bc)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8025be611e4849719b02c1043f2562bc">1</text><text x="55" y="15" class="phase_8025be611e4849719b02c1043f2562bc">Planning</text><text x="55" y="38" class="action_8025be611e4849719b02c1043f2562bc">Assessed cloud options</text><g transform="translate(55, 52)"><rect width="134.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8025be611e4849719b02c1043f2562bc">Selected AWS</text></g><rect x="576.0" y="10" width="174.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="663.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Consider multi-cloud</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8025be611e4849719b02c1043f2562bc">2</text><text x="55" y="15" class="phase_8025be611e4849719b02c1043f2562bc">Migration</text><text x="55" y="38" class="action_8025be611e4849719b02c1043f2562bc">Moved 80% of services</text><g transform="translate(55, 52)"><rect width="142.5" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8025be611e4849719b02c1043f2562bc">Zero downtime</text></g><rect x="576.0" y="10" width="174.0" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="663.0" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Better rollback plan</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#1E293B" stroke="#A855F7" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_8025be611e4849719b02c1043f2562bc">3</text><text x="55" y="15" class="phase_8025be611e4849719b02c1043f2562bc">Optimization</text><text x="55" y="38" class="action_8025be611e4849719b02c1043f2562bc">Right-sized instances</text><g transform="translate(55, 52)"><rect width="185.0" height="28" rx="14" fill="#2DD4BF" fill-opacity="0.1"/><text x="16" y="19" class="result_8025be611e4849719b02c1043f2562bc">30% cost reduction</text></g><rect x="568.5" y="10" width="181.5" height="22" rx="11" fill="#A855F7" fill-opacity="0.1"/><text x="659.25" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="#A855F7" style="text-transform:uppercase; letter-spacing: 0.5px;">Auto-scaling policies</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -1005,19 +1160,19 @@ Product Launches | 3
 </div>
 <h2 id="project-metrics">Project Metrics</h2>
 <h3 id="sprint-velocity-trackin">Sprint Velocity Trackin</h3>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_y2OQQuCQBSE7-9XvEtHCTVKgi4Z3oJA8C46yNLqbrvPcqEf32YdZ-abYUSJxpFr69QknOV8hTjVeZJgcRr_IkkS-gX85qbVM6gW4wLfTKx5Ls1oNQR9jHcFNdCmUxKiSvdsV2b7Au50ngfPlVpWMs2oND1i-wnXDohWcdjQBVabMCL-qRweM6buu5Qv68QHs4KKjLEAAAA%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAAAAAAAA_y2OQQuCQBSE7-9XvEtHCTVKgi4Z3oJA8C46yNLqbrvPcqEf32YdZ-abYUSJxpFr69QknOV8hTjVeZJgcRr_IkkS-gX85qbVM6gW4wLfTKx5Ls1oNQR9jHcFNdCmUxKiSvdsV2b7Au50ngfPlVpWMs2oND1i-wnXDohWcdjQBVabMCL-qRweM6buu5Qv68QHs4KKjLEAAAA%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_2f318e654b794fb7951b3ab7b6e3a0ae" width="800" height="630" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 630">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_2f318e654b794fb7951b3ab7b6e3a0ae { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .metric-key_2f318e654b794fb7951b3ab7b6e3a0ae { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: #94A3B8; text-transform: uppercase; letter-spacing: 1px; } .metric-val_2f318e654b794fb7951b3ab7b6e3a0ae { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: #F8FAFC; }</style><linearGradient id="bgGrad_2f318e654b794fb7951b3ab7b6e3a0ae" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_2f318e654b794fb7951b3ab7b6e3a0ae)" rx="24"/><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_2f318e654b794fb7951b3ab7b6e3a0ae">Sprint 23 Metrics</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_2f318e654b794fb7951b3ab7b6e3a0ae">Story Points Completed</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_2f318e654b794fb7951b3ab7b6e3a0ae">48</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_2f318e654b794fb7951b3ab7b6e3a0ae">Velocity</text><g transform="translate(20, 30)"><rect width="173.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_2f318e654b794fb7951b3ab7b6e3a0ae">16 points/week</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_2f318e654b794fb7951b3ab7b6e3a0ae">Bugs Fixed</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_2f318e654b794fb7951b3ab7b6e3a0ae">12</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_2f318e654b794fb7951b3ab7b6e3a0ae">Code Coverage</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_2f318e654b794fb7951b3ab7b6e3a0ae">87%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_2f318e654b794fb7951b3ab7b6e3a0ae">Deployment Frequency</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_2f318e654b794fb7951b3ab7b6e3a0ae">3x/week</text></g></g></svg>
+<svg id="ID_fb141e6e47224b1d9cb5caa1d73e0663" width="800" height="630" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 630">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":[],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap'); .title_fb141e6e47224b1d9cb5caa1d73e0663 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: #F8FAFC; letter-spacing: -0.5px; } .metric-key_fb141e6e47224b1d9cb5caa1d73e0663 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: #94A3B8; text-transform: uppercase; letter-spacing: 1px; } .metric-val_fb141e6e47224b1d9cb5caa1d73e0663 { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: #F8FAFC; }</style><linearGradient id="bgGrad_fb141e6e47224b1d9cb5caa1d73e0663" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#020617" /><stop offset="100%" stop-color="#0F172A" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_fb141e6e47224b1d9cb5caa1d73e0663)" rx="24"/><g opacity="0.05" stroke="#F8FAFC" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_fb141e6e47224b1d9cb5caa1d73e0663">Sprint 23 Metrics</text><rect x="50" y="85" width="40" height="4" fill="#A855F7" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fb141e6e47224b1d9cb5caa1d73e0663">Story Points Completed</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fb141e6e47224b1d9cb5caa1d73e0663">48</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fb141e6e47224b1d9cb5caa1d73e0663">Velocity</text><g transform="translate(20, 30)"><rect width="173.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fb141e6e47224b1d9cb5caa1d73e0663">16 points/week</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fb141e6e47224b1d9cb5caa1d73e0663">Bugs Fixed</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fb141e6e47224b1d9cb5caa1d73e0663">12</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fb141e6e47224b1d9cb5caa1d73e0663">Code Coverage</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fb141e6e47224b1d9cb5caa1d73e0663">87%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#A855F7" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fb141e6e47224b1d9cb5caa1d73e0663">Deployment Frequency</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#A855F7" fill-opacity="0.08" stroke="#A855F7" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fb141e6e47224b1d9cb5caa1d73e0663">3x/week</text></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -1028,151 +1183,189 @@ Product Launches | 3
 </div>
 </div>
 
-                </article>
-                <!-- Modal Overlay -->
-                <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
-                    <div class="modal-content" id="modalContent">
-                        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
-                        <div id="modalSvgContainer"></div>
-                        <div class="modal-zoom-controls">
-                            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
-                            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
-                            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
-                            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+                    </article>
+                    
+                    <!-- Global Shared Modal for Markdown View -->
+                    <div class="svg-modal-overlay" id="globalSvgModal" onclick="if(event.target === this) closeGlobalModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalModal()">×</button>
+                            <div id="globalModalBody" class="svg-modal-body"></div>
                         </div>
                     </div>
-                </div>
-                <script>
-                    const modalOverlay = document.getElementById('modalOverlay');
-                    const modalSvgContainer = document.getElementById('modalSvgContainer');
-                    
-                    // Zoom state
-                    let modalZoomLevel = 1;
-                    const MODAL_ZOOM_MIN = 0.25;
-                    const MODAL_ZOOM_MAX = 4;
-                    const MODAL_ZOOM_STEP = 0.25;
 
-                    function openModal(container) {
-                        // Reset zoom level
-                        modalZoomLevel = 1;
-                        updateZoomDisplay();
+                    <!-- Global Shared Modal for Data View -->
+                    <div class="svg-modal-overlay" id="globalCsvModal" onclick="if(event.target === this) closeGlobalCsvModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalCsvModal()">×</button>
+                            <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+                            </div>
+                            <div id="globalCsvModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Unified Modal Logic for Markdown
+                        function openModal(container) {
+                            const modal = document.getElementById('globalSvgModal');
+                            const targetContainer = document.getElementById('globalModalBody');
+                            
+                            // Find SVG in the container passed from the button
+                            const sourceSvg = container.querySelector ? container.querySelector('svg') : container; 
+                            
+                            if (sourceSvg && targetContainer) {
+                                targetContainer.innerHTML = '';
+                                const clone = sourceSvg.cloneNode(true);
+                                
+                                // Reset dimensions to allow CSS to control scaling
+                                clone.removeAttribute('width');
+                                clone.removeAttribute('height');
+                                clone.style.width = '100%';
+                                clone.style.height = '100%';
+                                
+                                targetContainer.appendChild(clone);
+                                modal.classList.add('active');
+                                document.body.style.overflow = 'hidden';
+                            }
+                        }
+
+                        function closeGlobalModal() {
+                            const modal = document.getElementById('globalSvgModal');
+                            if (modal) {
+                                modal.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
+                        }
                         
-                        // Clone the SVG from the clicked container
-                        const svg = container.querySelector('svg');
-                        const svgClone = svg.cloneNode(true);
-                        svgClone.style.transform = 'scale(1)';
-                        svgClone.style.transition = 'transform 0.2s ease';
-
-                        // Clear previous content and add new SVG
-                        modalSvgContainer.innerHTML = '';
-                        modalSvgContainer.appendChild(svgClone);
-
-                        // Show modal with animation
-                        modalOverlay.classList.add('active');
-
-                        // Prevent body scroll when modal is open
-                        document.body.style.overflow = 'hidden';
-                    }
-
-                    function closeModal() {
-                        modalOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                        modalZoomLevel = 1;
-                    }
-
-                    function closeModalOnBackdrop(event) {
-                        // Only close if clicking the overlay itself, not the content
-                        if (event.target === modalOverlay) {
-                            closeModal();
+                        function closeGlobalCsvModal() {
+                            const modal = document.getElementById('globalCsvModal');
+                            if (modal) {
+                                modal.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
                         }
-                    }
-                    
-                    function modalZoomIn() {
-                        if (modalZoomLevel < MODAL_ZOOM_MAX) {
-                            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
-                            applyModalZoom();
-                        }
-                    }
-                    
-                    function modalZoomOut() {
-                        if (modalZoomLevel > MODAL_ZOOM_MIN) {
-                            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
-                            applyModalZoom();
-                        }
-                    }
-                    
-                    function modalZoomReset() {
-                        modalZoomLevel = 1;
-                        applyModalZoom();
-                    }
-                    
-                    function applyModalZoom() {
-                        const svg = modalSvgContainer.querySelector('svg');
-                        if (svg) {
-                            svg.style.transform = `scale(${modalZoomLevel})`;
-                        }
-                        updateZoomDisplay();
-                    }
-                    
-                    function updateZoomDisplay() {
-                        const display = document.getElementById('modalZoomLevel');
-                        if (display) {
-                            display.textContent = `${Math.round(modalZoomLevel * 100)}%`;
-                        }
-                    }
 
-                    // Close modal with Escape key
-                    document.addEventListener('keydown', function(event) {
-                        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                            closeModal();
-                        }
-                    });
-                    const docopsCopy = {
-                        url: (btn) => {
-                                const url = btn.closest('.docops-media-card').getAttribute('data-url');
-                                navigator.clipboard.writeText(url).then(() => {
+                        // Close modal with Escape key
+                        document.addEventListener('keydown', function(event) {
+                            if (event.key === 'Escape') {
+                                closeGlobalModal();
+                                closeGlobalCsvModal();
+                            }
+                        });
+                        
+                        const docopsData = {
+                            toggle: function(btn) {
+                                const container = btn.closest('.docops-media-card');
+                                const svg = container.querySelector('.svg-container svg') || container.querySelector('svg');
+                                
+                                if (!svg) return;
+                                
+                                let csvData = null;
+                                
+                                // Method 1: Standard metadata with type
+                                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                                if (csvMetadata) {
+                                    try {
+                                        csvData = JSON.parse(csvMetadata.textContent.trim());
+                                    } catch(e) { console.error("Error parsing CSV JSON", e); }
+                                }
+
+                                // Method 2: Custom csv-data element
+                                if (!csvData) {
+                                    csvMetadata = svg.querySelector('metadata csv-data');
+                                    if (csvMetadata) {
+                                        try {
+                                            csvData = JSON.parse(csvMetadata.textContent.trim());
+                                        } catch(e) {}
+                                    }
+                                }
+
+                                // Method 3: Data attribute
+                                if (!csvData) {
+                                    const csvDataAttr = svg.getAttribute('data-csv');
+                                    if (csvDataAttr) {
+                                        try {
+                                            csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                                        } catch(e) {}
+                                    }
+                                }
+                                
+                                if (csvData) {
+                                    const modal = document.getElementById('globalCsvModal');
+                                    const body = document.getElementById('globalCsvModalBody');
+                                    
+                                    let html = '<table class="csv-table">';
+                                     if (csvData.headers) {
+                                        html += '<thead><tr>';
+                                        csvData.headers.forEach(h => html += '<th>' + h + '</th>');
+                                        html += '</tr></thead>';
+                                    }
+                                    if (csvData.rows) {
+                                        html += '<tbody>';
+                                        csvData.rows.forEach(row => {
+                                            html += '<tr>';
+                                            row.forEach(cell => html += '<td>' + cell + '</td>');
+                                            html += '</tr>';
+                                        });
+                                        html += '</tbody>';
+                                    }
+                                    html += '</table>';
+                                    
+                                    body.innerHTML = html;
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                } else {
+                                    console.log("No CSV data found in SVG");
+                                }
+                            }
+                        };
+                        
+                        const docopsCopy = {
+                            url: (btn) => {
+                                    const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                },
+                            svg: (btn) => {
+                                const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                                navigator.clipboard.writeText(svg).then(() => {
                                     const originalText = btn.innerText;
                                     btn.innerText = 'COPIED!';
                                     setTimeout(() => btn.innerText = originalText, 2000);
                                 });
                             },
-                        svg: (btn) => {
-                            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
-                            navigator.clipboard.writeText(svg).then(() => {
-                                const originalText = btn.innerText;
-                                btn.innerText = 'COPIED!';
-                                setTimeout(() => btn.innerText = originalText, 2000);
-                            });
-                        },
-                        png: (btn) => {
-                            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
-                            const svgData = new XMLSerializer().serializeToString(svgElement);
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            const img = new Image();
+                            png: (btn) => {
+                                const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                                const svgData = new XMLSerializer().serializeToString(svgElement);
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                const img = new Image();
                             
-                            img.onload = () => {
-                                canvas.width = img.width;
-                                canvas.height = img.height;
-                                ctx.drawImage(img, 0, 0);
-                                canvas.toBlob(blob => {
-                                    const item = new ClipboardItem({ "image/png": blob });
-                                    navigator.clipboard.write([item]);
-                                    const originalText = btn.innerText;
-                                    btn.innerText = 'COPIED!';
-                                    setTimeout(() => btn.innerText = originalText, 2000);
-                                });
-                            };
-                            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-                        }
-                    };
+                                img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(blob => {
+                                        const item = new ClipboardItem({ "image/png": blob });
+                                        navigator.clipboard.write([item]);
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                };
+                                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            }
+                        };
                     
-                </script>
-                <script>
-                    mermaid.initialize({ startOnLoad: true });
-                </script>
-                <script>
-                (() => {
+                    </script>
+                    <script>
+                        mermaid.initialize({ startOnLoad: true });
+                    </script>
+                    <script>
+                    (() => {
     let divs = document.getElementsByClassName("adm-block");
     for (let i = 0; i < divs.length; i++) {
         let div = divs[i];
@@ -1197,7 +1390,7 @@ Product Launches | 3
         }
     }
 })();
-                const docopsData = {
+                    const docopsData = {
     toggle(btn) {
         const card = btn.closest('.docops-media-card');
         const panel = card.querySelector('.docops-data-panel');
@@ -1308,7 +1501,7 @@ Product Launches | 3
     }
 
 };
-                </script>
+                    </script>
                 
-            </body>
-            </html>
+                </body>
+                </html>

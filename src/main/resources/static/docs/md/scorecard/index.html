@@ -694,18 +694,173 @@
 }
                 </style>
                 <style>
-                      @media (prefers-color-scheme: dark) {
-                          body {
-                              background-color: #0d1117;
+                          @media (prefers-color-scheme: dark) {
+                              body {
+                                  background-color: #0d1117;
+                              }
                           }
-                      }
-                </style>
+                          
+                          /* Consistent Modal Styles matching AsciiDoc implementation */
+                          .svg-modal-overlay {
+                              display: none;
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(15, 20, 25, 0.95);
+                              backdrop-filter: blur(8px);
+                              z-index: 2147483647;
+                              align-items: center;
+                              justify-content: center;
+                              padding: 40px;
+                              box-sizing: border-box;
+                          }
+                          .svg-modal-overlay.active {
+                              display: flex;
+                          }
+                          .svg-modal-content {
+                              width: 95vw;
+                              max-width: 1400px;
+                              height: 90vh;
+                              background: var(--docops-card-bg, #1e293b);
+                              border-radius: 20px;
+                              padding: 48px 24px 24px 24px;
+                              position: relative;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              display: flex;
+                              flex-direction: column;
+                              overflow: hidden;
+                              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                              animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                          }
+                          .svg-modal-close {
+                              position: absolute;
+                              top: 12px;
+                              right: 12px;
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border: none;
+                              width: 36px;
+                              height: 36px;
+                              border-radius: 50%;
+                              font-size: 24px;
+                              cursor: pointer;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              transition: all 0.2s ease;
+                              z-index: 10;
+                          }
+                          .svg-modal-close:hover {
+                              background: rgba(255,255,255,0.2);
+                              transform: rotate(90deg);
+                          }
+                          .svg-modal-body {
+                              flex: 1;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 100%;
+                              height: 100%;
+                              overflow: auto;
+                              padding: 10px;
+                          }
+                          .svg-modal-body svg {
+                              max-width: 100%;
+                              max-height: 100%;
+                              width: auto;
+                              height: auto;
+                              object-fit: contain;
+                          }
+                          @keyframes scaleInModal {
+                              from { opacity: 0; transform: scale(0.9); }
+                              to { opacity: 1; transform: scale(1); }
+                          }
+                          /* CSV Modal Styles */
+                          #globalCsvModal .csv-table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              color: #e2e8f0;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 13px;
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table th {
+                              text-align: left;
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              position: sticky;
+                              top: 0;
+                          }
+                          #globalCsvModal .csv-table td {
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              color: #cbd5e1;
+                          }
+                          #globalCsvModal .csv-table tr {
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table tr:hover {
+                              background: rgba(255,255,255,0.05);
+                          }
+                          /* Sliding Controls Styles (Consistent with Asciidoctor) */
+                          .svg-with-controls {
+                              position: relative;
+                              display: inline-block;
+                              border-radius: 8px;
+                              overflow: hidden;
+                          }
+                          .svg-bottom-controls {
+                              position: absolute;
+                              bottom: 12px;
+                              left: 50%;
+                              transform: translateX(-50%) translateY(150%);
+                              display: flex;
+                              gap: 6px;
+                              background: rgba(15, 20, 30, 0.85);
+                              padding: 6px 8px;
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              opacity: 0;
+                              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                              z-index: 100;
+                              backdrop-filter: blur(8px);
+                              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                          }
+                          .svg-with-controls:hover .svg-bottom-controls {
+                              opacity: 1;
+                              transform: translateX(-50%) translateY(0);
+                          }
+                          .svg-control-btn {
+                              background: transparent;
+                              border: 1px solid rgba(255,255,255,0.15);
+                              color: #94a3b8;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 10px;
+                              font-weight: 600;
+                              padding: 4px 10px;
+                              border-radius: 4px;
+                              cursor: pointer;
+                              transition: all 0.2s;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                          }
+                          .svg-control-btn:hover {
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border-color: rgba(255,255,255,0.3);
+                              transform: translateY(-1px);
+                          }
+                    </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
                 
             </head>
             <body>
-                <article class="markdown-body">
-                    <h1 id="docops-scorecard">DocOps Scorecard</h1>
+                    <article class="markdown-body">
+                        <h1 id="docops-scorecard">DocOps Scorecard</h1>
 <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 32px; margin-bottom: 48px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
   <div style="display: flex; align-items: center; gap: 24px;">
     <div style="background: linear-gradient(135deg, #15803d 0%, #22c55e 100%); padding: 20px; border-radius: 12px;">
@@ -745,19 +900,19 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_31UTXPbNhC981fsJT1ZnsbTaccHH-REmmpqJR5JOXVyWIJLEiN8MFhAsjr58V2AlO00tU6igN23H-89RB0N3W19G48YCDZkCJngcHP92_WvMIMlYUxy8Qvcpw62yVoMp4pTHUviWncBo_YO2uAtPFCH6gTbE0eyED2sfUPBwTyoXkdSGaqazWZV9XdNrQ_0tRpx7hfLz5vFVLZETAHXkmb5a3V3d_fcyzbKL1cfMexLAdj1ZAm-w1oza9dBOwVi20rNfJKYAtDTQEGTU1Stk4l6ZtB1CTtBTMPgQxSITz4CHlAbrA1dgdFWF4DO-BoNBELVV_PmgILSwJZQJoOlNpECS_o9slbA47F35nQFbPwRpLBMY3NWtXgqtWQ7jx-XknMey0lpbQcjs7hITbU7-tkSVfQB5in2cqjVuOvvUliloOMJDsk4Clhrk__Rk-bI1fxxBRuMBA_n9vNgMASfOcgI2KF2LKPWspmy3L-cPzpYMSfi6sF32kHUlnySpsqhYHzhPGUb6FuSbswJjO86WYMEVWuyPsgJ4Z5BkhvkvvYYmtztqIealLcCVDbiD8JIrlDJ9gjSYDw2oHwIaZiGzBcSLTk5js-XUrCR4TOrJala-zpDfFkVUIPDMI68kjWGFhVBHfyenBACdoxt6KAVZQ1FrLPglXdu2k0T_MDndNlflFlf37eiDuGLq4WVr0ybbidmuFyO1cdlZVIDKdKHfCr0CvUoeGlohCCuNlTE0FFmscBTCL5oabwaIbNaphjKPIqezGlyErbS59lI8-VusfnBR-X6tY0-0fGsOYZ504jUfrbS6kWIcNSxHx00BGopZAcBY57obSMVYHh_A-c7HnEwRW9lUiUcTGq84Kcliki1a0TYsr4CYHNFaQ7aEgW-yIV_stWfuutn3xIWY-QjGgMKiEosbYAsZTCFh0tm233ePQI6aW-9nWW1NHCznP_g1f9zXNaPMbrL8im8PT8mLwuNWuYsrMjzykI5e3MQvDcMuCV54LKK0clG7SjM3IZUOonOjqHI9aIZN_KEjWneCQCXBVr9DzVXYMe8xJnL2e9_vHvbnFlFqk9uL9uY7nm0eZlOy_BdeaFUT2rPb5pURpZGWB-yKVl3rtz3mMzzaM1Fm354ORq8L-bLXAWKoTxQorTXTF02bZ6KSoSwk5-IcZrb2-vbd9KfkTYFNbN5yblzPjklHfw3oGCJeztxHkMMqPZS9l8l4aX7gwcAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_31UTXPbNhC981fsJT1ZnsbTaccHH-REmmpqJR5JOXVyWIJLEiN8MFhAsjr58V2AlO00tU6igN23H-89RB0N3W19G48YCDZkCJngcHP92_WvMIMlYUxy8Qvcpw62yVoMp4pTHUviWncBo_YO2uAtPFCH6gTbE0eyED2sfUPBwTyoXkdSGaqazWZV9XdNrQ_0tRpx7hfLz5vFVLZETAHXkmb5a3V3d_fcyzbKL1cfMexLAdj1ZAm-w1oza9dBOwVi20rNfJKYAtDTQEGTU1Stk4l6ZtB1CTtBTMPgQxSITz4CHlAbrA1dgdFWF4DO-BoNBELVV_PmgILSwJZQJoOlNpECS_o9slbA47F35nQFbPwRpLBMY3NWtXgqtWQ7jx-XknMey0lpbQcjs7hITbU7-tkSVfQB5in2cqjVuOvvUliloOMJDsk4Clhrk__Rk-bI1fxxBRuMBA_n9vNgMASfOcgI2KF2LKPWspmy3L-cPzpYMSfi6sF32kHUlnySpsqhYHzhPGUb6FuSbswJjO86WYMEVWuyPsgJ4Z5BkhvkvvYYmtztqIealLcCVDbiD8JIrlDJ9gjSYDw2oHwIaZiGzBcSLTk5js-XUrCR4TOrJala-zpDfFkVUIPDMI68kjWGFhVBHfyenBACdoxt6KAVZQ1FrLPglXdu2k0T_MDndNlflFlf37eiDuGLq4WVr0ybbidmuFyO1cdlZVIDKdKHfCr0CvUoeGlohCCuNlTE0FFmscBTCL5oabwaIbNaphjKPIqezGlyErbS59lI8-VusfnBR-X6tY0-0fGsOYZ504jUfrbS6kWIcNSxHx00BGopZAcBY57obSMVYHh_A-c7HnEwRW9lUiUcTGq84Kcliki1a0TYsr4CYHNFaQ7aEgW-yIV_stWfuutn3xIWY-QjGgMKiEosbYAsZTCFh0tm233ePQI6aW-9nWW1NHCznP_g1f9zXNaPMbrL8im8PT8mLwuNWuYsrMjzykI5e3MQvDcMuCV54LKK0clG7SjM3IZUOonOjqHI9aIZN_KEjWneCQCXBVr9DzVXYMe8xJnL2e9_vHvbnFlFqk9uL9uY7nm0eZlOy_BdeaFUT2rPb5pURpZGWB-yKVl3rtz3mMzzaM1Fm354ORq8L-bLXAWKoTxQorTXTF02bZ6KSoSwk5-IcZrb2-vbd9KfkTYFNbN5yblzPjklHfw3oGCJeztxHkMMqPZS9l8l4aX7gwcAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="1024" height="1090" viewBox="0 0 1024 1090.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Feature Status","Dark Mode Theme","Missing feature affecting user experience"],["BEFORE","Feature Status","Multi-language Support","Not available, limiting global reach"],["BEFORE","Feature Status","Advanced Search Filters","Basic search only, slow performance"],["BEFORE","Feature Status","Export to PDF","Feature not implemented"],["BEFORE","Feature Status","Two-Factor Authentication","Security vulnerability exists"],["BEFORE","Feature Status","API Rate Limiting","No protection against abuse"],["BEFORE","Known Issues","Login timeout issues","Users frequently logged out"],["BEFORE","Known Issues","Memory leaks in dashboard","System becomes slow over time"],["BEFORE","Known Issues","File upload corruption","Files sometimes corrupted during upload"],["BEFORE","Known Issues","Mobile UI overlapping","Interface broken on mobile devices"],["BEFORE","Known Issues","Database connection drops","Intermittent connection failures"],["BEFORE","Known Issues","Email notifications failing","Users not receiving important updates"],["BEFORE","Known Issues","Report generation errors","Reports fail to generate properly"],["AFTER","New Features Added","Dark Mode Theme","Implemented with user preference saving"],["AFTER","New Features Added","Multi-language Support","Added 12 languages with automatic detection"],["AFTER","New Features Added","Advanced Search Filters","Fast indexing with multiple filter options"],["AFTER","New Features Added","Export to PDF","High-quality PDF export with custom templates"],["AFTER","New Features Added","Two-Factor Authentication","TOTP and SMS-based 2FA implemented"],["AFTER","New Features Added","API Rate Limiting","Intelligent rate limiting with user tiers"],["AFTER","Bugs Resolved","Login timeout issues","Session management completely rewritten"],["AFTER","Bugs Resolved","Memory leaks in dashboard","React components optimized, memory usage -67%"],["AFTER","Bugs Resolved","File upload corruption","New chunked upload system with integrity checks"],["AFTER","Bugs Resolved","Mobile UI overlapping","Responsive design overhaul completed"],["AFTER","Bugs Resolved","Database connection drops","Connection pooling and retry logic implemented"],["AFTER","Bugs Resolved","Email notifications failing","New email service with 99.9% delivery rate"],["AFTER","Bugs Resolved","Report generation errors","Async report generation with progress tracking"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_bbbcd54c10d34c589530abd1ac62b990" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1"/></pattern><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .main-title_bbbcd54c10d34c589530abd1ac62b990 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13.913044px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_bbbcd54c10d34c589530abd1ac62b990 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12.173913px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_bbbcd54c10d34c589530abd1ac62b990 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #22d3ee; } .item-desc_bbbcd54c10d34c589530abd1ac62b990 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #22d3ee; } .meta-text_bbbcd54c10d34c589530abd1ac62b990 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #22d3ee; opacity: 0.5; } @keyframes slideUp_bbbcd54c10d34c589530abd1ac62b990 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_bbbcd54c10d34c589530abd1ac62b990 { animation: slideUp_bbbcd54c10d34c589530abd1ac62b990 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_bbbcd54c10d34c589530abd1ac62b990 { animation-delay: 0.1s; } .delay-2_bbbcd54c10d34c589530abd1ac62b990 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#grid_bbbcd54c10d34c589530abd1ac62b990)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#38bdf8" rx="2"/><text x="16" y="28" class="main-title_bbbcd54c10d34c589530abd1ac62b990">Software Release v2.4.0 - Feature &amp; Bug Summary —</text><text x="16" y="60" class="main-title_bbbcd54c10d34c589530abd1ac62b990">Migration from Legacy System to Modern Architecture</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_bbbcd54c10d34c589530abd1ac62b990 delay-1_bbbcd54c10d34c589530abd1ac62b990"><rect width="450" height="838" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#38bdf8" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_bbbcd54c10d34c589530abd1ac62b990" style="fill: #38bdf8">01_BEFORE v2.4.0</text><text x="24" y="80" class="sec-header_bbbcd54c10d34c589530abd1ac62b990" style="fill: #38bdf8">Feature Status</text><circle cx="32" cy="115" r="4" fill="#38bdf8"/><text x="52" y="119" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Dark Mode Theme</text><text x="52" y="137" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Missing feature affecting user experience</text><circle cx="32" cy="163" r="4" fill="#38bdf8"/><text x="52" y="167" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Multi-language Support</text><text x="52" y="185" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Not available, limiting global reach</text><circle cx="32" cy="211" r="4" fill="#38bdf8"/><text x="52" y="215" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Advanced Search Filters</text><text x="52" y="233" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Basic search only, slow performance</text><circle cx="32" cy="259" r="4" fill="#38bdf8"/><text x="52" y="263" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Export to PDF</text><text x="52" y="281" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Feature not implemented</text><circle cx="32" cy="307" r="4" fill="#38bdf8"/><text x="52" y="311" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Two-Factor Authentication</text><text x="52" y="329" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Security vulnerability exists</text><circle cx="32" cy="355" r="4" fill="#38bdf8"/><text x="52" y="359" class="item-text_bbbcd54c10d34c589530abd1ac62b990">API Rate Limiting</text><text x="52" y="377" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// No protection against abuse</text><text x="24" y="433" class="sec-header_bbbcd54c10d34c589530abd1ac62b990" style="fill: #38bdf8">Known Issues</text><circle cx="32" cy="468" r="4" fill="#38bdf8"/><text x="52" y="472" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Login timeout issues</text><text x="52" y="490" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Users frequently logged out</text><circle cx="32" cy="516" r="4" fill="#38bdf8"/><text x="52" y="520" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Memory leaks in dashboard</text><text x="52" y="538" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// System becomes slow over time</text><circle cx="32" cy="564" r="4" fill="#38bdf8"/><text x="52" y="568" class="item-text_bbbcd54c10d34c589530abd1ac62b990">File upload corruption</text><text x="52" y="586" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Files sometimes corrupted during upload</text><circle cx="32" cy="612" r="4" fill="#38bdf8"/><text x="52" y="616" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Mobile UI overlapping</text><text x="52" y="634" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Interface broken on mobile devices</text><circle cx="32" cy="660" r="4" fill="#38bdf8"/><text x="52" y="664" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Database connection drops</text><text x="52" y="682" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Intermittent connection failures</text><circle cx="32" cy="708" r="4" fill="#38bdf8"/><text x="52" y="712" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Email notifications failing</text><text x="52" y="730" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Users not receiving important updates</text><circle cx="32" cy="756" r="4" fill="#38bdf8"/><text x="52" y="760" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Report generation errors</text><text x="52" y="778" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Reports fail to generate properly</text></g></g><g transform="translate(492, 596.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_bbbcd54c10d34c589530abd1ac62b990 delay-2_bbbcd54c10d34c589530abd1ac62b990"><rect width="450" height="908" fill="#0f172a" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_bbbcd54c10d34c589530abd1ac62b990" style="fill: #10b981">02_AFTER v2.4.0</text><text x="24" y="80" class="sec-header_bbbcd54c10d34c589530abd1ac62b990" style="fill: #10b981">New Features Added</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Dark Mode Theme</text><text x="52" y="137" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Implemented with user preference saving</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Multi-language Support</text><text x="52" y="185" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Added 12 languages with automatic detection</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Advanced Search Filters</text><text x="52" y="233" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Fast indexing with multiple filter options</text><path d="M24,259 L30,265 L40,255" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="263" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Export to PDF</text><text x="52" y="281" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// High-quality PDF export with custom</text><text x="52" y="295" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">templates</text><path d="M24,321 L30,327 L40,317" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="325" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Two-Factor Authentication</text><text x="52" y="343" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// TOTP and SMS-based 2FA implemented</text><path d="M24,369 L30,375 L40,365" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="373" class="item-text_bbbcd54c10d34c589530abd1ac62b990">API Rate Limiting</text><text x="52" y="391" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Intelligent rate limiting with user tiers</text><text x="24" y="447" class="sec-header_bbbcd54c10d34c589530abd1ac62b990" style="fill: #10b981">Bugs Resolved</text><path d="M24,482 L30,488 L40,478" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="486" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Login timeout issues</text><text x="52" y="504" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Session management completely rewritten</text><path d="M24,530 L30,536 L40,526" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="534" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Memory leaks in dashboard</text><text x="52" y="552" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// React components optimized, memory usage</text><text x="52" y="566" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">-67%</text><path d="M24,592 L30,598 L40,588" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="596" class="item-text_bbbcd54c10d34c589530abd1ac62b990">File upload corruption</text><text x="52" y="614" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// New chunked upload system with integrity</text><text x="52" y="628" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">checks</text><path d="M24,654 L30,660 L40,650" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="658" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Mobile UI overlapping</text><text x="52" y="676" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Responsive design overhaul completed</text><path d="M24,702 L30,708 L40,698" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="706" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Database connection drops</text><text x="52" y="724" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Connection pooling and retry logic</text><text x="52" y="738" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">implemented</text><path d="M24,764 L30,770 L40,760" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="768" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Email notifications failing</text><text x="52" y="786" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// New email service with 99.9% delivery rate</text><path d="M24,812 L30,818 L40,808" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="816" class="item-text_bbbcd54c10d34c589530abd1ac62b990">Report generation errors</text><text x="52" y="834" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">// Async report generation with progress</text><text x="52" y="848" class="item-desc_bbbcd54c10d34c589530abd1ac62b990">tracking</text></g></g><text x="40" y="1070.0" class="meta-text_bbbcd54c10d34c589530abd1ac62b990">SCORECARD_REF: BBBC // SCALE: 1.0 // THEME: ProDarkTheme</text></svg>
+<svg width="1024" height="1090" viewBox="0 0 1024 1090.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Feature Status","Dark Mode Theme","Missing feature affecting user experience"],["BEFORE","Feature Status","Multi-language Support","Not available, limiting global reach"],["BEFORE","Feature Status","Advanced Search Filters","Basic search only, slow performance"],["BEFORE","Feature Status","Export to PDF","Feature not implemented"],["BEFORE","Feature Status","Two-Factor Authentication","Security vulnerability exists"],["BEFORE","Feature Status","API Rate Limiting","No protection against abuse"],["BEFORE","Known Issues","Login timeout issues","Users frequently logged out"],["BEFORE","Known Issues","Memory leaks in dashboard","System becomes slow over time"],["BEFORE","Known Issues","File upload corruption","Files sometimes corrupted during upload"],["BEFORE","Known Issues","Mobile UI overlapping","Interface broken on mobile devices"],["BEFORE","Known Issues","Database connection drops","Intermittent connection failures"],["BEFORE","Known Issues","Email notifications failing","Users not receiving important updates"],["BEFORE","Known Issues","Report generation errors","Reports fail to generate properly"],["AFTER","New Features Added","Dark Mode Theme","Implemented with user preference saving"],["AFTER","New Features Added","Multi-language Support","Added 12 languages with automatic detection"],["AFTER","New Features Added","Advanced Search Filters","Fast indexing with multiple filter options"],["AFTER","New Features Added","Export to PDF","High-quality PDF export with custom templates"],["AFTER","New Features Added","Two-Factor Authentication","TOTP and SMS-based 2FA implemented"],["AFTER","New Features Added","API Rate Limiting","Intelligent rate limiting with user tiers"],["AFTER","Bugs Resolved","Login timeout issues","Session management completely rewritten"],["AFTER","Bugs Resolved","Memory leaks in dashboard","React components optimized, memory usage -67%"],["AFTER","Bugs Resolved","File upload corruption","New chunked upload system with integrity checks"],["AFTER","Bugs Resolved","Mobile UI overlapping","Responsive design overhaul completed"],["AFTER","Bugs Resolved","Database connection drops","Connection pooling and retry logic implemented"],["AFTER","Bugs Resolved","Email notifications failing","New email service with 99.9% delivery rate"],["AFTER","Bugs Resolved","Report generation errors","Async report generation with progress tracking"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_5768d933434a4a9698155791ed316d65" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1"/></pattern><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .main-title_5768d933434a4a9698155791ed316d65 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13.913044px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_5768d933434a4a9698155791ed316d65 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12.173913px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_5768d933434a4a9698155791ed316d65 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #22d3ee; } .item-desc_5768d933434a4a9698155791ed316d65 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #22d3ee; } .meta-text_5768d933434a4a9698155791ed316d65 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #22d3ee; opacity: 0.5; } @keyframes slideUp_5768d933434a4a9698155791ed316d65 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_5768d933434a4a9698155791ed316d65 { animation: slideUp_5768d933434a4a9698155791ed316d65 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_5768d933434a4a9698155791ed316d65 { animation-delay: 0.1s; } .delay-2_5768d933434a4a9698155791ed316d65 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#grid_5768d933434a4a9698155791ed316d65)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#38bdf8" rx="2"/><text x="16" y="28" class="main-title_5768d933434a4a9698155791ed316d65">Software Release v2.4.0 - Feature &amp; Bug Summary —</text><text x="16" y="60" class="main-title_5768d933434a4a9698155791ed316d65">Migration from Legacy System to Modern Architecture</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_5768d933434a4a9698155791ed316d65 delay-1_5768d933434a4a9698155791ed316d65"><rect width="450" height="838" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#38bdf8" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_5768d933434a4a9698155791ed316d65" style="fill: #38bdf8">01_BEFORE v2.4.0</text><text x="24" y="80" class="sec-header_5768d933434a4a9698155791ed316d65" style="fill: #38bdf8">Feature Status</text><circle cx="32" cy="115" r="4" fill="#38bdf8"/><text x="52" y="119" class="item-text_5768d933434a4a9698155791ed316d65">Dark Mode Theme</text><text x="52" y="137" class="item-desc_5768d933434a4a9698155791ed316d65">// Missing feature affecting user experience</text><circle cx="32" cy="163" r="4" fill="#38bdf8"/><text x="52" y="167" class="item-text_5768d933434a4a9698155791ed316d65">Multi-language Support</text><text x="52" y="185" class="item-desc_5768d933434a4a9698155791ed316d65">// Not available, limiting global reach</text><circle cx="32" cy="211" r="4" fill="#38bdf8"/><text x="52" y="215" class="item-text_5768d933434a4a9698155791ed316d65">Advanced Search Filters</text><text x="52" y="233" class="item-desc_5768d933434a4a9698155791ed316d65">// Basic search only, slow performance</text><circle cx="32" cy="259" r="4" fill="#38bdf8"/><text x="52" y="263" class="item-text_5768d933434a4a9698155791ed316d65">Export to PDF</text><text x="52" y="281" class="item-desc_5768d933434a4a9698155791ed316d65">// Feature not implemented</text><circle cx="32" cy="307" r="4" fill="#38bdf8"/><text x="52" y="311" class="item-text_5768d933434a4a9698155791ed316d65">Two-Factor Authentication</text><text x="52" y="329" class="item-desc_5768d933434a4a9698155791ed316d65">// Security vulnerability exists</text><circle cx="32" cy="355" r="4" fill="#38bdf8"/><text x="52" y="359" class="item-text_5768d933434a4a9698155791ed316d65">API Rate Limiting</text><text x="52" y="377" class="item-desc_5768d933434a4a9698155791ed316d65">// No protection against abuse</text><text x="24" y="433" class="sec-header_5768d933434a4a9698155791ed316d65" style="fill: #38bdf8">Known Issues</text><circle cx="32" cy="468" r="4" fill="#38bdf8"/><text x="52" y="472" class="item-text_5768d933434a4a9698155791ed316d65">Login timeout issues</text><text x="52" y="490" class="item-desc_5768d933434a4a9698155791ed316d65">// Users frequently logged out</text><circle cx="32" cy="516" r="4" fill="#38bdf8"/><text x="52" y="520" class="item-text_5768d933434a4a9698155791ed316d65">Memory leaks in dashboard</text><text x="52" y="538" class="item-desc_5768d933434a4a9698155791ed316d65">// System becomes slow over time</text><circle cx="32" cy="564" r="4" fill="#38bdf8"/><text x="52" y="568" class="item-text_5768d933434a4a9698155791ed316d65">File upload corruption</text><text x="52" y="586" class="item-desc_5768d933434a4a9698155791ed316d65">// Files sometimes corrupted during upload</text><circle cx="32" cy="612" r="4" fill="#38bdf8"/><text x="52" y="616" class="item-text_5768d933434a4a9698155791ed316d65">Mobile UI overlapping</text><text x="52" y="634" class="item-desc_5768d933434a4a9698155791ed316d65">// Interface broken on mobile devices</text><circle cx="32" cy="660" r="4" fill="#38bdf8"/><text x="52" y="664" class="item-text_5768d933434a4a9698155791ed316d65">Database connection drops</text><text x="52" y="682" class="item-desc_5768d933434a4a9698155791ed316d65">// Intermittent connection failures</text><circle cx="32" cy="708" r="4" fill="#38bdf8"/><text x="52" y="712" class="item-text_5768d933434a4a9698155791ed316d65">Email notifications failing</text><text x="52" y="730" class="item-desc_5768d933434a4a9698155791ed316d65">// Users not receiving important updates</text><circle cx="32" cy="756" r="4" fill="#38bdf8"/><text x="52" y="760" class="item-text_5768d933434a4a9698155791ed316d65">Report generation errors</text><text x="52" y="778" class="item-desc_5768d933434a4a9698155791ed316d65">// Reports fail to generate properly</text></g></g><g transform="translate(492, 596.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_5768d933434a4a9698155791ed316d65 delay-2_5768d933434a4a9698155791ed316d65"><rect width="450" height="908" fill="#0f172a" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_5768d933434a4a9698155791ed316d65" style="fill: #10b981">02_AFTER v2.4.0</text><text x="24" y="80" class="sec-header_5768d933434a4a9698155791ed316d65" style="fill: #10b981">New Features Added</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_5768d933434a4a9698155791ed316d65">Dark Mode Theme</text><text x="52" y="137" class="item-desc_5768d933434a4a9698155791ed316d65">// Implemented with user preference saving</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_5768d933434a4a9698155791ed316d65">Multi-language Support</text><text x="52" y="185" class="item-desc_5768d933434a4a9698155791ed316d65">// Added 12 languages with automatic detection</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_5768d933434a4a9698155791ed316d65">Advanced Search Filters</text><text x="52" y="233" class="item-desc_5768d933434a4a9698155791ed316d65">// Fast indexing with multiple filter options</text><path d="M24,259 L30,265 L40,255" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="263" class="item-text_5768d933434a4a9698155791ed316d65">Export to PDF</text><text x="52" y="281" class="item-desc_5768d933434a4a9698155791ed316d65">// High-quality PDF export with custom</text><text x="52" y="295" class="item-desc_5768d933434a4a9698155791ed316d65">templates</text><path d="M24,321 L30,327 L40,317" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="325" class="item-text_5768d933434a4a9698155791ed316d65">Two-Factor Authentication</text><text x="52" y="343" class="item-desc_5768d933434a4a9698155791ed316d65">// TOTP and SMS-based 2FA implemented</text><path d="M24,369 L30,375 L40,365" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="373" class="item-text_5768d933434a4a9698155791ed316d65">API Rate Limiting</text><text x="52" y="391" class="item-desc_5768d933434a4a9698155791ed316d65">// Intelligent rate limiting with user tiers</text><text x="24" y="447" class="sec-header_5768d933434a4a9698155791ed316d65" style="fill: #10b981">Bugs Resolved</text><path d="M24,482 L30,488 L40,478" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="486" class="item-text_5768d933434a4a9698155791ed316d65">Login timeout issues</text><text x="52" y="504" class="item-desc_5768d933434a4a9698155791ed316d65">// Session management completely rewritten</text><path d="M24,530 L30,536 L40,526" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="534" class="item-text_5768d933434a4a9698155791ed316d65">Memory leaks in dashboard</text><text x="52" y="552" class="item-desc_5768d933434a4a9698155791ed316d65">// React components optimized, memory usage</text><text x="52" y="566" class="item-desc_5768d933434a4a9698155791ed316d65">-67%</text><path d="M24,592 L30,598 L40,588" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="596" class="item-text_5768d933434a4a9698155791ed316d65">File upload corruption</text><text x="52" y="614" class="item-desc_5768d933434a4a9698155791ed316d65">// New chunked upload system with integrity</text><text x="52" y="628" class="item-desc_5768d933434a4a9698155791ed316d65">checks</text><path d="M24,654 L30,660 L40,650" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="658" class="item-text_5768d933434a4a9698155791ed316d65">Mobile UI overlapping</text><text x="52" y="676" class="item-desc_5768d933434a4a9698155791ed316d65">// Responsive design overhaul completed</text><path d="M24,702 L30,708 L40,698" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="706" class="item-text_5768d933434a4a9698155791ed316d65">Database connection drops</text><text x="52" y="724" class="item-desc_5768d933434a4a9698155791ed316d65">// Connection pooling and retry logic</text><text x="52" y="738" class="item-desc_5768d933434a4a9698155791ed316d65">implemented</text><path d="M24,764 L30,770 L40,760" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="768" class="item-text_5768d933434a4a9698155791ed316d65">Email notifications failing</text><text x="52" y="786" class="item-desc_5768d933434a4a9698155791ed316d65">// New email service with 99.9% delivery rate</text><path d="M24,812 L30,818 L40,808" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="816" class="item-text_5768d933434a4a9698155791ed316d65">Report generation errors</text><text x="52" y="834" class="item-desc_5768d933434a4a9698155791ed316d65">// Async report generation with progress</text><text x="52" y="848" class="item-desc_5768d933434a4a9698155791ed316d65">tracking</text></g></g><text x="40" y="1070.0" class="meta-text_5768d933434a4a9698155791ed316d65">SCORECARD_REF: 5768 // SCALE: 1.0 // THEME: ProDarkTheme</text></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -769,19 +924,19 @@
 </div>
 <hr />
 <h2 id="program-improvement-example">Program Improvement Example</h2>
-<div class="docops-media-card" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_3WRQW8TQQyF7_MrfMkxHFpAveRQ1EQggZZu2xPqwTvrDdbOjhePJ1FQfzyzmwaiALeRnu333jfGFmh1fw1fA1onOkBNgbHhwHaAT8OosqOBoiWXcmPz9IOd9L1oD-hVUgKOnWIyzd6yEmBswUQCx61bLpfOfWuo3KdndzzyYb2p6jXcX8_qq_iGjYb07FarFfxxqTn1yT2Q7tgTGA8k2RK8wEbpRy7ZoM1afGAk7CEItq6KS48hAAbSefQjb79DFE7HZB2G8holsfGOkrujMchh6gkqITTo-7L0BWPGMC-kIPs5VjWSorHEItxRY67OsRHpJ5MqW4tGLYjCwClN3asmleCnKi_wmQeeRkzRT5l94au4pVdI2BnpidHt5nFd_0Y0S-eEzn-nZAmliVL7L1A1tdkX0-YA728Wf9N5e7WAjvakMJYo_8Nxm02GuR9HuCoNY7YyfEnladwqtkU4I_M0HsFMKH05qxj4Z8l6Sefxggqgwc27xS8tFYUGpgIAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
+<div class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=scorecard&payload=H4sIAAAAAAAA_3WRQW8TQQyF7_MrfMkxHFpAveRQ1EQggZZu2xPqwTvrDdbOjhePJ1FQfzyzmwaiALeRnu333jfGFmh1fw1fA1onOkBNgbHhwHaAT8OosqOBoiWXcmPz9IOd9L1oD-hVUgKOnWIyzd6yEmBswUQCx61bLpfOfWuo3KdndzzyYb2p6jXcX8_qq_iGjYb07FarFfxxqTn1yT2Q7tgTGA8k2RK8wEbpRy7ZoM1afGAk7CEItq6KS48hAAbSefQjb79DFE7HZB2G8holsfGOkrujMchh6gkqITTo-7L0BWPGMC-kIPs5VjWSorHEItxRY67OsRHpJ5MqW4tGLYjCwClN3asmleCnKi_wmQeeRkzRT5l94au4pVdI2BnpidHt5nFd_0Y0S-eEzn-nZAmliVL7L1A1tdkX0-YA728Wf9N5e7WAjvakMJYo_8Nxm02GuR9HuCoNY7YyfEnladwqtkU4I_M0HsFMKH05qxj4Z8l6Sefxggqgwc27xS8tFYUGpgIAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="1024" height="636" viewBox="0 0 1024 636.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Stability Risks","Service timeouts","Frequent during peak load"],["BEFORE","Stability Risks","On-call alerts","High noise and false positives"],["BEFORE","Stability Risks","Deployment rollback","Manual and slow"],["BEFORE","Operational Debt","Runbooks","Outdated or missing"],["BEFORE","Operational Debt","Observability","Limited tracing coverage"],["AFTER","Improvements Delivered","Service timeouts","Reduced by 68%"],["AFTER","Improvements Delivered","On-call alerts","42% fewer pages"],["AFTER","Improvements Delivered","Deployment rollback","Automated in 2 minutes"],["AFTER","Operational Upgrades","Runbooks","Updated and centralized"],["AFTER","Operational Upgrades","Observability","Tracing coverage at 85%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_4659a9a1251e4bd1b61962baf9d14746" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1"/></pattern><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .main-title_4659a9a1251e4bd1b61962baf9d14746 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13.913044px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_4659a9a1251e4bd1b61962baf9d14746 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12.173913px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_4659a9a1251e4bd1b61962baf9d14746 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #22d3ee; } .item-desc_4659a9a1251e4bd1b61962baf9d14746 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #22d3ee; } .meta-text_4659a9a1251e4bd1b61962baf9d14746 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #22d3ee; opacity: 0.5; } @keyframes slideUp_4659a9a1251e4bd1b61962baf9d14746 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_4659a9a1251e4bd1b61962baf9d14746 { animation: slideUp_4659a9a1251e4bd1b61962baf9d14746 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_4659a9a1251e4bd1b61962baf9d14746 { animation-delay: 0.1s; } .delay-2_4659a9a1251e4bd1b61962baf9d14746 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#grid_4659a9a1251e4bd1b61962baf9d14746)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#38bdf8" rx="2"/><text x="16" y="28" class="main-title_4659a9a1251e4bd1b61962baf9d14746">Q3 Platform Reliability Improvements — Stability work</text><text x="16" y="60" class="main-title_4659a9a1251e4bd1b61962baf9d14746">across infrastructure and tooling</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_4659a9a1251e4bd1b61962baf9d14746 delay-1_4659a9a1251e4bd1b61962baf9d14746"><rect width="450" height="454" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#38bdf8" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_4659a9a1251e4bd1b61962baf9d14746" style="fill: #38bdf8">01_BEFORE Q3</text><text x="24" y="80" class="sec-header_4659a9a1251e4bd1b61962baf9d14746" style="fill: #38bdf8">Stability Risks</text><circle cx="32" cy="115" r="4" fill="#38bdf8"/><text x="52" y="119" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Service timeouts</text><text x="52" y="137" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Frequent during peak load</text><circle cx="32" cy="163" r="4" fill="#38bdf8"/><text x="52" y="167" class="item-text_4659a9a1251e4bd1b61962baf9d14746">On-call alerts</text><text x="52" y="185" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// High noise and false positives</text><circle cx="32" cy="211" r="4" fill="#38bdf8"/><text x="52" y="215" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Deployment rollback</text><text x="52" y="233" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Manual and slow</text><text x="24" y="289" class="sec-header_4659a9a1251e4bd1b61962baf9d14746" style="fill: #38bdf8">Operational Debt</text><circle cx="32" cy="324" r="4" fill="#38bdf8"/><text x="52" y="328" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Runbooks</text><text x="52" y="346" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Outdated or missing</text><circle cx="32" cy="372" r="4" fill="#38bdf8"/><text x="52" y="376" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Observability</text><text x="52" y="394" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Limited tracing coverage</text></g></g><g transform="translate(492, 369.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_4659a9a1251e4bd1b61962baf9d14746 delay-2_4659a9a1251e4bd1b61962baf9d14746"><rect width="450" height="454" fill="#0f172a" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_4659a9a1251e4bd1b61962baf9d14746" style="fill: #10b981">02_AFTER Q3</text><text x="24" y="80" class="sec-header_4659a9a1251e4bd1b61962baf9d14746" style="fill: #10b981">Improvements Delivered</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Service timeouts</text><text x="52" y="137" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Reduced by 68%</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_4659a9a1251e4bd1b61962baf9d14746">On-call alerts</text><text x="52" y="185" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// 42% fewer pages</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Deployment rollback</text><text x="52" y="233" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Automated in 2 minutes</text><text x="24" y="289" class="sec-header_4659a9a1251e4bd1b61962baf9d14746" style="fill: #10b981">Operational Upgrades</text><path d="M24,324 L30,330 L40,320" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="328" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Runbooks</text><text x="52" y="346" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Updated and centralized</text><path d="M24,372 L30,378 L40,368" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="376" class="item-text_4659a9a1251e4bd1b61962baf9d14746">Observability</text><text x="52" y="394" class="item-desc_4659a9a1251e4bd1b61962baf9d14746">// Tracing coverage at 85%</text></g></g><text x="40" y="616.0" class="meta-text_4659a9a1251e4bd1b61962baf9d14746">SCORECARD_REF: 4659 // SCALE: 1.0 // THEME: ProDarkTheme</text></svg>
+<svg width="1024" height="636" viewBox="0 0 1024 636.0" xmlns="http://www.w3.org/2000/svg">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["column","section","item","description"],"rows":[["BEFORE","Stability Risks","Service timeouts","Frequent during peak load"],["BEFORE","Stability Risks","On-call alerts","High noise and false positives"],["BEFORE","Stability Risks","Deployment rollback","Manual and slow"],["BEFORE","Operational Debt","Runbooks","Outdated or missing"],["BEFORE","Operational Debt","Observability","Limited tracing coverage"],["AFTER","Improvements Delivered","Service timeouts","Reduced by 68%"],["AFTER","Improvements Delivered","On-call alerts","42% fewer pages"],["AFTER","Improvements Delivered","Deployment rollback","Automated in 2 minutes"],["AFTER","Operational Upgrades","Runbooks","Updated and centralized"],["AFTER","Operational Upgrades","Observability","Tracing coverage at 85%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>    <defs><pattern id="grid_67b72c9c79164696ae37d48f1b2e21f2" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1"/></pattern><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); .main-title_67b72c9c79164696ae37d48f1b2e21f2 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13.913044px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; } .sec-header_67b72c9c79164696ae37d48f1b2e21f2 { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12.173913px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; } .item-text_67b72c9c79164696ae37d48f1b2e21f2 { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #22d3ee; } .item-desc_67b72c9c79164696ae37d48f1b2e21f2 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #22d3ee; } .meta-text_67b72c9c79164696ae37d48f1b2e21f2 { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: #22d3ee; opacity: 0.5; } @keyframes slideUp_67b72c9c79164696ae37d48f1b2e21f2 { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } } .anim-panel_67b72c9c79164696ae37d48f1b2e21f2 { animation: slideUp_67b72c9c79164696ae37d48f1b2e21f2 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; } .delay-1_67b72c9c79164696ae37d48f1b2e21f2 { animation-delay: 0.1s; } .delay-2_67b72c9c79164696ae37d48f1b2e21f2 { animation-delay: 0.3s; }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#grid_67b72c9c79164696ae37d48f1b2e21f2)" opacity="0.4"/><g transform="translate(40, 60)"><rect x="0" y="8" width="4" height="40" fill="#38bdf8" rx="2"/><text x="16" y="28" class="main-title_67b72c9c79164696ae37d48f1b2e21f2">Q3 Platform Reliability Improvements — Stability work</text><text x="16" y="60" class="main-title_67b72c9c79164696ae37d48f1b2e21f2">across infrastructure and tooling</text></g><g transform="translate(40, 142.0)"><g class="anim-panel_67b72c9c79164696ae37d48f1b2e21f2 delay-1_67b72c9c79164696ae37d48f1b2e21f2"><rect width="450" height="454" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#38bdf8" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_67b72c9c79164696ae37d48f1b2e21f2" style="fill: #38bdf8">01_BEFORE Q3</text><text x="24" y="80" class="sec-header_67b72c9c79164696ae37d48f1b2e21f2" style="fill: #38bdf8">Stability Risks</text><circle cx="32" cy="115" r="4" fill="#38bdf8"/><text x="52" y="119" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Service timeouts</text><text x="52" y="137" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Frequent during peak load</text><circle cx="32" cy="163" r="4" fill="#38bdf8"/><text x="52" y="167" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">On-call alerts</text><text x="52" y="185" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// High noise and false positives</text><circle cx="32" cy="211" r="4" fill="#38bdf8"/><text x="52" y="215" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Deployment rollback</text><text x="52" y="233" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Manual and slow</text><text x="24" y="289" class="sec-header_67b72c9c79164696ae37d48f1b2e21f2" style="fill: #38bdf8">Operational Debt</text><circle cx="32" cy="324" r="4" fill="#38bdf8"/><text x="52" y="328" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Runbooks</text><text x="52" y="346" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Outdated or missing</text><circle cx="32" cy="372" r="4" fill="#38bdf8"/><text x="52" y="376" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Observability</text><text x="52" y="394" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Limited tracing coverage</text></g></g><g transform="translate(492, 369.0)"><path d="M0,0 L40,0 L32,-8 M40,0 L32,8" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="square" opacity="0.5"/></g><g transform="translate(534, 142.0)"><g class="anim-panel_67b72c9c79164696ae37d48f1b2e21f2 delay-2_67b72c9c79164696ae37d48f1b2e21f2"><rect width="450" height="454" fill="#0f172a" stroke="#10b981" stroke-width="1.5" rx="4"/><rect width="450" height="40" fill="#10b981" fill-opacity="0.1" rx="4"/><text x="24" y="26" class="sec-header_67b72c9c79164696ae37d48f1b2e21f2" style="fill: #10b981">02_AFTER Q3</text><text x="24" y="80" class="sec-header_67b72c9c79164696ae37d48f1b2e21f2" style="fill: #10b981">Improvements Delivered</text><path d="M24,115 L30,121 L40,111" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="119" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Service timeouts</text><text x="52" y="137" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Reduced by 68%</text><path d="M24,163 L30,169 L40,159" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="167" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">On-call alerts</text><text x="52" y="185" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// 42% fewer pages</text><path d="M24,211 L30,217 L40,207" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="215" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Deployment rollback</text><text x="52" y="233" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Automated in 2 minutes</text><text x="24" y="289" class="sec-header_67b72c9c79164696ae37d48f1b2e21f2" style="fill: #10b981">Operational Upgrades</text><path d="M24,324 L30,330 L40,320" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="328" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Runbooks</text><text x="52" y="346" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Updated and centralized</text><path d="M24,372 L30,378 L40,368" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="52" y="376" class="item-text_67b72c9c79164696ae37d48f1b2e21f2">Observability</text><text x="52" y="394" class="item-desc_67b72c9c79164696ae37d48f1b2e21f2">// Tracing coverage at 85%</text></g></g><text x="40" y="616.0" class="meta-text_67b72c9c79164696ae37d48f1b2e21f2">SCORECARD_REF: 67B7 // SCALE: 1.0 // THEME: ProDarkTheme</text></svg>
 </div>
 <figcaption></figcaption>
 </figure>
-<div class="docops-control-bar">
-<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
-<button class="docops-btn" onclick="docopsData.toggle(this)">DATA</button>
-<button class="docops-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="docops-btn" onclick="docopsCopy.svg(this)">SVG</button>
-<button class="docops-btn" onclick="docopsCopy.png(this)">PNG</button>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
 </div>
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
@@ -838,151 +993,189 @@ Item | Description
 <li><strong>Program reporting</strong> - Demonstrate impact for stakeholders</li>
 </ul>
 
-                </article>
-                <!-- Modal Overlay -->
-                <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
-                    <div class="modal-content" id="modalContent">
-                        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
-                        <div id="modalSvgContainer"></div>
-                        <div class="modal-zoom-controls">
-                            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
-                            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
-                            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
-                            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+                    </article>
+                    
+                    <!-- Global Shared Modal for Markdown View -->
+                    <div class="svg-modal-overlay" id="globalSvgModal" onclick="if(event.target === this) closeGlobalModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalModal()">×</button>
+                            <div id="globalModalBody" class="svg-modal-body"></div>
                         </div>
                     </div>
-                </div>
-                <script>
-                    const modalOverlay = document.getElementById('modalOverlay');
-                    const modalSvgContainer = document.getElementById('modalSvgContainer');
-                    
-                    // Zoom state
-                    let modalZoomLevel = 1;
-                    const MODAL_ZOOM_MIN = 0.25;
-                    const MODAL_ZOOM_MAX = 4;
-                    const MODAL_ZOOM_STEP = 0.25;
 
-                    function openModal(container) {
-                        // Reset zoom level
-                        modalZoomLevel = 1;
-                        updateZoomDisplay();
+                    <!-- Global Shared Modal for Data View -->
+                    <div class="svg-modal-overlay" id="globalCsvModal" onclick="if(event.target === this) closeGlobalCsvModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalCsvModal()">×</button>
+                            <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+                            </div>
+                            <div id="globalCsvModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Unified Modal Logic for Markdown
+                        function openModal(container) {
+                            const modal = document.getElementById('globalSvgModal');
+                            const targetContainer = document.getElementById('globalModalBody');
+                            
+                            // Find SVG in the container passed from the button
+                            const sourceSvg = container.querySelector ? container.querySelector('svg') : container; 
+                            
+                            if (sourceSvg && targetContainer) {
+                                targetContainer.innerHTML = '';
+                                const clone = sourceSvg.cloneNode(true);
+                                
+                                // Reset dimensions to allow CSS to control scaling
+                                clone.removeAttribute('width');
+                                clone.removeAttribute('height');
+                                clone.style.width = '100%';
+                                clone.style.height = '100%';
+                                
+                                targetContainer.appendChild(clone);
+                                modal.classList.add('active');
+                                document.body.style.overflow = 'hidden';
+                            }
+                        }
+
+                        function closeGlobalModal() {
+                            const modal = document.getElementById('globalSvgModal');
+                            if (modal) {
+                                modal.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
+                        }
                         
-                        // Clone the SVG from the clicked container
-                        const svg = container.querySelector('svg');
-                        const svgClone = svg.cloneNode(true);
-                        svgClone.style.transform = 'scale(1)';
-                        svgClone.style.transition = 'transform 0.2s ease';
-
-                        // Clear previous content and add new SVG
-                        modalSvgContainer.innerHTML = '';
-                        modalSvgContainer.appendChild(svgClone);
-
-                        // Show modal with animation
-                        modalOverlay.classList.add('active');
-
-                        // Prevent body scroll when modal is open
-                        document.body.style.overflow = 'hidden';
-                    }
-
-                    function closeModal() {
-                        modalOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                        modalZoomLevel = 1;
-                    }
-
-                    function closeModalOnBackdrop(event) {
-                        // Only close if clicking the overlay itself, not the content
-                        if (event.target === modalOverlay) {
-                            closeModal();
+                        function closeGlobalCsvModal() {
+                            const modal = document.getElementById('globalCsvModal');
+                            if (modal) {
+                                modal.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
                         }
-                    }
-                    
-                    function modalZoomIn() {
-                        if (modalZoomLevel < MODAL_ZOOM_MAX) {
-                            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
-                            applyModalZoom();
-                        }
-                    }
-                    
-                    function modalZoomOut() {
-                        if (modalZoomLevel > MODAL_ZOOM_MIN) {
-                            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
-                            applyModalZoom();
-                        }
-                    }
-                    
-                    function modalZoomReset() {
-                        modalZoomLevel = 1;
-                        applyModalZoom();
-                    }
-                    
-                    function applyModalZoom() {
-                        const svg = modalSvgContainer.querySelector('svg');
-                        if (svg) {
-                            svg.style.transform = `scale(${modalZoomLevel})`;
-                        }
-                        updateZoomDisplay();
-                    }
-                    
-                    function updateZoomDisplay() {
-                        const display = document.getElementById('modalZoomLevel');
-                        if (display) {
-                            display.textContent = `${Math.round(modalZoomLevel * 100)}%`;
-                        }
-                    }
 
-                    // Close modal with Escape key
-                    document.addEventListener('keydown', function(event) {
-                        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                            closeModal();
-                        }
-                    });
-                    const docopsCopy = {
-                        url: (btn) => {
-                                const url = btn.closest('.docops-media-card').getAttribute('data-url');
-                                navigator.clipboard.writeText(url).then(() => {
+                        // Close modal with Escape key
+                        document.addEventListener('keydown', function(event) {
+                            if (event.key === 'Escape') {
+                                closeGlobalModal();
+                                closeGlobalCsvModal();
+                            }
+                        });
+                        
+                        const docopsData = {
+                            toggle: function(btn) {
+                                const container = btn.closest('.docops-media-card');
+                                const svg = container.querySelector('.svg-container svg') || container.querySelector('svg');
+                                
+                                if (!svg) return;
+                                
+                                let csvData = null;
+                                
+                                // Method 1: Standard metadata with type
+                                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                                if (csvMetadata) {
+                                    try {
+                                        csvData = JSON.parse(csvMetadata.textContent.trim());
+                                    } catch(e) { console.error("Error parsing CSV JSON", e); }
+                                }
+
+                                // Method 2: Custom csv-data element
+                                if (!csvData) {
+                                    csvMetadata = svg.querySelector('metadata csv-data');
+                                    if (csvMetadata) {
+                                        try {
+                                            csvData = JSON.parse(csvMetadata.textContent.trim());
+                                        } catch(e) {}
+                                    }
+                                }
+
+                                // Method 3: Data attribute
+                                if (!csvData) {
+                                    const csvDataAttr = svg.getAttribute('data-csv');
+                                    if (csvDataAttr) {
+                                        try {
+                                            csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                                        } catch(e) {}
+                                    }
+                                }
+                                
+                                if (csvData) {
+                                    const modal = document.getElementById('globalCsvModal');
+                                    const body = document.getElementById('globalCsvModalBody');
+                                    
+                                    let html = '<table class="csv-table">';
+                                     if (csvData.headers) {
+                                        html += '<thead><tr>';
+                                        csvData.headers.forEach(h => html += '<th>' + h + '</th>');
+                                        html += '</tr></thead>';
+                                    }
+                                    if (csvData.rows) {
+                                        html += '<tbody>';
+                                        csvData.rows.forEach(row => {
+                                            html += '<tr>';
+                                            row.forEach(cell => html += '<td>' + cell + '</td>');
+                                            html += '</tr>';
+                                        });
+                                        html += '</tbody>';
+                                    }
+                                    html += '</table>';
+                                    
+                                    body.innerHTML = html;
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                } else {
+                                    console.log("No CSV data found in SVG");
+                                }
+                            }
+                        };
+                        
+                        const docopsCopy = {
+                            url: (btn) => {
+                                    const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                },
+                            svg: (btn) => {
+                                const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                                navigator.clipboard.writeText(svg).then(() => {
                                     const originalText = btn.innerText;
                                     btn.innerText = 'COPIED!';
                                     setTimeout(() => btn.innerText = originalText, 2000);
                                 });
                             },
-                        svg: (btn) => {
-                            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
-                            navigator.clipboard.writeText(svg).then(() => {
-                                const originalText = btn.innerText;
-                                btn.innerText = 'COPIED!';
-                                setTimeout(() => btn.innerText = originalText, 2000);
-                            });
-                        },
-                        png: (btn) => {
-                            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
-                            const svgData = new XMLSerializer().serializeToString(svgElement);
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            const img = new Image();
+                            png: (btn) => {
+                                const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                                const svgData = new XMLSerializer().serializeToString(svgElement);
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                const img = new Image();
                             
-                            img.onload = () => {
-                                canvas.width = img.width;
-                                canvas.height = img.height;
-                                ctx.drawImage(img, 0, 0);
-                                canvas.toBlob(blob => {
-                                    const item = new ClipboardItem({ "image/png": blob });
-                                    navigator.clipboard.write([item]);
-                                    const originalText = btn.innerText;
-                                    btn.innerText = 'COPIED!';
-                                    setTimeout(() => btn.innerText = originalText, 2000);
-                                });
-                            };
-                            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-                        }
-                    };
+                                img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(blob => {
+                                        const item = new ClipboardItem({ "image/png": blob });
+                                        navigator.clipboard.write([item]);
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                };
+                                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            }
+                        };
                     
-                </script>
-                <script>
-                    mermaid.initialize({ startOnLoad: true });
-                </script>
-                <script>
-                (() => {
+                    </script>
+                    <script>
+                        mermaid.initialize({ startOnLoad: true });
+                    </script>
+                    <script>
+                    (() => {
     let divs = document.getElementsByClassName("adm-block");
     for (let i = 0; i < divs.length; i++) {
         let div = divs[i];
@@ -1007,7 +1200,7 @@ Item | Description
         }
     }
 })();
-                const docopsData = {
+                    const docopsData = {
     toggle(btn) {
         const card = btn.closest('.docops-media-card');
         const panel = card.querySelector('.docops-data-panel');
@@ -1118,7 +1311,7 @@ Item | Description
     }
 
 };
-                </script>
+                    </script>
                 
-            </body>
-            </html>
+                </body>
+                </html>
