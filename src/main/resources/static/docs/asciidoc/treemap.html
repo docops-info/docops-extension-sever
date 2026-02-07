@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<link rel="icon" type="image/04" href="../images/favicon.svg?v=2025.04">
+<link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
 <title>DocOps Treemap Visualizations</title>
 <style>
 @import url(https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap);@keyframes reveal{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}:root{--bg-base:#f8fafc;--bg-surface:#ffffff;--bg-grid:rgba(0, 0, 0, 0.05);--text-main:#334155;--text-heading:#0f172a;--accent-primary:#4f46e5;--accent-secondary:#06b6d4;--accent-glow:rgba(79, 70, 229, 0.1);--border-color:#e2e8f0;--note-color:#4f46e5;--tip-color:#10b981;--warning-color:#f59e0b;--caution-color:#ef4444;--important-color:#8b5cf6;--font-heading:'Syne', sans-serif;--font-body:'Outfit', sans-serif;--font-mono:'JetBrains Mono', monospace;--content-max-width:1100px}:root.dark-mode{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}}body{background-color:var(--bg-base);background-image:radial-gradient(var(--bg-grid) 1px,transparent 1px);background-size:30px 30px;background-attachment:fixed;color:var(--text-main);font-family:var(--font-body);line-height:1.6;margin:0;padding:0;-webkit-font-smoothing:antialiased}#content,#footer,#footnotes,#header>h1:first-child,.details{opacity:0;animation:reveal .8s cubic-bezier(.16,1,.3,1) forwards}#content,#footnotes,#header{padding:2rem 1.5rem}#content,#footer,#footnotes,#header{max-width:var(--content-max-width);margin:0 auto}#toc.toc2{position:fixed!important}#header>h1:first-child{font-family:var(--font-heading);font-size:3.5rem;font-weight:800;color:var(--text-heading);letter-spacing:-.04em;line-height:1;margin-bottom:2rem;background:linear-gradient(to bottom right,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}#toc,.details{margin-bottom:3rem}.details,a{color:var(--accent-primary)}.details{display:flex;gap:2rem;font-size:.875rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);color:var(--text-heading);font-weight:700;margin-top:3rem;margin-bottom:1rem;line-height:1.2}h2{font-size:2rem;border-bottom:1px solid var(--border-color);padding-bottom:.5rem}a{text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:hover{border-bottom-color:var(--accent-primary);text-shadow:0 0 15px var(--accent-glow)}#toc{background:var(--bg-surface);backdrop-filter:blur(12px);border:1px solid var(--border-color);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000}#toc:not(.toc2){max-width:var(--content-max-width);margin:2rem auto}#toc.toc2,.admonitionblock{background:var(--bg-surface);border:1px solid var(--border-color)}#toc.toc2{backdrop-filter:blur(12px);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000;transform:none!important;animation:none!important;opacity:1!important}#toctitle,.admonitionblock .title{text-transform:uppercase;font-size:.75rem}#toc a:hover,#toctitle{color:var(--accent-primary)}#toctitle{font-family:var(--font-heading);font-weight:800;letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}#toctitle::after{content:"";flex:1;height:1px;background:var(--border-color)}#toc ul{list-style:none;padding:0;margin:0}#toc li{margin-bottom:.5rem}#toc a{color:var(--text-main);font-size:.9rem;border:0}#toc a:hover{padding-left:4px}.admonitionblock{margin:2rem 0;border-radius:.75rem;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;flex-direction:row;align-items:stretch}.admonitionblock td.icon{width:4rem;min-width:4rem;padding:1.5rem 0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.02)}.admonitionblock td.icon .fa-note::before,.admonitionblock td.icon .icon-note::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--note-color)}.admonitionblock td.icon .fa-lightbulb::before,.admonitionblock td.icon .icon-tip::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--tip-color)}.admonitionblock td.icon .fa-exclamation-triangle::before,.admonitionblock td.icon .icon-warning::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--warning-color)}.admonitionblock td.icon .fa-fire::before,.admonitionblock td.icon .icon-caution::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--caution-color)}.admonitionblock td.icon .fa-exclamation-circle::before,.admonitionblock td.icon .icon-important::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--important-color)}.admonitionblock td.content{padding:1.5rem;font-size:.95rem;flex:1}.admonitionblock .title{font-weight:700;letter-spacing:.1em;margin-bottom:.75rem;display:block}.admonitionblock.note{border-left:4px solid var(--note-color)}.admonitionblock.note .title{color:var(--note-color)}.admonitionblock.tip{border-left:4px solid var(--tip-color)}.admonitionblock.tip .title{color:var(--tip-color)}.admonitionblock.warning{border-left:4px solid var(--warning-color)}.admonitionblock.warning .title{color:var(--warning-color)}.admonitionblock.caution{border-left:4px solid var(--caution-color)}.admonitionblock.caution .title{color:var(--caution-color)}.admonitionblock.important{border-left:4px solid var(--important-color)}.admonitionblock.important .title{color:var(--important-color)}:root.dark-mode .admonitionblock td.content,:root.dark-mode-auto .admonitionblock td.content{color:var(--text-main)}.listingblock pre{background:#0f172a!important;color:#f8fafc!important;padding:1.5rem!important;border-radius:.75rem;font-family:var(--font-mono);font-size:.875rem;border:1px solid #1e293b;box-shadow:0 20px 25px -5px rgba(0,0,0,.2);position:relative;overflow:hidden}:root.dark-mode .listingblock pre{background:#020617!important;border-color:var(--border-color)}@media (prefers-color-scheme:dark){:root.dark-mode-auto .listingblock pre{background:#020617!important;border-color:var(--border-color)}}.listingblock pre::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent-primary),var(--accent-secondary));opacity:.5}code{font-family:var(--font-mono);padding:.2em .4em;border-radius:.25rem;color:var(--accent-primary);font-size:.9em}.exampleblock,.sidebarblock,table{background:var(--bg-surface);border:1px solid var(--border-color);margin:2rem 0}table{width:100%;border-collapse:collapse;border-radius:.75rem;overflow:hidden}th{background:var(--border-color);color:var(--text-heading);text-align:left;padding:1rem;font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.05em}#footer,td{padding:1rem;border-top:1px solid var(--border-color);font-size:.9rem}code,tr:hover td{background:var(--accent-glow)}.exampleblock,.sidebarblock{border-radius:1rem;padding:2rem}#footer,th{font-size:.875rem}#footer{margin-top:4rem;padding:4rem 1.5rem;text-align:center;color:var(--text-main)}#footer-text{opacity:.6}@media (max-width:1279px){#header>h1:first-child{font-size:2.5rem}.details{flex-direction:column;gap:.5rem}body.toc2{padding-left:0!important;padding-right:0!important}#toc.toc2{position:relative!important;width:auto!important;left:0!important;right:0!important;top:0!important;margin:0 1.5rem 3rem!important;max-height:none!important}}@media (min-width:1280px){body.toc2.toc-left{padding-left:24rem!important;padding-right:0!important}body.toc2.toc-left #toc.toc2{left:1rem;right:auto}body.toc2.toc-right{padding-right:24rem!important;padding-left:0!important}body.toc2.toc-right #toc.toc2{right:1rem;left:auto}#toc.toc2{position:fixed!important;width:20rem;top:2rem;height:auto;max-height:calc(100vh - 4rem);overflow-y:auto}body.toc2.toc-right .reading-time{right:auto!important;left:2rem!important}#content,#footer,#footnotes,#header{max-width:900px;margin-left:auto;margin-right:auto}body.toc2.toc-left #content,body.toc2.toc-left #header{margin-left:2rem}body.toc2.toc-right #content,body.toc2.toc-right #header{margin-right:2rem}}.theme-toggle{position:fixed;bottom:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border-color);box-shadow:0 10px 25px -5px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all .3s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(0,0,0,.2);border-color:var(--accent-primary)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all .3s ease}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0;border-top:1px solid var(--border-color)}.nav-container{max-width:var(--content-max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-body);font-weight:600;font-size:.9rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:.5rem;background:var(--bg-surface);border:1px solid var(--border-color);transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);border-bottom:1px solid var(--border-color)}.nav-next:hover,.nav-prev:hover{color:var(--bg-surface);background:var(--accent-primary);border-color:var(--accent-primary);transform:translateY(-2px);box-shadow:0 10px 15px -3px var(--accent-glow)}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.mermaid{background:var(--bg-surface);padding:2rem;border:1px solid var(--border-color);border-radius:1rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);margin:2rem 0}.mermaid .cluster rect{fill:var(--bg-base)!important;fill-opacity:.5!important;stroke:var(--border-color)!important;backdrop-filter:blur(4px)}.mermaid text{font-family:var(--font-body)!important;letter-spacing:-.01em}.mermaid .active,.mermaid .task0{fill:var(--accent-primary)!important;stroke:var(--accent-secondary)!important}:root.dark-mode .mermaid .loopText,:root.dark-mode .mermaid .messageText,:root.dark-mode .mermaid .noteText,:root.dark-mode .mermaid .sectionTitle,:root.dark-mode .mermaid .taskText{fill:var(--text-heading)!important;color:var(--text-heading)!important;stroke:none!important}:root.dark-mode .mermaid .messageLine0,:root.dark-mode .mermaid .messageLine1{stroke:var(--accent-secondary)!important;stroke-opacity:.6}:root.dark-mode .mermaid .actor,:root.dark-mode .mermaid .note{fill:var(--bg-surface)!important;stroke:var(--accent-primary)!important}:root.dark-mode .mermaid .noteText>tspan{fill:var(--accent-primary)!important}:root.dark-mode .mermaid text.actor>tspan{fill:var(--text-heading)!important;font-weight:600}:root.dark-mode .mermaid .edgeLabel,:root.dark-mode .mermaid .edgeLabel rect{fill:var(--bg-base)!important;color:var(--text-main)!important}
@@ -638,6 +638,96 @@
         display: block; /* Important for scroll calculations */
     }
 
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
     /* Centering Fix for SVG diagrams */
     .modal-svg-wrapper {
         display: flex;
@@ -645,12 +735,15 @@
         align-items: center;
         min-height: 100%;
         width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
     }
 
     .modal-svg-wrapper svg {
         max-width: 100%;
-        height: auto !important; /* Allow natural aspect ratio */
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
     }
 
     /* Body locking when modal is open */
@@ -796,18 +889,30 @@
 
         showContent(itemId, title, kind, content) {
             const modal = document.getElementById('showcase-content-modal');
-            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
-            modal.querySelector('.showcase-content-code').textContent = content;
+            if (!modal) return;
 
-            this.hideTOC(); // Hide TOC before showing modal
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
             modal.style.display = 'flex';
             modal.querySelector('.showcase-modal-body').scrollTop = 0;
         },
 
         expandItem(itemId, title) {
             const item = document.getElementById(itemId);
-            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
             const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
 
             modal.querySelector('.showcase-modal-title').textContent = title;
             modal.querySelector('.showcase-modal-body').innerHTML =
@@ -1766,6 +1871,34 @@
 
 </script>
 
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
+
 <style>
 .hidden {
     display: none;
@@ -2104,8 +2237,247 @@ Operations | 420000 | Support | | $420K
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-db084ab60c59c64f" data-theme="light" data-original-content="title=Project Portfolio 2024
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-638db806b323b45b {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-638db806b323b45b.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-638db806b323b45b {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-638db806b323b45b {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-638db806b323b45b:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-638db806b323b45b {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-638db806b323b45b svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-638db806b323b45b .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-638db806b323b45b .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-638db806b323b45b .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-638db806b323b45b .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-638db806b323b45b .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-638db806b323b45b .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_638db806b323b45b = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-638db806b323b45b');
+          const sourceContainer = document.getElementById('svgviewer-638db806b323b45b');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-638db806b323b45b');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-638db806b323b45b');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_638db806b323b45b = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-638db806b323b45b');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-638db806b323b45b');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-638db806b323b45b');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-638db806b323b45b');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_638db806b323b45b.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-638db806b323b45b');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_638db806b323b45b.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-638db806b323b45b" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treemap&payload=H4sIAIt7h2kA_1WQQW_CMAyF7_kVOUy7gUpUaezQQxkVQlCooEPaMWtNk60kleMOTeLHz9AxaTnZ771PtkOWWkgK9B9QkSw80tG31ksVqViE_p1u_ux1vshKma7X25e0XG43cvYm51mR7so825TibGsyyURFkTBgG0PJlEsycILk5GtAJzrdAhGU3x2PS_dlthbB-PNBtz2EhLCHW18AVuBIN3dxNBqJzDXWAaB1jbxIFUfXx9UcvqD13YkB-SiX7og6MFRRj8D2RT6ocZwLvq5mkfvn6R8ZbOMY2kEAjZUZ4uyvRK7xE2iYdT1pIBboz2SYmKF29RCfjFUu9nxY4O5J_SZ3vJXrQW47QE3WuzCkObAS_8T4juz7ruOvH3Ksrn4ALE4tx5cBAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treemap&filename=ghi.svg" data-original-content="title=Project Portfolio 2024
 subtitle=BUDGET ALLOCATION BY DEPARTMENT
 width=1200
 height=800
@@ -2119,31 +2491,33 @@ Product | 980000 | Design & Research | | $980K
 Marketing | 1200000 | Growth & Brand | | $1.2M
 Sales | 720000 | Revenue Operations | | $720K
 Operations | 420000 | Support | | $420K" data-kind="treemap">
-<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" id="ID_6f25ccefeec34d95861940c8669e5167">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["Engineering","2400000.0","42.0","Development & Infrastructure","$2.4M"],["Product","980000.0","17.1","Design & Research","$980K"],["Marketing","1200000.0","21.0","Growth & Brand","$1.2M"],["Sales","720000.0","12.6","Revenue Operations","$720K"],["Operations","420000.0","7.3","Support","$420K"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); #ID_6f25ccefeec34d95861940c8669e5167 .treemap-rect { stroke: #ffffff; stroke-width: 3; opacity: 0; animation: slideIn-6f25ccefeec34d95861940c8669e5167 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } #ID_6f25ccefeec34d95861940c8669e5167 .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } #ID_6f25ccefeec34d95861940c8669e5167 .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } #ID_6f25ccefeec34d95861940c8669e5167 .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } #ID_6f25ccefeec34d95861940c8669e5167 .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } #ID_6f25ccefeec34d95861940c8669e5167 .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #111111; letter-spacing: -0.03em; } #ID_6f25ccefeec34d95861940c8669e5167 .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #4338ca; letter-spacing: 0.05em; } /* Custom ToolTip Styles - tooltips in separate layer */ #ID_6f25ccefeec34d95861940c8669e5167 .tooltip-group { pointer-events: none; } #ID_6f25ccefeec34d95861940c8669e5167 .tooltip-content { opacity: 0; transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); transform: translateY(8px); } /* Hover selectors linking tiles to their tooltips via sibling combinator */ #ID_6f25ccefeec34d95861940c8669e5167 #tile-6f25ccefeec34d95861940c8669e5167-0:hover ~ .tooltips-layer #tooltip-6f25ccefeec34d95861940c8669e5167-0 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_6f25ccefeec34d95861940c8669e5167 #tile-6f25ccefeec34d95861940c8669e5167-1:hover ~ .tooltips-layer #tooltip-6f25ccefeec34d95861940c8669e5167-1 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_6f25ccefeec34d95861940c8669e5167 #tile-6f25ccefeec34d95861940c8669e5167-2:hover ~ .tooltips-layer #tooltip-6f25ccefeec34d95861940c8669e5167-2 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_6f25ccefeec34d95861940c8669e5167 #tile-6f25ccefeec34d95861940c8669e5167-3:hover ~ .tooltips-layer #tooltip-6f25ccefeec34d95861940c8669e5167-3 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_6f25ccefeec34d95861940c8669e5167 #tile-6f25ccefeec34d95861940c8669e5167-4:hover ~ .tooltips-layer #tooltip-6f25ccefeec34d95861940c8669e5167-4 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_6f25ccefeec34d95861940c8669e5167 .tooltip-bg { filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.2)); } #ID_6f25ccefeec34d95861940c8669e5167 .tooltip-title { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: -0.01em; } #ID_6f25ccefeec34d95861940c8669e5167 .tooltip-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 18px; } #ID_6f25ccefeec34d95861940c8669e5167 .tooltip-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; } #ID_6f25ccefeec34d95861940c8669e5167 .tooltip-percent { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 11px; } @keyframes slideIn-6f25ccefeec34d95861940c8669e5167 { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-6f25ccefeec34d95861940c8669e5167-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-6f25ccefeec34d95861940c8669e5167-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-6f25ccefeec34d95861940c8669e5167-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="grad-6f25ccefeec34d95861940c8669e5167-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E63946;stop-opacity:1" /><stop offset="100%" style="stop-color:#c3303b;stop-opacity:1" /></linearGradient><linearGradient id="grad-6f25ccefeec34d95861940c8669e5167-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1D3557;stop-opacity:1" /><stop offset="100%" style="stop-color:#182d49;stop-opacity:1" /></linearGradient><linearGradient id="tooltip-bg-grad-6f25ccefeec34d95861940c8669e5167" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a;stop-opacity:0.97" /><stop offset="100%" style="stop-color:#1e293b;stop-opacity:0.95" /></linearGradient><pattern id="dots-6f25ccefeec34d95861940c8669e5167" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#f8fafc"/><circle cx="900.0" cy="200.0" r="400" fill="#818cf8" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#60a5fa" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">PROJECT PORTFOLIO 2024</text><text class="title-sub" y="30">BUDGET ALLOCATION BY DEPARTMENT</text><line x1="0" y1="45" x2="180" y2="45" stroke="#A8DADC" stroke-width="3" stroke-linecap="round"/></g><g class="tile-group" id="tile-6f25ccefeec34d95861940c8669e5167-0"><rect class="treemap-rect" x="64.0" y="144.0" width="445.146853146853" height="572.0" rx="8" fill="url(#grad-6f25ccefeec34d95861940c8669e5167-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="445.146853146853" height="572.0" rx="8" fill="url(#dots-6f25ccefeec34d95861940c8669e5167)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#000000"><tspan x="28.0" dy="0">Engineering</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="28.0" dy="0">Development &amp; Infrastructure</tspan></text><text class="label-metric" x="28.0" y="517.0" font-size="32" fill="#000000">$2.4M</text><text class="label-value" x="28.0" y="544.0" font-size="13" fill="rgba(0, 0, 0, 0.7)">42.0% of total</text></g></g><g class="tile-group" id="tile-6f25ccefeec34d95861940c8669e5167-1"><rect class="treemap-rect" x="517.146853146853" y="144.0" width="218.57342657342656" height="572.0" rx="8" fill="url(#grad-6f25ccefeec34d95861940c8669e5167-1)" style="animation-delay: 0.1s;"/><rect x="517.146853146853" y="144.0" width="218.57342657342656" height="572.0" rx="8" fill="url(#dots-6f25ccefeec34d95861940c8669e5167)" pointer-events="none"/><g transform="translate(517.146853146853, 144.0)"><text class="label-category" x="24.0" y="40.0" font-size="16" fill="#FCFCFC"><tspan x="24.0" dy="0">Product</tspan></text><text class="label-value" x="24.0" y="56.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="24.0" dy="0">Design &amp; Research</tspan></text><text class="label-metric" x="24.0" y="521.0" font-size="28" fill="#FCFCFC">$980K</text><text class="label-value" x="24.0" y="548.0" font-size="13" fill="rgba(252, 252, 252, 0.7)">17.1% of total</text></g></g><g class="tile-group" id="tile-6f25ccefeec34d95861940c8669e5167-2"><rect class="treemap-rect" x="743.7202797202796" y="144.0" width="392.27972027972044" height="260.1132075471698" rx="8" fill="url(#grad-6f25ccefeec34d95861940c8669e5167-2)" style="animation-delay: 0.2s;"/><rect x="743.7202797202796" y="144.0" width="392.27972027972044" height="260.1132075471698" rx="8" fill="url(#dots-6f25ccefeec34d95861940c8669e5167)" pointer-events="none"/><g transform="translate(743.7202797202796, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#000000"><tspan x="28.0" dy="0">Marketing</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="28.0" dy="0">Growth &amp; Brand</tspan></text><text class="label-metric" x="28.0" y="205.1132075471698" font-size="32" fill="#000000">$1.2M</text><text class="label-value" x="28.0" y="232.1132075471698" font-size="13" fill="rgba(0, 0, 0, 0.7)">21.0% of total</text></g></g><g class="tile-group" id="tile-6f25ccefeec34d95861940c8669e5167-3"><rect class="treemap-rect" x="743.7202797202796" y="412.1132075471698" width="392.27972027972044" height="188.9811320754717" rx="8" fill="url(#grad-6f25ccefeec34d95861940c8669e5167-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="743.7202797202796" y="412.1132075471698" width="392.27972027972044" height="188.9811320754717" rx="8" fill="url(#dots-6f25ccefeec34d95861940c8669e5167)" pointer-events="none"/><g transform="translate(743.7202797202796, 412.1132075471698)"><text class="label-category" x="18.0" y="36.0" font-size="18" fill="#FCFCFC"><tspan x="18.0" dy="0">Sales</tspan></text><text class="label-value" x="18.0" y="52.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="18.0" dy="0">Revenue Operations</tspan></text><text class="label-metric" x="18.0" y="143.9811320754717" font-size="32" fill="#FCFCFC">$720K</text><text class="label-value" x="18.0" y="170.9811320754717" font-size="13" fill="rgba(252, 252, 252, 0.7)">12.6% of total</text></g></g><g class="tile-group" id="tile-6f25ccefeec34d95861940c8669e5167-4"><rect class="treemap-rect" x="743.7202797202796" y="609.0943396226414" width="392.27972027972044" height="106.90566037735852" rx="8" fill="url(#grad-6f25ccefeec34d95861940c8669e5167-4)" style="animation-delay: 0.4s;"/><rect x="743.7202797202796" y="609.0943396226414" width="392.27972027972044" height="106.90566037735852" rx="8" fill="url(#dots-6f25ccefeec34d95861940c8669e5167)" pointer-events="none"/><g transform="translate(743.7202797202796, 609.0943396226414)"><text class="label-category" x="12.0" y="30.0" font-size="18" fill="#FCFCFC"><tspan x="12.0" dy="0">Operations</tspan></text><text class="label-value" x="12.0" y="46.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="12.0" dy="0">Support</tspan></text><text class="label-value" x="12.0" y="94.90566037735852" font-size="13" fill="rgba(252, 252, 252, 0.7)">7.3% of total</text></g></g><g class="tooltips-layer"><g class="tooltip-group" id="tooltip-6f25ccefeec34d95861940c8669e5167-0" transform="translate(286.5734265734265, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-6f25ccefeec34d95861940c8669e5167)" stroke="#c2e5e6" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#c2e5e6"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Engineering</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#c2e5e6">$2.4M</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#c2e5e6" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#c2e5e6" text-anchor="middle">42.0%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-6f25ccefeec34d95861940c8669e5167-1" transform="translate(626.4335664335663, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-6f25ccefeec34d95861940c8669e5167)" stroke="#7ca2ba" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#7ca2ba"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Product</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#7ca2ba">$980K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#7ca2ba" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#7ca2ba" text-anchor="middle">17.1%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-6f25ccefeec34d95861940c8669e5167-2" transform="translate(939.8601398601397, 404.1132075471698)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-6f25ccefeec34d95861940c8669e5167)" stroke="#f5fbf3" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#f5fbf3"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Marketing</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#f5fbf3">$1.2M</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#f5fbf3" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#f5fbf3" text-anchor="middle">21.0%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-6f25ccefeec34d95861940c8669e5167-3" transform="translate(939.8601398601397, 412.1132075471698)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-6f25ccefeec34d95861940c8669e5167)" stroke="#ed747d" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ed747d"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Sales</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ed747d">$720K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ed747d" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ed747d" text-anchor="middle">12.6%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-6f25ccefeec34d95861940c8669e5167-4" transform="translate(939.8601398601397, 609.0943396226414)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-6f25ccefeec34d95861940c8669e5167)" stroke="#607189" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#607189"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Operations</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#607189">$420K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#607189" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#607189" text-anchor="middle">7.3%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#4338ca">Updated: 2026-02-01 • Hover for details</text></g></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-db084ab60c59c64f')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-db084ab60c59c64f">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-db084ab60c59c64f')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-db084ab60c59c64f')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-db084ab60c59c64f')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-db084ab60c59c64f')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-db084ab60c59c64f')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-db084ab60c59c64f')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-db084ab60c59c64f')" title="Show CSV Data">📊 CSV</button>
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" id="ID_fda792b67523447bbc590c90d8214c1c">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["Engineering","2400000.0","42.0","Development & Infrastructure","$2.4M"],["Product","980000.0","17.1","Design & Research","$980K"],["Marketing","1200000.0","21.0","Growth & Brand","$1.2M"],["Sales","720000.0","12.6","Revenue Operations","$720K"],["Operations","420000.0","7.3","Support","$420K"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); #ID_fda792b67523447bbc590c90d8214c1c .treemap-rect { stroke: #ffffff; stroke-width: 3; opacity: 0; animation: slideIn-fda792b67523447bbc590c90d8214c1c 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } #ID_fda792b67523447bbc590c90d8214c1c .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } #ID_fda792b67523447bbc590c90d8214c1c .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } #ID_fda792b67523447bbc590c90d8214c1c .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } #ID_fda792b67523447bbc590c90d8214c1c .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } #ID_fda792b67523447bbc590c90d8214c1c .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #111111; letter-spacing: -0.03em; } #ID_fda792b67523447bbc590c90d8214c1c .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #4338ca; letter-spacing: 0.05em; } /* Custom ToolTip Styles - tooltips in separate layer */ #ID_fda792b67523447bbc590c90d8214c1c .tooltip-group { pointer-events: none; } #ID_fda792b67523447bbc590c90d8214c1c .tooltip-content { opacity: 0; transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); transform: translateY(8px); } /* Hover selectors linking tiles to their tooltips via sibling combinator */ #ID_fda792b67523447bbc590c90d8214c1c #tile-fda792b67523447bbc590c90d8214c1c-0:hover ~ .tooltips-layer #tooltip-fda792b67523447bbc590c90d8214c1c-0 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_fda792b67523447bbc590c90d8214c1c #tile-fda792b67523447bbc590c90d8214c1c-1:hover ~ .tooltips-layer #tooltip-fda792b67523447bbc590c90d8214c1c-1 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_fda792b67523447bbc590c90d8214c1c #tile-fda792b67523447bbc590c90d8214c1c-2:hover ~ .tooltips-layer #tooltip-fda792b67523447bbc590c90d8214c1c-2 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_fda792b67523447bbc590c90d8214c1c #tile-fda792b67523447bbc590c90d8214c1c-3:hover ~ .tooltips-layer #tooltip-fda792b67523447bbc590c90d8214c1c-3 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_fda792b67523447bbc590c90d8214c1c #tile-fda792b67523447bbc590c90d8214c1c-4:hover ~ .tooltips-layer #tooltip-fda792b67523447bbc590c90d8214c1c-4 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_fda792b67523447bbc590c90d8214c1c .tooltip-bg { filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.2)); } #ID_fda792b67523447bbc590c90d8214c1c .tooltip-title { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: -0.01em; } #ID_fda792b67523447bbc590c90d8214c1c .tooltip-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 18px; } #ID_fda792b67523447bbc590c90d8214c1c .tooltip-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; } #ID_fda792b67523447bbc590c90d8214c1c .tooltip-percent { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 11px; } @keyframes slideIn-fda792b67523447bbc590c90d8214c1c { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-fda792b67523447bbc590c90d8214c1c-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-fda792b67523447bbc590c90d8214c1c-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-fda792b67523447bbc590c90d8214c1c-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="grad-fda792b67523447bbc590c90d8214c1c-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E63946;stop-opacity:1" /><stop offset="100%" style="stop-color:#c3303b;stop-opacity:1" /></linearGradient><linearGradient id="grad-fda792b67523447bbc590c90d8214c1c-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1D3557;stop-opacity:1" /><stop offset="100%" style="stop-color:#182d49;stop-opacity:1" /></linearGradient><linearGradient id="tooltip-bg-grad-fda792b67523447bbc590c90d8214c1c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a;stop-opacity:0.97" /><stop offset="100%" style="stop-color:#1e293b;stop-opacity:0.95" /></linearGradient><pattern id="dots-fda792b67523447bbc590c90d8214c1c" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#f8fafc"/><circle cx="900.0" cy="200.0" r="400" fill="#818cf8" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#60a5fa" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">PROJECT PORTFOLIO 2024</text><text class="title-sub" y="30">BUDGET ALLOCATION BY DEPARTMENT</text><line x1="0" y1="45" x2="180" y2="45" stroke="#A8DADC" stroke-width="3" stroke-linecap="round"/></g><g class="tile-group" id="tile-fda792b67523447bbc590c90d8214c1c-0"><rect class="treemap-rect" x="64.0" y="144.0" width="445.146853146853" height="572.0" rx="8" fill="url(#grad-fda792b67523447bbc590c90d8214c1c-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="445.146853146853" height="572.0" rx="8" fill="url(#dots-fda792b67523447bbc590c90d8214c1c)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#000000"><tspan x="28.0" dy="0">Engineering</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="28.0" dy="0">Development &amp; Infrastructure</tspan></text><text class="label-metric" x="28.0" y="517.0" font-size="32" fill="#000000">$2.4M</text><text class="label-value" x="28.0" y="544.0" font-size="13" fill="rgba(0, 0, 0, 0.7)">42.0% of total</text></g></g><g class="tile-group" id="tile-fda792b67523447bbc590c90d8214c1c-1"><rect class="treemap-rect" x="517.146853146853" y="144.0" width="218.57342657342656" height="572.0" rx="8" fill="url(#grad-fda792b67523447bbc590c90d8214c1c-1)" style="animation-delay: 0.1s;"/><rect x="517.146853146853" y="144.0" width="218.57342657342656" height="572.0" rx="8" fill="url(#dots-fda792b67523447bbc590c90d8214c1c)" pointer-events="none"/><g transform="translate(517.146853146853, 144.0)"><text class="label-category" x="24.0" y="40.0" font-size="16" fill="#FCFCFC"><tspan x="24.0" dy="0">Product</tspan></text><text class="label-value" x="24.0" y="56.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="24.0" dy="0">Design &amp; Research</tspan></text><text class="label-metric" x="24.0" y="521.0" font-size="28" fill="#FCFCFC">$980K</text><text class="label-value" x="24.0" y="548.0" font-size="13" fill="rgba(252, 252, 252, 0.7)">17.1% of total</text></g></g><g class="tile-group" id="tile-fda792b67523447bbc590c90d8214c1c-2"><rect class="treemap-rect" x="743.7202797202796" y="144.0" width="392.27972027972044" height="260.1132075471698" rx="8" fill="url(#grad-fda792b67523447bbc590c90d8214c1c-2)" style="animation-delay: 0.2s;"/><rect x="743.7202797202796" y="144.0" width="392.27972027972044" height="260.1132075471698" rx="8" fill="url(#dots-fda792b67523447bbc590c90d8214c1c)" pointer-events="none"/><g transform="translate(743.7202797202796, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#000000"><tspan x="28.0" dy="0">Marketing</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="28.0" dy="0">Growth &amp; Brand</tspan></text><text class="label-metric" x="28.0" y="205.1132075471698" font-size="32" fill="#000000">$1.2M</text><text class="label-value" x="28.0" y="232.1132075471698" font-size="13" fill="rgba(0, 0, 0, 0.7)">21.0% of total</text></g></g><g class="tile-group" id="tile-fda792b67523447bbc590c90d8214c1c-3"><rect class="treemap-rect" x="743.7202797202796" y="412.1132075471698" width="392.27972027972044" height="188.9811320754717" rx="8" fill="url(#grad-fda792b67523447bbc590c90d8214c1c-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="743.7202797202796" y="412.1132075471698" width="392.27972027972044" height="188.9811320754717" rx="8" fill="url(#dots-fda792b67523447bbc590c90d8214c1c)" pointer-events="none"/><g transform="translate(743.7202797202796, 412.1132075471698)"><text class="label-category" x="18.0" y="36.0" font-size="18" fill="#FCFCFC"><tspan x="18.0" dy="0">Sales</tspan></text><text class="label-value" x="18.0" y="52.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="18.0" dy="0">Revenue Operations</tspan></text><text class="label-metric" x="18.0" y="143.9811320754717" font-size="32" fill="#FCFCFC">$720K</text><text class="label-value" x="18.0" y="170.9811320754717" font-size="13" fill="rgba(252, 252, 252, 0.7)">12.6% of total</text></g></g><g class="tile-group" id="tile-fda792b67523447bbc590c90d8214c1c-4"><rect class="treemap-rect" x="743.7202797202796" y="609.0943396226414" width="392.27972027972044" height="106.90566037735852" rx="8" fill="url(#grad-fda792b67523447bbc590c90d8214c1c-4)" style="animation-delay: 0.4s;"/><rect x="743.7202797202796" y="609.0943396226414" width="392.27972027972044" height="106.90566037735852" rx="8" fill="url(#dots-fda792b67523447bbc590c90d8214c1c)" pointer-events="none"/><g transform="translate(743.7202797202796, 609.0943396226414)"><text class="label-category" x="12.0" y="30.0" font-size="18" fill="#FCFCFC"><tspan x="12.0" dy="0">Operations</tspan></text><text class="label-value" x="12.0" y="46.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="12.0" dy="0">Support</tspan></text><text class="label-value" x="12.0" y="94.90566037735852" font-size="13" fill="rgba(252, 252, 252, 0.7)">7.3% of total</text></g></g><g class="tooltips-layer"><g class="tooltip-group" id="tooltip-fda792b67523447bbc590c90d8214c1c-0" transform="translate(286.5734265734265, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-fda792b67523447bbc590c90d8214c1c)" stroke="#c2e5e6" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#c2e5e6"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Engineering</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#c2e5e6">$2.4M</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#c2e5e6" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#c2e5e6" text-anchor="middle">42.0%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-fda792b67523447bbc590c90d8214c1c-1" transform="translate(626.4335664335663, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-fda792b67523447bbc590c90d8214c1c)" stroke="#7ca2ba" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#7ca2ba"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Product</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#7ca2ba">$980K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#7ca2ba" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#7ca2ba" text-anchor="middle">17.1%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-fda792b67523447bbc590c90d8214c1c-2" transform="translate(939.8601398601397, 404.1132075471698)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-fda792b67523447bbc590c90d8214c1c)" stroke="#f5fbf3" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#f5fbf3"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Marketing</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#f5fbf3">$1.2M</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#f5fbf3" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#f5fbf3" text-anchor="middle">21.0%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-fda792b67523447bbc590c90d8214c1c-3" transform="translate(939.8601398601397, 412.1132075471698)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-fda792b67523447bbc590c90d8214c1c)" stroke="#ed747d" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ed747d"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Sales</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ed747d">$720K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ed747d" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ed747d" text-anchor="middle">12.6%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-fda792b67523447bbc590c90d8214c1c-4" transform="translate(939.8601398601397, 609.0943396226414)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-fda792b67523447bbc590c90d8214c1c)" stroke="#607189" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#607189"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Operations</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#607189">$420K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#607189" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#607189" text-anchor="middle">7.3%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#4338ca">Updated: 2026-02-07 • Hover for details</text></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_638db806b323b45b.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_638db806b323b45b.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-638db806b323b45b')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-638db806b323b45b')">PNG</button>
 </div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-db084ab60c59c64f" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-db084ab60c59c64f')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-db084ab60c59c64f">
-        <div class="csv-loading">Loading CSV data...</div>
+<div id="modal-svgviewer-638db806b323b45b" class="svg-modal-svgviewer-638db806b323b45b" onclick="if(event.target === this) svgModalsvgviewer_638db806b323b45b.close()">
+    <div class="svg-modal-content-svgviewer-638db806b323b45b">
+        <button class="svg-modal-close-svgviewer-638db806b323b45b" onclick="svgModalsvgviewer_638db806b323b45b.close()">×</button>
+        <div id="modal-body-svgviewer-638db806b323b45b" class="svg-modal-body-svgviewer-638db806b323b45b"></div>
     </div>
 </div>
+
+<div id="csv-modal-svgviewer-638db806b323b45b" class="svg-modal-svgviewer-638db806b323b45b" onclick="if(event.target === this) csvModalsvgviewer_638db806b323b45b.close()">
+    <div class="svg-modal-content-svgviewer-638db806b323b45b">
+        <button class="svg-modal-close-svgviewer-638db806b323b45b" onclick="csvModalsvgviewer_638db806b323b45b.close()">×</button>
+        <div class="svg-modal-header-svgviewer-638db806b323b45b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-638db806b323b45b" class="svg-modal-body-svgviewer-638db806b323b45b" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 <style>
@@ -2195,8 +2569,247 @@ Route 53 | 1800 | DNS services | | $1.8K
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-555b0ca44f9f75ee" data-theme="light" data-original-content="title=Cloud Infrastructure Costs
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-70b76ae20931f21d {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-70b76ae20931f21d.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-70b76ae20931f21d {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-70b76ae20931f21d {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-70b76ae20931f21d:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-70b76ae20931f21d {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-70b76ae20931f21d svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-70b76ae20931f21d .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-70b76ae20931f21d .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-70b76ae20931f21d .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-70b76ae20931f21d .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-70b76ae20931f21d .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-70b76ae20931f21d .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_70b76ae20931f21d = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-70b76ae20931f21d');
+          const sourceContainer = document.getElementById('svgviewer-70b76ae20931f21d');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-70b76ae20931f21d');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-70b76ae20931f21d');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_70b76ae20931f21d = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-70b76ae20931f21d');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-70b76ae20931f21d');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-70b76ae20931f21d');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-70b76ae20931f21d');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_70b76ae20931f21d.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-70b76ae20931f21d');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_70b76ae20931f21d.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-70b76ae20931f21d" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treemap&payload=H4sIAIt7h2kA_1WRQW_iMBCF7_4Vc-gVFAKpcskBkrSLYAMiqFWPxpmSbBMb2ZNFlfrjO04oUk-238zTfG9MDbWYpK3pK1jrdysd2V5RbxFS48gJ159o6Pm7K45_tm-wfC2h3OdFti6eYXXIl5ts91qIa1NRnczCIBA1NueakpivVGOHSWcqtFpcZItEePy8YLJflsd8K1xtri-y7dElPBeH9x6tQk3y_CNOJhORpyHzOZJaoYMvWERBEPCZmu7SE4JFZ3o71r7gYRFtxCErIZMkT9INchiPlh8Nag7Y6PPoCOONKOdQkrE8mRUfxbfvTv9QEbh7gZtn4UYMO3uyRhOkWcFqHN2INDE-VNg2_9F-jo54ykRb2Z0qCU-9VtQY7aEew8FUouXeFp0DdUs02B6nPClflfBi2r4bYkTx4Fi1Rn38poqmnCFv-QubVKoab2viY60nHXaGYRQX7pkXHsqvA45WaveOltX5SFQgXY39ADxbTzX0zz3NwXi6aO5XNKJkRQmOAzT39c-Y5BtCSM4JWgIAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=treemap&filename=ghi.svg" data-original-content="title=Cloud Infrastructure Costs
 subtitle=MONTHLY AWS SPENDING BREAKDOWN
 width=1200
 height=800
@@ -2214,31 +2827,33 @@ EBS Volumes | 5800 | Block storage | | $5.8K
 ElastiCache | 4500 | In-memory caching | | $4.5K
 Data Transfer | 3200 | Network egress | | $3.2K
 Route 53 | 1800 | DNS services | | $1.8K" data-kind="treemap">
-<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" id="ID_49036cb1b7cf40bfbbe2eecf9108ddc6">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["EC2 Instances","45000.0","39.1","Compute resources","$45K"],["RDS Databases","28000.0","24.3","Database hosting","$28K"],["S3 Storage","12000.0","10.4","Object storage","$12K"],["CloudFront CDN","8500.0","7.4","Content delivery","$8.5K"],["Lambda Functions","6200.0","5.4","Serverless compute","$6.2K"],["EBS Volumes","5800.0","5.0","Block storage","$5.8K"],["ElastiCache","4500.0","3.9","In-memory caching","$4.5K"],["Data Transfer","3200.0","2.8","Network egress","$3.2K"],["Route 53","1800.0","1.6","DNS services","$1.8K"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .treemap-rect { stroke: #0f172a; stroke-width: 3; opacity: 0; animation: slideIn-49036cb1b7cf40bfbbe2eecf9108ddc6 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #f8fafc; letter-spacing: -0.03em; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #22d3ee; letter-spacing: 0.05em; } /* Custom ToolTip Styles - tooltips in separate layer */ #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .tooltip-group { pointer-events: none; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .tooltip-content { opacity: 0; transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); transform: translateY(8px); } /* Hover selectors linking tiles to their tooltips via sibling combinator */ #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-0:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-0 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-1:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-1 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-2:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-2 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-3:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-3 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-4:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-4 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-5:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-5 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-6:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-6 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-7:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-7 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 #tile-49036cb1b7cf40bfbbe2eecf9108ddc6-8:hover ~ .tooltips-layer #tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-8 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .tooltip-bg { filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.2)); } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .tooltip-title { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: -0.01em; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .tooltip-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 18px; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .tooltip-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; } #ID_49036cb1b7cf40bfbbe2eecf9108ddc6 .tooltip-percent { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 11px; } @keyframes slideIn-49036cb1b7cf40bfbbe2eecf9108ddc6 { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E63946;stop-opacity:1" /><stop offset="100%" style="stop-color:#c3303b;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1D3557;stop-opacity:1" /><stop offset="100%" style="stop-color:#182d49;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFB703;stop-opacity:1" /><stop offset="100%" style="stop-color:#d89b02;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-49036cb1b7cf40bfbbe2eecf9108ddc6-8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e293b;stop-opacity:0.97" /><stop offset="100%" style="stop-color:#334155;stop-opacity:0.95" /></linearGradient><pattern id="dots-49036cb1b7cf40bfbbe2eecf9108ddc6" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#0a0e1a"/><circle cx="900.0" cy="200.0" r="400" fill="#9775fa" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#4dabf7" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">CLOUD INFRASTRUCTURE COSTS</text><text class="title-sub" y="30">MONTHLY AWS SPENDING BREAKDOWN</text><line x1="0" y1="45" x2="180" y2="45" stroke="#A8DADC" stroke-width="3" stroke-linecap="round"/></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-0"><rect class="treemap-rect" x="64.0" y="144.0" width="414.60869565217394" height="572.0" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="414.60869565217394" height="572.0" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#000000"><tspan x="28.0" dy="0">EC2 Instances</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="28.0" dy="0">Compute resources</tspan></text><text class="label-metric" x="28.0" y="517.0" font-size="32" fill="#000000">$45K</text><text class="label-value" x="28.0" y="544.0" font-size="13" fill="rgba(0, 0, 0, 0.7)">39.1% of total</text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-1"><rect class="treemap-rect" x="486.60869565217394" y="144.0" width="254.95652173913044" height="572.0" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-1)" style="animation-delay: 0.1s;"/><rect x="486.60869565217394" y="144.0" width="254.95652173913044" height="572.0" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(486.60869565217394, 144.0)"><text class="label-category" x="24.0" y="40.0" font-size="16" fill="#FCFCFC"><tspan x="24.0" dy="0">RDS Databases</tspan></text><text class="label-value" x="24.0" y="56.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="24.0" dy="0">Database hosting</tspan></text><text class="label-metric" x="24.0" y="521.0" font-size="28" fill="#FCFCFC">$28K</text><text class="label-value" x="24.0" y="548.0" font-size="13" fill="rgba(252, 252, 252, 0.7)">24.3% of total</text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-2"><rect class="treemap-rect" x="749.5652173913044" y="144.0" width="294.84318514899854" height="207.83275261324042" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-2)" style="animation-delay: 0.2s;"/><rect x="749.5652173913044" y="144.0" width="294.84318514899854" height="207.83275261324042" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(749.5652173913044, 144.0)"><text class="label-category" x="24.0" y="40.0" font-size="16" fill="#000000"><tspan x="24.0" dy="0">S3 Storage</tspan></text><text class="label-value" x="24.0" y="56.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Object storage</tspan></text><text class="label-metric" x="24.0" y="156.83275261324042" font-size="28" fill="#000000">$12K</text><text class="label-value" x="24.0" y="183.83275261324042" font-size="13" fill="rgba(0, 0, 0, 0.7)">10.4% of total</text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-3"><rect class="treemap-rect" x="749.5652173913044" y="359.8327526132404" width="294.84318514899854" height="144.88153310104525" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="749.5652173913044" y="359.8327526132404" width="294.84318514899854" height="144.88153310104525" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(749.5652173913044, 359.8327526132404)"><text class="label-category" x="18.0" y="34.0" font-size="16" fill="#FCFCFC"><tspan x="18.0" dy="0">CloudFront CDN</tspan></text><text class="label-value" x="18.0" y="50.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="18.0" dy="0">Content delivery</tspan></text><text class="label-metric" x="18.0" y="99.88153310104525" font-size="28" fill="#FCFCFC">$8.5K</text><text class="label-value" x="18.0" y="126.88153310104525" font-size="13" fill="rgba(252, 252, 252, 0.7)">7.4% of total</text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-4"><rect class="treemap-rect" x="1052.4084025403029" y="144.0" width="83.59159745969708" height="360.71428571428567" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-4)" style="animation-delay: 0.4s;"/><rect x="1052.4084025403029" y="144.0" width="83.59159745969708" height="360.71428571428567" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(1052.4084025403029, 144.0)"><text class="label-category" x="12.0" y="22.0" font-size="10" fill="#FCFCFC"><tspan x="12.0" dy="0">Lambda</tspan><tspan x="12.0" dy="12">Functions</tspan></text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-5"><rect class="treemap-rect" x="749.5652173913044" y="512.7142857142857" width="141.5242966751918" height="203.28571428571433" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-5)" style="animation-delay: 0.5s;"/><rect x="749.5652173913044" y="512.7142857142857" width="141.5242966751918" height="203.28571428571433" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(749.5652173913044, 512.7142857142857)"><text class="label-category" x="18.0" y="32.0" font-size="14" fill="#000000"><tspan x="18.0" dy="0">EBS Volumes</tspan></text><text class="label-value" x="18.0" y="48.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="18.0" dy="0">Block storage</tspan></text><text class="label-metric" x="18.0" y="160.28571428571433" font-size="20" fill="#000000">$5.8K</text><text class="label-value" x="18.0" y="185.28571428571433" font-size="11" fill="rgba(0, 0, 0, 0.7)">5.0% of total</text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-6"><rect class="treemap-rect" x="899.0895140664961" y="512.7142857142857" width="108.01023017902816" height="203.28571428571433" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-6)" style="animation-delay: 0.6000000000000001s;"/><rect x="899.0895140664961" y="512.7142857142857" width="108.01023017902816" height="203.28571428571433" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(899.0895140664961, 512.7142857142857)"><text class="label-category" x="12.0" y="24.0" font-size="12" fill="#000000"><tspan x="12.0" dy="0">ElastiCache</tspan></text><text class="label-metric" x="12.0" y="167.28571428571433" font-size="20" fill="#000000">$4.5K</text><text class="label-value" x="12.0" y="191.28571428571433" font-size="10" fill="rgba(0, 0, 0, 0.7)">3.9% of total</text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-7"><rect class="treemap-rect" x="1015.0997442455243" y="512.7142857142857" width="120.90025575447567" height="127.22285714285718" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-7)" style="animation-delay: 0.7000000000000001s;"/><rect x="1015.0997442455243" y="512.7142857142857" width="120.90025575447567" height="127.22285714285718" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(1015.0997442455243, 512.7142857142857)"><text class="label-category" x="12.0" y="24.0" font-size="12" fill="#FCFCFC"><tspan x="12.0" dy="0">Data Transfer</tspan></text><text class="label-value" x="12.0" y="40.0" font-size="11" fill="rgba(252, 252, 252, 0.7)"><tspan x="12.0" dy="0">Network egress</tspan></text><text class="label-metric" x="12.0" y="90.22285714285718" font-size="20" fill="#FCFCFC">$3.2K</text><text class="label-value" x="12.0" y="115.22285714285718" font-size="11" fill="rgba(252, 252, 252, 0.7)">2.8% of total</text></g></g><g class="tile-group" id="tile-49036cb1b7cf40bfbbe2eecf9108ddc6-8"><rect class="treemap-rect" x="1015.0997442455243" y="647.9371428571428" width="120.90025575447567" height="68.06285714285715" rx="8" fill="url(#grad-49036cb1b7cf40bfbbe2eecf9108ddc6-8)" style="animation-delay: 0.8s;"/><rect x="1015.0997442455243" y="647.9371428571428" width="120.90025575447567" height="68.06285714285715" rx="8" fill="url(#dots-49036cb1b7cf40bfbbe2eecf9108ddc6)" pointer-events="none"/><g transform="translate(1015.0997442455243, 647.9371428571428)"><text class="label-category" x="12.0" y="26.0" font-size="14" fill="#000000"><tspan x="12.0" dy="0">Route 53</tspan></text><text class="label-value" x="12.0" y="42.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="12.0" dy="0">DNS services</tspan></text></g></g><g class="tooltips-layer"><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-0" transform="translate(271.304347826087, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#c2e5e6" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#c2e5e6"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">EC2 Instances</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#c2e5e6">$45K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#c2e5e6" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#c2e5e6" text-anchor="middle">39.1%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-1" transform="translate(614.0869565217391, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#7ca2ba" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#7ca2ba"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">RDS Databases</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#7ca2ba">$28K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#7ca2ba" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#7ca2ba" text-anchor="middle">24.3%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-2" transform="translate(896.9868099658037, 351.8327526132404)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#f5fbf3" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#f5fbf3"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">S3 Storage</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#f5fbf3">$12K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#f5fbf3" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#f5fbf3" text-anchor="middle">10.4%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-3" transform="translate(896.9868099658037, 359.8327526132404)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#ed747d" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ed747d"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">CloudFront CDN</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ed747d">$8.5K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ed747d" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ed747d" text-anchor="middle">7.4%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-4" transform="translate(1094.2042012701513, 504.71428571428567)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#607189" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#607189"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Lambda Functions</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#607189">$6.2K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#607189" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#607189" text-anchor="middle">5.4%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-5" transform="translate(820.3273657289003, 512.7142857142857)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#ffcc4e" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ffcc4e"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">EBS Volumes</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ffcc4e">$5.8K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ffcc4e" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ffcc4e" text-anchor="middle">5.0%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-6" transform="translate(953.0946291560102, 512.7142857142857)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#c2e5e6" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#c2e5e6"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">ElastiCache</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#c2e5e6">$4.5K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#c2e5e6" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#c2e5e6" text-anchor="middle">3.9%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-7" transform="translate(1075.5498721227623, 512.7142857142857)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#7ca2ba" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#7ca2ba"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Data Transfer</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#7ca2ba">$3.2K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#7ca2ba" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#7ca2ba" text-anchor="middle">2.8%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-49036cb1b7cf40bfbbe2eecf9108ddc6-8" transform="translate(1075.5498721227623, 647.9371428571428)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-49036cb1b7cf40bfbbe2eecf9108ddc6)" stroke="#f5fbf3" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#f5fbf3"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Route 53</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#f5fbf3">$1.8K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#f5fbf3" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#f5fbf3" text-anchor="middle">1.6%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#22d3ee">Updated: 2026-02-01 • Hover for details</text></g></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-555b0ca44f9f75ee')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-555b0ca44f9f75ee">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-555b0ca44f9f75ee')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-555b0ca44f9f75ee')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-555b0ca44f9f75ee')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-555b0ca44f9f75ee')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-555b0ca44f9f75ee')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-555b0ca44f9f75ee')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-555b0ca44f9f75ee')" title="Show CSV Data">📊 CSV</button>
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" id="ID_df409399ffc54858832a6c4b59a4421f">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["EC2 Instances","45000.0","39.1","Compute resources","$45K"],["RDS Databases","28000.0","24.3","Database hosting","$28K"],["S3 Storage","12000.0","10.4","Object storage","$12K"],["CloudFront CDN","8500.0","7.4","Content delivery","$8.5K"],["Lambda Functions","6200.0","5.4","Serverless compute","$6.2K"],["EBS Volumes","5800.0","5.0","Block storage","$5.8K"],["ElastiCache","4500.0","3.9","In-memory caching","$4.5K"],["Data Transfer","3200.0","2.8","Network egress","$3.2K"],["Route 53","1800.0","1.6","DNS services","$1.8K"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); #ID_df409399ffc54858832a6c4b59a4421f .treemap-rect { stroke: #0f172a; stroke-width: 3; opacity: 0; animation: slideIn-df409399ffc54858832a6c4b59a4421f 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } #ID_df409399ffc54858832a6c4b59a4421f .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } #ID_df409399ffc54858832a6c4b59a4421f .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } #ID_df409399ffc54858832a6c4b59a4421f .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } #ID_df409399ffc54858832a6c4b59a4421f .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } #ID_df409399ffc54858832a6c4b59a4421f .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #f8fafc; letter-spacing: -0.03em; } #ID_df409399ffc54858832a6c4b59a4421f .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #22d3ee; letter-spacing: 0.05em; } /* Custom ToolTip Styles - tooltips in separate layer */ #ID_df409399ffc54858832a6c4b59a4421f .tooltip-group { pointer-events: none; } #ID_df409399ffc54858832a6c4b59a4421f .tooltip-content { opacity: 0; transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); transform: translateY(8px); } /* Hover selectors linking tiles to their tooltips via sibling combinator */ #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-0:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-0 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-1:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-1 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-2:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-2 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-3:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-3 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-4:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-4 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-5:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-5 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-6:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-6 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-7:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-7 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f #tile-df409399ffc54858832a6c4b59a4421f-8:hover ~ .tooltips-layer #tooltip-df409399ffc54858832a6c4b59a4421f-8 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_df409399ffc54858832a6c4b59a4421f .tooltip-bg { filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.2)); } #ID_df409399ffc54858832a6c4b59a4421f .tooltip-title { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: -0.01em; } #ID_df409399ffc54858832a6c4b59a4421f .tooltip-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 18px; } #ID_df409399ffc54858832a6c4b59a4421f .tooltip-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; } #ID_df409399ffc54858832a6c4b59a4421f .tooltip-percent { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 11px; } @keyframes slideIn-df409399ffc54858832a6c4b59a4421f { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E63946;stop-opacity:1" /><stop offset="100%" style="stop-color:#c3303b;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1D3557;stop-opacity:1" /><stop offset="100%" style="stop-color:#182d49;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFB703;stop-opacity:1" /><stop offset="100%" style="stop-color:#d89b02;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#A8DADC;stop-opacity:1" /><stop offset="100%" style="stop-color:#8eb9bb;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#457B9D;stop-opacity:1" /><stop offset="100%" style="stop-color:#3a6885;stop-opacity:1" /></linearGradient><linearGradient id="grad-df409399ffc54858832a6c4b59a4421f-8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#F1FAEE;stop-opacity:1" /><stop offset="100%" style="stop-color:#ccd4ca;stop-opacity:1" /></linearGradient><linearGradient id="tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e293b;stop-opacity:0.97" /><stop offset="100%" style="stop-color:#334155;stop-opacity:0.95" /></linearGradient><pattern id="dots-df409399ffc54858832a6c4b59a4421f" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#0a0e1a"/><circle cx="900.0" cy="200.0" r="400" fill="#9775fa" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#4dabf7" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">CLOUD INFRASTRUCTURE COSTS</text><text class="title-sub" y="30">MONTHLY AWS SPENDING BREAKDOWN</text><line x1="0" y1="45" x2="180" y2="45" stroke="#A8DADC" stroke-width="3" stroke-linecap="round"/></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-0"><rect class="treemap-rect" x="64.0" y="144.0" width="414.60869565217394" height="572.0" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="414.60869565217394" height="572.0" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#000000"><tspan x="28.0" dy="0">EC2 Instances</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="28.0" dy="0">Compute resources</tspan></text><text class="label-metric" x="28.0" y="517.0" font-size="32" fill="#000000">$45K</text><text class="label-value" x="28.0" y="544.0" font-size="13" fill="rgba(0, 0, 0, 0.7)">39.1% of total</text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-1"><rect class="treemap-rect" x="486.60869565217394" y="144.0" width="254.95652173913044" height="572.0" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-1)" style="animation-delay: 0.1s;"/><rect x="486.60869565217394" y="144.0" width="254.95652173913044" height="572.0" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(486.60869565217394, 144.0)"><text class="label-category" x="24.0" y="40.0" font-size="16" fill="#FCFCFC"><tspan x="24.0" dy="0">RDS Databases</tspan></text><text class="label-value" x="24.0" y="56.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="24.0" dy="0">Database hosting</tspan></text><text class="label-metric" x="24.0" y="521.0" font-size="28" fill="#FCFCFC">$28K</text><text class="label-value" x="24.0" y="548.0" font-size="13" fill="rgba(252, 252, 252, 0.7)">24.3% of total</text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-2"><rect class="treemap-rect" x="749.5652173913044" y="144.0" width="294.84318514899854" height="207.83275261324042" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-2)" style="animation-delay: 0.2s;"/><rect x="749.5652173913044" y="144.0" width="294.84318514899854" height="207.83275261324042" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(749.5652173913044, 144.0)"><text class="label-category" x="24.0" y="40.0" font-size="16" fill="#000000"><tspan x="24.0" dy="0">S3 Storage</tspan></text><text class="label-value" x="24.0" y="56.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Object storage</tspan></text><text class="label-metric" x="24.0" y="156.83275261324042" font-size="28" fill="#000000">$12K</text><text class="label-value" x="24.0" y="183.83275261324042" font-size="13" fill="rgba(0, 0, 0, 0.7)">10.4% of total</text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-3"><rect class="treemap-rect" x="749.5652173913044" y="359.8327526132404" width="294.84318514899854" height="144.88153310104525" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="749.5652173913044" y="359.8327526132404" width="294.84318514899854" height="144.88153310104525" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(749.5652173913044, 359.8327526132404)"><text class="label-category" x="18.0" y="34.0" font-size="16" fill="#FCFCFC"><tspan x="18.0" dy="0">CloudFront CDN</tspan></text><text class="label-value" x="18.0" y="50.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="18.0" dy="0">Content delivery</tspan></text><text class="label-metric" x="18.0" y="99.88153310104525" font-size="28" fill="#FCFCFC">$8.5K</text><text class="label-value" x="18.0" y="126.88153310104525" font-size="13" fill="rgba(252, 252, 252, 0.7)">7.4% of total</text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-4"><rect class="treemap-rect" x="1052.4084025403029" y="144.0" width="83.59159745969708" height="360.71428571428567" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-4)" style="animation-delay: 0.4s;"/><rect x="1052.4084025403029" y="144.0" width="83.59159745969708" height="360.71428571428567" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(1052.4084025403029, 144.0)"><text class="label-category" x="12.0" y="22.0" font-size="10" fill="#FCFCFC"><tspan x="12.0" dy="0">Lambda</tspan><tspan x="12.0" dy="12">Functions</tspan></text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-5"><rect class="treemap-rect" x="749.5652173913044" y="512.7142857142857" width="141.5242966751918" height="203.28571428571433" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-5)" style="animation-delay: 0.5s;"/><rect x="749.5652173913044" y="512.7142857142857" width="141.5242966751918" height="203.28571428571433" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(749.5652173913044, 512.7142857142857)"><text class="label-category" x="18.0" y="32.0" font-size="14" fill="#000000"><tspan x="18.0" dy="0">EBS Volumes</tspan></text><text class="label-value" x="18.0" y="48.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="18.0" dy="0">Block storage</tspan></text><text class="label-metric" x="18.0" y="160.28571428571433" font-size="20" fill="#000000">$5.8K</text><text class="label-value" x="18.0" y="185.28571428571433" font-size="11" fill="rgba(0, 0, 0, 0.7)">5.0% of total</text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-6"><rect class="treemap-rect" x="899.0895140664961" y="512.7142857142857" width="108.01023017902816" height="203.28571428571433" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-6)" style="animation-delay: 0.6000000000000001s;"/><rect x="899.0895140664961" y="512.7142857142857" width="108.01023017902816" height="203.28571428571433" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(899.0895140664961, 512.7142857142857)"><text class="label-category" x="12.0" y="24.0" font-size="12" fill="#000000"><tspan x="12.0" dy="0">ElastiCache</tspan></text><text class="label-metric" x="12.0" y="167.28571428571433" font-size="20" fill="#000000">$4.5K</text><text class="label-value" x="12.0" y="191.28571428571433" font-size="10" fill="rgba(0, 0, 0, 0.7)">3.9% of total</text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-7"><rect class="treemap-rect" x="1015.0997442455243" y="512.7142857142857" width="120.90025575447567" height="127.22285714285718" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-7)" style="animation-delay: 0.7000000000000001s;"/><rect x="1015.0997442455243" y="512.7142857142857" width="120.90025575447567" height="127.22285714285718" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(1015.0997442455243, 512.7142857142857)"><text class="label-category" x="12.0" y="24.0" font-size="12" fill="#FCFCFC"><tspan x="12.0" dy="0">Data Transfer</tspan></text><text class="label-value" x="12.0" y="40.0" font-size="11" fill="rgba(252, 252, 252, 0.7)"><tspan x="12.0" dy="0">Network egress</tspan></text><text class="label-metric" x="12.0" y="90.22285714285718" font-size="20" fill="#FCFCFC">$3.2K</text><text class="label-value" x="12.0" y="115.22285714285718" font-size="11" fill="rgba(252, 252, 252, 0.7)">2.8% of total</text></g></g><g class="tile-group" id="tile-df409399ffc54858832a6c4b59a4421f-8"><rect class="treemap-rect" x="1015.0997442455243" y="647.9371428571428" width="120.90025575447567" height="68.06285714285715" rx="8" fill="url(#grad-df409399ffc54858832a6c4b59a4421f-8)" style="animation-delay: 0.8s;"/><rect x="1015.0997442455243" y="647.9371428571428" width="120.90025575447567" height="68.06285714285715" rx="8" fill="url(#dots-df409399ffc54858832a6c4b59a4421f)" pointer-events="none"/><g transform="translate(1015.0997442455243, 647.9371428571428)"><text class="label-category" x="12.0" y="26.0" font-size="14" fill="#000000"><tspan x="12.0" dy="0">Route 53</tspan></text><text class="label-value" x="12.0" y="42.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="12.0" dy="0">DNS services</tspan></text></g></g><g class="tooltips-layer"><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-0" transform="translate(271.304347826087, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#c2e5e6" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#c2e5e6"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">EC2 Instances</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#c2e5e6">$45K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#c2e5e6" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#c2e5e6" text-anchor="middle">39.1%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-1" transform="translate(614.0869565217391, 716.0)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#7ca2ba" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#7ca2ba"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">RDS Databases</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#7ca2ba">$28K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#7ca2ba" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#7ca2ba" text-anchor="middle">24.3%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-2" transform="translate(896.9868099658037, 351.8327526132404)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#f5fbf3" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#f5fbf3"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">S3 Storage</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#f5fbf3">$12K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#f5fbf3" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#f5fbf3" text-anchor="middle">10.4%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-3" transform="translate(896.9868099658037, 359.8327526132404)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#ed747d" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ed747d"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">CloudFront CDN</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ed747d">$8.5K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ed747d" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ed747d" text-anchor="middle">7.4%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-4" transform="translate(1094.2042012701513, 504.71428571428567)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#607189" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#607189"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Lambda Functions</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#607189">$6.2K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#607189" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#607189" text-anchor="middle">5.4%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-5" transform="translate(820.3273657289003, 512.7142857142857)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#ffcc4e" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ffcc4e"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">EBS Volumes</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ffcc4e">$5.8K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ffcc4e" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ffcc4e" text-anchor="middle">5.0%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-6" transform="translate(953.0946291560102, 512.7142857142857)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#c2e5e6" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#c2e5e6"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">ElastiCache</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#c2e5e6">$4.5K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#c2e5e6" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#c2e5e6" text-anchor="middle">3.9%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-7" transform="translate(1075.5498721227623, 512.7142857142857)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#7ca2ba" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#7ca2ba"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Data Transfer</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#7ca2ba">$3.2K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#7ca2ba" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#7ca2ba" text-anchor="middle">2.8%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-df409399ffc54858832a6c4b59a4421f-8" transform="translate(1075.5498721227623, 647.9371428571428)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-df409399ffc54858832a6c4b59a4421f)" stroke="#f5fbf3" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#f5fbf3"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Route 53</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#f5fbf3">$1.8K</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#f5fbf3" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#f5fbf3" text-anchor="middle">1.6%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#22d3ee">Updated: 2026-02-07 • Hover for details</text></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_70b76ae20931f21d.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_70b76ae20931f21d.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-70b76ae20931f21d')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-70b76ae20931f21d')">PNG</button>
 </div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-555b0ca44f9f75ee" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-555b0ca44f9f75ee')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-555b0ca44f9f75ee">
-        <div class="csv-loading">Loading CSV data...</div>
+<div id="modal-svgviewer-70b76ae20931f21d" class="svg-modal-svgviewer-70b76ae20931f21d" onclick="if(event.target === this) svgModalsvgviewer_70b76ae20931f21d.close()">
+    <div class="svg-modal-content-svgviewer-70b76ae20931f21d">
+        <button class="svg-modal-close-svgviewer-70b76ae20931f21d" onclick="svgModalsvgviewer_70b76ae20931f21d.close()">×</button>
+        <div id="modal-body-svgviewer-70b76ae20931f21d" class="svg-modal-body-svgviewer-70b76ae20931f21d"></div>
     </div>
 </div>
+
+<div id="csv-modal-svgviewer-70b76ae20931f21d" class="svg-modal-svgviewer-70b76ae20931f21d" onclick="if(event.target === this) csvModalsvgviewer_70b76ae20931f21d.close()">
+    <div class="svg-modal-content-svgviewer-70b76ae20931f21d">
+        <button class="svg-modal-close-svgviewer-70b76ae20931f21d" onclick="csvModalsvgviewer_70b76ae20931f21d.close()">×</button>
+        <div class="svg-modal-header-svgviewer-70b76ae20931f21d" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-70b76ae20931f21d" class="svg-modal-body-svgviewer-70b76ae20931f21d" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 <style>
@@ -2283,8 +2898,247 @@ Others | 131 | Various manufacturers | | 13.1%
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-1241b1c3be0a21c9" data-theme="light" data-original-content="title=Smartphone Market Share 2024
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-62dd8e2511c374af {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-62dd8e2511c374af.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-62dd8e2511c374af {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-62dd8e2511c374af {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-62dd8e2511c374af:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-62dd8e2511c374af {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-62dd8e2511c374af svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-62dd8e2511c374af .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-62dd8e2511c374af .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-62dd8e2511c374af .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-62dd8e2511c374af .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-62dd8e2511c374af .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-62dd8e2511c374af .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_62dd8e2511c374af = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-62dd8e2511c374af');
+          const sourceContainer = document.getElementById('svgviewer-62dd8e2511c374af');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-62dd8e2511c374af');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-62dd8e2511c374af');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_62dd8e2511c374af = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-62dd8e2511c374af');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-62dd8e2511c374af');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-62dd8e2511c374af');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-62dd8e2511c374af');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_62dd8e2511c374af.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-62dd8e2511c374af');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_62dd8e2511c374af.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-62dd8e2511c374af" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treemap&payload=H4sIAIt7h2kA_1WQS2-DMBCE7_4VvnAEBQgJOXCAFFVRHkSBRlUvlQOb2Cq2kR-NKvXH16Hvy2jH-2k0a8NMD1nNiTIDlQLwlqgXMLimRAGOJtEUaXsyI3W_qYp8g7f5YV02-G5VN4dV8dCsqh26ss7QLIwmE0SBXajJUjcaChwyLjtQAg2kB2OgeRsgq5ZlvnsuDmX5VCJN5fVIegs6M8rC6PegWhCGXL4ffd9HNeHaigt-x1GaOK2lNRSvpQIiMPTQGiUFa7Vb3ZAg8VA-DD3c3DR2ulfAmeVY_5z7xU6D2EOPjEjOnA2TmdOxkn-WrdXQ4ZMiohvhMAlmHqqGQTqzSJ0sKXNJgDkR9kxaYxWoEV0EqYeO7PVGpnMnRbHG5Z-iv6lpMHeh7sPUrVIYh2MDxaTV_3I_C4dxEHofA-J1V7sBAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treemap&filename=ghi.svg" data-original-content="title=Smartphone Market Share 2024
 subtitle=GLOBAL MARKET DISTRIBUTION
 width=1200
 height=800
@@ -2299,31 +3153,33 @@ Xiaomi | 156 | Value-focused brand | | 15.6%
 Oppo | 98 | Chinese manufacturer | | 9.8%
 Vivo | 87 | BBK Electronics brand | | 8.7%
 Others | 131 | Various manufacturers | | 13.1%" data-kind="treemap">
-<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" id="ID_86effed290ae401d919cb6ddf379071a">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["Samsung","285.0","28.5","South Korean electronics","28.5%"],["Apple","243.0","24.3","Premium smartphones","24.3%"],["Xiaomi","156.0","15.6","Value-focused brand","15.6%"],["Oppo","98.0","9.8","Chinese manufacturer","9.8%"],["Vivo","87.0","8.7","BBK Electronics brand","8.7%"],["Others","131.0","13.1","Various manufacturers","13.1%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); #ID_86effed290ae401d919cb6ddf379071a .treemap-rect { stroke: #ffffff; stroke-width: 3; opacity: 0; animation: slideIn-86effed290ae401d919cb6ddf379071a 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } #ID_86effed290ae401d919cb6ddf379071a .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } #ID_86effed290ae401d919cb6ddf379071a .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } #ID_86effed290ae401d919cb6ddf379071a .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } #ID_86effed290ae401d919cb6ddf379071a .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } #ID_86effed290ae401d919cb6ddf379071a .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #111111; letter-spacing: -0.03em; } #ID_86effed290ae401d919cb6ddf379071a .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #4338ca; letter-spacing: 0.05em; } /* Custom ToolTip Styles - tooltips in separate layer */ #ID_86effed290ae401d919cb6ddf379071a .tooltip-group { pointer-events: none; } #ID_86effed290ae401d919cb6ddf379071a .tooltip-content { opacity: 0; transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); transform: translateY(8px); } /* Hover selectors linking tiles to their tooltips via sibling combinator */ #ID_86effed290ae401d919cb6ddf379071a #tile-86effed290ae401d919cb6ddf379071a-0:hover ~ .tooltips-layer #tooltip-86effed290ae401d919cb6ddf379071a-0 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_86effed290ae401d919cb6ddf379071a #tile-86effed290ae401d919cb6ddf379071a-1:hover ~ .tooltips-layer #tooltip-86effed290ae401d919cb6ddf379071a-1 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_86effed290ae401d919cb6ddf379071a #tile-86effed290ae401d919cb6ddf379071a-2:hover ~ .tooltips-layer #tooltip-86effed290ae401d919cb6ddf379071a-2 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_86effed290ae401d919cb6ddf379071a #tile-86effed290ae401d919cb6ddf379071a-3:hover ~ .tooltips-layer #tooltip-86effed290ae401d919cb6ddf379071a-3 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_86effed290ae401d919cb6ddf379071a #tile-86effed290ae401d919cb6ddf379071a-4:hover ~ .tooltips-layer #tooltip-86effed290ae401d919cb6ddf379071a-4 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_86effed290ae401d919cb6ddf379071a #tile-86effed290ae401d919cb6ddf379071a-5:hover ~ .tooltips-layer #tooltip-86effed290ae401d919cb6ddf379071a-5 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_86effed290ae401d919cb6ddf379071a .tooltip-bg { filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.2)); } #ID_86effed290ae401d919cb6ddf379071a .tooltip-title { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: -0.01em; } #ID_86effed290ae401d919cb6ddf379071a .tooltip-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 18px; } #ID_86effed290ae401d919cb6ddf379071a .tooltip-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; } #ID_86effed290ae401d919cb6ddf379071a .tooltip-percent { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 11px; } @keyframes slideIn-86effed290ae401d919cb6ddf379071a { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-86effed290ae401d919cb6ddf379071a-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#006D77;stop-opacity:1" /><stop offset="100%" style="stop-color:#005c65;stop-opacity:1" /></linearGradient><linearGradient id="grad-86effed290ae401d919cb6ddf379071a-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#83C5BE;stop-opacity:1" /><stop offset="100%" style="stop-color:#6fa7a1;stop-opacity:1" /></linearGradient><linearGradient id="grad-86effed290ae401d919cb6ddf379071a-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#EDF6F9;stop-opacity:1" /><stop offset="100%" style="stop-color:#c9d1d3;stop-opacity:1" /></linearGradient><linearGradient id="grad-86effed290ae401d919cb6ddf379071a-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFDDD2;stop-opacity:1" /><stop offset="100%" style="stop-color:#d8bbb2;stop-opacity:1" /></linearGradient><linearGradient id="grad-86effed290ae401d919cb6ddf379071a-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E29578;stop-opacity:1" /><stop offset="100%" style="stop-color:#c07e66;stop-opacity:1" /></linearGradient><linearGradient id="grad-86effed290ae401d919cb6ddf379071a-5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#006D77;stop-opacity:1" /><stop offset="100%" style="stop-color:#005c65;stop-opacity:1" /></linearGradient><linearGradient id="tooltip-bg-grad-86effed290ae401d919cb6ddf379071a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a;stop-opacity:0.97" /><stop offset="100%" style="stop-color:#1e293b;stop-opacity:0.95" /></linearGradient><pattern id="dots-86effed290ae401d919cb6ddf379071a" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#f8fafc"/><circle cx="900.0" cy="200.0" r="400" fill="#818cf8" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#60a5fa" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">SMARTPHONE MARKET SHARE 2024</text><text class="title-sub" y="30">GLOBAL MARKET DISTRIBUTION</text><line x1="0" y1="45" x2="180" y2="45" stroke="#006D77" stroke-width="3" stroke-linecap="round"/></g><g class="tile-group" id="tile-86effed290ae401d919cb6ddf379071a-0"><rect class="treemap-rect" x="64.0" y="144.0" width="562.2399999999999" height="305.0681818181818" rx="8" fill="url(#grad-86effed290ae401d919cb6ddf379071a-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="562.2399999999999" height="305.0681818181818" rx="8" fill="url(#dots-86effed290ae401d919cb6ddf379071a)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#FCFCFC"><tspan x="28.0" dy="0">Samsung</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="28.0" dy="0">South Korean electronics</tspan></text><text class="label-metric" x="28.0" y="250.0681818181818" font-size="32" fill="#FCFCFC">28.5%</text><text class="label-value" x="28.0" y="277.0681818181818" font-size="13" fill="rgba(252, 252, 252, 0.7)">28.5% of total</text></g></g><g class="tile-group" id="tile-86effed290ae401d919cb6ddf379071a-1"><rect class="treemap-rect" x="64.0" y="457.0681818181818" width="562.2399999999999" height="258.9318181818182" rx="8" fill="url(#grad-86effed290ae401d919cb6ddf379071a-1)" style="animation-delay: 0.1s;"/><rect x="64.0" y="457.0681818181818" width="562.2399999999999" height="258.9318181818182" rx="8" fill="url(#dots-86effed290ae401d919cb6ddf379071a)" pointer-events="none"/><g transform="translate(64.0, 457.0681818181818)"><text class="label-category" x="24.0" y="42.0" font-size="18" fill="#000000"><tspan x="24.0" dy="0">Apple</tspan></text><text class="label-value" x="24.0" y="58.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Premium smartphones</tspan></text><text class="label-metric" x="24.0" y="207.9318181818182" font-size="32" fill="#000000">24.3%</text><text class="label-value" x="24.0" y="234.9318181818182" font-size="13" fill="rgba(0, 0, 0, 0.7)">24.3% of total</text></g></g><g class="tile-group" id="tile-86effed290ae401d919cb6ddf379071a-2"><rect class="treemap-rect" x="634.2399999999999" y="144.0" width="372.0029090909091" height="249.15171558495246" rx="8" fill="url(#grad-86effed290ae401d919cb6ddf379071a-2)" style="animation-delay: 0.2s;"/><rect x="634.2399999999999" y="144.0" width="372.0029090909091" height="249.15171558495246" rx="8" fill="url(#dots-86effed290ae401d919cb6ddf379071a)" pointer-events="none"/><g transform="translate(634.2399999999999, 144.0)"><text class="label-category" x="24.0" y="42.0" font-size="18" fill="#000000"><tspan x="24.0" dy="0">Xiaomi</tspan></text><text class="label-value" x="24.0" y="58.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Value-focused brand</tspan></text><text class="label-metric" x="24.0" y="198.15171558495246" font-size="32" fill="#000000">15.6%</text><text class="label-value" x="24.0" y="225.15171558495246" font-size="13" fill="rgba(0, 0, 0, 0.7)">15.6% of total</text></g></g><g class="tile-group" id="tile-86effed290ae401d919cb6ddf379071a-3"><rect class="treemap-rect" x="634.2399999999999" y="401.15171558495246" width="372.0029090909091" height="207.94150475403063" rx="8" fill="url(#grad-86effed290ae401d919cb6ddf379071a-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="634.2399999999999" y="401.15171558495246" width="372.0029090909091" height="207.94150475403063" rx="8" fill="url(#dots-86effed290ae401d919cb6ddf379071a)" pointer-events="none"/><g transform="translate(634.2399999999999, 401.15171558495246)"><text class="label-category" x="24.0" y="42.0" font-size="18" fill="#000000"><tspan x="24.0" dy="0">Oppo</tspan></text><text class="label-value" x="24.0" y="58.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Chinese manufacturer</tspan></text><text class="label-metric" x="24.0" y="156.94150475403063" font-size="32" fill="#000000">9.8%</text><text class="label-value" x="24.0" y="183.94150475403063" font-size="13" fill="rgba(0, 0, 0, 0.7)">9.8% of total</text></g></g><g class="tile-group" id="tile-86effed290ae401d919cb6ddf379071a-4"><rect class="treemap-rect" x="1014.242909090909" y="144.0" width="121.757090909091" height="465.0932203389831" rx="8" fill="url(#grad-86effed290ae401d919cb6ddf379071a-4)" style="animation-delay: 0.4s;"/><rect x="1014.242909090909" y="144.0" width="121.757090909091" height="465.0932203389831" rx="8" fill="url(#dots-86effed290ae401d919cb6ddf379071a)" pointer-events="none"/><g transform="translate(1014.242909090909, 144.0)"><text class="label-category" x="12.0" y="26.0" font-size="14" fill="#000000"><tspan x="12.0" dy="0">Vivo</tspan></text><text class="label-value" x="12.0" y="42.0" font-size="9" fill="rgba(0, 0, 0, 0.7)"><tspan x="12.0" dy="0">BBK Electronics</tspan><tspan x="12.0" dy="11">brand</tspan></text><text class="label-metric" x="12.0" y="428.0932203389831" font-size="20" fill="#000000">8.7%</text><text class="label-value" x="12.0" y="453.0932203389831" font-size="11" fill="rgba(0, 0, 0, 0.7)">8.7% of total</text></g></g><g class="tile-group" id="tile-86effed290ae401d919cb6ddf379071a-5"><rect class="treemap-rect" x="634.2399999999999" y="617.0932203389831" width="501.7600000000001" height="98.90677966101691" rx="8" fill="url(#grad-86effed290ae401d919cb6ddf379071a-5)" style="animation-delay: 0.5s;"/><rect x="634.2399999999999" y="617.0932203389831" width="501.7600000000001" height="98.90677966101691" rx="8" fill="url(#dots-86effed290ae401d919cb6ddf379071a)" pointer-events="none"/><g transform="translate(634.2399999999999, 617.0932203389831)"><text class="label-category" x="12.0" y="30.0" font-size="18" fill="#FCFCFC"><tspan x="12.0" dy="0">Others</tspan></text><text class="label-value" x="12.0" y="46.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="12.0" dy="0">Various manufacturers</tspan></text></g></g><g class="tooltips-layer"><g class="tooltip-group" id="tooltip-86effed290ae401d919cb6ddf379071a-0" transform="translate(345.11999999999995, 449.0681818181818)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-86effed290ae401d919cb6ddf379071a)" stroke="#4c989f" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#4c989f"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Samsung</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#4c989f">28.5%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#4c989f" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#4c989f" text-anchor="middle">28.5%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-86effed290ae401d919cb6ddf379071a-1" transform="translate(345.11999999999995, 457.0681818181818)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-86effed290ae401d919cb6ddf379071a)" stroke="#a8d6d1" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#a8d6d1"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Apple</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#a8d6d1">24.3%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#a8d6d1" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#a8d6d1" text-anchor="middle">24.3%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-86effed290ae401d919cb6ddf379071a-2" transform="translate(820.2414545454544, 393.15171558495246)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-86effed290ae401d919cb6ddf379071a)" stroke="#f2f8fa" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#f2f8fa"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Xiaomi</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#f2f8fa">15.6%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#f2f8fa" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#f2f8fa" text-anchor="middle">15.6%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-86effed290ae401d919cb6ddf379071a-3" transform="translate(820.2414545454544, 401.15171558495246)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-86effed290ae401d919cb6ddf379071a)" stroke="#ffe7df" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ffe7df"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Oppo</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ffe7df">9.8%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ffe7df" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ffe7df" text-anchor="middle">9.8%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-86effed290ae401d919cb6ddf379071a-4" transform="translate(1075.1214545454545, 609.0932203389831)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-86effed290ae401d919cb6ddf379071a)" stroke="#eab4a0" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#eab4a0"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Vivo</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#eab4a0">8.7%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#eab4a0" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#eab4a0" text-anchor="middle">8.7%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-86effed290ae401d919cb6ddf379071a-5" transform="translate(885.1199999999999, 617.0932203389831)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-86effed290ae401d919cb6ddf379071a)" stroke="#4c989f" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#4c989f"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Others</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#4c989f">13.1%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#4c989f" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#4c989f" text-anchor="middle">13.1%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#4338ca">Updated: 2026-02-01 • Hover for details</text></g></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-1241b1c3be0a21c9')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-1241b1c3be0a21c9">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-1241b1c3be0a21c9')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-1241b1c3be0a21c9')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-1241b1c3be0a21c9')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-1241b1c3be0a21c9')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1241b1c3be0a21c9')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1241b1c3be0a21c9')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-1241b1c3be0a21c9')" title="Show CSV Data">📊 CSV</button>
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" id="ID_5e68cf590f434634950bb85072cdec29">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Category","Value","Percentage","Description","Metric"],"rows":[["Samsung","285.0","28.5","South Korean electronics","28.5%"],["Apple","243.0","24.3","Premium smartphones","24.3%"],["Xiaomi","156.0","15.6","Value-focused brand","15.6%"],["Oppo","98.0","9.8","Chinese manufacturer","9.8%"],["Vivo","87.0","8.7","BBK Electronics brand","8.7%"],["Others","131.0","13.1","Various manufacturers","13.1%"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap'); #ID_5e68cf590f434634950bb85072cdec29 .treemap-rect { stroke: #ffffff; stroke-width: 3; opacity: 0; animation: slideIn-5e68cf590f434634950bb85072cdec29 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; } #ID_5e68cf590f434634950bb85072cdec29 .treemap-rect:hover { filter: brightness(1.2); cursor: pointer; } #ID_5e68cf590f434634950bb85072cdec29 .label-category { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; pointer-events: none; text-transform: uppercase; letter-spacing: -0.02em; } #ID_5e68cf590f434634950bb85072cdec29 .label-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; pointer-events: none; } #ID_5e68cf590f434634950bb85072cdec29 .label-metric { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; pointer-events: none; } #ID_5e68cf590f434634950bb85072cdec29 .title-main { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 42px; fill: #111111; letter-spacing: -0.03em; } #ID_5e68cf590f434634950bb85072cdec29 .title-sub { font-family: 'JetBrains Mono', monospace; font-size: 14px; fill: #4338ca; letter-spacing: 0.05em; } /* Custom ToolTip Styles - tooltips in separate layer */ #ID_5e68cf590f434634950bb85072cdec29 .tooltip-group { pointer-events: none; } #ID_5e68cf590f434634950bb85072cdec29 .tooltip-content { opacity: 0; transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); transform: translateY(8px); } /* Hover selectors linking tiles to their tooltips via sibling combinator */ #ID_5e68cf590f434634950bb85072cdec29 #tile-5e68cf590f434634950bb85072cdec29-0:hover ~ .tooltips-layer #tooltip-5e68cf590f434634950bb85072cdec29-0 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_5e68cf590f434634950bb85072cdec29 #tile-5e68cf590f434634950bb85072cdec29-1:hover ~ .tooltips-layer #tooltip-5e68cf590f434634950bb85072cdec29-1 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_5e68cf590f434634950bb85072cdec29 #tile-5e68cf590f434634950bb85072cdec29-2:hover ~ .tooltips-layer #tooltip-5e68cf590f434634950bb85072cdec29-2 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_5e68cf590f434634950bb85072cdec29 #tile-5e68cf590f434634950bb85072cdec29-3:hover ~ .tooltips-layer #tooltip-5e68cf590f434634950bb85072cdec29-3 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_5e68cf590f434634950bb85072cdec29 #tile-5e68cf590f434634950bb85072cdec29-4:hover ~ .tooltips-layer #tooltip-5e68cf590f434634950bb85072cdec29-4 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_5e68cf590f434634950bb85072cdec29 #tile-5e68cf590f434634950bb85072cdec29-5:hover ~ .tooltips-layer #tooltip-5e68cf590f434634950bb85072cdec29-5 .tooltip-content { opacity: 1; transform: translateY(0); } #ID_5e68cf590f434634950bb85072cdec29 .tooltip-bg { filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35)) drop-shadow(0 2px 8px rgba(0,0,0,0.2)); } #ID_5e68cf590f434634950bb85072cdec29 .tooltip-title { font-family: 'Bricolage Grotesque', -apple-system, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: -0.01em; } #ID_5e68cf590f434634950bb85072cdec29 .tooltip-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 18px; } #ID_5e68cf590f434634950bb85072cdec29 .tooltip-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; } #ID_5e68cf590f434634950bb85072cdec29 .tooltip-percent { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 11px; } @keyframes slideIn-5e68cf590f434634950bb85072cdec29 { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }</style><linearGradient id="grad-5e68cf590f434634950bb85072cdec29-0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#006D77;stop-opacity:1" /><stop offset="100%" style="stop-color:#005c65;stop-opacity:1" /></linearGradient><linearGradient id="grad-5e68cf590f434634950bb85072cdec29-1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#83C5BE;stop-opacity:1" /><stop offset="100%" style="stop-color:#6fa7a1;stop-opacity:1" /></linearGradient><linearGradient id="grad-5e68cf590f434634950bb85072cdec29-2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#EDF6F9;stop-opacity:1" /><stop offset="100%" style="stop-color:#c9d1d3;stop-opacity:1" /></linearGradient><linearGradient id="grad-5e68cf590f434634950bb85072cdec29-3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFDDD2;stop-opacity:1" /><stop offset="100%" style="stop-color:#d8bbb2;stop-opacity:1" /></linearGradient><linearGradient id="grad-5e68cf590f434634950bb85072cdec29-4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#E29578;stop-opacity:1" /><stop offset="100%" style="stop-color:#c07e66;stop-opacity:1" /></linearGradient><linearGradient id="grad-5e68cf590f434634950bb85072cdec29-5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#006D77;stop-opacity:1" /><stop offset="100%" style="stop-color:#005c65;stop-opacity:1" /></linearGradient><linearGradient id="tooltip-bg-grad-5e68cf590f434634950bb85072cdec29" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a;stop-opacity:0.97" /><stop offset="100%" style="stop-color:#1e293b;stop-opacity:0.95" /></linearGradient><pattern id="dots-5e68cf590f434634950bb85072cdec29" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="#f8fafc"/><circle cx="900.0" cy="200.0" r="400" fill="#818cf8" opacity="0.08" filter="blur(80px)"/><circle cx="300.0" cy="600.0" r="350" fill="#60a5fa" opacity="0.06" filter="blur(100px)"/><g transform="translate(60, 70)"><text class="title-main">SMARTPHONE MARKET SHARE 2024</text><text class="title-sub" y="30">GLOBAL MARKET DISTRIBUTION</text><line x1="0" y1="45" x2="180" y2="45" stroke="#006D77" stroke-width="3" stroke-linecap="round"/></g><g class="tile-group" id="tile-5e68cf590f434634950bb85072cdec29-0"><rect class="treemap-rect" x="64.0" y="144.0" width="562.2399999999999" height="305.0681818181818" rx="8" fill="url(#grad-5e68cf590f434634950bb85072cdec29-0)" style="animation-delay: 0.0s;"/><rect x="64.0" y="144.0" width="562.2399999999999" height="305.0681818181818" rx="8" fill="url(#dots-5e68cf590f434634950bb85072cdec29)" pointer-events="none"/><g transform="translate(64.0, 144.0)"><text class="label-category" x="28.0" y="46.0" font-size="18" fill="#FCFCFC"><tspan x="28.0" dy="0">Samsung</tspan></text><text class="label-value" x="28.0" y="62.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="28.0" dy="0">South Korean electronics</tspan></text><text class="label-metric" x="28.0" y="250.0681818181818" font-size="32" fill="#FCFCFC">28.5%</text><text class="label-value" x="28.0" y="277.0681818181818" font-size="13" fill="rgba(252, 252, 252, 0.7)">28.5% of total</text></g></g><g class="tile-group" id="tile-5e68cf590f434634950bb85072cdec29-1"><rect class="treemap-rect" x="64.0" y="457.0681818181818" width="562.2399999999999" height="258.9318181818182" rx="8" fill="url(#grad-5e68cf590f434634950bb85072cdec29-1)" style="animation-delay: 0.1s;"/><rect x="64.0" y="457.0681818181818" width="562.2399999999999" height="258.9318181818182" rx="8" fill="url(#dots-5e68cf590f434634950bb85072cdec29)" pointer-events="none"/><g transform="translate(64.0, 457.0681818181818)"><text class="label-category" x="24.0" y="42.0" font-size="18" fill="#000000"><tspan x="24.0" dy="0">Apple</tspan></text><text class="label-value" x="24.0" y="58.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Premium smartphones</tspan></text><text class="label-metric" x="24.0" y="207.9318181818182" font-size="32" fill="#000000">24.3%</text><text class="label-value" x="24.0" y="234.9318181818182" font-size="13" fill="rgba(0, 0, 0, 0.7)">24.3% of total</text></g></g><g class="tile-group" id="tile-5e68cf590f434634950bb85072cdec29-2"><rect class="treemap-rect" x="634.2399999999999" y="144.0" width="372.0029090909091" height="249.15171558495246" rx="8" fill="url(#grad-5e68cf590f434634950bb85072cdec29-2)" style="animation-delay: 0.2s;"/><rect x="634.2399999999999" y="144.0" width="372.0029090909091" height="249.15171558495246" rx="8" fill="url(#dots-5e68cf590f434634950bb85072cdec29)" pointer-events="none"/><g transform="translate(634.2399999999999, 144.0)"><text class="label-category" x="24.0" y="42.0" font-size="18" fill="#000000"><tspan x="24.0" dy="0">Xiaomi</tspan></text><text class="label-value" x="24.0" y="58.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Value-focused brand</tspan></text><text class="label-metric" x="24.0" y="198.15171558495246" font-size="32" fill="#000000">15.6%</text><text class="label-value" x="24.0" y="225.15171558495246" font-size="13" fill="rgba(0, 0, 0, 0.7)">15.6% of total</text></g></g><g class="tile-group" id="tile-5e68cf590f434634950bb85072cdec29-3"><rect class="treemap-rect" x="634.2399999999999" y="401.15171558495246" width="372.0029090909091" height="207.94150475403063" rx="8" fill="url(#grad-5e68cf590f434634950bb85072cdec29-3)" style="animation-delay: 0.30000000000000004s;"/><rect x="634.2399999999999" y="401.15171558495246" width="372.0029090909091" height="207.94150475403063" rx="8" fill="url(#dots-5e68cf590f434634950bb85072cdec29)" pointer-events="none"/><g transform="translate(634.2399999999999, 401.15171558495246)"><text class="label-category" x="24.0" y="42.0" font-size="18" fill="#000000"><tspan x="24.0" dy="0">Oppo</tspan></text><text class="label-value" x="24.0" y="58.0" font-size="13" fill="rgba(0, 0, 0, 0.7)"><tspan x="24.0" dy="0">Chinese manufacturer</tspan></text><text class="label-metric" x="24.0" y="156.94150475403063" font-size="32" fill="#000000">9.8%</text><text class="label-value" x="24.0" y="183.94150475403063" font-size="13" fill="rgba(0, 0, 0, 0.7)">9.8% of total</text></g></g><g class="tile-group" id="tile-5e68cf590f434634950bb85072cdec29-4"><rect class="treemap-rect" x="1014.242909090909" y="144.0" width="121.757090909091" height="465.0932203389831" rx="8" fill="url(#grad-5e68cf590f434634950bb85072cdec29-4)" style="animation-delay: 0.4s;"/><rect x="1014.242909090909" y="144.0" width="121.757090909091" height="465.0932203389831" rx="8" fill="url(#dots-5e68cf590f434634950bb85072cdec29)" pointer-events="none"/><g transform="translate(1014.242909090909, 144.0)"><text class="label-category" x="12.0" y="26.0" font-size="14" fill="#000000"><tspan x="12.0" dy="0">Vivo</tspan></text><text class="label-value" x="12.0" y="42.0" font-size="9" fill="rgba(0, 0, 0, 0.7)"><tspan x="12.0" dy="0">BBK Electronics</tspan><tspan x="12.0" dy="11">brand</tspan></text><text class="label-metric" x="12.0" y="428.0932203389831" font-size="20" fill="#000000">8.7%</text><text class="label-value" x="12.0" y="453.0932203389831" font-size="11" fill="rgba(0, 0, 0, 0.7)">8.7% of total</text></g></g><g class="tile-group" id="tile-5e68cf590f434634950bb85072cdec29-5"><rect class="treemap-rect" x="634.2399999999999" y="617.0932203389831" width="501.7600000000001" height="98.90677966101691" rx="8" fill="url(#grad-5e68cf590f434634950bb85072cdec29-5)" style="animation-delay: 0.5s;"/><rect x="634.2399999999999" y="617.0932203389831" width="501.7600000000001" height="98.90677966101691" rx="8" fill="url(#dots-5e68cf590f434634950bb85072cdec29)" pointer-events="none"/><g transform="translate(634.2399999999999, 617.0932203389831)"><text class="label-category" x="12.0" y="30.0" font-size="18" fill="#FCFCFC"><tspan x="12.0" dy="0">Others</tspan></text><text class="label-value" x="12.0" y="46.0" font-size="13" fill="rgba(252, 252, 252, 0.7)"><tspan x="12.0" dy="0">Various manufacturers</tspan></text></g></g><g class="tooltips-layer"><g class="tooltip-group" id="tooltip-5e68cf590f434634950bb85072cdec29-0" transform="translate(345.11999999999995, 449.0681818181818)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-5e68cf590f434634950bb85072cdec29)" stroke="#4c989f" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#4c989f"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Samsung</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#4c989f">28.5%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#4c989f" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#4c989f" text-anchor="middle">28.5%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-5e68cf590f434634950bb85072cdec29-1" transform="translate(345.11999999999995, 457.0681818181818)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-5e68cf590f434634950bb85072cdec29)" stroke="#a8d6d1" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#a8d6d1"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Apple</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#a8d6d1">24.3%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#a8d6d1" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#a8d6d1" text-anchor="middle">24.3%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-5e68cf590f434634950bb85072cdec29-2" transform="translate(820.2414545454544, 393.15171558495246)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-5e68cf590f434634950bb85072cdec29)" stroke="#f2f8fa" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#f2f8fa"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Xiaomi</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#f2f8fa">15.6%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#f2f8fa" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#f2f8fa" text-anchor="middle">15.6%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-5e68cf590f434634950bb85072cdec29-3" transform="translate(820.2414545454544, 401.15171558495246)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-5e68cf590f434634950bb85072cdec29)" stroke="#ffe7df" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#ffe7df"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Oppo</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#ffe7df">9.8%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#ffe7df" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#ffe7df" text-anchor="middle">9.8%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-5e68cf590f434634950bb85072cdec29-4" transform="translate(1075.1214545454545, 609.0932203389831)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,12 H -84 Q -90,12  -90,18 V 96 Q -90,102 -84,102 H 84 Q 90,102 90,96 V 18 Q 90,12 84,12 H 12 L 0,0 z" fill="url(#tooltip-bg-grad-5e68cf590f434634950bb85072cdec29)" stroke="#eab4a0" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="20" width="4" height="36" rx="2" fill="#eab4a0"/><!-- Category label --><text class="tooltip-title" x="-66" y="34" fill="#f8fafc">Vivo</text><!-- Value --><text class="tooltip-value" x="-66" y="58" fill="#eab4a0">8.7%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="76" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="42" width="42" height="20" rx="4" fill="#eab4a0" opacity="0.2"/><text class="tooltip-percent" x="59" y="56" fill="#eab4a0" text-anchor="middle">8.7%</text><!-- Separator line --><line x1="-78" y1="86" x2="78" y2="86" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="100" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g><g class="tooltip-group" id="tooltip-5e68cf590f434634950bb85072cdec29-5" transform="translate(885.1199999999999, 617.0932203389831)"><g class="tooltip-content"><path class="tooltip-bg" d="M 0,0 L -12,-12 H -84 Q -90,-12  -90,-18 V -96 Q -90,-102  -84,-102 H 84 Q 90,-102  90,-96 V -18 Q 90,-12  84,-12 H 12 z" fill="url(#tooltip-bg-grad-5e68cf590f434634950bb85072cdec29)" stroke="#4c989f" stroke-width="1.5"/><!-- Accent bar --><rect x="-78" y="-94" width="4" height="36" rx="2" fill="#4c989f"/><!-- Category label --><text class="tooltip-title" x="-66" y="-80" fill="#f8fafc">Others</text><!-- Value --><text class="tooltip-value" x="-66" y="-56" fill="#4c989f">13.1%</text><!-- Labels row --><text class="tooltip-label" x="-66" y="-38" fill="#94a3b8">VALUE</text><!-- Percentage badge --><rect x="38" y="-72" width="42" height="20" rx="4" fill="#4c989f" opacity="0.2"/><text class="tooltip-percent" x="59" y="-58" fill="#4c989f" text-anchor="middle">13.1%</text><!-- Separator line --><line x1="-78" y1="-28" x2="78" y2="-28" stroke="#334155" stroke-width="1"/><!-- Footer hint --><text class="tooltip-label" x="0" y="-14" fill="#64748b" text-anchor="middle">SHARE OF TOTAL</text></g></g></g><g transform="translate(60, 740)"><text font-family="JetBrains Mono, monospace" font-size="11" fill="#4338ca">Updated: 2026-02-07 • Hover for details</text></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_62dd8e2511c374af.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_62dd8e2511c374af.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-62dd8e2511c374af')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-62dd8e2511c374af')">PNG</button>
 </div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-1241b1c3be0a21c9" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-1241b1c3be0a21c9')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-1241b1c3be0a21c9">
-        <div class="csv-loading">Loading CSV data...</div>
+<div id="modal-svgviewer-62dd8e2511c374af" class="svg-modal-svgviewer-62dd8e2511c374af" onclick="if(event.target === this) svgModalsvgviewer_62dd8e2511c374af.close()">
+    <div class="svg-modal-content-svgviewer-62dd8e2511c374af">
+        <button class="svg-modal-close-svgviewer-62dd8e2511c374af" onclick="svgModalsvgviewer_62dd8e2511c374af.close()">×</button>
+        <div id="modal-body-svgviewer-62dd8e2511c374af" class="svg-modal-body-svgviewer-62dd8e2511c374af"></div>
     </div>
 </div>
+
+<div id="csv-modal-svgviewer-62dd8e2511c374af" class="svg-modal-svgviewer-62dd8e2511c374af" onclick="if(event.target === this) csvModalsvgviewer_62dd8e2511c374af.close()">
+    <div class="svg-modal-content-svgviewer-62dd8e2511c374af">
+        <button class="svg-modal-close-svgviewer-62dd8e2511c374af" onclick="csvModalsvgviewer_62dd8e2511c374af.close()">×</button>
+        <div class="svg-modal-header-svgviewer-62dd8e2511c374af" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-62dd8e2511c374af" class="svg-modal-body-svgviewer-62dd8e2511c374af" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 <style>
@@ -2592,43 +3448,7 @@ if (!hljs.initHighlighting.called) {
   ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
 }
 </script>
-<style>
-/* Reading Time Styles */
-.reading-time {
-    position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    background: var(--bg-base); /* Uses the dynamic background variable */
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--accent-secondary);
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    z-index: 1005;
-    
-    /* Double-accent shadow follows the light/dark mode logic */
-    box-shadow: 6px 6px 0px var(--accent-pink);
-    
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-main); /* Switches between grey and dark slate */
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
 
-.reading-time p {
-    margin: 0 !important;
-    font-weight: 600;
-}
-
-/* Light Mode specific opacity tweak */
-body.light-mode .reading-time {
-    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
-}
-</style>
-<div class="reading-time">
-    <p>📖 1 min read • 544 words</p>
-</div>
 <style>
 .listingblock {
     position: relative;

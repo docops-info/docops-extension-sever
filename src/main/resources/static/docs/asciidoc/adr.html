@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<link rel="icon" type="image/04" href="../images/favicon.svg?v=2025.04">
+<link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
 <title>DocOps ADR</title>
 <style>
 @import url(https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap);@keyframes reveal{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}:root{--bg-base:#f8fafc;--bg-surface:#ffffff;--bg-grid:rgba(0, 0, 0, 0.05);--text-main:#334155;--text-heading:#0f172a;--accent-primary:#4f46e5;--accent-secondary:#06b6d4;--accent-glow:rgba(79, 70, 229, 0.1);--border-color:#e2e8f0;--note-color:#4f46e5;--tip-color:#10b981;--warning-color:#f59e0b;--caution-color:#ef4444;--important-color:#8b5cf6;--font-heading:'Syne', sans-serif;--font-body:'Outfit', sans-serif;--font-mono:'JetBrains Mono', monospace;--content-max-width:1100px}:root.dark-mode{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}}body{background-color:var(--bg-base);background-image:radial-gradient(var(--bg-grid) 1px,transparent 1px);background-size:30px 30px;background-attachment:fixed;color:var(--text-main);font-family:var(--font-body);line-height:1.6;margin:0;padding:0;-webkit-font-smoothing:antialiased}#content,#footer,#footnotes,#header>h1:first-child,.details{opacity:0;animation:reveal .8s cubic-bezier(.16,1,.3,1) forwards}#content,#footnotes,#header{padding:2rem 1.5rem}#content,#footer,#footnotes,#header{max-width:var(--content-max-width);margin:0 auto}#toc.toc2{position:fixed!important}#header>h1:first-child{font-family:var(--font-heading);font-size:3.5rem;font-weight:800;color:var(--text-heading);letter-spacing:-.04em;line-height:1;margin-bottom:2rem;background:linear-gradient(to bottom right,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}#toc,.details{margin-bottom:3rem}.details,a{color:var(--accent-primary)}.details{display:flex;gap:2rem;font-size:.875rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);color:var(--text-heading);font-weight:700;margin-top:3rem;margin-bottom:1rem;line-height:1.2}h2{font-size:2rem;border-bottom:1px solid var(--border-color);padding-bottom:.5rem}a{text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:hover{border-bottom-color:var(--accent-primary);text-shadow:0 0 15px var(--accent-glow)}#toc{background:var(--bg-surface);backdrop-filter:blur(12px);border:1px solid var(--border-color);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000}#toc:not(.toc2){max-width:var(--content-max-width);margin:2rem auto}#toc.toc2,.admonitionblock{background:var(--bg-surface);border:1px solid var(--border-color)}#toc.toc2{backdrop-filter:blur(12px);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000;transform:none!important;animation:none!important;opacity:1!important}#toctitle,.admonitionblock .title{text-transform:uppercase;font-size:.75rem}#toc a:hover,#toctitle{color:var(--accent-primary)}#toctitle{font-family:var(--font-heading);font-weight:800;letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}#toctitle::after{content:"";flex:1;height:1px;background:var(--border-color)}#toc ul{list-style:none;padding:0;margin:0}#toc li{margin-bottom:.5rem}#toc a{color:var(--text-main);font-size:.9rem;border:0}#toc a:hover{padding-left:4px}.admonitionblock{margin:2rem 0;border-radius:.75rem;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;flex-direction:row;align-items:stretch}.admonitionblock td.icon{width:4rem;min-width:4rem;padding:1.5rem 0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.02)}.admonitionblock td.icon .fa-note::before,.admonitionblock td.icon .icon-note::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--note-color)}.admonitionblock td.icon .fa-lightbulb::before,.admonitionblock td.icon .icon-tip::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--tip-color)}.admonitionblock td.icon .fa-exclamation-triangle::before,.admonitionblock td.icon .icon-warning::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--warning-color)}.admonitionblock td.icon .fa-fire::before,.admonitionblock td.icon .icon-caution::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--caution-color)}.admonitionblock td.icon .fa-exclamation-circle::before,.admonitionblock td.icon .icon-important::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--important-color)}.admonitionblock td.content{padding:1.5rem;font-size:.95rem;flex:1}.admonitionblock .title{font-weight:700;letter-spacing:.1em;margin-bottom:.75rem;display:block}.admonitionblock.note{border-left:4px solid var(--note-color)}.admonitionblock.note .title{color:var(--note-color)}.admonitionblock.tip{border-left:4px solid var(--tip-color)}.admonitionblock.tip .title{color:var(--tip-color)}.admonitionblock.warning{border-left:4px solid var(--warning-color)}.admonitionblock.warning .title{color:var(--warning-color)}.admonitionblock.caution{border-left:4px solid var(--caution-color)}.admonitionblock.caution .title{color:var(--caution-color)}.admonitionblock.important{border-left:4px solid var(--important-color)}.admonitionblock.important .title{color:var(--important-color)}:root.dark-mode .admonitionblock td.content,:root.dark-mode-auto .admonitionblock td.content{color:var(--text-main)}.listingblock pre{background:#0f172a!important;color:#f8fafc!important;padding:1.5rem!important;border-radius:.75rem;font-family:var(--font-mono);font-size:.875rem;border:1px solid #1e293b;box-shadow:0 20px 25px -5px rgba(0,0,0,.2);position:relative;overflow:hidden}:root.dark-mode .listingblock pre{background:#020617!important;border-color:var(--border-color)}@media (prefers-color-scheme:dark){:root.dark-mode-auto .listingblock pre{background:#020617!important;border-color:var(--border-color)}}.listingblock pre::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent-primary),var(--accent-secondary));opacity:.5}code{font-family:var(--font-mono);padding:.2em .4em;border-radius:.25rem;color:var(--accent-primary);font-size:.9em}.exampleblock,.sidebarblock,table{background:var(--bg-surface);border:1px solid var(--border-color);margin:2rem 0}table{width:100%;border-collapse:collapse;border-radius:.75rem;overflow:hidden}th{background:var(--border-color);color:var(--text-heading);text-align:left;padding:1rem;font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.05em}#footer,td{padding:1rem;border-top:1px solid var(--border-color);font-size:.9rem}code,tr:hover td{background:var(--accent-glow)}.exampleblock,.sidebarblock{border-radius:1rem;padding:2rem}#footer,th{font-size:.875rem}#footer{margin-top:4rem;padding:4rem 1.5rem;text-align:center;color:var(--text-main)}#footer-text{opacity:.6}@media (max-width:1279px){#header>h1:first-child{font-size:2.5rem}.details{flex-direction:column;gap:.5rem}body.toc2{padding-left:0!important;padding-right:0!important}#toc.toc2{position:relative!important;width:auto!important;left:0!important;right:0!important;top:0!important;margin:0 1.5rem 3rem!important;max-height:none!important}}@media (min-width:1280px){body.toc2.toc-left{padding-left:24rem!important;padding-right:0!important}body.toc2.toc-left #toc.toc2{left:1rem;right:auto}body.toc2.toc-right{padding-right:24rem!important;padding-left:0!important}body.toc2.toc-right #toc.toc2{right:1rem;left:auto}#toc.toc2{position:fixed!important;width:20rem;top:2rem;height:auto;max-height:calc(100vh - 4rem);overflow-y:auto}body.toc2.toc-right .reading-time{right:auto!important;left:2rem!important}#content,#footer,#footnotes,#header{max-width:900px;margin-left:auto;margin-right:auto}body.toc2.toc-left #content,body.toc2.toc-left #header{margin-left:2rem}body.toc2.toc-right #content,body.toc2.toc-right #header{margin-right:2rem}}.theme-toggle{position:fixed;bottom:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border-color);box-shadow:0 10px 25px -5px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all .3s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(0,0,0,.2);border-color:var(--accent-primary)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all .3s ease}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0;border-top:1px solid var(--border-color)}.nav-container{max-width:var(--content-max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-body);font-weight:600;font-size:.9rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:.5rem;background:var(--bg-surface);border:1px solid var(--border-color);transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);border-bottom:1px solid var(--border-color)}.nav-next:hover,.nav-prev:hover{color:var(--bg-surface);background:var(--accent-primary);border-color:var(--accent-primary);transform:translateY(-2px);box-shadow:0 10px 15px -3px var(--accent-glow)}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.mermaid{background:var(--bg-surface);padding:2rem;border:1px solid var(--border-color);border-radius:1rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);margin:2rem 0}.mermaid .cluster rect{fill:var(--bg-base)!important;fill-opacity:.5!important;stroke:var(--border-color)!important;backdrop-filter:blur(4px)}.mermaid text{font-family:var(--font-body)!important;letter-spacing:-.01em}.mermaid .active,.mermaid .task0{fill:var(--accent-primary)!important;stroke:var(--accent-secondary)!important}:root.dark-mode .mermaid .loopText,:root.dark-mode .mermaid .messageText,:root.dark-mode .mermaid .noteText,:root.dark-mode .mermaid .sectionTitle,:root.dark-mode .mermaid .taskText{fill:var(--text-heading)!important;color:var(--text-heading)!important;stroke:none!important}:root.dark-mode .mermaid .messageLine0,:root.dark-mode .mermaid .messageLine1{stroke:var(--accent-secondary)!important;stroke-opacity:.6}:root.dark-mode .mermaid .actor,:root.dark-mode .mermaid .note{fill:var(--bg-surface)!important;stroke:var(--accent-primary)!important}:root.dark-mode .mermaid .noteText>tspan{fill:var(--accent-primary)!important}:root.dark-mode .mermaid text.actor>tspan{fill:var(--text-heading)!important;font-weight:600}:root.dark-mode .mermaid .edgeLabel,:root.dark-mode .mermaid .edgeLabel rect{fill:var(--bg-base)!important;color:var(--text-main)!important}
@@ -638,6 +638,96 @@
         display: block; /* Important for scroll calculations */
     }
 
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
     /* Centering Fix for SVG diagrams */
     .modal-svg-wrapper {
         display: flex;
@@ -645,12 +735,15 @@
         align-items: center;
         min-height: 100%;
         width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
     }
 
     .modal-svg-wrapper svg {
         max-width: 100%;
-        height: auto !important; /* Allow natural aspect ratio */
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
     }
 
     /* Body locking when modal is open */
@@ -796,18 +889,30 @@
 
         showContent(itemId, title, kind, content) {
             const modal = document.getElementById('showcase-content-modal');
-            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
-            modal.querySelector('.showcase-content-code').textContent = content;
+            if (!modal) return;
 
-            this.hideTOC(); // Hide TOC before showing modal
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
             modal.style.display = 'flex';
             modal.querySelector('.showcase-modal-body').scrollTop = 0;
         },
 
         expandItem(itemId, title) {
             const item = document.getElementById(itemId);
-            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
             const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
 
             modal.querySelector('.showcase-modal-title').textContent = title;
             modal.querySelector('.showcase-modal-body').innerHTML =
@@ -1766,6 +1871,34 @@
 
 </script>
 
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
+
 <style>
 .hidden {
     display: none;
@@ -2120,7 +2253,7 @@ participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Produ
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" id="id_4b7011faac5a4fc7804e12e647e4fc69" width="700" height="700" viewBox="0 0 700 700" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Use Elasticsearch for Search Functionality"],["Status","Accepted"],["Date","2024-05-15"],["Context","- Our application needs robust search capabilities across multiple data types\n- We need to support full-text search with relevance ranking\n- The search functionality must scale with growing data volumes\n- We need to support faceted search and filtering"],["Decision","- We will use Elasticsearch as our search engine\n- We will integrate it with our existing PostgreSQL database\n- We will implement a synchronization mechanism to keep data in sync"],["Consequences","- Improved search performance and capabilities\n- Additional infrastructure to maintain\n- Need for expertise in Elasticsearch configuration and optimization\n- Potential complexity in keeping data synchronized"],["Participants","Jane Smith (Architect),John Doe (Developer),Alice Johnson (Product Manager),Mike Brown (DBA)"],["References",""],["Links",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_4b7011faac5a4fc7804e12e647e4fc69" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_4b7011faac5a4fc7804e12e647e4fc69" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_4b7011faac5a4fc7804e12e647e4fc69" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_4b7011faac5a4fc7804e12e647e4fc69" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><style type="text/css">#id_4b7011faac5a4fc7804e12e647e4fc69 .card { fill: #ffffff; stroke: #e1e1e1; stroke-width: 1; filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1)); } #id_4b7011faac5a4fc7804e12e647e4fc69 .title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 20px; fill: #000000; } #id_4b7011faac5a4fc7804e12e647e4fc69 .subtitle { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 16px; fill: #666666; } #id_4b7011faac5a4fc7804e12e647e4fc69 .status { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_4b7011faac5a4fc7804e12e647e4fc69 .content { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #333333; } #id_4b7011faac5a4fc7804e12e647e4fc69 .section-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 16px; fill: #333333; } #id_4b7011faac5a4fc7804e12e647e4fc69 .participant-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 12px; fill: #333333; } #id_4b7011faac5a4fc7804e12e647e4fc69 .participant-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #333333; text-anchor: middle; } #id_4b7011faac5a4fc7804e12e647e4fc69 .participant-name-with-email { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 12px; fill: #007AFF; text-anchor: middle; border-bottom: 1px dotted #007AFF; } #id_4b7011faac5a4fc7804e12e647e4fc69 .participant-name-with-email:hover { fill: #0056CC; font-weight: 600; } #id_4b7011faac5a4fc7804e12e647e4fc69 .participant-container { cursor: pointer; } #id_4b7011faac5a4fc7804e12e647e4fc69 .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5)); transition: filter 0.3s ease; } #id_4b7011faac5a4fc7804e12e647e4fc69 .participant-container:hover .participant-name { fill: #007AFF; transition: fill 0.3s ease; } #id_4b7011faac5a4fc7804e12e647e4fc69 .group-chat-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_4b7011faac5a4fc7804e12e647e4fc69 .reference-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_4b7011faac5a4fc7804e12e647e4fc69 .reference-link:hover { fill: #0056CC; font-weight: 500; } #id_4b7011faac5a4fc7804e12e647e4fc69 a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 688.0 A 12.0 12.0 0 0 1 688.0 700.0 L 12.0 700.0 A 12.0 12.0 0 0 1 0 688.0 Z" fill="#F2F2F7" /><rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Use Elasticsearch for Search Functionality</text><text x="35" y="70" class="subtitle">Date: 2024-05-15</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our application needs robust search capabilities across multiple data types</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">We need to support full-text search with relevance ranking</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">The search functionality must scale with growing data volumes</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">We need to support faceted search and filtering</text><rect x="20" y="240" width="660" height="100" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will use Elasticsearch as our search engine</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content">We will integrate it with our existing PostgreSQL database</text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content">We will implement a synchronization mechanism to keep data in sync</text><rect x="20" y="360" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="385" class="section-title">Consequences</text><circle cx="40" cy="405" r="3" fill="#333333" /><text x="50" y="410" class="content">Improved search performance and capabilities</text><circle cx="40" cy="425" r="3" fill="#333333" /><text x="50" y="430" class="content">Additional infrastructure to maintain</text><circle cx="40" cy="445" r="3" fill="#333333" /><text x="50" y="450" class="content">Need for expertise in Elasticsearch configuration and optimization</text><circle cx="40" cy="465" r="3" fill="#333333" /><text x="50" y="470" class="content">Potential complexity in keeping data synchronized</text><rect x="20" y="500" width="660" height="180" class="card" rx="10" ry="10"/><text x="35" y="525" class="section-title">Participants</text><g><circle cx="140" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="555" text-anchor="middle" font-size="16">👤</text><text x="140" y="580" class="participant-name">Jane Smith</text><text x="140" y="595" class="participant-name">(Architect)</text></g><g><circle cx="350" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="350" y="555" text-anchor="middle" font-size="16">👤</text><text x="350" y="580" class="participant-name">John Doe (Developer)</text></g><g><circle cx="560" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="560" y="555" text-anchor="middle" font-size="16">👤</text><text x="560" y="580" class="participant-name">Alice Johnson</text><text x="560" y="595" class="participant-name">(Product Manager)</text></g><g><circle cx="140" cy="620" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="625" text-anchor="middle" font-size="16">👤</text><text x="140" y="650" class="participant-name">Mike Brown (DBA)</text></g></svg></div></div></div></div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" id="id_08e53d8d827243fcba0cf7e309589afb" width="700" height="700" viewBox="0 0 700 700" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Use Elasticsearch for Search Functionality"],["Status","Accepted"],["Date","2024-05-15"],["Context","- Our application needs robust search capabilities across multiple data types\n- We need to support full-text search with relevance ranking\n- The search functionality must scale with growing data volumes\n- We need to support faceted search and filtering"],["Decision","- We will use Elasticsearch as our search engine\n- We will integrate it with our existing PostgreSQL database\n- We will implement a synchronization mechanism to keep data in sync"],["Consequences","- Improved search performance and capabilities\n- Additional infrastructure to maintain\n- Need for expertise in Elasticsearch configuration and optimization\n- Potential complexity in keeping data synchronized"],["Participants","Jane Smith (Architect),John Doe (Developer),Alice Johnson (Product Manager),Mike Brown (DBA)"],["References",""],["Links",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_08e53d8d827243fcba0cf7e309589afb" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_08e53d8d827243fcba0cf7e309589afb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_08e53d8d827243fcba0cf7e309589afb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_08e53d8d827243fcba0cf7e309589afb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><style type="text/css">#id_08e53d8d827243fcba0cf7e309589afb .card { fill: #ffffff; stroke: #e1e1e1; stroke-width: 1; filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1)); } #id_08e53d8d827243fcba0cf7e309589afb .title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 20px; fill: #000000; } #id_08e53d8d827243fcba0cf7e309589afb .subtitle { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 16px; fill: #666666; } #id_08e53d8d827243fcba0cf7e309589afb .status { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_08e53d8d827243fcba0cf7e309589afb .content { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #333333; } #id_08e53d8d827243fcba0cf7e309589afb .section-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 16px; fill: #333333; } #id_08e53d8d827243fcba0cf7e309589afb .participant-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 12px; fill: #333333; } #id_08e53d8d827243fcba0cf7e309589afb .participant-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #333333; text-anchor: middle; } #id_08e53d8d827243fcba0cf7e309589afb .participant-name-with-email { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 12px; fill: #007AFF; text-anchor: middle; border-bottom: 1px dotted #007AFF; } #id_08e53d8d827243fcba0cf7e309589afb .participant-name-with-email:hover { fill: #0056CC; font-weight: 600; } #id_08e53d8d827243fcba0cf7e309589afb .participant-container { cursor: pointer; } #id_08e53d8d827243fcba0cf7e309589afb .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5)); transition: filter 0.3s ease; } #id_08e53d8d827243fcba0cf7e309589afb .participant-container:hover .participant-name { fill: #007AFF; transition: fill 0.3s ease; } #id_08e53d8d827243fcba0cf7e309589afb .group-chat-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_08e53d8d827243fcba0cf7e309589afb .reference-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_08e53d8d827243fcba0cf7e309589afb .reference-link:hover { fill: #0056CC; font-weight: 500; } #id_08e53d8d827243fcba0cf7e309589afb a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 688.0 A 12.0 12.0 0 0 1 688.0 700.0 L 12.0 700.0 A 12.0 12.0 0 0 1 0 688.0 Z" fill="#F2F2F7" /><rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Use Elasticsearch for Search Functionality</text><text x="35" y="70" class="subtitle">Date: 2024-05-15</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our application needs robust search capabilities across multiple data types</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">We need to support full-text search with relevance ranking</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">The search functionality must scale with growing data volumes</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">We need to support faceted search and filtering</text><rect x="20" y="240" width="660" height="100" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will use Elasticsearch as our search engine</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content">We will integrate it with our existing PostgreSQL database</text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content">We will implement a synchronization mechanism to keep data in sync</text><rect x="20" y="360" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="385" class="section-title">Consequences</text><circle cx="40" cy="405" r="3" fill="#333333" /><text x="50" y="410" class="content">Improved search performance and capabilities</text><circle cx="40" cy="425" r="3" fill="#333333" /><text x="50" y="430" class="content">Additional infrastructure to maintain</text><circle cx="40" cy="445" r="3" fill="#333333" /><text x="50" y="450" class="content">Need for expertise in Elasticsearch configuration and optimization</text><circle cx="40" cy="465" r="3" fill="#333333" /><text x="50" y="470" class="content">Potential complexity in keeping data synchronized</text><rect x="20" y="500" width="660" height="180" class="card" rx="10" ry="10"/><text x="35" y="525" class="section-title">Participants</text><g><circle cx="140" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="555" text-anchor="middle" font-size="16">👤</text><text x="140" y="580" class="participant-name">Jane Smith</text><text x="140" y="595" class="participant-name">(Architect)</text></g><g><circle cx="350" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="350" y="555" text-anchor="middle" font-size="16">👤</text><text x="350" y="580" class="participant-name">John Doe (Developer)</text></g><g><circle cx="560" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="560" y="555" text-anchor="middle" font-size="16">👤</text><text x="560" y="580" class="participant-name">Alice Johnson</text><text x="560" y="595" class="participant-name">(Product Manager)</text></g><g><circle cx="140" cy="620" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="625" text-anchor="middle" font-size="16">👤</text><text x="140" y="650" class="participant-name">Mike Brown (DBA)</text></g></svg></div></div></div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2157,8 +2290,247 @@ participants: Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-a5bd5f1e1ce7680c" data-theme="light" data-original-content="title: Adopt Microservices Architecture
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-a948a9c521abbdc2 {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-a948a9c521abbdc2.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-a948a9c521abbdc2 {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-a948a9c521abbdc2 {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-a948a9c521abbdc2:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-a948a9c521abbdc2 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-a948a9c521abbdc2 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-a948a9c521abbdc2 .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-a948a9c521abbdc2 .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-a948a9c521abbdc2 .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-a948a9c521abbdc2 .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-a948a9c521abbdc2 .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-a948a9c521abbdc2 .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_a948a9c521abbdc2 = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-a948a9c521abbdc2');
+          const sourceContainer = document.getElementById('svgviewer-a948a9c521abbdc2');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-a948a9c521abbdc2');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-a948a9c521abbdc2');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_a948a9c521abbdc2 = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-a948a9c521abbdc2');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-a948a9c521abbdc2');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-a948a9c521abbdc2');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-a948a9c521abbdc2');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_a948a9c521abbdc2.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-a948a9c521abbdc2');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_a948a9c521abbdc2.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-a948a9c521abbdc2" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=adr&payload=H4sIAIt7h2kA_2VTTW_bMAy951fw2AJz0hXDDrkVDQZ0W9cBO_RQ5MBIdExEH55Ex3V__Sg7dbLtkEAJqcfH956ExdEa7mxsBR7ZpJgpHdlQhrtkGhYy0iVaZEHpsjYaQ62QXVgUvXd7c_upuvlc3XxcmBiEXmW9qOCpS-BjiI6lYQPYto4NCscAnGFHJnoOe7Bc12w6JyARPHIQ_QAGC9mgIwXa0JFcbD0F7SH0GQKRLe19TAfgYKkl_QriBlD0gkipdLeYJEOsQRqCPGQhr3jPNAOwb1M8EiiCi8M4oU70u6NghpFDItsZAmFPlcTKYzqQFE7zDF2jjUFPGRosUHOl8C8bFkBOVNDzwpLhrBqsJyI9Owf7hLZDp-w961lISUQ_izcK85cpeGnKGafLBC8vjUib16uVchUOdewdpaWyXO0cH3i1iUXkTeIjhQ1l3odlI96BHf-v7FhQQUplux1FKtJyPcBpPuxiFywmpnwxXKV0446q2wUL7PMSPb7FMHLAlqu9btjjAHc_H-B01kF1TGAcnyT1XTiF5Z_9SsCUJyV-m7J0dZ7V9_3SRnM47Qub8bzdXo9WRhWNsqT_rh26HaVAQnnJcQXf5p96swQ6T4GgXDx7mBIzpRN3rAa9JyVzoW-KI19Qs5ZUxXNyzWBcsU5bLxJ7kbwi5kMwiTArfGxpYopujJijV52kLT9KdItYKe66LLMplrNRYmlio9lhiUnjtyiPgA23qCPW5XU3SA7uG3X56r5hqs9v_PoD_MKEDXyNTchFJX17T22G74RWixs8soVndu-1ebtHDLindP0H7b6CUEoEAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=adr&filename=ghi.svg" data-original-content="title: Adopt Microservices Architecture
 status: Accepted
 date: 2024-06-01
 context:
@@ -2177,31 +2549,33 @@ consequences:
 - Increased operational complexity
 - Need for robust service discovery and monitoring
 participants: Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)" data-kind="adr">
-<svg xmlns="http://www.w3.org/2000/svg" id="id_d0930974f41d4b38ab3a799e1f2fc767" width="700" height="710" viewBox="0 0 700 710" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Adopt Microservices Architecture"],["Status","Accepted"],["Date","2024-06-01"],["Context","- Our monolithic application is becoming difficult to maintain and scale\n- Development teams need to work independently on different parts of the system\n- We need to improve deployment frequency and reduce time-to-market\n- Different components have different scaling requirements"],["Decision","- We will gradually migrate from monolith to microservices architecture\n- We will use [[https://martinfowler.com/bliki/DomainDrivenDesign.html domain-driven design]] to identify service boundaries\n- We will implement an [[https://aws.amazon.com/api-gateway API gateway]] for client communication\n- We will use containerization ([[https://www.docker.com/ Docker]]) and orchestration ([[https://kubernetes.io/ Kubernetes]])"],["Consequences","- Improved scalability and resilience\n- Faster development cycles and independent deployments\n- Increased operational complexity\n- Need for robust service discovery and monitoring"],["Participants","Michael Chen (Chief Architect),Sarah Johnson (DevOps Lead),David Wilson (Development Manager)"],["References",""],["Links","https://martinfowler.com/bliki/DomainDrivenDesign.html,https://aws.amazon.com/api-gateway,https://www.docker.com/,https://kubernetes.io/"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_d0930974f41d4b38ab3a799e1f2fc767" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_d0930974f41d4b38ab3a799e1f2fc767" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_d0930974f41d4b38ab3a799e1f2fc767" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_d0930974f41d4b38ab3a799e1f2fc767" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><style type="text/css">#id_d0930974f41d4b38ab3a799e1f2fc767 .card { fill: #1f2937; stroke: #374151; stroke-width: 1; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); } #id_d0930974f41d4b38ab3a799e1f2fc767 .title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 20px; fill: #f9fafb; } #id_d0930974f41d4b38ab3a799e1f2fc767 .subtitle { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 16px; fill: #9ca3af; } #id_d0930974f41d4b38ab3a799e1f2fc767 .status { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_d0930974f41d4b38ab3a799e1f2fc767 .content { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #e5e7eb; } #id_d0930974f41d4b38ab3a799e1f2fc767 .section-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 16px; fill: #f3f4f6; } #id_d0930974f41d4b38ab3a799e1f2fc767 .participant-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 12px; fill: #f3f4f6; } #id_d0930974f41d4b38ab3a799e1f2fc767 .participant-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #d1d5db; text-anchor: middle; } #id_d0930974f41d4b38ab3a799e1f2fc767 .participant-name-with-email { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 12px; fill: #60a5fa; text-anchor: middle; border-bottom: 1px dotted #60a5fa; } #id_d0930974f41d4b38ab3a799e1f2fc767 .participant-name-with-email:hover { fill: #93c5fd; font-weight: 600; } #id_d0930974f41d4b38ab3a799e1f2fc767 .participant-container { cursor: pointer; } #id_d0930974f41d4b38ab3a799e1f2fc767 .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 6px rgba(96, 165, 250, 0.6)); transition: filter 0.3s ease; } #id_d0930974f41d4b38ab3a799e1f2fc767 .participant-container:hover .participant-name { fill: #60a5fa; transition: fill 0.3s ease; } #id_d0930974f41d4b38ab3a799e1f2fc767 .group-chat-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_d0930974f41d4b38ab3a799e1f2fc767 .reference-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_d0930974f41d4b38ab3a799e1f2fc767 .reference-link:hover { fill: #93c5fd; font-weight: 500; } #id_d0930974f41d4b38ab3a799e1f2fc767 a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 698.0 A 12.0 12.0 0 0 1 688.0 710.0 L 12.0 710.0 A 12.0 12.0 0 0 1 0 698.0 Z" fill="url(#backgroundGradient_d0930974f41d4b38ab3a799e1f2fc767)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 698.0 A 12.0 12.0 0 0 1 688.0 710.0 L 12.0 710.0 A 12.0 12.0 0 0 1 0 698.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_d0930974f41d4b38ab3a799e1f2fc767)" stroke-width="1.5" filter="url(#glassDropShadow_d0930974f41d4b38ab3a799e1f2fc767)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 698.0 A 12.0 12.0 0 0 1 688.0 710.0 L 12.0 710.0 A 12.0 12.0 0 0 1 0 698.0 Z" fill="url(#glassOverlay_d0930974f41d4b38ab3a799e1f2fc767)" opacity="0.7" />        <rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Adopt Microservices Architecture</text><text x="35" y="70" class="subtitle">Date: 2024-06-01</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our monolithic application is becoming difficult to maintain and scale</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">Development teams need to work independently on different parts of the system</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">We need to improve deployment frequency and reduce time-to-market</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">Different components have different scaling requirements</text><rect x="20" y="240" width="660" height="180" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will gradually migrate from monolith to microservices architecture</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content"><tspan>We will use </tspan><tspan><a href="https://martinfowler.com/bliki/DomainDrivenDesign.html" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">domain-driven design</tspan></a></tspan><tspan> to identify service boundaries</tspan></text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content"><tspan>We will implement an </tspan><tspan><a href="https://aws.amazon.com/api-gateway" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">API gateway</tspan></a></tspan><tspan> for client communication</tspan></text><circle cx="40" cy="345" r="3" fill="#333333" /><text x="50" y="350" class="content"><tspan>We will use containerization (</tspan><tspan><a href="https://www.docker.com/" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">Docker</tspan></a></tspan><tspan>) and orchestration</tspan></text><text x="50" y="370" class="content"><tspan>(</tspan><tspan><a href="https://kubernetes.io/" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">Kubernetes</tspan></a></tspan><tspan>)</tspan></text><rect x="20" y="440" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="465" class="section-title">Consequences</text><circle cx="40" cy="485" r="3" fill="#333333" /><text x="50" y="490" class="content">Improved scalability and resilience</text><circle cx="40" cy="505" r="3" fill="#333333" /><text x="50" y="510" class="content">Faster development cycles and independent deployments</text><circle cx="40" cy="525" r="3" fill="#333333" /><text x="50" y="530" class="content">Increased operational complexity</text><circle cx="40" cy="545" r="3" fill="#333333" /><text x="50" y="550" class="content">Need for robust service discovery and monitoring</text><rect x="20" y="580" width="660" height="110" class="card" rx="10" ry="10"/><text x="35" y="605" class="section-title">Participants</text><g><circle cx="140" cy="630" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="635" text-anchor="middle" font-size="16">👤</text><text x="140" y="660" class="participant-name">Michael Chen (Chief</text><text x="140" y="675" class="participant-name">Architect)</text></g><g><circle cx="350" cy="630" r="15" fill="#6c757d" class="participant-icon" /><text x="350" y="635" text-anchor="middle" font-size="16">👤</text><text x="350" y="660" class="participant-name">Sarah Johnson</text><text x="350" y="675" class="participant-name">(DevOps Lead)</text></g><g><circle cx="560" cy="630" r="15" fill="#6c757d" class="participant-icon" /><text x="560" y="635" text-anchor="middle" font-size="16">👤</text><text x="560" y="660" class="participant-name">David Wilson</text><text x="560" y="675" class="participant-name">(Development</text><text x="560" y="690" class="participant-name">Manager)</text></g></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-a5bd5f1e1ce7680c')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-a5bd5f1e1ce7680c">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-a5bd5f1e1ce7680c')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-a5bd5f1e1ce7680c')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-a5bd5f1e1ce7680c')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-a5bd5f1e1ce7680c')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-a5bd5f1e1ce7680c')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-a5bd5f1e1ce7680c')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-a5bd5f1e1ce7680c')" title="Show CSV Data">📊 CSV</button>
+<svg xmlns="http://www.w3.org/2000/svg" id="id_a13f0db6f2a44e36b9502f3b762e8eba" width="700" height="710" viewBox="0 0 700 710" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Adopt Microservices Architecture"],["Status","Accepted"],["Date","2024-06-01"],["Context","- Our monolithic application is becoming difficult to maintain and scale\n- Development teams need to work independently on different parts of the system\n- We need to improve deployment frequency and reduce time-to-market\n- Different components have different scaling requirements"],["Decision","- We will gradually migrate from monolith to microservices architecture\n- We will use [[https://martinfowler.com/bliki/DomainDrivenDesign.html domain-driven design]] to identify service boundaries\n- We will implement an [[https://aws.amazon.com/api-gateway API gateway]] for client communication\n- We will use containerization ([[https://www.docker.com/ Docker]]) and orchestration ([[https://kubernetes.io/ Kubernetes]])"],["Consequences","- Improved scalability and resilience\n- Faster development cycles and independent deployments\n- Increased operational complexity\n- Need for robust service discovery and monitoring"],["Participants","Michael Chen (Chief Architect),Sarah Johnson (DevOps Lead),David Wilson (Development Manager)"],["References",""],["Links","https://martinfowler.com/bliki/DomainDrivenDesign.html,https://aws.amazon.com/api-gateway,https://www.docker.com/,https://kubernetes.io/"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_a13f0db6f2a44e36b9502f3b762e8eba" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_a13f0db6f2a44e36b9502f3b762e8eba" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_a13f0db6f2a44e36b9502f3b762e8eba" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_a13f0db6f2a44e36b9502f3b762e8eba" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><style type="text/css">#id_a13f0db6f2a44e36b9502f3b762e8eba .card { fill: #1f2937; stroke: #374151; stroke-width: 1; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); } #id_a13f0db6f2a44e36b9502f3b762e8eba .title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 20px; fill: #f9fafb; } #id_a13f0db6f2a44e36b9502f3b762e8eba .subtitle { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 16px; fill: #9ca3af; } #id_a13f0db6f2a44e36b9502f3b762e8eba .status { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_a13f0db6f2a44e36b9502f3b762e8eba .content { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #e5e7eb; } #id_a13f0db6f2a44e36b9502f3b762e8eba .section-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 16px; fill: #f3f4f6; } #id_a13f0db6f2a44e36b9502f3b762e8eba .participant-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 12px; fill: #f3f4f6; } #id_a13f0db6f2a44e36b9502f3b762e8eba .participant-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #d1d5db; text-anchor: middle; } #id_a13f0db6f2a44e36b9502f3b762e8eba .participant-name-with-email { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 12px; fill: #60a5fa; text-anchor: middle; border-bottom: 1px dotted #60a5fa; } #id_a13f0db6f2a44e36b9502f3b762e8eba .participant-name-with-email:hover { fill: #93c5fd; font-weight: 600; } #id_a13f0db6f2a44e36b9502f3b762e8eba .participant-container { cursor: pointer; } #id_a13f0db6f2a44e36b9502f3b762e8eba .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 6px rgba(96, 165, 250, 0.6)); transition: filter 0.3s ease; } #id_a13f0db6f2a44e36b9502f3b762e8eba .participant-container:hover .participant-name { fill: #60a5fa; transition: fill 0.3s ease; } #id_a13f0db6f2a44e36b9502f3b762e8eba .group-chat-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_a13f0db6f2a44e36b9502f3b762e8eba .reference-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_a13f0db6f2a44e36b9502f3b762e8eba .reference-link:hover { fill: #93c5fd; font-weight: 500; } #id_a13f0db6f2a44e36b9502f3b762e8eba a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 698.0 A 12.0 12.0 0 0 1 688.0 710.0 L 12.0 710.0 A 12.0 12.0 0 0 1 0 698.0 Z" fill="url(#backgroundGradient_a13f0db6f2a44e36b9502f3b762e8eba)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 698.0 A 12.0 12.0 0 0 1 688.0 710.0 L 12.0 710.0 A 12.0 12.0 0 0 1 0 698.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_a13f0db6f2a44e36b9502f3b762e8eba)" stroke-width="1.5" filter="url(#glassDropShadow_a13f0db6f2a44e36b9502f3b762e8eba)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 698.0 A 12.0 12.0 0 0 1 688.0 710.0 L 12.0 710.0 A 12.0 12.0 0 0 1 0 698.0 Z" fill="url(#glassOverlay_a13f0db6f2a44e36b9502f3b762e8eba)" opacity="0.7" />        <rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Adopt Microservices Architecture</text><text x="35" y="70" class="subtitle">Date: 2024-06-01</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our monolithic application is becoming difficult to maintain and scale</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">Development teams need to work independently on different parts of the system</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">We need to improve deployment frequency and reduce time-to-market</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">Different components have different scaling requirements</text><rect x="20" y="240" width="660" height="180" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will gradually migrate from monolith to microservices architecture</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content"><tspan>We will use </tspan><tspan><a href="https://martinfowler.com/bliki/DomainDrivenDesign.html" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">domain-driven design</tspan></a></tspan><tspan> to identify service boundaries</tspan></text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content"><tspan>We will implement an </tspan><tspan><a href="https://aws.amazon.com/api-gateway" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">API gateway</tspan></a></tspan><tspan> for client communication</tspan></text><circle cx="40" cy="345" r="3" fill="#333333" /><text x="50" y="350" class="content"><tspan>We will use containerization (</tspan><tspan><a href="https://www.docker.com/" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">Docker</tspan></a></tspan><tspan>) and orchestration</tspan></text><text x="50" y="370" class="content"><tspan>(</tspan><tspan><a href="https://kubernetes.io/" target="_blank"><tspan style="fill:#007AFF; text-decoration:underline;">Kubernetes</tspan></a></tspan><tspan>)</tspan></text><rect x="20" y="440" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="465" class="section-title">Consequences</text><circle cx="40" cy="485" r="3" fill="#333333" /><text x="50" y="490" class="content">Improved scalability and resilience</text><circle cx="40" cy="505" r="3" fill="#333333" /><text x="50" y="510" class="content">Faster development cycles and independent deployments</text><circle cx="40" cy="525" r="3" fill="#333333" /><text x="50" y="530" class="content">Increased operational complexity</text><circle cx="40" cy="545" r="3" fill="#333333" /><text x="50" y="550" class="content">Need for robust service discovery and monitoring</text><rect x="20" y="580" width="660" height="110" class="card" rx="10" ry="10"/><text x="35" y="605" class="section-title">Participants</text><g><circle cx="140" cy="630" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="635" text-anchor="middle" font-size="16">👤</text><text x="140" y="660" class="participant-name">Michael Chen (Chief</text><text x="140" y="675" class="participant-name">Architect)</text></g><g><circle cx="350" cy="630" r="15" fill="#6c757d" class="participant-icon" /><text x="350" y="635" text-anchor="middle" font-size="16">👤</text><text x="350" y="660" class="participant-name">Sarah Johnson</text><text x="350" y="675" class="participant-name">(DevOps Lead)</text></g><g><circle cx="560" cy="630" r="15" fill="#6c757d" class="participant-icon" /><text x="560" y="635" text-anchor="middle" font-size="16">👤</text><text x="560" y="660" class="participant-name">David Wilson</text><text x="560" y="675" class="participant-name">(Development</text><text x="560" y="690" class="participant-name">Manager)</text></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_a948a9c521abbdc2.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_a948a9c521abbdc2.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-a948a9c521abbdc2')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-a948a9c521abbdc2')">PNG</button>
 </div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-a5bd5f1e1ce7680c" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-a5bd5f1e1ce7680c')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-a5bd5f1e1ce7680c">
-        <div class="csv-loading">Loading CSV data...</div>
+<div id="modal-svgviewer-a948a9c521abbdc2" class="svg-modal-svgviewer-a948a9c521abbdc2" onclick="if(event.target === this) svgModalsvgviewer_a948a9c521abbdc2.close()">
+    <div class="svg-modal-content-svgviewer-a948a9c521abbdc2">
+        <button class="svg-modal-close-svgviewer-a948a9c521abbdc2" onclick="svgModalsvgviewer_a948a9c521abbdc2.close()">×</button>
+        <div id="modal-body-svgviewer-a948a9c521abbdc2" class="svg-modal-body-svgviewer-a948a9c521abbdc2"></div>
     </div>
 </div>
+
+<div id="csv-modal-svgviewer-a948a9c521abbdc2" class="svg-modal-svgviewer-a948a9c521abbdc2" onclick="if(event.target === this) csvModalsvgviewer_a948a9c521abbdc2.close()">
+    <div class="svg-modal-content-svgviewer-a948a9c521abbdc2">
+        <button class="svg-modal-close-svgviewer-a948a9c521abbdc2" onclick="csvModalsvgviewer_a948a9c521abbdc2.close()">×</button>
+        <div class="svg-modal-header-svgviewer-a948a9c521abbdc2" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-a948a9c521abbdc2" class="svg-modal-body-svgviewer-a948a9c521abbdc2" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 <style>
@@ -2254,7 +2628,7 @@ references:
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" id="id_69e520e2e3604f3a9b3f8e318d7fe5aa" width="700" height="810" viewBox="0 0 700 810" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Adopt GraphQL for API Layer"],["Status","Accepted"],["Date","2024-07-15"],["Context","- Our REST APIs have become complex with many endpoints\n- Mobile clients need to fetch data from multiple endpoints\n- Different clients need different data shapes\n- We need to reduce over-fetching and under-fetching of data"],["Decision","- We will adopt GraphQL for our API layer\n- We will maintain existing REST endpoints for backward compatibility\n- We will implement a gradual migration strategy\n- We will use Apollo Server for the GraphQL implementation"],["Consequences","- More efficient data fetching for clients\n- Improved developer experience with self-documenting API\n- Potential learning curve for the team\n- Need for new tooling and monitoring"],["Participants","Alex Rivera,Jasmine Wong,David Kim"],["References","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"],["Links","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_69e520e2e3604f3a9b3f8e318d7fe5aa" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_69e520e2e3604f3a9b3f8e318d7fe5aa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_69e520e2e3604f3a9b3f8e318d7fe5aa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_69e520e2e3604f3a9b3f8e318d7fe5aa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><style type="text/css">#id_69e520e2e3604f3a9b3f8e318d7fe5aa .card { fill: #ffffff; stroke: #e1e1e1; stroke-width: 1; filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1)); } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 20px; fill: #000000; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .subtitle { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 16px; fill: #666666; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .status { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .content { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #333333; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .section-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 16px; fill: #333333; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .participant-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 12px; fill: #333333; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .participant-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #333333; text-anchor: middle; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .participant-name-with-email { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 12px; fill: #007AFF; text-anchor: middle; border-bottom: 1px dotted #007AFF; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .participant-name-with-email:hover { fill: #0056CC; font-weight: 600; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .participant-container { cursor: pointer; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5)); transition: filter 0.3s ease; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .participant-container:hover .participant-name { fill: #007AFF; transition: fill 0.3s ease; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .group-chat-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .reference-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa .reference-link:hover { fill: #0056CC; font-weight: 500; } #id_69e520e2e3604f3a9b3f8e318d7fe5aa a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 798.0 A 12.0 12.0 0 0 1 688.0 810.0 L 12.0 810.0 A 12.0 12.0 0 0 1 0 798.0 Z" fill="#F2F2F7" /><rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Adopt GraphQL for API Layer</text><text x="35" y="70" class="subtitle">Date: 2024-07-15</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our REST APIs have become complex with many endpoints</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">Mobile clients need to fetch data from multiple endpoints</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">Different clients need different data shapes</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">We need to reduce over-fetching and under-fetching of data</text><rect x="20" y="240" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will adopt GraphQL for our API layer</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content">We will maintain existing REST endpoints for backward compatibility</text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content">We will implement a gradual migration strategy</text><circle cx="40" cy="345" r="3" fill="#333333" /><text x="50" y="350" class="content">We will use Apollo Server for the GraphQL implementation</text><rect x="20" y="380" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="405" class="section-title">Consequences</text><circle cx="40" cy="425" r="3" fill="#333333" /><text x="50" y="430" class="content">More efficient data fetching for clients</text><circle cx="40" cy="445" r="3" fill="#333333" /><text x="50" y="450" class="content">Improved developer experience with self-documenting API</text><circle cx="40" cy="465" r="3" fill="#333333" /><text x="50" y="470" class="content">Potential learning curve for the team</text><circle cx="40" cy="485" r="3" fill="#333333" /><text x="50" y="490" class="content">Need for new tooling and monitoring</text><rect x="20" y="520" width="660" height="110" class="card" rx="10" ry="10"/><text x="35" y="545" class="section-title">Participants</text><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com,jasmine.wong@example.com,david.kim@example.com&amp;topicName=Adopt+GraphQL+for+API+Layer" target="_blank"><text x="545" y="545" class="group-chat-link">Start Group Chat</text></a><g class="participant-container"><circle cx="140" cy="570" r="15" fill="#4F46E5" class="participant-icon" /><text x="140" y="575" text-anchor="middle" font-size="16">🔌</text><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com" target="_blank" title="Chat with alex.rivera@example.com"><text x="140" y="600" class="participant-name-with-email">Alex Rivera</text></a><text x="140" y="615" class="participant-title" text-anchor="middle">API Architect</text></g><g class="participant-container"><circle cx="350" cy="570" r="15" fill="#059669" class="participant-icon" /><text x="350" y="575" text-anchor="middle" font-size="16">📱</text><a href="https://teams.microsoft.com/l/chat/0/0?users=jasmine.wong@example.com" target="_blank" title="Chat with jasmine.wong@example.com"><text x="350" y="600" class="participant-name-with-email">Jasmine Wong</text></a><text x="350" y="615" class="participant-title" text-anchor="middle">Frontend Lead</text></g><g class="participant-container"><circle cx="560" cy="570" r="15" fill="#D97706" class="participant-icon" /><text x="560" y="575" text-anchor="middle" font-size="16">💻</text><a href="https://teams.microsoft.com/l/chat/0/0?users=david.kim@example.com" target="_blank" title="Chat with david.kim@example.com"><text x="560" y="600" class="participant-name-with-email">David Kim</text></a><text x="560" y="615" class="participant-title" text-anchor="middle">Backend Developer</text></g><rect x="20" y="650" width="660" height="140" class="card" rx="10" ry="10"/><text x="35" y="675" class="section-title">References</text><a href="https://graphql.org/" target="_blank"><text x="35" y="700" class="reference-link">GraphQL Official Documentation</text></a><a href="https://www.apollographql.com/docs/" target="_blank"><text x="35" y="725" class="reference-link">Apollo GraphQL Documentation</text></a><a href="https://engineering.example.com/graphql-best-practices" target="_blank"><text x="35" y="750" class="reference-link">GraphQL Best Practices</text></a><a href="https://github.com/example/graphql-migration-guide" target="_blank"><text x="35" y="775" class="reference-link">Our GraphQL Migration Guide</text></a></svg></div></div></div></div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" id="id_21737f4a9d9946748bc29827a58eb3f2" width="700" height="810" viewBox="0 0 700 810" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Adopt GraphQL for API Layer"],["Status","Accepted"],["Date","2024-07-15"],["Context","- Our REST APIs have become complex with many endpoints\n- Mobile clients need to fetch data from multiple endpoints\n- Different clients need different data shapes\n- We need to reduce over-fetching and under-fetching of data"],["Decision","- We will adopt GraphQL for our API layer\n- We will maintain existing REST endpoints for backward compatibility\n- We will implement a gradual migration strategy\n- We will use Apollo Server for the GraphQL implementation"],["Consequences","- More efficient data fetching for clients\n- Improved developer experience with self-documenting API\n- Potential learning curve for the team\n- Need for new tooling and monitoring"],["Participants","Alex Rivera,Jasmine Wong,David Kim"],["References","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"],["Links","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_21737f4a9d9946748bc29827a58eb3f2" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_21737f4a9d9946748bc29827a58eb3f2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_21737f4a9d9946748bc29827a58eb3f2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_21737f4a9d9946748bc29827a58eb3f2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><style type="text/css">#id_21737f4a9d9946748bc29827a58eb3f2 .card { fill: #ffffff; stroke: #e1e1e1; stroke-width: 1; filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1)); } #id_21737f4a9d9946748bc29827a58eb3f2 .title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 20px; fill: #000000; } #id_21737f4a9d9946748bc29827a58eb3f2 .subtitle { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 16px; fill: #666666; } #id_21737f4a9d9946748bc29827a58eb3f2 .status { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_21737f4a9d9946748bc29827a58eb3f2 .content { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #333333; } #id_21737f4a9d9946748bc29827a58eb3f2 .section-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 16px; fill: #333333; } #id_21737f4a9d9946748bc29827a58eb3f2 .participant-title { font-family: Arial, Helvetica, sans-serif; font-weight: 600; font-size: 12px; fill: #333333; } #id_21737f4a9d9946748bc29827a58eb3f2 .participant-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #333333; text-anchor: middle; } #id_21737f4a9d9946748bc29827a58eb3f2 .participant-name-with-email { font-family: Arial, Helvetica, sans-serif; font-weight: 500; font-size: 12px; fill: #007AFF; text-anchor: middle; border-bottom: 1px dotted #007AFF; } #id_21737f4a9d9946748bc29827a58eb3f2 .participant-name-with-email:hover { fill: #0056CC; font-weight: 600; } #id_21737f4a9d9946748bc29827a58eb3f2 .participant-container { cursor: pointer; } #id_21737f4a9d9946748bc29827a58eb3f2 .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5)); transition: filter 0.3s ease; } #id_21737f4a9d9946748bc29827a58eb3f2 .participant-container:hover .participant-name { fill: #007AFF; transition: fill 0.3s ease; } #id_21737f4a9d9946748bc29827a58eb3f2 .group-chat-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 12px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_21737f4a9d9946748bc29827a58eb3f2 .reference-link { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 14px; fill: #007AFF; text-decoration: underline; cursor: pointer; } #id_21737f4a9d9946748bc29827a58eb3f2 .reference-link:hover { fill: #0056CC; font-weight: 500; } #id_21737f4a9d9946748bc29827a58eb3f2 a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 688.0 0 A 12.0 12.0 0 0 1 700.0 12.0 L 700.0 798.0 A 12.0 12.0 0 0 1 688.0 810.0 L 12.0 810.0 A 12.0 12.0 0 0 1 0 798.0 Z" fill="#F2F2F7" /><rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Adopt GraphQL for API Layer</text><text x="35" y="70" class="subtitle">Date: 2024-07-15</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our REST APIs have become complex with many endpoints</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">Mobile clients need to fetch data from multiple endpoints</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">Different clients need different data shapes</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">We need to reduce over-fetching and under-fetching of data</text><rect x="20" y="240" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will adopt GraphQL for our API layer</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content">We will maintain existing REST endpoints for backward compatibility</text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content">We will implement a gradual migration strategy</text><circle cx="40" cy="345" r="3" fill="#333333" /><text x="50" y="350" class="content">We will use Apollo Server for the GraphQL implementation</text><rect x="20" y="380" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="405" class="section-title">Consequences</text><circle cx="40" cy="425" r="3" fill="#333333" /><text x="50" y="430" class="content">More efficient data fetching for clients</text><circle cx="40" cy="445" r="3" fill="#333333" /><text x="50" y="450" class="content">Improved developer experience with self-documenting API</text><circle cx="40" cy="465" r="3" fill="#333333" /><text x="50" y="470" class="content">Potential learning curve for the team</text><circle cx="40" cy="485" r="3" fill="#333333" /><text x="50" y="490" class="content">Need for new tooling and monitoring</text><rect x="20" y="520" width="660" height="110" class="card" rx="10" ry="10"/><text x="35" y="545" class="section-title">Participants</text><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com,jasmine.wong@example.com,david.kim@example.com&amp;topicName=Adopt+GraphQL+for+API+Layer" target="_blank"><text x="545" y="545" class="group-chat-link">Start Group Chat</text></a><g class="participant-container"><circle cx="140" cy="570" r="15" fill="#4F46E5" class="participant-icon" /><text x="140" y="575" text-anchor="middle" font-size="16">🔌</text><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com" target="_blank" title="Chat with alex.rivera@example.com"><text x="140" y="600" class="participant-name-with-email">Alex Rivera</text></a><text x="140" y="615" class="participant-title" text-anchor="middle">API Architect</text></g><g class="participant-container"><circle cx="350" cy="570" r="15" fill="#059669" class="participant-icon" /><text x="350" y="575" text-anchor="middle" font-size="16">📱</text><a href="https://teams.microsoft.com/l/chat/0/0?users=jasmine.wong@example.com" target="_blank" title="Chat with jasmine.wong@example.com"><text x="350" y="600" class="participant-name-with-email">Jasmine Wong</text></a><text x="350" y="615" class="participant-title" text-anchor="middle">Frontend Lead</text></g><g class="participant-container"><circle cx="560" cy="570" r="15" fill="#D97706" class="participant-icon" /><text x="560" y="575" text-anchor="middle" font-size="16">💻</text><a href="https://teams.microsoft.com/l/chat/0/0?users=david.kim@example.com" target="_blank" title="Chat with david.kim@example.com"><text x="560" y="600" class="participant-name-with-email">David Kim</text></a><text x="560" y="615" class="participant-title" text-anchor="middle">Backend Developer</text></g><rect x="20" y="650" width="660" height="140" class="card" rx="10" ry="10"/><text x="35" y="675" class="section-title">References</text><a href="https://graphql.org/" target="_blank"><text x="35" y="700" class="reference-link">GraphQL Official Documentation</text></a><a href="https://www.apollographql.com/docs/" target="_blank"><text x="35" y="725" class="reference-link">Apollo GraphQL Documentation</text></a><a href="https://engineering.example.com/graphql-best-practices" target="_blank"><text x="35" y="750" class="reference-link">GraphQL Best Practices</text></a><a href="https://github.com/example/graphql-migration-guide" target="_blank"><text x="35" y="775" class="reference-link">Our GraphQL Migration Guide</text></a></svg></div></div></div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2530,43 +2904,7 @@ if (!hljs.initHighlighting.called) {
   ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
 }
 </script>
-<style>
-/* Reading Time Styles */
-.reading-time {
-    position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    background: var(--bg-base); /* Uses the dynamic background variable */
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--accent-secondary);
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    z-index: 1005;
-    
-    /* Double-accent shadow follows the light/dark mode logic */
-    box-shadow: 6px 6px 0px var(--accent-pink);
-    
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-main); /* Switches between grey and dark slate */
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
 
-.reading-time p {
-    margin: 0 !important;
-    font-weight: 600;
-}
-
-/* Light Mode specific opacity tweak */
-body.light-mode .reading-time {
-    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
-}
-</style>
-<div class="reading-time">
-    <p>📖 3 min read • 1055 words</p>
-</div>
 <style>
 .listingblock {
     position: relative;

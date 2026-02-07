@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<link rel="icon" type="image/04" href="../images/favicon.svg?v=2025.04">
+<link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
 <title>Line Charts</title>
 <style>
 @import url(https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap);@keyframes reveal{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}:root{--bg-base:#f8fafc;--bg-surface:#ffffff;--bg-grid:rgba(0, 0, 0, 0.05);--text-main:#334155;--text-heading:#0f172a;--accent-primary:#4f46e5;--accent-secondary:#06b6d4;--accent-glow:rgba(79, 70, 229, 0.1);--border-color:#e2e8f0;--note-color:#4f46e5;--tip-color:#10b981;--warning-color:#f59e0b;--caution-color:#ef4444;--important-color:#8b5cf6;--font-heading:'Syne', sans-serif;--font-body:'Outfit', sans-serif;--font-mono:'JetBrains Mono', monospace;--content-max-width:1100px}:root.dark-mode{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}}body{background-color:var(--bg-base);background-image:radial-gradient(var(--bg-grid) 1px,transparent 1px);background-size:30px 30px;background-attachment:fixed;color:var(--text-main);font-family:var(--font-body);line-height:1.6;margin:0;padding:0;-webkit-font-smoothing:antialiased}#content,#footer,#footnotes,#header>h1:first-child,.details{opacity:0;animation:reveal .8s cubic-bezier(.16,1,.3,1) forwards}#content,#footnotes,#header{padding:2rem 1.5rem}#content,#footer,#footnotes,#header{max-width:var(--content-max-width);margin:0 auto}#toc.toc2{position:fixed!important}#header>h1:first-child{font-family:var(--font-heading);font-size:3.5rem;font-weight:800;color:var(--text-heading);letter-spacing:-.04em;line-height:1;margin-bottom:2rem;background:linear-gradient(to bottom right,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}#toc,.details{margin-bottom:3rem}.details,a{color:var(--accent-primary)}.details{display:flex;gap:2rem;font-size:.875rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);color:var(--text-heading);font-weight:700;margin-top:3rem;margin-bottom:1rem;line-height:1.2}h2{font-size:2rem;border-bottom:1px solid var(--border-color);padding-bottom:.5rem}a{text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:hover{border-bottom-color:var(--accent-primary);text-shadow:0 0 15px var(--accent-glow)}#toc{background:var(--bg-surface);backdrop-filter:blur(12px);border:1px solid var(--border-color);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000}#toc:not(.toc2){max-width:var(--content-max-width);margin:2rem auto}#toc.toc2,.admonitionblock{background:var(--bg-surface);border:1px solid var(--border-color)}#toc.toc2{backdrop-filter:blur(12px);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000;transform:none!important;animation:none!important;opacity:1!important}#toctitle,.admonitionblock .title{text-transform:uppercase;font-size:.75rem}#toc a:hover,#toctitle{color:var(--accent-primary)}#toctitle{font-family:var(--font-heading);font-weight:800;letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}#toctitle::after{content:"";flex:1;height:1px;background:var(--border-color)}#toc ul{list-style:none;padding:0;margin:0}#toc li{margin-bottom:.5rem}#toc a{color:var(--text-main);font-size:.9rem;border:0}#toc a:hover{padding-left:4px}.admonitionblock{margin:2rem 0;border-radius:.75rem;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;flex-direction:row;align-items:stretch}.admonitionblock td.icon{width:4rem;min-width:4rem;padding:1.5rem 0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.02)}.admonitionblock td.icon .fa-note::before,.admonitionblock td.icon .icon-note::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--note-color)}.admonitionblock td.icon .fa-lightbulb::before,.admonitionblock td.icon .icon-tip::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--tip-color)}.admonitionblock td.icon .fa-exclamation-triangle::before,.admonitionblock td.icon .icon-warning::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--warning-color)}.admonitionblock td.icon .fa-fire::before,.admonitionblock td.icon .icon-caution::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--caution-color)}.admonitionblock td.icon .fa-exclamation-circle::before,.admonitionblock td.icon .icon-important::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--important-color)}.admonitionblock td.content{padding:1.5rem;font-size:.95rem;flex:1}.admonitionblock .title{font-weight:700;letter-spacing:.1em;margin-bottom:.75rem;display:block}.admonitionblock.note{border-left:4px solid var(--note-color)}.admonitionblock.note .title{color:var(--note-color)}.admonitionblock.tip{border-left:4px solid var(--tip-color)}.admonitionblock.tip .title{color:var(--tip-color)}.admonitionblock.warning{border-left:4px solid var(--warning-color)}.admonitionblock.warning .title{color:var(--warning-color)}.admonitionblock.caution{border-left:4px solid var(--caution-color)}.admonitionblock.caution .title{color:var(--caution-color)}.admonitionblock.important{border-left:4px solid var(--important-color)}.admonitionblock.important .title{color:var(--important-color)}:root.dark-mode .admonitionblock td.content,:root.dark-mode-auto .admonitionblock td.content{color:var(--text-main)}.listingblock pre{background:#0f172a!important;color:#f8fafc!important;padding:1.5rem!important;border-radius:.75rem;font-family:var(--font-mono);font-size:.875rem;border:1px solid #1e293b;box-shadow:0 20px 25px -5px rgba(0,0,0,.2);position:relative;overflow:hidden}:root.dark-mode .listingblock pre{background:#020617!important;border-color:var(--border-color)}@media (prefers-color-scheme:dark){:root.dark-mode-auto .listingblock pre{background:#020617!important;border-color:var(--border-color)}}.listingblock pre::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent-primary),var(--accent-secondary));opacity:.5}code{font-family:var(--font-mono);padding:.2em .4em;border-radius:.25rem;color:var(--accent-primary);font-size:.9em}.exampleblock,.sidebarblock,table{background:var(--bg-surface);border:1px solid var(--border-color);margin:2rem 0}table{width:100%;border-collapse:collapse;border-radius:.75rem;overflow:hidden}th{background:var(--border-color);color:var(--text-heading);text-align:left;padding:1rem;font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.05em}#footer,td{padding:1rem;border-top:1px solid var(--border-color);font-size:.9rem}code,tr:hover td{background:var(--accent-glow)}.exampleblock,.sidebarblock{border-radius:1rem;padding:2rem}#footer,th{font-size:.875rem}#footer{margin-top:4rem;padding:4rem 1.5rem;text-align:center;color:var(--text-main)}#footer-text{opacity:.6}@media (max-width:1279px){#header>h1:first-child{font-size:2.5rem}.details{flex-direction:column;gap:.5rem}body.toc2{padding-left:0!important;padding-right:0!important}#toc.toc2{position:relative!important;width:auto!important;left:0!important;right:0!important;top:0!important;margin:0 1.5rem 3rem!important;max-height:none!important}}@media (min-width:1280px){body.toc2.toc-left{padding-left:24rem!important;padding-right:0!important}body.toc2.toc-left #toc.toc2{left:1rem;right:auto}body.toc2.toc-right{padding-right:24rem!important;padding-left:0!important}body.toc2.toc-right #toc.toc2{right:1rem;left:auto}#toc.toc2{position:fixed!important;width:20rem;top:2rem;height:auto;max-height:calc(100vh - 4rem);overflow-y:auto}body.toc2.toc-right .reading-time{right:auto!important;left:2rem!important}#content,#footer,#footnotes,#header{max-width:900px;margin-left:auto;margin-right:auto}body.toc2.toc-left #content,body.toc2.toc-left #header{margin-left:2rem}body.toc2.toc-right #content,body.toc2.toc-right #header{margin-right:2rem}}.theme-toggle{position:fixed;bottom:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border-color);box-shadow:0 10px 25px -5px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all .3s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(0,0,0,.2);border-color:var(--accent-primary)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all .3s ease}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0;border-top:1px solid var(--border-color)}.nav-container{max-width:var(--content-max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-body);font-weight:600;font-size:.9rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:.5rem;background:var(--bg-surface);border:1px solid var(--border-color);transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);border-bottom:1px solid var(--border-color)}.nav-next:hover,.nav-prev:hover{color:var(--bg-surface);background:var(--accent-primary);border-color:var(--accent-primary);transform:translateY(-2px);box-shadow:0 10px 15px -3px var(--accent-glow)}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.mermaid{background:var(--bg-surface);padding:2rem;border:1px solid var(--border-color);border-radius:1rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);margin:2rem 0}.mermaid .cluster rect{fill:var(--bg-base)!important;fill-opacity:.5!important;stroke:var(--border-color)!important;backdrop-filter:blur(4px)}.mermaid text{font-family:var(--font-body)!important;letter-spacing:-.01em}.mermaid .active,.mermaid .task0{fill:var(--accent-primary)!important;stroke:var(--accent-secondary)!important}:root.dark-mode .mermaid .loopText,:root.dark-mode .mermaid .messageText,:root.dark-mode .mermaid .noteText,:root.dark-mode .mermaid .sectionTitle,:root.dark-mode .mermaid .taskText{fill:var(--text-heading)!important;color:var(--text-heading)!important;stroke:none!important}:root.dark-mode .mermaid .messageLine0,:root.dark-mode .mermaid .messageLine1{stroke:var(--accent-secondary)!important;stroke-opacity:.6}:root.dark-mode .mermaid .actor,:root.dark-mode .mermaid .note{fill:var(--bg-surface)!important;stroke:var(--accent-primary)!important}:root.dark-mode .mermaid .noteText>tspan{fill:var(--accent-primary)!important}:root.dark-mode .mermaid text.actor>tspan{fill:var(--text-heading)!important;font-weight:600}:root.dark-mode .mermaid .edgeLabel,:root.dark-mode .mermaid .edgeLabel rect{fill:var(--bg-base)!important;color:var(--text-main)!important}
@@ -638,6 +638,96 @@
         display: block; /* Important for scroll calculations */
     }
 
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
     /* Centering Fix for SVG diagrams */
     .modal-svg-wrapper {
         display: flex;
@@ -645,12 +735,15 @@
         align-items: center;
         min-height: 100%;
         width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
     }
 
     .modal-svg-wrapper svg {
         max-width: 100%;
-        height: auto !important; /* Allow natural aspect ratio */
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
     }
 
     /* Body locking when modal is open */
@@ -796,18 +889,30 @@
 
         showContent(itemId, title, kind, content) {
             const modal = document.getElementById('showcase-content-modal');
-            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
-            modal.querySelector('.showcase-content-code').textContent = content;
+            if (!modal) return;
 
-            this.hideTOC(); // Hide TOC before showing modal
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
             modal.style.display = 'flex';
             modal.querySelector('.showcase-modal-body').scrollTop = 0;
         },
 
         expandItem(itemId, title) {
             const item = document.getElementById(itemId);
-            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
             const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
 
             modal.querySelector('.showcase-modal-title').textContent = title;
             modal.querySelector('.showcase-modal-body').innerHTML =
@@ -1766,6 +1871,34 @@
 
 </script>
 
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
+
 <style>
 .hidden {
     display: none;
@@ -2099,8 +2232,247 @@ Revenue | Jun | 125
 <div class="paragraph">
 <p>Track multiple metrics on one chart:</p>
 </div>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls" id="svgviewer-8620c92897f481f3" data-theme="light" data-original-content="title=Monthly Performance Metrics
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-44a79a7747edbec2 {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-44a79a7747edbec2.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-44a79a7747edbec2 {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-44a79a7747edbec2 {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-44a79a7747edbec2:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-44a79a7747edbec2 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-44a79a7747edbec2 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-44a79a7747edbec2 .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-44a79a7747edbec2 .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-44a79a7747edbec2 .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-44a79a7747edbec2 .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-44a79a7747edbec2 .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-44a79a7747edbec2 .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_44a79a7747edbec2 = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-44a79a7747edbec2');
+          const sourceContainer = document.getElementById('svgviewer-44a79a7747edbec2');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-44a79a7747edbec2');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-44a79a7747edbec2');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_44a79a7747edbec2 = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-44a79a7747edbec2');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-44a79a7747edbec2');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-44a79a7747edbec2');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-44a79a7747edbec2');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_44a79a7747edbec2.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-44a79a7747edbec2');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_44a79a7747edbec2.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-44a79a7747edbec2" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=line&payload=H4sIAIt7h2kA_yvJLMlJtfXNzyvJyKlUCEgtSssvyk3MS05V8E0tKcpMLuYqz0wpybC1MDDg0tXV5QpOzEktVqhR8ErMA5ImBnABt9QkIGmOEPBNLAKSlggBx4IidBWVqGZ4lYIMNTbgAurNTi3JzEuH22RkhCIIsc3YGEUQYqOJCYogxFZTUzSVIJvNzFAtAttubg4ArmeWVBMBAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=linechart&filename=ghi.svg" data-original-content="title=Monthly Performance Metrics
 width=800
 ---
 Sales | Jan | 40
@@ -2115,31 +2487,33 @@ Marketing | Mar | 44
 Marketing | Apr | 55
 Marketing | May | 66
 Marketing | Jun | 77" data-kind="line">
-<svg width='800' height='500' xmlns='http://www.w3.org/2000/svg' id='ID_1291dd46-7c35-4157-9829-da792a03f814' preserveAspectRatio="xMidYMid meet" viewBox="0 0 800 500">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Series","X","Y"],"rows":[["Sales","0.0","40.0"],["Sales","1.0","70.0"],["Sales","2.0","90.0"],["Sales","3.0","70.0"],["Sales","4.0","40.0"],["Sales","5.0","30.0"],["Marketing","0.0","22.0"],["Marketing","1.0","33.0"],["Marketing","2.0","44.0"],["Marketing","3.0","55.0"],["Marketing","4.0","66.0"],["Marketing","5.0","77.0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="legendGlass_1291dd46-7c35-4157-9829-da792a03f814" x="0" y="0" width="100%" height="100%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" /></filter><pattern id="dotPattern_1291dd46-7c35-4157-9829-da792a03f814" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.4" /></pattern><filter id="glow_1291dd46-7c35-4157-9829-da792a03f814" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>        <style><![CDATA[ #ID_1291dd46-7c35-4157-9829-da792a03f814 .chart-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; letter-spacing: -0.5px; } #ID_1291dd46-7c35-4157-9829-da792a03f814 .chart-grid { stroke: #2563eb; stroke-dasharray: 3,3; stroke-opacity: 0.2; } #ID_1291dd46-7c35-4157-9829-da792a03f814 .chart-axis { stroke: #2563eb; stroke-width: 1.5; stroke-opacity: 0.5; } #ID_1291dd46-7c35-4157-9829-da792a03f814 .chart-background { fill: #ffffff; } #ID_1291dd46-7c35-4157-9829-da792a03f814 .legend-box { fill: rgba(255, 255, 255, 0.9); stroke: #2563eb; stroke-width: 1; } @keyframes revealPoint { from { r: 0; opacity: 0; } to { r: 5; opacity: 1; } } .data-point-reveal { opacity: 0; animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; } /* Hover effects */ .line-path { transition: stroke-width 0.2s; } .line-path:hover { stroke-width: 4; } .data-point { transition: r 0.2s; } .data-point:hover { r: 8; cursor: pointer; } .legend-item:hover { cursor: pointer; } .legend-item:hover rect { stroke-width: 2; } .legend-item:hover text { font-weight: bold; } ]]></style></defs><rect width='800' height='500' class='chart-background' rx='12'/><rect width='800' height='500' fill='url(#dotPattern_1291dd46-7c35-4157-9829-da792a03f814)' rx='12' pointer-events='none'/><text x='400' y='30' font-size='22' text-anchor='middle' font-weight='800' class='chart-text' style='text-transform: uppercase; letter-spacing: 1px;'>Monthly Performance Metrics</text><g class='grid' stroke='#2563eb' stroke-width='1'><line x1='85' y1='413.44919786096256' x2='580' y2='413.44919786096256' /><line x1='85' y1='366.6577540106952' x2='580' y2='366.6577540106952' /><line x1='85' y1='319.8663101604278' x2='580' y2='319.8663101604278' /><line x1='85' y1='273.0748663101605' x2='580' y2='273.0748663101605' /><line x1='85' y1='226.28342245989307' x2='580' y2='226.28342245989307' /><line x1='85' y1='179.4919786096257' x2='580' y2='179.4919786096257' /><line x1='85' y1='132.70053475935833' x2='580' y2='132.70053475935833' /><line x1='85' y1='85.90909090909093' x2='580' y2='85.90909090909093' /><line x1='107.5' y1='70' x2='107.5' y2='420' /><line x1='197.5' y1='70' x2='197.5' y2='420' /><line x1='287.5' y1='70' x2='287.5' y2='420' /><line x1='377.5' y1='70' x2='377.5' y2='420' /><line x1='467.5' y1='70' x2='467.5' y2='420' /><line x1='557.5' y1='70' x2='557.5' y2='420' /></g><g class='axes'><line x1='85' y1='420' x2='580' y2='420' stroke='#2563eb' stroke-width='1' /><line x1='85' y1='70' x2='85' y2='420' stroke='#2563eb' stroke-width='1' /><line x1='107.5' y1='420' x2='107.5' y2='425' class='chart-axis' /><text x='107.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Jan</text><line x1='197.5' y1='420' x2='197.5' y2='425' class='chart-axis' /><text x='197.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Feb</text><line x1='287.5' y1='420' x2='287.5' y2='425' class='chart-axis' /><text x='287.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Mar</text><line x1='377.5' y1='420' x2='377.5' y2='425' class='chart-axis' /><text x='377.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Apr</text><line x1='467.5' y1='420' x2='467.5' y2='425' class='chart-axis' /><text x='467.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>May</text><line x1='557.5' y1='420' x2='557.5' y2='425' class='chart-axis' /><text x='557.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Jun</text><line x1='85' y1='413.44919786096256' x2='80' y2='413.44919786096256' class='chart-axis' /><text x='75' y='413.44919786096256' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>20</text><line x1='85' y1='366.6577540106952' x2='80' y2='366.6577540106952' class='chart-axis' /><text x='75' y='366.6577540106952' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>30</text><line x1='85' y1='319.8663101604278' x2='80' y2='319.8663101604278' class='chart-axis' /><text x='75' y='319.8663101604278' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>40</text><line x1='85' y1='273.0748663101605' x2='80' y2='273.0748663101605' class='chart-axis' /><text x='75' y='273.0748663101605' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>50</text><line x1='85' y1='226.28342245989307' x2='80' y2='226.28342245989307' class='chart-axis' /><text x='75' y='226.28342245989307' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>60</text><line x1='85' y1='179.4919786096257' x2='80' y2='179.4919786096257' class='chart-axis' /><text x='75' y='179.4919786096257' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>70</text><line x1='85' y1='132.70053475935833' x2='80' y2='132.70053475935833' class='chart-axis' /><text x='75' y='132.70053475935833' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>80</text><line x1='85' y1='85.90909090909093' x2='80' y2='85.90909090909093' class='chart-axis' /><text x='75' y='85.90909090909093' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>90</text></g><g class='data-series' id='series-0' filter='url(#glow_1291dd46-7c35-4157-9829-da792a03f814)'><path class='line-path' id='line-0' d='M107.5,319.8663101604278 C137.5,319.8663101604278 167.5,179.4919786096257 197.5,179.4919786096257 C227.5,179.4919786096257 257.5,85.90909090909093 287.5,85.90909090909093 C317.5,85.90909090909093 347.5,179.4919786096257 377.5,179.4919786096257 C407.5,179.4919786096257 437.5,319.8663101604278 467.5,319.8663101604278 C497.5,319.8663101604278 527.5,366.6577540106952 557.5,366.6577540106952 ' fill='none' stroke='#2563EB' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' /><circle class='data-point data-point-reveal' cx='107.5' cy='319.8663101604278' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6s'><title>Sales: (Jan, 40)</title></circle><circle class='data-point data-point-reveal' cx='197.5' cy='179.4919786096257' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6799999999999999s'><title>Sales: (Feb, 70)</title></circle><circle class='data-point data-point-reveal' cx='287.5' cy='85.90909090909093' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.76s'><title>Sales: (Mar, 90)</title></circle><circle class='data-point data-point-reveal' cx='377.5' cy='179.4919786096257' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.84s'><title>Sales: (Apr, 70)</title></circle><circle class='data-point data-point-reveal' cx='467.5' cy='319.8663101604278' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.9199999999999999s'><title>Sales: (May, 40)</title></circle><circle class='data-point data-point-reveal' cx='557.5' cy='366.6577540106952' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 1.0s'><title>Sales: (Jun, 30)</title></circle></g><g class='data-series' id='series-1' filter='url(#glow_1291dd46-7c35-4157-9829-da792a03f814)'><path class='line-path' id='line-1' d='M107.5,404.0909090909091 C137.5,404.0909090909091 167.5,352.620320855615 197.5,352.620320855615 C227.5,352.620320855615 257.5,301.1497326203209 287.5,301.1497326203209 C317.5,301.1497326203209 347.5,249.67914438502677 377.5,249.67914438502677 C407.5,249.67914438502677 437.5,198.20855614973266 467.5,198.20855614973266 C497.5,198.20855614973266 527.5,146.73796791443857 557.5,146.73796791443857 ' fill='none' stroke='#10B981' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' /><circle class='data-point data-point-reveal' cx='107.5' cy='404.0909090909091' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6s'><title>Marketing: (Jan, 22)</title></circle><circle class='data-point data-point-reveal' cx='197.5' cy='352.620320855615' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6799999999999999s'><title>Marketing: (Feb, 33)</title></circle><circle class='data-point data-point-reveal' cx='287.5' cy='301.1497326203209' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.76s'><title>Marketing: (Mar, 44)</title></circle><circle class='data-point data-point-reveal' cx='377.5' cy='249.67914438502677' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.84s'><title>Marketing: (Apr, 55)</title></circle><circle class='data-point data-point-reveal' cx='467.5' cy='198.20855614973266' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.9199999999999999s'><title>Marketing: (May, 66)</title></circle><circle class='data-point data-point-reveal' cx='557.5' cy='146.73796791443857' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 1.0s'><title>Marketing: (Jun, 77)</title></circle></g><g class='legend'><g class='legend-item' data-series='series-0' onmouseover='highlightSeries("line-0")' onmouseout='resetSeries("line-0")'><line x1='585' y1='90' x2='600' y2='90' stroke='#2563EB' stroke-width='2' /><circle cx='593' cy='90' r='4' fill='#2563EB' stroke='#ffffff' stroke-width='1' /><text x='615' y='90' font-size='11' font-weight='600' dominant-baseline='middle' fill='#2563EB' style='pointer-events: none;'>Sales</text></g><g class='legend-item' data-series='series-1' onmouseover='highlightSeries("line-1")' onmouseout='resetSeries("line-1")'><line x1='585' y1='115' x2='600' y2='115' stroke='#10B981' stroke-width='2' /><circle cx='593' cy='115' r='4' fill='#10B981' stroke='#ffffff' stroke-width='1' /><text x='615' y='115' font-size='11' font-weight='600' dominant-baseline='middle' fill='#10B981' style='pointer-events: none;'>Marketing</text></g></g><script type="text/javascript">function highlightSeries(id) { var line = document.getElementById(id); if (line) { line.setAttribute('stroke-width', '4'); } } function resetSeries(id) { var line = document.getElementById(id); if (line) { line.setAttribute('stroke-width', '2'); } }</script></svg>
-<div class="svg-floating-controls">
-<button class="svg-controls-toggle" onclick="svgViewer.toggleControls('svgviewer-8620c92897f481f3')" title="Controls">⚙️</button>
-<div class="svg-controls-panel" id="controls-panel-svgviewer-8620c92897f481f3">
-<button class="svg-control-btn zoom-in" onclick="svgViewer.zoomIn('svgviewer-8620c92897f481f3')" title="Zoom In">🔍+</button>
-<button class="svg-control-btn zoom-out" onclick="svgViewer.zoomOut('svgviewer-8620c92897f481f3')" title="Zoom Out">🔍-</button>
-<button class="svg-control-btn zoom-reset" onclick="svgViewer.resetZoom('svgviewer-8620c92897f481f3')" title="Reset Zoom">⚪</button>
-
-<button class="svg-control-btn expand" onclick="svgViewer.toggleFullscreen('svgviewer-8620c92897f481f3')" title="Toggle Fullscreen">⛶</button>
-
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-8620c92897f481f3')" title="Copy as SVG">📋 SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-8620c92897f481f3')" title="Copy as PNG">📋 PNG</button>
-
-<button class="svg-control-btn csv-btn" onclick="svgViewer.toggleCsv('svgviewer-8620c92897f481f3')" title="Show CSV Data">📊 CSV</button>
+<svg width='800' height='500' xmlns='http://www.w3.org/2000/svg' id='ID_b42c82f8-94c0-47ec-895c-f3ba7ddb5412' preserveAspectRatio="xMidYMid meet" viewBox="0 0 800 500">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Series","X","Y"],"rows":[["Sales","0.0","40.0"],["Sales","1.0","70.0"],["Sales","2.0","90.0"],["Sales","3.0","70.0"],["Sales","4.0","40.0"],["Sales","5.0","30.0"],["Marketing","0.0","22.0"],["Marketing","1.0","33.0"],["Marketing","2.0","44.0"],["Marketing","3.0","55.0"],["Marketing","4.0","66.0"],["Marketing","5.0","77.0"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><filter id="legendGlass_b42c82f8-94c0-47ec-895c-f3ba7ddb5412" x="0" y="0" width="100%" height="100%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" /></filter><pattern id="dotPattern_b42c82f8-94c0-47ec-895c-f3ba7ddb5412" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.4" /></pattern><filter id="glow_b42c82f8-94c0-47ec-895c-f3ba7ddb5412" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter>        <style><![CDATA[ #ID_b42c82f8-94c0-47ec-895c-f3ba7ddb5412 .chart-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; letter-spacing: -0.5px; } #ID_b42c82f8-94c0-47ec-895c-f3ba7ddb5412 .chart-grid { stroke: #2563eb; stroke-dasharray: 3,3; stroke-opacity: 0.2; } #ID_b42c82f8-94c0-47ec-895c-f3ba7ddb5412 .chart-axis { stroke: #2563eb; stroke-width: 1.5; stroke-opacity: 0.5; } #ID_b42c82f8-94c0-47ec-895c-f3ba7ddb5412 .chart-background { fill: #ffffff; } #ID_b42c82f8-94c0-47ec-895c-f3ba7ddb5412 .legend-box { fill: rgba(255, 255, 255, 0.9); stroke: #2563eb; stroke-width: 1; } @keyframes revealPoint { from { r: 0; opacity: 0; } to { r: 5; opacity: 1; } } .data-point-reveal { opacity: 0; animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; } /* Hover effects */ .line-path { transition: stroke-width 0.2s; } .line-path:hover { stroke-width: 4; } .data-point { transition: r 0.2s; } .data-point:hover { r: 8; cursor: pointer; } .legend-item:hover { cursor: pointer; } .legend-item:hover rect { stroke-width: 2; } .legend-item:hover text { font-weight: bold; } ]]></style></defs><rect width='800' height='500' class='chart-background' rx='12'/><rect width='800' height='500' fill='url(#dotPattern_b42c82f8-94c0-47ec-895c-f3ba7ddb5412)' rx='12' pointer-events='none'/><text x='400' y='30' font-size='22' text-anchor='middle' font-weight='800' class='chart-text' style='text-transform: uppercase; letter-spacing: 1px;'>Monthly Performance Metrics</text><g class='grid' stroke='#2563eb' stroke-width='1'><line x1='85' y1='413.44919786096256' x2='580' y2='413.44919786096256' /><line x1='85' y1='366.6577540106952' x2='580' y2='366.6577540106952' /><line x1='85' y1='319.8663101604278' x2='580' y2='319.8663101604278' /><line x1='85' y1='273.0748663101605' x2='580' y2='273.0748663101605' /><line x1='85' y1='226.28342245989307' x2='580' y2='226.28342245989307' /><line x1='85' y1='179.4919786096257' x2='580' y2='179.4919786096257' /><line x1='85' y1='132.70053475935833' x2='580' y2='132.70053475935833' /><line x1='85' y1='85.90909090909093' x2='580' y2='85.90909090909093' /><line x1='107.5' y1='70' x2='107.5' y2='420' /><line x1='197.5' y1='70' x2='197.5' y2='420' /><line x1='287.5' y1='70' x2='287.5' y2='420' /><line x1='377.5' y1='70' x2='377.5' y2='420' /><line x1='467.5' y1='70' x2='467.5' y2='420' /><line x1='557.5' y1='70' x2='557.5' y2='420' /></g><g class='axes'><line x1='85' y1='420' x2='580' y2='420' stroke='#2563eb' stroke-width='1' /><line x1='85' y1='70' x2='85' y2='420' stroke='#2563eb' stroke-width='1' /><line x1='107.5' y1='420' x2='107.5' y2='425' class='chart-axis' /><text x='107.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Jan</text><line x1='197.5' y1='420' x2='197.5' y2='425' class='chart-axis' /><text x='197.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Feb</text><line x1='287.5' y1='420' x2='287.5' y2='425' class='chart-axis' /><text x='287.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Mar</text><line x1='377.5' y1='420' x2='377.5' y2='425' class='chart-axis' /><text x='377.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Apr</text><line x1='467.5' y1='420' x2='467.5' y2='425' class='chart-axis' /><text x='467.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>May</text><line x1='557.5' y1='420' x2='557.5' y2='425' class='chart-axis' /><text x='557.5' y='440' font-size='11' text-anchor='middle' class='chart-text'>Jun</text><line x1='85' y1='413.44919786096256' x2='80' y2='413.44919786096256' class='chart-axis' /><text x='75' y='413.44919786096256' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>20</text><line x1='85' y1='366.6577540106952' x2='80' y2='366.6577540106952' class='chart-axis' /><text x='75' y='366.6577540106952' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>30</text><line x1='85' y1='319.8663101604278' x2='80' y2='319.8663101604278' class='chart-axis' /><text x='75' y='319.8663101604278' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>40</text><line x1='85' y1='273.0748663101605' x2='80' y2='273.0748663101605' class='chart-axis' /><text x='75' y='273.0748663101605' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>50</text><line x1='85' y1='226.28342245989307' x2='80' y2='226.28342245989307' class='chart-axis' /><text x='75' y='226.28342245989307' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>60</text><line x1='85' y1='179.4919786096257' x2='80' y2='179.4919786096257' class='chart-axis' /><text x='75' y='179.4919786096257' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>70</text><line x1='85' y1='132.70053475935833' x2='80' y2='132.70053475935833' class='chart-axis' /><text x='75' y='132.70053475935833' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>80</text><line x1='85' y1='85.90909090909093' x2='80' y2='85.90909090909093' class='chart-axis' /><text x='75' y='85.90909090909093' font-size='11' text-anchor='end' dominant-baseline='middle' class='chart-text'>90</text></g><g class='data-series' id='series-0' filter='url(#glow_b42c82f8-94c0-47ec-895c-f3ba7ddb5412)'><path class='line-path' id='line-0' d='M107.5,319.8663101604278 C137.5,319.8663101604278 167.5,179.4919786096257 197.5,179.4919786096257 C227.5,179.4919786096257 257.5,85.90909090909093 287.5,85.90909090909093 C317.5,85.90909090909093 347.5,179.4919786096257 377.5,179.4919786096257 C407.5,179.4919786096257 437.5,319.8663101604278 467.5,319.8663101604278 C497.5,319.8663101604278 527.5,366.6577540106952 557.5,366.6577540106952 ' fill='none' stroke='#2563EB' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' /><circle class='data-point data-point-reveal' cx='107.5' cy='319.8663101604278' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6s'><title>Sales: (Jan, 40)</title></circle><circle class='data-point data-point-reveal' cx='197.5' cy='179.4919786096257' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6799999999999999s'><title>Sales: (Feb, 70)</title></circle><circle class='data-point data-point-reveal' cx='287.5' cy='85.90909090909093' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.76s'><title>Sales: (Mar, 90)</title></circle><circle class='data-point data-point-reveal' cx='377.5' cy='179.4919786096257' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.84s'><title>Sales: (Apr, 70)</title></circle><circle class='data-point data-point-reveal' cx='467.5' cy='319.8663101604278' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.9199999999999999s'><title>Sales: (May, 40)</title></circle><circle class='data-point data-point-reveal' cx='557.5' cy='366.6577540106952' r='6' fill='#2563EB' stroke='#ffffff' stroke-width='2' style='animation-delay: 1.0s'><title>Sales: (Jun, 30)</title></circle></g><g class='data-series' id='series-1' filter='url(#glow_b42c82f8-94c0-47ec-895c-f3ba7ddb5412)'><path class='line-path' id='line-1' d='M107.5,404.0909090909091 C137.5,404.0909090909091 167.5,352.620320855615 197.5,352.620320855615 C227.5,352.620320855615 257.5,301.1497326203209 287.5,301.1497326203209 C317.5,301.1497326203209 347.5,249.67914438502677 377.5,249.67914438502677 C407.5,249.67914438502677 437.5,198.20855614973266 467.5,198.20855614973266 C497.5,198.20855614973266 527.5,146.73796791443857 557.5,146.73796791443857 ' fill='none' stroke='#10B981' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' /><circle class='data-point data-point-reveal' cx='107.5' cy='404.0909090909091' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6s'><title>Marketing: (Jan, 22)</title></circle><circle class='data-point data-point-reveal' cx='197.5' cy='352.620320855615' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.6799999999999999s'><title>Marketing: (Feb, 33)</title></circle><circle class='data-point data-point-reveal' cx='287.5' cy='301.1497326203209' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.76s'><title>Marketing: (Mar, 44)</title></circle><circle class='data-point data-point-reveal' cx='377.5' cy='249.67914438502677' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.84s'><title>Marketing: (Apr, 55)</title></circle><circle class='data-point data-point-reveal' cx='467.5' cy='198.20855614973266' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 0.9199999999999999s'><title>Marketing: (May, 66)</title></circle><circle class='data-point data-point-reveal' cx='557.5' cy='146.73796791443857' r='6' fill='#10B981' stroke='#ffffff' stroke-width='2' style='animation-delay: 1.0s'><title>Marketing: (Jun, 77)</title></circle></g><g class='legend'><g class='legend-item' data-series='series-0' onmouseover='highlightSeries("line-0")' onmouseout='resetSeries("line-0")'><line x1='585' y1='90' x2='600' y2='90' stroke='#2563EB' stroke-width='2' /><circle cx='593' cy='90' r='4' fill='#2563EB' stroke='#ffffff' stroke-width='1' /><text x='615' y='90' font-size='11' font-weight='600' dominant-baseline='middle' fill='#2563EB' style='pointer-events: none;'>Sales</text></g><g class='legend-item' data-series='series-1' onmouseover='highlightSeries("line-1")' onmouseout='resetSeries("line-1")'><line x1='585' y1='115' x2='600' y2='115' stroke='#10B981' stroke-width='2' /><circle cx='593' cy='115' r='4' fill='#10B981' stroke='#ffffff' stroke-width='1' /><text x='615' y='115' font-size='11' font-weight='600' dominant-baseline='middle' fill='#10B981' style='pointer-events: none;'>Marketing</text></g></g><script type="text/javascript">function highlightSeries(id) { var line = document.getElementById(id); if (line) { line.setAttribute('stroke-width', '4'); } } function resetSeries(id) { var line = document.getElementById(id); if (line) { line.setAttribute('stroke-width', '2'); } }</script></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_44a79a7747edbec2.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_44a79a7747edbec2.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-44a79a7747edbec2')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-44a79a7747edbec2')">PNG</button>
 </div>
-</div>
-<div class="csv-container" id="csv-container-svgviewer-8620c92897f481f3" style="display: none;">
-    <div class="csv-header">
-        <span>CSV Data</span>
-        <button class="csv-close" onclick="svgViewer.closeCsv('svgviewer-8620c92897f481f3')" title="Close CSV">×</button>
-    </div>
-    <div class="csv-content" id="csv-content-svgviewer-8620c92897f481f3">
-        <div class="csv-loading">Loading CSV data...</div>
+<div id="modal-svgviewer-44a79a7747edbec2" class="svg-modal-svgviewer-44a79a7747edbec2" onclick="if(event.target === this) svgModalsvgviewer_44a79a7747edbec2.close()">
+    <div class="svg-modal-content-svgviewer-44a79a7747edbec2">
+        <button class="svg-modal-close-svgviewer-44a79a7747edbec2" onclick="svgModalsvgviewer_44a79a7747edbec2.close()">×</button>
+        <div id="modal-body-svgviewer-44a79a7747edbec2" class="svg-modal-body-svgviewer-44a79a7747edbec2"></div>
     </div>
 </div>
+
+<div id="csv-modal-svgviewer-44a79a7747edbec2" class="svg-modal-svgviewer-44a79a7747edbec2" onclick="if(event.target === this) csvModalsvgviewer_44a79a7747edbec2.close()">
+    <div class="svg-modal-content-svgviewer-44a79a7747edbec2">
+        <button class="svg-modal-close-svgviewer-44a79a7747edbec2" onclick="csvModalsvgviewer_44a79a7747edbec2.close()">×</button>
+        <div class="svg-modal-header-svgviewer-44a79a7747edbec2" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-44a79a7747edbec2" class="svg-modal-body-svgviewer-44a79a7747edbec2" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 <style>
@@ -2312,43 +2686,7 @@ if (!hljs.initHighlighting.called) {
   ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
 }
 </script>
-<style>
-/* Reading Time Styles */
-.reading-time {
-    position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    background: var(--bg-base); /* Uses the dynamic background variable */
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--accent-secondary);
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    z-index: 1005;
-    
-    /* Double-accent shadow follows the light/dark mode logic */
-    box-shadow: 6px 6px 0px var(--accent-pink);
-    
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-main); /* Switches between grey and dark slate */
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
 
-.reading-time p {
-    margin: 0 !important;
-    font-weight: 600;
-}
-
-/* Light Mode specific opacity tweak */
-body.light-mode .reading-time {
-    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
-}
-</style>
-<div class="reading-time">
-    <p>📖 1 min read • 374 words</p>
-</div>
 <style>
 .listingblock {
     position: relative;
