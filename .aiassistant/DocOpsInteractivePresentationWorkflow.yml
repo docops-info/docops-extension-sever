@@ -1,0 +1,268 @@
+skills:
+  - name: create_presentation_with_visualizations
+    description: Create PowerPoint presentations or slide decks with embedded DocOps visualizations through an interactive workflow
+    workflow_mode: interactive  # Tells Claude to use step-by-step prompting
+    prompts:
+      - step: 1
+        question: "What is the topic and purpose of your presentation?"
+        examples:
+          - "Quarterly business review for stakeholders"
+          - "Product roadmap presentation for engineering team"
+          - "Architecture overview for new developers"
+        required: true
+        store_as: presentation_topic
+      
+      - step: 2
+        question: "Who is your target audience?"
+        examples:
+          - "Executive leadership"
+          - "Engineering team"
+          - "Customers and prospects"
+        required: true
+        store_as: audience
+      
+      - step: 3
+        question: "How many slides do you need approximately?"
+        validation: "Must be a number between 1 and 50"
+        required: true
+        store_as: slide_count
+      
+      - step: 4
+        question: "What types of visualizations would you like to include? (Select multiple)"
+        options:
+          - label: "Charts (pie, bar, line, gauge)"
+            value: charts
+            skill: docops_chart_visualization
+          - label: "Process diagrams (connectors, callouts, planners)"
+            value: process
+            skill: docops_process_visualization
+          - label: "Timelines and roadmaps"
+            value: timeline
+            skill: docops_navigation_visualization
+          - label: "Architecture diagrams (domain maps, word clouds)"
+            value: technical
+            skill: docops_technical_visualization
+          - label: "Status badges and metrics"
+            value: metadata
+            skill: docops_metadata_visualization
+        required: true
+        multiple: true
+        store_as: visualization_types
+      
+      - step: 5
+        question: "What theme should the visualizations use?"
+        options:
+          - label: "Light mode (white background)"
+            value: false
+            param: useDark
+          - label: "Dark mode (dark background)"
+            value: true
+            param: useDark
+        required: true
+        store_as: dark_mode
+      
+      - step: 6
+        question: "Do you have data for the visualizations, or should I create sample data?"
+        options:
+          - label: "I have data (I'll provide it)"
+            value: user_provided
+          - label: "Create sample data based on topic"
+            value: generate_sample
+        required: true
+        store_as: data_source
+
+    instructions:
+      - 'INTERACTIVE WORKFLOW: Always prompt user for information using the prompts defined above'
+      - 'Execute prompts in order (step 1, then 2, then 3, etc.)'
+      - 'Wait for user response before proceeding to next step'
+      - 'After gathering all information, provide summary and ask for confirmation'
+      - 'Based on visualization_types selected, chain to appropriate visualization skills'
+      - 'If data_source is "user_provided", prompt for specific data per visualization'
+      - 'If data_source is "generate_sample", create realistic sample data based on presentation_topic'
+      - 'Generate DocOps API URLs with scale=1.5, type=PNG for PowerPoint'
+      - 'Apply useDark parameter based on dark_mode choice'
+      - 'Provide final output with: 1) Generated URLs, 2) Instructions for inserting into slides, 3) Preview of what each visualization shows'
+    
+    related_skills:
+      - docops_standalone_svg_api
+      - docops_chart_visualization
+      - docops_process_visualization
+      - docops_navigation_visualization
+      - docops_technical_visualization
+      - docops_metadata_visualization
+
+  - name: docops_chart_visualization
+    description: Generate DocOps chart visualizations with guided data entry
+    workflow_mode: interactive
+    prompts:
+      - step: 1
+        question: "What type of chart do you need?"
+        options:
+          - label: "Bar Chart (compare categories)"
+            value: barchart
+          - label: "Pie Chart (show proportions)"
+            value: pieslice
+          - label: "Line Chart (trends over time)"
+            value: linechart
+          - label: "Gauge Chart (single metric)"
+            value: gaugechart
+          - label: "Combination Chart (multiple types)"
+            value: combo
+          - label: "Metrics Card (KPI display)"
+            value: metricscard
+        required: true
+        store_as: chart_type
+      
+      - step: 2
+        question: "What is the title for this chart?"
+        required: true
+        store_as: chart_title
+      
+      - step: 3
+        question: "How many data points do you have?"
+        validation: "Must be a number between 1 and 20"
+        required: true
+        store_as: data_point_count
+        conditional:
+          if_chart_type: 
+            - barchart
+            - pieslice
+            - linechart
+      
+      - step: 4
+        question: "Please provide your data in pipe-delimited format (Label | Value) or JSON. Example: 'Product A | 30\\nProduct B | 25'"
+        multiline: true
+        required: true
+        store_as: chart_data
+      
+      - step: 5
+        question: "Any additional options?"
+        options:
+          - label: "Show legend"
+            value: true
+            param: legend
+          - label: "Show percentages (pie charts)"
+            value: true
+            param: percentages
+          - label: "Use donut style (pie charts)"
+            value: true
+            param: donut
+        multiple: true
+        required: false
+        store_as: chart_options
+
+    instructions:
+      - 'INTERACTIVE WORKFLOW: Guide user through chart creation step-by-step'
+      - 'Adjust prompts based on chart_type (e.g., skip data_point_count for gauge charts)'
+      - 'Validate data format before generating API URL'
+      - 'Base64 encode the chart_data'
+      - 'Construct API URL: https://roach.gy/extension/api/docops/svg?kind={chart_type}&payload={encoded_data}&title={chart_title}'
+      - 'Apply chart_options as URL parameters'
+      - 'Show preview description of what the chart will display'
+
+  - name: docops_process_visualization
+    description: Create process visualizations through guided workflow
+    workflow_mode: interactive
+    prompts:
+      - step: 1
+        question: "What type of process visualization do you need?"
+        options:
+          - label: "Connector (workflow arrows)"
+            value: connector
+            description: "Sequential steps with arrows (limit 5-7 steps)"
+          - label: "Callout (highlighted process)"
+            value: callout
+            description: "Systematic process, metrics, or timeline"
+          - label: "Release Strategy (roadmap)"
+            value: release
+            description: "Product release timeline with milestones"
+          - label: "Planner (Kanban board)"
+            value: planner
+            description: "Task board with columns"
+          - label: "Quadrant (2D priority map)"
+            value: quadrant
+            description: "Impact vs effort analysis"
+        required: true
+        store_as: process_type
+      
+      - step: 2
+        question: "For {{process_type}}, how many {{step_unit}} do you need?"
+        step_unit:
+          connector: "workflow steps"
+          callout: "phases"
+          release: "releases/milestones"
+          planner: "columns"
+          quadrant: "items to plot"
+        validation: "Recommended: 4-8 for optimal readability"
+        required: true
+        store_as: element_count
+      
+      - step: 3
+        question: "Please describe each {{step_unit}}. I'll format it correctly for you."
+        guidance:
+          connector: "For each step, provide: Step name, Color (hex), Description"
+          callout: "For each phase, provide: Phase name, Action, Result, Improvement (optional)"
+          release: "For each milestone, provide: Type (M1/M2/RC1/GA), Date, Goal, Activities (list)"
+          planner: "For each column, provide: Column title, Task items (list)"
+          quadrant: "For each item, provide: Item name, X position (0-100), Y position (0-100), Category"
+        multiline: true
+        required: true
+        store_as: element_details
+
+    instructions:
+      - 'INTERACTIVE WORKFLOW: Guide user through process visualization creation'
+      - 'Use {{variable}} substitution in prompts based on previous answers'
+      - 'Parse element_details into correct format for chosen process_type'
+      - 'Validate data meets requirements (e.g., hex colors for connectors, valid dates for releases)'
+      - 'Generate properly formatted data structure'
+      - 'Base64 encode and create API URL'
+      - 'Provide preview and edit option before finalizing'
+
+  # Shorter guided workflow for quick tasks
+  - name: docops_quick_badge
+    description: Quickly create a status badge with minimal prompting
+    workflow_mode: guided  # Less verbose than interactive
+    prompts:
+      - step: 1
+        question: "Badge label?"
+        placeholder: "Status, Version, Build, etc."
+        required: true
+        store_as: label
+      
+      - step: 2
+        question: "Badge message/value?"
+        placeholder: "Passing, v1.2.3, Success, etc."
+        required: true
+        store_as: message
+      
+      - step: 3
+        question: "Badge color (or press Enter for default)?"
+        default: "#10B981"
+        required: false
+        store_as: color
+
+    instructions:
+      - 'GUIDED WORKFLOW: Quick prompting with sensible defaults'
+      - 'Format: Label|Message||#3C3D37|{color}||#fcfcfc'
+      - 'Base64 encode and generate API URL'
+      - 'Return URL immediately without extensive explanation'
+
+  # Conditional workflow based on context
+  - name: docops_smart_visualization
+    description: Intelligently suggest and create visualizations based on user's data or description
+    workflow_mode: adaptive  # Claude decides when to prompt
+    prompts:
+      - step: 1
+        question: "What data or information do you want to visualize? (Paste data, describe it, or explain your goal)"
+        multiline: true
+        required: true
+        store_as: user_input
+    
+    instructions:
+      - 'ADAPTIVE WORKFLOW: Analyze user_input to determine best visualization type'
+      - 'If user_input contains data: auto-detect format and suggest appropriate chart type'
+      - 'If user_input is descriptive: ask clarifying questions only when necessary'
+      - 'Patterns to detect: Time series → line chart, Comparisons → bar chart, Proportions → pie chart, Steps → connector, Events → timeline'
+      - 'Proactively create visualization if user intent is clear'
+      - 'Only prompt for additional info if ambiguous'
+      - 'Chain to specific visualization skill once type is determined'

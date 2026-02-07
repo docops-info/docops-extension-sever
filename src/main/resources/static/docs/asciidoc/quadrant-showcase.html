@@ -638,6 +638,96 @@
         display: block; /* Important for scroll calculations */
     }
 
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
     /* Centering Fix for SVG diagrams */
     .modal-svg-wrapper {
         display: flex;
@@ -645,12 +735,15 @@
         align-items: center;
         min-height: 100%;
         width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
     }
 
     .modal-svg-wrapper svg {
         max-width: 100%;
-        height: auto !important; /* Allow natural aspect ratio */
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
     }
 
     /* Body locking when modal is open */
@@ -796,18 +889,30 @@
 
         showContent(itemId, title, kind, content) {
             const modal = document.getElementById('showcase-content-modal');
-            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
-            modal.querySelector('.showcase-content-code').textContent = content;
+            if (!modal) return;
 
-            this.hideTOC(); // Hide TOC before showing modal
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
             modal.style.display = 'flex';
             modal.querySelector('.showcase-modal-body').scrollTop = 0;
         },
 
         expandItem(itemId, title) {
             const item = document.getElementById(itemId);
-            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
             const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
 
             modal.querySelector('.showcase-modal-title').textContent = title;
             modal.querySelector('.showcase-modal-body').innerHTML =
@@ -1766,6 +1871,34 @@
 
 </script>
 
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
+
 <style>
 .hidden {
     display: none;
@@ -2030,56 +2163,379 @@ window.onload = function() {
 <div class="sect1">
 <h2 id="_slideshow">1. Slideshow</h2>
 <div class="sectionbody">
-<div class="docops-slideshow" id="docops-slideshow-522581ca39b38c1b" data-interval="3000">
-<div class="docops-slide active" data-title="Strategic Priority Matrix" data-kind="quadrant">
-<div class="slide-content">
-<div class="slide-title">Strategic Priority Matrix</div>
-<div class="slide-image">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_601d56aa5a7a40cb8cdf330ad412e572">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","75.0","85.0","Core","12",""],["Feature B","30.0","70.0","Enhancement","12",""],["Feature C","60.0","40.0","Nice-to-have","12",""],["Feature D","20.0","30.0","Optional","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_601d56aa5a7a40cb8cdf330ad412e572 .bg-rect { fill: #ffffff; } #mq_601d56aa5a7a40cb8cdf330ad412e572 .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_601d56aa5a7a40cb8cdf330ad412e572 .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_601d56aa5a7a40cb8cdf330ad412e572 .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_601d56aa5a7a40cb8cdf330ad412e572 .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_601d56aa5a7a40cb8cdf330ad412e572 .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_601d56aa5a7a40cb8cdf330ad412e572" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_601d56aa5a7a40cb8cdf330ad412e572" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_601d56aa5a7a40cb8cdf330ad412e572" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_601d56aa5a7a40cb8cdf330ad412e572" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_601d56aa5a7a40cb8cdf330ad412e572" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_601d56aa5a7a40cb8cdf330ad412e572"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_601d56aa5a7a40cb8cdf330ad412e572"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_601d56aa5a7a40cb8cdf330ad412e572)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Strategic Priority Matrix</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="139" y="125" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CHALLENGERS</text><rect x="446" y="125" width="98" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">LEADERS</text><rect x="131" y="555" width="149" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">NICHE PLAYERS</text><rect x="429" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">VISIONARIES</text><text x="205" y="685" text-anchor="middle" class="axis-label">EFFORT REQUIRED</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT LEVEL</text><g class="company-node"><circle cx="495" cy="182" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="495" cy="182" r="10" fill="#10b981" filter="url(#glow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><circle cx="495" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="495" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="234" cy="254" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="254" r="10" fill="#f59e0b" filter="url(#glow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><circle cx="234" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="279" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="408" cy="398" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="408" cy="398" r="10" fill="#3b82f6" filter="url(#glow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><circle cx="408" cy="398" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="423" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="176" cy="446" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="176" cy="446" r="10" fill="#f43f5e" filter="url(#glow_mq_601d56aa5a7a40cb8cdf330ad412e572)"/><circle cx="176" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="176" y="471" text-anchor="middle" class="company-name">Feature D</text></g></svg>
+<style>
+  :root {
+    --slideshow-bg: #0F1419;
+    --slideshow-surface: #1A2027;
+    --slideshow-accent: #FF6B35;
+    --slideshow-accent-dim: #FF8C61;
+    --slideshow-text: #E8EAED;
+    --slideshow-text-muted: #9BA1A6;
+    --slideshow-spacing: 8px;
+    --slideshow-radius-card: 16px;
+    --slideshow-radius-inner: 8px;
+  }
+
+  .slideshow-gallery-container-slideshow17d9c7578fa05ded {
+    position: relative;
+    max-width: 1400px;
+    margin: 3rem auto;
+    padding: calc(var(--slideshow-spacing) * 8);
+    background: var(--slideshow-bg);
+    border-radius: var(--slideshow-radius-card);
+    overflow-x: hidden;
+  }
+
+  /* Geometric background pattern */
+  .slideshow-gallery-container-slideshow17d9c7578fa05ded::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 107, 53, 0.03) 35px, rgba(255, 107, 53, 0.03) 70px),
+      repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255, 107, 53, 0.02) 35px, rgba(255, 107, 53, 0.02) 70px);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .slideshow-gallery-grid-slideshow17d9c7578fa05ded {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: calc(var(--slideshow-spacing) * 3);
+    margin-bottom: calc(var(--slideshow-spacing) * 8);
+  }
+
+  .svg-slideshow-card-slideshow17d9c7578fa05ded {
+    background: var(--slideshow-surface);
+    border-radius: var(--slideshow-radius-card);
+    padding: calc(var(--slideshow-spacing) * 3);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: fadeInUpSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    border: 1px solid rgba(255, 107, 53, 0.1);
+  }
+
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:nth-child(1) { animation-delay: 0.1s; }
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:nth-child(2) { animation-delay: 0.15s; }
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:nth-child(3) { animation-delay: 0.2s; }
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:nth-child(4) { animation-delay: 0.25s; }
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:nth-child(5) { animation-delay: 0.3s; }
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:nth-child(6) { animation-delay: 0.35s; }
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:nth-child(n+7) { animation-delay: 0.4s; }
+
+  .svg-slideshow-card-slideshow17d9c7578fa05ded::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--slideshow-accent), var(--slideshow-accent-dim));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:hover {
+    transform: translateY(-4px);
+  }
+
+  .svg-slideshow-card-slideshow17d9c7578fa05ded:hover::before {
+    transform: scaleX(1);
+  }
+
+  .svg-slideshow-preview-slideshow17d9c7578fa05ded {
+    width: 100%;
+    height: 200px;
+    background: var(--slideshow-bg);
+    border-radius: var(--slideshow-radius-inner);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: calc(var(--slideshow-spacing) * 2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .svg-slideshow-preview-slideshow17d9c7578fa05ded svg {
+    max-width: 80%;
+    max-height: 80%;
+    filter: drop-shadow(0 4px 12px rgba(255, 107, 53, 0.2));
+  }
+
+  .svg-slideshow-info-slideshow17d9c7578fa05ded {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--slideshow-spacing) * 1);
+  }
+
+  .svg-slideshow-name-slideshow17d9c7578fa05ded {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--slideshow-text);
+    letter-spacing: 0;
+  }
+
+  .svg-slideshow-meta-slideshow17d9c7578fa05ded {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--slideshow-text-muted);
+  }
+
+  /* Modal for full view */
+  .slideshow-modal-slideshow17d9c7578fa05ded {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 20, 25, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 2147483647; /* Max z-index to ensure it's on top */
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+
+  .slideshow-modal-slideshow17d9c7578fa05ded.active {
+    display: flex;
+  }
+
+  .slideshow-modal-content-slideshow17d9c7578fa05ded {
+    width: 95vw;
+    max-width: 1400px;
+    height: 90vh;
+    background: var(--slideshow-surface);
+    border-radius: 20px;
+    padding: 48px 24px 24px 24px;
+    position: relative;
+    animation: scaleInModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 2px solid var(--slideshow-accent);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .slideshow-modal-close-slideshow17d9c7578fa05ded {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--slideshow-accent);
+    color: var(--slideshow-bg);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    font-weight: 700;
+    z-index: 10;
+  }
+
+  .slideshow-modal-close-slideshow17d9c7578fa05ded:hover {
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  .slideshow-modal-svg-slideshow17d9c7578fa05ded {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Allow scrolling if SVG is truly massive */
+    padding: 10px;
+  }
+
+  .slideshow-modal-svg-slideshow17d9c7578fa05ded svg {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  @keyframes fadeInUpSlide {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleInModal {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>
+
+<script>
+window.galleryslideshow17d9c7578fa05ded = {
+  openModal: function(cardId) {
+    const card = document.getElementById(cardId);
+    if (!card) {
+      console.error('Card not found:', cardId);
+      return;
+    }
+
+    const previewDiv = card.querySelector('.svg-slideshow-preview-slideshow17d9c7578fa05ded');
+    if (!previewDiv) {
+      console.error('Preview div not found');
+      return;
+    }
+
+    const svg = previewDiv.querySelector('svg');
+    if (!svg) {
+      console.error('SVG not found in card');
+      return;
+    }
+
+    const modal = document.getElementById('modal-slideshow17d9c7578fa05ded');
+    const modalContent = document.getElementById('modalContent-slideshow17d9c7578fa05ded');
+
+    if (!modal || !modalContent) {
+      console.error('Modal elements not found');
+      return;
+    }
+
+    // CRITICAL FIX: Move modal to body to break out of any CSS transforms/containers
+    // that interfere with position: fixed
+    if (modal.parentNode !== document.body) {
+      document.body.appendChild(modal);
+    }
+
+    // Clear previous content
+    modalContent.innerHTML = '';
+
+    // Clone the SVG with deep clone
+    const clonedSvg = svg.cloneNode(true);
+
+    // Reset explicit width/height attributes if they cause scaling issues
+    // We let CSS handle the constraints
+    clonedSvg.removeAttribute('width');
+    clonedSvg.removeAttribute('height');
+    clonedSvg.style.width = '100%';
+    clonedSvg.style.height = '100%';
+
+    modalContent.appendChild(clonedSvg);
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  },
+
+  closeModal: function() {
+    const modal = document.getElementById('modal-slideshow17d9c7578fa05ded');
+    if (modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+};
+</script>
+
+<div class="slideshow-gallery-container-slideshow17d9c7578fa05ded">
+<div class="slideshow-gallery-grid-slideshow17d9c7578fa05ded" id="galleryGrid-slideshow17d9c7578fa05ded">
+<div class="svg-slideshow-card-slideshow17d9c7578fa05ded" id="card-slideshow17d9c7578fa05ded-0" onclick="galleryslideshow17d9c7578fa05ded.openModal('card-slideshow17d9c7578fa05ded-0')">
+  <div class="svg-slideshow-preview-slideshow17d9c7578fa05ded">
+    <?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_189ee68a369f4b5da10a046531fce870">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","75.0","85.0","Core","12",""],["Feature B","30.0","70.0","Enhancement","12",""],["Feature C","60.0","40.0","Nice-to-have","12",""],["Feature D","20.0","30.0","Optional","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_189ee68a369f4b5da10a046531fce870 .bg-rect { fill: #ffffff; } #mq_189ee68a369f4b5da10a046531fce870 .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_189ee68a369f4b5da10a046531fce870 .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_189ee68a369f4b5da10a046531fce870 .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_189ee68a369f4b5da10a046531fce870 .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_189ee68a369f4b5da10a046531fce870 .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_189ee68a369f4b5da10a046531fce870" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_189ee68a369f4b5da10a046531fce870" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_189ee68a369f4b5da10a046531fce870" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_189ee68a369f4b5da10a046531fce870" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_189ee68a369f4b5da10a046531fce870" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_189ee68a369f4b5da10a046531fce870"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_189ee68a369f4b5da10a046531fce870"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_189ee68a369f4b5da10a046531fce870)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Strategic Priority Matrix</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="139" y="125" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_189ee68a369f4b5da10a046531fce870)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CHALLENGERS</text><rect x="446" y="125" width="98" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_189ee68a369f4b5da10a046531fce870)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">LEADERS</text><rect x="131" y="555" width="149" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_189ee68a369f4b5da10a046531fce870)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">NICHE PLAYERS</text><rect x="429" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_189ee68a369f4b5da10a046531fce870)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">VISIONARIES</text><text x="205" y="685" text-anchor="middle" class="axis-label">EFFORT REQUIRED</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT LEVEL</text><g class="company-node"><circle cx="495" cy="182" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="495" cy="182" r="10" fill="#10b981" filter="url(#glow_mq_189ee68a369f4b5da10a046531fce870)"/><circle cx="495" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="495" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="234" cy="254" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="254" r="10" fill="#f59e0b" filter="url(#glow_mq_189ee68a369f4b5da10a046531fce870)"/><circle cx="234" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="279" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="408" cy="398" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="408" cy="398" r="10" fill="#3b82f6" filter="url(#glow_mq_189ee68a369f4b5da10a046531fce870)"/><circle cx="408" cy="398" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="423" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="176" cy="446" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="176" cy="446" r="10" fill="#f43f5e" filter="url(#glow_mq_189ee68a369f4b5da10a046531fce870)"/><circle cx="176" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="176" y="471" text-anchor="middle" class="company-name">Feature D</text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow17d9c7578fa05ded">
+    <div class="svg-slideshow-name-slideshow17d9c7578fa05ded">Strategic Priority Matrix</div>
+    <div class="svg-slideshow-meta-slideshow17d9c7578fa05ded">QUADRANT</div>
+  </div>
+</div>
+<div class="svg-slideshow-card-slideshow17d9c7578fa05ded" id="card-slideshow17d9c7578fa05ded-1" onclick="galleryslideshow17d9c7578fa05ded.openModal('card-slideshow17d9c7578fa05ded-1')">
+  <div class="svg-slideshow-preview-slideshow17d9c7578fa05ded">
+    <?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_d4578295ae744a04b928eb9ba8ac080d">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","25.0","85.0","Core","12",""],["Feature B","70.0","80.0","Enhancement","12",""],["Feature C","80.0","30.0","Nice-to-have","12",""],["Feature D","30.0","20.0","Optional","12",""],["Feature E","50.0","50.0","Maintenance","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_d4578295ae744a04b928eb9ba8ac080d .bg-rect { fill: #ffffff; } #mq_d4578295ae744a04b928eb9ba8ac080d .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_d4578295ae744a04b928eb9ba8ac080d .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_d4578295ae744a04b928eb9ba8ac080d .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_d4578295ae744a04b928eb9ba8ac080d .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_d4578295ae744a04b928eb9ba8ac080d .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_d4578295ae744a04b928eb9ba8ac080d" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_d4578295ae744a04b928eb9ba8ac080d" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_d4578295ae744a04b928eb9ba8ac080d" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_d4578295ae744a04b928eb9ba8ac080d" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_d4578295ae744a04b928eb9ba8ac080d" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_d4578295ae744a04b928eb9ba8ac080d"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_d4578295ae744a04b928eb9ba8ac080d"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_d4578295ae744a04b928eb9ba8ac080d)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Product Feature Prioritization</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">BIG BETS</text><rect x="433" y="125" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">QUICK WINS</text><rect x="139" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">INCREMENTAL</text><rect x="433" y="555" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">MONEY PITS</text><text x="205" y="685" text-anchor="middle" class="axis-label">COMPLEXITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">BUSINESS VALUE</text><g class="company-node"><circle cx="205" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="205" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><circle cx="205" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="205" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="466" cy="206" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="206" r="10" fill="#10b981" filter="url(#glow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><circle cx="466" cy="206" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="231" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="524" cy="446" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="524" cy="446" r="10" fill="#3b82f6" filter="url(#glow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><circle cx="524" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="471" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="234" cy="494" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="234" cy="494" r="10" fill="#f43f5e" filter="url(#glow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><circle cx="234" cy="494" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="519" text-anchor="middle" class="company-name">Feature D</text></g><g class="company-node"><circle cx="350" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="350" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_d4578295ae744a04b928eb9ba8ac080d)"/><circle cx="350" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="350" y="375" text-anchor="middle" class="company-name">Feature E</text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow17d9c7578fa05ded">
+    <div class="svg-slideshow-name-slideshow17d9c7578fa05ded">Product Feature Prioritization</div>
+    <div class="svg-slideshow-meta-slideshow17d9c7578fa05ded">QUADRANT</div>
+  </div>
+</div>
+<div class="svg-slideshow-card-slideshow17d9c7578fa05ded" id="card-slideshow17d9c7578fa05ded-2" onclick="galleryslideshow17d9c7578fa05ded.openModal('card-slideshow17d9c7578fa05ded-2')">
+  <div class="svg-slideshow-preview-slideshow17d9c7578fa05ded">
+    <?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_7db21a3647e24fefbb1e7ae941751509">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_7db21a3647e24fefbb1e7ae941751509 .bg-rect { fill: #ffffff; } #mq_7db21a3647e24fefbb1e7ae941751509 .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_7db21a3647e24fefbb1e7ae941751509 .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_7db21a3647e24fefbb1e7ae941751509 .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_7db21a3647e24fefbb1e7ae941751509 .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_7db21a3647e24fefbb1e7ae941751509 .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_7db21a3647e24fefbb1e7ae941751509" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_7db21a3647e24fefbb1e7ae941751509" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_7db21a3647e24fefbb1e7ae941751509" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_7db21a3647e24fefbb1e7ae941751509" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_7db21a3647e24fefbb1e7ae941751509" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_7db21a3647e24fefbb1e7ae941751509"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_7db21a3647e24fefbb1e7ae941751509"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_7db21a3647e24fefbb1e7ae941751509)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Project Risk Assessment</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_7db21a3647e24fefbb1e7ae941751509)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CRITICAL</text><rect x="421" y="125" width="149" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_7db21a3647e24fefbb1e7ae941751509)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">HIGH PRIORITY</text><rect x="122" y="555" width="166" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_7db21a3647e24fefbb1e7ae941751509)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">MEDIUM PRIORITY</text><rect x="425" y="555" width="140" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_7db21a3647e24fefbb1e7ae941751509)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">LOW PRIORITY</text><text x="205" y="685" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_7db21a3647e24fefbb1e7ae941751509)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_7db21a3647e24fefbb1e7ae941751509)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_7db21a3647e24fefbb1e7ae941751509)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_7db21a3647e24fefbb1e7ae941751509)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_7db21a3647e24fefbb1e7ae941751509)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_7db21a3647e24fefbb1e7ae941751509)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow17d9c7578fa05ded">
+    <div class="svg-slideshow-name-slideshow17d9c7578fa05ded">Project Risk Assessment</div>
+    <div class="svg-slideshow-meta-slideshow17d9c7578fa05ded">QUADRANT</div>
+  </div>
+</div>
+<div class="svg-slideshow-card-slideshow17d9c7578fa05ded" id="card-slideshow17d9c7578fa05ded-3" onclick="galleryslideshow17d9c7578fa05ded.openModal('card-slideshow17d9c7578fa05ded-3')">
+  <div class="svg-slideshow-preview-slideshow17d9c7578fa05ded">
+    <?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_48f4c18c463e4b88af439165338806ad">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_48f4c18c463e4b88af439165338806ad .bg-rect { fill: #0f172a; } #mq_48f4c18c463e4b88af439165338806ad .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_48f4c18c463e4b88af439165338806ad .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_48f4c18c463e4b88af439165338806ad .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_48f4c18c463e4b88af439165338806ad .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_48f4c18c463e4b88af439165338806ad .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_48f4c18c463e4b88af439165338806ad" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_48f4c18c463e4b88af439165338806ad" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_48f4c18c463e4b88af439165338806ad" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_48f4c18c463e4b88af439165338806ad" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_48f4c18c463e4b88af439165338806ad" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_48f4c18c463e4b88af439165338806ad"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_48f4c18c463e4b88af439165338806ad"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_48f4c18c463e4b88af439165338806ad)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Project Risk Assessment</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_48f4c18c463e4b88af439165338806ad)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CRITICAL</text><rect x="421" y="125" width="149" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_48f4c18c463e4b88af439165338806ad)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">HIGH PRIORITY</text><rect x="122" y="555" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_48f4c18c463e4b88af439165338806ad)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">MEDIUM PRIORITY</text><rect x="425" y="555" width="140" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_48f4c18c463e4b88af439165338806ad)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">LOW PRIORITY</text><text x="205" y="685" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_48f4c18c463e4b88af439165338806ad)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_48f4c18c463e4b88af439165338806ad)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_48f4c18c463e4b88af439165338806ad)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_48f4c18c463e4b88af439165338806ad)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_48f4c18c463e4b88af439165338806ad)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_48f4c18c463e4b88af439165338806ad)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow17d9c7578fa05ded">
+    <div class="svg-slideshow-name-slideshow17d9c7578fa05ded">Project Risk Assessment</div>
+    <div class="svg-slideshow-meta-slideshow17d9c7578fa05ded">QUADRANT</div>
+  </div>
+</div>
+<div class="svg-slideshow-card-slideshow17d9c7578fa05ded" id="card-slideshow17d9c7578fa05ded-4" onclick="galleryslideshow17d9c7578fa05ded.openModal('card-slideshow17d9c7578fa05ded-4')">
+  <div class="svg-slideshow-preview-slideshow17d9c7578fa05ded">
+    <?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_c1984e63b4a1499e9cd4aa0891c7ab0e">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_c1984e63b4a1499e9cd4aa0891c7ab0e .bg-rect { fill: #0f172a; } #mq_c1984e63b4a1499e9cd4aa0891c7ab0e .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_c1984e63b4a1499e9cd4aa0891c7ab0e .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_c1984e63b4a1499e9cd4aa0891c7ab0e .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_c1984e63b4a1499e9cd4aa0891c7ab0e .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_c1984e63b4a1499e9cd4aa0891c7ab0e .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_c1984e63b4a1499e9cd4aa0891c7ab0e" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_c1984e63b4a1499e9cd4aa0891c7ab0e" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_c1984e63b4a1499e9cd4aa0891c7ab0e" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_c1984e63b4a1499e9cd4aa0891c7ab0e" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_c1984e63b4a1499e9cd4aa0891c7ab0e" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Project Risk Assessment</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CRITICAL</text><rect x="421" y="125" width="149" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">HIGH PRIORITY</text><rect x="122" y="555" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">MEDIUM PRIORITY</text><rect x="425" y="555" width="140" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">LOW PRIORITY</text><text x="205" y="685" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_c1984e63b4a1499e9cd4aa0891c7ab0e)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow17d9c7578fa05ded">
+    <div class="svg-slideshow-name-slideshow17d9c7578fa05ded">Project Risk Assessment</div>
+    <div class="svg-slideshow-meta-slideshow17d9c7578fa05ded">QUADRANT</div>
+  </div>
+</div>
+<div class="svg-slideshow-card-slideshow17d9c7578fa05ded" id="card-slideshow17d9c7578fa05ded-5" onclick="galleryslideshow17d9c7578fa05ded.openModal('card-slideshow17d9c7578fa05ded-5')">
+  <div class="svg-slideshow-preview-slideshow17d9c7578fa05ded">
+    <?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_575091acf5234495b88425642dc81888">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_575091acf5234495b88425642dc81888 .bg-rect { fill: #0f172a; } #mq_575091acf5234495b88425642dc81888 .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_575091acf5234495b88425642dc81888 .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_575091acf5234495b88425642dc81888 .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_575091acf5234495b88425642dc81888 .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_575091acf5234495b88425642dc81888 .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_575091acf5234495b88425642dc81888" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_575091acf5234495b88425642dc81888" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_575091acf5234495b88425642dc81888" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_575091acf5234495b88425642dc81888" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_575091acf5234495b88425642dc81888" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_575091acf5234495b88425642dc81888"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_575091acf5234495b88425642dc81888"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_575091acf5234495b88425642dc81888)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Magic Quadrant</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="139" y="125" width="132" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_575091acf5234495b88425642dc81888)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CHALLENGERS</text><rect x="446" y="125" width="98" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_575091acf5234495b88425642dc81888)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">LEADERS</text><rect x="131" y="555" width="149" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_575091acf5234495b88425642dc81888)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">NICHE PLAYERS</text><rect x="429" y="555" width="132" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_575091acf5234495b88425642dc81888)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">VISIONARIES</text><text x="205" y="685" text-anchor="middle" class="axis-label">ABILITY TO EXECUTE</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">COMPLETENESS OF VISION</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_575091acf5234495b88425642dc81888)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_575091acf5234495b88425642dc81888)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_575091acf5234495b88425642dc81888)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_575091acf5234495b88425642dc81888)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_575091acf5234495b88425642dc81888)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_575091acf5234495b88425642dc81888)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow17d9c7578fa05ded">
+    <div class="svg-slideshow-name-slideshow17d9c7578fa05ded">Project Risk Assessment</div>
+    <div class="svg-slideshow-meta-slideshow17d9c7578fa05ded">QUADRANT</div>
+  </div>
 </div>
 </div>
 </div>
-<div class="docops-slide" data-title="Product Feature Prioritization" data-kind="quadrant">
-<div class="slide-content">
-<div class="slide-title">Product Feature Prioritization</div>
-<div class="slide-image">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_8d0f0d3c538e4f07b80e516edc307347">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","25.0","85.0","Core","12",""],["Feature B","70.0","80.0","Enhancement","12",""],["Feature C","80.0","30.0","Nice-to-have","12",""],["Feature D","30.0","20.0","Optional","12",""],["Feature E","50.0","50.0","Maintenance","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_8d0f0d3c538e4f07b80e516edc307347 .bg-rect { fill: #ffffff; } #mq_8d0f0d3c538e4f07b80e516edc307347 .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_8d0f0d3c538e4f07b80e516edc307347 .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_8d0f0d3c538e4f07b80e516edc307347 .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_8d0f0d3c538e4f07b80e516edc307347 .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_8d0f0d3c538e4f07b80e516edc307347 .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_8d0f0d3c538e4f07b80e516edc307347" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_8d0f0d3c538e4f07b80e516edc307347" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_8d0f0d3c538e4f07b80e516edc307347" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_8d0f0d3c538e4f07b80e516edc307347" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_8d0f0d3c538e4f07b80e516edc307347" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_8d0f0d3c538e4f07b80e516edc307347"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_8d0f0d3c538e4f07b80e516edc307347"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_8d0f0d3c538e4f07b80e516edc307347)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Product Feature Prioritization</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">BIG BETS</text><rect x="433" y="125" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">QUICK WINS</text><rect x="139" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">INCREMENTAL</text><rect x="433" y="555" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">MONEY PITS</text><text x="205" y="685" text-anchor="middle" class="axis-label">COMPLEXITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">BUSINESS VALUE</text><g class="company-node"><circle cx="205" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="205" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><circle cx="205" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="205" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="466" cy="206" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="206" r="10" fill="#10b981" filter="url(#glow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><circle cx="466" cy="206" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="231" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="524" cy="446" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="524" cy="446" r="10" fill="#3b82f6" filter="url(#glow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><circle cx="524" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="471" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="234" cy="494" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="234" cy="494" r="10" fill="#f43f5e" filter="url(#glow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><circle cx="234" cy="494" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="519" text-anchor="middle" class="company-name">Feature D</text></g><g class="company-node"><circle cx="350" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="350" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_8d0f0d3c538e4f07b80e516edc307347)"/><circle cx="350" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="350" y="375" text-anchor="middle" class="company-name">Feature E</text></g></svg>
+<div class="slideshow-modal-slideshow17d9c7578fa05ded" id="modal-slideshow17d9c7578fa05ded" onclick="if(event.target.id === 'modal-slideshow17d9c7578fa05ded') galleryslideshow17d9c7578fa05ded.closeModal()">
+  <div class="slideshow-modal-content-slideshow17d9c7578fa05ded">
+    <button class="slideshow-modal-close-slideshow17d9c7578fa05ded" onclick="event.stopPropagation(); galleryslideshow17d9c7578fa05ded.closeModal()">×</button>
+    <div class="slideshow-modal-svg-slideshow17d9c7578fa05ded" id="modalContent-slideshow17d9c7578fa05ded"></div>
+  </div>
 </div>
-</div>
-</div>
-<div class="docops-slide" data-title="Project Risk Assessment" data-kind="quadrant">
-<div class="slide-content">
-<div class="slide-title">Project Risk Assessment</div>
-<div class="slide-image">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_6f6354194ee44740bfb89a1d4b7eb5ae">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_6f6354194ee44740bfb89a1d4b7eb5ae .bg-rect { fill: #ffffff; } #mq_6f6354194ee44740bfb89a1d4b7eb5ae .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_6f6354194ee44740bfb89a1d4b7eb5ae .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_6f6354194ee44740bfb89a1d4b7eb5ae .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_6f6354194ee44740bfb89a1d4b7eb5ae .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_6f6354194ee44740bfb89a1d4b7eb5ae .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_6f6354194ee44740bfb89a1d4b7eb5ae" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_6f6354194ee44740bfb89a1d4b7eb5ae" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_6f6354194ee44740bfb89a1d4b7eb5ae" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_6f6354194ee44740bfb89a1d4b7eb5ae" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_6f6354194ee44740bfb89a1d4b7eb5ae" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_6f6354194ee44740bfb89a1d4b7eb5ae"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_6f6354194ee44740bfb89a1d4b7eb5ae"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_6f6354194ee44740bfb89a1d4b7eb5ae)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Project Risk Assessment</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CRITICAL</text><rect x="421" y="125" width="149" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">HIGH PRIORITY</text><rect x="122" y="555" width="166" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">MEDIUM PRIORITY</text><rect x="425" y="555" width="140" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">LOW PRIORITY</text><text x="205" y="685" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_6f6354194ee44740bfb89a1d4b7eb5ae)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
-</div>
-</div>
-</div>
-<div class="docops-slide" data-title="Project Risk Assessment" data-kind="quadrant">
-<div class="slide-content">
-<div class="slide-title">Project Risk Assessment</div>
-<div class="slide-image">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_2a0483355e5c4324bf9e436b06647a9f">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_2a0483355e5c4324bf9e436b06647a9f .bg-rect { fill: #0f172a; } #mq_2a0483355e5c4324bf9e436b06647a9f .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_2a0483355e5c4324bf9e436b06647a9f .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_2a0483355e5c4324bf9e436b06647a9f .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_2a0483355e5c4324bf9e436b06647a9f .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_2a0483355e5c4324bf9e436b06647a9f .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_2a0483355e5c4324bf9e436b06647a9f" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_2a0483355e5c4324bf9e436b06647a9f" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_2a0483355e5c4324bf9e436b06647a9f" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_2a0483355e5c4324bf9e436b06647a9f" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_2a0483355e5c4324bf9e436b06647a9f" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_2a0483355e5c4324bf9e436b06647a9f"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_2a0483355e5c4324bf9e436b06647a9f"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_2a0483355e5c4324bf9e436b06647a9f)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Project Risk Assessment</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CRITICAL</text><rect x="421" y="125" width="149" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">HIGH PRIORITY</text><rect x="122" y="555" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">MEDIUM PRIORITY</text><rect x="425" y="555" width="140" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">LOW PRIORITY</text><text x="205" y="685" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_2a0483355e5c4324bf9e436b06647a9f)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
-</div>
-</div>
-</div>
-<div class="docops-slide" data-title="Project Risk Assessment" data-kind="quadrant">
-<div class="slide-content">
-<div class="slide-title">Project Risk Assessment</div>
-<div class="slide-image">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_96f3f4a4247a4dd480faf44ae3dade04">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_96f3f4a4247a4dd480faf44ae3dade04 .bg-rect { fill: #0f172a; } #mq_96f3f4a4247a4dd480faf44ae3dade04 .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_96f3f4a4247a4dd480faf44ae3dade04 .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_96f3f4a4247a4dd480faf44ae3dade04 .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_96f3f4a4247a4dd480faf44ae3dade04 .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_96f3f4a4247a4dd480faf44ae3dade04 .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_96f3f4a4247a4dd480faf44ae3dade04" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_96f3f4a4247a4dd480faf44ae3dade04" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_96f3f4a4247a4dd480faf44ae3dade04" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_96f3f4a4247a4dd480faf44ae3dade04" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_96f3f4a4247a4dd480faf44ae3dade04" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_96f3f4a4247a4dd480faf44ae3dade04"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_96f3f4a4247a4dd480faf44ae3dade04"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_96f3f4a4247a4dd480faf44ae3dade04)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Project Risk Assessment</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CRITICAL</text><rect x="421" y="125" width="149" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">HIGH PRIORITY</text><rect x="122" y="555" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">MEDIUM PRIORITY</text><rect x="425" y="555" width="140" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">LOW PRIORITY</text><text x="205" y="685" text-anchor="middle" class="axis-label">PROBABILITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_96f3f4a4247a4dd480faf44ae3dade04)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
-</div>
-</div>
-</div>
-<div class="docops-slide" data-title="Project Risk Assessment" data-kind="quadrant">
-<div class="slide-content">
-<div class="slide-title">Project Risk Assessment</div>
-<div class="slide-image">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_256f72eb1c944650b260c59722aa7839">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-01-31</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Security Breach","30.0","95.0","Security","12",""],["Budget Overrun","70.0","75.0","Financial","12",""],["Schedule Delay","80.0","60.0","Timeline","12",""],["Scope Creep","85.0","50.0","Management","12",""],["Resource Shortage","60.0","70.0","Staffing","12",""],["Technical Failure","40.0","85.0","Technical","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_256f72eb1c944650b260c59722aa7839 .bg-rect { fill: #0f172a; } #mq_256f72eb1c944650b260c59722aa7839 .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_256f72eb1c944650b260c59722aa7839 .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_256f72eb1c944650b260c59722aa7839 .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_256f72eb1c944650b260c59722aa7839 .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_256f72eb1c944650b260c59722aa7839 .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_256f72eb1c944650b260c59722aa7839" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_256f72eb1c944650b260c59722aa7839" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_256f72eb1c944650b260c59722aa7839" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_256f72eb1c944650b260c59722aa7839" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_256f72eb1c944650b260c59722aa7839" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_256f72eb1c944650b260c59722aa7839"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_256f72eb1c944650b260c59722aa7839"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_256f72eb1c944650b260c59722aa7839)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Magic Quadrant</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="139" y="125" width="132" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_256f72eb1c944650b260c59722aa7839)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CHALLENGERS</text><rect x="446" y="125" width="98" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_256f72eb1c944650b260c59722aa7839)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">LEADERS</text><rect x="131" y="555" width="149" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_256f72eb1c944650b260c59722aa7839)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">NICHE PLAYERS</text><rect x="429" y="555" width="132" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_256f72eb1c944650b260c59722aa7839)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">VISIONARIES</text><text x="205" y="685" text-anchor="middle" class="axis-label">ABILITY TO EXECUTE</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">COMPLETENESS OF VISION</text><g class="company-node"><circle cx="234" cy="134" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="134" r="10" fill="#f59e0b" filter="url(#glow_mq_256f72eb1c944650b260c59722aa7839)"/><circle cx="234" cy="134" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="159" text-anchor="middle" class="company-name">Security Breach</text></g><g class="company-node"><circle cx="466" cy="230" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="230" r="10" fill="#10b981" filter="url(#glow_mq_256f72eb1c944650b260c59722aa7839)"/><circle cx="466" cy="230" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="255" text-anchor="middle" class="company-name">Budget Overrun</text></g><g class="company-node"><circle cx="524" cy="302" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="524" cy="302" r="10" fill="#10b981" filter="url(#glow_mq_256f72eb1c944650b260c59722aa7839)"/><circle cx="524" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="327" text-anchor="middle" class="company-name">Schedule Delay</text></g><g class="company-node"><circle cx="553" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="553" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_256f72eb1c944650b260c59722aa7839)"/><circle cx="553" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="553" y="375" text-anchor="middle" class="company-name">Scope Creep</text></g><g class="company-node"><circle cx="408" cy="254" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="408" cy="254" r="10" fill="#10b981" filter="url(#glow_mq_256f72eb1c944650b260c59722aa7839)"/><circle cx="408" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="279" text-anchor="middle" class="company-name">Resource Shortage</text></g><g class="company-node"><circle cx="292" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="292" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_256f72eb1c944650b260c59722aa7839)"/><circle cx="292" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="207" text-anchor="middle" class="company-name">Technical Failure</text></g></svg>
-</div>
-</div>
-</div>
-</div>
+
+<script>
+(function() {
+  const handleEscape = function(e) {
+    if (e.key === 'Escape') {
+      galleryslideshow17d9c7578fa05ded.closeModal();
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
+})();
+</script>
 </div>
 </div>
 </div>
@@ -2090,43 +2546,7 @@ if (!hljs.initHighlighting.called) {
   ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
 }
 </script>
-<style>
-/* Reading Time Styles */
-.reading-time {
-    position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    background: var(--bg-base); /* Uses the dynamic background variable */
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--accent-secondary);
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    z-index: 1005;
-    
-    /* Double-accent shadow follows the light/dark mode logic */
-    box-shadow: 6px 6px 0px var(--accent-pink);
-    
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-main); /* Switches between grey and dark slate */
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
 
-.reading-time p {
-    margin: 0 !important;
-    font-weight: 600;
-}
-
-/* Light Mode specific opacity tweak */
-body.light-mode .reading-time {
-    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
-}
-</style>
-<div class="reading-time">
-    <p>📖 < 1 min read • 132 words</p>
-</div>
 <style>
 .listingblock {
     position: relative;
