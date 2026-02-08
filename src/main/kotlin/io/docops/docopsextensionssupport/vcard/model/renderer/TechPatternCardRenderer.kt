@@ -13,9 +13,9 @@ class TechPatternCardRenderer(val useDark: Boolean) : VCardRenderer {
     @OptIn(ExperimentalUuidApi::class)
     override fun render(vcard: VCard, config: VCardConfig): String {
         val theme = if(useDark) "dark" else "light"
-        val (bgColor, textColor, accentColor, secondaryColor) = when (theme) {
-            "dark" -> arrayOf("#0A0E17", "#FFFFFF", "#00ff88", "#475569")
-            else -> arrayOf("#F8FAFC", "#0F172A", "#2563EB", "#64748B")
+        val (paperColor, blackColor, accentColor) = when (theme) {
+            "dark" -> arrayOf("#f5f5f7", "#000", "#84cc16")
+            else -> arrayOf("#f5f5f7", "#000", "#84cc16")
         }
         val id: String = Uuid.random().toHexString()
 
@@ -23,111 +23,153 @@ class TechPatternCardRenderer(val useDark: Boolean) : VCardRenderer {
         val qrCodeService = QRCodeService()
         val vCardData = vCardGeneratorService.generateVCard30(vcard)
         val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 80, 80)
+        val qrCodeLarge = qrCodeService.generateQRCodeBase64(vCardData, 320, 320)
 
         return buildString {
-            appendLine("""<svg width="350" height="200" viewBox="0 0 350 200" id="id_$id" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">""")
+            appendLine("""<svg width="350" height="200" viewBox="0 0 920 525" id="id_$id" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">""")
             appendLine("""
                 <defs>
                     <style>
-                        #id_$id @keyframes scanline { 0% { transform: translateY(-100px); opacity: 0; } 50% { opacity: 0.4; } 100% { transform: translateY(200px); opacity: 0; } }
-                        #id_$id @keyframes reveal { from { opacity: 0; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
-                        #id_$id .tech-reveal { animation: reveal 0.8s ease-out both; }
-                        #id_$id .name-txt { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; fill: $textColor; }
-                        #id_$id .code-txt { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: $accentColor; opacity: 0.8; }
-                        #id_$id .terminal-txt { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: $textColor; }
+                        @import url('https://fonts.googleapis.com/css2?family=Anton&amp;family=Space+Mono&amp;display=swap');
+                        
+                        #id_$id .card-container { cursor: pointer; transform-style: preserve-3d; transition: transform 700ms; }
+                        #id_$id .card-container.flipped { transform: rotateY(180deg); }
+                        #id_$id .side { backface-visibility: hidden; }
+                        #id_$id .back-side { transform: rotateY(180deg); }
+                        
+                        #id_$id @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+                        #id_$id @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+                        #id_$id @keyframes slideInRight { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                        #id_$id @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                        #id_$id @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } }
+                        
+                        #id_$id .accent-strip { animation: slideDown 1s ease-out; }
+                        #id_$id .name-first { animation: slideInLeft 0.8s cubic-bezier(.16,1,.3,1) both; }
+                        #id_$id .name-second { animation: slideInLeft 0.8s cubic-bezier(.16,1,.3,1) 0.1s both; }
+                        #id_$id .vertical-title { animation: slideInRight 0.8s cubic-bezier(.16,1,.3,1) 0.3s both; }
+                        #id_$id .contact-1 { animation: fadeInUp 0.6s ease-out 0.5s both; }
+                        #id_$id .contact-2 { animation: fadeInUp 0.6s ease-out 0.6s both; }
+                        #id_$id .contact-3 { animation: fadeInUp 0.6s ease-out 0.7s both; }
+                        #id_$id .dot { animation: pulse 2s ease-in-out infinite; }
+                        
+                        #id_$id .name-txt { font-family: 'Anton', 'Impact', sans-serif; font-weight: 900; font-size: 64px; letter-spacing: -0.05em; fill: $blackColor; }
+                        #id_$id .title-txt { font-family: 'Space Mono', monospace; font-weight: 900; font-size: 20px; letter-spacing: 0.15em; fill: $accentColor; }
+                        #id_$id .contact-txt { font-family: monospace; font-size: 14px; fill: $blackColor; }
+                        #id_$id .qr-label { font-family: monospace; font-size: 11px; fill: $blackColor; }
+                        #id_$id .back-title { font-family: 'Anton', 'Impact', sans-serif; font-weight: 900; font-size: 48px; fill: $paperColor; }
+                        #id_$id .back-text { font-family: monospace; font-size: 18px; fill: $paperColor; }
+                        #id_$id .back-hint { font-family: monospace; font-size: 13px; fill: #9ca3af; }
                     </style>
-                    <linearGradient id="scan-grad-$id" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="$accentColor" stop-opacity="0"/>
-                        <stop offset="50%" stop-color="$accentColor" stop-opacity="0.2"/>
-                        <stop offset="100%" stop-color="$accentColor" stop-opacity="0"/>
-                    </linearGradient>
                 </defs>
             """.trimIndent())
 
-            // Background & Atmospheric Scan Line
-            appendLine("""  <rect width="350" height="200" rx="2" fill="$bgColor"/>""")
-            appendLine("""  <rect width="350" height="80" fill="url(#scan-grad-$id)" style="animation: scanline 4s linear infinite;"/>""")
+            // Card container group (for flip transformation)
+            appendLine("""  <g class="card-container" id="card-$id">""")
 
-            // Identity Block
-            appendLine("""  <g transform="translate(35, 45)" class="tech-reveal" style="animation-delay: 0.1s;">""")
-            appendLine("""    <text class="name-txt">${vcard.firstName} ${vcard.lastName}</text>""")
-            vcard.title?.let {
-                appendLine("""    <text y="20" class="code-txt">// ROLE: ${it.uppercase()}</text>""")
+            // === FRONT SIDE ===
+            appendLine("""    <g class="side front-side">""")
+
+            // Background
+            appendLine("""      <rect width="920" height="525" fill="$paperColor"/>""")
+
+            // Diagonal black background (right side)
+            appendLine("""      <path d="M 690 0 L 920 0 L 920 525 L 460 525 Z" fill="$blackColor"/>""")
+
+            // Accent strip (left edge)
+            appendLine("""      <rect class="accent-strip" width="8" height="525" fill="$accentColor"/>""")
+
+            // Decorative dot
+            appendLine("""      <circle class="dot" cx="32" cy="32" r="6" fill="$accentColor"/>""")
+
+            // Name (stacked)
+            appendLine("""      <g transform="translate(32, 48)">""")
+            appendLine("""        <text class="name-txt name-first" y="58">${vcard.firstName.uppercase()}</text>""")
+            appendLine("""        <text class="name-txt name-second" y="124">${vcard.lastName.uppercase()}</text>""")
+            appendLine("""      </g>""")
+
+            // Vertical title (right side) - moved left to avoid diagonal
+            vcard.title?.let { title ->
+                appendLine("""      <g class="vertical-title" transform="translate(900, 48)">""")
+                appendLine("""        <text class="title-txt" writing-mode="tb" text-anchor="start">${title.uppercase()}</text>""")
+                appendLine("""      </g>""")
             }
-            appendLine("""  </g>""")
 
-            // Terminal Content
-            var yPos = 100
-            appendLine("""  <g transform="translate(35, $yPos)" class="tech-reveal" style="animation-delay: 0.3s;">""")
-            appendLine("""    <rect x="-10" y="0" width="3" height="12" fill="$accentColor"><animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" /></rect>""")
-            appendLine("""    <text class="code-txt">$ contact --fetch-identity</text>""")
 
+            // Contact cluster (bottom left)
             val primaryEmail = vcard.emails.firstOrNull()?.address ?: vcard.email
-            primaryEmail?.let {
-                appendLine("""    <text y="18" class="terminal-txt">$it</text>""")
-            }
             val primaryPhone = vcard.phones.firstOrNull()?.number ?: vcard.mobile
-            primaryPhone?.let {
-                appendLine("""    <text y="34" class="terminal-txt">$it</text>""")
+
+            appendLine("""      <g transform="translate(32, 420)">""")
+
+            // Email
+            primaryEmail?.let {
+                appendLine("""        <g class="contact-1">""")
+                appendLine("""          <path d="M3 8.5v7A2.5 2.5 0 0 0 5.5 18h13A2.5 2.5 0 0 0 21 15.5v-7 M21 8l-9 5-9-5" stroke="$blackColor" stroke-width="1.5" fill="none"/>""")
+                appendLine("""          <text class="contact-txt" x="32" y="13">$it</text>""")
+                appendLine("""        </g>""")
             }
+
+            // Phone
+            primaryPhone?.let {
+                appendLine("""        <g class="contact-2" transform="translate(0, 24)">""")
+                appendLine("""          <path d="M22 16.92V21a1 1 0 0 1-1.09 1 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2 3.09 1 1 0 0 1 3 2h4.09a1 1 0 0 1 1 .75 12.05 12.05 0 0 0 .7 2.81 1 1 0 0 1-.24 1.09L7.91 8.91a16 16 0 0 0 6 6l1.26-1.26a1 1 0 0 1 1.09-.24 12.05 12.05 0 0 0 2.81.7 1 1 0 0 1 .75 1z" stroke="$blackColor" stroke-width="1.5" fill="none"/>""")
+                appendLine("""          <text class="contact-txt" x="32" y="13">$it</text>""")
+                appendLine("""        </g>""")
+            }
+
+            // Organization
+            vcard.organization?.let { org ->
+                appendLine("""        <g class="contact-3" transform="translate(0, 48)">""")
+                appendLine("""          <path d="M3 21h18 M6 21V10a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v11 M9 21V6 M15 21V6" stroke="$blackColor" stroke-width="1.5" fill="none"/>""")
+                appendLine("""          <text class="contact-txt" x="32" y="13">$org</text>""")
+                appendLine("""        </g>""")
+            }
+
+            appendLine("""      </g>""")
+
+            // QR block (bottom right) - with proper white background
+            appendLine("""      <g transform="translate(760, 365)">""")
+            appendLine("""        <rect width="128" height="128" fill="$paperColor" stroke="$blackColor" stroke-width="6"/>""")
+            appendLine("""        <rect x="14" y="14" width="100" height="100" fill="white"/>""")
+            appendLine("""        <image x="14" y="14" width="100" height="100" href="$qrCodeBase64" preserveAspectRatio="xMidYMid meet"/>""")
+            appendLine("""        <text class="qr-label" x="64" y="142" text-anchor="middle">SCAN</text>""")
+            appendLine("""      </g>""")
+
+            appendLine("""    </g>""")  // Close front-side
+
+
+            // === BACK SIDE ===
+            appendLine("""    <g class="side back-side">""")
+
+            // Black background
+            appendLine("""      <rect width="920" height="525" fill="$blackColor"/>""")
+
+            // Centered content
+            appendLine("""      <g transform="translate(460, 262.5)">""")
+            appendLine("""        <text class="back-title" text-anchor="middle" y="-20">LET'S BUILD</text>""")
+            appendLine("""        <rect x="-48" y="0" width="96" height="6" fill="$accentColor"/>""")
+            appendLine("""        <text class="back-text" text-anchor="middle" y="40" style="max-width: 520px;">Engineering excellence through</text>""")
+            appendLine("""        <text class="back-text" text-anchor="middle" y="64">innovative solutions and collaborative design.</text>""")
+            appendLine("""        <text class="back-hint" text-anchor="middle" y="105">Click to flip back</text>""")
+            appendLine("""      </g>""")
+
+            appendLine("""    </g>""")
+
             appendLine("""  </g>""")
 
-            // Bottom Detail: Segmented Progress Detail
-            appendLine("""  <g transform="translate(35, 175)" opacity="0.3" class="tech-reveal" style="animation-delay: 0.5s;">""")
-            appendLine("""    <rect width="20" height="3" fill="$accentColor" rx="1"/>""")
-            appendLine("""    <rect x="25" width="20" height="3" fill="$accentColor" rx="1"/>""")
-            appendLine("""    <rect x="50" width="10" height="3" fill="$accentColor" rx="1"/>""")
-            appendLine("""  </g>""")
-
-            // QR Access Block
-            appendLine("""  <g id="qr-trigger-$id" transform="translate(245, 65)" class="tech-reveal" style="cursor: pointer; animation-delay: 0.6s;">""")
-            appendLine("""    <rect width="75" height="75" rx="1" fill="none" stroke="$accentColor" stroke-width="0.5" stroke-dasharray="8 4"/>""")
-            appendLine("""    <rect x="4" y="4" width="67" height="67" rx="1" fill="white" opacity="0.95"/>""")
-            appendLine("""    <image x="7" y="7" width="61" height="61" href="$qrCodeBase64"/>""")
-            appendLine("""    <text x="37.5" y="90" text-anchor="middle" class="code-txt" style="font-size: 7px;">AUTH_SCAN_v2</text>""")
-            appendLine("""  </g>""")
-
-           /* appendLine("""  <rect x="250" y="84" width="85" height="75" rx="4" fill="rgba(255,255,255,0.1)" stroke="$accentColor" stroke-width="1"/>""")
-            appendLine("""  <rect x="263" y="95" width="60" height="60" rx="2" fill="white"/>""")
-            appendLine("""  <image x="268" y="100" width="50" height="50" href="$qrCodeBase64"/>""")
-            appendLine("""  <text x="288" y="187" font-family="'JetBrains Mono', monospace" font-size="7" fill="$accentColor" text-anchor="middle">$ scan</text>""")
-*/
-            // Add modal BEFORE closing SVG tag
+            // Flip interaction script
             appendLine("""
-  <!-- QR Code Modal -->
-  <g id="qr-modal-$id" style="display: none;">
-      <rect width="350" height="220" fill="rgba(0,0,0,0.9)" id="modal-bg-$id" style="cursor: pointer;"/>
-      <g transform="translate(75,5)">
-          <rect width="200" height="185" rx="8" fill="white"/>
-          <image x="20" y="5" width="160" height="160" href="${qrCodeService.generateQRCodeBase64(vCardData, 320, 320)}"/>
-          <text x="100" y="180" font-family="'Roboto', sans-serif" font-size="9" fill="#64748b" text-anchor="middle">(click to close)</text>
-      </g>
-  </g>
-
   <script type="text/javascript">
   <![CDATA[
       (function() {
           var svg = document.getElementById('id_$id');
           if (!svg) return;
           
-          var qrTrigger = svg.getElementById('qr-trigger-$id');
-          var modal = svg.getElementById('qr-modal-$id');
-          var modalBg = svg.getElementById('modal-bg-$id');
+          var cardContainer = svg.getElementById('card-$id');
           
-          if (qrTrigger && modal && modalBg) {
-              qrTrigger.addEventListener('click', function(e) {
-                  e.stopPropagation();
-                  modal.style.display = 'block';
-              });
-              
-              modalBg.addEventListener('click', function() {
-                  modal.style.display = 'none';
-              });
-              
-              document.addEventListener('keydown', function(e) {
-                  if (e.key === 'Escape' && modal.style.display === 'block') {
-                      modal.style.display = 'none';
-                  }
+          if (cardContainer) {
+              svg.addEventListener('click', function(e) {
+                  cardContainer.classList.toggle('flipped');
               });
           }
       })();

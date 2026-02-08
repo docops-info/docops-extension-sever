@@ -10,10 +10,6 @@ class VCardParserService {
         private const val CONFIG_SEPARATOR = "---"
         private val VALID_DESIGNS = setOf(
             "tech_pattern_background",
-            "business_card_design",
-            "business_card_design2",
-            "business_card_template",
-            "creative_agency_pro_contact_card",
             "neo_brutalist",
             "modern_card"
         )

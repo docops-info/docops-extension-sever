@@ -9,17 +9,15 @@ class VCardSvgGeneratorService(val useDark: Boolean = false) {
     }
 
     private val renderers: Map<String, VCardRenderer> = listOf(
-        BusinessCardRenderer(useDark),
-        BusinessCard2Renderer(useDark),
-        BusinessCardTemplateRenderer(useDark),
+
+
         TechPatternCardRenderer(useDark),
-        CreativeAgencyCardRenderer(useDark),
         ModernCardRenderer(includeQR = true, useDark),
         NeoBrutalistCardRenderer(useDark)
     ).associateBy { it.designKey }
 
     fun generateSvg(vcard: VCard, config: VCardConfig): String {
-        val renderer = renderers[config.design] ?: renderers["business_card_design"]!!
+        val renderer = renderers[config.design] ?: renderers["neo_brutalist"]!!
         return renderer.render(vcard, config)
     }
 
@@ -55,25 +53,11 @@ END:VCARD
     val parser = VCardParserService()
     val pvcard = parser.parseVCard(card)
     val generator = VCardSvgGeneratorService()
-    var svg = generator.generateSvg(pvcard, VCardConfig(design = "business_card_design"))
-    var f = File("gen/vcard1.svg")
+
+    var svg = generator.generateSvg(pvcard, VCardConfig(design = "tech_pattern_background"))
+    var f = File("gen/vcard4.svg")
     f.writeText(svg)
 
-    svg = generator.generateSvg(pvcard, VCardConfig(design = "business_card_design2"))
-    f = File("gen/vcard2.svg")
-    f.writeText(svg)
-
-    svg = generator.generateSvg(pvcard, VCardConfig(design = "business_card_template"))
-    f = File("gen/vcard3.svg")
-    f.writeText(svg)
-
-    svg = generator.generateSvg(pvcard, VCardConfig(design = "tech_pattern_background"))
-    f = File("gen/vcard4.svg")
-    f.writeText(svg)
-
-    svg = generator.generateSvg(pvcard, VCardConfig(design = "creative_agency_pro_contact_card"))
-    f = File("gen/vcard5.svg")
-    f.writeText(svg)
 
     svg = generator.generateSvg(pvcard, VCardConfig(design = "modern_card"))
     f = File("gen/vcard6.svg")
