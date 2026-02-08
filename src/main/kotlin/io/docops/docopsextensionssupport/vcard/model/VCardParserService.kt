@@ -14,6 +14,7 @@ class VCardParserService {
             "business_card_design2",
             "business_card_template",
             "creative_agency_pro_contact_card",
+            "neo_brutalist",
             "modern_card"
         )
         private val VALID_THEMES = setOf("light", "dark")

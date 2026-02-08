@@ -14,7 +14,8 @@ class VCardSvgGeneratorService(val useDark: Boolean = false) {
         BusinessCardTemplateRenderer(useDark),
         TechPatternCardRenderer(useDark),
         CreativeAgencyCardRenderer(useDark),
-        ModernCardRenderer(includeQR = true, useDark)
+        ModernCardRenderer(includeQR = true, useDark),
+        NeoBrutalistCardRenderer(useDark)
     ).associateBy { it.designKey }
 
     fun generateSvg(vcard: VCard, config: VCardConfig): String {
@@ -76,6 +77,10 @@ END:VCARD
 
     svg = generator.generateSvg(pvcard, VCardConfig(design = "modern_card"))
     f = File("gen/vcard6.svg")
+    f.writeText(svg)
+
+    svg = generator.generateSvg(pvcard, VCardConfig(design = "neo_brutalist"))
+    f = File("gen/vcard7.svg")
     f.writeText(svg)
     println("done")
 }
