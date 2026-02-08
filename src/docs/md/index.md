@@ -252,7 +252,14 @@ Track decisions, tasks, and team information.
       "description": "Architecture decisions",
       "activeName": "adr",
       "type": "metadata"
-    }
+    },
+      {
+      "label": "VCard",
+      "link": "vcard/index.html",
+      "description": "VCards",
+      "activeName": "vcard",
+      "type": "metadata"
+      }
   ],
   "buttonType": "CIRCLE",
   "theme": {
