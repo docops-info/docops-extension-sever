@@ -2140,10 +2140,10 @@ window.onload = function() {
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
-<body class="book toc2 toc-left">
+<body class="book">
 <div id="header">
 <h1>DocOps Release Strategy</h1>
-<div id="toc" class="toc2">
+<div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#top">1. Introduction</a></li>
@@ -2312,7 +2312,7 @@ window.onload = function() {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-a46b22e00fd3e118 {
+  .svg-modal-svgviewer-b6e66aff24b6942a {
       display: none;
       position: fixed;
       top: 0;
@@ -2327,10 +2327,10 @@ window.onload = function() {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-a46b22e00fd3e118.active {
+  .svg-modal-svgviewer-b6e66aff24b6942a.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-a46b22e00fd3e118 {
+  .svg-modal-content-svgviewer-b6e66aff24b6942a {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2345,7 +2345,7 @@ window.onload = function() {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-a46b22e00fd3e118 {
+  .svg-modal-close-svgviewer-b6e66aff24b6942a {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2363,11 +2363,11 @@ window.onload = function() {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-a46b22e00fd3e118:hover {
+  .svg-modal-close-svgviewer-b6e66aff24b6942a:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-a46b22e00fd3e118 {
+  .svg-modal-body-svgviewer-b6e66aff24b6942a {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2377,7 +2377,7 @@ window.onload = function() {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-a46b22e00fd3e118 svg {
+  .svg-modal-body-svgviewer-b6e66aff24b6942a svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2386,10 +2386,10 @@ window.onload = function() {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-a46b22e00fd3e118 .csv-content {
+  #csv-modal-svgviewer-b6e66aff24b6942a .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-a46b22e00fd3e118 .csv-table {
+  #csv-modal-svgviewer-b6e66aff24b6942a .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2397,7 +2397,7 @@ window.onload = function() {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-a46b22e00fd3e118 .csv-table th {
+  #csv-modal-svgviewer-b6e66aff24b6942a .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2406,15 +2406,15 @@ window.onload = function() {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-a46b22e00fd3e118 .csv-table td {
+  #csv-modal-svgviewer-b6e66aff24b6942a .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-a46b22e00fd3e118 .csv-table tr {
+  #csv-modal-svgviewer-b6e66aff24b6942a .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-a46b22e00fd3e118 .csv-table tr:hover {
+  #csv-modal-svgviewer-b6e66aff24b6942a .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2422,10 +2422,10 @@ window.onload = function() {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_a46b22e00fd3e118 = {
+  window.svgModalsvgviewer_b6e66aff24b6942a = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-a46b22e00fd3e118');
-          const sourceContainer = document.getElementById('svgviewer-a46b22e00fd3e118');
+          const modal = document.getElementById('modal-svgviewer-b6e66aff24b6942a');
+          const sourceContainer = document.getElementById('svgviewer-b6e66aff24b6942a');
 
           if (!modal || !sourceContainer) return;
 
@@ -2434,7 +2434,7 @@ window.onload = function() {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-a46b22e00fd3e118');
+          const targetContainer = document.getElementById('modal-body-svgviewer-b6e66aff24b6942a');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2451,7 +2451,7 @@ window.onload = function() {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-a46b22e00fd3e118');
+          const modal = document.getElementById('modal-svgviewer-b6e66aff24b6942a');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2460,9 +2460,9 @@ window.onload = function() {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_a46b22e00fd3e118 = {
+  window.csvModalsvgviewer_b6e66aff24b6942a = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-a46b22e00fd3e118');
+          const modal = document.getElementById('csv-modal-svgviewer-b6e66aff24b6942a');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2473,11 +2473,11 @@ window.onload = function() {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-a46b22e00fd3e118');
+              window.svgViewer.loadCsvData('svgviewer-b6e66aff24b6942a');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-a46b22e00fd3e118');
+          const modal = document.getElementById('csv-modal-svgviewer-b6e66aff24b6942a');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2488,20 +2488,20 @@ window.onload = function() {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-a46b22e00fd3e118');
+          const viewModal = document.getElementById('modal-svgviewer-b6e66aff24b6942a');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_a46b22e00fd3e118.close();
+              window.svgModalsvgviewer_b6e66aff24b6942a.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-a46b22e00fd3e118');
+          const csvModal = document.getElementById('csv-modal-svgviewer-b6e66aff24b6942a');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_a46b22e00fd3e118.close();
+              window.csvModalsvgviewer_b6e66aff24b6942a.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-a46b22e00fd3e118" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=release&payload=H4sIAIt7h2kA_41UTW_bMAy991cQ7jUZ4qQLut3aBBkKrEDQdL0MOagynWpTREGSMxhF__tIOVg-kAy52Bb5-PEeab1fARTJJIvFVyjmgapGJ3hCiyoiLFJQCVdt0RNYTG0He_6-2Fq0ypbyU5nPoYuLbPrJZ4D3_JQSrc-hj2WOzLaKc4ttOBiO-oOyX37e-VakrPgenElGWZhb5Zxxqx3CGrdXKJumWLMRtl1A1OQRlKuAXn-hTmbDAb0d_KFCl0zdwm9soUaVmoAx49G9Kadxzf6DiElgFEKFSRmLFfhAkhiSWaP0s4-9s5a0oDkpNUFvU_PJk4vm1Vhmxg1tI5b5_dE7I9vwnGzDk7JNcYOWvBCA-RuL8V_dJlQJqV2INNqw8pAwpn3VRTXHG8FrYcgB1aBpzXyOhZqSbiRTB2u89ByPswTHg9VSO-DG4J8LtXianN2h0UkxnjsSFwgxa5yWjrmvE8znGGoKa9mMU-4F6iaY1J7y_YgYQGmNPh2EX0T42905vjdnhu8ttRfOfmaErfK8yhv54MlHs3J9qusD7t3NINOs_qU_AFBM_Z0LNhhMbXRegH3cI_FeUZB55FqN9xTSkRD8XPaKykRvVTshV5sVd90JU9Tk0oQsBeF6jUO8rQfbCoUWe2ZYXA_G9-PpTdFj0Hg0Hs_K_FkO7r_clsVyG-CIR_Fi-H_MF1kKDV5JAx9_Ad7Y0p4ZBQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=releasestrategy&filename=ghi.svg" data-original-content="{
+<div class="svg-with-controls docops-media-card" id="svgviewer-b6e66aff24b6942a" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=release&payload=H4sIAEiEimkA_41UTW_bMAy991cQ7jUZ4qQLut3aBBkKrEDQdL0MOagynWpTREGSMxhF__tIOVg-kAy52Bb5-PEeab1fARTJJIvFVyjmgapGJ3hCiyoiLFJQCVdt0RNYTG0He_6-2Fq0ypbyU5nPoYuLbPrJZ4D3_JQSrc-hj2WOzLaKc4ttOBiO-oOyX37e-VakrPgenElGWZhb5Zxxqx3CGrdXKJumWLMRtl1A1OQRlKuAXn-hTmbDAb0d_KFCl0zdwm9soUaVmoAx49G9Kadxzf6DiElgFEKFSRmLFfhAkhiSWaP0s4-9s5a0oDkpNUFvU_PJk4vm1Vhmxg1tI5b5_dE7I9vwnGzDk7JNcYOWvBCA-RuL8V_dJlQJqV2INNqw8pAwpn3VRTXHG8FrYcgB1aBpzXyOhZqSbiRTB2u89ByPswTHg9VSO-DG4J8LtXianN2h0UkxnjsSFwgxa5yWjrmvE8znGGoKa9mMU-4F6iaY1J7y_YgYQGmNPh2EX0T42905vjdnhu8ttRfOfmaErfK8yhv54MlHs3J9qusD7t3NINOs_qU_AFBM_Z0LNhhMbXRegH3cI_FeUZB55FqN9xTSkRD8XPaKykRvVTshV5sVd90JU9Tk0oQsBeF6jUO8rQfbCoUWe2ZYXA_G9-PpTdFj0Hg0Hs_K_FkO7r_clsVyG-CIR_Fi-H_MF1kKDV5JAx9_Ad7Y0p4ZBQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=releasestrategy&filename=ghi.svg" data-original-content="{
   &quot;title&quot;: &quot;Product Release Strategy&quot;,
   &quot;style&quot;: &quot;TLS&quot;,
   &quot;scale&quot;: 1.1,
@@ -2556,28 +2556,28 @@ window.onload = function() {
     &quot;notesVisible&quot;: true
   }
 }" data-kind="release">
-<svg width="2332.0" height="343.2" viewBox="0 0 2120.0 312.0"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="DocOps: Release Strategy" id="ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Release Type","Date","Goal","Completed","Selected","Lines","Lines Count"],"rows":[["M1","2023-01-15","Initial Planning","false","false","Define release scope and objectives; Identify key features and enhancements; Create detailed project timeline; Allocate resources and responsibilities","4"],["M2","2023-02-15","Development Phase","false","false","Code development and unit testing; Integration of components; Documentation updates; Internal code reviews","4"],["RC1","2023-03-15","Testing Phase","false","false","Functional testing; Performance testing; Security testing; User acceptance testing","4"],["GA","2023-04-15","Deployment Phase","false","false","Final approval and sign-off; Production deployment; Post-deployment verification; Monitoring and support","4"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>Release Strategy</desc><title>Product Release Strategy</title><defs><pattern id="meshPattern_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="currentColor" stroke-width="0.2" opacity="0.05"/><circle cx="50" cy="50" r="1" fill="currentColor" opacity="0.1"/></pattern><linearGradient id="gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#06B6D4;stop-opacity:1" /><stop offset="100%" style="stop-color:#047f94;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientR_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" /><stop offset="100%" style="stop-color:#4547a8;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientR_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientG_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#10B981;stop-opacity:1" /><stop offset="100%" style="stop-color:#0b815a;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientG_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter><filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>@keyframes fadeInSlide { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } } @keyframes gaPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } } @keyframes flowLine { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } } /* Outer group only handles opacity fade - NO transform here */ #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .release-card { opacity: 1; } /* Inner group handles the slide animation safely */ #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); } #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .release-card.ga-release .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards, gaPulse 2s ease-in-out 1.25s 2; } #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .release-card:hover .animated-content { transform: translateY(-8px); } #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .milestone-text { font-family: 'Outfit', sans-serif; font-weight: 800; } #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .date-text { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; } #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .goal-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; } #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 .flow-connector { animation: flowLine 1s linear infinite; } #ID4f4d7b51-66a5-4abc-983c-c2cd23f98ba9 text { user-select: none; }</style><rect width="2120.0" height="312.0" fill="#ffffff"/><rect width="2120.0" height="312.0" fill="url(#meshPattern_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" color="#2563eb"/><linearGradient id="bg_gradient_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.95"/></linearGradient><rect width="2120.0" height="312.0" fill="url(#bg_gradient_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)"/><g transform="translate(24.0, 38)"><text fill="#0f172a" font-size="24px" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Product Release Strategy</text><rect y="8" width="48" height="4" fill="#2563eb" rx="2"/></g><line x1="528.0" y1="164.0" x2="544.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1052.0" y1="164.0" x2="1068.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1576.0" y1="164.0" x2="1592.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><g transform="translate(24.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.0s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-01-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Initial Planning</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Define release scope and objectives</tspan><tspan x="24.0" dy="16">» Identify key features and enhancements</tspan><tspan x="24.0" dy="16">» Create detailed project timeline</tspan><tspan x="24.0" dy="16">» Allocate resources and responsibilities</tspan></text></g></g><g transform="translate(548.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.15s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-02-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M2</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Development Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Code development and unit testing</tspan><tspan x="24.0" dy="16">» Integration of components</tspan><tspan x="24.0" dy="16">» Documentation updates</tspan><tspan x="24.0" dy="16">» Internal code reviews</tspan></text></g></g><g transform="translate(1072.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.3s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientR_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientR_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientR_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientR_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-03-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">RC1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Testing Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Functional testing</tspan><tspan x="24.0" dy="16">» Performance testing</tspan><tspan x="24.0" dy="16">» Security testing</tspan><tspan x="24.0" dy="16">» User acceptance testing</tspan></text></g></g><g transform="translate(1596.0,64.0)" class="release-card ga-release"><g class="animated-content" style="animation-delay: 0.44999999999999996s">      <path d="M -4.0,-4.0 H 400.0 L 504.0,100.0 L 400.0,204.0 H -4.0 Z" fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round" opacity="0.5"/><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#glowEffect)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientG_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientG_4f4d7b51-66a5-4abc-983c-c2cd23f98ba9)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-04-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="32px" class="milestone-text">GA</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Deployment Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Final approval and sign-off</tspan><tspan x="24.0" dy="16">» Production deployment</tspan><tspan x="24.0" dy="16">» Post-deployment verification</tspan><tspan x="24.0" dy="16">» Monitoring and support</tspan></text></g></g></svg>
+<svg width="2332.0" height="343.2" viewBox="0 0 2120.0 312.0"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="DocOps: Release Strategy" id="ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Release Type","Date","Goal","Completed","Selected","Lines","Lines Count"],"rows":[["M1","2023-01-15","Initial Planning","false","false","Define release scope and objectives; Identify key features and enhancements; Create detailed project timeline; Allocate resources and responsibilities","4"],["M2","2023-02-15","Development Phase","false","false","Code development and unit testing; Integration of components; Documentation updates; Internal code reviews","4"],["RC1","2023-03-15","Testing Phase","false","false","Functional testing; Performance testing; Security testing; User acceptance testing","4"],["GA","2023-04-15","Deployment Phase","false","false","Final approval and sign-off; Production deployment; Post-deployment verification; Monitoring and support","4"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>Release Strategy</desc><title>Product Release Strategy</title><defs><pattern id="meshPattern_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="currentColor" stroke-width="0.2" opacity="0.05"/><circle cx="50" cy="50" r="1" fill="currentColor" opacity="0.1"/></pattern><linearGradient id="gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#06B6D4;stop-opacity:1" /><stop offset="100%" style="stop-color:#047f94;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientR_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" /><stop offset="100%" style="stop-color:#4547a8;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientR_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientG_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#10B981;stop-opacity:1" /><stop offset="100%" style="stop-color:#0b815a;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientG_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter><filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>@keyframes fadeInSlide { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } } @keyframes gaPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } } @keyframes flowLine { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } } /* Outer group only handles opacity fade - NO transform here */ #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .release-card { opacity: 1; } /* Inner group handles the slide animation safely */ #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); } #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .release-card.ga-release .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards, gaPulse 2s ease-in-out 1.25s 2; } #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .release-card:hover .animated-content { transform: translateY(-8px); } #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .milestone-text { font-family: 'Outfit', sans-serif; font-weight: 800; } #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .date-text { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; } #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .goal-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; } #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 .flow-connector { animation: flowLine 1s linear infinite; } #ID0587a5a2-8ecf-41b0-beb2-fce2bb210a58 text { user-select: none; }</style><rect width="2120.0" height="312.0" fill="#ffffff"/><rect width="2120.0" height="312.0" fill="url(#meshPattern_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" color="#2563eb"/><linearGradient id="bg_gradient_0587a5a2-8ecf-41b0-beb2-fce2bb210a58" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.95"/></linearGradient><rect width="2120.0" height="312.0" fill="url(#bg_gradient_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)"/><g transform="translate(24.0, 38)"><text fill="#0f172a" font-size="24px" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Product Release Strategy</text><rect y="8" width="48" height="4" fill="#2563eb" rx="2"/></g><line x1="528.0" y1="164.0" x2="544.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1052.0" y1="164.0" x2="1068.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1576.0" y1="164.0" x2="1592.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><g transform="translate(24.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.0s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-01-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Initial Planning</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Define release scope and objectives</tspan><tspan x="24.0" dy="16">» Identify key features and enhancements</tspan><tspan x="24.0" dy="16">» Create detailed project timeline</tspan><tspan x="24.0" dy="16">» Allocate resources and responsibilities</tspan></text></g></g><g transform="translate(548.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.15s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-02-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M2</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Development Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Code development and unit testing</tspan><tspan x="24.0" dy="16">» Integration of components</tspan><tspan x="24.0" dy="16">» Documentation updates</tspan><tspan x="24.0" dy="16">» Internal code reviews</tspan></text></g></g><g transform="translate(1072.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.3s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientR_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientR_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientR_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientR_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-03-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">RC1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Testing Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Functional testing</tspan><tspan x="24.0" dy="16">» Performance testing</tspan><tspan x="24.0" dy="16">» Security testing</tspan><tspan x="24.0" dy="16">» User acceptance testing</tspan></text></g></g><g transform="translate(1596.0,64.0)" class="release-card ga-release"><g class="animated-content" style="animation-delay: 0.44999999999999996s">      <path d="M -4.0,-4.0 H 400.0 L 504.0,100.0 L 400.0,204.0 H -4.0 Z" fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round" opacity="0.5"/><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#glowEffect)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientG_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientG_0587a5a2-8ecf-41b0-beb2-fce2bb210a58)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-04-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="32px" class="milestone-text">GA</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Deployment Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Final approval and sign-off</tspan><tspan x="24.0" dy="16">» Production deployment</tspan><tspan x="24.0" dy="16">» Post-deployment verification</tspan><tspan x="24.0" dy="16">» Monitoring and support</tspan></text></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_a46b22e00fd3e118.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_a46b22e00fd3e118.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_b6e66aff24b6942a.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_b6e66aff24b6942a.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-a46b22e00fd3e118')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-a46b22e00fd3e118')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-b6e66aff24b6942a')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-b6e66aff24b6942a')">PNG</button>
 </div>
-<div id="modal-svgviewer-a46b22e00fd3e118" class="svg-modal-svgviewer-a46b22e00fd3e118" onclick="if(event.target === this) svgModalsvgviewer_a46b22e00fd3e118.close()">
-    <div class="svg-modal-content-svgviewer-a46b22e00fd3e118">
-        <button class="svg-modal-close-svgviewer-a46b22e00fd3e118" onclick="svgModalsvgviewer_a46b22e00fd3e118.close()">×</button>
-        <div id="modal-body-svgviewer-a46b22e00fd3e118" class="svg-modal-body-svgviewer-a46b22e00fd3e118"></div>
+<div id="modal-svgviewer-b6e66aff24b6942a" class="svg-modal-svgviewer-b6e66aff24b6942a" onclick="if(event.target === this) svgModalsvgviewer_b6e66aff24b6942a.close()">
+    <div class="svg-modal-content-svgviewer-b6e66aff24b6942a">
+        <button class="svg-modal-close-svgviewer-b6e66aff24b6942a" onclick="svgModalsvgviewer_b6e66aff24b6942a.close()">×</button>
+        <div id="modal-body-svgviewer-b6e66aff24b6942a" class="svg-modal-body-svgviewer-b6e66aff24b6942a"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-a46b22e00fd3e118" class="svg-modal-svgviewer-a46b22e00fd3e118" onclick="if(event.target === this) csvModalsvgviewer_a46b22e00fd3e118.close()">
-    <div class="svg-modal-content-svgviewer-a46b22e00fd3e118">
-        <button class="svg-modal-close-svgviewer-a46b22e00fd3e118" onclick="csvModalsvgviewer_a46b22e00fd3e118.close()">×</button>
-        <div class="svg-modal-header-svgviewer-a46b22e00fd3e118" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-b6e66aff24b6942a" class="svg-modal-svgviewer-b6e66aff24b6942a" onclick="if(event.target === this) csvModalsvgviewer_b6e66aff24b6942a.close()">
+    <div class="svg-modal-content-svgviewer-b6e66aff24b6942a">
+        <button class="svg-modal-close-svgviewer-b6e66aff24b6942a" onclick="csvModalsvgviewer_b6e66aff24b6942a.close()">×</button>
+        <div class="svg-modal-header-svgviewer-b6e66aff24b6942a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-a46b22e00fd3e118" class="svg-modal-body-svgviewer-a46b22e00fd3e118" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-b6e66aff24b6942a" class="svg-modal-body-svgviewer-b6e66aff24b6942a" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
@@ -2721,7 +2721,7 @@ imageblock .title {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-6d45544af3125b0f {
+  .svg-modal-svgviewer-641522bd4dc67ef3 {
       display: none;
       position: fixed;
       top: 0;
@@ -2736,10 +2736,10 @@ imageblock .title {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-6d45544af3125b0f.active {
+  .svg-modal-svgviewer-641522bd4dc67ef3.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-6d45544af3125b0f {
+  .svg-modal-content-svgviewer-641522bd4dc67ef3 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2754,7 +2754,7 @@ imageblock .title {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-6d45544af3125b0f {
+  .svg-modal-close-svgviewer-641522bd4dc67ef3 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2772,11 +2772,11 @@ imageblock .title {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-6d45544af3125b0f:hover {
+  .svg-modal-close-svgviewer-641522bd4dc67ef3:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-6d45544af3125b0f {
+  .svg-modal-body-svgviewer-641522bd4dc67ef3 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2786,7 +2786,7 @@ imageblock .title {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-6d45544af3125b0f svg {
+  .svg-modal-body-svgviewer-641522bd4dc67ef3 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2795,10 +2795,10 @@ imageblock .title {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-6d45544af3125b0f .csv-content {
+  #csv-modal-svgviewer-641522bd4dc67ef3 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-6d45544af3125b0f .csv-table {
+  #csv-modal-svgviewer-641522bd4dc67ef3 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2806,7 +2806,7 @@ imageblock .title {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-6d45544af3125b0f .csv-table th {
+  #csv-modal-svgviewer-641522bd4dc67ef3 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2815,15 +2815,15 @@ imageblock .title {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-6d45544af3125b0f .csv-table td {
+  #csv-modal-svgviewer-641522bd4dc67ef3 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-6d45544af3125b0f .csv-table tr {
+  #csv-modal-svgviewer-641522bd4dc67ef3 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-6d45544af3125b0f .csv-table tr:hover {
+  #csv-modal-svgviewer-641522bd4dc67ef3 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2831,10 +2831,10 @@ imageblock .title {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_6d45544af3125b0f = {
+  window.svgModalsvgviewer_641522bd4dc67ef3 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-6d45544af3125b0f');
-          const sourceContainer = document.getElementById('svgviewer-6d45544af3125b0f');
+          const modal = document.getElementById('modal-svgviewer-641522bd4dc67ef3');
+          const sourceContainer = document.getElementById('svgviewer-641522bd4dc67ef3');
 
           if (!modal || !sourceContainer) return;
 
@@ -2843,7 +2843,7 @@ imageblock .title {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-6d45544af3125b0f');
+          const targetContainer = document.getElementById('modal-body-svgviewer-641522bd4dc67ef3');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2860,7 +2860,7 @@ imageblock .title {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-6d45544af3125b0f');
+          const modal = document.getElementById('modal-svgviewer-641522bd4dc67ef3');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2869,9 +2869,9 @@ imageblock .title {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_6d45544af3125b0f = {
+  window.csvModalsvgviewer_641522bd4dc67ef3 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-6d45544af3125b0f');
+          const modal = document.getElementById('csv-modal-svgviewer-641522bd4dc67ef3');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2882,11 +2882,11 @@ imageblock .title {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-6d45544af3125b0f');
+              window.svgViewer.loadCsvData('svgviewer-641522bd4dc67ef3');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-6d45544af3125b0f');
+          const modal = document.getElementById('csv-modal-svgviewer-641522bd4dc67ef3');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2897,20 +2897,20 @@ imageblock .title {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-6d45544af3125b0f');
+          const viewModal = document.getElementById('modal-svgviewer-641522bd4dc67ef3');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_6d45544af3125b0f.close();
+              window.svgModalsvgviewer_641522bd4dc67ef3.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-6d45544af3125b0f');
+          const csvModal = document.getElementById('csv-modal-svgviewer-641522bd4dc67ef3');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_6d45544af3125b0f.close();
+              window.csvModalsvgviewer_641522bd4dc67ef3.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-6d45544af3125b0f" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=release&payload=H4sIAIt7h2kA_41Uy27bMBC85ysI5WoXkt2oTm9-wEWABjDiPg6FD5S0kolQJEGu3LhB_r1LSm4cuTZyka3hLLkzO9TzFWMRCpQQfWbRvc6EBDY1hj2ABO6ArdFyhGofDTzT4b5lfvu67pCcByT5cBPeGwcLbh8JQdtAgGy7lSPsF70z9hye_uC9ac9NwmYBK-g4j43i0XgYp8P4aK3SXPq1BThRKbba0ravq1Koo0MC9N2BZUIh2JLnwIpQ96_iQIAnA1aAIoaRXCmhqmPOT2GhtLwmmHFVMGM1amq9R-uasrAT8DsQuSHqjlruSJvw-zI4Y8LonAmfhsnNqQlzbYEtYAdSmxoUXjRixvNHoJamqzty4bSGKEurySjiiNpI8KschX7j1oIjz3wqWiODSAfYmGPStMEtFYs8lDO3dwj1-yx4mJ8NwmQ4jk89WALHhmyYa98zXg7DVMp2vlCwsi10r2KhOBZxR0BlWwUIDnuznjUVK8VTD11RzLStuQ-SNihq8ae18F3iv0zPab_97_xXTSZFfriol5XThXbo8-KarBbO9eZ6TzcWvEaW89pwP1rJG5VvT65KCVBklCWWaykh7wdk3RijLXZD77LxVj09N6EiKoSjceznWpWiooZbR6KSYjjXUlsv8hpGMCkPk49yjwdx0XWcztLFx2hApHScpssk_E3i2e0kiTZdgdI0vR_CiSx8pfw36co38fIXsvn_FvkEAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=releasestrategy&filename=ghi.svg" data-original-content="{
+<div class="svg-with-controls docops-media-card" id="svgviewer-641522bd4dc67ef3" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=release&payload=H4sIAEmEimkA_41Uy27bMBC85ysI5WoXkt2oTm9-wEWABjDiPg6FD5S0kolQJEGu3LhB_r1LSm4cuTZyka3hLLkzO9TzFWMRCpQQfWbRvc6EBDY1hj2ABO6ArdFyhGofDTzT4b5lfvu67pCcByT5cBPeGwcLbh8JQdtAgGy7lSPsF70z9hye_uC9ac9NwmYBK-g4j43i0XgYp8P4aK3SXPq1BThRKbba0ravq1Koo0MC9N2BZUIh2JLnwIpQ96_iQIAnA1aAIoaRXCmhqmPOT2GhtLwmmHFVMGM1amq9R-uasrAT8DsQuSHqjlruSJvw-zI4Y8LonAmfhsnNqQlzbYEtYAdSmxoUXjRixvNHoJamqzty4bSGKEurySjiiNpI8KschX7j1oIjz3wqWiODSAfYmGPStMEtFYs8lDO3dwj1-yx4mJ8NwmQ4jk89WALHhmyYa98zXg7DVMp2vlCwsi10r2KhOBZxR0BlWwUIDnuznjUVK8VTD11RzLStuQ-SNihq8ae18F3iv0zPab_97_xXTSZFfriol5XThXbo8-KarBbO9eZ6TzcWvEaW89pwP1rJG5VvT65KCVBklCWWaykh7wdk3RijLXZD77LxVj09N6EiKoSjceznWpWiooZbR6KSYjjXUlsv8hpGMCkPk49yjwdx0XWcztLFx2hApHScpssk_E3i2e0kiTZdgdI0vR_CiSx8pfw36co38fIXsvn_FvkEAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=releasestrategy&filename=ghi.svg" data-original-content="{
   &quot;title&quot;: &quot;Mobile App Release Strategy&quot;,
   &quot;style&quot;: &quot;TLS&quot;,
   &quot;scale&quot;: 1.5,
@@ -2967,28 +2967,28 @@ imageblock .title {
     &quot;notesVisible&quot;: true
   }
 }" data-kind="release">
-<svg width="3180.0" height="468.0" viewBox="0 0 2120.0 312.0"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="DocOps: Release Strategy" id="ID8d03faae-e3e6-445c-a805-932fc809716c">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Release Type","Date","Goal","Completed","Selected","Lines","Lines Count"],"rows":[["M1","2023-06-01","Design Phase","false","false","User interface design; User experience planning; Wireframing and prototyping; Design review and approval","4"],["M2","2023-07-15","Core Development","false","false","Backend API development; Frontend implementation; Database design and setup; Authentication system","4"],["RC1","2023-08-30","Feature Complete","false","false","All planned features implemented; Integration testing; Bug fixing; Performance optimization","4"],["GA","2023-09-15","Public Release","false","false","App store submission; Marketing campaign launch; User feedback collection; Support system setup","4"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>Release Strategy</desc><title>Mobile App Release Strategy</title><defs><pattern id="meshPattern_8d03faae-e3e6-445c-a805-932fc809716c" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="currentColor" stroke-width="0.2" opacity="0.05"/><circle cx="50" cy="50" r="1" fill="currentColor" opacity="0.1"/></pattern><linearGradient id="gradientM_8d03faae-e3e6-445c-a805-932fc809716c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#06B6D4;stop-opacity:1" /><stop offset="100%" style="stop-color:#047f94;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientM_8d03faae-e3e6-445c-a805-932fc809716c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientR_8d03faae-e3e6-445c-a805-932fc809716c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" /><stop offset="100%" style="stop-color:#4547a8;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientR_8d03faae-e3e6-445c-a805-932fc809716c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientG_8d03faae-e3e6-445c-a805-932fc809716c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#10B981;stop-opacity:1" /><stop offset="100%" style="stop-color:#0b815a;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientG_8d03faae-e3e6-445c-a805-932fc809716c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter><filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>@keyframes fadeInSlide { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } } @keyframes gaPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } } @keyframes flowLine { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } } /* Outer group only handles opacity fade - NO transform here */ #ID8d03faae-e3e6-445c-a805-932fc809716c .release-card { opacity: 1; } /* Inner group handles the slide animation safely */ #ID8d03faae-e3e6-445c-a805-932fc809716c .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); } #ID8d03faae-e3e6-445c-a805-932fc809716c .release-card.ga-release .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards, gaPulse 2s ease-in-out 1.25s 2; } #ID8d03faae-e3e6-445c-a805-932fc809716c .release-card:hover .animated-content { transform: translateY(-8px); } #ID8d03faae-e3e6-445c-a805-932fc809716c .milestone-text { font-family: 'Outfit', sans-serif; font-weight: 800; } #ID8d03faae-e3e6-445c-a805-932fc809716c .date-text { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; } #ID8d03faae-e3e6-445c-a805-932fc809716c .goal-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; } #ID8d03faae-e3e6-445c-a805-932fc809716c .flow-connector { animation: flowLine 1s linear infinite; } #ID8d03faae-e3e6-445c-a805-932fc809716c text { user-select: none; }</style><rect width="2120.0" height="312.0" fill="#ffffff"/><rect width="2120.0" height="312.0" fill="url(#meshPattern_8d03faae-e3e6-445c-a805-932fc809716c)" color="#2563eb"/><linearGradient id="bg_gradient_8d03faae-e3e6-445c-a805-932fc809716c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.95"/></linearGradient><rect width="2120.0" height="312.0" fill="url(#bg_gradient_8d03faae-e3e6-445c-a805-932fc809716c)"/><g transform="translate(24.0, 38)"><text fill="#0f172a" font-size="24px" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Mobile App Release Strategy</text><rect y="8" width="48" height="4" fill="#2563eb" rx="2"/></g><line x1="528.0" y1="164.0" x2="544.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1052.0" y1="164.0" x2="1068.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1576.0" y1="164.0" x2="1592.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><g transform="translate(24.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.0s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-06-01</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Design Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» User interface design</tspan><tspan x="24.0" dy="16">» User experience planning</tspan><tspan x="24.0" dy="16">» Wireframing and prototyping</tspan><tspan x="24.0" dy="16">» Design review and approval</tspan></text></g></g><g transform="translate(548.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.15s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-07-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M2</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Core Development</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Backend API development</tspan><tspan x="24.0" dy="16">» Frontend implementation</tspan><tspan x="24.0" dy="16">» Database design and setup</tspan><tspan x="24.0" dy="16">» Authentication system</tspan></text></g></g><g transform="translate(1072.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.3s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientR_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientR_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientR_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientR_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-08-30</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">RC1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Feature Complete</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» All planned features implemented</tspan><tspan x="24.0" dy="16">» Integration testing</tspan><tspan x="24.0" dy="16">» Bug fixing</tspan><tspan x="24.0" dy="16">» Performance optimization</tspan></text></g></g><g transform="translate(1596.0,64.0)" class="release-card ga-release"><g class="animated-content" style="animation-delay: 0.44999999999999996s">      <path d="M -4.0,-4.0 H 400.0 L 504.0,100.0 L 400.0,204.0 H -4.0 Z" fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round" opacity="0.5"/><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#glowEffect)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientG_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_8d03faae-e3e6-445c-a805-932fc809716c)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientG_8d03faae-e3e6-445c-a805-932fc809716c)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-09-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="32px" class="milestone-text">GA</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Public Release</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» App store submission</tspan><tspan x="24.0" dy="16">» Marketing campaign launch</tspan><tspan x="24.0" dy="16">» User feedback collection</tspan><tspan x="24.0" dy="16">» Support system setup</tspan></text></g></g></svg>
+<svg width="3180.0" height="468.0" viewBox="0 0 2120.0 312.0"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="DocOps: Release Strategy" id="ID9627f254-f9ed-4ce6-a051-398335973aee">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Release Type","Date","Goal","Completed","Selected","Lines","Lines Count"],"rows":[["M1","2023-06-01","Design Phase","false","false","User interface design; User experience planning; Wireframing and prototyping; Design review and approval","4"],["M2","2023-07-15","Core Development","false","false","Backend API development; Frontend implementation; Database design and setup; Authentication system","4"],["RC1","2023-08-30","Feature Complete","false","false","All planned features implemented; Integration testing; Bug fixing; Performance optimization","4"],["GA","2023-09-15","Public Release","false","false","App store submission; Marketing campaign launch; User feedback collection; Support system setup","4"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>Release Strategy</desc><title>Mobile App Release Strategy</title><defs><pattern id="meshPattern_9627f254-f9ed-4ce6-a051-398335973aee" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="currentColor" stroke-width="0.2" opacity="0.05"/><circle cx="50" cy="50" r="1" fill="currentColor" opacity="0.1"/></pattern><linearGradient id="gradientM_9627f254-f9ed-4ce6-a051-398335973aee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#06B6D4;stop-opacity:1" /><stop offset="100%" style="stop-color:#047f94;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientM_9627f254-f9ed-4ce6-a051-398335973aee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientR_9627f254-f9ed-4ce6-a051-398335973aee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" /><stop offset="100%" style="stop-color:#4547a8;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientR_9627f254-f9ed-4ce6-a051-398335973aee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><linearGradient id="gradientG_9627f254-f9ed-4ce6-a051-398335973aee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#10B981;stop-opacity:1" /><stop offset="100%" style="stop-color:#0b815a;stop-opacity:1" /></linearGradient><linearGradient id="glass_gradientG_9627f254-f9ed-4ce6-a051-398335973aee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.05" /></linearGradient><filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/></filter><filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>@keyframes fadeInSlide { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } } @keyframes gaPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } } @keyframes flowLine { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } } /* Outer group only handles opacity fade - NO transform here */ #ID9627f254-f9ed-4ce6-a051-398335973aee .release-card { opacity: 1; } /* Inner group handles the slide animation safely */ #ID9627f254-f9ed-4ce6-a051-398335973aee .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); } #ID9627f254-f9ed-4ce6-a051-398335973aee .release-card.ga-release .animated-content { animation: fadeInSlide 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards, gaPulse 2s ease-in-out 1.25s 2; } #ID9627f254-f9ed-4ce6-a051-398335973aee .release-card:hover .animated-content { transform: translateY(-8px); } #ID9627f254-f9ed-4ce6-a051-398335973aee .milestone-text { font-family: 'Outfit', sans-serif; font-weight: 800; } #ID9627f254-f9ed-4ce6-a051-398335973aee .date-text { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; } #ID9627f254-f9ed-4ce6-a051-398335973aee .goal-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; } #ID9627f254-f9ed-4ce6-a051-398335973aee .flow-connector { animation: flowLine 1s linear infinite; } #ID9627f254-f9ed-4ce6-a051-398335973aee text { user-select: none; }</style><rect width="2120.0" height="312.0" fill="#ffffff"/><rect width="2120.0" height="312.0" fill="url(#meshPattern_9627f254-f9ed-4ce6-a051-398335973aee)" color="#2563eb"/><linearGradient id="bg_gradient_9627f254-f9ed-4ce6-a051-398335973aee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.95"/></linearGradient><rect width="2120.0" height="312.0" fill="url(#bg_gradient_9627f254-f9ed-4ce6-a051-398335973aee)"/><g transform="translate(24.0, 38)"><text fill="#0f172a" font-size="24px" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Mobile App Release Strategy</text><rect y="8" width="48" height="4" fill="#2563eb" rx="2"/></g><line x1="528.0" y1="164.0" x2="544.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1052.0" y1="164.0" x2="1068.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><line x1="1576.0" y1="164.0" x2="1592.0" y2="164.0" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" stroke-linecap="round" opacity="0.4" class="flow-connector"/><g transform="translate(24.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.0s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-06-01</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Design Phase</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» User interface design</tspan><tspan x="24.0" dy="16">» User experience planning</tspan><tspan x="24.0" dy="16">» Wireframing and prototyping</tspan><tspan x="24.0" dy="16">» Design review and approval</tspan></text></g></g><g transform="translate(548.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.15s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientM_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-07-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">M2</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Core Development</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» Backend API development</tspan><tspan x="24.0" dy="16">» Frontend implementation</tspan><tspan x="24.0" dy="16">» Database design and setup</tspan><tspan x="24.0" dy="16">» Authentication system</tspan></text></g></g><g transform="translate(1072.0,64.0)" class="release-card"><g class="animated-content" style="animation-delay: 0.3s"><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientR_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#dropShadow)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientR_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientR_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientR_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-08-30</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="28px" class="milestone-text">RC1</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Feature Complete</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» All planned features implemented</tspan><tspan x="24.0" dy="16">» Integration testing</tspan><tspan x="24.0" dy="16">» Bug fixing</tspan><tspan x="24.0" dy="16">» Performance optimization</tspan></text></g></g><g transform="translate(1596.0,64.0)" class="release-card ga-release"><g class="animated-content" style="animation-delay: 0.44999999999999996s">      <path d="M -4.0,-4.0 H 400.0 L 504.0,100.0 L 400.0,204.0 H -4.0 Z" fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round" opacity="0.5"/><!-- Left-side Depth Effect --><path d="M 0,0 L -8.0,8.0 V 208.0 L 0,200.0 Z" fill="rgba(0,0,0,0.15)" pointer-events="none"/><!-- Bottom Depth Effect (The "Thickness") --><path d="M 0,200.0 L -8.0,208.0 H 400.0 L 500.0,108.0 L 500.0,100.0 L 400.0,200.0 Z" fill="rgba(0,0,0,0.2)" pointer-events="none"/><!-- Main Card Body --><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#gradientG_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#glowEffect)"/><path d="M 0,0 H 400.0 V 200.0 H 0 Z" fill="url(#glass_gradientG_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><!-- Arrow Triangle --><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#gradientG_9627f254-f9ed-4ce6-a051-398335973aee)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><path d="M 400.0,0 V 200.0 L 500.0,100.0 Z" fill="url(#glass_gradientG_9627f254-f9ed-4ce6-a051-398335973aee)" pointer-events="none"/><text x="200.0" y="-15" fill="#475569" text-anchor="middle" class="date-text">2023-09-15</text><text x="450.0" y="110.0" fill="white" text-anchor="middle" font-size="32px" class="milestone-text">GA</text><text x="24.0" y="35.0" class="goal-text" fill="#e2e8f0"><tspan x="24.0" dy="0">Public Release</tspan></text><text x="24.0" y="80.0" class="detail-text" fill="#e2e8f0"><tspan x="24.0" dy="0">» App store submission</tspan><tspan x="24.0" dy="16">» Marketing campaign launch</tspan><tspan x="24.0" dy="16">» User feedback collection</tspan><tspan x="24.0" dy="16">» Support system setup</tspan></text></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_6d45544af3125b0f.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_6d45544af3125b0f.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_641522bd4dc67ef3.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_641522bd4dc67ef3.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-6d45544af3125b0f')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-6d45544af3125b0f')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-641522bd4dc67ef3')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-641522bd4dc67ef3')">PNG</button>
 </div>
-<div id="modal-svgviewer-6d45544af3125b0f" class="svg-modal-svgviewer-6d45544af3125b0f" onclick="if(event.target === this) svgModalsvgviewer_6d45544af3125b0f.close()">
-    <div class="svg-modal-content-svgviewer-6d45544af3125b0f">
-        <button class="svg-modal-close-svgviewer-6d45544af3125b0f" onclick="svgModalsvgviewer_6d45544af3125b0f.close()">×</button>
-        <div id="modal-body-svgviewer-6d45544af3125b0f" class="svg-modal-body-svgviewer-6d45544af3125b0f"></div>
+<div id="modal-svgviewer-641522bd4dc67ef3" class="svg-modal-svgviewer-641522bd4dc67ef3" onclick="if(event.target === this) svgModalsvgviewer_641522bd4dc67ef3.close()">
+    <div class="svg-modal-content-svgviewer-641522bd4dc67ef3">
+        <button class="svg-modal-close-svgviewer-641522bd4dc67ef3" onclick="svgModalsvgviewer_641522bd4dc67ef3.close()">×</button>
+        <div id="modal-body-svgviewer-641522bd4dc67ef3" class="svg-modal-body-svgviewer-641522bd4dc67ef3"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-6d45544af3125b0f" class="svg-modal-svgviewer-6d45544af3125b0f" onclick="if(event.target === this) csvModalsvgviewer_6d45544af3125b0f.close()">
-    <div class="svg-modal-content-svgviewer-6d45544af3125b0f">
-        <button class="svg-modal-close-svgviewer-6d45544af3125b0f" onclick="csvModalsvgviewer_6d45544af3125b0f.close()">×</button>
-        <div class="svg-modal-header-svgviewer-6d45544af3125b0f" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-641522bd4dc67ef3" class="svg-modal-svgviewer-641522bd4dc67ef3" onclick="if(event.target === this) csvModalsvgviewer_641522bd4dc67ef3.close()">
+    <div class="svg-modal-content-svgviewer-641522bd4dc67ef3">
+        <button class="svg-modal-close-svgviewer-641522bd4dc67ef3" onclick="csvModalsvgviewer_641522bd4dc67ef3.close()">×</button>
+        <div class="svg-modal-header-svgviewer-641522bd4dc67ef3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-6d45544af3125b0f" class="svg-modal-body-svgviewer-6d45544af3125b0f" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-641522bd4dc67ef3" class="svg-modal-body-svgviewer-641522bd4dc67ef3" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
@@ -3133,7 +3133,7 @@ imageblock .title {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-241bf5e5a277a17b {
+  .svg-modal-svgviewer-feaa008b202ee90a {
       display: none;
       position: fixed;
       top: 0;
@@ -3148,10 +3148,10 @@ imageblock .title {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-241bf5e5a277a17b.active {
+  .svg-modal-svgviewer-feaa008b202ee90a.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-241bf5e5a277a17b {
+  .svg-modal-content-svgviewer-feaa008b202ee90a {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -3166,7 +3166,7 @@ imageblock .title {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-241bf5e5a277a17b {
+  .svg-modal-close-svgviewer-feaa008b202ee90a {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -3184,11 +3184,11 @@ imageblock .title {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-241bf5e5a277a17b:hover {
+  .svg-modal-close-svgviewer-feaa008b202ee90a:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-241bf5e5a277a17b {
+  .svg-modal-body-svgviewer-feaa008b202ee90a {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3198,7 +3198,7 @@ imageblock .title {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-241bf5e5a277a17b svg {
+  .svg-modal-body-svgviewer-feaa008b202ee90a svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3207,10 +3207,10 @@ imageblock .title {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-241bf5e5a277a17b .csv-content {
+  #csv-modal-svgviewer-feaa008b202ee90a .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-241bf5e5a277a17b .csv-table {
+  #csv-modal-svgviewer-feaa008b202ee90a .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3218,7 +3218,7 @@ imageblock .title {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-241bf5e5a277a17b .csv-table th {
+  #csv-modal-svgviewer-feaa008b202ee90a .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3227,15 +3227,15 @@ imageblock .title {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-241bf5e5a277a17b .csv-table td {
+  #csv-modal-svgviewer-feaa008b202ee90a .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-241bf5e5a277a17b .csv-table tr {
+  #csv-modal-svgviewer-feaa008b202ee90a .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-241bf5e5a277a17b .csv-table tr:hover {
+  #csv-modal-svgviewer-feaa008b202ee90a .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3243,10 +3243,10 @@ imageblock .title {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_241bf5e5a277a17b = {
+  window.svgModalsvgviewer_feaa008b202ee90a = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-241bf5e5a277a17b');
-          const sourceContainer = document.getElementById('svgviewer-241bf5e5a277a17b');
+          const modal = document.getElementById('modal-svgviewer-feaa008b202ee90a');
+          const sourceContainer = document.getElementById('svgviewer-feaa008b202ee90a');
 
           if (!modal || !sourceContainer) return;
 
@@ -3255,7 +3255,7 @@ imageblock .title {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-241bf5e5a277a17b');
+          const targetContainer = document.getElementById('modal-body-svgviewer-feaa008b202ee90a');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -3272,7 +3272,7 @@ imageblock .title {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-241bf5e5a277a17b');
+          const modal = document.getElementById('modal-svgviewer-feaa008b202ee90a');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3281,9 +3281,9 @@ imageblock .title {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_241bf5e5a277a17b = {
+  window.csvModalsvgviewer_feaa008b202ee90a = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-241bf5e5a277a17b');
+          const modal = document.getElementById('csv-modal-svgviewer-feaa008b202ee90a');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -3294,11 +3294,11 @@ imageblock .title {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-241bf5e5a277a17b');
+              window.svgViewer.loadCsvData('svgviewer-feaa008b202ee90a');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-241bf5e5a277a17b');
+          const modal = document.getElementById('csv-modal-svgviewer-feaa008b202ee90a');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3309,20 +3309,20 @@ imageblock .title {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-241bf5e5a277a17b');
+          const viewModal = document.getElementById('modal-svgviewer-feaa008b202ee90a');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_241bf5e5a277a17b.close();
+              window.svgModalsvgviewer_feaa008b202ee90a.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-241bf5e5a277a17b');
+          const csvModal = document.getElementById('csv-modal-svgviewer-feaa008b202ee90a');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_241bf5e5a277a17b.close();
+              window.csvModalsvgviewer_feaa008b202ee90a.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-241bf5e5a277a17b" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=release&payload=H4sIAIt7h2kA_41TTW8aMRC951eMOIc2gUiVekOQVKggpcCt6mHwzm5G8dqW7QXRKP-9s-4m7IaPcIG1Z97MPL83L1cAvchRU-879MbaVhk8aoy59SUsLGYlut51nRTi7n_SojkrTOebL9_S2ZMmDBTk6recAV7Sb11-5xJwfpuQ6S7DmO4GN4Nh_1crUFjUdWBqco8h-krFyhM82MoIhq3Zp2o2rXbpamwll7vQQLFy76iUZCIK1vPfVBFcQ7iTNP06noBjR3Ub4NJpKkmAnRkkcW4NR-vZFIAmA22Lov6WEUraWv_ca1L_pP_X6xNvMzj1NoPDt1mS37AimFN4Ovscb4kZB2U35HftwWeiLqxRo1EycDuy8pjnrKBEg0Vi3Y4uSVWe4w6c1axYel7GcHiK4fCQ4QQjQjN9OEtxnmbMQEriWvwncn9AQVNui56ebBU-kL1fzd5lPgRJdb2LrMLeJBexXYxPmv3uCF3akLaOPKys1ecJL0nn_YakSOCjlGhNPXqcQiH9ttgRe98hs6o6auTl5GdysNIsYdC89ugvlvfH6Cjfu6PLfW8ieedZ5HogrLf0E5ErHbnvqai3NVSupt3daFlPFiMTKPKRxbyJXkfPVtPlbNQJjbJNDc7EPI2387exuuSv6q_Xf3_lwC41BQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=releasestrategy&filename=ghi.svg" data-original-content="{
+<div class="svg-with-controls docops-media-card" id="svgviewer-feaa008b202ee90a" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=release&payload=H4sIAEmEimkA_41TTW8aMRC951eMOIc2gUiVekOQVKggpcCt6mHwzm5G8dqW7QXRKP-9s-4m7IaPcIG1Z97MPL83L1cAvchRU-879MbaVhk8aoy59SUsLGYlut51nRTi7n_SojkrTOebL9_S2ZMmDBTk6recAV7Sb11-5xJwfpuQ6S7DmO4GN4Nh_1crUFjUdWBqco8h-krFyhM82MoIhq3Zp2o2rXbpamwll7vQQLFy76iUZCIK1vPfVBFcQ7iTNP06noBjR3Ub4NJpKkmAnRkkcW4NR-vZFIAmA22Lov6WEUraWv_ca1L_pP_X6xNvMzj1NoPDt1mS37AimFN4Ovscb4kZB2U35HftwWeiLqxRo1EycDuy8pjnrKBEg0Vi3Y4uSVWe4w6c1axYel7GcHiK4fCQ4QQjQjN9OEtxnmbMQEriWvwncn9AQVNui56ebBU-kL1fzd5lPgRJdb2LrMLeJBexXYxPmv3uCF3akLaOPKys1ecJL0nn_YakSOCjlGhNPXqcQiH9ttgRe98hs6o6auTl5GdysNIsYdC89ugvlvfH6Cjfu6PLfW8ieedZ5HogrLf0E5ErHbnvqai3NVSupt3daFlPFiMTKPKRxbyJXkfPVtPlbNQJjbJNDc7EPI2387exuuSv6q_Xf3_lwC41BQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=releasestrategy&filename=ghi.svg" data-original-content="{
   &quot;title&quot;: &quot;Cloud Platform Roadmap&quot;,
   &quot;style&quot;: &quot;R&quot;,
   &quot;scale&quot;: 0.7,
@@ -3384,28 +3384,28 @@ imageblock .title {
     }
   ]
 }" data-kind="release">
-<svg xmlns="http://www.w3.org/2000/svg" width="840.0" height="1148.0" viewBox="0 0 1200 1640">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Release Type","Date","Goal","Completed","Selected","Lines","Lines Count"],"rows":[["M1","2023-Q1","Infrastructure Foundation","false","false","Core infrastructure setup; Containerization platform; CI/CD pipeline implementation; Monitoring and logging framework","4"],["M2","2023-Q2","Service Mesh","false","false","Service discovery; Load balancing; Traffic management; Security policies","4"],["M3","2023-Q3","Data Services","false","false","Managed database services; Data warehousing; ETL pipelines; Data analytics platform","4"],["RC1","2023-Q4","Developer Tools","false","false","Self-service portal; API gateway; Developer documentation; SDK and client libraries","4"],["GA","2024-Q1","Enterprise Features","false","false","Multi-region support; Compliance certifications; Enterprise SLAs; Advanced security features","4"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>Mechanical Roadmap - DocOps Professional</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Alegreya+Sans:wght@400;700;800&amp;display=swap'); .roadmap-header-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; font-weight: 400; letter-spacing: 0.02em; } .id-badge { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; } .release-goal { font-family: 'Alegreya Sans', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 0.01em; } .release-date { font-family: 'Alegreya Sans', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; } .details-content { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; } @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } } .roadmap-group { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); animation: slideIn 0.5s ease-out forwards; opacity: 0; } .roadmap-nest { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); } .mechanical-card { cursor: pointer; pointer-events: auto; } .card-rect { stroke: #27272a; stroke-opacity: 0.3; transition: all 0.3s ease; } /* Expanded by default - details tray visible */ .details-tray { opacity: 1; visibility: visible; transition: all 0.4s ease; transform: translateY(104px); pointer-events: auto; } /* Chevron pointing down when expanded */ .chevron { transition: all 0.3s ease; transform-origin: center; transform: translate(944px, 40px) rotate(90deg); } /* Nested items pushed down by default */ .roadmap-nest { transform: translateY(var(--expansion-shift)); } /* Collapsed States - When user clicks to collapse */ .collapsed > .item-display .details-tray { opacity: 0; visibility: hidden; transform: translateY(80px); pointer-events: none; } .collapsed > .item-display .chevron { transform: translate(944px, 40px) rotate(0deg); } .collapsed > .roadmap-nest { transform: translateY(120px); } /* GA Card Emphasis - Make it 3x more obvious */ .ga-card .card-rect { stroke: #FF2D55; stroke-opacity: 0.6; stroke-width: 2; } .ga-card:hover .card-rect { filter: drop-shadow(0 0 8px #FF2D55); }</style><linearGradient id="roadmap_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f9fafb"/><stop offset="45%" stop-color="#eef2f7"/><stop offset="100%" stop-color="#f7f8fb"/></linearGradient><radialGradient id="roadmap_glow" cx="0.2" cy="0.1" r="0.6"><stop offset="0%" stop-color="#93c5fd" stop-opacity="0.35"/><stop offset="70%" stop-color="#f9fafb" stop-opacity="0"/></radialGradient><radialGradient id="roadmap_vignette" cx="0.5" cy="0.5" r="0.8"><stop offset="0%" stop-color="#000000" stop-opacity="0"/><stop offset="100%" stop-color="#000000" stop-opacity="0.18"/></radialGradient><pattern id="pattern_Roadmap_Dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#000000" opacity="0.2"/></pattern></defs><g transform="scale(0.7)"><!-- Atmospheric Background --><rect width="1200" height="1640" fill="#f8fafc"/><rect width="1200" height="1640" fill="url(#roadmap_bg)" opacity="1"/><rect width="1200" height="1640" fill="url(#roadmap_glow)" opacity="0.5"/><rect width="1200" height="1640" fill="url(#pattern_Roadmap_Dots)" opacity="0.35"/><rect width="1200" height="1640" fill="url(#roadmap_vignette)" opacity="0.35"/><!-- Header Section --><g transform="translate(96, 56)"><text class="roadmap-header-title" fill="#0f172a">Cloud Platform Roadmap</text><rect y="16" width="48" height="4" fill="#3b82f6" rx="2"/></g><!-- Roadmap Items Container --><g transform="translate(96, 144)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.0s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#5AC8FA" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Core infrastructure setup</tspan><tspan x="40" dy="24">• Containerization platform</tspan><tspan x="40" dy="24">• CI/CD pipeline implementation</tspan><tspan x="40" dy="24">• Monitoring and logging framework</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#5AC8FA" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#5AC8FA">M1</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Infrastructure Foundation</text><text y="24" class="release-date" fill="#71717a">2023-Q1</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.1s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#5AC8FA" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Service discovery</tspan><tspan x="40" dy="24">• Load balancing</tspan><tspan x="40" dy="24">• Traffic management</tspan><tspan x="40" dy="24">• Security policies</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#5AC8FA" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#5AC8FA">M2</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Service Mesh</text><text y="24" class="release-date" fill="#71717a">2023-Q2</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.2s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#5AC8FA" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Managed database services</tspan><tspan x="40" dy="24">• Data warehousing</tspan><tspan x="40" dy="24">• ETL pipelines</tspan><tspan x="40" dy="24">• Data analytics platform</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#5AC8FA" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#5AC8FA">M3</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Data Services</text><text y="24" class="release-date" fill="#71717a">2023-Q3</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.30000000000000004s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#FF9500" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Self-service portal</tspan><tspan x="40" dy="24">• API gateway</tspan><tspan x="40" dy="24">• Developer documentation</tspan><tspan x="40" dy="24">• SDK and client libraries</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#FF9500" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#FF9500">RC</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Developer Tools</text><text y="24" class="release-date" fill="#71717a">2023-Q4</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.4s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#FF2D55" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Multi-region support</tspan><tspan x="40" dy="24">• Compliance certifications</tspan><tspan x="40" dy="24">• Enterprise SLAs</tspan><tspan x="40" dy="24">• Advanced security features</tspan></text></g><g class="mechanical-card ga-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#FF2D55" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#FF2D55">GA</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Enterprise Features</text><text y="24" class="release-date" fill="#71717a">2024-Q1</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g></g></g></g></g></g></g></g></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="840.0" height="1148.0" viewBox="0 0 1200 1640">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Release Type","Date","Goal","Completed","Selected","Lines","Lines Count"],"rows":[["M1","2023-Q1","Infrastructure Foundation","false","false","Core infrastructure setup; Containerization platform; CI/CD pipeline implementation; Monitoring and logging framework","4"],["M2","2023-Q2","Service Mesh","false","false","Service discovery; Load balancing; Traffic management; Security policies","4"],["M3","2023-Q3","Data Services","false","false","Managed database services; Data warehousing; ETL pipelines; Data analytics platform","4"],["RC1","2023-Q4","Developer Tools","false","false","Self-service portal; API gateway; Developer documentation; SDK and client libraries","4"],["GA","2024-Q1","Enterprise Features","false","false","Multi-region support; Compliance certifications; Enterprise SLAs; Advanced security features","4"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>Mechanical Roadmap - DocOps Professional</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Alegreya+Sans:wght@400;700;800&amp;display=swap'); .roadmap-header-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; font-weight: 400; letter-spacing: 0.02em; } .id-badge { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; } .release-goal { font-family: 'Alegreya Sans', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 0.01em; } .release-date { font-family: 'Alegreya Sans', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; } .details-content { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; } @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } } .roadmap-group { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); animation: slideIn 0.5s ease-out forwards; opacity: 0; } .roadmap-nest { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); } .mechanical-card { cursor: pointer; pointer-events: auto; } .card-rect { stroke: #27272a; stroke-opacity: 0.3; transition: all 0.3s ease; } /* Expanded by default - details tray visible */ .details-tray { opacity: 1; visibility: visible; transition: all 0.4s ease; transform: translateY(104px); pointer-events: auto; } /* Chevron pointing down when expanded */ .chevron { transition: all 0.3s ease; transform-origin: center; transform: translate(944px, 40px) rotate(90deg); } /* Nested items pushed down by default */ .roadmap-nest { transform: translateY(var(--expansion-shift)); } /* Collapsed States - When user clicks to collapse */ .collapsed > .item-display .details-tray { opacity: 0; visibility: hidden; transform: translateY(80px); pointer-events: none; } .collapsed > .item-display .chevron { transform: translate(944px, 40px) rotate(0deg); } .collapsed > .roadmap-nest { transform: translateY(120px); } /* GA Card Emphasis - Make it 3x more obvious */ .ga-card .card-rect { stroke: #FF2D55; stroke-opacity: 0.6; stroke-width: 2; } .ga-card:hover .card-rect { filter: drop-shadow(0 0 8px #FF2D55); }</style><linearGradient id="roadmap_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f9fafb"/><stop offset="45%" stop-color="#eef2f7"/><stop offset="100%" stop-color="#f7f8fb"/></linearGradient><radialGradient id="roadmap_glow" cx="0.2" cy="0.1" r="0.6"><stop offset="0%" stop-color="#93c5fd" stop-opacity="0.35"/><stop offset="70%" stop-color="#f9fafb" stop-opacity="0"/></radialGradient><radialGradient id="roadmap_vignette" cx="0.5" cy="0.5" r="0.8"><stop offset="0%" stop-color="#000000" stop-opacity="0"/><stop offset="100%" stop-color="#000000" stop-opacity="0.18"/></radialGradient><pattern id="pattern_Roadmap_Dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#000000" opacity="0.2"/></pattern></defs><g transform="scale(0.7)"><!-- Atmospheric Background --><rect width="1200" height="1640" fill="#f8fafc"/><rect width="1200" height="1640" fill="url(#roadmap_bg)" opacity="1"/><rect width="1200" height="1640" fill="url(#roadmap_glow)" opacity="0.5"/><rect width="1200" height="1640" fill="url(#pattern_Roadmap_Dots)" opacity="0.35"/><rect width="1200" height="1640" fill="url(#roadmap_vignette)" opacity="0.35"/><!-- Header Section --><g transform="translate(96, 56)"><text class="roadmap-header-title" fill="#0f172a">Cloud Platform Roadmap</text><rect y="16" width="48" height="4" fill="#3b82f6" rx="2"/></g><!-- Roadmap Items Container --><g transform="translate(96, 144)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.0s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#5AC8FA" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Core infrastructure setup</tspan><tspan x="40" dy="24">• Containerization platform</tspan><tspan x="40" dy="24">• CI/CD pipeline implementation</tspan><tspan x="40" dy="24">• Monitoring and logging framework</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#5AC8FA" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#5AC8FA">M1</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Infrastructure Foundation</text><text y="24" class="release-date" fill="#71717a">2023-Q1</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.1s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#5AC8FA" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Service discovery</tspan><tspan x="40" dy="24">• Load balancing</tspan><tspan x="40" dy="24">• Traffic management</tspan><tspan x="40" dy="24">• Security policies</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#5AC8FA" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#5AC8FA">M2</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Service Mesh</text><text y="24" class="release-date" fill="#71717a">2023-Q2</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.2s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#5AC8FA" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Managed database services</tspan><tspan x="40" dy="24">• Data warehousing</tspan><tspan x="40" dy="24">• ETL pipelines</tspan><tspan x="40" dy="24">• Data analytics platform</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#5AC8FA" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#5AC8FA">M3</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Data Services</text><text y="24" class="release-date" fill="#71717a">2023-Q3</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.30000000000000004s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#FF9500" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Self-service portal</tspan><tspan x="40" dy="24">• API gateway</tspan><tspan x="40" dy="24">• Developer documentation</tspan><tspan x="40" dy="24">• SDK and client libraries</tspan></text></g><g class="mechanical-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#FF9500" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#FF9500">RC</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Developer Tools</text><text y="24" class="release-date" fill="#71717a">2023-Q4</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g><g class="roadmap-nest" transform = "translate(0, 280)"><g class="roadmap-group" style="--expansion-shift: 280px; animation-delay: 0.4s"><g class="item-display"><g class="details-tray"><rect width="1000" height="176" fill="#f8fafc" rx="16" stroke="#27272a" stroke-dasharray="4 4"/><text class="details-content" fill="#475569"><tspan x="40" dy="48" font-weight="700" fill="#FF2D55" text-transform="uppercase" font-size="11">Implementation Details</tspan><tspan x="40" dy="24">• Multi-region support</tspan><tspan x="40" dy="24">• Compliance certifications</tspan><tspan x="40" dy="24">• Enterprise SLAs</tspan><tspan x="40" dy="24">• Advanced security features</tspan></text></g><g class="mechanical-card ga-card" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')"><rect class="card-rect" width="1000" height="96" rx="16" fill="#fafafa"/>                        <g transform="translate(32, 24)"><rect width="48" height="48" rx="12" fill="#FF2D55" opacity="0.1"/><text x="24" y="32" text-anchor="middle" class="id-badge" fill="#FF2D55">GA</text></g><g transform="translate(96, 48)"><text class="release-goal" fill="#1e293b">Enterprise Features</text><text y="24" class="release-date" fill="#71717a">2024-Q1</text></g><path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="#71717a" stroke-width="2.5" stroke-linecap="round"/></g></g></g></g></g></g></g></g></g></g></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_241bf5e5a277a17b.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_241bf5e5a277a17b.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_feaa008b202ee90a.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_feaa008b202ee90a.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-241bf5e5a277a17b')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-241bf5e5a277a17b')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-feaa008b202ee90a')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-feaa008b202ee90a')">PNG</button>
 </div>
-<div id="modal-svgviewer-241bf5e5a277a17b" class="svg-modal-svgviewer-241bf5e5a277a17b" onclick="if(event.target === this) svgModalsvgviewer_241bf5e5a277a17b.close()">
-    <div class="svg-modal-content-svgviewer-241bf5e5a277a17b">
-        <button class="svg-modal-close-svgviewer-241bf5e5a277a17b" onclick="svgModalsvgviewer_241bf5e5a277a17b.close()">×</button>
-        <div id="modal-body-svgviewer-241bf5e5a277a17b" class="svg-modal-body-svgviewer-241bf5e5a277a17b"></div>
+<div id="modal-svgviewer-feaa008b202ee90a" class="svg-modal-svgviewer-feaa008b202ee90a" onclick="if(event.target === this) svgModalsvgviewer_feaa008b202ee90a.close()">
+    <div class="svg-modal-content-svgviewer-feaa008b202ee90a">
+        <button class="svg-modal-close-svgviewer-feaa008b202ee90a" onclick="svgModalsvgviewer_feaa008b202ee90a.close()">×</button>
+        <div id="modal-body-svgviewer-feaa008b202ee90a" class="svg-modal-body-svgviewer-feaa008b202ee90a"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-241bf5e5a277a17b" class="svg-modal-svgviewer-241bf5e5a277a17b" onclick="if(event.target === this) csvModalsvgviewer_241bf5e5a277a17b.close()">
-    <div class="svg-modal-content-svgviewer-241bf5e5a277a17b">
-        <button class="svg-modal-close-svgviewer-241bf5e5a277a17b" onclick="csvModalsvgviewer_241bf5e5a277a17b.close()">×</button>
-        <div class="svg-modal-header-svgviewer-241bf5e5a277a17b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-feaa008b202ee90a" class="svg-modal-svgviewer-feaa008b202ee90a" onclick="if(event.target === this) csvModalsvgviewer_feaa008b202ee90a.close()">
+    <div class="svg-modal-content-svgviewer-feaa008b202ee90a">
+        <button class="svg-modal-close-svgviewer-feaa008b202ee90a" onclick="csvModalsvgviewer_feaa008b202ee90a.close()">×</button>
+        <div class="svg-modal-header-svgviewer-feaa008b202ee90a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-241bf5e5a277a17b" class="svg-modal-body-svgviewer-241bf5e5a277a17b" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-feaa008b202ee90a" class="svg-modal-body-svgviewer-feaa008b202ee90a" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>

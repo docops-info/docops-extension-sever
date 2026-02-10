@@ -2140,10 +2140,10 @@ window.onload = function() {
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
-<body class="book toc2 toc-left">
+<body class="book">
 <div id="header">
 <h1>DocOps Buttons</h1>
-<div id="toc" class="toc2">
+<div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#top">1. Showcase</a></li>
@@ -2305,7 +2305,7 @@ window.onload = function() {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-2afd1cf33a163a06 {
+  .svg-modal-svgviewer-879133e7d4988a14 {
       display: none;
       position: fixed;
       top: 0;
@@ -2320,10 +2320,10 @@ window.onload = function() {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-2afd1cf33a163a06.active {
+  .svg-modal-svgviewer-879133e7d4988a14.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-2afd1cf33a163a06 {
+  .svg-modal-content-svgviewer-879133e7d4988a14 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2338,7 +2338,7 @@ window.onload = function() {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-2afd1cf33a163a06 {
+  .svg-modal-close-svgviewer-879133e7d4988a14 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2356,11 +2356,11 @@ window.onload = function() {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-2afd1cf33a163a06:hover {
+  .svg-modal-close-svgviewer-879133e7d4988a14:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-2afd1cf33a163a06 {
+  .svg-modal-body-svgviewer-879133e7d4988a14 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2370,7 +2370,7 @@ window.onload = function() {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-2afd1cf33a163a06 svg {
+  .svg-modal-body-svgviewer-879133e7d4988a14 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2379,10 +2379,10 @@ window.onload = function() {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-2afd1cf33a163a06 .csv-content {
+  #csv-modal-svgviewer-879133e7d4988a14 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-2afd1cf33a163a06 .csv-table {
+  #csv-modal-svgviewer-879133e7d4988a14 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2390,7 +2390,7 @@ window.onload = function() {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-2afd1cf33a163a06 .csv-table th {
+  #csv-modal-svgviewer-879133e7d4988a14 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2399,15 +2399,15 @@ window.onload = function() {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-2afd1cf33a163a06 .csv-table td {
+  #csv-modal-svgviewer-879133e7d4988a14 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-2afd1cf33a163a06 .csv-table tr {
+  #csv-modal-svgviewer-879133e7d4988a14 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-2afd1cf33a163a06 .csv-table tr:hover {
+  #csv-modal-svgviewer-879133e7d4988a14 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2415,10 +2415,10 @@ window.onload = function() {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_2afd1cf33a163a06 = {
+  window.svgModalsvgviewer_879133e7d4988a14 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-2afd1cf33a163a06');
-          const sourceContainer = document.getElementById('svgviewer-2afd1cf33a163a06');
+          const modal = document.getElementById('modal-svgviewer-879133e7d4988a14');
+          const sourceContainer = document.getElementById('svgviewer-879133e7d4988a14');
 
           if (!modal || !sourceContainer) return;
 
@@ -2427,7 +2427,7 @@ window.onload = function() {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-2afd1cf33a163a06');
+          const targetContainer = document.getElementById('modal-body-svgviewer-879133e7d4988a14');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2444,7 +2444,7 @@ window.onload = function() {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-2afd1cf33a163a06');
+          const modal = document.getElementById('modal-svgviewer-879133e7d4988a14');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2453,9 +2453,9 @@ window.onload = function() {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_2afd1cf33a163a06 = {
+  window.csvModalsvgviewer_879133e7d4988a14 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-2afd1cf33a163a06');
+          const modal = document.getElementById('csv-modal-svgviewer-879133e7d4988a14');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2466,11 +2466,11 @@ window.onload = function() {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-2afd1cf33a163a06');
+              window.svgViewer.loadCsvData('svgviewer-879133e7d4988a14');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-2afd1cf33a163a06');
+          const modal = document.getElementById('csv-modal-svgviewer-879133e7d4988a14');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2481,20 +2481,20 @@ window.onload = function() {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-2afd1cf33a163a06');
+          const viewModal = document.getElementById('modal-svgviewer-879133e7d4988a14');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_2afd1cf33a163a06.close();
+              window.svgModalsvgviewer_879133e7d4988a14.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-2afd1cf33a163a06');
+          const csvModal = document.getElementById('csv-modal-svgviewer-879133e7d4988a14');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_2afd1cf33a163a06.close();
+              window.csvModalsvgviewer_879133e7d4988a14.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-2afd1cf33a163a06" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=buttons&payload=H4sIAIt7h2kA_32QMQvCMBCFd39FONdQq8UqbiLWxanoJA5JDLaY9koTKSr-d5NU2kHsciTfvbt7vNeIEOB3Y7DUsCIn-yXk5attKMalshh2iFclgXaNvLw5nhlT6dVk0jRNcPWaQGDR6y5SizqvTI6lk_cN86ikI1qyWmTg8Zv-ub4u2NMuGLzOvGbwOke86V8LLW4d2HqmfSSHryTd7o77depnwWSycLT1CQIV1j47GIdhxGMOlMA4SeIkiv1ztlks4zmcaTdwL3zasy_Rgim3cRqEI2fi_QFosVIGlgEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=buttons&filename=ghi.svg" data-original-content="{
+<div class="svg-with-controls docops-media-card" id="svgviewer-879133e7d4988a14" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=buttons&payload=H4sIAEiEimkA_32QMQvCMBCFd39FONdQq8UqbiLWxanoJA5JDLaY9koTKSr-d5NU2kHsciTfvbt7vNeIEOB3Y7DUsCIn-yXk5attKMalshh2iFclgXaNvLw5nhlT6dVk0jRNcPWaQGDR6y5SizqvTI6lk_cN86ikI1qyWmTg8Zv-ub4u2NMuGLzOvGbwOke86V8LLW4d2HqmfSSHryTd7o77depnwWSycLT1CQIV1j47GIdhxGMOlMA4SeIkiv1ztlks4zmcaTdwL3zasy_Rgim3cRqEI2fi_QFosVIGlgEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=buttons&filename=ghi.svg" data-original-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Google&quot;,
@@ -2516,28 +2516,28 @@ window.onload = function() {
     &quot;scale&quot;: 1.0
   }
 }" data-kind="buttons">
-<svg xmlns="http://www.w3.org/2000/svg" width="359.99999999550005" height="33.74999999957813" viewBox="0 0 640.0 60.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_89a7872e-f235-403a-b7af-f2a907037a5c" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["Amazon","https://www.amazon.com","books","books","#FF6F36","true","false"],["Google","https://www.google.com","","search","#003b6b","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>            <defs><path id="outerBox" fill="#ffffff"  d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 382.0 A 18.0 18.0 0 0 1 282.0 400.0 L 18.0 400.0 A 18.0 18.0 0 0 1 0 382.0 Z"><title>Title</title></path><g id="topTextBox"><path fill="#ffffff" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/></g><path id="bottomTextBox" d="M 0 0.0 A 0.0 0.0 0 0 1 0.0 0 L 300.0 0 A 0.0 0.0 0 0 1 300.0 0.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/><path id="singleBox" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 191.0 A 0.0 0.0 0 0 1 300.0 191.0 L 0.0 191.0 A 0.0 0.0 0 0 1 0 191.0 Z"/><style>@keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } } .btn-group { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; } .btn-group:hover { transform: translate(2px, 2px) !important; } .btn-main { transition: fill 0.2s ease; } .btn-group:hover .btn-main { fill: #FFFFFF !important; } #89a7872e-f235-403a-b7af-f2a907037a5c .bar:hover { filter: grayscale(100%) sepia(100%); } #89a7872e-f235-403a-b7af-f2a907037a5c .shadowed { -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); }</style></defs><g transform="scale(1.0)">        <g transform="translate(10,10)"><g class="btn-group" style="animation: slideIn 0.5s ease-out 0.0s both;" onclick="window.open('https://www.amazon.com', '_top')" style="cursor: pointer;"><!-- Shadow Layer uses theme's surface impact --><rect x="4" y="4" width="300" height="32" rx="2" fill="rgba(0, 0, 0, 0.05)" opacity="0.3"/><!-- Main Button Body --><rect x="0" y="0" width="300" height="32" rx="2" fill="#F8F8F8" stroke="#FF6F36" stroke-width="1.5" class="btn-main"/><rect x="0" y="0" width="300" height="16" rx="2" fill="white" opacity="0.05"/><text x="150" y="21" text-anchor="middle" fill="#FF6F36" style="font-family: Arial, Helvetica, sans-serif !important;font-family: Arial, Helvetica, sans-serif; font-size: 12px;  letter-spacing: normal;}">Amazon</text></g></g>        <g transform="translate(320,10)"><g class="btn-group" style="animation: slideIn 0.5s ease-out 0.05s both;" onclick="window.open('https://www.google.com', '_top')" style="cursor: pointer;"><!-- Shadow Layer uses theme's surface impact --><rect x="4" y="4" width="300" height="32" rx="2" fill="rgba(0, 0, 0, 0.05)" opacity="0.3"/><!-- Main Button Body --><rect x="0" y="0" width="300" height="32" rx="2" fill="#F8F8F8" stroke="#003b6b" stroke-width="1.5" class="btn-main"/><rect x="0" y="0" width="300" height="16" rx="2" fill="white" opacity="0.05"/><text x="150" y="21" text-anchor="middle" fill="#003b6b" style="font-family: Arial, Helvetica, sans-serif !important;font-family: Arial, Helvetica, sans-serif; font-size: 12px;  letter-spacing: normal;}">Google</text></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="359.99999999550005" height="33.74999999957813" viewBox="0 0 640.0 60.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_fb3c16a7-87c5-4a8f-8117-0f503e4b7f1c" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["Amazon","https://www.amazon.com","books","books","#FF6F36","true","false"],["Google","https://www.google.com","","search","#003b6b","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>            <defs><path id="outerBox" fill="#ffffff"  d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 382.0 A 18.0 18.0 0 0 1 282.0 400.0 L 18.0 400.0 A 18.0 18.0 0 0 1 0 382.0 Z"><title>Title</title></path><g id="topTextBox"><path fill="#ffffff" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/></g><path id="bottomTextBox" d="M 0 0.0 A 0.0 0.0 0 0 1 0.0 0 L 300.0 0 A 0.0 0.0 0 0 1 300.0 0.0 L 300.0 95.5 A 0.0 0.0 0 0 1 300.0 95.5 L 0.0 95.5 A 0.0 0.0 0 0 1 0 95.5 Z"/><path id="singleBox" d="M 0 18.0 A 18.0 18.0 0 0 1 18.0 0 L 282.0 0 A 18.0 18.0 0 0 1 300.0 18.0 L 300.0 191.0 A 0.0 0.0 0 0 1 300.0 191.0 L 0.0 191.0 A 0.0 0.0 0 0 1 0 191.0 Z"/><style>@keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } } .btn-group { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; } .btn-group:hover { transform: translate(2px, 2px) !important; } .btn-main { transition: fill 0.2s ease; } .btn-group:hover .btn-main { fill: #FFFFFF !important; } #fb3c16a7-87c5-4a8f-8117-0f503e4b7f1c .bar:hover { filter: grayscale(100%) sepia(100%); } #fb3c16a7-87c5-4a8f-8117-0f503e4b7f1c .shadowed { -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3)); }</style></defs><g transform="scale(1.0)">        <g transform="translate(10,10)"><g class="btn-group" style="animation: slideIn 0.5s ease-out 0.0s both;" onclick="window.open('https://www.amazon.com', '_top')" style="cursor: pointer;"><!-- Shadow Layer uses theme's surface impact --><rect x="4" y="4" width="300" height="32" rx="2" fill="rgba(0, 0, 0, 0.05)" opacity="0.3"/><!-- Main Button Body --><rect x="0" y="0" width="300" height="32" rx="2" fill="#F8F8F8" stroke="#FF6F36" stroke-width="1.5" class="btn-main"/><rect x="0" y="0" width="300" height="16" rx="2" fill="white" opacity="0.05"/><text x="150" y="21" text-anchor="middle" fill="#FF6F36" style="font-family: Arial, Helvetica, sans-serif !important;font-family: Arial, Helvetica, sans-serif; font-size: 12px;  letter-spacing: normal;}">Amazon</text></g></g>        <g transform="translate(320,10)"><g class="btn-group" style="animation: slideIn 0.5s ease-out 0.05s both;" onclick="window.open('https://www.google.com', '_top')" style="cursor: pointer;"><!-- Shadow Layer uses theme's surface impact --><rect x="4" y="4" width="300" height="32" rx="2" fill="rgba(0, 0, 0, 0.05)" opacity="0.3"/><!-- Main Button Body --><rect x="0" y="0" width="300" height="32" rx="2" fill="#F8F8F8" stroke="#003b6b" stroke-width="1.5" class="btn-main"/><rect x="0" y="0" width="300" height="16" rx="2" fill="white" opacity="0.05"/><text x="150" y="21" text-anchor="middle" fill="#003b6b" style="font-family: Arial, Helvetica, sans-serif !important;font-family: Arial, Helvetica, sans-serif; font-size: 12px;  letter-spacing: normal;}">Google</text></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_2afd1cf33a163a06.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_2afd1cf33a163a06.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_879133e7d4988a14.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_879133e7d4988a14.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-2afd1cf33a163a06')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-2afd1cf33a163a06')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-879133e7d4988a14')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-879133e7d4988a14')">PNG</button>
 </div>
-<div id="modal-svgviewer-2afd1cf33a163a06" class="svg-modal-svgviewer-2afd1cf33a163a06" onclick="if(event.target === this) svgModalsvgviewer_2afd1cf33a163a06.close()">
-    <div class="svg-modal-content-svgviewer-2afd1cf33a163a06">
-        <button class="svg-modal-close-svgviewer-2afd1cf33a163a06" onclick="svgModalsvgviewer_2afd1cf33a163a06.close()">×</button>
-        <div id="modal-body-svgviewer-2afd1cf33a163a06" class="svg-modal-body-svgviewer-2afd1cf33a163a06"></div>
+<div id="modal-svgviewer-879133e7d4988a14" class="svg-modal-svgviewer-879133e7d4988a14" onclick="if(event.target === this) svgModalsvgviewer_879133e7d4988a14.close()">
+    <div class="svg-modal-content-svgviewer-879133e7d4988a14">
+        <button class="svg-modal-close-svgviewer-879133e7d4988a14" onclick="svgModalsvgviewer_879133e7d4988a14.close()">×</button>
+        <div id="modal-body-svgviewer-879133e7d4988a14" class="svg-modal-body-svgviewer-879133e7d4988a14"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-2afd1cf33a163a06" class="svg-modal-svgviewer-2afd1cf33a163a06" onclick="if(event.target === this) csvModalsvgviewer_2afd1cf33a163a06.close()">
-    <div class="svg-modal-content-svgviewer-2afd1cf33a163a06">
-        <button class="svg-modal-close-svgviewer-2afd1cf33a163a06" onclick="csvModalsvgviewer_2afd1cf33a163a06.close()">×</button>
-        <div class="svg-modal-header-svgviewer-2afd1cf33a163a06" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-879133e7d4988a14" class="svg-modal-svgviewer-879133e7d4988a14" onclick="if(event.target === this) csvModalsvgviewer_879133e7d4988a14.close()">
+    <div class="svg-modal-content-svgviewer-879133e7d4988a14">
+        <button class="svg-modal-close-svgviewer-879133e7d4988a14" onclick="csvModalsvgviewer_879133e7d4988a14.close()">×</button>
+        <div class="svg-modal-header-svgviewer-879133e7d4988a14" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-2afd1cf33a163a06" class="svg-modal-body-svgviewer-2afd1cf33a163a06" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-879133e7d4988a14" class="svg-modal-body-svgviewer-879133e7d4988a14" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
@@ -2618,7 +2618,7 @@ imageblock .title {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-c47767a063bfeb70 {
+  .svg-modal-svgviewer-c4135bf77333d080 {
       display: none;
       position: fixed;
       top: 0;
@@ -2633,10 +2633,10 @@ imageblock .title {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-c47767a063bfeb70.active {
+  .svg-modal-svgviewer-c4135bf77333d080.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-c47767a063bfeb70 {
+  .svg-modal-content-svgviewer-c4135bf77333d080 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2651,7 +2651,7 @@ imageblock .title {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-c47767a063bfeb70 {
+  .svg-modal-close-svgviewer-c4135bf77333d080 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2669,11 +2669,11 @@ imageblock .title {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-c47767a063bfeb70:hover {
+  .svg-modal-close-svgviewer-c4135bf77333d080:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-c47767a063bfeb70 {
+  .svg-modal-body-svgviewer-c4135bf77333d080 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2683,7 +2683,7 @@ imageblock .title {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-c47767a063bfeb70 svg {
+  .svg-modal-body-svgviewer-c4135bf77333d080 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2692,10 +2692,10 @@ imageblock .title {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-c47767a063bfeb70 .csv-content {
+  #csv-modal-svgviewer-c4135bf77333d080 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-c47767a063bfeb70 .csv-table {
+  #csv-modal-svgviewer-c4135bf77333d080 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2703,7 +2703,7 @@ imageblock .title {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-c47767a063bfeb70 .csv-table th {
+  #csv-modal-svgviewer-c4135bf77333d080 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2712,15 +2712,15 @@ imageblock .title {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-c47767a063bfeb70 .csv-table td {
+  #csv-modal-svgviewer-c4135bf77333d080 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-c47767a063bfeb70 .csv-table tr {
+  #csv-modal-svgviewer-c4135bf77333d080 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-c47767a063bfeb70 .csv-table tr:hover {
+  #csv-modal-svgviewer-c4135bf77333d080 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2728,10 +2728,10 @@ imageblock .title {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_c47767a063bfeb70 = {
+  window.svgModalsvgviewer_c4135bf77333d080 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-c47767a063bfeb70');
-          const sourceContainer = document.getElementById('svgviewer-c47767a063bfeb70');
+          const modal = document.getElementById('modal-svgviewer-c4135bf77333d080');
+          const sourceContainer = document.getElementById('svgviewer-c4135bf77333d080');
 
           if (!modal || !sourceContainer) return;
 
@@ -2740,7 +2740,7 @@ imageblock .title {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-c47767a063bfeb70');
+          const targetContainer = document.getElementById('modal-body-svgviewer-c4135bf77333d080');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2757,7 +2757,7 @@ imageblock .title {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-c47767a063bfeb70');
+          const modal = document.getElementById('modal-svgviewer-c4135bf77333d080');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2766,9 +2766,9 @@ imageblock .title {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_c47767a063bfeb70 = {
+  window.csvModalsvgviewer_c4135bf77333d080 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-c47767a063bfeb70');
+          const modal = document.getElementById('csv-modal-svgviewer-c4135bf77333d080');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2779,11 +2779,11 @@ imageblock .title {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-c47767a063bfeb70');
+              window.svgViewer.loadCsvData('svgviewer-c4135bf77333d080');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-c47767a063bfeb70');
+          const modal = document.getElementById('csv-modal-svgviewer-c4135bf77333d080');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2794,20 +2794,20 @@ imageblock .title {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-c47767a063bfeb70');
+          const viewModal = document.getElementById('modal-svgviewer-c4135bf77333d080');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_c47767a063bfeb70.close();
+              window.svgModalsvgviewer_c4135bf77333d080.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-c47767a063bfeb70');
+          const csvModal = document.getElementById('csv-modal-svgviewer-c4135bf77333d080');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_c47767a063bfeb70.close();
+              window.csvModalsvgviewer_c4135bf77333d080.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-c47767a063bfeb70" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=buttons&payload=H4sIAIt7h2kA_8WU207jMBCG7_cpRult6YEz6VUp5bBC2hWstBeoF64zTSwcO7InLQX13XecljZLYUECaaMoTf8ZT35_mcnTN4BoXBJZ46MY7vgvwFN15YAWY9QsRxfWphqj5jqgzH3QM6LCx-32bDZrpVVOS9p8k5egl04VpKzZlAHlwykM9HN0SvJNXmpSRoQ8oYFQZsZqm86BqxXCzIEyQeALlEpo9YhcwMCVIXQGacehFoQJeHRTJTGUTqBwNikledi4oXmBwYZIpuhIeczRUM0sFwnhzlF7r9Punpwcb2KipMy6NaFKu0WX4hxOnTLrRJavhXNz-ClSjFbiqPpdNN-A2y-K99iKkPJPtFURRiJbX8JWcj-UXAFQoyRnjZK-Wa0oGTp4O6GZcFiRtoYt45p-6xXil8IlIf8V2N0l7KOjd2ATThG-27Gvs16qv-2jUeL-Je5t0mdW_ih8S9lt2o27cLcTNoFu1Lhj4qM3Yd9mgl96ComVZeihCi7gQ8HI0UiEiXWQsDVtWfJAloOEzGqmKIO-l0qxF-JNbqHimpstRpiPMUkwucpDP8Xr7uGQw0nIb7XafKoQ921ebHmDfpo-w1hsEf8I5xsrZFYHfcWNdGP9y5bm66i5-YT8Wu3hun9zMayWR5TxlK2NR5Jbz_naI6PGsNs926-NWmN392xvOKwJx6cHg_PDmjDY7ww6g5qwf3DYPa4vOT8_OO0Pl25HzfWzy7z6zO2tlKXrW5rrOttlvzyr0cQa2pmIXOl5DH3HQ9KES9RTJB6vJnhhfGgbNelBlep5hmLo7hYPLCitY2h0q6MHGomnZ8cXQnL7xGCsy4XuVctmqNKMYhhbnfRe7bzPOurUHHWq42OOVtrLvvlfdipAq0rBQgyK-MMle39_XL7y_X3O3jO_9cgsvi3-AAsdLgB4BwAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=buttons&filename=ghi.svg" data-original-content="{
+<div class="svg-with-controls docops-media-card" id="svgviewer-c4135bf77333d080" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=buttons&payload=H4sIAEmEimkA_8WU207jMBCG7_cpRult6YEz6VUp5bBC2hWstBeoF64zTSwcO7InLQX13XecljZLYUECaaMoTf8ZT35_mcnTN4BoXBJZ46MY7vgvwFN15YAWY9QsRxfWphqj5jqgzH3QM6LCx-32bDZrpVVOS9p8k5egl04VpKzZlAHlwykM9HN0SvJNXmpSRoQ8oYFQZsZqm86BqxXCzIEyQeALlEpo9YhcwMCVIXQGacehFoQJeHRTJTGUTqBwNikledi4oXmBwYZIpuhIeczRUM0sFwnhzlF7r9Punpwcb2KipMy6NaFKu0WX4hxOnTLrRJavhXNz-ClSjFbiqPpdNN-A2y-K99iKkPJPtFURRiJbX8JWcj-UXAFQoyRnjZK-Wa0oGTp4O6GZcFiRtoYt45p-6xXil8IlIf8V2N0l7KOjd2ATThG-27Gvs16qv-2jUeL-Je5t0mdW_ih8S9lt2o27cLcTNoFu1Lhj4qM3Yd9mgl96ComVZeihCi7gQ8HI0UiEiXWQsDVtWfJAloOEzGqmKIO-l0qxF-JNbqHimpstRpiPMUkwucpDP8Xr7uGQw0nIb7XafKoQ921ebHmDfpo-w1hsEf8I5xsrZFYHfcWNdGP9y5bm66i5-YT8Wu3hun9zMayWR5TxlK2NR5Jbz_naI6PGsNs926-NWmN392xvOKwJx6cHg_PDmjDY7ww6g5qwf3DYPa4vOT8_OO0Pl25HzfWzy7z6zO2tlKXrW5rrOttlvzyr0cQa2pmIXOl5DH3HQ9KES9RTJB6vJnhhfGgbNelBlep5hmLo7hYPLCitY2h0q6MHGomnZ8cXQnL7xGCsy4XuVctmqNKMYhhbnfRe7bzPOurUHHWq42OOVtrLvvlfdipAq0rBQgyK-MMle39_XL7y_X3O3jO_9cgsvi3-AAsdLgB4BwAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=buttons&filename=ghi.svg" data-original-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Google&quot;,
@@ -2864,28 +2864,28 @@ imageblock .title {
     }
   }
 }" data-kind="buttons">
-<svg xmlns="http://www.w3.org/2000/svg" width="533.2499999933344" height="236.2499999970469" viewBox="0 0 948 420" xmlns:xlink="http://www.w3.org/1999/xlink" id="large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["Apple","https://www.apple.com","Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software and online services. ","Hardware","#22D3EE","true","false"],["DocOps.io","#[link-server]#[app]","Sharing documentation experience for developers to extend with AsciiDoctor","docs","#8B5CF6","true","false"],["Google","https://www.google.com","Google is is an American multinational technology company that specializes in Internet-related services and products ","advertisement","#E11D48","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><radialGradient id="bg_grad_large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="rgba(0, 0, 0, 0.05)"/></radialGradient><filter id="cardShadow_large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="black" flood-opacity="0.3"/></filter><linearGradient id="btn_6521e12b-0656-4e34-8dbd-753bceb7a839_gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22D3EE"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/></linearGradient><linearGradient id="btn_4f8c1cc1-937f-405f-8edc-6d4170bdf959_gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/></linearGradient><linearGradient id="btn_0fe633fd-fb48-4e7f-ac89-68e090a89321_gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E11D48"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/></linearGradient><filter id="iconGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter></defs><style>@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&amp;family=JetBrains+Mono:wght@600&amp;display=swap'); #large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728 .modern-card-button { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728 .hover-overlay { transition: opacity 0.3s ease; } #large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728 .modern-card-button:hover .hover-overlay { opacity: 0.05; }</style><g transform="scale(1.0)"><rect width="948" height="420" fill="url(#bg_grad_large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728)" rx="4"/><g transform="translate(10,10)" class="modern-card-button" onclick="window.open('https://www.apple.com', '_top')"><rect x="0" y="0" width="300" height="400" rx="8" fill="#ffffff" stroke="#22D3EE" stroke-width="1.5" filter="url(#cardShadow_large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728)"/><path d="M0 8 A8 8 0 0 1 8 0 L292 0 A8 8 0 0 1 300 8 L300 190 L0 190 Z" fill="url(#btn_6521e12b-0656-4e34-8dbd-753bceb7a839_gradient)"/><g opacity="0.2"><circle cx="260" cy="40" r="70" fill="none" stroke="white" stroke-width="0.5"/><circle cx="280" cy="80" r="50" fill="none" stroke="white" stroke-width="0.5"/></g><line x1="20" y1="190" x2="280" y2="190" stroke="#4338ca" stroke-width="0.5" opacity="0.2"/><g transform="translate(20, 210)"><text x="0" y="20" font-family="'JetBrains Mono', monospace" font-size="11.0" font-weight="600" fill="#22D3EE" style="text-transform: uppercase; letter-spacing: 2px;">Hardware</text><text x="0" y="50" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#111111" style="text-transform: uppercase; letter-spacing: -0.5px;"><tspan x="0" dy="0">Apple</tspan></text><text y="75" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" line-height="1.5"><tspan x="0" dy="0">Apple Inc. is an American</tspan><tspan x="0" dy="18">multinational technology company that</tspan><tspan x="0" dy="18">specializes in consumer electronics,</tspan><tspan x="0" dy="18">computer software and online</tspan></text><rect x="0" y="165" width="40" height="4" rx="2" fill="#22D3EE"/><text x="260" y="170" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="500" fill="#4338ca" opacity="0.8">01/30/1977</text></g><rect x="0" y="0" width="300" height="400" rx="24" fill="white" opacity="0" class="hover-overlay"/></g><g transform="translate(322,10)" class="modern-card-button" onclick="window.open('#[link-server]#[app]', '_top')"><rect x="0" y="0" width="300" height="400" rx="8" fill="#ffffff" stroke="#8B5CF6" stroke-width="1.5" filter="url(#cardShadow_large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728)"/><path d="M0 8 A8 8 0 0 1 8 0 L292 0 A8 8 0 0 1 300 8 L300 190 L0 190 Z" fill="url(#btn_4f8c1cc1-937f-405f-8edc-6d4170bdf959_gradient)"/><g opacity="0.2"><line x1="200" y1="0" x2="300" y2="100" stroke="white" stroke-width="0.5"/><line x1="215" y1="0" x2="300" y2="85" stroke="white" stroke-width="0.5"/><line x1="230" y1="0" x2="300" y2="70" stroke="white" stroke-width="0.5"/><line x1="245" y1="0" x2="300" y2="55" stroke="white" stroke-width="0.5"/><line x1="260" y1="0" x2="300" y2="40" stroke="white" stroke-width="0.5"/></g><g transform="translate(150, 95)"><circle cx="0" cy="0" r="50" fill="rgba(255,255,255,0.2)" filter="url(#iconGlow)"/><circle cx="0" cy="0" r="45" fill="rgba(255,255,255,0.95)"/><image href="../../images/docops.svg" x="-40" y="-40" width="80" height="80" preserveAspectRatio="xMidYMid meet"/></g><line x1="20" y1="190" x2="280" y2="190" stroke="#4338ca" stroke-width="0.5" opacity="0.2"/><g transform="translate(20, 210)"><text x="0" y="20" font-family="'JetBrains Mono', monospace" font-size="11.0" font-weight="600" fill="#8B5CF6" style="text-transform: uppercase; letter-spacing: 2px;">docs</text><text x="0" y="50" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#111111" style="text-transform: uppercase; letter-spacing: -0.5px;"><tspan x="0" dy="0">DocOps.io</tspan></text><text y="75" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" line-height="1.5"><tspan x="0" dy="0">Sharing documentation experience for</tspan><tspan x="0" dy="18">developers to extend with AsciiDoctor</tspan></text><rect x="0" y="165" width="40" height="4" rx="2" fill="#8B5CF6"/><text x="260" y="170" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="500" fill="#4338ca" opacity="0.8"></text></g><rect x="0" y="0" width="300" height="400" rx="24" fill="white" opacity="0" class="hover-overlay"/></g><g transform="translate(634,10)" class="modern-card-button" onclick="window.open('https://www.google.com', '_top')"><rect x="0" y="0" width="300" height="400" rx="8" fill="#ffffff" stroke="#E11D48" stroke-width="1.5" filter="url(#cardShadow_large_6c0dce5b-0e31-4ffa-87b4-f2c1e180a728)"/><path d="M0 8 A8 8 0 0 1 8 0 L292 0 A8 8 0 0 1 300 8 L300 190 L0 190 Z" fill="url(#btn_0fe633fd-fb48-4e7f-ac89-68e090a89321_gradient)"/><g opacity="0.2"><circle cx="260" cy="40" r="70" fill="none" stroke="white" stroke-width="0.5"/><circle cx="280" cy="80" r="50" fill="none" stroke="white" stroke-width="0.5"/></g><line x1="20" y1="190" x2="280" y2="190" stroke="#4338ca" stroke-width="0.5" opacity="0.2"/><g transform="translate(20, 210)"><text x="0" y="20" font-family="'JetBrains Mono', monospace" font-size="11.0" font-weight="600" fill="#E11D48" style="text-transform: uppercase; letter-spacing: 2px;">advertisement</text><text x="0" y="50" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#111111" style="text-transform: uppercase; letter-spacing: -0.5px;"><tspan x="0" dy="0">Google</tspan></text><text y="75" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" line-height="1.5"><tspan x="0" dy="0">Google is is an American</tspan><tspan x="0" dy="18">multinational technology company that</tspan><tspan x="0" dy="18">specializes in Internet-related</tspan><tspan x="0" dy="18">services and products </tspan></text><rect x="0" y="165" width="40" height="4" rx="2" fill="#E11D48"/><text x="260" y="170" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="500" fill="#4338ca" opacity="0.8">07/30/1998</text></g><rect x="0" y="0" width="300" height="400" rx="24" fill="white" opacity="0" class="hover-overlay"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="533.2499999933344" height="236.2499999970469" viewBox="0 0 948 420" xmlns:xlink="http://www.w3.org/1999/xlink" id="large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["Apple","https://www.apple.com","Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software and online services. ","Hardware","#22D3EE","true","false"],["DocOps.io","#[link-server]#[app]","Sharing documentation experience for developers to extend with AsciiDoctor","docs","#8B5CF6","true","false"],["Google","https://www.google.com","Google is is an American multinational technology company that specializes in Internet-related services and products ","advertisement","#E11D48","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><radialGradient id="bg_grad_large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="rgba(0, 0, 0, 0.05)"/></radialGradient><filter id="cardShadow_large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="black" flood-opacity="0.3"/></filter><linearGradient id="btn_eccdd256-565e-4e9a-8534-b044b66d23a6_gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#22D3EE"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/></linearGradient><linearGradient id="btn_b82aab64-2b40-4850-8a48-f05e52c06d18_gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/></linearGradient><linearGradient id="btn_d3ef612d-2feb-40ea-a71a-99acb4d86270_gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E11D48"/><stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/></linearGradient><filter id="iconGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter></defs><style>@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&amp;family=JetBrains+Mono:wght@600&amp;display=swap'); #large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab .modern-card-button { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab .hover-overlay { transition: opacity 0.3s ease; } #large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab .modern-card-button:hover .hover-overlay { opacity: 0.05; }</style><g transform="scale(1.0)"><rect width="948" height="420" fill="url(#bg_grad_large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab)" rx="4"/><g transform="translate(10,10)" class="modern-card-button" onclick="window.open('https://www.apple.com', '_top')"><rect x="0" y="0" width="300" height="400" rx="8" fill="#ffffff" stroke="#22D3EE" stroke-width="1.5" filter="url(#cardShadow_large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab)"/><path d="M0 8 A8 8 0 0 1 8 0 L292 0 A8 8 0 0 1 300 8 L300 190 L0 190 Z" fill="url(#btn_eccdd256-565e-4e9a-8534-b044b66d23a6_gradient)"/><g opacity="0.2"><circle cx="260" cy="40" r="70" fill="none" stroke="white" stroke-width="0.5"/><circle cx="280" cy="80" r="50" fill="none" stroke="white" stroke-width="0.5"/></g><line x1="20" y1="190" x2="280" y2="190" stroke="#4338ca" stroke-width="0.5" opacity="0.2"/><g transform="translate(20, 210)"><text x="0" y="20" font-family="'JetBrains Mono', monospace" font-size="11.0" font-weight="600" fill="#22D3EE" style="text-transform: uppercase; letter-spacing: 2px;">Hardware</text><text x="0" y="50" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#111111" style="text-transform: uppercase; letter-spacing: -0.5px;"><tspan x="0" dy="0">Apple</tspan></text><text y="75" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" line-height="1.5"><tspan x="0" dy="0">Apple Inc. is an American</tspan><tspan x="0" dy="18">multinational technology company that</tspan><tspan x="0" dy="18">specializes in consumer electronics,</tspan><tspan x="0" dy="18">computer software and online</tspan></text><rect x="0" y="165" width="40" height="4" rx="2" fill="#22D3EE"/><text x="260" y="170" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="500" fill="#4338ca" opacity="0.8">01/30/1977</text></g><rect x="0" y="0" width="300" height="400" rx="24" fill="white" opacity="0" class="hover-overlay"/></g><g transform="translate(322,10)" class="modern-card-button" onclick="window.open('#[link-server]#[app]', '_top')"><rect x="0" y="0" width="300" height="400" rx="8" fill="#ffffff" stroke="#8B5CF6" stroke-width="1.5" filter="url(#cardShadow_large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab)"/><path d="M0 8 A8 8 0 0 1 8 0 L292 0 A8 8 0 0 1 300 8 L300 190 L0 190 Z" fill="url(#btn_b82aab64-2b40-4850-8a48-f05e52c06d18_gradient)"/><g opacity="0.2"><line x1="200" y1="0" x2="300" y2="100" stroke="white" stroke-width="0.5"/><line x1="215" y1="0" x2="300" y2="85" stroke="white" stroke-width="0.5"/><line x1="230" y1="0" x2="300" y2="70" stroke="white" stroke-width="0.5"/><line x1="245" y1="0" x2="300" y2="55" stroke="white" stroke-width="0.5"/><line x1="260" y1="0" x2="300" y2="40" stroke="white" stroke-width="0.5"/></g><g transform="translate(150, 95)"><circle cx="0" cy="0" r="50" fill="rgba(255,255,255,0.2)" filter="url(#iconGlow)"/><circle cx="0" cy="0" r="45" fill="rgba(255,255,255,0.95)"/><image href="../../images/docops.svg" x="-40" y="-40" width="80" height="80" preserveAspectRatio="xMidYMid meet"/></g><line x1="20" y1="190" x2="280" y2="190" stroke="#4338ca" stroke-width="0.5" opacity="0.2"/><g transform="translate(20, 210)"><text x="0" y="20" font-family="'JetBrains Mono', monospace" font-size="11.0" font-weight="600" fill="#8B5CF6" style="text-transform: uppercase; letter-spacing: 2px;">docs</text><text x="0" y="50" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#111111" style="text-transform: uppercase; letter-spacing: -0.5px;"><tspan x="0" dy="0">DocOps.io</tspan></text><text y="75" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" line-height="1.5"><tspan x="0" dy="0">Sharing documentation experience for</tspan><tspan x="0" dy="18">developers to extend with AsciiDoctor</tspan></text><rect x="0" y="165" width="40" height="4" rx="2" fill="#8B5CF6"/><text x="260" y="170" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="500" fill="#4338ca" opacity="0.8"></text></g><rect x="0" y="0" width="300" height="400" rx="24" fill="white" opacity="0" class="hover-overlay"/></g><g transform="translate(634,10)" class="modern-card-button" onclick="window.open('https://www.google.com', '_top')"><rect x="0" y="0" width="300" height="400" rx="8" fill="#ffffff" stroke="#E11D48" stroke-width="1.5" filter="url(#cardShadow_large_0746cda2-58e9-46c0-ad68-c0d1f1e04bab)"/><path d="M0 8 A8 8 0 0 1 8 0 L292 0 A8 8 0 0 1 300 8 L300 190 L0 190 Z" fill="url(#btn_d3ef612d-2feb-40ea-a71a-99acb4d86270_gradient)"/><g opacity="0.2"><circle cx="260" cy="40" r="70" fill="none" stroke="white" stroke-width="0.5"/><circle cx="280" cy="80" r="50" fill="none" stroke="white" stroke-width="0.5"/></g><line x1="20" y1="190" x2="280" y2="190" stroke="#4338ca" stroke-width="0.5" opacity="0.2"/><g transform="translate(20, 210)"><text x="0" y="20" font-family="'JetBrains Mono', monospace" font-size="11.0" font-weight="600" fill="#E11D48" style="text-transform: uppercase; letter-spacing: 2px;">advertisement</text><text x="0" y="50" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#111111" style="text-transform: uppercase; letter-spacing: -0.5px;"><tspan x="0" dy="0">Google</tspan></text><text y="75" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" line-height="1.5"><tspan x="0" dy="0">Google is is an American</tspan><tspan x="0" dy="18">multinational technology company that</tspan><tspan x="0" dy="18">specializes in Internet-related</tspan><tspan x="0" dy="18">services and products </tspan></text><rect x="0" y="165" width="40" height="4" rx="2" fill="#E11D48"/><text x="260" y="170" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="500" fill="#4338ca" opacity="0.8">07/30/1998</text></g><rect x="0" y="0" width="300" height="400" rx="24" fill="white" opacity="0" class="hover-overlay"/></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_c47767a063bfeb70.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_c47767a063bfeb70.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_c4135bf77333d080.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_c4135bf77333d080.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-c47767a063bfeb70')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-c47767a063bfeb70')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-c4135bf77333d080')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-c4135bf77333d080')">PNG</button>
 </div>
-<div id="modal-svgviewer-c47767a063bfeb70" class="svg-modal-svgviewer-c47767a063bfeb70" onclick="if(event.target === this) svgModalsvgviewer_c47767a063bfeb70.close()">
-    <div class="svg-modal-content-svgviewer-c47767a063bfeb70">
-        <button class="svg-modal-close-svgviewer-c47767a063bfeb70" onclick="svgModalsvgviewer_c47767a063bfeb70.close()">×</button>
-        <div id="modal-body-svgviewer-c47767a063bfeb70" class="svg-modal-body-svgviewer-c47767a063bfeb70"></div>
+<div id="modal-svgviewer-c4135bf77333d080" class="svg-modal-svgviewer-c4135bf77333d080" onclick="if(event.target === this) svgModalsvgviewer_c4135bf77333d080.close()">
+    <div class="svg-modal-content-svgviewer-c4135bf77333d080">
+        <button class="svg-modal-close-svgviewer-c4135bf77333d080" onclick="svgModalsvgviewer_c4135bf77333d080.close()">×</button>
+        <div id="modal-body-svgviewer-c4135bf77333d080" class="svg-modal-body-svgviewer-c4135bf77333d080"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-c47767a063bfeb70" class="svg-modal-svgviewer-c47767a063bfeb70" onclick="if(event.target === this) csvModalsvgviewer_c47767a063bfeb70.close()">
-    <div class="svg-modal-content-svgviewer-c47767a063bfeb70">
-        <button class="svg-modal-close-svgviewer-c47767a063bfeb70" onclick="csvModalsvgviewer_c47767a063bfeb70.close()">×</button>
-        <div class="svg-modal-header-svgviewer-c47767a063bfeb70" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-c4135bf77333d080" class="svg-modal-svgviewer-c4135bf77333d080" onclick="if(event.target === this) csvModalsvgviewer_c4135bf77333d080.close()">
+    <div class="svg-modal-content-svgviewer-c4135bf77333d080">
+        <button class="svg-modal-close-svgviewer-c4135bf77333d080" onclick="csvModalsvgviewer_c4135bf77333d080.close()">×</button>
+        <div class="svg-modal-header-svgviewer-c4135bf77333d080" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-c47767a063bfeb70" class="svg-modal-body-svgviewer-c47767a063bfeb70" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-c4135bf77333d080" class="svg-modal-body-svgviewer-c4135bf77333d080" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
@@ -2966,7 +2966,7 @@ imageblock .title {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-f1561b049b77faaa {
+  .svg-modal-svgviewer-4596f36bc3a34618 {
       display: none;
       position: fixed;
       top: 0;
@@ -2981,10 +2981,10 @@ imageblock .title {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-f1561b049b77faaa.active {
+  .svg-modal-svgviewer-4596f36bc3a34618.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-f1561b049b77faaa {
+  .svg-modal-content-svgviewer-4596f36bc3a34618 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2999,7 +2999,7 @@ imageblock .title {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-f1561b049b77faaa {
+  .svg-modal-close-svgviewer-4596f36bc3a34618 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -3017,11 +3017,11 @@ imageblock .title {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-f1561b049b77faaa:hover {
+  .svg-modal-close-svgviewer-4596f36bc3a34618:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-f1561b049b77faaa {
+  .svg-modal-body-svgviewer-4596f36bc3a34618 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3031,7 +3031,7 @@ imageblock .title {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-f1561b049b77faaa svg {
+  .svg-modal-body-svgviewer-4596f36bc3a34618 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3040,10 +3040,10 @@ imageblock .title {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-f1561b049b77faaa .csv-content {
+  #csv-modal-svgviewer-4596f36bc3a34618 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-f1561b049b77faaa .csv-table {
+  #csv-modal-svgviewer-4596f36bc3a34618 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3051,7 +3051,7 @@ imageblock .title {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-f1561b049b77faaa .csv-table th {
+  #csv-modal-svgviewer-4596f36bc3a34618 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3060,15 +3060,15 @@ imageblock .title {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-f1561b049b77faaa .csv-table td {
+  #csv-modal-svgviewer-4596f36bc3a34618 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-f1561b049b77faaa .csv-table tr {
+  #csv-modal-svgviewer-4596f36bc3a34618 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-f1561b049b77faaa .csv-table tr:hover {
+  #csv-modal-svgviewer-4596f36bc3a34618 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3076,10 +3076,10 @@ imageblock .title {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_f1561b049b77faaa = {
+  window.svgModalsvgviewer_4596f36bc3a34618 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-f1561b049b77faaa');
-          const sourceContainer = document.getElementById('svgviewer-f1561b049b77faaa');
+          const modal = document.getElementById('modal-svgviewer-4596f36bc3a34618');
+          const sourceContainer = document.getElementById('svgviewer-4596f36bc3a34618');
 
           if (!modal || !sourceContainer) return;
 
@@ -3088,7 +3088,7 @@ imageblock .title {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-f1561b049b77faaa');
+          const targetContainer = document.getElementById('modal-body-svgviewer-4596f36bc3a34618');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -3105,7 +3105,7 @@ imageblock .title {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-f1561b049b77faaa');
+          const modal = document.getElementById('modal-svgviewer-4596f36bc3a34618');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3114,9 +3114,9 @@ imageblock .title {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_f1561b049b77faaa = {
+  window.csvModalsvgviewer_4596f36bc3a34618 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-f1561b049b77faaa');
+          const modal = document.getElementById('csv-modal-svgviewer-4596f36bc3a34618');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -3127,11 +3127,11 @@ imageblock .title {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-f1561b049b77faaa');
+              window.svgViewer.loadCsvData('svgviewer-4596f36bc3a34618');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-f1561b049b77faaa');
+          const modal = document.getElementById('csv-modal-svgviewer-4596f36bc3a34618');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3142,20 +3142,20 @@ imageblock .title {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-f1561b049b77faaa');
+          const viewModal = document.getElementById('modal-svgviewer-4596f36bc3a34618');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_f1561b049b77faaa.close();
+              window.svgModalsvgviewer_4596f36bc3a34618.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-f1561b049b77faaa');
+          const csvModal = document.getElementById('csv-modal-svgviewer-4596f36bc3a34618');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_f1561b049b77faaa.close();
+              window.csvModalsvgviewer_4596f36bc3a34618.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-f1561b049b77faaa" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=buttons&payload=H4sIAIt7h2kA_51VW2_aMBR-3684Sl8DhNILo9MkSunWahdpnbRJFQ_GOUmsOnZkm1sr_vuOQyDZKF03CYXkOxcff-fz8dMbgGA6c04rGwzgnj4BnsonGSSboiQ4GObsUSv4gVO4QzMXHG0Q7ryEevBOmXOFHXQ6i8WizcqANtd57Rej5UYUTmhV5_QuIdwo3gZhgSkY5mgEp5d8Jp1QzLszCQ55prTU6QooomBqBYtM8AwSzWcWLVB52CIThXMMgUs9i0vXGWVJQ4hFKhwlss4gy0uIqRiYcSIRXJBFKIdSihQVx7pqtyrQl2udNpgYrVxjR8yVthphM5dps2OyxG4xSeASH7UNKnBS_q_DQ2wXhcS_8OtdXqbXe_wfsS5jDmyBnhXxSNwKRTZlZ5QBUCJ3RIPgNqz4JdTqxC2YwZJTrahkBFsppQ37bH5kJvb--1xG3U4v6nTfnp_XNsynGMcY3-Qs9U5PNbnUEx_1rtzu-y3B6xcbcudwjnCrp7WId-gP_agEe3hlp640_1rYttD73Tq6928tTwKaydE9dWxysFl3GTMkSYhJzDkqVzYHcFlQy7wcSeUGYqpPaoIsOE1Gh8T1QrgMhpYLQbWQRPepppz2X6hstzv0E95uOxSsaYN2nu5T-zr1b2j9phnPmmzfkBC_aYt_Ev30kupzwY32Uvtd-bt2fN7aDxL9zLmulBs83-lnqlDoEimWB2r4srEerCDXc9Gcnts6Kvw1NKRap3-e_t36H0rjvxCAzFBvNgvTcxLWd8L37XEd_ywDA5dhXssmyHD5iY66HSs2lRiTIWHS4mYNGplGP-CIhospT0SSsDiKqgoC7nG_wGdW-Ix1J7xvdNo_fnsWhL5Bfg6VYI_1pslZsG5msA25BUfjbvfqpF9v8uj4-Ko3HjeA_uXp6PqsAYxOolE0agAnp2fdfjPk-vr0cjjeMDTZ7o0z6SuN2v26mlle3qK9CtlweOdWsnnSNq3aokFCN0oroRtJrgYwNLTVED6inKOjYR2CZcr6ISKSCyhdLU1kWuK4WFbAAkWauQGcR9HWxecegNImZ7LC5jRgmCI3S5hscVbYC5r9S9eKkWtTDhwfovCilsL6zfoXdEkZsiEIAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=buttons&filename=ghi.svg" data-original-content="{
+<div class="svg-with-controls docops-media-card" id="svgviewer-4596f36bc3a34618" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=buttons&payload=H4sIAEmEimkA_51VW2_aMBR-3684Sl8DhNILo9MkSunWahdpnbRJFQ_GOUmsOnZkm1sr_vuOQyDZKF03CYXkOxcff-fz8dMbgGA6c04rGwzgnj4BnsonGSSboiQ4GObsUSv4gVO4QzMXHG0Q7ryEevBOmXOFHXQ6i8WizcqANtd57Rej5UYUTmhV5_QuIdwo3gZhgSkY5mgEp5d8Jp1QzLszCQ55prTU6QooomBqBYtM8AwSzWcWLVB52CIThXMMgUs9i0vXGWVJQ4hFKhwlss4gy0uIqRiYcSIRXJBFKIdSihQVx7pqtyrQl2udNpgYrVxjR8yVthphM5dps2OyxG4xSeASH7UNKnBS_q_DQ2wXhcS_8OtdXqbXe_wfsS5jDmyBnhXxSNwKRTZlZ5QBUCJ3RIPgNqz4JdTqxC2YwZJTrahkBFsppQ37bH5kJvb--1xG3U4v6nTfnp_XNsynGMcY3-Qs9U5PNbnUEx_1rtzu-y3B6xcbcudwjnCrp7WId-gP_agEe3hlp640_1rYttD73Tq6928tTwKaydE9dWxysFl3GTMkSYhJzDkqVzYHcFlQy7wcSeUGYqpPaoIsOE1Gh8T1QrgMhpYLQbWQRPepppz2X6hstzv0E95uOxSsaYN2nu5T-zr1b2j9phnPmmzfkBC_aYt_Ev30kupzwY32Uvtd-bt2fN7aDxL9zLmulBs83-lnqlDoEimWB2r4srEerCDXc9Gcnts6Kvw1NKRap3-e_t36H0rjvxCAzFBvNgvTcxLWd8L37XEd_ywDA5dhXssmyHD5iY66HSs2lRiTIWHS4mYNGplGP-CIhospT0SSsDiKqgoC7nG_wGdW-Ix1J7xvdNo_fnsWhL5Bfg6VYI_1pslZsG5msA25BUfjbvfqpF9v8uj4-Ko3HjeA_uXp6PqsAYxOolE0agAnp2fdfjPk-vr0cjjeMDTZ7o0z6SuN2v26mlle3qK9CtlweOdWsnnSNq3aokFCN0oroRtJrgYwNLTVED6inKOjYR2CZcr6ISKSCyhdLU1kWuK4WFbAAkWauQGcR9HWxecegNImZ7LC5jRgmCI3S5hscVbYC5r9S9eKkWtTDhwfovCilsL6zfoXdEkZsiEIAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=buttons&filename=ghi.svg" data-original-content="{
   &quot;buttons&quot;: [
     {
       &quot;label&quot;: &quot;Amazon Web Services&quot;,
@@ -3232,28 +3232,28 @@ imageblock .title {
     }
   }
 }" data-kind="buttons">
-<svg xmlns="http://www.w3.org/2000/svg" width="732.0" height="692.0" viewBox="0 0 915 865.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="c4d2e32e-8927-4087-b8ee-10f260bdbc80" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["Amazon Web Services","https://www.amazon.com","Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence","storefront","#8B5CF6","true","false"],["Apple","https://www.apple.com","Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software and online services. ","Hardware","#C40C0C","true","false"],["DocOps.io","#[link-server]#[app]","Sharing documentation experience for developers to extend with AsciiDoctor","docs","#45618E","true","false"],["Google","https://www.google.com","","search","#E11D48","true","false"],["Microsoft","https://www.microsoft.com","","software","#058296","true","false"],["Netflix","https://www.netflix.com","movies","movies","#FF5BAE","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); /* Typography driven by ThemeFactory */ .hex-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 800; text-transform: uppercase; } @keyframes hexEntrance { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } } .hex-container { cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-box: fill-box; transform-origin: center; animation: hexEntrance 0.6s ease-out backwards; } .hex-container:hover { transform: scale(1.05); } /* Neon Pulse Animation for Active State using Theme Accent */ @keyframes neonPulse { 0% { filter: drop-shadow(0 0 2px #6366f1); opacity: 0.9; } 50% { filter: drop-shadow(0 0 12px #6366f1); opacity: 1; } 100% { filter: drop-shadow(0 0 2px #6366f1); opacity: 0.9; } }</style><linearGradient id="hexGrad_b4eb67ae-24dd-471d-b323-2a8920986702" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8B5CF6" /><stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_2c02c170-7f98-4816-ae4e-6c6cd1ffcc6e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#C40C0C" /><stop offset="100%" stop-color="#C40C0C" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_a136d4ff-c858-44b6-b726-ea600453a0a0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#45618E" /><stop offset="100%" stop-color="#45618E" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_3cb1c4a4-a600-4798-9f56-7dcea8b150f1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E11D48" /><stop offset="100%" stop-color="#E11D48" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_cae7212b-9a4c-4175-86ab-b15ae9d2f705" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#058296" /><stop offset="100%" stop-color="#058296" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_5ad552bf-9d27-4595-bdba-61526bd4e996" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FF5BAE" /><stop offset="100%" stop-color="#FF5BAE" stop-opacity="0.7" /></linearGradient><filter id="hexShadow_c4d2e32e-8927-4087-b8ee-10f260bdbc80" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(99,102,241,0.12)"/></filter></defs><circle cx="50%" cy="50%" r="400" fill="#6366f1" fill-opacity="0.02" /><g>    <g transform="translate(10,10)"><g class="hex-container " onclick="window.open('https://www.amazon.com', '_top')"  style="animation-delay: 0.0s;cursor: pointer;"><title>Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_b4eb67ae-24dd-471d-b323-2a8920986702)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_c4d2e32e-8927-4087-b8ee-10f260bdbc80)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="121" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"></tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Amazon </tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Web </tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Services </tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="254" x2="190" y2="254" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="277" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">STOREFRONT</text></g></g>                <g transform="translate(305,10)"><g class="hex-container " onclick="window.open('https://www.apple.com', '_top')"  style="animation-delay: 0.30000000000000004s;cursor: pointer;"><title>Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software and online services. </title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_2c02c170-7f98-4816-ae4e-6c6cd1ffcc6e)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_c4d2e32e-8927-4087-b8ee-10f260bdbc80)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"><svg width="128" height="128" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" fill="#000000" filter="url(#Bevel2)"/></svg></g><!-- Main Label --><text x="149" y="181" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Apple</tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="218" x2="190" y2="218" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="241" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">HARDWARE</text></g></g>                <g transform="translate(600,10)"><g class="hex-container " onclick="window.open('#[link-server]#[app]', '_top')"  style="animation-delay: 0.6000000000000001s;cursor: pointer;"><title>Sharing documentation experience for developers to extend with AsciiDoctor</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_a136d4ff-c858-44b6-b726-ea600453a0a0)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_c4d2e32e-8927-4087-b8ee-10f260bdbc80)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" filter="url(#Bevel2)"><image width='50' height="50" xlink:href="../../images/docops.svg" href="../../images/docops.svg" /></svg></g><!-- Main Label --><text x="149" y="161" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"></tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">DocOps.io </tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="230" x2="190" y2="230" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="253" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">DOCS</text></g></g>    <g transform="translate(155,265)"><g class="hex-container " onclick="window.open('https://www.google.com', '_top')"  style="animation-delay: 0.30000000000000004s;cursor: pointer;"><title>Google</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_3cb1c4a4-a600-4798-9f56-7dcea8b150f1)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_c4d2e32e-8927-4087-b8ee-10f260bdbc80)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="181" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Google</tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="218" x2="190" y2="218" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="241" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">SEARCH</text></g></g>    <g transform="translate(450,265)"><g class="hex-container " onclick="window.open('https://www.microsoft.com', '_top')"  style="animation-delay: 0.6000000000000001s;cursor: pointer;"><title>Microsoft</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_cae7212b-9a4c-4175-86ab-b15ae9d2f705)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_c4d2e32e-8927-4087-b8ee-10f260bdbc80)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="161" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"></tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Microsoft </tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="230" x2="190" y2="230" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="253" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">SOFTWARE</text></g></g>    <g transform="translate(10,520)"><g class="hex-container " onclick="window.open('https://www.netflix.com', '_top')"  style="animation-delay: 0.5s;cursor: pointer;"><title>movies</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_5ad552bf-9d27-4595-bdba-61526bd4e996)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_c4d2e32e-8927-4087-b8ee-10f260bdbc80)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="181" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Netflix</tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="218" x2="190" y2="218" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="241" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">MOVIES</text></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="732.0" height="692.0" viewBox="0 0 915 865.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="2ef5da88-ec1e-4878-a62b-28df2dec5282" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label","Link","Description","Type","Color","Enabled","Active"],"rows":[["Amazon Web Services","https://www.amazon.com","Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence","storefront","#8B5CF6","true","false"],["Apple","https://www.apple.com","Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software and online services. ","Hardware","#C40C0C","true","false"],["DocOps.io","#[link-server]#[app]","Sharing documentation experience for developers to extend with AsciiDoctor","docs","#45618E","true","false"],["Google","https://www.google.com","","search","#E11D48","true","false"],["Microsoft","https://www.microsoft.com","","software","#058296","true","false"],["Netflix","https://www.netflix.com","movies","movies","#FF5BAE","true","false"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc>                <defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); /* Typography driven by ThemeFactory */ .hex-label { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 800; text-transform: uppercase; } @keyframes hexEntrance { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } } .hex-container { cursor: pointer; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-box: fill-box; transform-origin: center; animation: hexEntrance 0.6s ease-out backwards; } .hex-container:hover { transform: scale(1.05); } /* Neon Pulse Animation for Active State using Theme Accent */ @keyframes neonPulse { 0% { filter: drop-shadow(0 0 2px #6366f1); opacity: 0.9; } 50% { filter: drop-shadow(0 0 12px #6366f1); opacity: 1; } 100% { filter: drop-shadow(0 0 2px #6366f1); opacity: 0.9; } }</style><linearGradient id="hexGrad_b5adeb22-128e-46c2-b719-a167acbc0314" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8B5CF6" /><stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_1657d230-10f5-4cf3-8b9e-5842a68bfedf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#C40C0C" /><stop offset="100%" stop-color="#C40C0C" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_ede876c8-fd4d-43e7-b86a-3ec2030e0ca9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#45618E" /><stop offset="100%" stop-color="#45618E" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_8297af34-40cc-41f9-a60c-4bfb9717a90e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E11D48" /><stop offset="100%" stop-color="#E11D48" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_9e794bf5-0cd3-4f55-80a3-34c8d9eb957c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#058296" /><stop offset="100%" stop-color="#058296" stop-opacity="0.7" /></linearGradient><linearGradient id="hexGrad_ed43391e-a410-4a3b-b5b7-5fc1aaa9349f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FF5BAE" /><stop offset="100%" stop-color="#FF5BAE" stop-opacity="0.7" /></linearGradient><filter id="hexShadow_2ef5da88-ec1e-4878-a62b-28df2dec5282" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(99,102,241,0.12)"/></filter></defs><circle cx="50%" cy="50%" r="400" fill="#6366f1" fill-opacity="0.02" /><g>    <g transform="translate(10,10)"><g class="hex-container " onclick="window.open('https://www.amazon.com', '_top')"  style="animation-delay: 0.0s;cursor: pointer;"><title>Amazon.com, Inc. is an American multinational technology company which focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_b5adeb22-128e-46c2-b719-a167acbc0314)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_2ef5da88-ec1e-4878-a62b-28df2dec5282)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="121" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"></tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Amazon </tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Web </tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Services </tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="254" x2="190" y2="254" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="277" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">STOREFRONT</text></g></g>                <g transform="translate(305,10)"><g class="hex-container " onclick="window.open('https://www.apple.com', '_top')"  style="animation-delay: 0.30000000000000004s;cursor: pointer;"><title>Apple Inc. is an American multinational technology company that specializes in consumer electronics, computer software and online services. </title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_1657d230-10f5-4cf3-8b9e-5842a68bfedf)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_2ef5da88-ec1e-4878-a62b-28df2dec5282)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"><svg width="128" height="128" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" fill="#000000" filter="url(#Bevel2)"/></svg></g><!-- Main Label --><text x="149" y="181" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Apple</tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="218" x2="190" y2="218" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="241" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">HARDWARE</text></g></g>                <g transform="translate(600,10)"><g class="hex-container " onclick="window.open('#[link-server]#[app]', '_top')"  style="animation-delay: 0.6000000000000001s;cursor: pointer;"><title>Sharing documentation experience for developers to extend with AsciiDoctor</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_ede876c8-fd4d-43e7-b86a-3ec2030e0ca9)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_2ef5da88-ec1e-4878-a62b-28df2dec5282)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" filter="url(#Bevel2)"><image width='50' height="50" xlink:href="../../images/docops.svg" href="../../images/docops.svg" /></svg></g><!-- Main Label --><text x="149" y="161" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"></tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">DocOps.io </tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="230" x2="190" y2="230" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="253" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">DOCS</text></g></g>    <g transform="translate(155,265)"><g class="hex-container " onclick="window.open('https://www.google.com', '_top')"  style="animation-delay: 0.30000000000000004s;cursor: pointer;"><title>Google</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_8297af34-40cc-41f9-a60c-4bfb9717a90e)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_2ef5da88-ec1e-4878-a62b-28df2dec5282)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="181" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Google</tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="218" x2="190" y2="218" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="241" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">SEARCH</text></g></g>    <g transform="translate(450,265)"><g class="hex-container " onclick="window.open('https://www.microsoft.com', '_top')"  style="animation-delay: 0.6000000000000001s;cursor: pointer;"><title>Microsoft</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_9e794bf5-0cd3-4f55-80a3-34c8d9eb957c)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_2ef5da88-ec1e-4878-a62b-28df2dec5282)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="161" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"></tspan><tspan x="149" text-anchor="middle" dy="40" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Microsoft </tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="230" x2="190" y2="230" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="253" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">SOFTWARE</text></g></g>    <g transform="translate(10,520)"><g class="hex-container " onclick="window.open('https://www.netflix.com', '_top')"  style="animation-delay: 0.5s;cursor: pointer;"><title>movies</title><!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) --><!-- Layer 2: Hexagon Base --><polygon points="291,254 149,336 7,254 7,90 149,8 291,90" fill="url(#hexGrad_ed43391e-a410-4a3b-b5b7-5fc1aaa9349f)" stroke="#f8fafc" stroke-opacity="1.0" stroke-width="1" filter="url(#hexShadow_2ef5da88-ec1e-4878-a62b-28df2dec5282)"/><!-- Layer 3: Glass highlight --><polygon points="149,15 280,95 149,175 18,95" fill="white" fill-opacity="0.03" pointer-events="none"/><!-- Icon Wrapper --><g transform="translate(120,50) scale(0.8)"></g><!-- Main Label --><text x="149" y="181" text-anchor="middle" fill="#f8fafc" class="hex-label" font-size="32" style="fill: #f8fafc !important;"><tspan x="149" text-anchor="middle" dy="0" style="font-family: 'Archivo', -apple-system, sans-serif !important; letter-spacing: 0.5px; fill: #f8fafc !important; font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;">Netflix</tspan></text><!-- Sharp Accent Line: Uses secondary accent color --><line x1="110" y1="218" x2="190" y2="218" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/><!-- Type Text: Uses secondary accent color --><text x="149" y="241" text-anchor="middle" fill="#38bdf8" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="800" style="letter-spacing: 2px; fill: #38bdf8 !important; opacity: 0.9;">MOVIES</text></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_f1561b049b77faaa.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_f1561b049b77faaa.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_4596f36bc3a34618.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_4596f36bc3a34618.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-f1561b049b77faaa')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-f1561b049b77faaa')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-4596f36bc3a34618')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-4596f36bc3a34618')">PNG</button>
 </div>
-<div id="modal-svgviewer-f1561b049b77faaa" class="svg-modal-svgviewer-f1561b049b77faaa" onclick="if(event.target === this) svgModalsvgviewer_f1561b049b77faaa.close()">
-    <div class="svg-modal-content-svgviewer-f1561b049b77faaa">
-        <button class="svg-modal-close-svgviewer-f1561b049b77faaa" onclick="svgModalsvgviewer_f1561b049b77faaa.close()">×</button>
-        <div id="modal-body-svgviewer-f1561b049b77faaa" class="svg-modal-body-svgviewer-f1561b049b77faaa"></div>
+<div id="modal-svgviewer-4596f36bc3a34618" class="svg-modal-svgviewer-4596f36bc3a34618" onclick="if(event.target === this) svgModalsvgviewer_4596f36bc3a34618.close()">
+    <div class="svg-modal-content-svgviewer-4596f36bc3a34618">
+        <button class="svg-modal-close-svgviewer-4596f36bc3a34618" onclick="svgModalsvgviewer_4596f36bc3a34618.close()">×</button>
+        <div id="modal-body-svgviewer-4596f36bc3a34618" class="svg-modal-body-svgviewer-4596f36bc3a34618"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-f1561b049b77faaa" class="svg-modal-svgviewer-f1561b049b77faaa" onclick="if(event.target === this) csvModalsvgviewer_f1561b049b77faaa.close()">
-    <div class="svg-modal-content-svgviewer-f1561b049b77faaa">
-        <button class="svg-modal-close-svgviewer-f1561b049b77faaa" onclick="csvModalsvgviewer_f1561b049b77faaa.close()">×</button>
-        <div class="svg-modal-header-svgviewer-f1561b049b77faaa" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-4596f36bc3a34618" class="svg-modal-svgviewer-4596f36bc3a34618" onclick="if(event.target === this) csvModalsvgviewer_4596f36bc3a34618.close()">
+    <div class="svg-modal-content-svgviewer-4596f36bc3a34618">
+        <button class="svg-modal-close-svgviewer-4596f36bc3a34618" onclick="csvModalsvgviewer_4596f36bc3a34618.close()">×</button>
+        <div class="svg-modal-header-svgviewer-4596f36bc3a34618" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-f1561b049b77faaa" class="svg-modal-body-svgviewer-f1561b049b77faaa" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-4596f36bc3a34618" class="svg-modal-body-svgviewer-4596f36bc3a34618" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>

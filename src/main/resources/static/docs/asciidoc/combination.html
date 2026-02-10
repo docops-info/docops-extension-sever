@@ -2140,10 +2140,10 @@ window.onload = function() {
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
-<body class="book toc2 toc-left">
+<body class="book">
 <div id="header">
 <h1>Combination Charts</h1>
-<div id="toc" class="toc2">
+<div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#top">1. Introduction</a>
@@ -2256,7 +2256,7 @@ window.onload = function() {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-f3c2ea30df88bcf7 {
+  .svg-modal-svgviewer-46769607c4780d95 {
       display: none;
       position: fixed;
       top: 0;
@@ -2271,10 +2271,10 @@ window.onload = function() {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-f3c2ea30df88bcf7.active {
+  .svg-modal-svgviewer-46769607c4780d95.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-f3c2ea30df88bcf7 {
+  .svg-modal-content-svgviewer-46769607c4780d95 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2289,7 +2289,7 @@ window.onload = function() {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-f3c2ea30df88bcf7 {
+  .svg-modal-close-svgviewer-46769607c4780d95 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2307,11 +2307,11 @@ window.onload = function() {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-f3c2ea30df88bcf7:hover {
+  .svg-modal-close-svgviewer-46769607c4780d95:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-f3c2ea30df88bcf7 {
+  .svg-modal-body-svgviewer-46769607c4780d95 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2321,7 +2321,7 @@ window.onload = function() {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-f3c2ea30df88bcf7 svg {
+  .svg-modal-body-svgviewer-46769607c4780d95 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2330,10 +2330,10 @@ window.onload = function() {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-f3c2ea30df88bcf7 .csv-content {
+  #csv-modal-svgviewer-46769607c4780d95 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-f3c2ea30df88bcf7 .csv-table {
+  #csv-modal-svgviewer-46769607c4780d95 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2341,7 +2341,7 @@ window.onload = function() {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-f3c2ea30df88bcf7 .csv-table th {
+  #csv-modal-svgviewer-46769607c4780d95 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2350,15 +2350,15 @@ window.onload = function() {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-f3c2ea30df88bcf7 .csv-table td {
+  #csv-modal-svgviewer-46769607c4780d95 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-f3c2ea30df88bcf7 .csv-table tr {
+  #csv-modal-svgviewer-46769607c4780d95 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-f3c2ea30df88bcf7 .csv-table tr:hover {
+  #csv-modal-svgviewer-46769607c4780d95 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2366,10 +2366,10 @@ window.onload = function() {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_f3c2ea30df88bcf7 = {
+  window.svgModalsvgviewer_46769607c4780d95 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-f3c2ea30df88bcf7');
-          const sourceContainer = document.getElementById('svgviewer-f3c2ea30df88bcf7');
+          const modal = document.getElementById('modal-svgviewer-46769607c4780d95');
+          const sourceContainer = document.getElementById('svgviewer-46769607c4780d95');
 
           if (!modal || !sourceContainer) return;
 
@@ -2378,7 +2378,7 @@ window.onload = function() {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-f3c2ea30df88bcf7');
+          const targetContainer = document.getElementById('modal-body-svgviewer-46769607c4780d95');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2395,7 +2395,7 @@ window.onload = function() {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-f3c2ea30df88bcf7');
+          const modal = document.getElementById('modal-svgviewer-46769607c4780d95');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2404,9 +2404,9 @@ window.onload = function() {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_f3c2ea30df88bcf7 = {
+  window.csvModalsvgviewer_46769607c4780d95 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-f3c2ea30df88bcf7');
+          const modal = document.getElementById('csv-modal-svgviewer-46769607c4780d95');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2417,11 +2417,11 @@ window.onload = function() {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-f3c2ea30df88bcf7');
+              window.svgViewer.loadCsvData('svgviewer-46769607c4780d95');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-f3c2ea30df88bcf7');
+          const modal = document.getElementById('csv-modal-svgviewer-46769607c4780d95');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2432,20 +2432,20 @@ window.onload = function() {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-f3c2ea30df88bcf7');
+          const viewModal = document.getElementById('modal-svgviewer-46769607c4780d95');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_f3c2ea30df88bcf7.close();
+              window.svgModalsvgviewer_46769607c4780d95.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-f3c2ea30df88bcf7');
+          const csvModal = document.getElementById('csv-modal-svgviewer-46769607c4780d95');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_f3c2ea30df88bcf7.close();
+              window.csvModalsvgviewer_46769607c4780d95.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-f3c2ea30df88bcf7" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=combination&payload=H4sIAIt7h2kA_5WPXQuCMBSG7_crBhXUhZJTa114YR-E0JfzqsupBxLEYM1K8Md3pIQgBNvFu7PxPmOPznQOXlhKpUHlFRVwh6IEKouUbtX1oS9USA3kuZMx5G2RVO9j2x4PJ5-rCJJrkUpVeV80HY8mJC1lfvaf2c3TqgRiGAZp8ZoufYEZWhjuFBfuA9tZ8DTG6SSCvS_Ov3WGMXN7122Mef_XHQzeWf_Wq-kuOGxaAcs13QaBuZPYCU7RZnU8rLuhRsPiJvsLamQYM_lfUKPEeNf3XlTeonAMAgAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=combination&filename=ghi.svg" data-original-content="title=Quarterly Revenue and Growth Rate
+<div class="svg-with-controls docops-media-card" id="svgviewer-46769607c4780d95" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=combination&payload=H4sIACWFimkA_5WPXQuCMBSG7_crBhXUhZJTa114YR-E0JfzqsupBxLEYM1K8Md3pIQgBNvFu7PxPmOPznQOXlhKpUHlFRVwh6IEKouUbtX1oS9USA3kuZMx5G2RVO9j2x4PJ5-rCJJrkUpVeV80HY8mJC1lfvaf2c3TqgRiGAZp8ZoufYEZWhjuFBfuA9tZ8DTG6SSCvS_Ov3WGMXN7122Mef_XHQzeWf_Wq-kuOGxaAcs13QaBuZPYCU7RZnU8rLuhRsPiJvsLamQYM_lfUKPEeNf3XlTeonAMAgAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=combination&filename=ghi.svg" data-original-content="title=Quarterly Revenue and Growth Rate
 xLabel=Quarter
 yLabel=Revenue ($)
 yLabelSecondary=Growth Rate (%)
@@ -2459,28 +2459,28 @@ Growth Rate | LINE | Q1 | 15.5 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q2 | 18.2 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q3 | 22.8 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q4 | 28.5 | #e74c3c | SECONDARY" data-kind="combination">
-<?xml version="1.0" encoding="UTF-8"?><svg id="combo_chart_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9" width="590.6249999926172" height="337.49999999578125" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Combination Chart'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-07</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Series","Type","X","Y","Color"],"rows":[["Revenue","BAR","Q1","50000.0","#3498db"],["Revenue","BAR","Q2","65000.0","#3498db"],["Revenue","BAR","Q3","70000.0","#3498db"],["Revenue","BAR","Q4","80000.0","#3498db"],["Growth Rate","LINE","Q1","15.5","#e74c3c"],["Growth Rate","LINE","Q2","18.2","#e74c3c"],["Growth Rate","LINE","Q3","22.8","#e74c3c"],["Growth Rate","LINE","Q4","28.5","#e74c3c"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="barGradient_Revenue_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3498db"/><stop offset="100%" stop-color="#246a99"/></linearGradient><linearGradient id="lineGradient_Growth_Rate_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e74c3c" stop-opacity="0.3"/><stop offset="100%" stop-color="#e74c3c" stop-opacity="0.1"/></linearGradient><filter id="dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="glow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="legendGlass_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9" x="0" y="0" width="100%" height="100%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" /></filter><pattern id="dotPattern_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.4" /></pattern><style>#combo_chart_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9 .chart-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; letter-spacing: -0.5px; } #combo_chart_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9 .chart-grid { stroke: #2563eb; stroke-dasharray: 3,3; stroke-opacity: 0.2; } #combo_chart_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9 .chart-axis { stroke: #2563eb; stroke-width: 1.5; stroke-opacity: 0.5; } @keyframes revealBar { from { transform: scaleY(0); opacity: 0; } to { transform: scaleY(1); opacity: 1; } } @keyframes revealPoint { from { r: 0; opacity: 0; } to { r: 5; opacity: 1; } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .bar-reveal { animation: revealBar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-origin: bottom; } .point-reveal { animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; } .fade-in { animation: fadeIn 0.8s ease-out forwards; } #combo_chart_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9 .glass-bar { transition: all 0.3s ease; } #combo_chart_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9 .glass-bar:hover { filter: url(#glassGlow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9); transform: scale(1.02); cursor: pointer; }</style></defs><rect width="100%" height="100%" fill="#ffffff" rx="10" ry="10"/><rect width="100%" height="100%" fill="url(#dotPattern_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" rx="10" ry="10" opacity="0.5"/><g class="fade-in"><rect x="200" y="10" width="400" height="40" rx="10" ry="10" fill="rgba(255, 255, 255, 0.9)" stroke="#2563eb" stroke-opacity="0.2"/><text x="400" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#111111" font-family="Arial, Helvetica, sans-serif">Quarterly Revenue and Growth Rate</text></g><g class="chart-grid fade-in"><line x1="80" y1="150" x2="720" y2="150"/><line x1="80" y1="200" x2="720" y2="200"/><line x1="80" y1="250" x2="720" y2="250"/><line x1="80" y1="300" x2="720" y2="300"/><line x1="80" y1="350" x2="720" y2="350"/><line x1="80" y1="400" x2="720" y2="400"/><line x1="80" y1="450" x2="720" y2="450"/><line x1="80" y1="500" x2="720" y2="500"/><line x1="180" y1="100" x2="180" y2="500"/><line x1="280" y1="100" x2="280" y2="500"/><line x1="380" y1="100" x2="380" y2="500"/><line x1="480" y1="100" x2="480" y2="500"/><line x1="580" y1="100" x2="580" y2="500"/><line x1="680" y1="100" x2="680" y2="500"/></g><g class="chart-axis fade-in"><line x1="80" y1="100" x2="80" y2="500"/><line x1="80" y1="500" x2="720" y2="500"/><line x1="720" y1="100" x2="720" y2="500"/></g><g class="chart-text fade-in"><text x="400" y="550" text-anchor="middle" font-size="14" font-weight="bold">Quarter</text><text x="30" y="300" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(-90, 30, 300)">Revenue ($)</text><text x="770" y="300" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(90, 770, 300)">Growth Rate (%)</text></g><g class="chart-text fade-in"><line x1="80.0" y1="500" x2="80.0" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="80.0" y="525" text-anchor="middle" font-size="12">Q1</text><line x1="293.33333333333337" y1="500" x2="293.33333333333337" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="293.33333333333337" y="525" text-anchor="middle" font-size="12">Q2</text><line x1="506.6666666666667" y1="500" x2="506.6666666666667" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="506.6666666666667" y="525" text-anchor="middle" font-size="12">Q3</text><line x1="720.0" y1="500" x2="720.0" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="720.0" y="525" text-anchor="middle" font-size="12">Q4</text><line x1="75" y1="500" x2="80" y2="500" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="500" text-anchor="end" font-size="12" dominant-baseline="middle">50000</text><line x1="75" y1="450" x2="80" y2="450" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="450" text-anchor="end" font-size="12" dominant-baseline="middle">53750</text><line x1="75" y1="400" x2="80" y2="400" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="400" text-anchor="end" font-size="12" dominant-baseline="middle">57500</text><line x1="75" y1="350" x2="80" y2="350" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="350" text-anchor="end" font-size="12" dominant-baseline="middle">61250</text><line x1="75" y1="300" x2="80" y2="300" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="300" text-anchor="end" font-size="12" dominant-baseline="middle">65000</text><line x1="75" y1="250" x2="80" y2="250" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="250" text-anchor="end" font-size="12" dominant-baseline="middle">68750</text><line x1="75" y1="200" x2="80" y2="200" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="200" text-anchor="end" font-size="12" dominant-baseline="middle">72500</text><line x1="75" y1="150" x2="80" y2="150" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="150" text-anchor="end" font-size="12" dominant-baseline="middle">76250</text><line x1="75" y1="100" x2="80" y2="100" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="100" text-anchor="end" font-size="12" dominant-baseline="middle">80000</text><line x1="720" y1="500" x2="725" y2="500" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="500" text-anchor="start" font-size="12" dominant-baseline="middle">15.5</text><line x1="720" y1="450" x2="725" y2="450" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="450" text-anchor="start" font-size="12" dominant-baseline="middle">17.1</text><line x1="720" y1="400" x2="725" y2="400" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="400" text-anchor="start" font-size="12" dominant-baseline="middle">18.8</text><line x1="720" y1="350" x2="725" y2="350" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="350" text-anchor="start" font-size="12" dominant-baseline="middle">20.4</text><line x1="720" y1="300" x2="725" y2="300" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="300" text-anchor="start" font-size="12" dominant-baseline="middle">22</text><line x1="720" y1="250" x2="725" y2="250" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="250" text-anchor="start" font-size="12" dominant-baseline="middle">23.6</text><line x1="720" y1="200" x2="725" y2="200" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="200" text-anchor="start" font-size="12" dominant-baseline="middle">25.3</text><line x1="720" y1="150" x2="725" y2="150" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="150" text-anchor="start" font-size="12" dominant-baseline="middle">26.9</text><line x1="720" y1="100" x2="725" y2="100" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="100" text-anchor="start" font-size="12" dominant-baseline="middle">28.5</text></g><rect x="90.0" y="500.0" width="96.0" height="0.0" fill="url(#barGradient_Revenue_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q1 = 50000</title></rect><rect x="264.66666666666663" y="300.0" width="96.0" height="200.0" fill="url(#barGradient_Revenue_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q2 = 65000</title></rect><text x="312.66666666666663" y="295.0" text-anchor="middle" font-size="10" class="chart-text fade-in">65000</text><rect x="439.3333333333333" y="233.33333333333337" width="96.0" height="266.66666666666663" fill="url(#barGradient_Revenue_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q3 = 70000</title></rect><text x="487.3333333333333" y="228.33333333333337" text-anchor="middle" font-size="10" class="chart-text fade-in">70000</text><rect x="614.0" y="100.0" width="96.0" height="400.0" fill="url(#barGradient_Revenue_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q4 = 80000</title></rect><text x="662.0" y="95.0" text-anchor="middle" font-size="10" class="chart-text fade-in">80000</text><path d="M 138.0 500.0 C 196.2222222222222 500.0 254.44444444444443 416.9230769230769 312.66666666666663 416.9230769230769 C 370.88888888888886 416.9230769230769 429.1111111111111 275.38461538461536 487.3333333333333 275.38461538461536 C 545.5555555555555 275.38461538461536 603.7777777777778 100.0 662.0 100.0 L 662.0 500 L 138.0 500 Z" fill="url(#lineGradient_Growth_Rate_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" opacity="0.3" class="fade-in"/><path d="M 138.0 500.0 C 196.2222222222222 500.0 254.44444444444443 416.9230769230769 312.66666666666663 416.9230769230769 C 370.88888888888886 416.9230769230769 429.1111111111111 275.38461538461536 487.3333333333333 275.38461538461536 C 545.5555555555555 275.38461538461536 603.7777777777778 100.0 662.0 100.0" fill="none" stroke="#e74c3c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" class="fade-in"/><circle cx="138.0" cy="500.0" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" class="point-reveal" style="animation-delay: 0.0s"><title>Growth Rate: Q1 = 15.5</title></circle><text x="138.0" y="490.0" text-anchor="middle" font-size="10" class="chart-text fade-in">15.5</text><circle cx="312.66666666666663" cy="416.9230769230769" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" class="point-reveal" style="animation-delay: 0.05s"><title>Growth Rate: Q2 = 18.2</title></circle><text x="312.66666666666663" y="406.9230769230769" text-anchor="middle" font-size="10" class="chart-text fade-in">18.2</text><circle cx="487.3333333333333" cy="275.38461538461536" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" class="point-reveal" style="animation-delay: 0.1s"><title>Growth Rate: Q3 = 22.8</title></circle><text x="487.3333333333333" y="265.38461538461536" text-anchor="middle" font-size="10" class="chart-text fade-in">22.8</text><circle cx="662.0" cy="100.0" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)" class="point-reveal" style="animation-delay: 0.15000000000000002s"><title>Growth Rate: Q4 = 28.5</title></circle><text x="662.0" y="90.0" text-anchor="middle" font-size="10" class="chart-text fade-in">28.5</text><g class="fade-in"><rect x="820" y="60" width="200" height="70" fill="rgba(255, 255, 255, 0.9)" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" rx="8" ry="8" filter="url(#legendGlass_6d3fc6f4-aa9f-4577-96c3-565a2c5491a9)"/><rect x="830" y="72" width="15" height="15" fill="#3498db" rx="2" ry="2"/><text x="855" y="84" font-size="12" class="chart-text">Revenue</text><line x1="830" y1="105" x2="845" y2="105" stroke="#e74c3c" stroke-width="3"/><circle cx="837" cy="105" r="3" fill="#e74c3c"/><text x="855" y="109" font-size="12" class="chart-text">Growth Rate (R)</text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="combo_chart_e275b494-7721-44d7-a03c-6a3fc8add982" width="590.6249999926172" height="337.49999999578125" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Combination Chart'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Series","Type","X","Y","Color"],"rows":[["Revenue","BAR","Q1","50000.0","#3498db"],["Revenue","BAR","Q2","65000.0","#3498db"],["Revenue","BAR","Q3","70000.0","#3498db"],["Revenue","BAR","Q4","80000.0","#3498db"],["Growth Rate","LINE","Q1","15.5","#e74c3c"],["Growth Rate","LINE","Q2","18.2","#e74c3c"],["Growth Rate","LINE","Q3","22.8","#e74c3c"],["Growth Rate","LINE","Q4","28.5","#e74c3c"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="barGradient_Revenue_e275b494-7721-44d7-a03c-6a3fc8add982" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3498db"/><stop offset="100%" stop-color="#246a99"/></linearGradient><linearGradient id="lineGradient_Growth_Rate_e275b494-7721-44d7-a03c-6a3fc8add982" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e74c3c" stop-opacity="0.3"/><stop offset="100%" stop-color="#e74c3c" stop-opacity="0.1"/></linearGradient><filter id="dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="glow_e275b494-7721-44d7-a03c-6a3fc8add982"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="legendGlass_e275b494-7721-44d7-a03c-6a3fc8add982" x="0" y="0" width="100%" height="100%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" /></filter><pattern id="dotPattern_e275b494-7721-44d7-a03c-6a3fc8add982" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.4" /></pattern><style>#combo_chart_e275b494-7721-44d7-a03c-6a3fc8add982 .chart-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; letter-spacing: -0.5px; } #combo_chart_e275b494-7721-44d7-a03c-6a3fc8add982 .chart-grid { stroke: #2563eb; stroke-dasharray: 3,3; stroke-opacity: 0.2; } #combo_chart_e275b494-7721-44d7-a03c-6a3fc8add982 .chart-axis { stroke: #2563eb; stroke-width: 1.5; stroke-opacity: 0.5; } @keyframes revealBar { from { transform: scaleY(0); opacity: 0; } to { transform: scaleY(1); opacity: 1; } } @keyframes revealPoint { from { r: 0; opacity: 0; } to { r: 5; opacity: 1; } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .bar-reveal { animation: revealBar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-origin: bottom; } .point-reveal { animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; } .fade-in { animation: fadeIn 0.8s ease-out forwards; } #combo_chart_e275b494-7721-44d7-a03c-6a3fc8add982 .glass-bar { transition: all 0.3s ease; } #combo_chart_e275b494-7721-44d7-a03c-6a3fc8add982 .glass-bar:hover { filter: url(#glassGlow_e275b494-7721-44d7-a03c-6a3fc8add982); transform: scale(1.02); cursor: pointer; }</style></defs><rect width="100%" height="100%" fill="#ffffff" rx="10" ry="10"/><rect width="100%" height="100%" fill="url(#dotPattern_e275b494-7721-44d7-a03c-6a3fc8add982)" rx="10" ry="10" opacity="0.5"/><g class="fade-in"><rect x="200" y="10" width="400" height="40" rx="10" ry="10" fill="rgba(255, 255, 255, 0.9)" stroke="#2563eb" stroke-opacity="0.2"/><text x="400" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#111111" font-family="Arial, Helvetica, sans-serif">Quarterly Revenue and Growth Rate</text></g><g class="chart-grid fade-in"><line x1="80" y1="150" x2="720" y2="150"/><line x1="80" y1="200" x2="720" y2="200"/><line x1="80" y1="250" x2="720" y2="250"/><line x1="80" y1="300" x2="720" y2="300"/><line x1="80" y1="350" x2="720" y2="350"/><line x1="80" y1="400" x2="720" y2="400"/><line x1="80" y1="450" x2="720" y2="450"/><line x1="80" y1="500" x2="720" y2="500"/><line x1="180" y1="100" x2="180" y2="500"/><line x1="280" y1="100" x2="280" y2="500"/><line x1="380" y1="100" x2="380" y2="500"/><line x1="480" y1="100" x2="480" y2="500"/><line x1="580" y1="100" x2="580" y2="500"/><line x1="680" y1="100" x2="680" y2="500"/></g><g class="chart-axis fade-in"><line x1="80" y1="100" x2="80" y2="500"/><line x1="80" y1="500" x2="720" y2="500"/><line x1="720" y1="100" x2="720" y2="500"/></g><g class="chart-text fade-in"><text x="400" y="550" text-anchor="middle" font-size="14" font-weight="bold">Quarter</text><text x="30" y="300" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(-90, 30, 300)">Revenue ($)</text><text x="770" y="300" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(90, 770, 300)">Growth Rate (%)</text></g><g class="chart-text fade-in"><line x1="80.0" y1="500" x2="80.0" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="80.0" y="525" text-anchor="middle" font-size="12">Q1</text><line x1="293.33333333333337" y1="500" x2="293.33333333333337" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="293.33333333333337" y="525" text-anchor="middle" font-size="12">Q2</text><line x1="506.6666666666667" y1="500" x2="506.6666666666667" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="506.6666666666667" y="525" text-anchor="middle" font-size="12">Q3</text><line x1="720.0" y1="500" x2="720.0" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="720.0" y="525" text-anchor="middle" font-size="12">Q4</text><line x1="75" y1="500" x2="80" y2="500" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="500" text-anchor="end" font-size="12" dominant-baseline="middle">50000</text><line x1="75" y1="450" x2="80" y2="450" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="450" text-anchor="end" font-size="12" dominant-baseline="middle">53750</text><line x1="75" y1="400" x2="80" y2="400" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="400" text-anchor="end" font-size="12" dominant-baseline="middle">57500</text><line x1="75" y1="350" x2="80" y2="350" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="350" text-anchor="end" font-size="12" dominant-baseline="middle">61250</text><line x1="75" y1="300" x2="80" y2="300" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="300" text-anchor="end" font-size="12" dominant-baseline="middle">65000</text><line x1="75" y1="250" x2="80" y2="250" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="250" text-anchor="end" font-size="12" dominant-baseline="middle">68750</text><line x1="75" y1="200" x2="80" y2="200" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="200" text-anchor="end" font-size="12" dominant-baseline="middle">72500</text><line x1="75" y1="150" x2="80" y2="150" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="150" text-anchor="end" font-size="12" dominant-baseline="middle">76250</text><line x1="75" y1="100" x2="80" y2="100" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="100" text-anchor="end" font-size="12" dominant-baseline="middle">80000</text><line x1="720" y1="500" x2="725" y2="500" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="500" text-anchor="start" font-size="12" dominant-baseline="middle">15.5</text><line x1="720" y1="450" x2="725" y2="450" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="450" text-anchor="start" font-size="12" dominant-baseline="middle">17.1</text><line x1="720" y1="400" x2="725" y2="400" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="400" text-anchor="start" font-size="12" dominant-baseline="middle">18.8</text><line x1="720" y1="350" x2="725" y2="350" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="350" text-anchor="start" font-size="12" dominant-baseline="middle">20.4</text><line x1="720" y1="300" x2="725" y2="300" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="300" text-anchor="start" font-size="12" dominant-baseline="middle">22</text><line x1="720" y1="250" x2="725" y2="250" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="250" text-anchor="start" font-size="12" dominant-baseline="middle">23.6</text><line x1="720" y1="200" x2="725" y2="200" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="200" text-anchor="start" font-size="12" dominant-baseline="middle">25.3</text><line x1="720" y1="150" x2="725" y2="150" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="150" text-anchor="start" font-size="12" dominant-baseline="middle">26.9</text><line x1="720" y1="100" x2="725" y2="100" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="100" text-anchor="start" font-size="12" dominant-baseline="middle">28.5</text></g><rect x="90.0" y="500.0" width="96.0" height="0.0" fill="url(#barGradient_Revenue_e275b494-7721-44d7-a03c-6a3fc8add982)" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q1 = 50000</title></rect><rect x="264.66666666666663" y="300.0" width="96.0" height="200.0" fill="url(#barGradient_Revenue_e275b494-7721-44d7-a03c-6a3fc8add982)" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q2 = 65000</title></rect><text x="312.66666666666663" y="295.0" text-anchor="middle" font-size="10" class="chart-text fade-in">65000</text><rect x="439.3333333333333" y="233.33333333333337" width="96.0" height="266.66666666666663" fill="url(#barGradient_Revenue_e275b494-7721-44d7-a03c-6a3fc8add982)" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q3 = 70000</title></rect><text x="487.3333333333333" y="228.33333333333337" text-anchor="middle" font-size="10" class="chart-text fade-in">70000</text><rect x="614.0" y="100.0" width="96.0" height="400.0" fill="url(#barGradient_Revenue_e275b494-7721-44d7-a03c-6a3fc8add982)" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q4 = 80000</title></rect><text x="662.0" y="95.0" text-anchor="middle" font-size="10" class="chart-text fade-in">80000</text><path d="M 138.0 500.0 C 196.2222222222222 500.0 254.44444444444443 416.9230769230769 312.66666666666663 416.9230769230769 C 370.88888888888886 416.9230769230769 429.1111111111111 275.38461538461536 487.3333333333333 275.38461538461536 C 545.5555555555555 275.38461538461536 603.7777777777778 100.0 662.0 100.0 L 662.0 500 L 138.0 500 Z" fill="url(#lineGradient_Growth_Rate_e275b494-7721-44d7-a03c-6a3fc8add982)" opacity="0.3" class="fade-in"/><path d="M 138.0 500.0 C 196.2222222222222 500.0 254.44444444444443 416.9230769230769 312.66666666666663 416.9230769230769 C 370.88888888888886 416.9230769230769 429.1111111111111 275.38461538461536 487.3333333333333 275.38461538461536 C 545.5555555555555 275.38461538461536 603.7777777777778 100.0 662.0 100.0" fill="none" stroke="#e74c3c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" class="fade-in"/><circle cx="138.0" cy="500.0" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" class="point-reveal" style="animation-delay: 0.0s"><title>Growth Rate: Q1 = 15.5</title></circle><text x="138.0" y="490.0" text-anchor="middle" font-size="10" class="chart-text fade-in">15.5</text><circle cx="312.66666666666663" cy="416.9230769230769" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" class="point-reveal" style="animation-delay: 0.05s"><title>Growth Rate: Q2 = 18.2</title></circle><text x="312.66666666666663" y="406.9230769230769" text-anchor="middle" font-size="10" class="chart-text fade-in">18.2</text><circle cx="487.3333333333333" cy="275.38461538461536" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" class="point-reveal" style="animation-delay: 0.1s"><title>Growth Rate: Q3 = 22.8</title></circle><text x="487.3333333333333" y="265.38461538461536" text-anchor="middle" font-size="10" class="chart-text fade-in">22.8</text><circle cx="662.0" cy="100.0" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_e275b494-7721-44d7-a03c-6a3fc8add982)" class="point-reveal" style="animation-delay: 0.15000000000000002s"><title>Growth Rate: Q4 = 28.5</title></circle><text x="662.0" y="90.0" text-anchor="middle" font-size="10" class="chart-text fade-in">28.5</text><g class="fade-in"><rect x="820" y="60" width="200" height="70" fill="rgba(255, 255, 255, 0.9)" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" rx="8" ry="8" filter="url(#legendGlass_e275b494-7721-44d7-a03c-6a3fc8add982)"/><rect x="830" y="72" width="15" height="15" fill="#3498db" rx="2" ry="2"/><text x="855" y="84" font-size="12" class="chart-text">Revenue</text><line x1="830" y1="105" x2="845" y2="105" stroke="#e74c3c" stroke-width="3"/><circle cx="837" cy="105" r="3" fill="#e74c3c"/><text x="855" y="109" font-size="12" class="chart-text">Growth Rate (R)</text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_f3c2ea30df88bcf7.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_f3c2ea30df88bcf7.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_46769607c4780d95.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_46769607c4780d95.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-f3c2ea30df88bcf7')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-f3c2ea30df88bcf7')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-46769607c4780d95')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-46769607c4780d95')">PNG</button>
 </div>
-<div id="modal-svgviewer-f3c2ea30df88bcf7" class="svg-modal-svgviewer-f3c2ea30df88bcf7" onclick="if(event.target === this) svgModalsvgviewer_f3c2ea30df88bcf7.close()">
-    <div class="svg-modal-content-svgviewer-f3c2ea30df88bcf7">
-        <button class="svg-modal-close-svgviewer-f3c2ea30df88bcf7" onclick="svgModalsvgviewer_f3c2ea30df88bcf7.close()">×</button>
-        <div id="modal-body-svgviewer-f3c2ea30df88bcf7" class="svg-modal-body-svgviewer-f3c2ea30df88bcf7"></div>
+<div id="modal-svgviewer-46769607c4780d95" class="svg-modal-svgviewer-46769607c4780d95" onclick="if(event.target === this) svgModalsvgviewer_46769607c4780d95.close()">
+    <div class="svg-modal-content-svgviewer-46769607c4780d95">
+        <button class="svg-modal-close-svgviewer-46769607c4780d95" onclick="svgModalsvgviewer_46769607c4780d95.close()">×</button>
+        <div id="modal-body-svgviewer-46769607c4780d95" class="svg-modal-body-svgviewer-46769607c4780d95"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-f3c2ea30df88bcf7" class="svg-modal-svgviewer-f3c2ea30df88bcf7" onclick="if(event.target === this) csvModalsvgviewer_f3c2ea30df88bcf7.close()">
-    <div class="svg-modal-content-svgviewer-f3c2ea30df88bcf7">
-        <button class="svg-modal-close-svgviewer-f3c2ea30df88bcf7" onclick="csvModalsvgviewer_f3c2ea30df88bcf7.close()">×</button>
-        <div class="svg-modal-header-svgviewer-f3c2ea30df88bcf7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-46769607c4780d95" class="svg-modal-svgviewer-46769607c4780d95" onclick="if(event.target === this) csvModalsvgviewer_46769607c4780d95.close()">
+    <div class="svg-modal-content-svgviewer-46769607c4780d95">
+        <button class="svg-modal-close-svgviewer-46769607c4780d95" onclick="csvModalsvgviewer_46769607c4780d95.close()">×</button>
+        <div class="svg-modal-header-svgviewer-46769607c4780d95" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-f3c2ea30df88bcf7" class="svg-modal-body-svgviewer-f3c2ea30df88bcf7" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-46769607c4780d95" class="svg-modal-body-svgviewer-46769607c4780d95" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
@@ -2892,5 +2892,11 @@ mermaid.initialize({
     `
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-container">
+    <a href="callout.html" class="nav-prev">&larr; Callout</a>
+          <a href="connectors.html" class="nav-next">Connectors &rarr;</a>
+  </div>
+</nav>
 </body>
 </html>
