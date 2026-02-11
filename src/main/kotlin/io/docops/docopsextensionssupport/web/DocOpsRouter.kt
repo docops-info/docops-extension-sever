@@ -15,7 +15,6 @@ import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.PlannerHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
-import io.docops.docopsextensionssupport.scorecard.FeatureCardHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
 import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
@@ -83,7 +82,6 @@ class DocOpsRouter(
             "wordcloud" -> WordCloudHandler(csvResponse)
             "quadrant" -> MagicQuadrantHandler(csvResponse)
             "swim" -> SwimLaneHandler(csvResponse)
-            "feature" -> FeatureCardHandler(csvResponse)
             "shield" -> ShieldHandler(csvResponse)
             "mermaid" -> DocOpsMermaid(csvResponse)
             "gauge" -> GaugeHandler(csvResponse)

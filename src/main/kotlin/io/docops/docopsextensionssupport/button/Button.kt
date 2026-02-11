@@ -31,6 +31,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.Boolean
 
 /**
  * Represents a card line.
@@ -48,7 +49,7 @@ class CardLines(val line: String = "", val size: String = "50px")
  * @property type The type of the image. Default value is "image/png".
  */
 @Serializable
-class EmbeddedImage(val ref: String = "", val type: String = "image/png", val qrEnabled: Boolean = false)
+class EmbeddedImage(val ref: String = "", val type: String = "image/png", val qrEnabled: Boolean = false, val spotlightOn: Boolean = false)
 
 /**
  * Represents a button that can be used in an application's user interface.

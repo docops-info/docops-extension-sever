@@ -189,9 +189,10 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
     private fun createImageIcon(embeddedImage: EmbeddedImage): String {
         val sb = StringBuilder()
         sb.append("""<g transform="translate(150, 95)">""")
-        sb.append("""<circle cx="0" cy="0" r="50" fill="rgba(255,255,255,0.2)" filter="url(#iconGlow)"/>""")
-        sb.append("""<circle cx="0" cy="0" r="45" fill="rgba(255,255,255,0.95)"/>""")
-
+        if(embeddedImage.spotlightOn) {
+            sb.append("""<circle cx="0" cy="0" r="50" fill="rgba(255,255,255,0.2)" filter="url(#iconGlow)"/>""")
+            sb.append("""<circle cx="0" cy="0" r="45" fill="rgba(255,255,255,0.95)"/>""")
+        }
         // Embedded image
         sb.append("""<image href="${embeddedImage.ref}" x="-40" y="-40" width="80" height="80" preserveAspectRatio="xMidYMid meet"/>""")
 
