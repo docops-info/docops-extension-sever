@@ -19,8 +19,8 @@ class ModernCardRenderer(
         val qrCodeService = QRCodeService()
         val qrCodeBase64 = if (includeQR) {
             val vCardData = vCardGeneratorService.generateVCard30(vcard)
-            //qrCodeService.generateQRCodeBase64(vCardData, 160, 160)
-            qrCodeService.generateQRCode(vCardData, 150, 150)
+            qrCodeService.generateQRCodeBase64(vCardData, 160, 160)
+            //qrCodeService.generateQRCode(vCardData, 150, 150)
         } else null
 
         val id: String = Uuid.random().toHexString()
@@ -281,9 +281,9 @@ class ModernCardRenderer(
         // Clickable QR code group with cursor pointer
         appendLine("""<g id="qr-code-trigger" style="cursor: pointer;">""")
         appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="#ffffff"/>""")
-        appendLine("""<g transform="translate(${qrX+5}, 5)">$qrCodeBase64</g>""")
+        //appendLine("""<g transform="translate(${qrX+5}, 5)">$qrCodeBase64</g>""")
 
-        //appendLine("""<image x="$qrX" y="0" width="$qrSize" height="$qrSize" href="$qrCodeBase64"/>""")
+        appendLine("""<image x="$qrX" y="0" width="$qrSize" height="$qrSize" href="$qrCodeBase64"/>""")
 
         // Hover effect overlay
         appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="rgba(255,255,255,0)" class="qr-hover"/>""")
@@ -316,7 +316,7 @@ class ModernCardRenderer(
         val vCardGeneratorService = VCardGeneratorService()
         val qrCodeService = QRCodeService()
         val vCardData = vCardGeneratorService.generateVCard30(vCard)
-        val largeQrCodeBase64 = qrCodeService.generateQRCode(vCardData, 400, 400)
+        val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 400, 400)
 
         // Modal positioned relative to entire SVG (900x540)
         appendLine("""
@@ -331,7 +331,7 @@ class ModernCardRenderer(
                 <rect x="0" y="0" width="440" height="480" rx="16" ry="16" fill="#ffffff"/>
                 <g transform="translate(20,10)">
                 <!-- Large QR code -->
-                $largeQrCodeBase64
+                <image x="0" y="0" width="400" height="400" href="$largeQrCodeBase64"/>
                 </g>
                 <!-- Instructions -->
                 <text x="220" y="445" font-family="Inter, Arial, sans-serif" fill="#0f172a" font-size="16" font-weight="600" text-anchor="middle">Scan to import contact</text>
