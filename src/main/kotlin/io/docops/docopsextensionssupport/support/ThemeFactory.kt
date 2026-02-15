@@ -24,7 +24,6 @@ object ThemeFactory {
                 if (isDark) ProDarkTheme() else ClassicLightTheme()
             }
         }
-        println("Selected theme for version $version and dark mode id $isDark and theme: ${theme.name}")
         return theme
     }
     fun getTheme(useDark: Boolean): DocOpsTheme {
@@ -147,7 +146,7 @@ class ProDarkTheme : DocOpsTheme {
     override val fontFamily = "'Archivo', -apple-system, sans-serif"
     override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
     override val fontWidthMultiplier = 1.15f
-    override val fontLineHeight = 1.25f // Give Syne some breathing room
+    override val fontLineHeight = 1.25f
     override val cornerRadius = 12
 }
 
@@ -199,4 +198,22 @@ class HexLightTheme: CyberLightTheme() {
     override val secondaryText = "#38bdf8"
     override val accentColor = "#6366f1"
     override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
+}
+
+class TallinnTheme: CyberLightTheme() {
+    override val name = "TallinnTheme"
+    override val canvas = "#D0DCEF"
+    override val primaryText = "#425EB8"
+    override val secondaryText = "#81549C"
+    override val accentColor = "#324979"
+    override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
+}
+
+class AutumnTheme: CyberLightTheme() {
+    override val name = "AutumnTheme"
+    override val canvas = "#F4D3BD"
+    override val primaryText = "#A87F25"
+    override val secondaryText = "#B0633A"
+    override val accentColor = "#BE553E"
+    override val surfaceImpact = "rgba(217, 163, 40, 0.2)"
 }
