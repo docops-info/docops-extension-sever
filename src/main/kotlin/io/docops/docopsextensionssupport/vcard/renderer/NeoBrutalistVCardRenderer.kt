@@ -1,10 +1,13 @@
-package io.docops.docopsextensionssupport.vcard.model.renderer
+package io.docops.viz.vcard.renderer
 
+
+import io.docops.docopsextensionssupport.qrcode.cyberNeonTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
-import io.docops.docopsextensionssupport.vcard.model.QRCodeService
-import io.docops.docopsextensionssupport.vcard.model.VCard
-import io.docops.docopsextensionssupport.vcard.model.VCardConfig
-import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
+import io.docops.docopsextensionssupport.vcard.VCard
+import io.docops.docopsextensionssupport.vcard.VCardConfig
+import io.docops.docopsextensionssupport.vcard.VCardGeneratorService
+import io.docops.docopsextensionssupport.vcard.renderer.QRCodeService
+import io.docops.docopsextensionssupport.vcard.renderer.VCardRenderer
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -38,9 +41,9 @@ class NeoBrutalistCardRenderer(val useDark: Boolean) : VCardRenderer {
         val vCardGeneratorService = VCardGeneratorService()
 
         val qrCodeService = QRCodeService()
-        val vCardData = vCardGeneratorService.generateVCard30(vcard)
-        val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 100, 100)
-        val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 300, 300)
+        val vCardData = vCardGeneratorService.generateMinimalVCard(vcard)
+        val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 70, 70, theme = cyberNeonTheme)
+        val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 150, 150, theme = cyberNeonTheme)
 
         return buildString {
             appendLine("""<svg width="350" height="200" viewBox="0 0 350 200" id="id_$id" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Business Card">""")
@@ -161,8 +164,8 @@ class NeoBrutalistCardRenderer(val useDark: Boolean) : VCardRenderer {
             appendLine("""<rect x="4" y="4" width="80" height="80" fill="var(--c-border)"/>""")
             // Sticker Bg
             appendLine("""<rect width="80" height="80" fill="#FFFFFF" stroke="var(--c-border)" stroke-width="3"/>""")
-            // QR
-            appendLine("""<image x="5" y="5" width="70" height="70" href="$qrCodeBase64"/>""")
+            // QR   width=70 h=70
+            appendLine("""<g transform="translate(5, 5)">$qrCodeBase64</g>""")
 
             // "SCAN" Tape
             appendLine("""<g transform="translate(-10, 65) rotate(-10)">""")
@@ -182,8 +185,9 @@ class NeoBrutalistCardRenderer(val useDark: Boolean) : VCardRenderer {
                         <g class="animate-in">
                             <rect x="6" y="6" width="200" height="190" fill="var(--c-border)"/>
                             <rect width="200" height="190" fill="#FFFFFF" stroke="var(--c-border)" stroke-width="3"/>
-                            
-                            <image x="20" y="10" width="160" height="160" href="$largeQrCodeBase64"/>
+                            <g transform="translate(20,10)">
+                                <g>$largeQrCodeBase64</g>
+                            </g>
                             <text x="100" y="182" font-family="'Courier New', monospace" font-size="10" fill="#000000" font-weight="bold" text-anchor="middle">// TAP TO CLOSE //</text>
                         </g>
                     </g>

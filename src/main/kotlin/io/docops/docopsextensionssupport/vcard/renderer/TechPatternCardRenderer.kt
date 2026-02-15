@@ -1,9 +1,9 @@
-package io.docops.docopsextensionssupport.vcard.model.renderer
+package io.docops.docopsextensionssupport.vcard.renderer
 
-import io.docops.docopsextensionssupport.vcard.model.QRCodeService
-import io.docops.docopsextensionssupport.vcard.model.VCard
-import io.docops.docopsextensionssupport.vcard.model.VCardConfig
-import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
+
+import io.docops.docopsextensionssupport.vcard.VCard
+import io.docops.docopsextensionssupport.vcard.VCardConfig
+import io.docops.docopsextensionssupport.vcard.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -21,9 +21,8 @@ class TechPatternCardRenderer(val useDark: Boolean) : VCardRenderer {
 
         val vCardGeneratorService = VCardGeneratorService()
         val qrCodeService = QRCodeService()
-        val vCardData = vCardGeneratorService.generateVCard30(vcard)
-        val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 80, 80)
-        val qrCodeLarge = qrCodeService.generateQRCodeBase64(vCardData, 320, 320)
+        val vCardData = vCardGeneratorService.generateMinimalVCard(vcard)
+        val qrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 180, 180)
 
         return buildString {
             appendLine("""<svg width="350" height="200" viewBox="0 0 920 525" id="id_$id" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">""")
@@ -127,35 +126,71 @@ class TechPatternCardRenderer(val useDark: Boolean) : VCardRenderer {
 
             appendLine("""      </g>""")
 
-            // QR block (bottom right) - with proper white background
-            appendLine("""      <g transform="translate(760, 365)">""")
-            appendLine("""        <rect width="128" height="128" fill="$paperColor" stroke="$blackColor" stroke-width="6"/>""")
-            appendLine("""        <rect x="14" y="14" width="100" height="100" fill="white"/>""")
-            appendLine("""        <image x="14" y="14" width="100" height="100" href="$qrCodeBase64" preserveAspectRatio="xMidYMid meet"/>""")
-            appendLine("""        <text class="qr-label" x="64" y="142" text-anchor="middle">SCAN</text>""")
+            // QR block (bottom right) - INCREASED SIZE & SHIFTED LEFT
+            appendLine("""      <g transform="translate(620, 305)">""")  // Changed from 700 to 620
+            appendLine("""        <rect width="200" height="200" fill="$paperColor" stroke="$blackColor" stroke-width="6"/>""")
+            appendLine("""        <rect x="10" y="10" width="180" height="180" fill="white"/>""")
+            appendLine("""        <g transform="translate(10, 10)">$qrCodeBase64</g>""")
+            appendLine("""        <text class="qr-label" x="100" y="216" text-anchor="middle">SCAN</text>""")
             appendLine("""      </g>""")
 
             appendLine("""    </g>""")  // Close front-side
 
 
-            // === BACK SIDE ===
+            // === BACK SIDE === (Replace your current back-side section)
             appendLine("""    <g class="side back-side">""")
 
-            // Black background
-            appendLine("""      <rect width="920" height="525" fill="$blackColor"/>""")
+// Dramatic gradient background
+            appendLine("""      <defs>""")
+            appendLine("""        <linearGradient id="scanGrad-$id" x1="0%" y1="0%" x2="100%" y2="100%">""")
+            appendLine("""          <stop offset="0%" style="stop-color:#0a0e27;stop-opacity:1" />""")
+            appendLine("""          <stop offset="100%" style="stop-color:#1a1f3a;stop-opacity:1" />""")
+            appendLine("""        </linearGradient>""")
+            appendLine("""      </defs>""")
+            appendLine("""      <rect width="920" height="525" fill="url(#scanGrad-$id)"/>""")
 
-            // Centered content
-            appendLine("""      <g transform="translate(460, 262.5)">""")
-            appendLine("""        <text class="back-title" text-anchor="middle" y="-20">LET'S BUILD</text>""")
-            appendLine("""        <rect x="-48" y="0" width="96" height="6" fill="$accentColor"/>""")
-            appendLine("""        <text class="back-text" text-anchor="middle" y="40" style="max-width: 520px;">Engineering excellence through</text>""")
-            appendLine("""        <text class="back-text" text-anchor="middle" y="64">innovative solutions and collaborative design.</text>""")
-            appendLine("""        <text class="back-hint" text-anchor="middle" y="105">Click to flip back</text>""")
+// Grid pattern for tech aesthetic
+            appendLine("""      <defs>""")
+            appendLine("""        <pattern id="grid-$id" width="40" height="40" patternUnits="userSpaceOnUse">""")
+            appendLine("""          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(132,204,22,0.1)" stroke-width="1"/>""")
+            appendLine("""        </pattern>""")
+            appendLine("""      </defs>""")
+            appendLine("""      <rect width="920" height="525" fill="url(#grid-$id)"/>""")
+
+// Massive centered QR code (350×350px)
+            appendLine("""      <g transform="translate(285, 87.5)">""")
+// White container with shadow effect
+            appendLine("""        <rect x="4" y="4" width="350" height="350" fill="rgba(0,0,0,0.3)" rx="12"/>""")
+            appendLine("""        <rect width="350" height="350" fill="white" rx="8"/>""")
+// Large QR
+            appendLine("""        <rect x="25" y="25" width="300" height="300" fill="white"/>""")
+            appendLine("""        <g transform="translate(25, 25)">""")
+// Generate 300×300 QR here
+            val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 300, 300)
+            appendLine(largeQrCodeBase64)
+            appendLine("""        </g>""")
             appendLine("""      </g>""")
 
-            appendLine("""    </g>""")
+// Glowing accent indicators
+            appendLine("""      <g opacity="0.8">""")
+            appendLine("""        <circle cx="285" cy="262.5" r="8" fill="none" stroke="$accentColor" stroke-width="2"/>""")
+            appendLine("""        <circle cx="635" cy="262.5" r="8" fill="none" stroke="$accentColor" stroke-width="2"/>""")
+            appendLine("""        <circle cx="460" cy="87.5" r="8" fill="none" stroke="$accentColor" stroke-width="2"/>""")
+            appendLine("""        <circle cx="460" cy="437.5" r="8" fill="none" stroke="$accentColor" stroke-width="2"/>""")
+            appendLine("""      </g>""")
 
-            appendLine("""  </g>""")
+// Instructions
+            appendLine("""      <g transform="translate(460, 465)">""")
+            appendLine("""        <text class="back-hint" text-anchor="middle" y="0">→ SCAN TO SAVE CONTACT ←</text>""")
+            appendLine("""        <text class="back-hint" text-anchor="middle" y="20" opacity="0.6">Click card to flip back</text>""")
+            appendLine("""      </g>""")
+
+// Corner accent
+            appendLine("""      <rect width="8" height="525" fill="$accentColor"/>""")
+            appendLine("""      <rect x="912" width="8" height="525" fill="$accentColor"/>""")
+
+            appendLine("""    </g>""")
+            appendLine("""    </g>""")
 
             // Flip interaction script
             appendLine("""

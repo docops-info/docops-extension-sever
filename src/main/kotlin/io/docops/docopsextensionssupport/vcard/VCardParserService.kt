@@ -1,8 +1,12 @@
-package io.docops.docopsextensionssupport.vcard.model
+package io.docops.docopsextensionssupport.vcard
 
-import java.time.LocalDateTime
+
+import kotlin.time.Clock
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.UUID
+import java.time.format.DateTimeParseException
 
 class VCardParserService {
 
@@ -114,6 +118,7 @@ class VCardParserService {
         return buildVCard(properties)
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private fun buildVCard(properties: Map<String, List<String>>): VCard {
         // Parse structured name (N property)
         val structuredName = properties["N"]?.firstOrNull()?.split(";") ?: emptyList()
@@ -238,7 +243,7 @@ class VCardParserService {
             note = properties["NOTE"]?.firstOrNull(),
             categories = categories,
             birthday = properties["BDAY"]?.firstOrNull(),
-            uid = properties["UID"]?.firstOrNull() ?: UUID.randomUUID().toString(),
+            uid = properties["UID"]?.firstOrNull() ?: Uuid.random().toHexString(),
             revision = parseRevision(properties["REV"]?.firstOrNull()),
             emails = emailList,
             phones = phoneList,
@@ -250,23 +255,27 @@ class VCardParserService {
         return typeMatch?.groupValues?.get(1)?.split(",")?.map { it.trim().uppercase() } ?: emptyList()
     }
 
-    private fun parseRevision(revString: String?): LocalDateTime {
+    private fun parseRevision(revString: String?): Instant {
         return revString?.let { rev ->
             try {
                 when {
                     rev.contains('T') && rev.endsWith('Z') -> {
                         // ISO format: 20231106T143000Z
-                        LocalDateTime.parse(rev.removeSuffix("Z"), DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss"))
+                        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
+                        Instant.from(formatter.parse(rev))
                     }
                     rev.length == 8 -> {
                         // Date only: 20231106
-                        LocalDateTime.parse("${rev}T000000", DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss"))
+                        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
+                        Instant.from(formatter.parse("${rev}T000000Z"))
                     }
-                    else -> LocalDateTime.now()
+                    else -> Instant.now()
                 }
+            } catch (e: DateTimeParseException) {
+                Instant.now()
             } catch (e: Exception) {
-                LocalDateTime.now()
+                Instant.now()
             }
-        } ?: LocalDateTime.now()
+        } ?: Instant.now()
     }
 }

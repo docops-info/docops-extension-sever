@@ -1,12 +1,19 @@
-package io.docops.docopsextensionssupport.vcard.model
+package io.docops.docopsextensionssupport.vcard
 
-import java.time.LocalDateTime
 
-data class VCard(
+
+
+
+import java.time.Instant
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
+
+data class VCard @OptIn(ExperimentalUuidApi::class) constructor(
     val firstName: String,
-    
+
     val lastName: String,
-    
+
     val middleName: String? = null,
     val prefix: String? = null,
     val suffix: String? = null,
@@ -36,8 +43,8 @@ data class VCard(
     val note: String? = null,
     val categories: List<String> = emptyList(),
     val birthday: String? = null, // YYYY-MM-DD format
-    val uid: String = java.util.UUID.randomUUID().toString(),
-    val revision: LocalDateTime = LocalDateTime.now()
+    val uid: String = Uuid.random().toHexString(),
+    val revision: Instant = Instant.now()
 )
 
 data class Address(

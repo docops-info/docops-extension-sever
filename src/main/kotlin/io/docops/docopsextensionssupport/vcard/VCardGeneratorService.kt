@@ -1,11 +1,32 @@
-package io.docops.docopsextensionssupport.vcard.model
+package io.docops.docopsextensionssupport.vcard
+
 
 import java.time.format.DateTimeFormatter
+import java.time.ZoneOffset
 
 class VCardGeneratorService {
 
     private val vCardFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")
 
+    fun generateMinimalVCard(vcard: VCard): String {
+        return buildString {
+            appendLine("BEGIN:VCARD")
+            appendLine("VERSION:2.1")  // Use 2.1 instead of 3.0 (shorter)
+
+            // Only include essential fields
+            val fullName = buildFullName(vcard)
+            appendLine("FN:$fullName")
+            //vcard.fullName?.let { appendLine("FN:$it") }
+
+            // Simplified phone (no type labels)
+            vcard.phone?.let { appendLine("TEL:$it") }
+
+            // Simplified email
+            vcard.email?.let { appendLine("EMAIL:$it") }
+
+            appendLine("END:VCARD")
+        }
+    }
     fun generateVCard30(vCard: VCard): String {
         return buildString {
             appendLine("BEGIN:VCARD")
@@ -67,7 +88,7 @@ class VCardGeneratorService {
             appendLine("UID:${vCard.uid}")
 
             // Revision timestamp
-            appendLine("REV:${vCard.revision.format(vCardFormatter)}")
+            appendLine("REV:${vCardFormatter.format(vCard.revision.atZone(ZoneOffset.UTC))}")
 
             appendLine("END:VCARD")
         }

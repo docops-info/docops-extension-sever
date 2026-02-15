@@ -1,7 +1,7 @@
-package io.docops.docopsextensionssupport.vcard.model.renderer
+package io.docops.docopsextensionssupport.vcard.renderer
 
-import io.docops.docopsextensionssupport.vcard.model.VCard
-import io.docops.docopsextensionssupport.vcard.model.VCardConfig
+import io.docops.docopsextensionssupport.vcard.VCard
+import io.docops.docopsextensionssupport.vcard.VCardConfig
 
 /**
  * Strategy interface for rendering VCards into SVG.

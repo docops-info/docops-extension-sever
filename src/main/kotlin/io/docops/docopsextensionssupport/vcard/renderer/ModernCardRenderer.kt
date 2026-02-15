@@ -1,9 +1,10 @@
-package io.docops.docopsextensionssupport.vcard.model.renderer
+package io.docops.docopsextensionssupport.vcard.renderer
 
-import io.docops.docopsextensionssupport.vcard.model.QRCodeService
-import io.docops.docopsextensionssupport.vcard.model.VCard
-import io.docops.docopsextensionssupport.vcard.model.VCardConfig
-import io.docops.docopsextensionssupport.vcard.model.VCardGeneratorService
+import io.docops.docopsextensionssupport.qrcode.cyberNeonTheme
+import io.docops.docopsextensionssupport.vcard.PhoneType
+import io.docops.docopsextensionssupport.vcard.VCard
+import io.docops.docopsextensionssupport.vcard.VCardConfig
+import io.docops.docopsextensionssupport.vcard.VCardGeneratorService
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -18,8 +19,8 @@ class ModernCardRenderer(
         val vCardGeneratorService = VCardGeneratorService()
         val qrCodeService = QRCodeService()
         val qrCodeBase64 = if (includeQR) {
-            val vCardData = vCardGeneratorService.generateVCard30(vcard)
-            qrCodeService.generateQRCodeBase64(vCardData, 160, 160)
+            val vCardData = vCardGeneratorService.generateMinimalVCard(vcard)
+            qrCodeService.generateQRCodeBase64(vCardData, 150, 150, theme = cyberNeonTheme)
             //qrCodeService.generateQRCode(vCardData, 150, 150)
         } else null
 
@@ -202,11 +203,11 @@ class ModernCardRenderer(
         val primaryPhone = vCard.phones.firstOrNull()
         if (primaryPhone != null) {
             val label = when (primaryPhone.type) {
-                io.docops.docopsextensionssupport.vcard.model.PhoneType.CELL -> "Mobile"
-                io.docops.docopsextensionssupport.vcard.model.PhoneType.WORK -> "Work Phone"
-                io.docops.docopsextensionssupport.vcard.model.PhoneType.HOME -> "Home Phone"
-                io.docops.docopsextensionssupport.vcard.model.PhoneType.FAX -> "Fax"
-                io.docops.docopsextensionssupport.vcard.model.PhoneType.VOICE -> "Phone"
+                PhoneType.CELL -> "Mobile"
+                PhoneType.WORK -> "Work Phone"
+                PhoneType.HOME -> "Home Phone"
+                PhoneType.FAX -> "Fax"
+                PhoneType.VOICE -> "Phone"
                 else -> "Phone"
             }
             appendLine("""<g transform="translate(0,$yOffset)">""")
@@ -275,15 +276,14 @@ class ModernCardRenderer(
         // Generate larger QR code for modal
         val vCardGeneratorService = VCardGeneratorService()
         val qrCodeService = QRCodeService()
-        val vCardData = vCardGeneratorService.generateVCard30(vCard)
-        val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 400, 400)
+        //val vCardData = vCardGeneratorService.generateVCard30(vCard)
+        //val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 400, 400)
 
         // Clickable QR code group with cursor pointer
         appendLine("""<g id="qr-code-trigger" style="cursor: pointer;">""")
         appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="#ffffff"/>""")
-        //appendLine("""<g transform="translate(${qrX+5}, 5)">$qrCodeBase64</g>""")
+        appendLine("""<g transform="translate(${qrX+5}, 5)">$qrCodeBase64</g>""")
 
-        appendLine("""<image x="$qrX" y="0" width="$qrSize" height="$qrSize" href="$qrCodeBase64"/>""")
 
         // Hover effect overlay
         appendLine("""<rect x="$qrX" y="0" width="$qrSize" height="$qrSize" rx="8" ry="8" fill="rgba(255,255,255,0)" class="qr-hover"/>""")
@@ -315,8 +315,8 @@ class ModernCardRenderer(
         // Generate larger QR code for modal
         val vCardGeneratorService = VCardGeneratorService()
         val qrCodeService = QRCodeService()
-        val vCardData = vCardGeneratorService.generateVCard30(vCard)
-        val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 400, 400)
+        val vCardData = vCardGeneratorService.generateMinimalVCard(vCard)
+        val largeQrCodeBase64 = qrCodeService.generateQRCodeBase64(vCardData, 400, 400, theme = cyberNeonTheme)
 
         // Modal positioned relative to entire SVG (900x540)
         appendLine("""
@@ -331,7 +331,7 @@ class ModernCardRenderer(
                 <rect x="0" y="0" width="440" height="480" rx="16" ry="16" fill="#ffffff"/>
                 <g transform="translate(20,10)">
                 <!-- Large QR code -->
-                <image x="0" y="0" width="400" height="400" href="$largeQrCodeBase64"/>
+                <g>$largeQrCodeBase64</g>
                 </g>
                 <!-- Instructions -->
                 <text x="220" y="445" font-family="Inter, Arial, sans-serif" fill="#0f172a" font-size="16" font-weight="600" text-anchor="middle">Scan to import contact</text>

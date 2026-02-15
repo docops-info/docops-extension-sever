@@ -1,13 +1,14 @@
 package io.docops.docopsextensionssupport.vcard
 
-import io.docops.docopsextensionssupport.vcard.model.VCardParserService
-import io.docops.docopsextensionssupport.vcard.model.VCardSvgGeneratorService
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
-import io.docops.docopsextensionssupport.web.update
+import io.docops.viz.vcard.VCardSvgGeneratorService
+
 
 class VCardHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse) {
+
+
     override fun handleSVG(
         payload: String,
         context: DocOpsContext
@@ -16,8 +17,6 @@ class VCardHandler(csvResponse: CsvResponse): BaseDocOpsHandler(csvResponse) {
         val parsedVCard = parser.parseVCardInput(payload)
         val vCard = parser.parseVCard(parsedVCard.vcardContent)
         val generator = VCardSvgGeneratorService(context.useDark)
-        val svg = generator.generateSvg(vCard, parsedVCard.config)
-        //csvResponse.update(card.toCsvResponse())
-        return svg
+        return generator.generateSvg(vCard, parsedVCard.config)
     }
 }
