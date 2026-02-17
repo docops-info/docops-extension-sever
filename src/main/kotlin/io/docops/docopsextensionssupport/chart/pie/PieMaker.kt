@@ -19,7 +19,11 @@ class PieMaker {
 
     private var theme = ThemeFactory.getTheme(false)
     fun makePies(pies: Pies) : String {
-        theme = ThemeFactory.getTheme(pies.pieDisplay)
+        val theme = if (pies.pieDisplay.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(pies.pieDisplay.theme, pies.pieDisplay.useDark)
+        } else {
+            ThemeFactory.getTheme(pies.pieDisplay)
+        }
         val pieCount = pies.pies.size
         val pieWidth = 60 // Increased from 36 to prevent horizontal overlap
         val totalPieWidth = pieCount * pieWidth

@@ -12,7 +12,11 @@ class PieMakerImproved {
     private val MODERN_COLORS = ChartColors.CYBER_PALETTE
 
     fun makePies(pies: Pies): String {
-        val theme = ThemeFactory.getTheme(pies.pieDisplay)
+        val theme = if (pies.pieDisplay.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(pies.pieDisplay.theme, pies.pieDisplay.useDark)
+        } else {
+            ThemeFactory.getTheme(pies.pieDisplay)
+        }
         val pieCount = pies.pies.size
         val pieWidth = 80 // Increased for Syne font and spacing
         val totalPieWidth = pieCount * pieWidth

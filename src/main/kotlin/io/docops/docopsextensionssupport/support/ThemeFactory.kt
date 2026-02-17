@@ -42,6 +42,36 @@ object ThemeFactory {
             if (useDark) ClassicDarkTheme() else ClassicLightTheme()
         }
     }
+
+    /**
+     * Get theme by name string
+     * @param themeName Name of the theme (e.g., "TallinnTheme", "AutumnTheme", "classic", "brutalist")
+     * @param useDark Fallback to dark/light if theme name is not found
+     * @return The requested theme or a default theme
+     */
+    fun getThemeByName(themeName: String, useDark: Boolean = false): DocOpsTheme {
+        return when (themeName.lowercase()) {
+            "tallinn", "tallinntheme" -> if(useDark)ProDarkTheme() else TallinnTheme()
+            "autumn", "autumntheme" -> if(useDark)ProDarkTheme() else AutumnTheme()
+            "tokyo", "tokyotheme" -> if(useDark)TokyoDarkTheme() else ModernLightTheme()
+            "hex", "hexlighttheme" ->  HexLightTheme()
+            "cyberlight", "cyberlighttheme" -> CyberLightTheme()
+            "cyberdark", "cyberdarktheme" -> CyberDarkTheme()
+            "brutalistlight", "brutalistlighttheme" -> BrutalistLightTheme()
+            "brutalistdark", "brutalistdarktheme" -> BrutalistDarkTheme()
+            "modernlight", "modernlighttheme" -> ModernLightTheme()
+            "moderndark", "moderndarktheme" -> ModernDarkTheme()
+            "classiclight", "classiclighttheme" -> ClassicLightTheme()
+            "classicdark", "classicdarktheme" -> ClassicDarkTheme()
+            "prodark", "prodarktheme" -> ProDarkTheme()
+            "classic" -> if (useDark) ClassicDarkTheme() else ClassicLightTheme()
+            "brutalist" -> if (useDark) BrutalistDarkTheme() else BrutalistLightTheme()
+            "modern" -> if (useDark) ModernDarkTheme() else ModernLightTheme()
+            "cyber" -> if (useDark) CyberDarkTheme() else CyberLightTheme()
+            "pro" -> if (useDark) ProDarkTheme() else ClassicLightTheme()
+            else -> if (useDark) ProDarkTheme() else ClassicLightTheme()
+        }
+    }
 }
 
 /**
@@ -168,7 +198,7 @@ class BrutalistLightTheme : DocOpsTheme {
 /**
  * Cyber-Brutalist "v3" themes
  */
-class CyberDarkTheme : ModernDarkTheme() {
+open class CyberDarkTheme : ModernDarkTheme() {
     override val name = "CyberDarkTheme"
     override val canvas = "#0a0e27" // Deep Midnight Blue
     override val primaryText = "#f8fafc"
@@ -207,6 +237,16 @@ class TallinnTheme: CyberLightTheme() {
     override val secondaryText = "#81549C"
     override val accentColor = "#324979"
     override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
+    override val chartPalette = listOf(
+            SVGColor("#425EB8"),  // Royal Blue (matches primary - for North America 35%)
+            SVGColor("#81549C"),  // Amethyst Purple (matches secondary - for Europe 28%)
+            SVGColor("#5B8DBE"),  // Baltic Sea Blue (for Asia Pacific 22%)
+            SVGColor("#7FA8C9"),  // Powder Blue (for Latin America 10%)
+            SVGColor("#324979"),  // Navy (matches accent - for Middle East & Africa 5%)
+            SVGColor("#6B7BA8"),  // Slate Blue
+            SVGColor("#8E9CC6"),  // Periwinkle
+            SVGColor("#4A6FA5")   // Cobalt
+        )
 }
 
 class AutumnTheme: CyberLightTheme() {
@@ -216,4 +256,33 @@ class AutumnTheme: CyberLightTheme() {
     override val secondaryText = "#B0633A"
     override val accentColor = "#BE553E"
     override val surfaceImpact = "rgba(217, 163, 40, 0.2)"
+    override val chartPalette = listOf(
+        SVGColor("#BE553E"),  // Rust Red (matches your accent - for North America 35%)
+        SVGColor("#B0633A"),  // Burnt Orange (matches secondary - for Europe 28%)
+        SVGColor("#D4A05E"),  // Golden Yellow (for Asia Pacific 22%)
+        SVGColor("#E8B54D"),  // Amber Gold (for Latin America 10%)
+        SVGColor("#8B4E3C"),  // Deep Brown (for Middle East & Africa 5%)
+        SVGColor("#C17F4A"),  // Copper
+        SVGColor("#A67F4B"),  // Bronze
+        SVGColor("#D9A95B")   // Harvest Gold
+    )
+}
+
+class TokyoDarkTheme: CyberDarkTheme() {
+    override val name = "TokyoDarkTheme"
+    override val canvas = "#2A3051"
+    override val primaryText = "#ECA1EB"
+    override val secondaryText = "#5CC19D"
+    override val accentColor = "#7285DC"
+    override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
+    override val chartPalette = listOf(
+        SVGColor("#ECA1EB"),  // Neon Pink (matches primary - for North America 35%)
+        SVGColor("#5CC19D"),  // Cyber Mint (matches secondary - for Europe 28%)
+        SVGColor("#7285DC"),  // Electric Lavender (matches accent - for Asia Pacific 22%)
+        SVGColor("#FF6B9D"),  // Hot Pink (for Latin America 10%)
+        SVGColor("#4ECDC4"),  // Aqua Cyan (for Middle East & Africa 5%)
+        SVGColor("#A8E6CF"),  // Pastel Green
+        SVGColor("#FFB7CE"),  // Bubblegum Pink
+        SVGColor("#9D84F2")   // Violet Glow
+    )
 }

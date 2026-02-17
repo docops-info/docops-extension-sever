@@ -17,7 +17,11 @@ class VGroupBar {
     
 
     fun makeVerticalBar(barGroup: BarGroup, isPdf: Boolean): String {
-        theme = ThemeFactory.getTheme(barGroup.display)
+        theme = if (barGroup.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(barGroup.display.theme, barGroup.display.useDark)
+        } else {
+            ThemeFactory.getTheme(barGroup.display)
+        }
 
         // Get the palette type for this bar group
         val paletteType = getPaletteType(barGroup.display)

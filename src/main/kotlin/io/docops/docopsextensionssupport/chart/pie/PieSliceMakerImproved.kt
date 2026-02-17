@@ -16,7 +16,11 @@ class PieSliceMakerImproved {
     private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
 
     fun makePie(pieSlices: PieSlices): String {
-        theme = ThemeFactory.getTheme(pieSlices.display)
+        theme = if (pieSlices.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(pieSlices.display.theme, pieSlices.display.useDark)
+        } else {
+            ThemeFactory.getTheme(pieSlices.display)
+        }
         val sb = StringBuilder()
 
         val buffer = 120
@@ -46,7 +50,7 @@ class PieSliceMakerImproved {
         pieSlices.slices.forEachIndexed { index, slice ->
             val angleSize = (slice.amount / total) * 360.0
             val endAngle = currentAngle + angleSize
-            val color = slice.displayColor(index)
+            val color = slice.displayColor(index, pieSlices.display.id)
 
             val pathData = createPiePath(centerX, centerY, radius, currentAngle, endAngle)
 
@@ -78,13 +82,11 @@ class PieSliceMakerImproved {
 
     private fun createEnhancedDefs(pieSlices: PieSlices): String {
         val defGrad = StringBuilder()
-        val clrs = if (pieSlices.display.visualVersion >= 3) {
-            ChartColors.CYBER_PALETTE
-        } else {
-            chartColorAsSVGColor()
-        }
-        for (i in 0 until pieSlices.slices.size) {
-            defGrad.append(clrs[i % clrs.size].linearGradient)
+        val clrs = theme.chartPalette
+        for (i in pieSlices.slices.indices) {
+            val clr = clrs[i % clrs.size]
+            defGrad.append(clr.createSimpleGradient(clr.color,"id_${pieSlices.display.id}_svgGradientColor_$i"))
+
         }
         return """
             <defs>
@@ -121,7 +123,7 @@ class PieSliceMakerImproved {
 
             sb.append("""
                 <g class="legend-item" transform="translate($xOffset, ${35 + row * 25})">
-                    <rect width="14" height="14" rx="4" fill="${slice.displayColor(index)}"/>
+                    <rect width="14" height="14" rx="4" fill="${slice.displayColor(index, pieSlices.display.id)}"/>
                     <text x="22" y="11" style="font-size: 12px; fill: ${theme.primaryText}; font-weight: 500;">${slice.label}</text>
                     <text x="160" y="11" text-anchor="end" style="font-size: 11px; fill: ${theme.secondaryText};">${slice.amount.toInt()} (${formatDecimal(percent, 1)}%)</text>
                 </g>
@@ -142,47 +144,4 @@ class PieSliceMakerImproved {
     }
 }
 
-fun main() {
-    // Create sample data for light mode
-    val pieSlices = PieSlices(
-        title = "Quarterly Revenue Distribution",
-        mutableListOf(
-            PieSlice(label = "Q1", amount = 45000.0),
-            PieSlice(label = "Q2", amount = 62000.0),
-            PieSlice(label = "Q3", amount = 38000.0),
-            PieSlice(label = "Q4", amount = 78000.0),
-            PieSlice(label = "Q5", amount = 51000.0)
-        ),
-        SliceDisplay(donut = true, useDark = false)
-    )
 
-    // Generate the donut chart
-    val maker = PieSliceMakerImproved()
-    val svg = maker.makePie(pieSlices)
-
-    // Save the chart to a file
-    val outfile = File("gen/modern_pie_chart.svg")
-    outfile.writeBytes(svg.toByteArray())
-    println("Modern donut chart saved to ${outfile.absolutePath}")
-
-    // Create sample data for dark mode
-    val darkPieSlices = PieSlices(
-        title = "Quarterly Revenue Distribution (Dark Mode)",
-        mutableListOf(
-            PieSlice(label = "Q1", amount = 45000.0),
-            PieSlice(label = "Q2", amount = 62000.0),
-            PieSlice(label = "Q3", amount = 38000.0),
-            PieSlice(label = "Q4", amount = 78000.0),
-            PieSlice(label = "Q5", amount = 51000.0)
-        ),
-        SliceDisplay(donut = true, useDark = true)
-    )
-
-    // Generate the dark mode donut chart
-    val darkSvg = maker.makePie(darkPieSlices)
-
-    // Save the dark mode chart to a file
-    val darkOutfile = File("gen/dark_mode_pie_chart.svg")
-    darkOutfile.writeBytes(darkSvg.toByteArray())
-    println("Dark mode donut chart saved to ${darkOutfile.absolutePath}")
-}

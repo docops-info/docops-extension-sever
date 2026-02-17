@@ -16,6 +16,7 @@ data class PieDisplay @OptIn(ExperimentalUuidApi::class) constructor(
     val baseColor: String = "#3ABEF9",
     val outlineColor: String = "#050C9C",
     val scale: Float = 1.0f,
+    val theme: String = "classic",
     override val useDark: Boolean = false,
     override val visualVersion: Int = 1,
 ) : VisualDisplay

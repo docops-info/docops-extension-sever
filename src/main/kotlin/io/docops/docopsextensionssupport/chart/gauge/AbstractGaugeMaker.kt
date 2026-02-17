@@ -30,7 +30,11 @@ abstract class AbstractGaugeMaker : GaugeMaker {
     protected var height: Double = 300.0
 
     override fun makeGauge(gaugeChart: GaugeChart): String {
-        theme = ThemeFactory.getTheme(gaugeChart.display)
+        theme = if (gaugeChart.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(gaugeChart.display.theme, gaugeChart.display.useDark)
+        } else {
+            ThemeFactory.getTheme(gaugeChart.display)
+        }
         ranges = GaugeRanges()
 
         calculateDimensions(gaugeChart)

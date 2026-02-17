@@ -26,7 +26,11 @@ class BarGroupMaker(val useDark: Boolean) {
 
     fun makeBar(barGroup: BarGroup, isPdf: Boolean): Pair<String, CsvResponse> {
         barGroup.display.useDark = useDark
-        theme = ThemeFactory.getTheme(barGroup.display)
+        theme = if (barGroup.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(barGroup.display.theme, barGroup.display.useDark)
+        } else {
+            ThemeFactory.getTheme(barGroup.display)
+        }
         if ("brutalist".equals(barGroup.display.theme, ignoreCase = true)) {
             val brutalistMaker = CyberBrutalistBarGroupMaker(useDark)
             return brutalistMaker.makeBar(barGroup)

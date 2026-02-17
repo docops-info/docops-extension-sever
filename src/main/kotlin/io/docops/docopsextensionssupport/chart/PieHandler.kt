@@ -99,6 +99,7 @@ class PieHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
             useDark = useDark,
             baseColor = config.getOrDefault("baseColor", "#3ABEF9"),
             outlineColor = config.getOrDefault("outlineColor", "#050C9C"),
+            theme = config.getOrDefault("theme", "classic"),
             scale = config.getOrDefault("scale", "1.0").toFloatOrNull() ?: 1.0f,
             visualVersion = config.getOrDefault("visualVersion", "1").toIntOrNull() ?: 1
         )

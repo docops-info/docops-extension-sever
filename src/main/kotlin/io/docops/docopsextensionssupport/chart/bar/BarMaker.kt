@@ -17,7 +17,11 @@ class BarMaker {
     private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
 
     fun makeHorizontalBar(bar: Bar) : String {
-        theme = ThemeFactory.getTheme(bar.display)
+        theme = if (bar.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(bar.display.theme, bar.display.useDark)
+        } else {
+            ThemeFactory.getTheme(bar.display)
+        }
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
         sb.append(makeHead(bar))

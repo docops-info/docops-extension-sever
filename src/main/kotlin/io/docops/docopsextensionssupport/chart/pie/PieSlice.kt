@@ -8,17 +8,17 @@ import kotlin.math.abs
 @Serializable
 class PieSlice(val id: String = UUID.randomUUID().toString(), val label: String, val amount: Double = 0.0, val itemDisplay: SliceItemDisplay? = null)
 
-fun PieSlice.displayColor(index: Int) : String {
+fun PieSlice.displayColor(index: Int, displayId: String) : String {
     return if(null != itemDisplay?.color) {
         itemDisplay.color
     } else {
-        "url(#svgGradientColor_$index)"
+        "url(#id_${displayId}_svgGradientColor_$index)"
     }
 }
 
 @Serializable
 data class SliceDisplay(val id: String = UUID.randomUUID().toString(), val showLegend: Boolean = true, val legendRows: Int = 4, val donut: Boolean = false, val scale: Float = 1.0f, override val useDark: Boolean = false,
-                        override val visualVersion: Int = 1):
+                        override val visualVersion: Int = 1, val theme: String = "classic"):
     VisualDisplay
 
 @Serializable
@@ -49,16 +49,16 @@ data class DonutSlice(
 fun PieSlices.toDonutSlices() : MutableList<DonutSlice> {
     val donutSlices = mutableListOf<DonutSlice>()
     slices.forEachIndexed { index, pieSlice ->
-        donutSlices.add(pieSlice.toDonutSlice(sum(), index))
+        donutSlices.add(pieSlice.toDonutSlice(sum(), index, display.id))
     }
     //donutSlices.sortBy{it.percent}
     return donutSlices
 }
-fun PieSlice.toDonutSlice(sum: Double, idx: Int): DonutSlice {
+fun PieSlice.toDonutSlice(sum: Double, idx: Int, displayId: String): DonutSlice {
     return DonutSlice(id = id,
         percent = (amount / sum) * 100,
         amount = amount,
-        color = "url(#svgGradientColor_$idx)",
+        color = "url(#id_${displayId}_svgGradientColor_$idx)",
         label = label
         )
 }

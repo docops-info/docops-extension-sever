@@ -30,7 +30,11 @@ class BarGroupCondensedMaker {
     private var fontColor = "#fcfcfc"
     var theme: DocOpsTheme = ThemeFactory.getTheme(false)
     fun makeBar(barGroup: BarGroup): String {
-        theme = ThemeFactory.getTheme(barGroup.display)
+        theme = if (barGroup.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(barGroup.display.theme, barGroup.display.useDark)
+        } else {
+            ThemeFactory.getTheme(barGroup.display)
+        }
         val svgColor = SVGColor(barGroup.display.baseColor)
         fontColor = determineTextColor(barGroup.display.baseColor)
 

@@ -53,6 +53,7 @@ data class GaugeDisplay @OptIn(ExperimentalUuidApi::class) constructor(
     val columns: Int = 3,            // For MULTI_GAUGE
     val layout: String = "1x1",      // For DASHBOARD (e.g., "2x3")
     val innerRadius: Int = 60,       // For SOLID_FILL
+    val theme: String = "classic",
     val id: String = "gauge_${Uuid.random().toHexString()}"
 ) : VisualDisplay
 

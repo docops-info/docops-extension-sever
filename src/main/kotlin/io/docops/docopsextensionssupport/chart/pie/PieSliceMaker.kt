@@ -57,7 +57,7 @@ open class PieSliceMaker {
             val y = sin(arc) * 100
             val id = pieSlice.label.lowercase().filterNot{it.isWhitespace()}
             val path = """
-            <path class="pie" id="$id" d="M0,0 L${prevX.round(1)}, ${prevY.round(1)} A100,100 0 $largeArc,1 ${x.round(1)},${y.round(1)} Z" style="fill: ${pieSlice.displayColor(index)};">
+            <path class="pie" id="$id" d="M0,0 L${prevX.round(1)}, ${prevY.round(1)} A100,100 0 $largeArc,1 ${x.round(1)},${y.round(1)} Z" style="fill: ${pieSlice.displayColor(index, pieSlices.display.id)};">
             <title>${pieSlice.label} - ${pieSlice.amount}</title>
             </path>
             <text fill='#000000' text-anchor='middle' alignment-baseline='middle' font-size="8" font-family="Arial, Helvetica" stroke='black' stroke-width="0.2">
@@ -96,7 +96,7 @@ open class PieSliceMaker {
                 "Z"
             ).joinToString(" ")
 
-            paths.append("<path class=\"pie\" d=\"$pathData\" fill=\"${segment.displayColor(index)}\" />\n")
+            paths.append("<path class=\"pie\" d=\"$pathData\" fill=\"${segment.displayColor(index, pieSlices.display.id)}\" />\n")
 
             // Midpoint for label
             val midAngle = startAngle + (endAngle - startAngle) / 2
@@ -152,7 +152,7 @@ open class PieSliceMaker {
         chunks.forEach {
             var startY= 2
             it.forEachIndexed { index, pieSlice ->
-                sb.append("""<rect x="$startX" y="$startY" height="8" width="8" fill="${pieSlice.displayColor(count++)}"/>""")
+                sb.append("""<rect x="$startX" y="$startY" height="8" width="8" fill="${pieSlice.displayColor(count++, pieSlices.display.id)}"/>""")
                 startY += 10
             }
             startX += 200 / chunks.size

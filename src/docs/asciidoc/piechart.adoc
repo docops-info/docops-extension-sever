@@ -25,17 +25,11 @@ Default pie with automatic colors:
 ....
 [docops,pieslice]
 ----
-legend=false
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
+include::charts/data/pie1.txt[]
 ----
 ....
 
-[docops,pieslice,controls=true]
+[docops,pieslice,controls=true,useDark=false]
 ----
 include::charts/data/pie1.txt[]
 ----
@@ -52,9 +46,11 @@ Modern style with detailed legend cards:
 [docops,pieslice]
 ----
 title=Market Share by Region
-legend=true
+visualVersion=1
+legend=false
 donut=true
 percentages=true
+theme=tokyo
 ---
 North America | 35
 Europe | 28
@@ -63,6 +59,23 @@ Latin America | 10
 Middle East & Africa | 5
 ----
 ....
+
+
+[docops,pieslice,useDark=false]
+----
+title=Market Share by Region
+visualVersion=1
+legend=true
+donut=true
+percentages=true
+theme=tallinn
+---
+North America | 35
+Europe | 28
+Asia Pacific | 22
+Latin America | 10
+Middle East & Africa | 5
+----
 
 [.back-to-top]
 <<top, 🔝>>

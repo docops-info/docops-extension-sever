@@ -14,7 +14,11 @@ class DonutMakerImproved {
     private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
 
     fun makeDonut(pieSlices: PieSlices): String {
-        theme = ThemeFactory.getTheme(pieSlices.display)
+        theme = if (pieSlices.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(pieSlices.display.theme, pieSlices.display.useDark)
+        } else {
+            ThemeFactory.getTheme(pieSlices.display)
+        }
         val sb = StringBuilder()
 
         val buffer = 120
@@ -32,10 +36,13 @@ class DonutMakerImproved {
         sb.append(createEnhancedDefs(pieSlices))
 
         sb.append("<g>")
-        sb.append("<g transform=\"translate(4,20)\">")
 
         val titleColor = theme.primaryText
-        sb.append("""<text x="${(width * pieSlices.display.scale) / 2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: ${theme.fontFamily}; fill: $titleColor; font-weight: 800;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("""
+            <g transform="translate(4, 20)">
+            <text style="font-size: 24px; font-family: ${theme.fontFamily}; fill: $titleColor; font-weight: 800;">${pieSlices.title.escapeXml()}</text>
+            </g>
+        """.trimIndent())
         sb.append("</g>")
 
         val donuts = pieSlices.toDonutSlices()
@@ -49,9 +56,10 @@ class DonutMakerImproved {
 
     private fun createEnhancedDefs(pieSlices: PieSlices): String {
         val defGrad = StringBuilder()
-        val clrs = chartColorAsSVGColor()
-        for (i in 0 until pieSlices.slices.size) {
-            defGrad.append(clrs[i % clrs.size].linearGradient)
+        val clrs = theme.chartPalette
+        for (i in pieSlices.slices.indices) {
+            val clr = clrs[i % clrs.size]
+            defGrad.append(clr.createSimpleGradient(clr.color,"id_${pieSlices.display.id}_svgGradientColor_$i"))
         }
 
         return """
@@ -178,7 +186,7 @@ class DonutMakerImproved {
 
             sb.append("""
                 <g class="legend-item" transform="translate($xOffset, ${45 + row * 25})">
-                    <rect width="14" height="14" rx="4" fill="url(#svgGradientColor_$index)"/>
+                    <rect width="14" height="14" rx="4" fill="url(#id_${pieSlices.display.id}_svgGradientColor_$index)"/>
                     <text x="22" y="11" style="font-size: 12px; fill: $legendTextColor; font-weight: 500;">${donutSlice.label}</text>
                     <text x="160" y="11" text-anchor="end" style="font-size: 11px; fill: $subTextColor;">${donutSlice.valueFmt(donutSlice.amount)} (${donutSlice.valueFmt(donutSlice.percent)}%)</text>
                 </g>

@@ -28,9 +28,14 @@ class PieChartImproved {
             useDark = useDark,
             visualVersion = config["visualVersion"]?.toIntOrNull() ?: 1,
             donut = config["donut"]?.toBoolean() ?: false,
-            showLegend = config["legend"]?.toBoolean() ?: true
+            showLegend = config["legend"]?.toBoolean() ?: true,
+            theme = config["theme"] ?: "classic"
         )
-        theme = ThemeFactory.getTheme(display)
+        theme = if (display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(display.theme, display.useDark)
+        } else {
+            ThemeFactory.getTheme(display)
+        }
         // Parse colors from config or attributes
         val configColors = config["colors"]?.split(",")?.map { it.trim() }
         val customColors = configColors
@@ -49,7 +54,7 @@ class PieChartImproved {
         }
         // Parse the pie chart data
         val pieData = parsePieChartData(chartData)
-        var colors = ChartColors.CYBER_PALETTE
+        var colors = theme.chartPalette
         if (customColors != null) {
             colors = mutableListOf()
             customColors.forEach {
@@ -148,7 +153,7 @@ class PieChartImproved {
     ): String {
         val svgBuilder = StringBuilder()
         val id = display.id
-        val darkMode = theme.canvas != "#ffffff"
+
 
         // Calculate chart dimensions considering legend
         val legendWidth = if (showLegend) 200 else 0
@@ -179,16 +184,8 @@ class PieChartImproved {
             currentAngle += angleSize
         }
 
-        // Set background based on dark mode
-
-        // Set background based on dark mode (Midnight IDE aesthetic)
-        val backgroundColor = if (darkMode) "#020617" else "#ffffff"
-        val textColorPrimary = if (darkMode) "#f8fafc" else "#0f172a"
-        val textColorSecondary = if (darkMode) "#94a3b8" else "#475569"
-
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
-        val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = darkMode, id)
         //svgBuilder.append(BackgroundHelper.getBackgroundGradient(darkMode, id))
         // Enhanced atmospheric definitions
         svgBuilder.append("""
@@ -246,7 +243,6 @@ class PieChartImproved {
                 <stop offset="50%" style="stop-color:rgba(255,255,255,${if (darkMode) "0.1" else "0.15"});stop-opacity:1"/>
                 <stop offset="100%" style="stop-color:rgba(255,255,255,${if (darkMode) "0.03" else "0.05"});stop-opacity:1"/>
             </linearGradient>
-            $darkModeDefs
         </defs>
     """.trimIndent())
 
@@ -313,8 +309,8 @@ class PieChartImproved {
         </style>
     """.trimIndent())
 
-        svgBuilder.append(BackgroundHelper.getBackGroundPath(darkMode, id, width = width.toFloat(), height = height.toFloat()))
 // Apply atmospheric pattern overlay
+        svgBuilder.append("<rect width='$width' height='$height' fill='${theme.canvas}' rx='12' pointer-events='none'/>")
         svgBuilder.append("<rect width='$width' height='$height' fill='url(#dotPattern_$id)' rx='12' pointer-events='none'/>")
 
         // Generate pie segments with improved glass effects
@@ -413,12 +409,12 @@ class PieChartImproved {
 
         // Enhanced title with glass effect and typography
         svgBuilder.append("""
-            <text x="$centerX" y="35" 
+            <text x="10" y="35" 
                   font-size="22" 
                   font-weight="800"
-                  text-anchor="middle" 
                   fill="${theme.primaryText}"
                   class="glass-title chart-title">$title</text>
+                  <rect x="10" y="45" width="60" height="5" fill="${theme.accentColor}" rx="2"/>
         """.trimIndent())
 
         // Add legend if enabled - positioned properly on the right

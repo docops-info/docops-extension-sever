@@ -11,7 +11,11 @@ class CylinderBarMaker {
 
     @OptIn(ExperimentalUuidApi::class)
     fun makeVerticalCylinderBar(bar: Bar, isPDf: Boolean): String {
-        val theme = ThemeFactory.getTheme(bar.display)
+        val theme = if (bar.display.theme.isNotBlank()) {
+            ThemeFactory.getThemeByName(bar.display.theme, bar.display.useDark)
+        } else {
+            ThemeFactory.getTheme(bar.display)
+        }
         val width = 800.0
         val height = 600.0
         val leftMargin = 80.0
