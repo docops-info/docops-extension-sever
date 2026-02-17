@@ -73,10 +73,10 @@ class VBarMaker {
             val barHeight = (series.value / maxValue) * (yAxisEnd - yAxisStart)
             val barX = xAxisStart + centerOffset + (index * adjustedBarSpacing)
             val barY = yAxisEnd - barHeight
-            val gradientId = "gradient${index + 1}"
+            val gradientId = "id_${bar.display.id}_$index"
 
             // Add the gradient definition
-            val svgColor = ChartColors.Companion.getColorForIndex(index)
+            /*val svgColor = theme.chartPalette[index % theme.chartPalette.size]
             sb.append("""
                 <defs>
                     <linearGradient id="$gradientId" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -84,7 +84,7 @@ class VBarMaker {
                         <stop offset="100%" stop-color="${svgColor.darker()}"/>
                     </linearGradient>
                 </defs>
-            """.trimIndent())
+            """.trimIndent())*/
 
             // Add the bar with glass effect
             if(!isPDf) {
@@ -127,6 +127,7 @@ class VBarMaker {
                 """.trimIndent()
                 )
             } else {
+                val svgColor = theme.chartPalette[index % theme.chartPalette.size]
                 sb.append("""
                         <g class="glass-bar">
                         <!-- Base rectangle with gradient -->
@@ -307,10 +308,22 @@ class VBarMaker {
     }
 
     private fun addDefs(bar: Bar): String {
-        val background = BackgroundHelper.getBackgroundGradient(bar.display.useDark, bar.display.id)
+        // Add the gradient definition
+        val barDefs= StringBuilder()
+        bar.series.forEachIndexed { index, series ->
+            val svgColor = theme.chartPalette[index % theme.chartPalette.size]
+            barDefs.append(
+                """
+                    <linearGradient id="id_${bar.display.id}_$index" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="${svgColor.lighter()}"/>
+                        <stop offset="100%" stop-color="${svgColor.darker()}"/>
+                    </linearGradient>
+            """.trimIndent()
+            )
+        }
         return """
             <defs>
-            $background
+                $barDefs
                 <!-- Glass effect gradients -->
                 <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
@@ -400,7 +413,7 @@ fun main() {
             Series("Q5 - Fifth Quarter", 62.0),
             Series("Q6 - Sixth Quarter", 90.0)
         ),
-        display = BarDisplay(baseColor = "#4361ee", useDark = false)
+        display = BarDisplay(baseColor = "#4361ee", useDark = false, theme = "autumn")
     )
 
     // Generate the vertical bar chart
@@ -431,7 +444,7 @@ fun main() {
             Series("November", 60.0),
             Series("December", 95.0)
         ),
-        display = BarDisplay(baseColor = "#4361ee", useDark = false)
+        display = BarDisplay(baseColor = "#4361ee", useDark = false, theme="tallinn")
     )
 
     // Generate the vertical bar chart with more bars

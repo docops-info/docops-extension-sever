@@ -19,7 +19,7 @@ class PieMaker {
 
     private var theme = ThemeFactory.getTheme(false)
     fun makePies(pies: Pies) : String {
-        val theme = if (pies.pieDisplay.theme.isNotBlank()) {
+        theme = if (pies.pieDisplay.theme.isNotBlank()) {
             ThemeFactory.getThemeByName(pies.pieDisplay.theme, pies.pieDisplay.useDark)
         } else {
             ThemeFactory.getTheme(pies.pieDisplay)
@@ -37,7 +37,7 @@ class PieMaker {
         sb.append(makeHead(width, pies))
         sb.append("<defs>")
         sb.append(filters(pies))
-        sb.append(gradients(pies))
+        sb.append(gradients(pies, pies.pieDisplay.id))
 
         sb.append("</defs>")
         // Apply Background Pattern overlay
@@ -80,7 +80,7 @@ class PieMaker {
 
     private fun makePieSvg(pie: Pie, display: PieDisplay, index: Int) : String {
         val fill = theme.glassEffect
-        val gradientId = "pieGradient_$index"
+        val gradientId = "id_${display.id}_pieGradient_$index"
 
 
         //language=svg
@@ -239,7 +239,7 @@ class PieMaker {
              </filter>
          """.trimIndent()
 
-    private fun gradients(pies: Pies): String {
+    private fun gradients(pies: Pies, id: String): String {
         val sb = StringBuilder()
 
         pies.pies.forEachIndexed { index, _ ->
@@ -250,7 +250,7 @@ class PieMaker {
 
             // Create enhanced gradient with glass-like appearance
             sb.append("""
-                <linearGradient id="pieGradient_$index" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="id_${id}_pieGradient_$index" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="$brighterColor" stop-opacity="0.9"/>
                     <stop offset="40%" stop-color="$color" stop-opacity="0.95"/>
                     <stop offset="100%" stop-color="$color" stop-opacity="0.8"/>
@@ -275,7 +275,7 @@ class PieMaker {
         }
 
         // Otherwise use our modern color palette
-        return MODERN_COLORS[index % MODERN_COLORS.size].color
+        return theme.chartPalette[index % theme.chartPalette.size].color
     }
 
     /**

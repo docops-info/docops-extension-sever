@@ -10,9 +10,9 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 class PieMakerImproved {
 
     private val MODERN_COLORS = ChartColors.CYBER_PALETTE
-
+    private var theme = ThemeFactory.getTheme(false)
     fun makePies(pies: Pies): String {
-        val theme = if (pies.pieDisplay.theme.isNotBlank()) {
+        theme = if (pies.pieDisplay.theme.isNotBlank()) {
             ThemeFactory.getThemeByName(pies.pieDisplay.theme, pies.pieDisplay.useDark)
         } else {
             ThemeFactory.getTheme(pies.pieDisplay)
@@ -124,7 +124,7 @@ class PieMakerImproved {
     private fun makePieGradients(pies: Pies): String {
         val sb = StringBuilder()
         pies.pies.forEachIndexed { i, _ ->
-            val color = MODERN_COLORS[i % MODERN_COLORS.size].color
+            val color = theme.chartPalette[i % theme.chartPalette.size].color
             sb.append("""
                 <linearGradient id="grad_${pies.pieDisplay.id}_$i" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="$color" stop-opacity="0.8"/>
