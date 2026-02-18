@@ -12,6 +12,7 @@ import java.util.UUID
 class LineChartImproved {
 
 
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
     fun makeLineSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean): String {
 
         // Parse configuration and data from content
@@ -22,9 +23,10 @@ class LineChartImproved {
             useDark = useDark,
             visualVersion = visualVersion,
             smoothLines = config["smooth"]?.toBoolean() ?: true,
-            showArea = config["area"]?.toBoolean() ?: false
+            showArea = config["area"]?.toBoolean() ?: false,
+            theme = config["theme"] ?: "classic"
         )
-        val theme = ThemeFactory.getTheme(display)
+        theme = ThemeFactory.getThemeByName(display.theme)
 
         // Parse colors from config or attributes
         val configColors = config["colors"]?.split(",")?.map { it.trim() }
@@ -46,9 +48,9 @@ class LineChartImproved {
 
         csvResponse.update(convertLineDataSeriesToCsv(lineData))
 
-        var colors = ChartColors.Companion.modernColors
+        var colors = theme.chartPalette
         if (customColors != null) {
-            colors = mutableListOf<SVGColor>()
+            colors = mutableListOf()
             customColors.forEach {
                 colors.add(SVGColor(it))
             }

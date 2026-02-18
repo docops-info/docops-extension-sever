@@ -18,7 +18,7 @@ data class Point(val label: String, val y: Double)
 
 @Serializable
 data class LineChartDisplay (val id: String = UUID.randomUUID().toString(), val backgroundColor: String = "#F5F5F5", val smoothLines: Boolean = false, val showArea: Boolean = true,override val useDark: Boolean = false,
-                             override val visualVersion: Int = 1): VisualDisplay
+                             override val visualVersion: Int = 1, val theme: String = "classic"): VisualDisplay
 
 fun LineChart.peakHeight(): Double {
     val points = this.points

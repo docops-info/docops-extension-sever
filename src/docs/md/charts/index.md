@@ -46,6 +46,7 @@ title=Berry Picking by Month 2024
 yLabel=Number of Sales
 xLabel=Month
 vBar=true
+theme=sakura
 ---
 Jan | 120.0
 Feb | 334.0
@@ -62,6 +63,7 @@ title=Berry Picking by Month 2024
 yLabel=Number of Sales 
 xLabel=Month 
 vBar=true
+---
 Jan | 120.0 
 Feb | 334.0
 Mar | 455.0 
@@ -79,7 +81,7 @@ title=Berry Picking by Month 2024
 yLabel=Number of Sales
 xLabel=Month
 type=C
-paletteType=OCEAN_BREEZE
+theme=everest
 ---
 Jan | 120.0
 Feb | 334.0
@@ -202,10 +204,10 @@ Profit Margin | LINE | Q4 2024 | 35.4 | #27ae60 | SECONDARY
 
 Visualize trends and changes over time with smooth or angular lines.
 
-[docops:line]
+[docops:line useDark=true]
 title=Quarterly Performance
 width=800
-colors=#6a0dad,#0da6a0,#daad0d
+theme=tokyo
 ---
 Q1 2023 | Jan | 120
 Q1 2023 | Feb | 150
@@ -234,6 +236,8 @@ Modern, clean donut style with better visual hierarchy.
 
 [docops:pieslice]
 legend=false
+theme=istanbul
+donut=true
 ---
 Product A | 30
 Product B | 25
@@ -309,7 +313,7 @@ height=600
 legend=true
 percentages=true
 donut=true
-visualVersion=2
+theme=sakura
 ---
 Equity | 30
 Real-estate | 27
