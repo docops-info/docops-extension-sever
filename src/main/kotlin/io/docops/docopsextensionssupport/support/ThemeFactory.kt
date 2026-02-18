@@ -53,6 +53,9 @@ object ThemeFactory {
         return when (themeName.lowercase()) {
             "tallinn", "tallinntheme" -> if(useDark)ProDarkTheme() else TallinnTheme()
             "autumn", "autumntheme" -> if(useDark)ProDarkTheme() else AutumnTheme()
+            "istanbul", "istanbultheme" -> if(useDark)TokyoDarkTheme() else IstanbulTheme()
+            "everest", "everesttheme" -> if(useDark)TokyoDarkTheme() else EverestTheme()
+            "sakura", "sakuratheme" -> if(useDark)TokyoDarkTheme() else SakuraTheme()
             "tokyo", "tokyotheme" -> if(useDark)TokyoDarkTheme() else ModernLightTheme()
             "hex", "hexlighttheme" ->  HexLightTheme()
             "cyberlight", "cyberlighttheme" -> CyberLightTheme()
@@ -238,15 +241,15 @@ class TallinnTheme: CyberLightTheme() {
     override val accentColor = "#324979"
     override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
     override val chartPalette = listOf(
-            SVGColor("#425EB8"),  // Royal Blue (matches primary - for North America 35%)
-            SVGColor("#81549C"),  // Amethyst Purple (matches secondary - for Europe 28%)
-            SVGColor("#5B8DBE"),  // Baltic Sea Blue (for Asia Pacific 22%)
-            SVGColor("#7FA8C9"),  // Powder Blue (for Latin America 10%)
-            SVGColor("#324979"),  // Navy (matches accent - for Middle East & Africa 5%)
-            SVGColor("#6B7BA8"),  // Slate Blue
-            SVGColor("#8E9CC6"),  // Periwinkle
-            SVGColor("#4A6FA5")   // Cobalt
-        )
+        SVGColor("#425EB8"),  // Royal Blue (matches primary - for North America 35%)
+        SVGColor("#81549C"),  // Amethyst Purple (matches secondary - for Europe 28%)
+        SVGColor("#5B8DBE"),  // Baltic Sea Blue (for Asia Pacific 22%)
+        SVGColor("#7FA8C9"),  // Powder Blue (for Latin America 10%)
+        SVGColor("#324979"),  // Navy (matches accent - for Middle East & Africa 5%)
+        SVGColor("#6B7BA8"),  // Slate Blue
+        SVGColor("#8E9CC6"),  // Periwinkle
+        SVGColor("#4A6FA5")   // Cobalt
+    )
 }
 
 class AutumnTheme: CyberLightTheme() {
@@ -284,5 +287,64 @@ class TokyoDarkTheme: CyberDarkTheme() {
         SVGColor("#A8E6CF"),  // Pastel Green
         SVGColor("#FFB7CE"),  // Bubblegum Pink
         SVGColor("#9D84F2")   // Violet Glow
+    )
+}
+
+class IstanbulTheme: CyberDarkTheme() {
+    override val name = "IstanbulTheme"
+    override val canvas = "#DBF0F1"
+    override val primaryText = "#1190A1"
+    override val secondaryText = "#0887B5"
+    override val accentColor = "#C16979"
+    override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
+    override val chartPalette = listOf(
+        SVGColor("#1190A1"),  // Turquoise (matches primary)
+        SVGColor("#C16979"),  // Rose (matches accent)
+        SVGColor("#0887B5"),  // Deep Teal (matches secondary)
+        SVGColor("#5AB5C1"),  // Light Turquoise
+        SVGColor("#D88A97"),  // Soft Coral
+        SVGColor("#2FA8B8"),  // Cyan
+        SVGColor("#A44F5E"),  // Deep Rose
+        SVGColor("#76C2CE")   // Sky Blue
+    )
+}
+
+class SakuraTheme: CyberLightTheme() {
+    override val name = "SakuraTheme"
+    override val canvas = "#F8DBE6"
+    override val primaryText = "#98556C"
+    override val secondaryText = "#CB6B91"
+    override val accentColor = "#607FA9"
+    override val surfaceImpact = "rgba(230, 159, 0, 0.2)"
+    override val chartPalette = listOf(
+        SVGColor("#CB6B91"),  // Cherry Blossom Pink (matches secondary)
+        SVGColor("#607FA9"),  // Serene Blue (matches accent)
+        SVGColor("#98556C"),  // Mauve (matches primary)
+        SVGColor("#E199B3"),  // Light Pink
+        SVGColor("#7A99BD"),  // Powder Blue
+        SVGColor("#B37589"),  // Dusty Rose
+        SVGColor("#4D6A8F"),  // Slate Blue
+        SVGColor("#D4A3B8")   // Pale Pink
+    )
+}
+
+class EverestTheme: CyberLightTheme() {
+    override val name = "EverestTheme"
+    override val canvas = "#FDFEFF"
+    override val primaryText = "#8C4069"
+    override val secondaryText = "#1A6D9F"
+    override val accentColor = "#007A47"
+    override val surfaceImpact = "rgba(26, 109, 159, 0.12)"
+    override val chartPalette = listOf(
+        SVGColor("#1A6D9F", "Summit Blue"),        // Deep sky blue from secondaryText
+        SVGColor("#007A47", "Forest Green"),       // Alpine forest from accentColor
+        SVGColor("#8C4069", "Rhododendron Pink"),  // Mountain flower from primaryText
+        SVGColor("#E69F00", "Sunrise Gold"),       // Golden hour extracted from surfaceImpact
+        SVGColor("#56B4E9", "Glacier Ice"),        // Bright glacier blue
+        SVGColor("#009E73", "Valley Moss"),        // Rich moss green
+        SVGColor("#D55E00", "Sunset Copper"),      // Warm sunset tone
+        SVGColor("#0072B2", "Deep Lake"),          // Mountain lake blue
+        SVGColor("#CC79A7", "Alpine Rose"),        // Soft mountain flower
+        SVGColor("#F0E442", "Snow Reflection")     // Bright snow highlight
     )
 }

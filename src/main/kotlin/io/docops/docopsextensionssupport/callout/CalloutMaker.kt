@@ -1,7 +1,13 @@
 package io.docops.docopsextensionssupport.callout
 
+import io.docops.docopsextensionssupport.support.SVGColor
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlinx.serialization.json.Json
+import kotlin.compareTo
+import kotlin.div
+import kotlin.rem
+import kotlin.times
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -12,35 +18,7 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    private interface ThemeColors {
-        val bgStart: String
-        val bgEnd: String
-        val cardBg: String
-        val textPrimary: String
-        val textSecondary: String
-        val accentPrimary: String
-        val accentSuccess: String
-    }
-
-    private class DarkTheme : ThemeColors {
-        override val bgStart = "#020617"
-        override val bgEnd = "#0F172A"
-        override val cardBg = "#1E293B"
-        override val textPrimary = "#F8FAFC"
-        override val textSecondary = "#94A3B8"
-        override val accentPrimary = "#A855F7"
-        override val accentSuccess = "#2DD4BF"
-    }
-
-    private class LightTheme : ThemeColors {
-        override val bgStart = "#F8FAFC"
-        override val bgEnd = "#F1F5F9"
-        override val cardBg = "#FFFFFF"
-        override val textPrimary = "#0F172A"
-        override val textSecondary = "#475569"
-        override val accentPrimary = "#7C3AED"
-        override val accentSuccess = "#059669"
-    }
+    private val theme = if(useDark) ThemeFactory.getThemeByName("tokyo") else ThemeFactory.getThemeByName("modernlight")
 
     // Table format parsing methods
     fun createSystematicApproachFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
@@ -64,9 +42,9 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
     // JSON format methods
     fun createSystematicApproachSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = try {
-            json.decodeFromString<CalloutData>(payload)
+            json.decodeFromString<CalloutData>(payload).copy(useDark = useDark)
         } catch (e: Exception) {
-            createDefaultCalloutData()
+            createDefaultCalloutData().copy(useDark = useDark)
         }
 
         val svg = generateSystematicSvg(calloutData, width, height)
@@ -75,9 +53,9 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
 
     fun createMetricsSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = try {
-            json.decodeFromString<CalloutData>(payload)
+            json.decodeFromString<CalloutData>(payload).copy(useDark = useDark)
         } catch (e: Exception) {
-            createDefaultCalloutData()
+            createDefaultCalloutData().copy(useDark = useDark)
         }
         val svg = generateMetricsSvg(calloutData, width, height)
         return Pair(svg, calloutData.toCsv())
@@ -85,9 +63,9 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
 
     fun createTimelineSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = try {
-            json.decodeFromString<CalloutData>(payload)
+            json.decodeFromString<CalloutData>(payload).copy(useDark = useDark)
         } catch (e: Exception) {
-            createDefaultCalloutData()
+            createDefaultCalloutData().copy(useDark = useDark)
         }
         val svg = generateTimelineSvg(calloutData, width, height)
         return Pair(svg, calloutData.toCsv())
@@ -120,53 +98,55 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
         val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         var title = "Callout"
 
+        // Pre-parse title from any line starting with title= or title:
+        val titleRegex = """^title[:=]\s*(.*?)(?:\s+type=|\s*$)""".toRegex(RegexOption.IGNORE_CASE)
+        lines.forEach { line ->
+            val match = titleRegex.find(line)
+            if (match != null) {
+                title = match.groupValues[1].trim()
+            }
+        }
         return when (type) {
             "metrics" -> {
                 val metrics = mutableMapOf<String, String>()
                 var inDataSection = false
                 for (line in lines) {
-                    when {
-                        line.startsWith("title:") -> title = line.substring(6).trim()
-                        line.startsWith("title=") -> title = line.substring(6).trim()
-
-                        line == "---" -> inDataSection = true
-                        inDataSection && line.contains("|") && !isHeaderRow(line) -> {
-                            val parts = line.split("|").map { it.trim() }
-                            if (parts.size >= 2) {
-                                metrics[parts[0]] = parts[1]
-                            }
+                    if (line == "---") {
+                        inDataSection = true
+                        continue
+                    }
+                    if (inDataSection && line.contains("|") && !isHeaderRow(line)) {
+                        val parts = line.split("|").map { it.trim() }
+                        if (parts.size >= 2) {
+                            metrics[parts[0]] = parts[1]
                         }
                     }
                 }
-
                 CalloutData(title = title, metrics = metrics, useDark = useDark)
             }
-            "systematic" -> {
+            "systematic", "timeline" -> {
                 val steps = mutableListOf<CalloutStep>()
                 var inDataSection = false
 
                 for (line in lines) {
-                    when {
-                        line.startsWith("title:") -> title = line.substring(6).trim()
-                        line.startsWith("title=") -> title = line.substring(6).trim()
-
-                        line == "---" -> inDataSection = true
-                        inDataSection && line.contains("|") && !isHeaderRow(line) -> {
-                            val parts = line.split("|").map { it.trim() }
-                            if (parts.size >= 3) {
-                                val phase = parts[0]
-                                val action = parts[1]
-                                val result = parts[2]
-                                val improvement = if (parts.size > 3) parts[3] else null
-                                steps.add(CalloutStep(phase, action, result, improvement))
-                            }
+                    if (line == "---") {
+                        inDataSection = true
+                        continue
+                    }
+                    if (inDataSection && line.contains("|") && !isHeaderRow(line)) {
+                        val parts = line.split("|").map { it.trim() }
+                        if (parts.size >= 3) {
+                            val phase = parts[0]
+                            val action = parts[1]
+                            val result = parts[2]
+                            val improvement = if (parts.size > 3) parts[3] else null
+                            steps.add(CalloutStep(phase, action, result, improvement))
                         }
                     }
                 }
-
                 CalloutData(title = title, steps = steps, useDark = useDark)
             }
-            else -> createDefaultCalloutData()
+            else -> createDefaultCalloutData().copy(title = title)
         }
     }
 
@@ -181,28 +161,32 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
         }
         val finalHeight = calculatedHeight.coerceAtLeast(height)
 
+        var stopColor = theme.surfaceImpact
+        if(!useDark) {
+            stopColor = SVGColor(theme.canvas).darker()!!
+        }
         return buildString {
             val id = Uuid.random().toHexString()
-            val theme = if (calloutData.useDark) DarkTheme() else LightTheme()
+            //val theme = if (calloutData.useDark) DarkTheme() else LightTheme()
 
             append("""
                 <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
                     <defs>
                         <style>
-                            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap');
-                            .title_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: ${theme.textPrimary}; letter-spacing: -0.5px; }
-                            .phase_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 17px; fill: ${theme.textPrimary}; }
-                            .action_$id { font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 14px; fill: ${theme.textSecondary}; }
-                            .result_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: ${theme.accentSuccess}; }
-                            .step-num_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 12px; fill: ${theme.accentPrimary}; }
+                            ${theme.fontImport}
+                            .title_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 26px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
+                            .phase_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 17px; fill: ${theme.primaryText}; }
+                            .action_$id { font-family: ${theme.fontFamily}; font-weight: 300; font-size: 14px; fill: ${theme.secondaryText}; }
+                            .result_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 13px; fill: ${theme.accentColor}; }
+                            .step-num_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 12px; fill: ${theme.accentColor}; }
                         </style>
-                        <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="${theme.bgStart}" />
-                            <stop offset="100%" stop-color="${theme.bgEnd}" />
+                        <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="${theme.canvas}" />
+                            <stop offset="100%" stop-color="$stopColor" />
                         </linearGradient>
                         <linearGradient id="spineGrad_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="${theme.accentPrimary}" />
-                            <stop offset="100%" stop-color="${theme.accentSuccess}" />
+                            <stop offset="0%" stop-color="${theme.accentColor}" />
+                            <stop offset="100%" stop-color="${theme.surfaceImpact}" />
                         </linearGradient>
                     </defs>
 
@@ -210,13 +194,13 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
                     <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="24"/>
                     
                     <!-- Decorative Grid -->
-                    <g opacity="0.05" stroke="${theme.textPrimary}" stroke-width="1">
+                    <g opacity="0.05" stroke="${theme.primaryText}" stroke-width="1">
                         <path d="M40 0 L40 $finalHeight M${width - 40} 0 L${width - 40} $finalHeight" stroke-dasharray="4 4"/>
                     </g>
 
                     <!-- Header -->
                     <text x="50" y="70" class="title_$id">${calloutData.title}</text>
-                    <rect x="50" y="85" width="40" height="4" fill="${theme.accentPrimary}" rx="2"/>
+                    <rect x="50" y="85" width="40" height="4" fill="${theme.secondaryText}" rx="2"/>
 
                     <!-- Vertical Spine -->
                     <rect x="68" y="130" width="2" height="${stepsCount * stepHeight}" fill="url(#spineGrad_$id)" opacity="0.3"/>
@@ -232,14 +216,14 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
 
                 append("""
                     <g transform="translate(50, $y)">
-                        <circle cx="18" cy="18" r="18" fill="${theme.cardBg}" stroke="${theme.accentPrimary}" stroke-width="2"/>
+                        <circle cx="18" cy="18" r="18" fill="${theme.canvas}" stroke="${theme.accentColor}" stroke-width="2"/>
                         <text x="18" y="23" text-anchor="middle" class="step-num_$id">${index + 1}</text>
                         
                         <text x="55" y="15" class="phase_$id">${step.phase}</text>
                         <text x="55" y="38" class="action_$id">${step.action}</text>
                         
                         <g transform="translate(55, 52)">
-                            <rect width="$resultPillWidth" height="28" rx="14" fill="${theme.accentSuccess}" fill-opacity="0.1"/>
+                            <rect width="$resultPillWidth" height="28" rx="14" fill="${theme.accentColor}" fill-opacity="0.1"/>
                             <text x="16" y="19" class="result_$id">${step.result}</text>
                         </g>
                 """.trimIndent())
@@ -248,8 +232,8 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
                     // Dynamic width for improvement badge
                     val impWidth = (imp.length * 7.5) + 24
                     append("""
-                        <rect x="${width - impWidth - 50}" y="10" width="$impWidth" height="22" rx="11" fill="${theme.accentPrimary}" fill-opacity="0.1"/>
-                        <text x="${width - (impWidth/2) - 50}" y="25" text-anchor="middle" font-family="Outfit" font-size="10" font-weight="600" fill="${theme.accentPrimary}" style="text-transform:uppercase; letter-spacing: 0.5px;">${imp}</text>
+                        <rect x="${width - impWidth - 50}" y="10" width="$impWidth" height="22" rx="11" fill="${theme.accentColor}" fill-opacity="0.1"/>
+                        <text x="${width - (impWidth/2) - 50}" y="25" text-anchor="middle" font-family="${theme.fontFamily}" font-size="10" font-weight="600" fill="${theme.accentColor}" style="text-transform:uppercase; letter-spacing: 0.5px;">${imp}</text>
                     """.trimIndent())
                 }
                 append("</g>")
@@ -271,31 +255,33 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
 
         return buildString {
             val id = Uuid.random().toHexString()
-            val theme = if (calloutData.useDark) DarkTheme() else LightTheme()
-
+            var stopColor = theme.surfaceImpact
+            if(!useDark) {
+                stopColor = SVGColor(theme.canvas).darker()!!
+            }
             append("""
                 <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
                     <defs>
                         <style>
-                            @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;display=swap');
-                            .title_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 26px; fill: ${theme.textPrimary}; letter-spacing: -0.5px; }
-                            .metric-key_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; fill: ${theme.textSecondary}; text-transform: uppercase; letter-spacing: 1px; }
-                            .metric-val_$id { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 18px; fill: ${theme.textPrimary}; }
+                            ${theme.fontImport}
+                            .title_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 26px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
+                            .metric-key_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 15px; fill: ${theme.secondaryText}; text-transform: uppercase; letter-spacing: 1px; }
+                            .metric-val_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 18px; fill: ${theme.primaryText}; }
                         </style>
                         <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="${theme.bgStart}" />
-                            <stop offset="100%" stop-color="${theme.bgEnd}" />
+                            <stop offset="0%" stop-color="${theme.canvas}" />
+                            <stop offset="100%" stop-color="$stopColor" />
                         </linearGradient>
                     </defs>
 
                     <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="24"/>
                     
-                    <g opacity="0.05" stroke="${theme.textPrimary}" stroke-width="1">
+                    <g opacity="0.05" stroke="${theme.primaryText}" stroke-width="1">
                         <path d="M0 110 L$width 110" />
                     </g>
 
                     <text x="50" y="70" class="title_$id">${calloutData.title}</text>
-                    <rect x="50" y="85" width="40" height="4" fill="${theme.accentPrimary}" rx="2"/>
+                    <rect x="50" y="85" width="40" height="4" fill="${theme.accentColor}" rx="2"/>
 
             """.trimIndent())
 
@@ -307,13 +293,13 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
                 append("""
                     <g transform="translate(50, $currentY)">
                         <!-- Decorative indicator -->
-                        <rect width="4" height="60" fill="${theme.accentPrimary}" rx="2" opacity="0.6"/>
+                        <rect width="4" height="60" fill="${theme.accentColor}" rx="2" opacity="0.6"/>
                         
                         <!-- Metric Info -->
                         <text x="20" y="20" class="metric-key_$id">$key</text>
                         
                         <g transform="translate(20, 30)">
-                            <rect width="$valPillWidth" height="34" rx="17" fill="${theme.accentPrimary}" fill-opacity="0.08" stroke="${theme.accentPrimary}" stroke-opacity="0.2"/>
+                            <rect width="$valPillWidth" height="34" rx="17" fill="${theme.accentColor}" fill-opacity="0.08" stroke="${theme.accentColor}" stroke-opacity="0.2"/>
                             <text x="20" y="23" class="metric-val_$id">$value</text>
                         </g>
                     </g>
@@ -540,6 +526,7 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
             )
         )
     }
+
 
 
 }

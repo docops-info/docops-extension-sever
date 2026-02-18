@@ -1,7 +1,6 @@
 package io.docops.docopsextensionssupport.chart.bar
 
 
-import io.docops.docopsextensionssupport.chart.ChartColors
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import kotlin.uuid.ExperimentalUuidApi
@@ -9,9 +8,10 @@ import kotlin.uuid.ExperimentalUuidApi
 
 class CylinderBarMaker {
 
+    private var theme = ThemeFactory.getTheme(false)
     @OptIn(ExperimentalUuidApi::class)
     fun makeVerticalCylinderBar(bar: Bar, isPDf: Boolean): String {
-        val theme = if (bar.display.theme.isNotBlank()) {
+        theme = if (bar.display.theme.isNotBlank()) {
             ThemeFactory.getThemeByName(bar.display.theme, bar.display.useDark)
         } else {
             ThemeFactory.getTheme(bar.display)
@@ -115,7 +115,7 @@ class CylinderBarMaker {
             val y = yAxisBottom - barHeight
 
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.Companion.getColorForIndex(index).color
+            val color = seriesItem.itemDisplay?.baseColor ?: theme.chartPalette[index % theme.chartPalette.size].color
             val gradientId = "cylinderGradient${index}_${bar.display.id}"
 
             sb.append(generateCylinderBar(
@@ -148,7 +148,7 @@ class CylinderBarMaker {
         // Generate gradients for each bar using modern colors
         series.forEachIndexed { index, seriesItem ->
             // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: ChartColors.Companion.getColorForIndex(index).color
+            val color = seriesItem.itemDisplay?.baseColor ?: theme.chartPalette[index % theme.chartPalette.size].color
             val gradientId = "cylinderGradient${index}_${display.id}"
 
             sb.append(generateRadialGradient(gradientId, color))
