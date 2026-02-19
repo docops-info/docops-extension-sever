@@ -358,6 +358,194 @@
         }
     }
 
+    .source-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 20, 25, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 2147483647;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+
+    .source-modal.active {
+        display: flex;
+    }
+
+    .source-modal-content {
+        width: 95vw;
+        max-width: 1200px;
+        height: 90vh;
+        background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(126, 87, 255, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(126, 87, 255, 0.2);
+        animation: sourceModalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes sourceModalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .source-modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
+        font-weight: 300;
+    }
+
+    .source-modal-close:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: rotate(90deg);
+    }
+
+    .source-modal-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 3rem 2rem 2rem 2rem;
+    }
+
+    .source-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+
+    .source-modal-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--accent-secondary, #b392ff);
+        font-size: 1rem;
+    }
+
+    .source-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .source-action-btn {
+        background: rgba(126, 87, 255, 0.15);
+        border: 1px solid rgba(126, 87, 255, 0.4);
+        color: var(--accent-secondary, #b392ff);
+        font-family: 'Syne', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .source-action-btn:hover {
+        background: rgba(126, 87, 255, 0.8);
+        color: #fff;
+        border-color: var(--accent-primary, #7e57ff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    }
+
+    .btn-icon {
+        font-size: 1em;
+    }
+
+    .source-code-pre {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        overflow: auto;
+        margin: 0;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .source-code {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e2e8f0;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .source-error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Light mode overrides */
+    @media (prefers-color-scheme: light) {
+        .source-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .source-modal-content {
+            background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .source-modal-title {
+            color: #6a3de8;
+        }
+
+        .source-code-pre {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .source-code {
+            color: #334155;
+        }
+    }
 </style>
 
 <!--slide show style-->
@@ -1870,7 +2058,104 @@
     };
 
 </script>
+<script>
+    const docopsSource = {
+        toggle(btn) {
+            const card = btn.closest('.docops-media-card');
+            const id = card.id;
+            const modal = document.getElementById(`source-modal-${id}`);
 
+            if (!modal) {
+                console.error('Source modal not found for', id);
+                return;
+            }
+
+            this.renderSource(card, modal);
+
+            // Move modal to body to avoid z-index/transform issues
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+
+        close(id) {
+            const modal = document.getElementById(`source-modal-${id}`);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        renderSource(card, modal) {
+            const container = modal.querySelector('.source-modal-body');
+            if (!container || container.dataset.rendered === 'true') return;
+
+            const originalContent = card.getAttribute('data-original-content');
+
+            if (!originalContent || !originalContent.trim()) {
+                container.innerHTML = '<div class="source-error">No source content available.</div>';
+                return;
+            }
+
+            // Decode HTML entities
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            const kind = card.getAttribute('data-kind') || 'source';
+
+            container.innerHTML = `
+            <div class="source-modal-header">
+                <span class="source-modal-title">${kind.toUpperCase()} Source</span>
+                <div class="source-modal-actions">
+                    <button class="source-action-btn" onclick="docopsSource.copySource('${card.id}')">
+                        <span class="btn-icon">📋</span> COPY
+                    </button>
+                </div>
+            </div>
+            <pre class="source-code-pre"><code class="source-code">${this.escapeHtml(decoded)}</code></pre>
+        `;
+
+            container.dataset.rendered = 'true';
+        },
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        },
+
+        copySource(cardId) {
+            const card = document.getElementById(cardId);
+            const originalContent = card.getAttribute('data-original-content');
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            navigator.clipboard.writeText(decoded).then(() => {
+                const btn = document.querySelector(`#source-modal-${cardId} .source-action-btn`);
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span class="btn-icon">✓</span> COPIED!';
+                    btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+    };
+</script>
 <div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
     <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
     <div class="showcase-modal-content">
@@ -2209,7 +2494,7 @@ window.onload = function() {
 <div class="sect1">
 <h2 id="_default_look">2. Default Look</h2>
 <div class="sectionbody">
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_5170e54ef1fd451aa7c1b3f9aafbd917" width="970" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 970 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["Q2 2024 Business Metrics","1","$4.2M","Revenue","18% YoY Growth","ios","false"],["","2","156","New Customers","42 Enterprise","",""],["","3","94%","Customer Retention","2% Improvement","",""],["","4","72","NPS Score","Industry Leading","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;family=JetBrains+Mono&amp;display=swap'); .metric-value_5170e54ef1fd451aa7c1b3f9aafbd917 { font-family: 'Outfit', sans-serif; font-weight: 700; fill: #1E293B; } .metric-label_5170e54ef1fd451aa7c1b3f9aafbd917 { font-family: 'Outfit', sans-serif; font-weight: 400; fill: #64748B; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_5170e54ef1fd451aa7c1b3f9aafbd917 { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: #A855F7; } .title-text_5170e54ef1fd451aa7c1b3f9aafbd917 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; fill: #0F172A; }</style><pattern id="grid_5170e54ef1fd451aa7c1b3f9aafbd917" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#CBD5E1" stroke-width="0.5"/></pattern><filter id="glow_5170e54ef1fd451aa7c1b3f9aafbd917"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="shadow_5170e54ef1fd451aa7c1b3f9aafbd917" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,0.08)"/></filter><linearGradient id="cardGrad_5170e54ef1fd451aa7c1b3f9aafbd917" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFFFFF" /><stop offset="100%" stop-color="#F1F5F9" /></linearGradient></defs><!-- Background Layering --><rect width="100%" height="100%" fill="#F8FAFC" rx="12"/><rect width="100%" height="100%" fill="url(#grid_5170e54ef1fd451aa7c1b3f9aafbd917)" opacity="0.5"/><!-- Title Section --><g transform="translate(40, 50)"><text x="0" y="0" class="title-text_5170e54ef1fd451aa7c1b3f9aafbd917">Q2 2024 Business Metrics</text><rect x="0" y="15" width="60" height="4" fill="#A855F7" rx="2" filter="url(#glow_5170e54ef1fd451aa7c1b3f9aafbd917)"/></g><g class="metrics"><g class="metric-card" transform="translate(40, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_5170e54ef1fd451aa7c1b3f9aafbd917)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_5170e54ef1fd451aa7c1b3f9aafbd917)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#A855F7" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_5170e54ef1fd451aa7c1b3f9aafbd917">$4.2M</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_5170e54ef1fd451aa7c1b3f9aafbd917">Revenue</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_5170e54ef1fd451aa7c1b3f9aafbd917">> 18% YoY Growth</text></g><g class="metric-card" transform="translate(270, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_5170e54ef1fd451aa7c1b3f9aafbd917)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_5170e54ef1fd451aa7c1b3f9aafbd917)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2DD4BF" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_5170e54ef1fd451aa7c1b3f9aafbd917">156</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_5170e54ef1fd451aa7c1b3f9aafbd917">New Customers</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_5170e54ef1fd451aa7c1b3f9aafbd917">> 42 Enterprise</text></g><g class="metric-card" transform="translate(500, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_5170e54ef1fd451aa7c1b3f9aafbd917)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_5170e54ef1fd451aa7c1b3f9aafbd917)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#F43F5E" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_5170e54ef1fd451aa7c1b3f9aafbd917">94%</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_5170e54ef1fd451aa7c1b3f9aafbd917">Customer Retention</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_5170e54ef1fd451aa7c1b3f9aafbd917">> 2% Improvement</text></g><g class="metric-card" transform="translate(730, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_5170e54ef1fd451aa7c1b3f9aafbd917)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_5170e54ef1fd451aa7c1b3f9aafbd917)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#3B82F6" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_5170e54ef1fd451aa7c1b3f9aafbd917">72</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_5170e54ef1fd451aa7c1b3f9aafbd917">NPS Score</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_5170e54ef1fd451aa7c1b3f9aafbd917">> Industry Leading</text></g>    </g></svg></div></div></div></div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_026e1fd1ebc24bd28c120357f5ea0de1" width="970" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 970 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-18</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Q2 2024 Business Metrics","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","$4.2M","Revenue","18% YoY Growth","classic","false"],["","2","156","New Customers","42 Enterprise","",""],["","3","94%","Customer Retention","2% Improvement","",""],["","4","72","NPS Score","Industry Leading","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.metric-value_026e1fd1ebc24bd28c120357f5ea0de1 { font-family: Arial, Helvetica, sans-serif; font-weight: 700; fill: #111111; } .metric-label_026e1fd1ebc24bd28c120357f5ea0de1 { font-family: Arial, Helvetica, sans-serif; font-weight: 400; fill: #4338ca; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_026e1fd1ebc24bd28c120357f5ea0de1 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #2563eb; } .title-text_026e1fd1ebc24bd28c120357f5ea0de1 { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 26.0px; fill: #111111; }</style><pattern id="grid_026e1fd1ebc24bd28c120357f5ea0de1" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#111111" stroke-width="0.3" opacity="0.1"/></pattern><filter id="glow_026e1fd1ebc24bd28c120357f5ea0de1"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="shadow_026e1fd1ebc24bd28c120357f5ea0de1" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="black" flood-opacity="0.3"/></filter><linearGradient id="cardGrad_026e1fd1ebc24bd28c120357f5ea0de1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(255, 255, 255, 0.9)" /><stop offset="100%" stop-color="rgba(0, 0, 0, 0.05)" /></linearGradient></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#ffffff" rx="16"/><rect width="100%" height="100%" fill="url(#grid_026e1fd1ebc24bd28c120357f5ea0de1)"/><!-- Title Section --><g transform="translate(40, 60)"><text x="0" y="0" class="title-text_026e1fd1ebc24bd28c120357f5ea0de1">Q2 2024 Business Metrics</text><rect x="0" y="18" width="40" height="5" fill="#2563eb" rx="2" filter="url(#glow_026e1fd1ebc24bd28c120357f5ea0de1)"/></g><g class="metrics"><g class="metric-card" transform="translate(40, 130)"><!-- Card Background --><rect width="200" height="180" rx="4" fill="url(#cardGrad_026e1fd1ebc24bd28c120357f5ea0de1)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_026e1fd1ebc24bd28c120357f5ea0de1)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2563eb" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42.0" class="metric-value_026e1fd1ebc24bd28c120357f5ea0de1">$4.2M</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="13.0" class="metric-label_026e1fd1ebc24bd28c120357f5ea0de1"><tspan x="100" dy="0">Revenue</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_026e1fd1ebc24bd28c120357f5ea0de1">> 18% YoY Growth</text></g><g class="metric-card" transform="translate(270, 130)"><!-- Card Background --><rect width="200" height="180" rx="4" fill="url(#cardGrad_026e1fd1ebc24bd28c120357f5ea0de1)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_026e1fd1ebc24bd28c120357f5ea0de1)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2DD4BF" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42.0" class="metric-value_026e1fd1ebc24bd28c120357f5ea0de1">156</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="13.0" class="metric-label_026e1fd1ebc24bd28c120357f5ea0de1"><tspan x="100" dy="0">New Customers</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_026e1fd1ebc24bd28c120357f5ea0de1">> 42 Enterprise</text></g><g class="metric-card" transform="translate(500, 130)"><!-- Card Background --><rect width="200" height="180" rx="4" fill="url(#cardGrad_026e1fd1ebc24bd28c120357f5ea0de1)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_026e1fd1ebc24bd28c120357f5ea0de1)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#F43F5E" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42.0" class="metric-value_026e1fd1ebc24bd28c120357f5ea0de1">94%</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="13.0" class="metric-label_026e1fd1ebc24bd28c120357f5ea0de1"><tspan x="100" dy="0">Customer Retention</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_026e1fd1ebc24bd28c120357f5ea0de1">> 2% Improvement</text></g><g class="metric-card" transform="translate(730, 130)"><!-- Card Background --><rect width="200" height="180" rx="4" fill="url(#cardGrad_026e1fd1ebc24bd28c120357f5ea0de1)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_026e1fd1ebc24bd28c120357f5ea0de1)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#3B82F6" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42.0" class="metric-value_026e1fd1ebc24bd28c120357f5ea0de1">72</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="13.0" class="metric-label_026e1fd1ebc24bd28c120357f5ea0de1"><tspan x="100" dy="0">NPS Score</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_026e1fd1ebc24bd28c120357f5ea0de1">> Industry Leading</text></g>    </g></svg></div></div></div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2218,7 +2503,7 @@ window.onload = function() {
 <div class="sect1">
 <h2 id="_sustainability_metrics_example">3. Sustainability Metrics Example</h2>
 <div class="sectionbody">
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_39016899220b46eebc1f91c37b1a29aa" width="1200" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["Sustainability Achievements","1","28%","Carbon Reduction","vs. 2020 Baseline","ios","false"],["","2","72%","Renewable Energy","Of Total Consumption","",""],["","3","350K","Water Conservation","Gallons Saved","",""],["","4","94%","Waste Diverted","From Landfill","",""],["","5","65%","Paper Reduction","Digital Transformation","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;family=JetBrains+Mono&amp;display=swap'); .metric-value_39016899220b46eebc1f91c37b1a29aa { font-family: 'Outfit', sans-serif; font-weight: 700; fill: #1E293B; } .metric-label_39016899220b46eebc1f91c37b1a29aa { font-family: 'Outfit', sans-serif; font-weight: 400; fill: #64748B; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_39016899220b46eebc1f91c37b1a29aa { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: #A855F7; } .title-text_39016899220b46eebc1f91c37b1a29aa { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; fill: #0F172A; }</style><pattern id="grid_39016899220b46eebc1f91c37b1a29aa" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#CBD5E1" stroke-width="0.5"/></pattern><filter id="glow_39016899220b46eebc1f91c37b1a29aa"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="shadow_39016899220b46eebc1f91c37b1a29aa" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,0.08)"/></filter><linearGradient id="cardGrad_39016899220b46eebc1f91c37b1a29aa" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFFFFF" /><stop offset="100%" stop-color="#F1F5F9" /></linearGradient></defs><!-- Background Layering --><rect width="100%" height="100%" fill="#F8FAFC" rx="12"/><rect width="100%" height="100%" fill="url(#grid_39016899220b46eebc1f91c37b1a29aa)" opacity="0.5"/><!-- Title Section --><g transform="translate(40, 50)"><text x="0" y="0" class="title-text_39016899220b46eebc1f91c37b1a29aa">Sustainability Achievements</text><rect x="0" y="15" width="60" height="4" fill="#A855F7" rx="2" filter="url(#glow_39016899220b46eebc1f91c37b1a29aa)"/></g><g class="metrics"><g class="metric-card" transform="translate(40, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_39016899220b46eebc1f91c37b1a29aa)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_39016899220b46eebc1f91c37b1a29aa)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#A855F7" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_39016899220b46eebc1f91c37b1a29aa">28%</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_39016899220b46eebc1f91c37b1a29aa">Carbon Reduction</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_39016899220b46eebc1f91c37b1a29aa">> vs. 2020 Baseline</text></g><g class="metric-card" transform="translate(270, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_39016899220b46eebc1f91c37b1a29aa)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_39016899220b46eebc1f91c37b1a29aa)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2DD4BF" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_39016899220b46eebc1f91c37b1a29aa">72%</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_39016899220b46eebc1f91c37b1a29aa">Renewable Energy</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_39016899220b46eebc1f91c37b1a29aa">> Of Total Consumption</text></g><g class="metric-card" transform="translate(500, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_39016899220b46eebc1f91c37b1a29aa)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_39016899220b46eebc1f91c37b1a29aa)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#F43F5E" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_39016899220b46eebc1f91c37b1a29aa">350K</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_39016899220b46eebc1f91c37b1a29aa">Water Conservation</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_39016899220b46eebc1f91c37b1a29aa">> Gallons Saved</text></g><g class="metric-card" transform="translate(730, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_39016899220b46eebc1f91c37b1a29aa)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_39016899220b46eebc1f91c37b1a29aa)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#3B82F6" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_39016899220b46eebc1f91c37b1a29aa">94%</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_39016899220b46eebc1f91c37b1a29aa">Waste Diverted</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_39016899220b46eebc1f91c37b1a29aa">> From Landfill</text></g><g class="metric-card" transform="translate(960, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_39016899220b46eebc1f91c37b1a29aa)" stroke="#E2E8F0" stroke-width="1.5" filter="url(#shadow_39016899220b46eebc1f91c37b1a29aa)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#EAB308" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_39016899220b46eebc1f91c37b1a29aa">65%</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_39016899220b46eebc1f91c37b1a29aa">Paper Reduction</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_39016899220b46eebc1f91c37b1a29aa">> Digital Transformation</text></g>    </g></svg></div></div></div></div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_d6e21afb875c48d3962e9e89e156584a" width="1200" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-18</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Sustainability Achievements","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","28%","Carbon Reduction","vs. 2020 Baseline","aurora","true"],["","2","72%","Renewable Energy","Of Total Consumption","",""],["","3","350K","Water Conservation","Gallons Saved","",""],["","4","94%","Waste Diverted","From Landfill","",""],["","5","65%","Paper Reduction","Digital Transformation","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .metric-value_d6e21afb875c48d3962e9e89e156584a { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; fill: #73D379; } .metric-label_d6e21afb875c48d3962e9e89e156584a { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; fill: #05C0A6; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_d6e21afb875c48d3962e9e89e156584a { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #BB719B; } .title-text_d6e21afb875c48d3962e9e89e156584a { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 22.608696px; fill: #73D379; }</style><pattern id="grid_d6e21afb875c48d3962e9e89e156584a" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#73D379" stroke-width="0.3" opacity="0.1"/></pattern><filter id="glow_d6e21afb875c48d3962e9e89e156584a"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="shadow_d6e21afb875c48d3962e9e89e156584a" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="black" flood-opacity="0.3"/></filter><linearGradient id="cardGrad_d6e21afb875c48d3962e9e89e156584a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(15, 23, 42, 0.8)" /><stop offset="100%" stop-color="rgba(5, 192, 166, 0.18)" /></linearGradient></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#142B37" rx="16"/><rect width="100%" height="100%" fill="url(#grid_d6e21afb875c48d3962e9e89e156584a)"/><!-- Title Section --><g transform="translate(40, 60)"><text x="0" y="0" class="title-text_d6e21afb875c48d3962e9e89e156584a">Sustainability Achievements</text><rect x="0" y="18" width="40" height="5" fill="#BB719B" rx="2" filter="url(#glow_d6e21afb875c48d3962e9e89e156584a)"/></g><g class="metrics"><g class="metric-card" transform="translate(40, 130)"><!-- Card Background --><rect width="200" height="180" rx="12" fill="url(#cardGrad_d6e21afb875c48d3962e9e89e156584a)" stroke="#73D379" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_d6e21afb875c48d3962e9e89e156584a)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#BB719B" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="36.52174" class="metric-value_d6e21afb875c48d3962e9e89e156584a">28%</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="11.304348" class="metric-label_d6e21afb875c48d3962e9e89e156584a"><tspan x="100" dy="0">Carbon Reduction</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_d6e21afb875c48d3962e9e89e156584a">> vs. 2020 Baseline</text></g><g class="metric-card" transform="translate(270, 130)"><!-- Card Background --><rect width="200" height="180" rx="12" fill="url(#cardGrad_d6e21afb875c48d3962e9e89e156584a)" stroke="#73D379" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_d6e21afb875c48d3962e9e89e156584a)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2DD4BF" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="36.52174" class="metric-value_d6e21afb875c48d3962e9e89e156584a">72%</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="11.304348" class="metric-label_d6e21afb875c48d3962e9e89e156584a"><tspan x="100" dy="0">Renewable Energy</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_d6e21afb875c48d3962e9e89e156584a">> Of Total Consumption</text></g><g class="metric-card" transform="translate(500, 130)"><!-- Card Background --><rect width="200" height="180" rx="12" fill="url(#cardGrad_d6e21afb875c48d3962e9e89e156584a)" stroke="#73D379" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_d6e21afb875c48d3962e9e89e156584a)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#F43F5E" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="36.52174" class="metric-value_d6e21afb875c48d3962e9e89e156584a">350K</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="11.304348" class="metric-label_d6e21afb875c48d3962e9e89e156584a"><tspan x="100" dy="0">Water Conservation</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_d6e21afb875c48d3962e9e89e156584a">> Gallons Saved</text></g><g class="metric-card" transform="translate(730, 130)"><!-- Card Background --><rect width="200" height="180" rx="12" fill="url(#cardGrad_d6e21afb875c48d3962e9e89e156584a)" stroke="#73D379" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_d6e21afb875c48d3962e9e89e156584a)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#3B82F6" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="36.52174" class="metric-value_d6e21afb875c48d3962e9e89e156584a">94%</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="11.304348" class="metric-label_d6e21afb875c48d3962e9e89e156584a"><tspan x="100" dy="0">Waste Diverted</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_d6e21afb875c48d3962e9e89e156584a">> From Landfill</text></g><g class="metric-card" transform="translate(960, 130)"><!-- Card Background --><rect width="200" height="180" rx="12" fill="url(#cardGrad_d6e21afb875c48d3962e9e89e156584a)" stroke="#73D379" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_d6e21afb875c48d3962e9e89e156584a)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#EAB308" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="36.52174" class="metric-value_d6e21afb875c48d3962e9e89e156584a">65%</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="11.304348" class="metric-label_d6e21afb875c48d3962e9e89e156584a"><tspan x="100" dy="0">Paper Reduction</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_d6e21afb875c48d3962e9e89e156584a">> Digital Transformation</text></g>    </g></svg></div></div></div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2227,7 +2512,7 @@ window.onload = function() {
 <div class="sect1">
 <h2 id="_modern_snapshot_example">4. Modern Snapshot Example</h2>
 <div class="sectionbody">
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_f172972e5b614eec97e432b6d22251a7" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["Performance Improvements","1","97%","Query Cost Reduction","(12,000 → 405)","ios","true"],["","2","32%","CPU Utilization Drop","(88% → 60%)","",""],["","3","3","Optimization Phases","Systematic Approach","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;family=JetBrains+Mono&amp;display=swap'); .metric-value_f172972e5b614eec97e432b6d22251a7 { font-family: 'Outfit', sans-serif; font-weight: 700; fill: #F8FAFC; } .metric-label_f172972e5b614eec97e432b6d22251a7 { font-family: 'Outfit', sans-serif; font-weight: 400; fill: #94A3B8; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_f172972e5b614eec97e432b6d22251a7 { font-family: 'JetBrains Mono', monospace; font-size: 12px; fill: #A855F7; } .title-text_f172972e5b614eec97e432b6d22251a7 { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 24px; fill: #FFFFFF; }</style><pattern id="grid_f172972e5b614eec97e432b6d22251a7" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#334155" stroke-width="0.5"/></pattern><filter id="glow_f172972e5b614eec97e432b6d22251a7"><feGaussianBlur stdDeviation="2" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="shadow_f172972e5b614eec97e432b6d22251a7" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,0.4)"/></filter><linearGradient id="cardGrad_f172972e5b614eec97e432b6d22251a7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0F172A" /><stop offset="100%" stop-color="#1E293B" /></linearGradient></defs><!-- Background Layering --><rect width="100%" height="100%" fill="#020617" rx="12"/><rect width="100%" height="100%" fill="url(#grid_f172972e5b614eec97e432b6d22251a7)" opacity="0.5"/><!-- Title Section --><g transform="translate(40, 50)"><text x="0" y="0" class="title-text_f172972e5b614eec97e432b6d22251a7">Performance Improvements</text><rect x="0" y="15" width="60" height="4" fill="#A855F7" rx="2" filter="url(#glow_f172972e5b614eec97e432b6d22251a7)"/></g><g class="metrics"><g class="metric-card" transform="translate(70, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_f172972e5b614eec97e432b6d22251a7)" stroke="#334155" stroke-width="1.5" filter="url(#shadow_f172972e5b614eec97e432b6d22251a7)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#A855F7" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_f172972e5b614eec97e432b6d22251a7">97%</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_f172972e5b614eec97e432b6d22251a7">Query Cost Reduction</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_f172972e5b614eec97e432b6d22251a7">> (12,000 → 405)</text></g><g class="metric-card" transform="translate(300, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_f172972e5b614eec97e432b6d22251a7)" stroke="#334155" stroke-width="1.5" filter="url(#shadow_f172972e5b614eec97e432b6d22251a7)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2DD4BF" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_f172972e5b614eec97e432b6d22251a7">32%</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_f172972e5b614eec97e432b6d22251a7">CPU Utilization Drop</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_f172972e5b614eec97e432b6d22251a7">> (88% → 60%)</text></g><g class="metric-card" transform="translate(530, 130)"><!-- Card Background --><rect width="200" height="180" rx="16" fill="url(#cardGrad_f172972e5b614eec97e432b6d22251a7)" stroke="#334155" stroke-width="1.5" filter="url(#shadow_f172972e5b614eec97e432b6d22251a7)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#F43F5E" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42" class="metric-value_f172972e5b614eec97e432b6d22251a7">3</text><!-- Metric Label --><text x="100" y="115" text-anchor="middle" font-size="13" class="metric-label_f172972e5b614eec97e432b6d22251a7">Optimization Phases</text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_f172972e5b614eec97e432b6d22251a7">> Systematic Approach</text></g>    </g></svg></div></div></div></div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg id="ID_bbf18de0fab445df8196a1e2be4500a9" width="800" height="400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-18</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Performance Improvements","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","97%","Query Cost Reduction","(12,000 → 405)","ios","true"],["","2","32%","CPU Utilization Drop","(88% → 60%)","",""],["","3","3","Optimization Phases","Systematic Approach","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.metric-value_bbf18de0fab445df8196a1e2be4500a9 { font-family: Arial, Helvetica, sans-serif; font-weight: 700; fill: #111111; } .metric-label_bbf18de0fab445df8196a1e2be4500a9 { font-family: Arial, Helvetica, sans-serif; font-weight: 400; fill: #4338ca; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_bbf18de0fab445df8196a1e2be4500a9 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #2563eb; } .title-text_bbf18de0fab445df8196a1e2be4500a9 { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 26.0px; fill: #111111; }</style><pattern id="grid_bbf18de0fab445df8196a1e2be4500a9" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#111111" stroke-width="0.3" opacity="0.1"/></pattern><filter id="glow_bbf18de0fab445df8196a1e2be4500a9"><feGaussianBlur stdDeviation="3" result="blur" /><feComposite in="SourceGraphic" in2="blur" operator="over" /></filter><filter id="shadow_bbf18de0fab445df8196a1e2be4500a9" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="black" flood-opacity="0.3"/></filter><linearGradient id="cardGrad_bbf18de0fab445df8196a1e2be4500a9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(255, 255, 255, 0.9)" /><stop offset="100%" stop-color="rgba(0, 0, 0, 0.05)" /></linearGradient></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#ffffff" rx="16"/><rect width="100%" height="100%" fill="url(#grid_bbf18de0fab445df8196a1e2be4500a9)"/><!-- Title Section --><g transform="translate(40, 60)"><text x="0" y="0" class="title-text_bbf18de0fab445df8196a1e2be4500a9">Performance Improvements</text><rect x="0" y="18" width="40" height="5" fill="#2563eb" rx="2" filter="url(#glow_bbf18de0fab445df8196a1e2be4500a9)"/></g><g class="metrics"><g class="metric-card" transform="translate(70, 130)"><!-- Card Background --><rect width="200" height="180" rx="4" fill="url(#cardGrad_bbf18de0fab445df8196a1e2be4500a9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_bbf18de0fab445df8196a1e2be4500a9)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2563eb" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42.0" class="metric-value_bbf18de0fab445df8196a1e2be4500a9">97%</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="13.0" class="metric-label_bbf18de0fab445df8196a1e2be4500a9"><tspan x="100" dy="0">Query Cost Reduction</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_bbf18de0fab445df8196a1e2be4500a9">> (12,000 → 405)</text></g><g class="metric-card" transform="translate(300, 130)"><!-- Card Background --><rect width="200" height="180" rx="4" fill="url(#cardGrad_bbf18de0fab445df8196a1e2be4500a9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_bbf18de0fab445df8196a1e2be4500a9)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#2DD4BF" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42.0" class="metric-value_bbf18de0fab445df8196a1e2be4500a9">32%</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="13.0" class="metric-label_bbf18de0fab445df8196a1e2be4500a9"><tspan x="100" dy="0">CPU Utilization Drop</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_bbf18de0fab445df8196a1e2be4500a9">> (88% → 60%)</text></g><g class="metric-card" transform="translate(530, 130)"><!-- Card Background --><rect width="200" height="180" rx="4" fill="url(#cardGrad_bbf18de0fab445df8196a1e2be4500a9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_bbf18de0fab445df8196a1e2be4500a9)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#F43F5E" opacity="0.9"/><!-- Metric Value --><text x="100" y="85" text-anchor="middle" font-size="42.0" class="metric-value_bbf18de0fab445df8196a1e2be4500a9">3</text><!-- Metric Label (Wrapped) --><text x="100" y="110" text-anchor="middle" font-size="13.0" class="metric-label_bbf18de0fab445df8196a1e2be4500a9"><tspan x="100" dy="0">Optimization Phases</tspan></text><!-- Metric Sublabel --><text x="100" y="145" text-anchor="middle" class="metric-sub_bbf18de0fab445df8196a1e2be4500a9">> Systematic Approach</text></g>    </g></svg></div></div></div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
