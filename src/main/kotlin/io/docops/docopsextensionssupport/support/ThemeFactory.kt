@@ -55,8 +55,10 @@ object ThemeFactory {
             "autumn", "autumntheme" -> if(useDark)ProDarkTheme() else AutumnTheme()
             "istanbul", "istanbultheme" -> if(useDark)TokyoDarkTheme() else IstanbulTheme()
             "everest", "everesttheme" -> if(useDark)TokyoDarkTheme() else EverestTheme()
+            "reo", "reotheme" -> if(useDark)AuroraTheme() else ReoTheme()
             "sakura", "sakuratheme" -> if(useDark)TokyoDarkTheme() else SakuraTheme()
             "tokyo", "tokyotheme" -> if(useDark)TokyoDarkTheme() else ModernLightTheme()
+            "aurora", "auroratheme" -> if(useDark)AuroraTheme() else ModernLightTheme()
             "hex", "hexlighttheme" ->  HexLightTheme()
             "cyberlight", "cyberlighttheme" -> CyberLightTheme()
             "cyberdark", "cyberdarktheme" -> CyberDarkTheme()
@@ -271,7 +273,7 @@ class AutumnTheme: CyberLightTheme() {
     )
 }
 
-class TokyoDarkTheme: CyberDarkTheme() {
+open class TokyoDarkTheme: CyberDarkTheme() {
     override val name = "TokyoDarkTheme"
     override val canvas = "#2A3051"
     override val primaryText = "#ECA1EB"
@@ -346,5 +348,43 @@ class EverestTheme: CyberLightTheme() {
         SVGColor("#0072B2", "Deep Lake"),          // Mountain lake blue
         SVGColor("#CC79A7", "Alpine Rose"),        // Soft mountain flower
         SVGColor("#F0E442", "Snow Reflection")     // Bright snow highlight
+    )
+}
+
+class ReoTheme: CyberLightTheme() {
+    override val name = "ReoTheme"
+    override val canvas = "#F7FAF6"
+    override val primaryText = "#5F9849"
+    override val secondaryText = "#247A4C"
+    override val accentColor = "#007A47"
+    override val surfaceImpact = "rgba(0, 122, 71, 0.12)"
+    override val chartPalette = listOf(
+        SVGColor("#007A47"),  // Evergreen (accent)
+        SVGColor("#247A4C"),  // Deep Leaf (secondary)
+        SVGColor("#5F9849"),  // Meadow (primary)
+        SVGColor("#8BBF6A"),  // Spring Green
+        SVGColor("#B9D9A6"),  // Sage Mist
+        SVGColor("#4E7D3A"),  // Forest Shadow
+        SVGColor("#6FB38E"),  // Soft Teal
+        SVGColor("#A7C68A")   // Fern Light
+    )
+}
+
+class AuroraTheme: TokyoDarkTheme() {
+    override val name = "AuroraTheme"
+    override val canvas = "#142B37"
+    override val primaryText = "#73D379"
+    override val secondaryText = "#05C0A6"
+    override val accentColor = "#BB719B"
+    override val surfaceImpact = "rgba(5, 192, 166, 0.18)"
+    override val chartPalette = listOf(
+        SVGColor("#73D379", "Aurora Green"),
+        SVGColor("#05C0A6", "Glacier Teal"),
+        SVGColor("#BB719B", "Solar Flare"),
+        SVGColor("#38BDF8", "Ice Blue"),
+        SVGColor("#A3E635", "Lime Ribbon"),
+        SVGColor("#94A3B8", "Moon Haze"),     // new: cool neutral for separation on dark
+        SVGColor("#60A5FA", "Arctic Sky"),
+        SVGColor("#8B5CF6", "Twilight Violet")
     )
 }

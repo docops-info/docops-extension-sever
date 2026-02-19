@@ -63,6 +63,7 @@ title=Berry Picking by Month 2024
 yLabel=Number of Sales 
 xLabel=Month 
 vBar=true
+theme=reo
 ---
 Jan | 120.0 
 Feb | 334.0
@@ -104,6 +105,7 @@ title=Annual Product Sales Report
 yLabel=Sales (USD)
 xLabel=Quarters
 paletteType=OCEAN_BREEZE
+theme=aurora
 ---
 Product A | Q1 | 5000.0
 Product A | Q2 | 7000.0
