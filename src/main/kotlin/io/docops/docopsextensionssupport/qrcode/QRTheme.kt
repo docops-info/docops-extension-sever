@@ -22,7 +22,7 @@ val cyberNeonTheme = QRTheme(
     foreground = "#00FFF0", // cyan
     background = "#0D0221", // deep purple-black
     moduleRadius = 0.0,
-    finderStyle = "hexagon"
+    finderStyle = "rounded-square"
 )
 
 val organicWaveTheme = QRTheme(
