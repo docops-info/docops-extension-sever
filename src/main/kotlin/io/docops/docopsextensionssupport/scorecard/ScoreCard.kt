@@ -42,6 +42,7 @@ class ScoreCard @OptIn(ExperimentalUuidApi::class) constructor(val id: String = 
                                                                val beforeTitle: String,
                                                                val beforeSections: MutableList<BeforeSection>,
                                                                val afterTitle: String,
+                                                               val theme: String= "classic",
                                                                val afterSections: MutableList<AfterSection>,
                                                                override var useDark: Boolean = false,
                                                                override var visualVersion: Int = 1

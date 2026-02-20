@@ -11,7 +11,7 @@ class ScoreCardMaker(val useDark: Boolean, val scale: Float = 1.0f) {
 
     private var theme = ThemeFactory.getTheme(useDark)
     fun make(scorecard: ScoreCard): String {
-        theme = ThemeFactory.getTheme(scorecard)
+        theme = ThemeFactory.getThemeByName(scorecard.theme, useDark)
         val baseWidth = 1024
         val margin = 40
         val gutter = 44

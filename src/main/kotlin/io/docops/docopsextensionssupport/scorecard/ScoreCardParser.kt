@@ -15,6 +15,7 @@ class ScoreCardParser {
         var initiativeTitle = "BEFORE"
         var outcomeTitle = "AFTER"
         var visualVersion = 1
+        var theme = "classic"
         val beforeSections: MutableList<BeforeSection> = mutableListOf()
         val afterSections: MutableList<AfterSection> = mutableListOf()
         val outcomeItems: MutableList<ScoreCardItem> = mutableListOf()
@@ -81,6 +82,7 @@ class ScoreCardParser {
                 line.startsWith("title=") -> title = line.removePrefix("title=").trim()
                 line.startsWith("subtitle=") -> subtitle = line.removePrefix("subtitle=").trim()
                 line.startsWith("visualVersion=") -> visualVersion = line.removePrefix("visualVersion=").trim().toIntOrNull() ?: 1
+                line.startsWith("theme=") -> theme = line.removePrefix("theme=").trim()
                 line == "---" -> { currentSection = null; currentItemsTitle = null }
 
                 // item lines
@@ -126,7 +128,8 @@ class ScoreCardParser {
             afterTitle = outcomeTitle.ifBlank { "AFTER" },
             afterSections = afterSections,
             useDark = useDark,
-            visualVersion = visualVersion
+            visualVersion = visualVersion,
+            theme = theme
         )
     }
 }

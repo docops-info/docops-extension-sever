@@ -51,6 +51,7 @@ object ThemeFactory {
      */
     fun getThemeByName(themeName: String, useDark: Boolean = false): DocOpsTheme {
         return when (themeName.lowercase()) {
+            "brand", "brandtheme" -> if (useDark) BrandDarkTheme() else BrandLightTheme()
             "tallinn", "tallinntheme" -> if(useDark)ProDarkTheme() else TallinnTheme()
             "autumn", "autumntheme" -> if(useDark)ProDarkTheme() else AutumnTheme()
             "istanbul", "istanbultheme" -> if(useDark)TokyoDarkTheme() else IstanbulTheme()
@@ -389,3 +390,60 @@ class AuroraTheme: TokyoDarkTheme() {
         SVGColor("#8B5CF6", "Twilight Violet")
     )
 }
+    /**
+     * Brand Light Theme - Based on branding color #335D79
+     * Clean, airy surfaces with a warm “signal” accent for contrast.
+     */
+    class BrandLightTheme : DocOpsTheme {
+        override val name = "BrandLightTheme"
+        override val canvas = "#F6F9FC"
+        override val primaryText = "#0F2230"
+        override val secondaryText = "#335D79" // brand-forward
+        override val accentColor = "#E39A3B"   // warm accent to avoid “all-blue” UI
+        override val glassEffect = "rgba(255, 255, 255, 0.78)"
+        override val surfaceImpact = "rgba(51, 93, 121, 0.14)"
+        override val fontFamily = "'Archivo', -apple-system, sans-serif"
+        override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap');"
+        override val fontWidthMultiplier = 1.12f
+        override val fontLineHeight = 1.24f
+        override val cornerRadius = 14
+        override val chartPalette = listOf(
+            SVGColor("#335D79"), // Brand Ocean
+            SVGColor("#2B5169"), // Deepened Brand
+            SVGColor("#4D7A98"), // Harbor Blue
+            SVGColor("#7FB0CD"), // Sky Tint
+            SVGColor("#1E3A4D"), // Ink
+            SVGColor("#E39A3B"), // Signal Amber
+            SVGColor("#C56F3A"), // Burnt Copper
+            SVGColor("#2F7A6B")  // Sea Glass Teal
+        )
+    }
+
+    /**
+     * Brand Dark Theme - Based on branding color #335D79
+     * Inky navy canvas, readable “lifted brand” accents, warm highlight accent.
+     */
+    class BrandDarkTheme : DocOpsTheme {
+        override val name = "BrandDarkTheme"
+        override val canvas = "#071925"
+        override val primaryText = "#EAF3F8"
+        override val secondaryText = "#7FB0CD" // lifted brand tint for dark UI
+        override val accentColor = "#F2B45B"
+        override val glassEffect = "rgba(11, 34, 50, 0.78)"
+        override val surfaceImpact = "rgba(127, 176, 205, 0.16)"
+        override val fontFamily = "'Archivo', -apple-system, sans-serif"
+        override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap');"
+        override val fontWidthMultiplier = 1.12f
+        override val fontLineHeight = 1.24f
+        override val cornerRadius = 14
+        override val chartPalette = listOf(
+            SVGColor("#7FB0CD"), // Lifted Brand
+            SVGColor("#335D79"), // Brand Anchor
+            SVGColor("#9BC9DF"), // Ice Blue
+            SVGColor("#4D7A98"), // Harbor Blue
+            SVGColor("#1E3A4D"), // Ink
+            SVGColor("#F2B45B"), // Warm Highlight
+            SVGColor("#FFCF8A"), // Pale Gold
+            SVGColor("#3AAE9F")  // Luminous Teal
+        )
+    }
