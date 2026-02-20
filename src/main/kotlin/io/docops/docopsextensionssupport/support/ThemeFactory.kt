@@ -294,20 +294,21 @@ open class TokyoDarkTheme: CyberDarkTheme() {
 
 class IstanbulTheme: CyberDarkTheme() {
     override val name = "IstanbulTheme"
-    override val canvas = "#DBF0F1"
-    override val primaryText = "#1190A1"
-    override val secondaryText = "#0887B5"
-    override val accentColor = "#C16979"
-    override val surfaceImpact = "rgba(99, 102, 241, 0.2)"
+    override val canvas        = "#DBF0F1" // Window Background
+    override val primaryText   = "#1190A1" // Keywords
+    override val secondaryText = "#0887B5" // Strings
+    override val accentColor   = "#C16979" // Tags
+    override val surfaceImpact = "rgba(163, 221, 229, 0.40)"
+    override val glassEffect = "rgba(250, 253, 253, 0.88)" // Editor Background #FAFDFD
     override val chartPalette = listOf(
-        SVGColor("#1190A1"),  // Turquoise (matches primary)
-        SVGColor("#C16979"),  // Rose (matches accent)
-        SVGColor("#0887B5"),  // Deep Teal (matches secondary)
-        SVGColor("#5AB5C1"),  // Light Turquoise
-        SVGColor("#D88A97"),  // Soft Coral
-        SVGColor("#2FA8B8"),  // Cyan
-        SVGColor("#A44F5E"),  // Deep Rose
-        SVGColor("#76C2CE")   // Sky Blue
+        SVGColor("#1190A1", "Keyword Teal"),     // Keywords
+        SVGColor("#0887B5", "String Blue"),      // Strings
+        SVGColor("#C16979", "Tag Rose"),         // Tags
+        SVGColor("#B87958", "Attribute Clay"),   // Attributes
+        SVGColor("#B6514D", "Parameter Brick"),  // Parameters
+        SVGColor("#9C6E7C", "Metadata Mauve"),   // Metadata
+        SVGColor("#A3DDE5", "Selection Aqua"),   // Selection Background (bright fill)
+        SVGColor("#EFEAD0", "Active Sand")       // Active Background (warm light)
     )
 }
 
