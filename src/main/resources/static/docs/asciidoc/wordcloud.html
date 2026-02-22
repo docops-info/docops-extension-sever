@@ -8,7 +8,7 @@
 <link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
 <title>DocOps WordCloud Extension</title>
 <style>
-@import url(https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap);@keyframes reveal{0%{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}:root{--bg-base:#f8fafc;--bg-surface:#ffffff;--bg-grid:rgba(0, 0, 0, 0.05);--text-main:#334155;--text-heading:#0f172a;--accent-primary:#4f46e5;--accent-secondary:#06b6d4;--accent-glow:rgba(79, 70, 229, 0.1);--border-color:#e2e8f0;--note-color:#4f46e5;--tip-color:#10b981;--warning-color:#f59e0b;--caution-color:#ef4444;--important-color:#8b5cf6;--font-heading:'Syne', sans-serif;--font-body:'Outfit', sans-serif;--font-mono:'JetBrains Mono', monospace;--content-max-width:1100px}:root.dark-mode{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--bg-base:#020617;--bg-surface:rgba(15, 23, 42, 0.8);--bg-grid:rgba(255, 255, 255, 0.05);--text-main:#94a3b8;--text-heading:#f8fafc;--accent-primary:#818cf8;--accent-secondary:#22d3ee;--accent-glow:rgba(129, 140, 248, 0.15);--border-color:#1e293b}}body{background-color:var(--bg-base);background-image:radial-gradient(var(--bg-grid) 1px,transparent 1px);background-size:30px 30px;background-attachment:fixed;color:var(--text-main);font-family:var(--font-body);line-height:1.6;margin:0;padding:0;-webkit-font-smoothing:antialiased}#content,#footer,#footnotes,#header>h1:first-child,.details{opacity:0;animation:reveal .8s cubic-bezier(.16,1,.3,1) forwards}#content,#footnotes,#header{padding:2rem 1.5rem}#content,#footer,#footnotes,#header{max-width:var(--content-max-width);margin:0 auto}#toc.toc2{position:fixed!important}#header>h1:first-child{font-family:var(--font-heading);font-size:3.5rem;font-weight:800;color:var(--text-heading);letter-spacing:-.04em;line-height:1;margin-bottom:2rem;background:linear-gradient(to bottom right,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}#toc,.details{margin-bottom:3rem}.details,a{color:var(--accent-primary)}.details{display:flex;gap:2rem;font-size:.875rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);color:var(--text-heading);font-weight:700;margin-top:3rem;margin-bottom:1rem;line-height:1.2}h2{font-size:2rem;border-bottom:1px solid var(--border-color);padding-bottom:.5rem}a{text-decoration:none;transition:all .2s ease;border-bottom:1px solid transparent}a:hover{border-bottom-color:var(--accent-primary);text-shadow:0 0 15px var(--accent-glow)}#toc{background:var(--bg-surface);backdrop-filter:blur(12px);border:1px solid var(--border-color);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000}#toc:not(.toc2){max-width:var(--content-max-width);margin:2rem auto}#toc.toc2,.admonitionblock{background:var(--bg-surface);border:1px solid var(--border-color)}#toc.toc2{backdrop-filter:blur(12px);border-radius:1rem;padding:2rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);z-index:5000;transform:none!important;animation:none!important;opacity:1!important}#toctitle,.admonitionblock .title{text-transform:uppercase;font-size:.75rem}#toc a:hover,#toctitle{color:var(--accent-primary)}#toctitle{font-family:var(--font-heading);font-weight:800;letter-spacing:.2em;margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}#toctitle::after{content:"";flex:1;height:1px;background:var(--border-color)}#toc ul{list-style:none;padding:0;margin:0}#toc li{margin-bottom:.5rem}#toc a{color:var(--text-main);font-size:.9rem;border:0}#toc a:hover{padding-left:4px}.admonitionblock{margin:2rem 0;border-radius:.75rem;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);display:flex;flex-direction:row;align-items:stretch}.admonitionblock td.icon{width:4rem;min-width:4rem;padding:1.5rem 0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.02)}.admonitionblock td.icon .fa-note::before,.admonitionblock td.icon .icon-note::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--note-color)}.admonitionblock td.icon .fa-lightbulb::before,.admonitionblock td.icon .icon-tip::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--tip-color)}.admonitionblock td.icon .fa-exclamation-triangle::before,.admonitionblock td.icon .icon-warning::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--warning-color)}.admonitionblock td.icon .fa-fire::before,.admonitionblock td.icon .icon-caution::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--caution-color)}.admonitionblock td.icon .fa-exclamation-circle::before,.admonitionblock td.icon .icon-important::before{font-family:"Font Awesome 6 Free";font-weight:900;content:"";font-size:1.5rem;color:var(--important-color)}.admonitionblock td.content{padding:1.5rem;font-size:.95rem;flex:1}.admonitionblock .title{font-weight:700;letter-spacing:.1em;margin-bottom:.75rem;display:block}.admonitionblock.note{border-left:4px solid var(--note-color)}.admonitionblock.note .title{color:var(--note-color)}.admonitionblock.tip{border-left:4px solid var(--tip-color)}.admonitionblock.tip .title{color:var(--tip-color)}.admonitionblock.warning{border-left:4px solid var(--warning-color)}.admonitionblock.warning .title{color:var(--warning-color)}.admonitionblock.caution{border-left:4px solid var(--caution-color)}.admonitionblock.caution .title{color:var(--caution-color)}.admonitionblock.important{border-left:4px solid var(--important-color)}.admonitionblock.important .title{color:var(--important-color)}:root.dark-mode .admonitionblock td.content,:root.dark-mode-auto .admonitionblock td.content{color:var(--text-main)}.listingblock pre{background:#0f172a!important;color:#f8fafc!important;padding:1.5rem!important;border-radius:.75rem;font-family:var(--font-mono);font-size:.875rem;border:1px solid #1e293b;box-shadow:0 20px 25px -5px rgba(0,0,0,.2);position:relative;overflow:hidden}:root.dark-mode .listingblock pre{background:#020617!important;border-color:var(--border-color)}@media (prefers-color-scheme:dark){:root.dark-mode-auto .listingblock pre{background:#020617!important;border-color:var(--border-color)}}.listingblock pre::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent-primary),var(--accent-secondary));opacity:.5}code{font-family:var(--font-mono);padding:.2em .4em;border-radius:.25rem;color:var(--accent-primary);font-size:.9em}.exampleblock,.sidebarblock,table{background:var(--bg-surface);border:1px solid var(--border-color);margin:2rem 0}table{width:100%;border-collapse:collapse;border-radius:.75rem;overflow:hidden}th{background:var(--border-color);color:var(--text-heading);text-align:left;padding:1rem;font-family:var(--font-heading);text-transform:uppercase;letter-spacing:.05em}#footer,td{padding:1rem;border-top:1px solid var(--border-color);font-size:.9rem}code,tr:hover td{background:var(--accent-glow)}.exampleblock,.sidebarblock{border-radius:1rem;padding:2rem}#footer,th{font-size:.875rem}#footer{margin-top:4rem;padding:4rem 1.5rem;text-align:center;color:var(--text-main)}#footer-text{opacity:.6}@media (max-width:1279px){#header>h1:first-child{font-size:2.5rem}.details{flex-direction:column;gap:.5rem}body.toc2{padding-left:0!important;padding-right:0!important}#toc.toc2{position:relative!important;width:auto!important;left:0!important;right:0!important;top:0!important;margin:0 1.5rem 3rem!important;max-height:none!important}}@media (min-width:1280px){body.toc2.toc-left{padding-left:24rem!important;padding-right:0!important}body.toc2.toc-left #toc.toc2{left:1rem;right:auto}body.toc2.toc-right{padding-right:24rem!important;padding-left:0!important}body.toc2.toc-right #toc.toc2{right:1rem;left:auto}#toc.toc2{position:fixed!important;width:20rem;top:2rem;height:auto;max-height:calc(100vh - 4rem);overflow-y:auto}body.toc2.toc-right .reading-time{right:auto!important;left:2rem!important}#content,#footer,#footnotes,#header{max-width:900px;margin-left:auto;margin-right:auto}body.toc2.toc-left #content,body.toc2.toc-left #header{margin-left:2rem}body.toc2.toc-right #content,body.toc2.toc-right #header{margin-right:2rem}}.theme-toggle{position:fixed;bottom:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--bg-surface);border:1px solid var(--border-color);box-shadow:0 10px 25px -5px rgba(0,0,0,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all .3s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(0,0,0,.2);border-color:var(--accent-primary)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all .3s ease}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0;border-top:1px solid var(--border-color)}.nav-container{max-width:var(--content-max-width);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-body);font-weight:600;font-size:.9rem;color:var(--accent-primary);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:.5rem;background:var(--bg-surface);border:1px solid var(--border-color);transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 6px -1px rgba(0,0,0,.05);border-bottom:1px solid var(--border-color)}.nav-next:hover,.nav-prev:hover{color:var(--bg-surface);background:var(--accent-primary);border-color:var(--accent-primary);transform:translateY(-2px);box-shadow:0 10px 15px -3px var(--accent-glow)}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon,:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon,:root.dark-mode-auto .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.mermaid{background:var(--bg-surface);padding:2rem;border:1px solid var(--border-color);border-radius:1rem;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);margin:2rem 0}.mermaid .cluster rect{fill:var(--bg-base)!important;fill-opacity:.5!important;stroke:var(--border-color)!important;backdrop-filter:blur(4px)}.mermaid text{font-family:var(--font-body)!important;letter-spacing:-.01em}.mermaid .active,.mermaid .task0{fill:var(--accent-primary)!important;stroke:var(--accent-secondary)!important}:root.dark-mode .mermaid .loopText,:root.dark-mode .mermaid .messageText,:root.dark-mode .mermaid .noteText,:root.dark-mode .mermaid .sectionTitle,:root.dark-mode .mermaid .taskText{fill:var(--text-heading)!important;color:var(--text-heading)!important;stroke:none!important}:root.dark-mode .mermaid .messageLine0,:root.dark-mode .mermaid .messageLine1{stroke:var(--accent-secondary)!important;stroke-opacity:.6}:root.dark-mode .mermaid .actor,:root.dark-mode .mermaid .note{fill:var(--bg-surface)!important;stroke:var(--accent-primary)!important}:root.dark-mode .mermaid .noteText>tspan{fill:var(--accent-primary)!important}:root.dark-mode .mermaid text.actor>tspan{fill:var(--text-heading)!important;font-weight:600}:root.dark-mode .mermaid .edgeLabel,:root.dark-mode .mermaid .edgeLabel rect{fill:var(--bg-base)!important;color:var(--text-main)!important}
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap);@keyframes docops-reveal{to{opacity:1;transform:translateY(0)}}:root{--brand-ink:#0B1220;--brand-cloud:#F6F8FB;--brand-slate:#2A3447;--brand-steel:#8A96AD;--brand-cyan:#00B7D6;--brand-gold:#C9A227;--semantic-success:#16A34A;--semantic-warning:#D97706;--semantic-error:#DC2626;--semantic-info:#2563EB;--canvas:var(--brand-cloud);--surface-1:#FFFFFF;--surface-2:#EEF2F7;--border:rgba(11, 18, 32, 0.12);--text-1:var(--brand-ink);--text-2:var(--brand-slate);--text-3:var(--brand-steel);--accent:var(--brand-cyan);--font-sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;--font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;--content-max:1100px;--content-reading:920px;--r-sm:8px;--r-md:12px;--r-lg:16px;--shadow-sm:0 6px 18px rgba(11, 18, 32, 0.08);--shadow-md:0 16px 40px rgba(11, 18, 32, 0.12);--focus-glow:0 0 0 4px rgba(0, 183, 214, 0.22);--dur-fast:120ms;--dur-base:220ms;--dur-slow:420ms;--ease-standard:cubic-bezier(0.16, 1, 0.3, 1);--grid-ink:rgba(11, 18, 32, 0.05);--halo-cyan:rgba(0, 183, 214, 0.10);--halo-gold:rgba(201, 162, 39, 0.08)}:root.dark-mode{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}}html{box-sizing:border-box;text-size-adjust:100%;scroll-behavior:smooth}*,::after,::before{box-sizing:inherit}::selection{background:rgba(0,183,214,.22)}body{margin:0;font-family:var(--font-sans);color:var(--text-2);background:var(--canvas);line-height:1.6;background-image:radial-gradient(1200px 800px at 12% -10%,var(--halo-cyan),transparent 55%),radial-gradient(900px 700px at 100% 10%,var(--halo-gold),transparent 50%),linear-gradient(to right,var(--grid-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-ink) 1px,transparent 1px);background-size:auto,auto,28px 28px,28px 28px;background-attachment:fixed}#header{max-width:var(--content-max)}#content,#footer,#footnotes,#header{margin:0 auto;padding:28px 20px}#footer,#footnotes{max-width:var(--content-max)}#content{max-width:var(--content-reading)}#content,#footer,#footnotes,#header>h1:first-child,#toc{opacity:0;transform:translateY(10px);animation:docops-reveal var(--dur-slow) var(--ease-standard) forwards}#header>h1:first-child{animation-delay:40ms}#toc{animation-delay:90ms}#content{animation-delay:140ms}#footnotes{animation-delay:190ms}#footer{animation-delay:240ms}@media (prefers-reduced-motion:reduce){#content,#footer,#footnotes,#header>h1:first-child,#toc{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}h1,h2,h3,h4{color:var(--text-1)}h1,h4,h5{letter-spacing:-.01em}h1,h2,h3,h4,h5,h6{line-height:1.2;margin:2.2rem 0 .9rem;scroll-margin-top:96px}#header>h1:first-child{margin:0 0 12px;font-size:40px;font-weight:600;letter-spacing:-.6px;padding:18px 18px 18px 16px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.2));border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative}#header>h1:first-child::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;border-radius:var(--r-lg)0 0 var(--r-lg);background:linear-gradient(180deg,var(--accent),rgba(0,183,214,.35))}h2,h4,h5,h6{font-weight:600}h2{font-size:28px;letter-spacing:-.3px;border-bottom:1px solid var(--border);padding-bottom:10px}h3{font-size:22px;font-weight:500;letter-spacing:-.2px}h4,h5,h6{font-size:16px}h5,h6{font-size:14px;color:var(--text-2)}h6{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.12em}p{margin:0 0 1rem}a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,183,214,.35);transition:border-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard)}a:focus,a:hover{color:var(--accent);border-bottom-color:var(--accent)}hr{border:0;height:1px;background:var(--border);margin:2rem 0}ol,ul{margin:0 0 1rem;padding-left:1.25rem}li{margin:.3rem 0}code,kbd,pre{font-family:var(--font-mono);font-variant-ligatures:none}code{font-size:.92em;color:var(--text-1);background:rgba(0,183,214,.1);border:1px solid rgba(0,183,214,.18);padding:.16em .4em;border-radius:10px}blockquote,pre{border:1px solid var(--border);box-shadow:var(--shadow-sm)}pre{margin:0 0 1.25rem;padding:16px 18px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(11,18,32,.92),rgba(11,18,32,.84));color:#eaf0ff;overflow:auto;line-height:1.55}pre code{background:0 0;border:0;padding:0;color:inherit}blockquote{margin:1.5rem 0;padding:14px 16px;border-radius:var(--r-md);background:var(--surface-1);position:relative}blockquote::before{content:"";position:absolute;inset:10px auto 10px 10px;width:3px;border-radius:999px;background:rgba(138,150,173,.55)}blockquote p:last-child{margin-bottom:0}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);box-shadow:var(--shadow-sm)}td,th{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}th{font-weight:600;color:var(--text-1);background:linear-gradient(180deg,var(--surface-2),rgba(238,242,247,.25));text-transform:uppercase;letter-spacing:.08em;font-size:12px}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(0,183,214,.06)}#toc,.admonitionblock,.exampleblock,.sidebarblock{border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#toc{background:color-mix(in srgb,var(--surface-1) 78%,transparent);backdrop-filter:blur(10px);border:1px solid var(--border);padding:16px}#toc .title,#toctitle,.admonitionblock .title{color:var(--text-1);font-weight:600;font-size:12px;text-transform:uppercase}#toc .title,#toctitle{margin:0 0 10px;letter-spacing:.12em;display:flex;align-items:center;gap:10px}#toc .title::after,#toctitle::after{content:"";flex:1;height:1px;background:var(--border)}#toc ul{list-style:none;padding-left:0;margin:0}#toc li{margin:6px 0}#toc a{color:var(--text-2);border-bottom:0;display:inline-block;padding:2px 0}#toc a:hover{color:var(--text-1)}#toc ul ul{padding-left:14px;border-left:1px solid var(--border);margin-left:6px}#toc.toc2{position:fixed!important;top:20px;left:20px;width:320px;max-height:calc(100vh - 40px);overflow:auto;z-index:5000}body.toc2{padding-left:360px;max-width:none}@media (max-width:1100px){#toc.toc2{position:static!important;width:auto;max-height:none;left:auto;top:auto;margin:0 0 16px}body.toc2{padding-left:0}}.admonitionblock,.exampleblock,.sidebarblock{margin:1.5rem 0;background:var(--surface-1)}.admonitionblock{overflow:hidden;border:1px solid var(--border)}.admonitionblock>table{border:0;margin:0;box-shadow:none}.admonitionblock td.icon{width:52px;padding:14px 10px;text-align:center;background:var(--surface-2);border-right:1px solid var(--border)}.admonitionblock td.content{padding:14px 16px}.admonitionblock .title{letter-spacing:.1em;margin-bottom:6px}.admonitionblock.note{border-left:4px solid var(--semantic-info)}.admonitionblock.tip{border-left:4px solid var(--semantic-success)}.admonitionblock.warning{border-left:4px solid var(--semantic-warning)}.admonitionblock.caution{border-left:4px solid var(--semantic-error)}.admonitionblock.important{border-left:4px solid var(--brand-gold)}.admonitionblock.important td.icon{background:color-mix(in srgb,var(--brand-gold) 14%,var(--surface-2))}.exampleblock,.sidebarblock{padding:16px}.exampleblock>.content>.title,.sidebarblock>.content>.title{margin:0 0 10px;font-weight:600;color:var(--text-1)}.exampleblock,.sidebarblock,img,kbd{border:1px solid var(--border)}kbd{display:inline-block;padding:.14rem .4rem;border-radius:10px;background:var(--surface-2);color:var(--text-1);font-size:.85em;box-shadow:0 2px 0 rgba(11,18,32,.08)}img{max-width:100%;height:auto;border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#footer{border-top:1px solid var(--border);color:var(--text-3)}#footer-text{opacity:.9}:focus{outline:2px solid var(--accent);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--focus-glow)}@media print{body{background:#fff!important}#toc.toc2{display:none!important}a,body,pre{color:#000!important}a{border-bottom:0!important;text-decoration:underline!important}pre{background:#f6f8fb!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
@@ -358,6 +358,194 @@
         }
     }
 
+    .source-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 20, 25, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 2147483647;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+
+    .source-modal.active {
+        display: flex;
+    }
+
+    .source-modal-content {
+        width: 95vw;
+        max-width: 1200px;
+        height: 90vh;
+        background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(126, 87, 255, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(126, 87, 255, 0.2);
+        animation: sourceModalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes sourceModalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .source-modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
+        font-weight: 300;
+    }
+
+    .source-modal-close:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: rotate(90deg);
+    }
+
+    .source-modal-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 3rem 2rem 2rem 2rem;
+    }
+
+    .source-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+
+    .source-modal-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--accent-secondary, #b392ff);
+        font-size: 1rem;
+    }
+
+    .source-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .source-action-btn {
+        background: rgba(126, 87, 255, 0.15);
+        border: 1px solid rgba(126, 87, 255, 0.4);
+        color: var(--accent-secondary, #b392ff);
+        font-family: 'Syne', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .source-action-btn:hover {
+        background: rgba(126, 87, 255, 0.8);
+        color: #fff;
+        border-color: var(--accent-primary, #7e57ff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    }
+
+    .btn-icon {
+        font-size: 1em;
+    }
+
+    .source-code-pre {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        overflow: auto;
+        margin: 0;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .source-code {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e2e8f0;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .source-error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Light mode overrides */
+    @media (prefers-color-scheme: light) {
+        .source-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .source-modal-content {
+            background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .source-modal-title {
+            color: #6a3de8;
+        }
+
+        .source-code-pre {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .source-code {
+            color: #334155;
+        }
+    }
 </style>
 
 <!--slide show style-->
@@ -1870,7 +2058,104 @@
     };
 
 </script>
+<script>
+    const docopsSource = {
+        toggle(btn) {
+            const card = btn.closest('.docops-media-card');
+            const id = card.id;
+            const modal = document.getElementById(`source-modal-${id}`);
 
+            if (!modal) {
+                console.error('Source modal not found for', id);
+                return;
+            }
+
+            this.renderSource(card, modal);
+
+            // Move modal to body to avoid z-index/transform issues
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+
+        close(id) {
+            const modal = document.getElementById(`source-modal-${id}`);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        renderSource(card, modal) {
+            const container = modal.querySelector('.source-modal-body');
+            if (!container || container.dataset.rendered === 'true') return;
+
+            const originalContent = card.getAttribute('data-original-content');
+
+            if (!originalContent || !originalContent.trim()) {
+                container.innerHTML = '<div class="source-error">No source content available.</div>';
+                return;
+            }
+
+            // Decode HTML entities
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            const kind = card.getAttribute('data-kind') || 'source';
+
+            container.innerHTML = `
+            <div class="source-modal-header">
+                <span class="source-modal-title">${kind.toUpperCase()} Source</span>
+                <div class="source-modal-actions">
+                    <button class="source-action-btn" onclick="docopsSource.copySource('${card.id}')">
+                        <span class="btn-icon">📋</span> COPY
+                    </button>
+                </div>
+            </div>
+            <pre class="source-code-pre"><code class="source-code">${this.escapeHtml(decoded)}</code></pre>
+        `;
+
+            container.dataset.rendered = 'true';
+        },
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        },
+
+        copySource(cardId) {
+            const card = document.getElementById(cardId);
+            const originalContent = card.getAttribute('data-original-content');
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            navigator.clipboard.writeText(decoded).then(() => {
+                const btn = document.querySelector(`#source-modal-${cardId} .source-action-btn`);
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span class="btn-icon">✓</span> COPIED!';
+                    btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+    };
+</script>
 <div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
     <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
     <div class="showcase-modal-content">
@@ -2292,7 +2577,7 @@ PostgreSQL | 72 | #9b59b6
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-d59ef56d8b56c6c0 {
+  .svg-modal-svgviewer-5daf3eec8ad9843c {
       display: none;
       position: fixed;
       top: 0;
@@ -2307,10 +2592,10 @@ PostgreSQL | 72 | #9b59b6
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-d59ef56d8b56c6c0.active {
+  .svg-modal-svgviewer-5daf3eec8ad9843c.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-d59ef56d8b56c6c0 {
+  .svg-modal-content-svgviewer-5daf3eec8ad9843c {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2325,7 +2610,7 @@ PostgreSQL | 72 | #9b59b6
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-d59ef56d8b56c6c0 {
+  .svg-modal-close-svgviewer-5daf3eec8ad9843c {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2343,11 +2628,11 @@ PostgreSQL | 72 | #9b59b6
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-d59ef56d8b56c6c0:hover {
+  .svg-modal-close-svgviewer-5daf3eec8ad9843c:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-d59ef56d8b56c6c0 {
+  .svg-modal-body-svgviewer-5daf3eec8ad9843c {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2357,7 +2642,7 @@ PostgreSQL | 72 | #9b59b6
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-d59ef56d8b56c6c0 svg {
+  .svg-modal-body-svgviewer-5daf3eec8ad9843c svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2366,10 +2651,10 @@ PostgreSQL | 72 | #9b59b6
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-d59ef56d8b56c6c0 .csv-content {
+  #csv-modal-svgviewer-5daf3eec8ad9843c .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-d59ef56d8b56c6c0 .csv-table {
+  #csv-modal-svgviewer-5daf3eec8ad9843c .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2377,7 +2662,7 @@ PostgreSQL | 72 | #9b59b6
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-d59ef56d8b56c6c0 .csv-table th {
+  #csv-modal-svgviewer-5daf3eec8ad9843c .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2386,15 +2671,15 @@ PostgreSQL | 72 | #9b59b6
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-d59ef56d8b56c6c0 .csv-table td {
+  #csv-modal-svgviewer-5daf3eec8ad9843c .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-d59ef56d8b56c6c0 .csv-table tr {
+  #csv-modal-svgviewer-5daf3eec8ad9843c .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-d59ef56d8b56c6c0 .csv-table tr:hover {
+  #csv-modal-svgviewer-5daf3eec8ad9843c .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2402,10 +2687,10 @@ PostgreSQL | 72 | #9b59b6
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_d59ef56d8b56c6c0 = {
+  window.svgModalsvgviewer_5daf3eec8ad9843c = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-d59ef56d8b56c6c0');
-          const sourceContainer = document.getElementById('svgviewer-d59ef56d8b56c6c0');
+          const modal = document.getElementById('modal-svgviewer-5daf3eec8ad9843c');
+          const sourceContainer = document.getElementById('svgviewer-5daf3eec8ad9843c');
 
           if (!modal || !sourceContainer) return;
 
@@ -2414,7 +2699,7 @@ PostgreSQL | 72 | #9b59b6
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-d59ef56d8b56c6c0');
+          const targetContainer = document.getElementById('modal-body-svgviewer-5daf3eec8ad9843c');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2431,7 +2716,7 @@ PostgreSQL | 72 | #9b59b6
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-d59ef56d8b56c6c0');
+          const modal = document.getElementById('modal-svgviewer-5daf3eec8ad9843c');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2440,9 +2725,9 @@ PostgreSQL | 72 | #9b59b6
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_d59ef56d8b56c6c0 = {
+  window.csvModalsvgviewer_5daf3eec8ad9843c = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-d59ef56d8b56c6c0');
+          const modal = document.getElementById('csv-modal-svgviewer-5daf3eec8ad9843c');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2453,11 +2738,11 @@ PostgreSQL | 72 | #9b59b6
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-d59ef56d8b56c6c0');
+              window.svgViewer.loadCsvData('svgviewer-5daf3eec8ad9843c');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-d59ef56d8b56c6c0');
+          const modal = document.getElementById('csv-modal-svgviewer-5daf3eec8ad9843c');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2468,49 +2753,62 @@ PostgreSQL | 72 | #9b59b6
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-d59ef56d8b56c6c0');
+          const viewModal = document.getElementById('modal-svgviewer-5daf3eec8ad9843c');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_d59ef56d8b56c6c0.close();
+              window.svgModalsvgviewer_5daf3eec8ad9843c.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-d59ef56d8b56c6c0');
+          const csvModal = document.getElementById('csv-modal-svgviewer-5daf3eec8ad9843c');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_d59ef56d8b56c6c0.close();
+              window.csvModalsvgviewer_5daf3eec8ad9843c.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-d59ef56d8b56c6c0" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAEiEimkA_yvJLMlJtVXwrVQIzy9KUXDOyS9NUQgBCXLlZua55eeVBGdWARUYGnHlJlYg-GYGXLq6ulxgTYYKNQoWpkBC2djE0iIlCSJqBBSwBBHKlkmmlklmEFFjoIC5BUjUKDU52dwQAENx6RGAAAAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= My Word Cloud Title
+<div class="svg-with-controls docops-media-card" id="svgviewer-5daf3eec8ad9843c" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAJ3smmkA_yvJLMlJtVXwrVQIzy9KUXDOyS9NUQgBCXLlZua55eeVBGdWARUYGnHlJlYg-GYGXLq6ulxgTYYKNQoWpkBC2djE0iIlCSJqBBSwBBHKlkmmlklmEFFjoIC5BUjUKDU52dwQAENx6RGAAAAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= My Word Cloud Title
 minFontSize= 12
 maxFontSize= 60
 ---
 Word 1 | 85 | #3498db
 Word 2 | 92 | #9b59b6
 Word 3 | 78 | #2ecc71" data-kind="wordcloud">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_1760a93347504841a5d886435e940605" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["My Word Cloud Title","1","Word 1","85.0","5c9480ef791c496f8bb72767ffff9af0","false","800","600","12","60","rectangle","1.0"],["","2","Word 2","92.0","b2b5ef84db7f4db4ad49349a1c51b8d3","","","","","","",""],["","3","Word 3","78.0","3598417db02546949bc0c52dff4ea06a","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_1760a93347504841a5d886435e940605" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_1760a93347504841a5d886435e940605" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_1760a93347504841a5d886435e940605" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_1760a93347504841a5d886435e940605" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_1760a93347504841a5d886435e940605"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_1760a93347504841a5d886435e940605"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_1760a93347504841a5d886435e940605 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_1760a93347504841a5d886435e940605 .word-text:hover { filter: url(#wordGlow_1760a93347504841a5d886435e940605); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">My Word Cloud Title</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_1760a93347504841a5d886435e940605)">Word 2<title>Word 2: weight 92.00</title></text><text class="word-text" x="403.28264210897305" y="396.5254032661959" text-anchor="middle" font-size="36.0" fill="#3498db" filter="url(#wordShadow_1760a93347504841a5d886435e940605)">Word 1<title>Word 1: weight 85.00</title></text><text class="word-text" x="400.82989785744" y="275.3365764226032" text-anchor="middle" font-size="12.0" fill="#2ecc71" filter="url(#wordShadow_1760a93347504841a5d886435e940605)">Word 3<title>Word 3: weight 78.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_83c8bca764484175ac77876e1ae58ca4" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-22</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["My Word Cloud Title","1","Word 1","85.0","faee5ac7b33846bcb77de2c1c07dfa5a","false","800","600","12","60","rectangle","1.0"],["","2","Word 2","92.0","d85a0b868d014f0cb5de8f5235f7478e","","","","","","",""],["","3","Word 3","78.0","c86c8f12ea75445cb321152a099b37ac","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_83c8bca764484175ac77876e1ae58ca4" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_83c8bca764484175ac77876e1ae58ca4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_83c8bca764484175ac77876e1ae58ca4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_83c8bca764484175ac77876e1ae58ca4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_83c8bca764484175ac77876e1ae58ca4"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_83c8bca764484175ac77876e1ae58ca4"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_83c8bca764484175ac77876e1ae58ca4 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_83c8bca764484175ac77876e1ae58ca4 .word-text:hover { filter: url(#wordGlow_83c8bca764484175ac77876e1ae58ca4); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">My Word Cloud Title</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_83c8bca764484175ac77876e1ae58ca4)">Word 2<title>Word 2: weight 92.00</title></text><text class="word-text" x="391.15485490560883" y="396.0164254349231" text-anchor="middle" font-size="36.0" fill="#3498db" filter="url(#wordShadow_83c8bca764484175ac77876e1ae58ca4)">Word 1<title>Word 1: weight 85.00</title></text><text class="word-text" x="397.8790025641198" y="277.5217131135204" text-anchor="middle" font-size="12.0" fill="#2ecc71" filter="url(#wordShadow_83c8bca764484175ac77876e1ae58ca4)">Word 3<title>Word 3: weight 78.00</title></text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_d59ef56d8b56c6c0.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_d59ef56d8b56c6c0.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_5daf3eec8ad9843c.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_5daf3eec8ad9843c.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-d59ef56d8b56c6c0')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-d59ef56d8b56c6c0')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-5daf3eec8ad9843c')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-5daf3eec8ad9843c')">PNG</button>
 </div>
-<div id="modal-svgviewer-d59ef56d8b56c6c0" class="svg-modal-svgviewer-d59ef56d8b56c6c0" onclick="if(event.target === this) svgModalsvgviewer_d59ef56d8b56c6c0.close()">
-    <div class="svg-modal-content-svgviewer-d59ef56d8b56c6c0">
-        <button class="svg-modal-close-svgviewer-d59ef56d8b56c6c0" onclick="svgModalsvgviewer_d59ef56d8b56c6c0.close()">×</button>
-        <div id="modal-body-svgviewer-d59ef56d8b56c6c0" class="svg-modal-body-svgviewer-d59ef56d8b56c6c0"></div>
+<div id="modal-svgviewer-5daf3eec8ad9843c" class="svg-modal-svgviewer-5daf3eec8ad9843c" onclick="if(event.target === this) svgModalsvgviewer_5daf3eec8ad9843c.close()">
+    <div class="svg-modal-content-svgviewer-5daf3eec8ad9843c">
+        <button class="svg-modal-close-svgviewer-5daf3eec8ad9843c" onclick="svgModalsvgviewer_5daf3eec8ad9843c.close()">×</button>
+        <div id="modal-body-svgviewer-5daf3eec8ad9843c" class="svg-modal-body-svgviewer-5daf3eec8ad9843c"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-d59ef56d8b56c6c0" class="svg-modal-svgviewer-d59ef56d8b56c6c0" onclick="if(event.target === this) csvModalsvgviewer_d59ef56d8b56c6c0.close()">
-    <div class="svg-modal-content-svgviewer-d59ef56d8b56c6c0">
-        <button class="svg-modal-close-svgviewer-d59ef56d8b56c6c0" onclick="csvModalsvgviewer_d59ef56d8b56c6c0.close()">×</button>
-        <div class="svg-modal-header-svgviewer-d59ef56d8b56c6c0" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-5daf3eec8ad9843c" class="svg-modal-svgviewer-5daf3eec8ad9843c" onclick="if(event.target === this) csvModalsvgviewer_5daf3eec8ad9843c.close()">
+    <div class="svg-modal-content-svgviewer-5daf3eec8ad9843c">
+        <button class="svg-modal-close-svgviewer-5daf3eec8ad9843c" onclick="csvModalsvgviewer_5daf3eec8ad9843c.close()">×</button>
+        <div class="svg-modal-header-svgviewer-5daf3eec8ad9843c" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-d59ef56d8b56c6c0" class="svg-modal-body-svgviewer-d59ef56d8b56c6c0" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-5daf3eec8ad9843c" class="svg-modal-body-svgviewer-5daf3eec8ad9843c" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-svgviewer-5daf3eec8ad9843c" class="svg-modal-svgviewer-5daf3eec8ad9843c" onclick="if(event.target === this) docopsSource.close('svgviewer-5daf3eec8ad9843c')">
+    <div class="svg-modal-content-svgviewer-5daf3eec8ad9843c">
+        <button class="svg-modal-close-svgviewer-5daf3eec8ad9843c" onclick="docopsSource.close('svgviewer-5daf3eec8ad9843c')">×</button>
+        <div class="svg-modal-header-svgviewer-5daf3eec8ad9843c" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-svgviewer-5daf3eec8ad9843c" class="svg-modal-body-svgviewer-5daf3eec8ad9843c" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
@@ -2590,7 +2888,7 @@ imageblock .title {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-a6560074e97ba54f {
+  .svg-modal-svgviewer-75fea345fc662bab {
       display: none;
       position: fixed;
       top: 0;
@@ -2605,10 +2903,10 @@ imageblock .title {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-a6560074e97ba54f.active {
+  .svg-modal-svgviewer-75fea345fc662bab.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-a6560074e97ba54f {
+  .svg-modal-content-svgviewer-75fea345fc662bab {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2623,7 +2921,7 @@ imageblock .title {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-a6560074e97ba54f {
+  .svg-modal-close-svgviewer-75fea345fc662bab {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2641,11 +2939,11 @@ imageblock .title {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-a6560074e97ba54f:hover {
+  .svg-modal-close-svgviewer-75fea345fc662bab:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-a6560074e97ba54f {
+  .svg-modal-body-svgviewer-75fea345fc662bab {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2655,7 +2953,7 @@ imageblock .title {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-a6560074e97ba54f svg {
+  .svg-modal-body-svgviewer-75fea345fc662bab svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2664,10 +2962,10 @@ imageblock .title {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-a6560074e97ba54f .csv-content {
+  #csv-modal-svgviewer-75fea345fc662bab .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-a6560074e97ba54f .csv-table {
+  #csv-modal-svgviewer-75fea345fc662bab .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2675,7 +2973,7 @@ imageblock .title {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-a6560074e97ba54f .csv-table th {
+  #csv-modal-svgviewer-75fea345fc662bab .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2684,15 +2982,15 @@ imageblock .title {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-a6560074e97ba54f .csv-table td {
+  #csv-modal-svgviewer-75fea345fc662bab .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-a6560074e97ba54f .csv-table tr {
+  #csv-modal-svgviewer-75fea345fc662bab .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-a6560074e97ba54f .csv-table tr:hover {
+  #csv-modal-svgviewer-75fea345fc662bab .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2700,10 +2998,10 @@ imageblock .title {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_a6560074e97ba54f = {
+  window.svgModalsvgviewer_75fea345fc662bab = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-a6560074e97ba54f');
-          const sourceContainer = document.getElementById('svgviewer-a6560074e97ba54f');
+          const modal = document.getElementById('modal-svgviewer-75fea345fc662bab');
+          const sourceContainer = document.getElementById('svgviewer-75fea345fc662bab');
 
           if (!modal || !sourceContainer) return;
 
@@ -2712,7 +3010,7 @@ imageblock .title {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-a6560074e97ba54f');
+          const targetContainer = document.getElementById('modal-body-svgviewer-75fea345fc662bab');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2729,7 +3027,7 @@ imageblock .title {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-a6560074e97ba54f');
+          const modal = document.getElementById('modal-svgviewer-75fea345fc662bab');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2738,9 +3036,9 @@ imageblock .title {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_a6560074e97ba54f = {
+  window.csvModalsvgviewer_75fea345fc662bab = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-a6560074e97ba54f');
+          const modal = document.getElementById('csv-modal-svgviewer-75fea345fc662bab');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2751,11 +3049,11 @@ imageblock .title {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-a6560074e97ba54f');
+              window.svgViewer.loadCsvData('svgviewer-75fea345fc662bab');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-a6560074e97ba54f');
+          const modal = document.getElementById('csv-modal-svgviewer-75fea345fc662bab');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2766,20 +3064,20 @@ imageblock .title {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-a6560074e97ba54f');
+          const viewModal = document.getElementById('modal-svgviewer-75fea345fc662bab');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_a6560074e97ba54f.close();
+              window.svgModalsvgviewer_75fea345fc662bab.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-a6560074e97ba54f');
+          const csvModal = document.getElementById('csv-modal-svgviewer-75fea345fc662bab');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_a6560074e97ba54f.close();
+              window.csvModalsvgviewer_75fea345fc662bab.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-a6560074e97ba54f" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAEmEimkA_z3NwQqCQBCA4fs8xYLHEGbXHXc9dJCkIjpI9QJrbiakhmkg9PDtbtBlYH4-ZqZ2etg1K8ehGU3XtX3DjqZvZtPYFxMoJMRxDAfzNufr2D4n9mEZuhHduEUyUC7Tfehd0ORrQkrkFLxvQVaoBM_gsjzt_4YKWlRK6gw2kS_BcqVTRCj3pdvSgOSWioxgs1r59PudyErVcJqrxa0UmEJOPIXd4EtQiHlRaKde_qMMqraGtPwCfXpdDvUAAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Programming Languages 2024
+<div class="svg-with-controls docops-media-card" id="svgviewer-75fea345fc662bab" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAJ3smmkA_z3NwQqCQBCA4fs8xYLHEGbXHXc9dJCkIjpI9QJrbiakhmkg9PDtbtBlYH4-ZqZ2etg1K8ehGU3XtX3DjqZvZtPYFxMoJMRxDAfzNufr2D4n9mEZuhHduEUyUC7Tfehd0ORrQkrkFLxvQVaoBM_gsjzt_4YKWlRK6gw2kS_BcqVTRCj3pdvSgOSWioxgs1r59PudyErVcJqrxa0UmEJOPIXd4EtQiHlRaKde_qMMqraGtPwCfXpdDvUAAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Programming Languages 2024
 ---
 JavaScript | 90 | #f1e05a
 Python | 85 | #3572A5
@@ -2791,29 +3089,42 @@ C++ | 60 | #f34b7d
 Ruby | 55 | #701516
 Go | 50 | #00ADD8
 Rust | 45 | #dea584" data-kind="wordcloud">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_023bc97f65c245a88d0852941953bbe9" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Programming Languages 2024","1","JavaScript","90.0","e613ab4508da411c8c74e111754c4063","true","800","600","10","60","rectangle","1.0"],["","2","Python","85.0","4564ccd42f6345fcaf4d1e1988e65070","","","","","","",""],["","3","Java","80.0","bbb1b9a27edb4edfb6d6e331b5f3dc77","","","","","","",""],["","4","TypeScript","75.0","885a0c37bfd84b99bb756c3eb68428e7","","","","","","",""],["","5","C#","70.0","445d6f8910ed40fd9c81c17c72867ca6","","","","","","",""],["","6","PHP","65.0","103cb997046e45ecb569f2e25dbfaf96","","","","","","",""],["","7","C++","60.0","a54e8f90ca7946659aa2e9466bac44c1","","","","","","",""],["","8","Ruby","55.0","993492a3ff3b429dabb556a8653151c5","","","","","","",""],["","9","Go","50.0","d93bc7f03bfd4bbabf1a031b1f890eaf","","","","","","",""],["","10","Rust","45.0","fab85da282e44765af53ba4c34ea26e8","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_023bc97f65c245a88d0852941953bbe9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_023bc97f65c245a88d0852941953bbe9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_023bc97f65c245a88d0852941953bbe9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_023bc97f65c245a88d0852941953bbe9" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><filter id="wordShadow_023bc97f65c245a88d0852941953bbe9"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_023bc97f65c245a88d0852941953bbe9"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_023bc97f65c245a88d0852941953bbe9 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_023bc97f65c245a88d0852941953bbe9 .word-text:hover { filter: url(#wordGlow_023bc97f65c245a88d0852941953bbe9); transform: scale(1.1); }</style></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#backgroundGradient_023bc97f65c245a88d0852941953bbe9)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_023bc97f65c245a88d0852941953bbe9)" stroke-width="1.5" filter="url(#glassDropShadow_023bc97f65c245a88d0852941953bbe9)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#glassOverlay_023bc97f65c245a88d0852941953bbe9)" opacity="0.7" />        <g transform="translate(24.0, 38)"><text fill="#f9fafb" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Programming Languages 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#f1e05a" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">JavaScript<title>JavaScript: weight 90.00</title></text><text class="word-text" x="394.0517005052964" y="407.12024575957804" text-anchor="middle" font-size="54.0" fill="#3572A5" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">Python<title>Python: weight 85.00</title></text><text class="word-text" x="396.9379850005893" y="255.1005858551393" text-anchor="middle" font-size="49.0" fill="#b07219" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">Java<title>Java: weight 80.00</title></text><text class="word-text" x="384.80259373699135" y="189.48988754757698" text-anchor="middle" font-size="43.0" fill="#2b7489" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">TypeScript<title>TypeScript: weight 75.00</title></text><text class="word-text" x="488.33366390166105" y="261.5892189225421" text-anchor="middle" font-size="38.0" fill="#178600" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">C#<title>C#: weight 70.00</title></text><text class="word-text" x="303.7887191805304" y="255.38557869051925" text-anchor="middle" font-size="32.0" fill="#4F5D95" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">PHP<title>PHP: weight 65.00</title></text><text class="word-text" x="514.6352802943993" y="406.8066228560756" text-anchor="middle" font-size="27.0" fill="#f34b7d" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">C++<title>C++: weight 60.00</title></text><text class="word-text" x="409.27230794385014" y="465.04332706538776" text-anchor="middle" font-size="21.0" fill="#701516" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">Ruby<title>Ruby: weight 55.00</title></text><text class="word-text" x="276.9818202256214" y="391.4450325174129" text-anchor="middle" font-size="16.0" fill="#00ADD8" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">Go<title>Go: weight 50.00</title></text><text class="word-text" x="346.1028511064874" y="458.0626816570228" text-anchor="middle" font-size="10.0" fill="#dea584" filter="url(#wordShadow_023bc97f65c245a88d0852941953bbe9)">Rust<title>Rust: weight 45.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_c44fe5e4006042f2b88a42890e4644d3" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-22</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Programming Languages 2024","1","JavaScript","90.0","468efc28ddac44b8bbedfce3b1f3b1b4","true","800","600","10","60","rectangle","1.0"],["","2","Python","85.0","fd84f51f57b1406a945cc5ff195ca08e","","","","","","",""],["","3","Java","80.0","aa7e16e7808140a38cf51def67d9200d","","","","","","",""],["","4","TypeScript","75.0","a855bed14c3c4011a902cd0e6f70cd4f","","","","","","",""],["","5","C#","70.0","f5b1cae09a724cd194561368d6d075c5","","","","","","",""],["","6","PHP","65.0","0ba46b4eaf1d4311b8c6cfe47bdb2b92","","","","","","",""],["","7","C++","60.0","2b51247af22b437aa753ac86264d8c58","","","","","","",""],["","8","Ruby","55.0","4c8c236754c34ace9e7c10899267daaf","","","","","","",""],["","9","Go","50.0","9f8005dca4f049a291e5510b07a5f42d","","","","","","",""],["","10","Rust","45.0","737343a24bae48b7b134cd4d4dfdc0a5","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_c44fe5e4006042f2b88a42890e4644d3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_c44fe5e4006042f2b88a42890e4644d3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_c44fe5e4006042f2b88a42890e4644d3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_c44fe5e4006042f2b88a42890e4644d3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><filter id="wordShadow_c44fe5e4006042f2b88a42890e4644d3"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_c44fe5e4006042f2b88a42890e4644d3"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_c44fe5e4006042f2b88a42890e4644d3 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_c44fe5e4006042f2b88a42890e4644d3 .word-text:hover { filter: url(#wordGlow_c44fe5e4006042f2b88a42890e4644d3); transform: scale(1.1); }</style></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#backgroundGradient_c44fe5e4006042f2b88a42890e4644d3)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_c44fe5e4006042f2b88a42890e4644d3)" stroke-width="1.5" filter="url(#glassDropShadow_c44fe5e4006042f2b88a42890e4644d3)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#glassOverlay_c44fe5e4006042f2b88a42890e4644d3)" opacity="0.7" />        <g transform="translate(24.0, 38)"><text fill="#f9fafb" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Programming Languages 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#f1e05a" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">JavaScript<title>JavaScript: weight 90.00</title></text><text class="word-text" x="411.30028036985647" y="250.82701410623292" text-anchor="middle" font-size="54.0" fill="#3572A5" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">Python<title>Python: weight 85.00</title></text><text class="word-text" x="409.3503487522611" y="405.81999179642366" text-anchor="middle" font-size="49.0" fill="#b07219" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">Java<title>Java: weight 80.00</title></text><text class="word-text" x="392.40600580282063" y="469.21275949715766" text-anchor="middle" font-size="43.0" fill="#2b7489" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">TypeScript<title>TypeScript: weight 75.00</title></text><text class="word-text" x="325.39156297677516" y="405.6283860879081" text-anchor="middle" font-size="38.0" fill="#178600" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">C#<title>C#: weight 70.00</title></text><text class="word-text" x="501.8109516909211" y="407.1193814585832" text-anchor="middle" font-size="32.0" fill="#4F5D95" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">PHP<title>PHP: weight 65.00</title></text><text class="word-text" x="284.3833697363234" y="260.52742873191846" text-anchor="middle" font-size="27.0" fill="#f34b7d" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">C++<title>C++: weight 60.00</title></text><text class="word-text" x="401.4163731267668" y="193.21365923190817" text-anchor="middle" font-size="21.0" fill="#701516" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">Ruby<title>Ruby: weight 55.00</title></text><text class="word-text" x="282.71086716206077" y="392.6524701351867" text-anchor="middle" font-size="16.0" fill="#00ADD8" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">Go<title>Go: weight 50.00</title></text><text class="word-text" x="353.38939219657624" y="202.6625963714041" text-anchor="middle" font-size="10.0" fill="#dea584" filter="url(#wordShadow_c44fe5e4006042f2b88a42890e4644d3)">Rust<title>Rust: weight 45.00</title></text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_a6560074e97ba54f.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_a6560074e97ba54f.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_75fea345fc662bab.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_75fea345fc662bab.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-a6560074e97ba54f')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-a6560074e97ba54f')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-75fea345fc662bab')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-75fea345fc662bab')">PNG</button>
 </div>
-<div id="modal-svgviewer-a6560074e97ba54f" class="svg-modal-svgviewer-a6560074e97ba54f" onclick="if(event.target === this) svgModalsvgviewer_a6560074e97ba54f.close()">
-    <div class="svg-modal-content-svgviewer-a6560074e97ba54f">
-        <button class="svg-modal-close-svgviewer-a6560074e97ba54f" onclick="svgModalsvgviewer_a6560074e97ba54f.close()">×</button>
-        <div id="modal-body-svgviewer-a6560074e97ba54f" class="svg-modal-body-svgviewer-a6560074e97ba54f"></div>
+<div id="modal-svgviewer-75fea345fc662bab" class="svg-modal-svgviewer-75fea345fc662bab" onclick="if(event.target === this) svgModalsvgviewer_75fea345fc662bab.close()">
+    <div class="svg-modal-content-svgviewer-75fea345fc662bab">
+        <button class="svg-modal-close-svgviewer-75fea345fc662bab" onclick="svgModalsvgviewer_75fea345fc662bab.close()">×</button>
+        <div id="modal-body-svgviewer-75fea345fc662bab" class="svg-modal-body-svgviewer-75fea345fc662bab"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-a6560074e97ba54f" class="svg-modal-svgviewer-a6560074e97ba54f" onclick="if(event.target === this) csvModalsvgviewer_a6560074e97ba54f.close()">
-    <div class="svg-modal-content-svgviewer-a6560074e97ba54f">
-        <button class="svg-modal-close-svgviewer-a6560074e97ba54f" onclick="csvModalsvgviewer_a6560074e97ba54f.close()">×</button>
-        <div class="svg-modal-header-svgviewer-a6560074e97ba54f" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-75fea345fc662bab" class="svg-modal-svgviewer-75fea345fc662bab" onclick="if(event.target === this) csvModalsvgviewer_75fea345fc662bab.close()">
+    <div class="svg-modal-content-svgviewer-75fea345fc662bab">
+        <button class="svg-modal-close-svgviewer-75fea345fc662bab" onclick="csvModalsvgviewer_75fea345fc662bab.close()">×</button>
+        <div class="svg-modal-header-svgviewer-75fea345fc662bab" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-a6560074e97ba54f" class="svg-modal-body-svgviewer-a6560074e97ba54f" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-75fea345fc662bab" class="svg-modal-body-svgviewer-75fea345fc662bab" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-svgviewer-75fea345fc662bab" class="svg-modal-svgviewer-75fea345fc662bab" onclick="if(event.target === this) docopsSource.close('svgviewer-75fea345fc662bab')">
+    <div class="svg-modal-content-svgviewer-75fea345fc662bab">
+        <button class="svg-modal-close-svgviewer-75fea345fc662bab" onclick="docopsSource.close('svgviewer-75fea345fc662bab')">×</button>
+        <div class="svg-modal-header-svgviewer-75fea345fc662bab" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-svgviewer-75fea345fc662bab" class="svg-modal-body-svgviewer-75fea345fc662bab" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
@@ -2893,7 +3204,7 @@ imageblock .title {
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-612516c69d560176 {
+  .svg-modal-svgviewer-dcf0601701ba3a04 {
       display: none;
       position: fixed;
       top: 0;
@@ -2908,10 +3219,10 @@ imageblock .title {
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-612516c69d560176.active {
+  .svg-modal-svgviewer-dcf0601701ba3a04.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-612516c69d560176 {
+  .svg-modal-content-svgviewer-dcf0601701ba3a04 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2926,7 +3237,7 @@ imageblock .title {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-612516c69d560176 {
+  .svg-modal-close-svgviewer-dcf0601701ba3a04 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2944,11 +3255,11 @@ imageblock .title {
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-612516c69d560176:hover {
+  .svg-modal-close-svgviewer-dcf0601701ba3a04:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-612516c69d560176 {
+  .svg-modal-body-svgviewer-dcf0601701ba3a04 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2958,7 +3269,7 @@ imageblock .title {
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-612516c69d560176 svg {
+  .svg-modal-body-svgviewer-dcf0601701ba3a04 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2967,10 +3278,10 @@ imageblock .title {
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-612516c69d560176 .csv-content {
+  #csv-modal-svgviewer-dcf0601701ba3a04 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-612516c69d560176 .csv-table {
+  #csv-modal-svgviewer-dcf0601701ba3a04 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2978,7 +3289,7 @@ imageblock .title {
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-612516c69d560176 .csv-table th {
+  #csv-modal-svgviewer-dcf0601701ba3a04 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2987,15 +3298,15 @@ imageblock .title {
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-612516c69d560176 .csv-table td {
+  #csv-modal-svgviewer-dcf0601701ba3a04 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-612516c69d560176 .csv-table tr {
+  #csv-modal-svgviewer-dcf0601701ba3a04 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-612516c69d560176 .csv-table tr:hover {
+  #csv-modal-svgviewer-dcf0601701ba3a04 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3003,10 +3314,10 @@ imageblock .title {
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_612516c69d560176 = {
+  window.svgModalsvgviewer_dcf0601701ba3a04 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-612516c69d560176');
-          const sourceContainer = document.getElementById('svgviewer-612516c69d560176');
+          const modal = document.getElementById('modal-svgviewer-dcf0601701ba3a04');
+          const sourceContainer = document.getElementById('svgviewer-dcf0601701ba3a04');
 
           if (!modal || !sourceContainer) return;
 
@@ -3015,7 +3326,7 @@ imageblock .title {
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-612516c69d560176');
+          const targetContainer = document.getElementById('modal-body-svgviewer-dcf0601701ba3a04');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -3032,7 +3343,7 @@ imageblock .title {
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-612516c69d560176');
+          const modal = document.getElementById('modal-svgviewer-dcf0601701ba3a04');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3041,9 +3352,9 @@ imageblock .title {
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_612516c69d560176 = {
+  window.csvModalsvgviewer_dcf0601701ba3a04 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-612516c69d560176');
+          const modal = document.getElementById('csv-modal-svgviewer-dcf0601701ba3a04');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -3054,11 +3365,11 @@ imageblock .title {
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-612516c69d560176');
+              window.svgViewer.loadCsvData('svgviewer-dcf0601701ba3a04');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-612516c69d560176');
+          const modal = document.getElementById('csv-modal-svgviewer-dcf0601701ba3a04');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3069,20 +3380,20 @@ imageblock .title {
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-612516c69d560176');
+          const viewModal = document.getElementById('modal-svgviewer-dcf0601701ba3a04');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_612516c69d560176.close();
+              window.svgModalsvgviewer_dcf0601701ba3a04.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-612516c69d560176');
+          const csvModal = document.getElementById('csv-modal-svgviewer-dcf0601701ba3a04');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_612516c69d560176.close();
+              window.csvModalsvgviewer_dcf0601701ba3a04.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-612516c69d560176" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAEmEimkA_1VQy07DMBC8-yssca5InacPOdAUUCUQolTcnfU2WeHYVeoARXw8dkAqvVjr3ZnZ2fHkDdZ8h9BbZ1x34rsRrT5ykYiMfZD2fc2rJGE9Utf7mhehHsjeOetf6CtQl4IN6vP8LxK2WCxYY9ykeeOGw-TJdvybV3l4rtJMVrplN6OnPQEpwzfWozHUoQUMCCkiTLa5bAv2qKAni_wB1Wh_ZcoqzgUClEu2Mg7eoFdkQ7OYF2CZQQps43YRnMTWPpUQbDanFscjwjSSP0VDs9JStSCBrajja-VVJP0ZzWSObI3vT4djVJ_RWJQoBHuelPXTcHFfPtNEqTBEcKs7vJgWsxOd5lkIML-Pa8T_PLbXr9soUp2v_wFKndMPnAEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Technology Trends 2024
+<div class="svg-with-controls docops-media-card" id="svgviewer-dcf0601701ba3a04" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAJ3smmkA_1VQy07DMBC8-yssca5InacPOdAUUCUQolTcnfU2WeHYVeoARXw8dkAqvVjr3ZnZ2fHkDdZ8h9BbZ1x34rsRrT5ykYiMfZD2fc2rJGE9Utf7mhehHsjeOetf6CtQl4IN6vP8LxK2WCxYY9ykeeOGw-TJdvybV3l4rtJMVrplN6OnPQEpwzfWozHUoQUMCCkiTLa5bAv2qKAni_wB1Wh_ZcoqzgUClEu2Mg7eoFdkQ7OYF2CZQQps43YRnMTWPpUQbDanFscjwjSSP0VDs9JStSCBrajja-VVJP0ZzWSObI3vT4djVJ_RWJQoBHuelPXTcHFfPtNEqTBEcKs7vJgWsxOd5lkIML-Pa8T_PLbXr9soUp2v_wFKndMPnAEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Technology Trends 2024
 width= 800
 height= 600
 minFontSize= 12
@@ -3100,29 +3411,42 @@ Quantum Computing | 55 | #27ae60
 Edge Computing | 60 | #d35400
 5G | 72 | #3498db
 AR/VR | 58 | #9b59b6" data-kind="wordcloud">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_d16a3cb3eb70472b93dbd8911a9c27cf" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-09</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Technology Trends 2024","1","Cloud Computing","85.0","cb2a76e199c24ed184d1c17b5340a592","false","800","600","12","60","rectangle","1.0"],["","2","Artificial Intelligence","92.0","7590fa5b6a104913be5b6524bd689f68","","","","","","",""],["","3","Machine Learning","78.0","398874b20cef492db1bf993780c5bc7e","","","","","","",""],["","4","Blockchain","65.0","505bfd0e71e546b0a35e62d881ba892d","","","","","","",""],["","5","IoT","70.0","5459d4198a484c4fb4d2c79e47805b8d","","","","","","",""],["","6","Cybersecurity","88.0","b81ad3042d16470eba7e4a7a2b7928ca","","","","","","",""],["","7","Big Data","75.0","fff6852100004d708b27e757c860c2a2","","","","","","",""],["","8","DevOps","68.0","062bf037a7ce458d838fbc60fbe1f227","","","","","","",""],["","9","Quantum Computing","55.0","390db5dbc139472281eaa72b7dc738af","","","","","","",""],["","10","Edge Computing","60.0","e6afe6fee661428bb845ff1e3e500449","","","","","","",""],["","11","5G","72.0","20094cdd69a44a35bb812840d6d42ab0","","","","","","",""],["","12","AR/VR","58.0","475de64af64f4c5b95b1cfdac5033942","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_d16a3cb3eb70472b93dbd8911a9c27cf" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_d16a3cb3eb70472b93dbd8911a9c27cf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_d16a3cb3eb70472b93dbd8911a9c27cf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_d16a3cb3eb70472b93dbd8911a9c27cf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_d16a3cb3eb70472b93dbd8911a9c27cf"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_d16a3cb3eb70472b93dbd8911a9c27cf .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_d16a3cb3eb70472b93dbd8911a9c27cf .word-text:hover { filter: url(#wordGlow_d16a3cb3eb70472b93dbd8911a9c27cf); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Technology Trends 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Artificial Intelligence<title>Artificial Intelligence: weight 92.00</title></text><text class="word-text" x="401.63171619416715" y="252.90669616052074" text-anchor="middle" font-size="55.0" fill="#1abc9c" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Cybersecurity<title>Cybersecurity: weight 88.00</title></text><text class="word-text" x="409.7744276233075" y="405.2850414284013" text-anchor="middle" font-size="51.0" fill="#3498db" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Cloud Computing<title>Cloud Computing: weight 85.00</title></text><text class="word-text" x="406.1522060946135" y="474.06307345822336" text-anchor="middle" font-size="42.0" fill="#2ecc71" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Machine Learning<title>Machine Learning: weight 78.00</title></text><text class="word-text" x="398.3193139851627" y="186.29291404849636" text-anchor="middle" font-size="38.0" fill="#34495e" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Big Data<title>Big Data: weight 75.00</title></text><text class="word-text" x="524.8675086413625" y="186.1195592200007" text-anchor="middle" font-size="34.0" fill="#3498db" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">5G<title>5G: weight 72.00</title></text><text class="word-text" x="271.815807349172" y="181.09755961771506" text-anchor="middle" font-size="31.0" fill="#f39c12" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">IoT<title>IoT: weight 70.00</title></text><text class="word-text" x="426.3643902324298" y="138.19144719269283" text-anchor="middle" font-size="29.0" fill="#e67e22" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">DevOps<title>DevOps: weight 68.00</title></text><text class="word-text" x="410.80336320357833" y="527.614087555098" text-anchor="middle" font-size="25.0" fill="#e74c3c" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Blockchain<title>Blockchain: weight 65.00</title></text><text class="word-text" x="290.94109812714794" y="136.06241320693906" text-anchor="middle" font-size="18.0" fill="#d35400" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Edge Computing<title>Edge Computing: weight 60.00</title></text><text class="word-text" x="308.6811209152417" y="523.695834913714" text-anchor="middle" font-size="16.0" fill="#9b59b6" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">AR/VR<title>AR/VR: weight 58.00</title></text><text class="word-text" x="413.592115878774" y="102.1769099422927" text-anchor="middle" font-size="12.0" fill="#27ae60" filter="url(#wordShadow_d16a3cb3eb70472b93dbd8911a9c27cf)">Quantum Computing<title>Quantum Computing: weight 55.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_c2becc1ca857462387d69cb1f3fd84c2" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-02-22</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Technology Trends 2024","1","Cloud Computing","85.0","b64a6c73d3f94648a9b58b98691efee2","false","800","600","12","60","rectangle","1.0"],["","2","Artificial Intelligence","92.0","c71d12efe49e4a75ac78848bcf39aa6e","","","","","","",""],["","3","Machine Learning","78.0","adcf5f8d69634a47a6d8b00db1e7c0b0","","","","","","",""],["","4","Blockchain","65.0","fc08f751cd2b4f5093b98ce7b15ceb8d","","","","","","",""],["","5","IoT","70.0","d1a9d0cc755c4459a2c31cf43d3557a0","","","","","","",""],["","6","Cybersecurity","88.0","90a005f3d2144ed7ae098ab9a43567be","","","","","","",""],["","7","Big Data","75.0","f34262f4019f4a67b5bc0d51668c9f51","","","","","","",""],["","8","DevOps","68.0","060aa8bd0f5b40eaa3f8a3ecd84f4650","","","","","","",""],["","9","Quantum Computing","55.0","528058a7a5624b7faa26aa9a59f38605","","","","","","",""],["","10","Edge Computing","60.0","f8306387c7fa44bface6aca716a6c2a5","","","","","","",""],["","11","5G","72.0","d260c83e7e874ceaae386ba695ce081b","","","","","","",""],["","12","AR/VR","58.0","77210e7d1ef04f6fa9deb4c3f173a6cb","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_c2becc1ca857462387d69cb1f3fd84c2" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_c2becc1ca857462387d69cb1f3fd84c2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_c2becc1ca857462387d69cb1f3fd84c2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_c2becc1ca857462387d69cb1f3fd84c2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_c2becc1ca857462387d69cb1f3fd84c2"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_c2becc1ca857462387d69cb1f3fd84c2"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_c2becc1ca857462387d69cb1f3fd84c2 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_c2becc1ca857462387d69cb1f3fd84c2 .word-text:hover { filter: url(#wordGlow_c2becc1ca857462387d69cb1f3fd84c2); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Technology Trends 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Artificial Intelligence<title>Artificial Intelligence: weight 92.00</title></text><text class="word-text" x="392.7334722098597" y="407.48679411557805" text-anchor="middle" font-size="55.0" fill="#1abc9c" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Cybersecurity<title>Cybersecurity: weight 88.00</title></text><text class="word-text" x="403.3607076794365" y="253.67958450262446" text-anchor="middle" font-size="51.0" fill="#3498db" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Cloud Computing<title>Cloud Computing: weight 85.00</title></text><text class="word-text" x="408.255121928729" y="185.56387156519668" text-anchor="middle" font-size="42.0" fill="#2ecc71" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Machine Learning<title>Machine Learning: weight 78.00</title></text><text class="word-text" x="387.1019497816074" y="473.85605239987177" text-anchor="middle" font-size="38.0" fill="#34495e" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Big Data<title>Big Data: weight 75.00</title></text><text class="word-text" x="501.43043955405005" y="476.38809579185295" text-anchor="middle" font-size="34.0" fill="#3498db" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">5G<title>5G: weight 72.00</title></text><text class="word-text" x="422.6867304426875" y="526.3642402344035" text-anchor="middle" font-size="31.0" fill="#f39c12" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">IoT<title>IoT: weight 70.00</title></text><text class="word-text" x="386.1431671063782" y="130.66201226894268" text-anchor="middle" font-size="29.0" fill="#e67e22" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">DevOps<title>DevOps: weight 68.00</title></text><text class="word-text" x="298.79421615596596" y="523.8500632937833" text-anchor="middle" font-size="25.0" fill="#e74c3c" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Blockchain<title>Blockchain: weight 65.00</title></text><text class="word-text" x="522.5772990022576" y="131.56503502132853" text-anchor="middle" font-size="18.0" fill="#d35400" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Edge Computing<title>Edge Computing: weight 60.00</title></text><text class="word-text" x="273.00325621011615" y="459.58039833308624" text-anchor="middle" font-size="16.0" fill="#9b59b6" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">AR/VR<title>AR/VR: weight 58.00</title></text><text class="word-text" x="526.0550739275732" y="515.9475296469761" text-anchor="middle" font-size="12.0" fill="#27ae60" filter="url(#wordShadow_c2becc1ca857462387d69cb1f3fd84c2)">Quantum Computing<title>Quantum Computing: weight 55.00</title></text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_612516c69d560176.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_612516c69d560176.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_dcf0601701ba3a04.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_dcf0601701ba3a04.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-612516c69d560176')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-612516c69d560176')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-dcf0601701ba3a04')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-dcf0601701ba3a04')">PNG</button>
 </div>
-<div id="modal-svgviewer-612516c69d560176" class="svg-modal-svgviewer-612516c69d560176" onclick="if(event.target === this) svgModalsvgviewer_612516c69d560176.close()">
-    <div class="svg-modal-content-svgviewer-612516c69d560176">
-        <button class="svg-modal-close-svgviewer-612516c69d560176" onclick="svgModalsvgviewer_612516c69d560176.close()">×</button>
-        <div id="modal-body-svgviewer-612516c69d560176" class="svg-modal-body-svgviewer-612516c69d560176"></div>
+<div id="modal-svgviewer-dcf0601701ba3a04" class="svg-modal-svgviewer-dcf0601701ba3a04" onclick="if(event.target === this) svgModalsvgviewer_dcf0601701ba3a04.close()">
+    <div class="svg-modal-content-svgviewer-dcf0601701ba3a04">
+        <button class="svg-modal-close-svgviewer-dcf0601701ba3a04" onclick="svgModalsvgviewer_dcf0601701ba3a04.close()">×</button>
+        <div id="modal-body-svgviewer-dcf0601701ba3a04" class="svg-modal-body-svgviewer-dcf0601701ba3a04"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-612516c69d560176" class="svg-modal-svgviewer-612516c69d560176" onclick="if(event.target === this) csvModalsvgviewer_612516c69d560176.close()">
-    <div class="svg-modal-content-svgviewer-612516c69d560176">
-        <button class="svg-modal-close-svgviewer-612516c69d560176" onclick="csvModalsvgviewer_612516c69d560176.close()">×</button>
-        <div class="svg-modal-header-svgviewer-612516c69d560176" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-dcf0601701ba3a04" class="svg-modal-svgviewer-dcf0601701ba3a04" onclick="if(event.target === this) csvModalsvgviewer_dcf0601701ba3a04.close()">
+    <div class="svg-modal-content-svgviewer-dcf0601701ba3a04">
+        <button class="svg-modal-close-svgviewer-dcf0601701ba3a04" onclick="csvModalsvgviewer_dcf0601701ba3a04.close()">×</button>
+        <div class="svg-modal-header-svgviewer-dcf0601701ba3a04" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-612516c69d560176" class="svg-modal-body-svgviewer-612516c69d560176" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-dcf0601701ba3a04" class="svg-modal-body-svgviewer-dcf0601701ba3a04" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-svgviewer-dcf0601701ba3a04" class="svg-modal-svgviewer-dcf0601701ba3a04" onclick="if(event.target === this) docopsSource.close('svgviewer-dcf0601701ba3a04')">
+    <div class="svg-modal-content-svgviewer-dcf0601701ba3a04">
+        <button class="svg-modal-close-svgviewer-dcf0601701ba3a04" onclick="docopsSource.close('svgviewer-dcf0601701ba3a04')">×</button>
+        <div class="svg-modal-header-svgviewer-dcf0601701ba3a04" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-svgviewer-dcf0601701ba3a04" class="svg-modal-body-svgviewer-dcf0601701ba3a04" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
