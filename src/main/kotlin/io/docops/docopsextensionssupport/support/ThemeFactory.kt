@@ -51,6 +51,7 @@ object ThemeFactory {
      */
     fun getThemeByName(themeName: String, useDark: Boolean = false): DocOpsTheme {
         return when (themeName.lowercase()) {
+            "signal", "signaltheme" -> if (useDark) SignalDarkTheme() else SignalLightTheme()
             "brand", "brandtheme" -> if (useDark) BrandDarkTheme() else BrandLightTheme()
             "tallinn", "tallinntheme" -> if(useDark)ProDarkTheme() else TallinnTheme()
             "autumn", "autumntheme" -> if(useDark)ProDarkTheme() else AutumnTheme()
@@ -447,3 +448,74 @@ class AuroraTheme: TokyoDarkTheme() {
             SVGColor("#3AAE9F")  // Luminous Teal
         )
     }
+/**
+ * DocOps Signal — Chart-first Light Theme
+ *
+ * Tuned for: ModernLight canvas + Signal 6-series palette
+ * Goal: decision-ready docs (clear, restrained, high contrast)
+ */
+class SignalLightTheme : DocOpsTheme {
+    override val name = "SignalLightTheme"
+
+    // Canvas aligned to ModernLight recommendation
+    override val canvas = "#f1f5f9"
+    override val primaryText = "#0f172a"
+    override val secondaryText = "#2A3447" // Slate-ish supporting text
+    override val accentColor = "#00B7D6"   // Signal Cyan (reserved, strong)
+
+    override val glassEffect = "rgba(255, 255, 255, 0.75)"
+    override val surfaceImpact = "rgba(11, 18, 32, 0.06)"
+
+    // Keep typography consistent with existing modern themes in this project
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport =
+        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
+    override val fontLineHeight = 1.25f
+    override val cornerRadius = 12
+
+    // Signal Palette 6 (purpose-built for multi-series line charts)
+    override val chartPalette = listOf(
+        SVGColor("#00B7D6", "Signal Cyan"),
+        SVGColor("#2563EB", "Royal Blue"),
+        SVGColor("#16A34A", "Emerald"),
+        SVGColor("#D97706", "Amber"),
+        SVGColor("#7C3AED", "Violet"),
+        SVGColor("#DB2777", "Rose")
+    )
+}
+
+/**
+ * DocOps Signal — Chart-first Dark Theme
+ *
+ * Tuned for: Aurora canvas + Signal 6-series palette
+ * Goal: high legibility on deep teal canvas without glow/pattern reliance.
+ */
+class SignalDarkTheme : DocOpsTheme {
+    override val name = "SignalDarkTheme"
+
+    // Canvas aligned to Aurora recommendation
+    override val canvas = "#142B37"
+    override val primaryText = "#EAF3F8"
+    override val secondaryText = "#B7C2D9"
+    override val accentColor = "#00B7D6" // Signal Cyan
+
+    override val glassEffect = "rgba(20, 43, 55, 0.72)"
+    override val surfaceImpact = "rgba(0, 183, 214, 0.14)"
+
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport =
+        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
+    override val fontLineHeight = 1.25f
+    override val cornerRadius = 12
+
+    override val chartPalette = listOf(
+        SVGColor("#00B7D6", "Signal Cyan"),
+        SVGColor("#2563EB", "Royal Blue"),
+        SVGColor("#16A34A", "Emerald"),
+        SVGColor("#D97706", "Amber"),
+        SVGColor("#7C3AED", "Violet"),
+        SVGColor("#DB2777", "Rose")
+    )
+}

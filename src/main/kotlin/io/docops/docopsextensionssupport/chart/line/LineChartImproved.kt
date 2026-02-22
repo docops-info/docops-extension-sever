@@ -1,32 +1,40 @@
 package io.docops.docopsextensionssupport.chart.line
 
-import io.docops.docopsextensionssupport.chart.ChartColors
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
-import java.util.UUID
+
 
 class LineChartImproved {
 
 
     private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
-    fun makeLineSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean): String {
 
+    fun makeLineSvg(payload: String, csvResponse: CsvResponse, useDark: Boolean): String {
         // Parse configuration and data from content
         val (config, chartData) = parseConfigAndData(payload)
         val visualVersion = config["visualVersion"]?.toIntOrNull() ?: 1
 
+        // Accept both legacy + documented keys, pick Signal defaults (precise + restrained).
+        val smoothLines = config["smoothLines"]?.toBoolean()
+            ?: config["smooth"]?.toBoolean()
+            ?: false
+
+        val showArea = config["showArea"]?.toBoolean()
+            ?: config["area"]?.toBoolean()
+            ?: false
+
         val display = LineChartDisplay(
             useDark = useDark,
             visualVersion = visualVersion,
-            smoothLines = config["smooth"]?.toBoolean() ?: true,
-            showArea = config["area"]?.toBoolean() ?: false,
+            smoothLines = smoothLines,
+            showArea = showArea,
             theme = config["theme"] ?: "classic"
         )
-        theme = ThemeFactory.getThemeByName(display.theme)
+        theme = ThemeFactory.getThemeByName(display.theme, useDark)
 
         // Parse colors from config or attributes
         val configColors = config["colors"]?.split(",")?.map { it.trim() }
@@ -37,26 +45,22 @@ class LineChartImproved {
         val height = config.getOrDefault("height", "500")
         val showLegend = config["legend"]?.toBoolean() ?: true
         val enableHoverEffects = config["hover"]?.toBoolean() ?: true
-        val smoothLines = config["smooth"]?.toBoolean() ?: true
         val showPoints = config["points"]?.toBoolean() ?: true
         val showGrid = config["grid"]?.toBoolean() ?: true
         val xAxisLabel = config.getOrDefault("xAxisLabel", "")
         val yAxisLabel = config.getOrDefault("yAxisLabel", "")
-        val darkMode = useDark
 
         val lineData = parseLineChartData(chartData)
-
         csvResponse.update(convertLineDataSeriesToCsv(lineData))
 
         var colors = theme.chartPalette
         if (customColors != null) {
             colors = mutableListOf()
-            customColors.forEach {
-                colors.add(SVGColor(it))
-            }
+            customColors.forEach { colors.add(SVGColor(it)) }
         }
+
         // Generate SVG
-        val svg = generateLineChartSvg(
+        return generateLineChartSvg(
             lineData,
             title,
             width.toInt(),
@@ -69,9 +73,9 @@ class LineChartImproved {
             showGrid,
             xAxisLabel,
             yAxisLabel,
-            theme, display
+            theme,
+            display
         )
-        return svg
     }
 
     /**
@@ -169,109 +173,57 @@ class LineChartImproved {
 
         val svgBuilder = StringBuilder()
 
-        // Define colors based on dark mode (Midnight IDE aesthetic)
-        // Define colors based on ThemeFactory
+        // Signal: keep chart chrome neutral; accent should be reserved for the data series.
         val backgroundColor = theme.canvas
         val textColor = theme.primaryText
-        val gridColor = theme.accentColor
-        val axisColor = theme.accentColor
+        val gridColor = theme.primaryText
+        val axisColor = theme.primaryText
         val pointStrokeColor = theme.canvas
-        val legendBg = theme.glassEffect
-
 
         val id = display.id
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
-
         svgBuilder.append("<defs>")
         svgBuilder.append(theme.fontImport)
-        svgBuilder.append("""
-                <filter id="legendGlass_$id" x="0" y="0" width="100%" height="100%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-                </filter>
-            """.trimIndent())
 
-        // Layered Gradient for Atmosphere
-        if (darkMode) {
-            svgBuilder.append("""
-                    <radialGradient id="bgGlow_$id" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                        <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#020617;stop-opacity:1" />
-                    </radialGradient>
-                """.trimIndent())
-        }
-        // Atmospheric Patterns and Glow Filter
-        svgBuilder.append("""
-                <pattern id="dotPattern_$id" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="1" fill="${if (darkMode) "#334155" else "#cbd5e1"}" fill-opacity="0.4" />
-                </pattern>
-                <filter id="glow_$id" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="4" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-            """.trimIndent())
-        // Add responsive CSS that adapts to system color scheme
+        // Signal: keep defs minimal; no default atmosphere/patterns.
         val chartStyle = """
-                #ID_$id .chart-text { fill: ${theme.primaryText}; font-family: ${theme.fontFamily}; letter-spacing: -0.5px; }
-                #ID_$id .chart-grid { stroke: ${theme.accentColor}; stroke-dasharray: 3,3; stroke-opacity: 0.2; }
-                #ID_$id .chart-axis { stroke: ${theme.accentColor}; stroke-width: 1.5; stroke-opacity: 0.5; }
-                #ID_$id .chart-background { fill: ${theme.canvas}; }
-                #ID_$id .legend-box { fill: ${theme.glassEffect}; stroke: ${theme.accentColor}; stroke-width: 1; }
+                #ID_$id .chart-text { fill: $textColor; font-family: ${theme.fontFamily}; letter-spacing: 0px; }
+                #ID_$id .chart-grid { stroke: $gridColor; stroke-dasharray: 3,3; stroke-opacity: ${if (darkMode) "0.14" else "0.12"}; }
+                #ID_$id .chart-axis { stroke: $axisColor; stroke-width: 1.25; stroke-opacity: ${if (darkMode) "0.45" else "0.35"}; }
+                #ID_$id .chart-background { fill: $backgroundColor; }
+                #ID_$id .legend-box { fill: ${theme.glassEffect}; stroke: $axisColor; stroke-width: 1; stroke-opacity: 0.20; }
             """.trimIndent()
 
-        svgBuilder.append("""
-        <style>
-            <![CDATA[
-            $chartStyle
-             @keyframes revealPoint {
-                from { r: 0; opacity: 0; }
-                to { r: 5; opacity: 1; }
-            }
-            
-            .data-point-reveal {
-                opacity: 0;
-                animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            }
-            /* Hover effects */
-            ${if (enableHoverEffects) """
-                .line-path {
-                    transition: stroke-width 0.2s;
-                }
-                .line-path:hover {
-                    stroke-width: 4;
-                }
-                .data-point {
-                    transition: r 0.2s;
-                }
-                .data-point:hover {
-                    r: 8;
-                    cursor: pointer;
-                }
-                .legend-item:hover {
-                    cursor: pointer;
-                }
-                .legend-item:hover rect {
-                    stroke-width: 2;
-                }
-                .legend-item:hover text {
-                    font-weight: bold;
-                }
-            """ else ""}
-            ]]>
-        </style>
-    """.trimIndent())
+        svgBuilder.append(
+            """
+            <style>
+                <![CDATA[
+                $chartStyle
+
+                /* Hover effects (optional) */
+                ${if (enableHoverEffects) """
+                    .line-path { transition: stroke-width 120ms cubic-bezier(0.16, 1, 0.3, 1); }
+                    .line-path:hover { stroke-width: 5; }
+                    .data-point { transition: r 120ms cubic-bezier(0.16, 1, 0.3, 1); }
+                    .data-point:hover { r: 7; cursor: pointer; }
+                    .legend-item:hover { cursor: pointer; }
+                """ else ""}
+                ]]>
+            </style>
+            """.trimIndent()
+        )
 
         svgBuilder.append("</defs>")
 
-        // ENFORCE BACKGROUND: Full coverage rect ensures no blending into page
+        // Signal: solid background, no dot overlay
         svgBuilder.append("<rect width='$width' height='$height' class='chart-background' rx='12'/>")
-        svgBuilder.append("<rect width='$width' height='$height' fill='url(#dotPattern_$id)' rx='12' pointer-events='none'/>")
 
-        // Add title with distinct typography
-        svgBuilder.append("<text x='${width/2}' y='30' font-size='22' text-anchor='middle' font-weight='800' class='chart-text' style='text-transform: uppercase; letter-spacing: 1px;'>$title</text>")
+        // Signal: title is readable, not shouty
+        svgBuilder.append(
+            "<text x='${width / 2}' y='34' font-size='22' text-anchor='middle' font-weight='600' class='chart-text'>$title</text>"
+        )
 
-
-        // Define chart area
         // Define chart area
         val chartX = marginLeft
         val chartY = marginTop
@@ -282,7 +234,7 @@ class LineChartImproved {
 
         // Draw grid if enabled
         if (showGrid) {
-            svgBuilder.append("<g class='grid' stroke='$gridColor' stroke-width='1'>")
+            svgBuilder.append("<g class='chart-grid'>")
 
             // Horizontal grid lines (y-axis)
             val yStep = calculateAxisStep(paddedMinY, paddedMaxY)
@@ -307,11 +259,8 @@ class LineChartImproved {
 
         // Draw axes
         svgBuilder.append("<g class='axes'>")
-        //svgBuilder.append("<g class='axes' stroke='$axisColor' stroke-width='1'>")
-        // X-axis
-        svgBuilder.append("<line x1='$chartX' y1='${chartY + chartHeight}' x2='${chartX + chartWidth}' y2='${chartY + chartHeight}' stroke='$axisColor' stroke-width='1' />")
-        // Y-axis
-        svgBuilder.append("<line x1='$chartX' y1='$chartY' x2='$chartX' y2='${chartY + chartHeight}' stroke='$axisColor' stroke-width='1' />")
+        svgBuilder.append("<line x1='$chartX' y1='${chartY + chartHeight}' x2='${chartX + chartWidth}' y2='${chartY + chartHeight}' class='chart-axis' />")
+        svgBuilder.append("<line x1='$chartX' y1='$chartY' x2='$chartX' y2='${chartY + chartHeight}' class='chart-axis' />")
 
         // X-axis ticks and labels
         // Check if we have string labels
@@ -366,12 +315,10 @@ class LineChartImproved {
         seriesList.forEachIndexed { index, series ->
             if (series.points.isEmpty()) return@forEachIndexed
 
-            // Choose color for this series
             val colorIndex = index % colors.size
             val color = series.color ?: colors[colorIndex].color
 
-            // Create a group for this series with a high-impact glow
-            svgBuilder.append("<g class='data-series' id='series-$index' filter='url(#glow_$id)'>")
+            svgBuilder.append("<g class='data-series' id='series-$index'>")
 
             // Draw the line with sharp, vibrant stroke
             svgBuilder.append("<path class='line-path' ")
@@ -475,23 +422,20 @@ class LineChartImproved {
 
         // Add JavaScript for interactive effects if enabled
         if (enableHoverEffects) {
-            svgBuilder.append("""
+            svgBuilder.append(
+                """
                 <script type="text/javascript">
                     function highlightSeries(id) {
                         var line = document.getElementById(id);
-                        if (line) {
-                            line.setAttribute('stroke-width', '4');
-                        }
+                        if (line) { line.setAttribute('stroke-width', '5'); }
                     }
-
                     function resetSeries(id) {
                         var line = document.getElementById(id);
-                        if (line) {
-                            line.setAttribute('stroke-width', '2');
-                        }
+                        if (line) { line.setAttribute('stroke-width', '4'); }
                     }
                 </script>
-            """.trimIndent())
+                """.trimIndent()
+            )
         }
 
         svgBuilder.append("</svg>")
