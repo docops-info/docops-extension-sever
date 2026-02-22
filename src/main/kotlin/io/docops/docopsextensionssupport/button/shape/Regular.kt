@@ -76,6 +76,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         sb.append("</g>")
         return sb.toString()
     }
+
     open fun drawButton(index: Int, buttonList: MutableList<Button>): String {
         val btns = StringBuilder()
         var win = "_top"
@@ -90,53 +91,61 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         if (index > 0) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
+
         buttonList.forEachIndexed { btnIdx, button ->
             val accentColor = button.color ?: docOpsTheme.accentColor
-            val bodyFill = if (buttons.useDark) docOpsTheme.canvas else "#F8F8F8"
 
-            // Fix: Use theme typography
+            // Signal: neutral surfaces; accent is a cue (border/focus/active), not the fill.
+            val bodyFill = if (buttons.useDark) docOpsTheme.surfaceImpact else "#FFFFFF"
+
+            // Signal: label uses primary text color for authority and readability.
+            val textFillColor = docOpsTheme.primaryText
+
             val font = docOpsTheme.fontFamily
-            
-            // Fix: Ensure high contrast for text
-            val textFillColor = if (buttons.useDark) {
-                accentColor // Neon glow on dark
-            } else {
-                // On light background, use the accent color directly for the label
-                // but ensure it's not too light.
-                accentColor
-            }
-
-            val animDelay = (index * 0.1) + (btnIdx * 0.05)
-
             val isPdfMode = isPdf
 
+            val borderWidth = if (button.active) 2.0 else 1.0
+            val buttonOpacity = if (button.enabled) 1.0 else 0.55
+
             var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
-            if(!button.enabled) {
+            if (!button.enabled) {
                 href = ""
             }
 
-            // PDF and Print don't support CSS animations or complex hover interactions
-            val groupStyle = if (isPdfMode) "" else """style="animation: slideIn 0.5s ease-out ${animDelay}s both;""""
             val groupClass = if (isPdfMode) "" else """class="btn-group""""
-            // Strip conflicting fill from user style
-            val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
+            val groupStyle = "" // Signal: keep buttons stable; page-level motion should orchestrate reveals.
 
-            btns.append("""
+            // Strip conflicting fill from user style (we control label color via tokens)
+            val cleanUserStyle =
+                button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
+
+            btns.append(
+                """
                     <g transform="translate($startX,$startY)">
-            <g $groupClass $groupStyle $href>
-                <!-- Shadow Layer uses theme's surface impact -->
-                <rect x="4" y="4" width="300" height="32" rx="${docOpsTheme.cornerRadius / 2}" fill="${docOpsTheme.surfaceImpact}" opacity="0.3"/>
-                <!-- Main Button Body -->
-                <rect x="0" y="0" width="300" height="32" rx="${docOpsTheme.cornerRadius / 2}" fill="$bodyFill" stroke="$accentColor" stroke-width="1.5" class="btn-main"/>
-                    ${if (!isPdfMode) """<rect x="0" y="0" width="300" height="16" rx="2" fill="white" opacity="0.05"/>""" else ""}
-                    
-                   <text x="150" y="21" text-anchor="middle" fill="$textFillColor" 
-                    style="font-family: $font !important;$cleanUserStyle}">
-                    ${button.label.escapeXml()}
-                </text>
-                </g>
-            </g>
-            """.trimIndent())
+                        <g $groupClass $groupStyle $href opacity="$buttonOpacity">
+                            <!-- Shadow Layer (subtle elevation, not decoration) -->
+                            <rect x="2" y="3" width="300" height="40" rx="${docOpsTheme.cornerRadius}" fill="${docOpsTheme.surfaceImpact}" opacity="0.18"/>
+                            
+                            <!-- Main Button Body -->
+                            <rect x="0" y="0" width="300" height="40" rx="${docOpsTheme.cornerRadius}"
+                                  fill="$bodyFill" stroke="$accentColor" stroke-width="$borderWidth" class="btn-main"/>
+                            
+                            <!-- Active/Current: understated inner highlight so it reads even without hover -->
+                            ${
+                    if (button.active) {
+                        """<rect x="2" y="2" width="296" height="36" rx="${docOpsTheme.cornerRadius - 2}"
+                               fill="$accentColor" opacity="${if (buttons.useDark) "0.10" else "0.06"}"/>"""
+                    } else ""
+                }
+
+                            <text x="150" y="26" text-anchor="middle" fill="$textFillColor"
+                                  style="font-family: $font !important;$cleanUserStyle">
+                                ${button.label.escapeXml()}
+                            </text>
+                        </g>
+                    </g>
+                """.trimIndent()
+            )
 
             startX += BUTTON_WIDTH + BUTTON_PADDING
         }
@@ -151,21 +160,13 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
 
     protected fun end() = """</svg>"""
-    protected open fun defs() : String{
-        var strokeColor: String = "gold"
-        buttons.theme?.let {
-            strokeColor = it.strokeColor
-        }
 
+    protected open fun defs(): String {
         val customStyle = if (isPdf) "" else """
-            @keyframes slideIn {
-                from { opacity: 0; transform: translateY(15px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .btn-group { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; }
-            .btn-group:hover { transform: translate(2px, 2px) !important; }
-            .btn-main { transition: fill 0.2s ease; }
-            .btn-group:hover .btn-main { fill: ${if (buttons.useDark) "#252525" else "#FFFFFF"} !important; }
+            .btn-group { cursor: pointer; }
+            .btn-main { transition: fill 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1); }
+            .btn-group:hover .btn-main { transform: translateY(-1px); }
+            .btn-group:hover { }
         """.trimIndent()
 
         var style = """
@@ -181,7 +182,8 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             }
             </style>
         """.trimIndent()
-        if(isPdf) {
+
+        if (isPdf) {
             style = """
 
             """.trimIndent()

@@ -5,9 +5,9 @@ include::_base.adoc[]
 :prev-page-url: arch.html
 :next-page-title: Callout
 :next-page-url: callout.html
-= DocOps Buttons
+= image:icons/ButtonIcon.svg[Button Icon,36,36] DocOps Buttons
 
-image::icons/ButtonIcon.svg[Button Icon,80,80]
+
 
 
 
@@ -21,6 +21,8 @@ link:buttonsshowcase.html[Showcase]
 
 Buttons create organized navigation grids that turn link lists into scannable visual menus. Perfect for dashboards, index pages, and resource directories where you need users to find the right link fast.
 
+DocOps Signal defaults prioritize clarity and audit-friendly restraint.
+
 === Key Features
 
 * *9 button shapes* - From regular rectangles to hexagons and circles
@@ -29,6 +31,62 @@ Buttons create organized navigation grids that turn link lists into scannable vi
 * *Embedded images* - Add icons or logos to buttons
 * *Sorting options* - Order by label, type, date, or custom order
 
+[.back-to-top]
+<<top, 🔝>>
+
+== Hierarchy & meaning (DocOps Signal)
+
+Use buttons as a navigation system, not decoration.
+
+* *One Primary per grid* - If everything is loud, nothing is legible. Use a single Primary action when a grid contains a clear “next step.”
+* *Cyan is action* - Reserve accent usage for Primary, focus/selection, and the current (active) destination.
+* *Gold is governance* - Use gold to indicate review/audit/attention items, not as a generic highlight.
+* *Semantic colors are literal* - Use success/warning/error/info only when the linked destination represents that meaning (e.g., “Failed checks” is error, not “Docs”).
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Navigation index (Signal default)
+
+A restrained, scan-friendly index: neutral surfaces, one accent, and an obvious “you are here”.
+
+[source,asciidoc]
+....
+[docops,buttons]
+----
+{
+  "docname": "buttons.html",
+  "buttons": [
+    {
+      "label": "Overview",
+      "link": "index.html",
+      "type": "docs"
+    },
+    {
+      "label": "Buttons",
+      "link": "buttons.html",
+      "type": "docs",
+      "activeName": "buttons.html"
+    },
+    {
+      "label": "Charts",
+      "link": "charts.html",
+      "type": "docs"
+    },
+    {
+      "label": "Runbooks",
+      "link": "runbooks.html",
+      "type": "ops"
+    }
+  ],
+  "buttonType": "REGULAR",
+  "theme": {
+    "columns": 2,
+    "scale": 1.0
+  }
+}
+----
+....
 [.back-to-top]
 <<top, 🔝>>
 
@@ -65,7 +123,7 @@ Basic navigation with regular buttons:
 ----
 ....
 
-[docops,buttons,controls=true]
+[docops,buttons,controls=false]
 ----
 {
   "buttons": [
@@ -120,36 +178,45 @@ include::data/buttons/buttons3.json[]
 
 == Button Shape Reference
 
-[cols="1,3"]
+[cols="1,2,1"]
 |===
-| Button Type | Best For
+| Button Type | Best For | Signal Profile
 
 | `REGULAR`
 | Standard navigation grids, link directories
+| *Signal Core*
 
 | `PILL`
-| Modern UI, tag-style navigation
+| Tag-style navigation, compact groupings
+| *Signal Core* (sparingly)
 
 | `LARGE`
-| Hero sections, primary actions (2-4 buttons max)
+| Hero navigation tiles with metadata (2–4 buttons max)
+| *Signal Core*
 
 | `RECTANGLE`
 | Documentation indexes, structured menus
-
-| `ROUND`
-| Dashboard widgets, feature showcases
-
-| `CIRCLE`
-| Icon-focused navigation, app launchers
+| *Signal Core*
 
 | `SLIM`
-| Compact menus, sidebar navigation
-
-| `OVAL`
-| Playful designs, creative projects
+| Compact menus, sidebar-like navigation
+| *Specialty/Diagram*
 
 | `HEX`
 | Technical docs, architecture diagrams
+| *Specialty/Diagram*
+
+| `CIRCLE`
+| Icon-focused navigation, app launchers
+| *Specialty/Diagram*
+
+| `ROUND`
+| Dashboard widgets, feature showcases
+| *Specialty/Diagram*
+
+| `OVAL`
+| Playful designs, creative projects
+| *Specialty/Diagram*
 |===
 
 [.back-to-top]
@@ -225,14 +292,14 @@ Add icons to buttons:
 == Best Practices
 
 * *Use 2-3 columns* - More columns create cramped buttons on smaller screens
-* *Color-code by type* - Assign consistent colors to categories (docs=blue, tools=green)
+* *Use one strong accent* - Keep surfaces neutral; reserve accent for the primary action, focus, and current destination
 * *Keep labels short* - 1-3 words max for readability
 * *Limit grid size* - 6-12 buttons per grid; more creates decision fatigue
-* *Match shape to context* - Use REGULAR for general navigation, LARGE for primary CTAs
+* *Match shape to context* - Use Signal Core shapes for navigation; reserve Specialty/Diagram shapes for diagrams and showcases
 
 [TIP]
 ====
-For documentation indexes, use type-based color coding (e.g., "tutorial"=blue, "reference"=green, "guide"=orange). Users quickly learn the color system and can scan faster.
+For DocOps Signal documentation indexes, prefer neutral button surfaces and use small accents (e.g., a subtle border, a compact badge, or a tiny icon) to indicate category. Reserve strong color for hierarchy (Primary vs Secondary) and meaning (gold for audit/review, semantic colors only when literal).
 ====
 
 [.back-to-top]
