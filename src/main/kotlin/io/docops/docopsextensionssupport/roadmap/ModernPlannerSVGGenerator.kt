@@ -1,40 +1,41 @@
 package io.docops.docopsextensionssupport.roadmap
 
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 import java.io.File
 import java.util.*
+import kotlin.collections.get
+import kotlin.text.get
+import kotlin.times
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-class ModernPlannerMaker {
-
-    fun makePlannerImage(planItems: PlanItems, title: String, scale: String, useDark: Boolean = false): String {
+class ModernPlannerMaker(val useDark: Boolean = false) {
+    private var theme = ThemeFactory.getTheme(useDark)
+    fun makePlannerImage(planItems: PlanItems, title: String, scale: String): String {
         val cols = planItems.toColumns()
         val width = determineWidth(planItems)
         val height = determineHeight(planItems)
 
         val sb = StringBuilder()
-        sb.append(makeHead(width, height, useDark))
+        sb.append(makeHead(width, height))
 
         // Background & Grid
-        val bgColor = if (useDark) "#09090b" else "#f8fafc"
-        val dotColor = if (useDark) "#27272a" else "#e2e8f0"
+        val bgColor = theme.canvas
 
         sb.append(
             """
             <rect width="100%" height="100%" fill="$bgColor"/>
-            <pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1" fill="$dotColor" opacity="0.5"/>
-            </pattern>
+            
             <rect width="100%" height="100%" fill="url(#dotGrid)"/>
         """
         )
 
         // Header
-        val titleColor = if (useDark) "#f4f4f5" else "#09090b"
-        val accentColor = "#ef4444"
+        val titleColor = theme.primaryText
+        val accentColor = theme.accentColor
         sb.append(
             """
             <g transform="translate(80, 80)">
@@ -49,7 +50,7 @@ class ModernPlannerMaker {
         cols.forEach { (key, value) ->
             val color = value[0].color ?: DOCOPS_BRANDING_COLORS[columnIndex % DOCOPS_BRANDING_COLORS.size]
             val x = 80 + (columnIndex * 360)
-            sb.append(makeColumn(key, value, x, color, useDark, columnIndex))
+            sb.append(makeColumn(key, value, x, color, columnIndex))
             columnIndex++
         }
 
@@ -62,7 +63,6 @@ class ModernPlannerMaker {
         items: List<PlanItem>,
         x: Int,
         color: String,
-        useDark: Boolean,
         index: Int
     ): String {
         val sb = StringBuilder()
@@ -79,7 +79,7 @@ class ModernPlannerMaker {
         var currentY = 0
         items.forEach { item ->
             val cardHeight = calculateCardHeight(item)
-            sb.append(makeCard(item, currentY, cardHeight, color, useDark))
+            sb.append(makeCard(item, currentY, cardHeight, color))
             currentY += cardHeight + 20
         }
 
@@ -87,7 +87,7 @@ class ModernPlannerMaker {
         return sb.toString()
     }
 
-    private fun makeCard(item: PlanItem, y: Int, height: Int, accentColor: String, useDark: Boolean): String {
+    private fun makeCard(item: PlanItem, y: Int, height: Int, accentColor: String): String {
         val cardBg = if (useDark) "#18181b" else "#ffffff"
         val cardStroke = if (useDark) "#27272a" else "#e2e8f0"
         val titleColor = if (useDark) "#f4f4f5" else "#18181b"
@@ -108,14 +108,14 @@ class ModernPlannerMaker {
 
         val contentY = if (item.title != null) 30f else 10f
         if (!item.content.isNullOrEmpty()) {
-            sb.append(renderTextWithBullets(item.content!!, 0f, contentY, item.urlMap, useDark))
+            sb.append(renderTextWithBullets(item.content!!, 0f, contentY, item.urlMap))
         }
 
         sb.append("</g></g>")
         return sb.toString()
     }
 
-    private fun renderTextWithBullets(text: String, x: Float, y: Float, urlMap: MutableMap<String, String>, useDark: Boolean = false, lineHeight: Float = 20f): String {
+    private fun renderTextWithBullets(text: String, x: Float, y: Float, urlMap: MutableMap<String, String>, lineHeight: Float = 20f): String {
         val lines = text.split("\n")
         val result = StringBuilder()
         var currentY = y
@@ -184,17 +184,18 @@ class ModernPlannerMaker {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    private fun makeHead(width: Int, height: Int, useDark: Boolean): String {
+    private fun makeHead(width: Int, height: Int): String {
         val id = Uuid.random().toHexString()
+        val dotColor = if (useDark) "#e2e8f0" else "#27272a"
         return """
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width / DISPLAY_RATIO_16_9}" height="${height / DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" id="id_$id" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 $width $height" id="id_$id" xmlns:xlink="http://www.w3.org/1999/xlink">
             <defs>
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&amp;family=Outfit:wght@400;600&amp;display=swap');
-                    #id_$id .planner-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; }
-                    #id_$id .column-title { font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; }
-                    #id_$id .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; }
-                    #id_$id .card-body { font-family: 'Outfit', sans-serif; font-size: 13px; }
+                    ${theme.fontImport}
+                    #id_$id .planner-title { font-family: ${theme.fontFamily}; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; }
+                    #id_$id .column-title { font-family: ${theme.fontFamily}; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; }
+                    #id_$id .card-title { font-family: ${theme.fontFamily}; font-size: 16px; font-weight: 700; }
+                    #id_$id .card-body { font-family: ${theme.fontFamily}; font-size: 13px; }
                 </style>
                 <symbol id="bullet-dot" viewBox="0 0 10 10">
                     <circle cx="5" cy="5" r="2" fill="currentColor"/>
@@ -208,6 +209,9 @@ class ModernPlannerMaker {
                 <symbol id="bullet-dash" viewBox="0 0 10 10">
                     <path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/>
                 </symbol>
+                <pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="$dotColor" opacity="0.5"/>
+                </pattern>
             </defs>
         """.trimIndent()
     }

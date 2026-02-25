@@ -13,8 +13,8 @@ class PlannerHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
     fun handleSVG(payload: String, useDark: Boolean, type: String, scale: String, title: String, theme: String = "DEFAULT"): String {
         val parser = PlannerParser()
         val planItems = parser.parse(payload)
-        val rmm = ModernPlannerMaker()
-        val svg = rmm.makePlannerImage(planItems, title, scale, useDark = useDark)
+        val rmm = ModernPlannerMaker(useDark = useDark)
+        val svg = rmm.makePlannerImage(planItems, title, scale)
         /*val svg = if (theme.uppercase() == "MODERN") {
             val rmm = ModernPlannerMaker()
             rmm.makePlannerImage(planItems, title, scale, useDark = useDark)
