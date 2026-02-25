@@ -1,80 +1,72 @@
 ---
 name: timeline
-description: "Timeline is a skill that allows you to create and manage timelines in your documentation. It provides a visual representation of events, milestones, and progress over time."
+description: "Timeline is a skill that helps you author DocOps timelines for Asciidoctor or Markdown. It generates a clean, chronological event list that renders as a timeline visualization."
 trigger:
   - "create a timeline"
+  - "make a timeline"
   - "add event to timeline"
   - "remove event from timeline"
   - "update event in timeline"
-  - "view timeline"
+  - "convert timeline to asciidoctor"
+  - "convert timeline to markdown"
 ---
 
-## Key Features
+## What this skill does
 
-* Horizontal layout - Events flow left-to-right along a center spine
+Given a set of events (date + headline + optional description), this skill produces a DocOps timeline block you can paste into:
 
-* Alternating placement - Events alternate above/below for balanced design
+- Asciidoctor documentation
+- Markdown documentation
 
-* Multi-line support - Descriptions can span multiple lines with links
+## Output rules (important)
 
-* Date flexibility - Use any date format (Q1 2024, Jan 15, etc.)
+- Default layout is `type=H` (horizontal). Only output `type=V` when the user asks for vertical.
+- Blank lines between events are optional. Events are detected by `date:` boundaries.
+- Links are allowed in *description lines only* (not in the `text:` headline line), using `[[url label]]`.
+- `scale` is supported in both Asciidoctor and Markdown.
+- Dark/light in Markdown is *not* controlled by `useDark`. It is driven by the stylesheet name containing `dark` or `light`.
+    - Therefore: **never output `useDark` in Markdown**.
 
-* Interactive elements - Clickable items with expandable details
+## Quick start
 
- 
-## Usage
-
-### Asciidoctor
+### Asciidoctor (supports `useDark`)
 
 ```asciidoc
-[docops,timeline,title="Project Milestones", useDark=false]
+[docops,timeline,title="Project Milestones",scale="1",useDark=false,role="center"]
 ----
-type=V
----
-date: Q1 2024
-text: Project Kickoff
-Initial planning and team formation completed.
-
-date: Q2 2024
-text: Design Phase
-UI/UX design and architecture planning.
-
-date: Q3 2024
-text: Development
-Core functionality implementation.
-
-date: Q4 2024
-text: Testing & Launch
-Quality assurance and public release.
+date: Q1 2024 
+text: Kickoff Initial planning and team formation completed.
+date: Q2 2024 
+text: Design Phase UI/UX design and architecture planning.
 ----
 ```
 
-### Markdown
+### Markdown (`scale` supported; theme via stylesheet name)
 
 ```markdown
-[docops,timeline]
-type=H
----
-date: Q1 2024
-text: Project Kickoff
-Initial planning and team formation completed.
-
-date: Q2 2024
-text: Design Phase
-UI/UX design and architecture planning.
-
-date: Q3 2024
-text: Development
-Core functionality implementation.
-
-date: Q4 2024
-text: Testing & Launch
-Quality assurance and public release.
+[docops,timeline,title="Project Milestones",scale="1"]
+date: Q1 2024 
+text: Kickoff Initial planning and team formation completed.
+date: Q2 2024 
+text: Design Phase UI/UX design and architecture planning. 
 [/docops]
 ```
+## How to respond to users (behavior)
 
-### URL format
-the image url would be in the format of
-https://roach.gy/extension/api/docops/svg?kind=<type>&payload=<base64_encoded_data>'
+When asked to create a timeline, do this:
 
-IMPORTANT: kind=timeline
+1. Ask at most 2 clarifying questions **only if needed**:
+    - Target format: Asciidoctor or Markdown?
+    - Any preference for date style (quarters vs months vs exact dates)?
+
+2. Produce a single paste-ready timeline block.
+3. Include a 1–2 line *timeline summary* above the block (unless the user asked for “just the block”):
+    - Scope (time range)
+    - Narrative (what changes over time)
+    - Anchor (what “done” looks like)
+
+## URL / API embedding (optional)
+
+If the user needs an image URL, use:
+
+`https://<host>/extension/api/docops/svg?kind=timeline&payload=<base64_encoded_payload>`
