@@ -476,3 +476,46 @@ img {
   a { color: #000 !important; border-bottom: 0 !important; text-decoration: underline !important; }
   pre { background: #f6f8fb !important; color: #000 !important; }
 }
+
+/* Admonition icons compatibility (AsciidoctorJ emits <i class="fa icon-tip"> etc.)
+       You load Font Awesome 6, which doesn't map these legacy classes by default.
+       This block renders the icons via FA6 glyphs (no shims needed). */
+.admonitionblock td.icon i.fa {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900; /* solid */
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  font-size: 18px;
+  /* fallback color if a variant isn't matched */
+  color: var(--text-1);
+}
+
+.admonitionblock td.icon i.fa::before {
+  display: inline-block;
+}
+
+.admonitionblock td.icon i.fa.icon-note::before {
+  content: "\f05a"; /* circle-info */
+  color: var(--semantic-info);
+}
+
+.admonitionblock td.icon i.fa.icon-tip::before {
+  content: "\f0eb"; /* lightbulb */
+  color: var(--semantic-success);
+}
+
+.admonitionblock td.icon i.fa.icon-warning::before {
+  content: "\f071"; /* triangle-exclamation */
+  color: var(--semantic-warning);
+}
+
+.admonitionblock td.icon i.fa.icon-caution::before {
+  content: "\f06d"; /* fire */
+  color: var(--semantic-error);
+}
+
+.admonitionblock td.icon i.fa.icon-important::before {
+  content: "\f06a"; /* circle-exclamation */
+  color: var(--brand-gold);
+}
