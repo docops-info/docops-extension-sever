@@ -8,11 +8,10 @@
 <link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
 <title>🌳 DocOps Tree Chart</title>
 <style>
-@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap);@keyframes docops-reveal{to{opacity:1;transform:translateY(0)}}:root{--brand-ink:#0B1220;--brand-cloud:#F6F8FB;--brand-slate:#2A3447;--brand-steel:#8A96AD;--brand-cyan:#00B7D6;--brand-gold:#C9A227;--semantic-success:#16A34A;--semantic-warning:#D97706;--semantic-error:#DC2626;--semantic-info:#2563EB;--canvas:var(--brand-cloud);--surface-1:#FFFFFF;--surface-2:#EEF2F7;--border:rgba(11, 18, 32, 0.12);--text-1:var(--brand-ink);--text-2:var(--brand-slate);--text-3:var(--brand-steel);--accent:var(--brand-cyan);--font-sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;--font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;--content-max:1100px;--content-reading:920px;--r-sm:8px;--r-md:12px;--r-lg:16px;--shadow-sm:0 6px 18px rgba(11, 18, 32, 0.08);--shadow-md:0 16px 40px rgba(11, 18, 32, 0.12);--focus-glow:0 0 0 4px rgba(0, 183, 214, 0.22);--dur-fast:120ms;--dur-base:220ms;--dur-slow:420ms;--ease-standard:cubic-bezier(0.16, 1, 0.3, 1);--grid-ink:rgba(11, 18, 32, 0.05);--halo-cyan:rgba(0, 183, 214, 0.10);--halo-gold:rgba(201, 162, 39, 0.08)}:root.dark-mode{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}}html{box-sizing:border-box;text-size-adjust:100%;scroll-behavior:smooth}*,::after,::before{box-sizing:inherit}::selection{background:rgba(0,183,214,.22)}body{margin:0;font-family:var(--font-sans);color:var(--text-2);background:var(--canvas);line-height:1.6;background-image:radial-gradient(1200px 800px at 12% -10%,var(--halo-cyan),transparent 55%),radial-gradient(900px 700px at 100% 10%,var(--halo-gold),transparent 50%),linear-gradient(to right,var(--grid-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-ink) 1px,transparent 1px);background-size:auto,auto,28px 28px,28px 28px;background-attachment:fixed}#header{max-width:var(--content-max)}#content,#footer,#footnotes,#header{margin:0 auto;padding:28px 20px}#footer,#footnotes{max-width:var(--content-max)}#content{max-width:var(--content-reading)}#content,#footer,#footnotes,#header>h1:first-child,#toc{opacity:0;transform:translateY(10px);animation:docops-reveal var(--dur-slow) var(--ease-standard) forwards}#header>h1:first-child{animation-delay:40ms}#toc{animation-delay:90ms}#content{animation-delay:140ms}#footnotes{animation-delay:190ms}#footer{animation-delay:240ms}@media (prefers-reduced-motion:reduce){#content,#footer,#footnotes,#header>h1:first-child,#toc{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}h1,h2,h3,h4{color:var(--text-1)}h1,h4,h5{letter-spacing:-.01em}h1,h2,h3,h4,h5,h6{line-height:1.2;margin:2.2rem 0 .9rem;scroll-margin-top:96px}#header>h1:first-child{margin:0 0 12px;font-size:40px;font-weight:600;letter-spacing:-.6px;padding:18px 18px 18px 16px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.2));border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative}#header>h1:first-child::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;border-radius:var(--r-lg)0 0 var(--r-lg);background:linear-gradient(180deg,var(--accent),rgba(0,183,214,.35))}h2,h4,h5,h6{font-weight:600}h2{font-size:28px;letter-spacing:-.3px;border-bottom:1px solid var(--border);padding-bottom:10px}h3{font-size:22px;font-weight:500;letter-spacing:-.2px}h4,h5,h6{font-size:16px}h5,h6{font-size:14px;color:var(--text-2)}h6{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.12em}p{margin:0 0 1rem}a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,183,214,.35);transition:border-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard)}a:focus,a:hover{color:var(--accent);border-bottom-color:var(--accent)}hr{border:0;height:1px;background:var(--border);margin:2rem 0}ol,ul{margin:0 0 1rem;padding-left:1.25rem}li{margin:.3rem 0}code,kbd,pre{font-family:var(--font-mono);font-variant-ligatures:none}code{font-size:.92em;color:var(--text-1);background:rgba(0,183,214,.1);border:1px solid rgba(0,183,214,.18);padding:.16em .4em;border-radius:10px}blockquote,pre{border:1px solid var(--border);box-shadow:var(--shadow-sm)}pre{margin:0 0 1.25rem;padding:16px 18px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(11,18,32,.92),rgba(11,18,32,.84));color:#eaf0ff;overflow:auto;line-height:1.55}pre code{background:0 0;border:0;padding:0;color:inherit}blockquote{margin:1.5rem 0;padding:14px 16px;border-radius:var(--r-md);background:var(--surface-1);position:relative}blockquote::before{content:"";position:absolute;inset:10px auto 10px 10px;width:3px;border-radius:999px;background:rgba(138,150,173,.55)}blockquote p:last-child{margin-bottom:0}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);box-shadow:var(--shadow-sm)}td,th{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}th{font-weight:600;color:var(--text-1);background:linear-gradient(180deg,var(--surface-2),rgba(238,242,247,.25));text-transform:uppercase;letter-spacing:.08em;font-size:12px}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(0,183,214,.06)}#toc,.admonitionblock,.exampleblock,.sidebarblock{border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#toc{background:color-mix(in srgb,var(--surface-1) 78%,transparent);backdrop-filter:blur(10px);border:1px solid var(--border);padding:16px}#toc .title,#toctitle,.admonitionblock .title{color:var(--text-1);font-weight:600;font-size:12px;text-transform:uppercase}#toc .title,#toctitle{margin:0 0 10px;letter-spacing:.12em;display:flex;align-items:center;gap:10px}#toc .title::after,#toctitle::after{content:"";flex:1;height:1px;background:var(--border)}#toc ul{list-style:none;padding-left:0;margin:0}#toc li{margin:6px 0}#toc a{color:var(--text-2);border-bottom:0;display:inline-block;padding:2px 0}#toc a:hover{color:var(--text-1)}#toc ul ul{padding-left:14px;border-left:1px solid var(--border);margin-left:6px}#toc.toc2{position:fixed!important;top:20px;left:20px;width:320px;max-height:calc(100vh - 40px);overflow:auto;z-index:5000}body.toc2{padding-left:360px;max-width:none}@media (max-width:1100px){#toc.toc2{position:static!important;width:auto;max-height:none;left:auto;top:auto;margin:0 0 16px}body.toc2{padding-left:0}}.admonitionblock,.exampleblock,.sidebarblock{margin:1.5rem 0;background:var(--surface-1)}.admonitionblock{overflow:hidden;border:1px solid var(--border)}.admonitionblock>table{border:0;margin:0;box-shadow:none}.admonitionblock td.icon{width:52px;padding:14px 10px;text-align:center;background:var(--surface-2);border-right:1px solid var(--border)}.admonitionblock td.content{padding:14px 16px}.admonitionblock .title{letter-spacing:.1em;margin-bottom:6px}.admonitionblock.note{border-left:4px solid var(--semantic-info)}.admonitionblock.tip{border-left:4px solid var(--semantic-success)}.admonitionblock.warning{border-left:4px solid var(--semantic-warning)}.admonitionblock.caution{border-left:4px solid var(--semantic-error)}.admonitionblock.important{border-left:4px solid var(--brand-gold)}.admonitionblock.important td.icon{background:color-mix(in srgb,var(--brand-gold) 14%,var(--surface-2))}.exampleblock,.sidebarblock{padding:16px}.exampleblock>.content>.title,.sidebarblock>.content>.title{margin:0 0 10px;font-weight:600;color:var(--text-1)}.exampleblock,.sidebarblock,img,kbd{border:1px solid var(--border)}kbd{display:inline-block;padding:.14rem .4rem;border-radius:10px;background:var(--surface-2);color:var(--text-1);font-size:.85em;box-shadow:0 2px 0 rgba(11,18,32,.08)}img{max-width:100%;height:auto;border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#footer{border-top:1px solid var(--border);color:var(--text-3)}#footer-text{opacity:.9}:focus{outline:2px solid var(--accent);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--focus-glow)}@media print{body{background:#fff!important}#toc.toc2{display:none!important}a,body,pre{color:#000!important}a{border-bottom:0!important;text-decoration:underline!important}pre{background:#f6f8fb!important}}.admonitionblock td.icon i.fa{font-family:"Font Awesome 6 Free";font-weight:900;font-style:normal;display:inline-block;line-height:1;font-size:18px;color:var(--text-1)}.admonitionblock td.icon i.fa::before{display:inline-block}.admonitionblock td.icon i.fa.icon-note::before{content:"";color:var(--semantic-info)}.admonitionblock td.icon i.fa.icon-tip::before{content:"";color:var(--semantic-success)}.admonitionblock td.icon i.fa.icon-warning::before{content:"";color:var(--semantic-warning)}.admonitionblock td.icon i.fa.icon-caution::before{content:"";color:var(--semantic-error)}.admonitionblock td.icon i.fa.icon-important::before{content:"";color:var(--brand-gold)}
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap);@keyframes docops-reveal{to{opacity:1;transform:translateY(0)}}:root{--brand-ink:#0B1220;--brand-cloud:#F6F8FB;--brand-slate:#2A3447;--brand-steel:#8A96AD;--brand-cyan:#00B7D6;--brand-gold:#C9A227;--semantic-success:#16A34A;--semantic-warning:#D97706;--semantic-error:#DC2626;--semantic-info:#2563EB;--canvas:var(--brand-cloud);--surface-1:#FFFFFF;--surface-2:#EEF2F7;--border:rgba(11, 18, 32, 0.12);--text-1:var(--brand-ink);--text-2:var(--brand-slate);--text-3:var(--brand-steel);--accent:var(--brand-cyan);--font-sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;--font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;--content-max:1100px;--content-reading:920px;--r-sm:8px;--r-md:12px;--r-lg:16px;--shadow-sm:0 6px 18px rgba(11, 18, 32, 0.08);--shadow-md:0 16px 40px rgba(11, 18, 32, 0.12);--focus-glow:0 0 0 4px rgba(0, 183, 214, 0.22);--dur-fast:120ms;--dur-base:220ms;--dur-slow:420ms;--ease-standard:cubic-bezier(0.16, 1, 0.3, 1);--grid-ink:rgba(11, 18, 32, 0.05);--halo-cyan:rgba(0, 183, 214, 0.10);--halo-gold:rgba(201, 162, 39, 0.08)}:root.dark-mode{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}}html{box-sizing:border-box;text-size-adjust:100%;scroll-behavior:smooth}*,::after,::before{box-sizing:inherit}::selection{background:rgba(0,183,214,.22)}body{margin:0;font-family:var(--font-sans);color:var(--text-2);background:var(--canvas);line-height:1.6;background-image:radial-gradient(1200px 800px at 12% -10%,var(--halo-cyan),transparent 55%),radial-gradient(900px 700px at 100% 10%,var(--halo-gold),transparent 50%),linear-gradient(to right,var(--grid-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-ink) 1px,transparent 1px);background-size:auto,auto,28px 28px,28px 28px;background-attachment:fixed}#header{max-width:var(--content-max)}#content,#footer,#footnotes,#header{margin:0 auto;padding:28px 20px}#footer,#footnotes{max-width:var(--content-max)}#content{max-width:var(--content-reading)}#content,#footer,#footnotes,#header>h1:first-child,#toc{opacity:0;transform:translateY(10px);animation:docops-reveal var(--dur-slow) var(--ease-standard) forwards}#header>h1:first-child{animation-delay:40ms}#toc{animation-delay:90ms}#content{animation-delay:140ms}#footnotes{animation-delay:190ms}#footer{animation-delay:240ms}@media (prefers-reduced-motion:reduce){#content,#footer,#footnotes,#header>h1:first-child,#toc{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}h1,h2,h3,h4{color:var(--text-1)}h1,h4,h5{letter-spacing:-.01em}h1,h2,h3,h4,h5,h6{line-height:1.2;margin:2.2rem 0 .9rem;scroll-margin-top:96px}#header>h1:first-child{margin:0 0 12px;font-size:40px;font-weight:600;letter-spacing:-.6px;padding:18px 18px 18px 16px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.2));border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative}#header>h1:first-child::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;border-radius:var(--r-lg)0 0 var(--r-lg);background:linear-gradient(180deg,var(--accent),rgba(0,183,214,.35))}h2,h4,h5,h6{font-weight:600}h2{font-size:28px;letter-spacing:-.3px;border-bottom:1px solid var(--border);padding-bottom:10px}h3{font-size:22px;font-weight:500;letter-spacing:-.2px}h4,h5,h6{font-size:16px}h5,h6{font-size:14px;color:var(--text-2)}h6{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.12em}p{margin:0 0 1rem}a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,183,214,.35);transition:border-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard)}a:focus,a:hover{color:var(--accent);border-bottom-color:var(--accent)}hr{border:0;height:1px;background:var(--border);margin:2rem 0}ol,ul{margin:0 0 1rem;padding-left:1.25rem}li{margin:.3rem 0}code,kbd,pre{font-family:var(--font-mono);font-variant-ligatures:none}code{font-size:.92em;color:var(--text-1);background:rgba(0,183,214,.1);border:1px solid rgba(0,183,214,.18);padding:.16em .4em;border-radius:10px}blockquote,pre{border:1px solid var(--border);box-shadow:var(--shadow-sm)}pre{margin:0 0 1.25rem;padding:16px 18px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(11,18,32,.92),rgba(11,18,32,.84));color:#eaf0ff;overflow:auto;line-height:1.55}pre code{background:0 0;border:0;padding:0;color:inherit}blockquote{margin:1.5rem 0;padding:14px 16px;border-radius:var(--r-md);background:var(--surface-1);position:relative}blockquote::before{content:"";position:absolute;inset:10px auto 10px 10px;width:3px;border-radius:999px;background:rgba(138,150,173,.55)}blockquote p:last-child{margin-bottom:0}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);box-shadow:var(--shadow-sm)}td,th{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}th{font-weight:600;color:var(--text-1);background:linear-gradient(180deg,var(--surface-2),rgba(238,242,247,.25));text-transform:uppercase;letter-spacing:.08em;font-size:12px}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(0,183,214,.06)}#toc,.admonitionblock,.exampleblock,.sidebarblock{border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#toc{background:color-mix(in srgb,var(--surface-1) 78%,transparent);backdrop-filter:blur(10px);border:1px solid var(--border);padding:16px}#toc .title,#toctitle,.admonitionblock .title{color:var(--text-1);font-weight:600;font-size:12px;text-transform:uppercase}#toc .title,#toctitle{margin:0 0 10px;letter-spacing:.12em;display:flex;align-items:center;gap:10px}#toc .title::after,#toctitle::after{content:"";flex:1;height:1px;background:var(--border)}#toc ul{list-style:none;padding-left:0;margin:0}#toc li{margin:6px 0}#toc a{color:var(--text-2);border-bottom:0;display:inline-block;padding:2px 0}#toc a:hover{color:var(--text-1)}#toc ul ul{padding-left:14px;border-left:1px solid var(--border);margin-left:6px}#toc.toc2{position:fixed!important;top:20px;left:20px;width:320px;max-height:calc(100vh - 40px);overflow:auto;z-index:5000}body.toc2{padding-left:360px;max-width:none}@media (max-width:1100px){#toc.toc2{position:static!important;width:auto;max-height:none;left:auto;top:auto;margin:0 0 16px}body.toc2{padding-left:0}}.admonitionblock,.exampleblock,.sidebarblock{margin:1.5rem 0;background:var(--surface-1)}.admonitionblock{overflow:hidden;border:1px solid var(--border)}.admonitionblock>table{border:0;margin:0;box-shadow:none}.admonitionblock td.icon{width:52px;padding:14px 10px;text-align:center;background:var(--surface-2);border-right:1px solid var(--border)}.admonitionblock td.content{padding:14px 16px}.admonitionblock .title{letter-spacing:.1em;margin-bottom:6px}.admonitionblock.note{border-left:4px solid var(--semantic-info)}.admonitionblock.tip{border-left:4px solid var(--semantic-success)}.admonitionblock.warning{border-left:4px solid var(--semantic-warning)}.admonitionblock.caution{border-left:4px solid var(--semantic-error)}.admonitionblock.important{border-left:4px solid var(--brand-gold)}.admonitionblock.important td.icon{background:color-mix(in srgb,var(--brand-gold) 14%,var(--surface-2))}.exampleblock,.sidebarblock{padding:16px}.exampleblock>.content>.title,.sidebarblock>.content>.title{margin:0 0 10px;font-weight:600;color:var(--text-1)}.exampleblock,.sidebarblock,img,kbd{border:1px solid var(--border)}kbd{display:inline-block;padding:.14rem .4rem;border-radius:10px;background:var(--surface-2);color:var(--text-1);font-size:.85em;box-shadow:0 2px 0 rgba(11,18,32,.08)}img{max-width:100%;height:auto;border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#footer,.page-navigation{border-top:1px solid var(--border)}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0}.nav-container{max-width:var(--content-max);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-sans);font-weight:600;font-size:.9rem;color:var(--brand-cyan);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:var(--r-md);background:var(--surface-1);border:1px solid var(--border);transition:all var(--dur-base) var(--ease-standard);box-shadow:var(--shadow-sm);border-bottom:1px solid var(--border)}.nav-next:hover,.nav-prev:hover{color:var(--surface-1);background:var(--brand-cyan);border-color:var(--brand-cyan);transform:translateY(-2px);box-shadow:var(--shadow-md);border-bottom:1px solid var(--brand-cyan)}#footer{color:var(--text-3)}#footer-text{opacity:.9}:focus{outline:2px solid var(--accent);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--focus-glow)}@media print{body{background:#fff!important}#toc.toc2{display:none!important}a,body,pre{color:#000!important}a{border-bottom:0!important;text-decoration:underline!important}pre{background:#f6f8fb!important}}.theme-toggle{position:fixed;top:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--surface-1);border:1px solid var(--border);box-shadow:var(--shadow-md);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all var(--dur-base) var(--ease-standard);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(11,18,32,.2);border-color:var(--accent)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all var(--dur-base) ease}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.admonitionblock td.icon i.fa{font-family:"Font Awesome 6 Free";font-weight:900;font-style:normal;display:inline-block;line-height:1;font-size:18px;color:var(--text-1)}.admonitionblock td.icon i.fa::before{display:inline-block}.admonitionblock td.icon i.fa.icon-note::before{content:"";color:var(--semantic-info)}.admonitionblock td.icon i.fa.icon-tip::before{content:"";color:var(--semantic-success)}.admonitionblock td.icon i.fa.icon-warning::before{content:"";color:var(--semantic-warning)}.admonitionblock td.icon i.fa.icon-caution::before{content:"";color:var(--semantic-error)}.admonitionblock td.icon i.fa.icon-important::before{content:"";color:var(--brand-gold)}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/v4-shims.min.css">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -2571,7 +2570,7 @@ CEO
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-6f9ef4b47cec1fcf {
+  .svg-modal-svgviewer-2181723f1a328d53 {
       display: none;
       position: fixed;
       top: 0;
@@ -2586,10 +2585,10 @@ CEO
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-6f9ef4b47cec1fcf.active {
+  .svg-modal-svgviewer-2181723f1a328d53.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-6f9ef4b47cec1fcf {
+  .svg-modal-content-svgviewer-2181723f1a328d53 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2604,7 +2603,7 @@ CEO
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-6f9ef4b47cec1fcf {
+  .svg-modal-close-svgviewer-2181723f1a328d53 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2622,11 +2621,11 @@ CEO
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-6f9ef4b47cec1fcf:hover {
+  .svg-modal-close-svgviewer-2181723f1a328d53:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-6f9ef4b47cec1fcf {
+  .svg-modal-body-svgviewer-2181723f1a328d53 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2636,7 +2635,7 @@ CEO
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-6f9ef4b47cec1fcf svg {
+  .svg-modal-body-svgviewer-2181723f1a328d53 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2645,10 +2644,10 @@ CEO
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-6f9ef4b47cec1fcf .csv-content {
+  #csv-modal-svgviewer-2181723f1a328d53 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-6f9ef4b47cec1fcf .csv-table {
+  #csv-modal-svgviewer-2181723f1a328d53 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2656,7 +2655,7 @@ CEO
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-6f9ef4b47cec1fcf .csv-table th {
+  #csv-modal-svgviewer-2181723f1a328d53 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2665,15 +2664,15 @@ CEO
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-6f9ef4b47cec1fcf .csv-table td {
+  #csv-modal-svgviewer-2181723f1a328d53 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-6f9ef4b47cec1fcf .csv-table tr {
+  #csv-modal-svgviewer-2181723f1a328d53 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-6f9ef4b47cec1fcf .csv-table tr:hover {
+  #csv-modal-svgviewer-2181723f1a328d53 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2681,10 +2680,10 @@ CEO
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_6f9ef4b47cec1fcf = {
+  window.svgModalsvgviewer_2181723f1a328d53 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-6f9ef4b47cec1fcf');
-          const sourceContainer = document.getElementById('svgviewer-6f9ef4b47cec1fcf');
+          const modal = document.getElementById('modal-svgviewer-2181723f1a328d53');
+          const sourceContainer = document.getElementById('svgviewer-2181723f1a328d53');
 
           if (!modal || !sourceContainer) return;
 
@@ -2693,7 +2692,7 @@ CEO
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-6f9ef4b47cec1fcf');
+          const targetContainer = document.getElementById('modal-body-svgviewer-2181723f1a328d53');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2710,7 +2709,7 @@ CEO
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-6f9ef4b47cec1fcf');
+          const modal = document.getElementById('modal-svgviewer-2181723f1a328d53');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2719,9 +2718,9 @@ CEO
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_6f9ef4b47cec1fcf = {
+  window.csvModalsvgviewer_2181723f1a328d53 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-6f9ef4b47cec1fcf');
+          const modal = document.getElementById('csv-modal-svgviewer-2181723f1a328d53');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2732,11 +2731,11 @@ CEO
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-6f9ef4b47cec1fcf');
+              window.svgViewer.loadCsvData('svgviewer-2181723f1a328d53');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-6f9ef4b47cec1fcf');
+          const modal = document.getElementById('csv-modal-svgviewer-2181723f1a328d53');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2747,20 +2746,20 @@ CEO
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-6f9ef4b47cec1fcf');
+          const viewModal = document.getElementById('modal-svgviewer-2181723f1a328d53');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_6f9ef4b47cec1fcf.close();
+              window.svgModalsvgviewer_2181723f1a328d53.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-6f9ef4b47cec1fcf');
+          const csvModal = document.getElementById('csv-modal-svgviewer-2181723f1a328d53');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_6f9ef4b47cec1fcf.close();
+              window.csvModalsvgviewer_2181723f1a328d53.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-6f9ef4b47cec1fcf" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAACJpWkA_3VQQQqDQAy87yv2A4Kn0osH2eqhIKXYDwQbdkOXrKyxpX19FWlF0bkkzJCZIULiMbtEC0wfEAqsjYMo6kV3cdkxTZVDsk6yw7AmSaJMcVF6gLlNc0TBlhgxEltdAYPF-NdG1MgUoj7hE31oV-I2e-53Tq75ZsRA_1qs-ZzBvzuZWpdz65IYuMFNu7xpQs8CLAt6OiHwS9NqNq0gPlD2HjGrdYujD3XLABNYkEWbiCAhfgGKO9GinwEAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Organization Chart
+<div class="svg-with-controls docops-media-card" id="svgviewer-2181723f1a328d53" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAC4bqGkA_3VQQQqDQAy87yv2A4Kn0osH2eqhIKXYDwQbdkOXrKyxpX19FWlF0bkkzJCZIULiMbtEC0wfEAqsjYMo6kV3cdkxTZVDsk6yw7AmSaJMcVF6gLlNc0TBlhgxEltdAYPF-NdG1MgUoj7hE31oV-I2e-53Tq75ZsRA_1qs-ZzBvzuZWpdz65IYuMFNu7xpQs8CLAt6OiHwS9NqNq0gPlD2HjGrdYujD3XLABNYkEWbiCAhfgGKO9GinwEAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Organization Chart
 width=800
 height=600
 ---
@@ -2781,41 +2780,41 @@ CEO
         Marketing Manager
             Marketing Specialist
             Content Creator" data-kind="treechart">
-<svg width='1270' height='1000' viewBox='0 0 1270 1000' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["CEO"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#020617' /><circle cx='635' cy='500' r='635' fill='#7000ff' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 209.0,620.0 209.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 318.0,620.0 318.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 427.0,620.0 427.0,675.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 536.0,620.0 536.0,675.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 645.0,620.0 645.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 754.0,620.0 754.0,675.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 863.0,620.0 863.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 972.0,620.0 972.0,675.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 1081.0,620.0 1081.0,675.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>CEO</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>CTO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Engineering</text><text x='318.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='209.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='209.0' cy='720.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Senior</text><text x='209.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='318.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='318.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='427.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='427.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Junior</text><text x='427.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>QA Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='536.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='536.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>QA Engineer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='645.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>QA Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>CFO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Finance</text><text x='754.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='754.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='754.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Accountant</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='863.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='863.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Financial</text><text x='863.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>CMO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Marketing</text><text x='972.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='972.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='972.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Marketing</text><text x='972.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Specialist</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='1081.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='1081.0' cy='720.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Content</text><text x='1081.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Creator</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#ffffff" font-weight="700">ORGANIZATION CHART</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='1270' height='1000' viewBox='0 0 1270 1000' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["CEO"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#020617' /><circle cx='635' cy='500' r='635' fill='#7000ff' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 209.0,620.0 209.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 318.0,620.0 318.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 427.0,620.0 427.0,675.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 536.0,620.0 536.0,675.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 645.0,620.0 645.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 754.0,620.0 754.0,675.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 863.0,620.0 863.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 972.0,620.0 972.0,675.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 1081.0,620.0 1081.0,675.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>CEO</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>CTO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Engineering</text><text x='318.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='209.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='209.0' cy='720.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Senior</text><text x='209.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='318.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='318.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='427.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='427.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Junior</text><text x='427.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>QA Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='536.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='536.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>QA Engineer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='645.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='645.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>QA Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#39ff14' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>CFO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Finance</text><text x='754.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='754.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='754.0' cy='720.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Accountant</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='863.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='863.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Financial</text><text x='863.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#ff007f' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>CMO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#f39c12' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Marketing</text><text x='972.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='972.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#00f2ff' stroke-width='2' /><circle cx='972.0' cy='720.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Marketing</text><text x='972.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Specialist</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='1081.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7000ff' stroke-width='2' /><circle cx='1081.0' cy='720.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Content</text><text x='1081.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Creator</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#ffffff" font-weight="700">ORGANIZATION CHART</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_6f9ef4b47cec1fcf.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_6f9ef4b47cec1fcf.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_2181723f1a328d53.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_2181723f1a328d53.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-6f9ef4b47cec1fcf')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-6f9ef4b47cec1fcf')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-2181723f1a328d53')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-2181723f1a328d53')">PNG</button>
 </div>
-<div id="modal-svgviewer-6f9ef4b47cec1fcf" class="svg-modal-svgviewer-6f9ef4b47cec1fcf" onclick="if(event.target === this) svgModalsvgviewer_6f9ef4b47cec1fcf.close()">
-    <div class="svg-modal-content-svgviewer-6f9ef4b47cec1fcf">
-        <button class="svg-modal-close-svgviewer-6f9ef4b47cec1fcf" onclick="svgModalsvgviewer_6f9ef4b47cec1fcf.close()">×</button>
-        <div id="modal-body-svgviewer-6f9ef4b47cec1fcf" class="svg-modal-body-svgviewer-6f9ef4b47cec1fcf"></div>
+<div id="modal-svgviewer-2181723f1a328d53" class="svg-modal-svgviewer-2181723f1a328d53" onclick="if(event.target === this) svgModalsvgviewer_2181723f1a328d53.close()">
+    <div class="svg-modal-content-svgviewer-2181723f1a328d53">
+        <button class="svg-modal-close-svgviewer-2181723f1a328d53" onclick="svgModalsvgviewer_2181723f1a328d53.close()">×</button>
+        <div id="modal-body-svgviewer-2181723f1a328d53" class="svg-modal-body-svgviewer-2181723f1a328d53"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-6f9ef4b47cec1fcf" class="svg-modal-svgviewer-6f9ef4b47cec1fcf" onclick="if(event.target === this) csvModalsvgviewer_6f9ef4b47cec1fcf.close()">
-    <div class="svg-modal-content-svgviewer-6f9ef4b47cec1fcf">
-        <button class="svg-modal-close-svgviewer-6f9ef4b47cec1fcf" onclick="csvModalsvgviewer_6f9ef4b47cec1fcf.close()">×</button>
-        <div class="svg-modal-header-svgviewer-6f9ef4b47cec1fcf" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-2181723f1a328d53" class="svg-modal-svgviewer-2181723f1a328d53" onclick="if(event.target === this) csvModalsvgviewer_2181723f1a328d53.close()">
+    <div class="svg-modal-content-svgviewer-2181723f1a328d53">
+        <button class="svg-modal-close-svgviewer-2181723f1a328d53" onclick="csvModalsvgviewer_2181723f1a328d53.close()">×</button>
+        <div class="svg-modal-header-svgviewer-2181723f1a328d53" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-6f9ef4b47cec1fcf" class="svg-modal-body-svgviewer-6f9ef4b47cec1fcf" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-2181723f1a328d53" class="svg-modal-body-svgviewer-2181723f1a328d53" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-6f9ef4b47cec1fcf" class="svg-modal-svgviewer-6f9ef4b47cec1fcf" onclick="if(event.target === this) docopsSource.close('svgviewer-6f9ef4b47cec1fcf')">
-    <div class="svg-modal-content-svgviewer-6f9ef4b47cec1fcf">
-        <button class="svg-modal-close-svgviewer-6f9ef4b47cec1fcf" onclick="docopsSource.close('svgviewer-6f9ef4b47cec1fcf')">×</button>
-        <div class="svg-modal-header-svgviewer-6f9ef4b47cec1fcf" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-svgviewer-2181723f1a328d53" class="svg-modal-svgviewer-2181723f1a328d53" onclick="if(event.target === this) docopsSource.close('svgviewer-2181723f1a328d53')">
+    <div class="svg-modal-content-svgviewer-2181723f1a328d53">
+        <button class="svg-modal-close-svgviewer-2181723f1a328d53" onclick="docopsSource.close('svgviewer-2181723f1a328d53')">×</button>
+        <div class="svg-modal-header-svgviewer-2181723f1a328d53" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-6f9ef4b47cec1fcf" class="svg-modal-body-svgviewer-6f9ef4b47cec1fcf" style="display: block; overflow: auto;">
+        <div id="source-content-svgviewer-2181723f1a328d53" class="svg-modal-body-svgviewer-2181723f1a328d53" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -2928,7 +2927,7 @@ Start Project
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-16a8b8ba029ab973 {
+  .svg-modal-svgviewer-59ea4f66e207cb73 {
       display: none;
       position: fixed;
       top: 0;
@@ -2943,10 +2942,10 @@ Start Project
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-16a8b8ba029ab973.active {
+  .svg-modal-svgviewer-59ea4f66e207cb73.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-16a8b8ba029ab973 {
+  .svg-modal-content-svgviewer-59ea4f66e207cb73 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2961,7 +2960,7 @@ Start Project
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-16a8b8ba029ab973 {
+  .svg-modal-close-svgviewer-59ea4f66e207cb73 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2979,11 +2978,11 @@ Start Project
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-16a8b8ba029ab973:hover {
+  .svg-modal-close-svgviewer-59ea4f66e207cb73:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-16a8b8ba029ab973 {
+  .svg-modal-body-svgviewer-59ea4f66e207cb73 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2993,7 +2992,7 @@ Start Project
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-16a8b8ba029ab973 svg {
+  .svg-modal-body-svgviewer-59ea4f66e207cb73 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3002,10 +3001,10 @@ Start Project
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-16a8b8ba029ab973 .csv-content {
+  #csv-modal-svgviewer-59ea4f66e207cb73 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-16a8b8ba029ab973 .csv-table {
+  #csv-modal-svgviewer-59ea4f66e207cb73 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3013,7 +3012,7 @@ Start Project
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-16a8b8ba029ab973 .csv-table th {
+  #csv-modal-svgviewer-59ea4f66e207cb73 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3022,15 +3021,15 @@ Start Project
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-16a8b8ba029ab973 .csv-table td {
+  #csv-modal-svgviewer-59ea4f66e207cb73 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-16a8b8ba029ab973 .csv-table tr {
+  #csv-modal-svgviewer-59ea4f66e207cb73 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-16a8b8ba029ab973 .csv-table tr:hover {
+  #csv-modal-svgviewer-59ea4f66e207cb73 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3038,10 +3037,10 @@ Start Project
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_16a8b8ba029ab973 = {
+  window.svgModalsvgviewer_59ea4f66e207cb73 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-16a8b8ba029ab973');
-          const sourceContainer = document.getElementById('svgviewer-16a8b8ba029ab973');
+          const modal = document.getElementById('modal-svgviewer-59ea4f66e207cb73');
+          const sourceContainer = document.getElementById('svgviewer-59ea4f66e207cb73');
 
           if (!modal || !sourceContainer) return;
 
@@ -3050,7 +3049,7 @@ Start Project
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-16a8b8ba029ab973');
+          const targetContainer = document.getElementById('modal-body-svgviewer-59ea4f66e207cb73');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -3067,7 +3066,7 @@ Start Project
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-16a8b8ba029ab973');
+          const modal = document.getElementById('modal-svgviewer-59ea4f66e207cb73');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3076,9 +3075,9 @@ Start Project
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_16a8b8ba029ab973 = {
+  window.csvModalsvgviewer_59ea4f66e207cb73 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-16a8b8ba029ab973');
+          const modal = document.getElementById('csv-modal-svgviewer-59ea4f66e207cb73');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -3089,11 +3088,11 @@ Start Project
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-16a8b8ba029ab973');
+              window.svgViewer.loadCsvData('svgviewer-59ea4f66e207cb73');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-16a8b8ba029ab973');
+          const modal = document.getElementById('csv-modal-svgviewer-59ea4f66e207cb73');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3104,20 +3103,20 @@ Start Project
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-16a8b8ba029ab973');
+          const viewModal = document.getElementById('modal-svgviewer-59ea4f66e207cb73');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_16a8b8ba029ab973.close();
+              window.svgModalsvgviewer_59ea4f66e207cb73.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-16a8b8ba029ab973');
+          const csvModal = document.getElementById('csv-modal-svgviewer-59ea4f66e207cb73');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_16a8b8ba029ab973.close();
+              window.csvModalsvgviewer_59ea4f66e207cb73.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-16a8b8ba029ab973" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAACJpWkA_3WRwU4EIQyG7zwFLzBxT8bLHMYQzdw27m7iFZlmqLKAUDTr09shhnUy2hP9v7-0BUJy0CswmDF4eUwA4hMnsv3dbics4Gypv-VjSAieNLGrt5x8Bc6c6LpOHEgnkvsUXsGQkBxP8F4wwZkrshy8dpeMuZIlHjVZSCtTYyqYsihbqiDj7OXe6gzNPiRjkbhtSfDjaOw03pyef4vjObp6Yd2i-R4SrwJ-YusHuBAXR4P32rz9x5Qm_cLTyANQiVU-Qib083UGj7QRR243pzrEtiDzywzGQCTtDay4gujCZTUCP_3M-C_E_zEVU5tc6TcgcKt77wEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Decision Tree
+<div class="svg-with-controls docops-media-card" id="svgviewer-59ea4f66e207cb73" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAC4bqGkA_3WRwU4EIQyG7zwFLzBxT8bLHMYQzdw27m7iFZlmqLKAUDTr09shhnUy2hP9v7-0BUJy0CswmDF4eUwA4hMnsv3dbics4Gypv-VjSAieNLGrt5x8Bc6c6LpOHEgnkvsUXsGQkBxP8F4wwZkrshy8dpeMuZIlHjVZSCtTYyqYsihbqiDj7OXe6gzNPiRjkbhtSfDjaOw03pyef4vjObp6Yd2i-R4SrwJ-YusHuBAXR4P32rz9x5Qm_cLTyANQiVU-Qib083UGj7QRR243pzrEtiDzywzGQCTtDay4gujCZTUCP_3M-C_E_zEVU5tc6TcgcKt77wEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Decision Tree
 width=800
 height=600
 orientation=horizontal
@@ -3140,41 +3139,41 @@ Start Project
     Deployment
         Staging Deployment
         Production Deployment" data-kind="treechart">
-<svg width='800' height='1660' viewBox='0 0 800 1660' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Start Project"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#f8fafc' /><circle cx='400' cy='830' r='400' fill='#818cf8' opacity='0.05' filter='blur(120px)' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,363.33333333333337 255.0,363.33333333333337' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,232.30769230769232 455.0,232.30769230769232' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,344.61538461538464 455.0,344.61538461538464' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,606.6666666666667 255.0,606.6666666666667' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,456.9230769230769 455.0,456.9230769230769' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,569.2307692307693 455.0,569.2307692307693' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,850.0 255.0,850.0' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,681.5384615384615 455.0,681.5384615384615' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,793.8461538461538 455.0,793.8461538461538' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,906.1538461538462 455.0,906.1538461538462' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1093.3333333333335 255.0,1093.3333333333335' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1018.4615384615385 455.0,1018.4615384615385' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1130.7692307692307 455.0,1130.7692307692307' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1243.076923076923 455.0,1243.076923076923' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1336.6666666666667 255.0,1336.6666666666667' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1355.3846153846155 455.0,1355.3846153846155' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1467.6923076923076 455.0,1467.6923076923076' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='100.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='100.0' cy='850.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='100.0' y='850.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Start Project</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='363.33333333333337' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='300.0' cy='363.33333333333337' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='356.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Requirements</text><text x='300.0' y='370.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Analysis</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='232.30769230769232' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='500.0' cy='232.30769230769232' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='225.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Gather</text><text x='500.0' y='239.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='344.61538461538464' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='500.0' cy='344.61538461538464' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='337.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Document</text><text x='500.0' y='351.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='606.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='300.0' cy='606.6666666666667' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='606.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Design Phase</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='456.9230769230769' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='500.0' cy='456.9230769230769' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='449.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Architecture</text><text x='500.0' y='463.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Design</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='569.2307692307693' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='500.0' cy='569.2307692307693' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='569.2307692307693' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>UI/UX Design</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='300.0' cy='850.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='843.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'></text><text x='300.0' y='857.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Implementation</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='681.5384615384615' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='500.0' cy='681.5384615384615' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='674.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Frontend</text><text x='500.0' y='688.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='793.8461538461538' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='500.0' cy='793.8461538461538' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='786.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Backend</text><text x='500.0' y='800.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='906.1538461538462' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='500.0' cy='906.1538461538462' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='899.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Database</text><text x='500.0' y='913.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Setup</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1093.3333333333335' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='300.0' cy='1093.3333333333335' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1093.3333333333335' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1018.4615384615385' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='500.0' cy='1018.4615384615385' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1018.4615384615385' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Unit Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1130.7692307692307' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='500.0' cy='1130.7692307692307' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1123.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Integration</text><text x='500.0' y='1137.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1243.076923076923' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='500.0' cy='1243.076923076923' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1229.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>User</text><text x='500.0' y='1243.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Acceptance</text><text x='500.0' y='1257.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1336.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='300.0' cy='1336.6666666666667' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1336.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1355.3846153846155' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='500.0' cy='1355.3846153846155' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1348.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Staging</text><text x='500.0' y='1362.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1467.6923076923076' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='500.0' cy='1467.6923076923076' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1460.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Production</text><text x='500.0' y='1474.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#0f172a" font-weight="700">DECISION TREE</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='800' height='1660' viewBox='0 0 800 1660' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Start Project"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#f8fafc' /><circle cx='400' cy='830' r='400' fill='#818cf8' opacity='0.05' filter='blur(120px)' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,363.33333333333337 255.0,363.33333333333337' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,232.30769230769232 455.0,232.30769230769232' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,344.61538461538464 455.0,344.61538461538464' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,606.6666666666667 255.0,606.6666666666667' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,456.9230769230769 455.0,456.9230769230769' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,569.2307692307693 455.0,569.2307692307693' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,850.0 255.0,850.0' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,681.5384615384615 455.0,681.5384615384615' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,793.8461538461538 455.0,793.8461538461538' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,906.1538461538462 455.0,906.1538461538462' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1093.3333333333335 255.0,1093.3333333333335' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1018.4615384615385 455.0,1018.4615384615385' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1130.7692307692307 455.0,1130.7692307692307' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1243.076923076923 455.0,1243.076923076923' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1336.6666666666667 255.0,1336.6666666666667' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1355.3846153846155 455.0,1355.3846153846155' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1467.6923076923076 455.0,1467.6923076923076' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='100.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='100.0' cy='850.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='100.0' y='850.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Start Project</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='363.33333333333337' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='300.0' cy='363.33333333333337' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='356.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Requirements</text><text x='300.0' y='370.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Analysis</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='232.30769230769232' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='500.0' cy='232.30769230769232' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='225.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Gather</text><text x='500.0' y='239.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='344.61538461538464' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='500.0' cy='344.61538461538464' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='337.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Document</text><text x='500.0' y='351.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='606.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='300.0' cy='606.6666666666667' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='606.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Design Phase</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='456.9230769230769' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='500.0' cy='456.9230769230769' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='449.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Architecture</text><text x='500.0' y='463.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Design</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='569.2307692307693' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='500.0' cy='569.2307692307693' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='569.2307692307693' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>UI/UX Design</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='300.0' cy='850.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='843.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'></text><text x='300.0' y='857.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Implementation</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='681.5384615384615' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='500.0' cy='681.5384615384615' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='674.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Frontend</text><text x='500.0' y='688.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='793.8461538461538' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='500.0' cy='793.8461538461538' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='786.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Backend</text><text x='500.0' y='800.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='906.1538461538462' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='500.0' cy='906.1538461538462' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='899.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Database</text><text x='500.0' y='913.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Setup</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1093.3333333333335' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='300.0' cy='1093.3333333333335' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1093.3333333333335' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1018.4615384615385' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='500.0' cy='1018.4615384615385' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1018.4615384615385' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Unit Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1130.7692307692307' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='500.0' cy='1130.7692307692307' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1123.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Integration</text><text x='500.0' y='1137.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1243.076923076923' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='500.0' cy='1243.076923076923' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1229.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>User</text><text x='500.0' y='1243.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Acceptance</text><text x='500.0' y='1257.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1336.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='300.0' cy='1336.6666666666667' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1336.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1355.3846153846155' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='500.0' cy='1355.3846153846155' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1348.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Staging</text><text x='500.0' y='1362.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1467.6923076923076' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='500.0' cy='1467.6923076923076' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1460.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>Production</text><text x='500.0' y='1474.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#0f172a" font-weight="700">DECISION TREE</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_16a8b8ba029ab973.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_16a8b8ba029ab973.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_59ea4f66e207cb73.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_59ea4f66e207cb73.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-16a8b8ba029ab973')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-16a8b8ba029ab973')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-59ea4f66e207cb73')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-59ea4f66e207cb73')">PNG</button>
 </div>
-<div id="modal-svgviewer-16a8b8ba029ab973" class="svg-modal-svgviewer-16a8b8ba029ab973" onclick="if(event.target === this) svgModalsvgviewer_16a8b8ba029ab973.close()">
-    <div class="svg-modal-content-svgviewer-16a8b8ba029ab973">
-        <button class="svg-modal-close-svgviewer-16a8b8ba029ab973" onclick="svgModalsvgviewer_16a8b8ba029ab973.close()">×</button>
-        <div id="modal-body-svgviewer-16a8b8ba029ab973" class="svg-modal-body-svgviewer-16a8b8ba029ab973"></div>
+<div id="modal-svgviewer-59ea4f66e207cb73" class="svg-modal-svgviewer-59ea4f66e207cb73" onclick="if(event.target === this) svgModalsvgviewer_59ea4f66e207cb73.close()">
+    <div class="svg-modal-content-svgviewer-59ea4f66e207cb73">
+        <button class="svg-modal-close-svgviewer-59ea4f66e207cb73" onclick="svgModalsvgviewer_59ea4f66e207cb73.close()">×</button>
+        <div id="modal-body-svgviewer-59ea4f66e207cb73" class="svg-modal-body-svgviewer-59ea4f66e207cb73"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-16a8b8ba029ab973" class="svg-modal-svgviewer-16a8b8ba029ab973" onclick="if(event.target === this) csvModalsvgviewer_16a8b8ba029ab973.close()">
-    <div class="svg-modal-content-svgviewer-16a8b8ba029ab973">
-        <button class="svg-modal-close-svgviewer-16a8b8ba029ab973" onclick="csvModalsvgviewer_16a8b8ba029ab973.close()">×</button>
-        <div class="svg-modal-header-svgviewer-16a8b8ba029ab973" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-59ea4f66e207cb73" class="svg-modal-svgviewer-59ea4f66e207cb73" onclick="if(event.target === this) csvModalsvgviewer_59ea4f66e207cb73.close()">
+    <div class="svg-modal-content-svgviewer-59ea4f66e207cb73">
+        <button class="svg-modal-close-svgviewer-59ea4f66e207cb73" onclick="csvModalsvgviewer_59ea4f66e207cb73.close()">×</button>
+        <div class="svg-modal-header-svgviewer-59ea4f66e207cb73" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-16a8b8ba029ab973" class="svg-modal-body-svgviewer-16a8b8ba029ab973" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-59ea4f66e207cb73" class="svg-modal-body-svgviewer-59ea4f66e207cb73" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-16a8b8ba029ab973" class="svg-modal-svgviewer-16a8b8ba029ab973" onclick="if(event.target === this) docopsSource.close('svgviewer-16a8b8ba029ab973')">
-    <div class="svg-modal-content-svgviewer-16a8b8ba029ab973">
-        <button class="svg-modal-close-svgviewer-16a8b8ba029ab973" onclick="docopsSource.close('svgviewer-16a8b8ba029ab973')">×</button>
-        <div class="svg-modal-header-svgviewer-16a8b8ba029ab973" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-svgviewer-59ea4f66e207cb73" class="svg-modal-svgviewer-59ea4f66e207cb73" onclick="if(event.target === this) docopsSource.close('svgviewer-59ea4f66e207cb73')">
+    <div class="svg-modal-content-svgviewer-59ea4f66e207cb73">
+        <button class="svg-modal-close-svgviewer-59ea4f66e207cb73" onclick="docopsSource.close('svgviewer-59ea4f66e207cb73')">×</button>
+        <div class="svg-modal-header-svgviewer-59ea4f66e207cb73" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-16a8b8ba029ab973" class="svg-modal-body-svgviewer-16a8b8ba029ab973" style="display: block; overflow: auto;">
+        <div id="source-content-svgviewer-59ea4f66e207cb73" class="svg-modal-body-svgviewer-59ea4f66e207cb73" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -3278,7 +3277,7 @@ Application | #3498db
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-8f6167767e7f4ff0 {
+  .svg-modal-svgviewer-9320984267d9120d {
       display: none;
       position: fixed;
       top: 0;
@@ -3293,10 +3292,10 @@ Application | #3498db
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-8f6167767e7f4ff0.active {
+  .svg-modal-svgviewer-9320984267d9120d.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-8f6167767e7f4ff0 {
+  .svg-modal-content-svgviewer-9320984267d9120d {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -3311,7 +3310,7 @@ Application | #3498db
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-8f6167767e7f4ff0 {
+  .svg-modal-close-svgviewer-9320984267d9120d {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -3329,11 +3328,11 @@ Application | #3498db
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-8f6167767e7f4ff0:hover {
+  .svg-modal-close-svgviewer-9320984267d9120d:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-8f6167767e7f4ff0 {
+  .svg-modal-body-svgviewer-9320984267d9120d {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3343,7 +3342,7 @@ Application | #3498db
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-8f6167767e7f4ff0 svg {
+  .svg-modal-body-svgviewer-9320984267d9120d svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3352,10 +3351,10 @@ Application | #3498db
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-8f6167767e7f4ff0 .csv-content {
+  #csv-modal-svgviewer-9320984267d9120d .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-8f6167767e7f4ff0 .csv-table {
+  #csv-modal-svgviewer-9320984267d9120d .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3363,7 +3362,7 @@ Application | #3498db
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-8f6167767e7f4ff0 .csv-table th {
+  #csv-modal-svgviewer-9320984267d9120d .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3372,15 +3371,15 @@ Application | #3498db
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-8f6167767e7f4ff0 .csv-table td {
+  #csv-modal-svgviewer-9320984267d9120d .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-8f6167767e7f4ff0 .csv-table tr {
+  #csv-modal-svgviewer-9320984267d9120d .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-8f6167767e7f4ff0 .csv-table tr:hover {
+  #csv-modal-svgviewer-9320984267d9120d .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3388,10 +3387,10 @@ Application | #3498db
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_8f6167767e7f4ff0 = {
+  window.svgModalsvgviewer_9320984267d9120d = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-8f6167767e7f4ff0');
-          const sourceContainer = document.getElementById('svgviewer-8f6167767e7f4ff0');
+          const modal = document.getElementById('modal-svgviewer-9320984267d9120d');
+          const sourceContainer = document.getElementById('svgviewer-9320984267d9120d');
 
           if (!modal || !sourceContainer) return;
 
@@ -3400,7 +3399,7 @@ Application | #3498db
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-8f6167767e7f4ff0');
+          const targetContainer = document.getElementById('modal-body-svgviewer-9320984267d9120d');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -3417,7 +3416,7 @@ Application | #3498db
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-8f6167767e7f4ff0');
+          const modal = document.getElementById('modal-svgviewer-9320984267d9120d');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3426,9 +3425,9 @@ Application | #3498db
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_8f6167767e7f4ff0 = {
+  window.csvModalsvgviewer_9320984267d9120d = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-8f6167767e7f4ff0');
+          const modal = document.getElementById('csv-modal-svgviewer-9320984267d9120d');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -3439,11 +3438,11 @@ Application | #3498db
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-8f6167767e7f4ff0');
+              window.svgViewer.loadCsvData('svgviewer-9320984267d9120d');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-8f6167767e7f4ff0');
+          const modal = document.getElementById('csv-modal-svgviewer-9320984267d9120d');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3454,20 +3453,20 @@ Application | #3498db
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-8f6167767e7f4ff0');
+          const viewModal = document.getElementById('modal-svgviewer-9320984267d9120d');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_8f6167767e7f4ff0.close();
+              window.svgModalsvgviewer_9320984267d9120d.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-8f6167767e7f4ff0');
+          const csvModal = document.getElementById('csv-modal-svgviewer-9320984267d9120d');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_8f6167767e7f4ff0.close();
+              window.csvModalsvgviewer_9320984267d9120d.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-8f6167767e7f4ff0" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAACJpWkA_02OwWrCQBCG7_sUCz0HYrXVHHKoSAut0Nb4AslkSAaXmWV3Yiv04ZuorM5p_o-fb0ZJHZZ7hJ7FSXeyldZwMD_Ual_O8jw3PVLXa7ka1yHim6tjLDUMaLIsMy_eO4JaSdj-2Yf5oli1jbHjvAZhRW4n_IgAy9kZT7PDGvQutcNvSvuTxwoC-UthPT5zleByAXNIxcoH4s6uRW6qD1FHnOKXRO0CVt_bM9rg8dPHSVU0T0XznHobGY-Em2VoMDAqxoTekQ_E8R8VSQexLQEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Technology Stack
+<div class="svg-with-controls docops-media-card" id="svgviewer-9320984267d9120d" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAC4bqGkA_02OwWrCQBCG7_sUCz0HYrXVHHKoSAut0Nb4AslkSAaXmWV3Yiv04ZuorM5p_o-fb0ZJHZZ7hJ7FSXeyldZwMD_Ual_O8jw3PVLXa7ka1yHim6tjLDUMaLIsMy_eO4JaSdj-2Yf5oli1jbHjvAZhRW4n_IgAy9kZT7PDGvQutcNvSvuTxwoC-UthPT5zleByAXNIxcoH4s6uRW6qD1FHnOKXRO0CVt_bM9rg8dPHSVU0T0XznHobGY-Em2VoMDAqxoTekQ_E8R8VSQexLQEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Technology Stack
 width=1000
 height=800
 useGlass=true
@@ -3485,41 +3484,41 @@ Application | #3498db
         Docker
         Kubernetes
         Jenkins" data-kind="treechart">
-<svg width='1270' height='800' viewBox='0 0 1270 800' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Application"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#f8fafc' /><circle cx='635' cy='400' r='635' fill='#818cf8' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 209.0,420.0 209.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 427.0,420.0 427.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 645.0,420.0 645.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 863.0,420.0 863.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 1081.0,420.0 1081.0,475.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#3498db' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#3498db' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#3498db'>Application</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#2ecc71' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#2ecc71' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#2ecc71'>Frontend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='209.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='209.0' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>React</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Redux</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='427.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='427.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>TypeScript</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#e74c3c' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#e74c3c' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#e74c3c'>Backend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Spring Boot</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='645.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='645.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Kotlin</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>PostgreSQL</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#9b59b6' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#9b59b6' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9b59b6'>DevOps</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='863.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='863.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Docker</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Kubernetes</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='1081.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='1081.0' cy='520.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Jenkins</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#0f172a" font-weight="700">TECHNOLOGY STACK</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='1270' height='800' viewBox='0 0 1270 800' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Application"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#f8fafc' /><circle cx='635' cy='400' r='635' fill='#818cf8' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 209.0,420.0 209.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 427.0,420.0 427.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 645.0,420.0 645.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 863.0,420.0 863.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 1081.0,420.0 1081.0,475.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#3498db' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#3498db' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#3498db'>Application</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#2ecc71' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#2ecc71' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#2ecc71'>Frontend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='209.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#39ff14' stroke-width='2' /><circle cx='209.0' cy='520.0' r='40' fill='none' stroke='#39ff14' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#39ff14'>React</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Redux</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='427.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='427.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>TypeScript</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#e74c3c' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#e74c3c' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#e74c3c'>Backend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#ff007f' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#ff007f' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#ff007f'>Spring Boot</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='645.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='645.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Kotlin</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>PostgreSQL</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#9b59b6' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#9b59b6' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9b59b6'>DevOps</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='863.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#f39c12' stroke-width='2' /><circle cx='863.0' cy='520.0' r='40' fill='none' stroke='#f39c12' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#f39c12'>Docker</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#00f2ff' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#00f2ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#00f2ff'>Kubernetes</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='1081.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7000ff' stroke-width='2' /><circle cx='1081.0' cy='520.0' r='40' fill='none' stroke='#7000ff' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7000ff'>Jenkins</text></g><g transform="translate(40, 60)"><text font-family="Syne, sans-serif" font-size="28" fill="#0f172a" font-weight="700">TECHNOLOGY STACK</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_8f6167767e7f4ff0.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_8f6167767e7f4ff0.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_9320984267d9120d.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_9320984267d9120d.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-8f6167767e7f4ff0')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-8f6167767e7f4ff0')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-9320984267d9120d')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-9320984267d9120d')">PNG</button>
 </div>
-<div id="modal-svgviewer-8f6167767e7f4ff0" class="svg-modal-svgviewer-8f6167767e7f4ff0" onclick="if(event.target === this) svgModalsvgviewer_8f6167767e7f4ff0.close()">
-    <div class="svg-modal-content-svgviewer-8f6167767e7f4ff0">
-        <button class="svg-modal-close-svgviewer-8f6167767e7f4ff0" onclick="svgModalsvgviewer_8f6167767e7f4ff0.close()">×</button>
-        <div id="modal-body-svgviewer-8f6167767e7f4ff0" class="svg-modal-body-svgviewer-8f6167767e7f4ff0"></div>
+<div id="modal-svgviewer-9320984267d9120d" class="svg-modal-svgviewer-9320984267d9120d" onclick="if(event.target === this) svgModalsvgviewer_9320984267d9120d.close()">
+    <div class="svg-modal-content-svgviewer-9320984267d9120d">
+        <button class="svg-modal-close-svgviewer-9320984267d9120d" onclick="svgModalsvgviewer_9320984267d9120d.close()">×</button>
+        <div id="modal-body-svgviewer-9320984267d9120d" class="svg-modal-body-svgviewer-9320984267d9120d"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-8f6167767e7f4ff0" class="svg-modal-svgviewer-8f6167767e7f4ff0" onclick="if(event.target === this) csvModalsvgviewer_8f6167767e7f4ff0.close()">
-    <div class="svg-modal-content-svgviewer-8f6167767e7f4ff0">
-        <button class="svg-modal-close-svgviewer-8f6167767e7f4ff0" onclick="csvModalsvgviewer_8f6167767e7f4ff0.close()">×</button>
-        <div class="svg-modal-header-svgviewer-8f6167767e7f4ff0" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-9320984267d9120d" class="svg-modal-svgviewer-9320984267d9120d" onclick="if(event.target === this) csvModalsvgviewer_9320984267d9120d.close()">
+    <div class="svg-modal-content-svgviewer-9320984267d9120d">
+        <button class="svg-modal-close-svgviewer-9320984267d9120d" onclick="csvModalsvgviewer_9320984267d9120d.close()">×</button>
+        <div class="svg-modal-header-svgviewer-9320984267d9120d" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-8f6167767e7f4ff0" class="svg-modal-body-svgviewer-8f6167767e7f4ff0" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-9320984267d9120d" class="svg-modal-body-svgviewer-9320984267d9120d" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-8f6167767e7f4ff0" class="svg-modal-svgviewer-8f6167767e7f4ff0" onclick="if(event.target === this) docopsSource.close('svgviewer-8f6167767e7f4ff0')">
-    <div class="svg-modal-content-svgviewer-8f6167767e7f4ff0">
-        <button class="svg-modal-close-svgviewer-8f6167767e7f4ff0" onclick="docopsSource.close('svgviewer-8f6167767e7f4ff0')">×</button>
-        <div class="svg-modal-header-svgviewer-8f6167767e7f4ff0" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-svgviewer-9320984267d9120d" class="svg-modal-svgviewer-9320984267d9120d" onclick="if(event.target === this) docopsSource.close('svgviewer-9320984267d9120d')">
+    <div class="svg-modal-content-svgviewer-9320984267d9120d">
+        <button class="svg-modal-close-svgviewer-9320984267d9120d" onclick="docopsSource.close('svgviewer-9320984267d9120d')">×</button>
+        <div class="svg-modal-header-svgviewer-9320984267d9120d" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-8f6167767e7f4ff0" class="svg-modal-body-svgviewer-8f6167767e7f4ff0" style="display: block; overflow: auto;">
+        <div id="source-content-svgviewer-9320984267d9120d" class="svg-modal-body-svgviewer-9320984267d9120d" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>

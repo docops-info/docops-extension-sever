@@ -454,6 +454,55 @@ img {
   box-shadow: var(--shadow-sm);
 }
 
+/* Page Navigation Styling - Signal Design System */
+.page-navigation {
+  width: 100%;
+  margin-top: 5rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.nav-container {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+}
+
+.nav-prev, .nav-next {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--brand-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--r-md);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  transition: all var(--dur-base) var(--ease-standard);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-prev:hover, .nav-next:hover {
+  color: var(--surface-1);
+  background: var(--brand-cyan);
+  border-color: var(--brand-cyan);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Override global anchor border-bottom for nav links */
+.nav-prev, .nav-next {
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-prev:hover, .nav-next:hover {
+  border-bottom: 1px solid var(--brand-cyan);
+}
+
 /* Footer */
 #footer {
   border-top: 1px solid var(--border);
@@ -477,6 +526,62 @@ img {
   pre { background: #f6f8fb !important; color: #000 !important; }
 }
 
+/* Theme Toggle Styling */
+.theme-toggle {
+  position: fixed;
+  top: 2rem;      /* Changed from bottom: 2rem */
+  right: 2rem;    /* Changed from left: 2rem */
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6000;
+  transition: all var(--dur-base) var(--ease-standard);
+  backdrop-filter: blur(12px);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(11, 18, 32, 0.2);
+  border-color: var(--accent);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle span {
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: all var(--dur-base) ease;
+}
+
+/* Theme Icon Visibility */
+.theme-toggle .dark-icon { display: none; }
+.theme-toggle .light-icon { display: block; }
+
+:root.dark-mode .theme-toggle .dark-icon {
+  display: block;
+}
+:root.dark-mode .theme-toggle .light-icon {
+  display: none;
+}
+
+/* In auto mode, use media query to decide which icon to show */
+@media (prefers-color-scheme: light) {
+  :root.dark-mode-auto .theme-toggle .dark-icon { display: none; }
+  :root.dark-mode-auto .theme-toggle .light-icon { display: block; }
+}
+@media (prefers-color-scheme: dark) {
+  :root.dark-mode-auto .theme-toggle .dark-icon { display: block; }
+  :root.dark-mode-auto .theme-toggle .light-icon { display: none; }
+}
 /* Admonition icons compatibility (AsciidoctorJ emits <i class="fa icon-tip"> etc.)
        You load Font Awesome 6, which doesn't map these legacy classes by default.
        This block renders the icons via FA6 glyphs (no shims needed). */
