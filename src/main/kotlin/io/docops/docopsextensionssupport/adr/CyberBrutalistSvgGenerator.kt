@@ -9,7 +9,8 @@ import kotlin.uuid.Uuid
  * Generates high-fidelity, "Cyber-Brutalist" SVG diagrams for ADRs.
  * Features glassmorphism, technical backgrounds, and distinctive typography.
  */
-class CyberBrutalistAdrSvgGenerator(val useDark: Boolean) {
+class CyberBrutalistAdrSvgGenerator(val useDark: Boolean, themeName: String) {
+    private val theme = ThemeFactory.getThemeByName(themeName, useDark)
     companion object {
         private const val DEFAULT_WIDTH = 850
         private const val DEFAULT_PADDING = 40
@@ -33,7 +34,6 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean) {
     @OptIn(ExperimentalUuidApi::class)
     fun generate(adr: Adr): String {
         val id = Uuid.random().toHexString()
-        val theme = ThemeFactory.getTheme(useDark, true)
         val colors = getThemeColors(useDark)
         val statusColor = STATUS_COLORS[adr.status] ?: theme.accentColor
         val svgWidth = 850
@@ -89,7 +89,7 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean) {
               <path d="M25 0 L50 14.4 L50 43.4 L25 57.8 L0 43.4 L0 14.4 Z" fill="none" stroke="$patternStroke" stroke-width="1" />
             </pattern>
             <style type="text/css">
-              @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap');
+              ${theme.fontImport}
       
               #cb_adr_$id .canvas { fill: ${theme.canvas}; }
               #cb_adr_$id .bg-pattern { fill: url(#hexagons_$id); }

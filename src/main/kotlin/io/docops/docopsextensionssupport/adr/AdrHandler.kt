@@ -12,10 +12,10 @@ class AdrHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
 
         val isBrutalist = adr.template == "brutalist"
         val svg = if (!isBrutalist) {
-            val generator = AdrSvgGenerator()
-            generator.generate(adr, width = 700, darkMode = useDark)
+            val generator = AdrSvgGenerator(useDark, adr.theme)
+            generator.generate(adr, width = 700)
         } else {
-            val generator = CyberBrutalistAdrSvgGenerator(useDark = useDark)
+            val generator = CyberBrutalistAdrSvgGenerator(useDark = useDark, themeName = adr.theme)
             generator.generate(adr)
         }
         csvResponse.update(adr.toCsv())

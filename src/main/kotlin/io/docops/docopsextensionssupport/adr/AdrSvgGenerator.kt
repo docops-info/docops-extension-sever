@@ -1,7 +1,11 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.util.BackgroundHelper
 import io.docops.docopsextensionssupport.util.UrlUtil.urlEncode
+import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -10,108 +14,11 @@ import kotlin.uuid.Uuid
  * Generates SVG diagrams for Architecture Decision Records (ADRs).
  * Creates iOS-style cards with sections for title, date, status, context, decision, consequences, and participants.
  */
-class AdrSvgGenerator {
+class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
+
+    private val theme: DocOpsTheme = ThemeFactory.getThemeByName(themeName, useDark = useDark)
+
     companion object {
-        // SVG header and footer
-        private val SVG_HEADER = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-            |<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d" preserveAspectRatio='xMidYMid meet'>
-            |<defs>
-            |  <style type="text/css">
-            |    .card { 
-            |      fill: #ffffff; 
-            |      stroke: #e1e1e1; 
-            |      stroke-width: 1; 
-            |      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
-            |    }
-            |    .title { 
-            |      font-family: Arial, Helvetica,  sans-serif; 
-            |      font-weight: 600; 
-            |      font-size: 20px; 
-            |      fill: #000000; 
-            |    }
-            |    .subtitle { 
-            |      font-family: Arial, Helvetica,  sans-serif; 
-            |      font-weight: 500; 
-            |      font-size: 16px; 
-            |      fill: #666666; 
-            |    }
-            |    .status { 
-            |      font-family: Arial, Helvetica,  sans-serif; 
-            |      font-weight: 500; 
-            |      font-size: 14px; 
-            |      fill: #ffffff; 
-            |    }
-            |    .content { 
-            |      font-family: Arial, Helvetica,  sans-serif; 
-            |      font-weight: 400; 
-            |      font-size: 14px; 
-            |      fill: #333333; 
-            |    }
-            |    .section-title { 
-            |      font-family: Arial, Helvetica,  sans-serif; 
-            |      font-weight: 600; 
-            |      font-size: 16px; 
-            |      fill: #333333; 
-            |    }
-            |    .participant-name { 
-            |      font-family: Arial, Helvetica,  sans-serif; 
-            |      font-weight: 400; 
-            |      font-size: 12px; 
-            |      fill: #333333; 
-            |      text-anchor: middle; 
-            |    }
-            |    .participant-name-with-email {
-            |      font-family: Arial, Helvetica, sans-serif;
-            |      font-weight: 500;
-            |      font-size: 12px;
-            |      fill: #007AFF;  /* Use link blue to indicate clickability */
-            |      text-anchor: middle;
-            |      border-bottom: 1px dotted #007AFF;  /* Subtle underline */    
-            |    }
-            |    .participant-name-with-email:hover {
-            |      fill: #0056CC;
-            |      font-weight: 600;
-            |    }
-            |    .participant-container {
-            |      cursor: pointer;
-            |    }
-            |    .participant-container:hover .participant-icon {
-            |      filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5));
-            |      transition: filter 0.3s ease;
-            |    }
-            |    .participant-container:hover .participant-name {
-            |      fill: #007AFF;
-            |      transition: fill 0.3s ease;
-            |    }
-            |    .group-chat-link {
-            |      font-family: Arial, Helvetica, sans-serif;
-            |      font-weight: 400;
-            |      font-size: 12px;
-            |      fill: #007AFF;
-            |      text-decoration: underline;
-            |      cursor: pointer;
-            |    }
-            |    .reference-link {
-            |      font-family: Arial, Helvetica, sans-serif;
-            |      font-weight: 400;
-            |      font-size: 14px;
-            |      fill: #007AFF;
-            |      text-decoration: underline;
-            |      cursor: pointer;
-            |    }
-            |    .reference-link:hover {
-            |      fill: #0056CC;
-            |      font-weight: 500;
-            |    }
-            |    a {
-            |      cursor: pointer;
-            |    }
-            |  </style>
-            |  <!-- Font Awesome style user icon -->
-            |  <symbol id="user-icon" viewBox="0 0 448 512">
-            |    <path stroke="%s" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/>
-            |  </symbol>
-            |</defs>""".trimMargin()
 
         private const val SVG_FOOTER = "</svg>"
 
@@ -157,8 +64,8 @@ class AdrSvgGenerator {
             val textToMeasure = if (isBullet) line.trim().substring(1).trim() else line
 
             // Estimate lines needed based on character count
-            val estimatedLines = Math.ceil(textToMeasure.length.toDouble() / CHARS_PER_LINE).toInt()
-            Math.max(1, estimatedLines)
+            val estimatedLines = ceil(textToMeasure.length.toDouble() / CHARS_PER_LINE).toInt()
+            max(1, estimatedLines)
         }
 
         return linesCount * TEXT_LINE_HEIGHT
@@ -183,7 +90,7 @@ class AdrSvgGenerator {
         // Now wrap the text with placeholders
         val words = modifiedText.split(" ")
         val lines = mutableListOf<String>()
-        var currentLine = kotlin.text.StringBuilder()
+        var currentLine = StringBuilder()
 
         for (word in words) {
             if (currentLine.length + word.length + 1 <= maxCharsPerLine) {
@@ -193,7 +100,7 @@ class AdrSvgGenerator {
                 currentLine.append(word)
             } else {
                 lines.add(currentLine.toString())
-                currentLine = kotlin.text.StringBuilder(word)
+                currentLine = StringBuilder(word)
             }
         }
 
@@ -447,8 +354,8 @@ class AdrSvgGenerator {
      * @return String containing the complete SVG content
      */
     @OptIn(ExperimentalUuidApi::class)
-    fun generate(adr: Adr, width: Int = DEFAULT_WIDTH, darkMode: Boolean): String {
-        val svg = kotlin.text.StringBuilder()
+    fun generate(adr: Adr, width: Int = DEFAULT_WIDTH): String {
+        val svg = StringBuilder()
         val id = Uuid.random().toHexString()
         var currentY = DEFAULT_PADDING
         val contentX = DEFAULT_PADDING + CARD_PADDING
@@ -462,7 +369,7 @@ class AdrSvgGenerator {
         // Calculate participants section height (3 per row)
         val participantsPerRow = 3
         val participantWidth = (MAX_CARD_WIDTH - 2 * CARD_PADDING) / participantsPerRow
-        val participantRows = Math.ceil(adr.participants.size.toDouble() / participantsPerRow).toInt()
+        val participantRows = ceil(adr.participants.size.toDouble() / participantsPerRow).toInt()
         val participantsHeight = if (adr.participants.isEmpty()) 0 else participantRows * 70 + 40
 
         // Calculate references section height
@@ -475,11 +382,10 @@ class AdrSvgGenerator {
 
         val color = STATUS_COLORS[adr.status] ?: "#999999"
         // Add SVG header with dark mode support
-        svg.append(makeSvgHeader(width, totalHeight, color, darkMode, id))
+        svg.append(makeSvgHeader(width, totalHeight, color, useDark, id))
 
         // Add background card
-        svg.append(BackgroundHelper.getBackGroundPath(useDark = darkMode, id, width=width.toFloat(), height=totalHeight.toFloat()))
-
+        svg.append("""<rect width="100%" height="100%" fill="${theme.canvas}"/> """)
         // Title Card
         svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$titleHeight" class="card" rx="10" ry="10"/>""")
         svg.append("""<text x="$contentX" y="${currentY + 30}" class="title">${escapeXml(adr.title)}</text>""")
@@ -585,8 +491,8 @@ class AdrSvgGenerator {
         return  """
         |<svg xmlns="http://www.w3.org/2000/svg" id="id_$id" width="$width" height="$height" viewBox="0 0 $width $height" preserveAspectRatio='xMidYMid meet'>
         |<defs>
-        |   ${BackgroundHelper.getBackgroundGradient(darkMode, id)}
         |  <style type="text/css">
+        |  ${theme.fontImport}
         |$styles
         |  </style>
         |  <!-- Font Awesome style user icon -->
@@ -605,56 +511,56 @@ class AdrSvgGenerator {
     private fun createLightModeStyles(id: String, color: String): String {
         return """
         |    #id_$id .card { 
-        |      fill: #ffffff; 
-        |      stroke: #e1e1e1; 
+        |      fill: rgba(255, 255, 255, 0.95); 
+        |      stroke: rgba(11, 18, 32, 0.12); 
         |      stroke-width: 1; 
-        |      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+        |      filter: drop-shadow(0 6px 18px rgba(11,18,32,0.08));
         |    }
         |    #id_$id .title { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 600; 
         |      font-size: 20px; 
         |      fill: #000000; 
         |    }
         |    #id_$id .subtitle { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 500; 
         |      font-size: 16px; 
         |      fill: #666666; 
         |    }
         |    #id_$id .status { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 500; 
         |      font-size: 14px; 
         |      fill: #ffffff; 
         |    }
         |    #id_$id .content { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 400; 
         |      font-size: 14px; 
         |      fill: #333333; 
         |    }
         |    #id_$id .section-title { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 600; 
         |      font-size: 16px; 
         |      fill: #333333; 
         |    }
         |    #id_$id .participant-title {
-        |       font-family: Arial, Helvetica, sans-serif;
+        |       font-family: ${theme.fontFamily};
         |       font-weight: 600;
         |       font-size: 12px;
         |       fill: #333333;
         |    }
         |    #id_$id .participant-name { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 400; 
         |      font-size: 12px; 
         |      fill: #333333; 
         |      text-anchor: middle; 
         |    }
         |    #id_$id .participant-name-with-email {
-        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-family: ${theme.fontFamily};
         |      font-weight: 500;
         |      font-size: 12px;
         |      fill: #007AFF;
@@ -677,7 +583,7 @@ class AdrSvgGenerator {
         |      transition: fill 0.3s ease;
         |    }
         |    #id_$id .group-chat-link {
-        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-family: ${theme.fontFamily};
         |      font-weight: 400;
         |      font-size: 12px;
         |      fill: #007AFF;
@@ -685,7 +591,7 @@ class AdrSvgGenerator {
         |      cursor: pointer;
         |    }
         |    #id_$id .reference-link {
-        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-family: ${theme.fontFamily};
         |      font-weight: 400;
         |      font-size: 14px;
         |      fill: #007AFF;
@@ -710,50 +616,50 @@ class AdrSvgGenerator {
         |      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3));
         |    }
         |    #id_$id .title { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 600; 
         |      font-size: 20px; 
         |      fill: #f9fafb; 
         |    }
         |    #id_$id .subtitle { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 500; 
         |      font-size: 16px; 
         |      fill: #9ca3af; 
         |    }
         |    #id_$id .status { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 500; 
         |      font-size: 14px; 
         |      fill: #ffffff; 
         |    }
         |    #id_$id .content { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 400; 
         |      font-size: 14px; 
         |      fill: #e5e7eb; 
         |    }
         |    #id_$id .section-title { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 600; 
         |      font-size: 16px; 
         |      fill: #f3f4f6; 
         |    }
         |    #id_$id .participant-title {
-        |       font-family: Arial, Helvetica, sans-serif;
+        |       font-family: ${theme.fontFamily};
         |       font-weight: 600;
         |       font-size: 12px;
         |       fill: #f3f4f6;
         |    }
         |    #id_$id .participant-name { 
-        |      font-family: Arial, Helvetica, sans-serif; 
+        |      font-family: ${theme.fontFamily}; 
         |      font-weight: 400; 
         |      font-size: 12px; 
         |      fill: #d1d5db; 
         |      text-anchor: middle; 
         |    }
         |    #id_$id .participant-name-with-email {
-        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-family: ${theme.fontFamily};
         |      font-weight: 500;
         |      font-size: 12px;
         |      fill: #60a5fa;
@@ -776,7 +682,7 @@ class AdrSvgGenerator {
         |      transition: fill 0.3s ease;
         |    }
         |    #id_$id .group-chat-link {
-        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-family: ${theme.fontFamily};
         |      font-weight: 400;
         |      font-size: 12px;
         |      fill: #60a5fa;
@@ -784,7 +690,7 @@ class AdrSvgGenerator {
         |      cursor: pointer;
         |    }
         |    #id_$id .reference-link {
-        |      font-family: Arial, Helvetica, sans-serif;
+        |      font-family: ${theme.fontFamily};
         |      font-weight: 400;
         |      font-size: 14px;
         |      fill: #60a5fa;
