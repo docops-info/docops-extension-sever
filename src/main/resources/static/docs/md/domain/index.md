@@ -41,7 +41,6 @@ A comprehensive data platform showing all layers from ingestion through ML/AI:
 
 [docops:domain]
 main,ENTERPRISE DATA PLATFORM
-
 type,emoji,rowIndex,nodes
 COMMON,,0,"[[https://keycloak.org Single Sign-On]];[[https://wiki.company.com/governance Data Governance]];[[https://wiki.company.com/privacy Privacy Controls]]"
 COMMON,,1,"[[https://grafana.company.com Monitoring]];[[https://wiki.company.com/lineage Data Lineage]];[[https://wiki.company.com/catalog Data Catalog]]"
@@ -67,7 +66,6 @@ The same architecture with a modern neural network-inspired visual design:
 
 [docops:domain]
 main,ENTERPRISE DATA PLATFORM,useNeural=true
-
 type,emoji,rowIndex,nodes
 COMMON,,0,"[[https://keycloak.org Single Sign-On]];[[https://wiki.company.com/governance Data Governance]];[[https://wiki.company.com/privacy Privacy Controls]]"
 COMMON,,1,"[[https://grafana.company.com Monitoring]];[[https://wiki.company.com/lineage Data Lineage]];[[https://wiki.company.com/catalog Data Catalog]]"
@@ -94,7 +92,6 @@ A simplified view of technology layers showing frontend, backend, and infrastruc
 
 [docops:domain]
 main,TECHNOLOGY
-
 type,emoji,rowIndex,nodes
 COMMON,,0,"FRONTEND,BACKEND,DATABASE"
 COMMON,,1,"DEVOPS,DOCOPS"
@@ -111,7 +108,6 @@ Document decision-making processes, architectural patterns, and review procedure
 
 [docops:domain]
 main,ARCHITECTURE GOVERNANCE
-
 type,emoji,rowIndex,nodes
 COMMON,,0,"[[https://wiki.company.com/standards Coding Standards]];[[https://wiki.company.com/security Security Guidelines]];COMPLIANCE"
 COMMON,,1,"[[https://wiki.company.com/dr Disaster Recovery]];[[https://monitoring.company.com Observability]];SLA MGMT"
@@ -128,7 +124,6 @@ Showcase multi-channel product architecture with web, mobile, and data layers:
 
 [docops:domain]
 main,PRODUCT PLATFORM
-
 type,emoji,rowIndex,nodes
 COMMON,,0,"[[https://auth0.com Identity Provider]];OBSERVABILITY;[[https://wiki.company.com/security Security Hub]]"
 COMMON,,1,"[[https://stripe.com Billing API]];NOTIFICATIONS;[[https://algolia.com Search Engine]]"
@@ -145,12 +140,14 @@ DATA,🧠,0,"[[https://snowflake.com Data Warehouse]];[[https://databricks.com L
 
 Domain visualizations use a CSV-style format with headers and data rows:
 
+```text
 text main,TITLE HERE
-type,emoji,rowIndex,nodes 
 
+type,emoji,rowIndex,nodes
 LAYER_NAME,🔧,0,"COMPONENT1;COMPONENT2;COMPONENT3" 
 LAYER_NAME,🔧,1,"COMPONENT4;COMPONENT5" 
 ANOTHER_LAYER,📊,0,"ITEM1;ITEM2;ITEM3;ITEM4"
+```
 
 ### Component Anatomy
 
@@ -294,7 +291,6 @@ Document platform evolution by creating domain visualizations for different time
 
 [docops:domain]
 main,CLOUD NATIVE PLATFORM, useNeural=true
-
 type,emoji,rowIndex,nodes 
 COMMON,🔐,0,"[[https://vault.hashicorp.com Secrets Management]];[[https://keycloak.org SSO & Identity]];[[https://falco.org Runtime Security]]" 
 COMMON,📊,1,"[[https://grafana.com Grafana Stack]];[[https://sentry.io Error Tracking]];[[https://wiki.company.com/sla SLA Dashboards]]" 
