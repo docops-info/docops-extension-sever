@@ -121,13 +121,14 @@ Each metrics callout consists of:
 
 ### Basic Syntax
 
+```text 
 [docops:callout] 
 title: Your Callout Title 
 ---
 type=systematic|metrics
 [Table Data] 
 [/docops]
-
+```
 ### Systematic Callout Example
 
 [docops:callout] 
@@ -196,7 +197,7 @@ Phase | Action | Result | Improvement Investigation | Analyzed slow endpoints | 
 ### Business Reporting
 
 **Quarterly Performance Summary**
-```markdown
+```text
 [docops:callout]
 title: Q4 2024 Key Metrics
 type=metrics
