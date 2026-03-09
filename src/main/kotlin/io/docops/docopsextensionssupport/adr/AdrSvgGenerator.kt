@@ -16,7 +16,7 @@ import kotlin.uuid.Uuid
  */
 class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
 
-    private val theme: DocOpsTheme = ThemeFactory.getThemeByName(themeName, useDark = useDark)
+    private val theme: DocOpsTheme = ThemeFactory.getThemeByName(themeName = themeName, useDark = useDark)
 
     companion object {
 

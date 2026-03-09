@@ -32,11 +32,10 @@ DocOps Scorecard compares before-and-after states in a single visual. It is idea
 [docops:scorecard]
 title=Software Release v2.4.0 - Feature & Bug Summary
 subtitle=Migration from Legacy System to Modern Architecture
----
 
 [before]
 title=BEFORE v2.4.0
----
+
 [before.items]
 === Feature Status
 Dark Mode Theme | Missing feature affecting user experience
@@ -53,11 +52,11 @@ Mobile UI overlapping | Interface broken on mobile devices
 Database connection drops | Intermittent connection failures
 Email notifications failing | Users not receiving important updates
 Report generation errors | Reports fail to generate properly
----
+
 
 [after]
 title=AFTER v2.4.0
----
+
 [after.items]
 === New Features Added
 Dark Mode Theme | Implemented with user preference saving
@@ -83,11 +82,10 @@ Report generation errors | Async report generation with progress tracking
 [docops:scorecard]
 title=Q3 Platform Reliability Improvements
 subtitle=Stability work across infrastructure and tooling
----
 
 [before]
 title=BEFORE Q3
----
+
 [before.items]
 === Stability Risks
 Service timeouts | Frequent during peak load
@@ -96,11 +94,11 @@ Deployment rollback | Manual and slow
 === Operational Debt
 Runbooks | Outdated or missing
 Observability | Limited tracing coverage
----
+
 
 [after]
 title=AFTER Q3
----
+
 [after.items]
 === Improvements Delivered
 Service timeouts | Reduced by 68%
@@ -119,23 +117,20 @@ Observability | Tracing coverage at 85%
 
 Define `title`, `subtitle`, then `before` and `after` blocks with grouped items:
 
-```text
+```
 [docops:scorecard]
 title=Release Summary
 subtitle=Highlights
----
 
 [before]
 title=BEFORE
----
 [before.items]
 === Category
 Item | Description
----
 
 [after]
 title=AFTER
----
+
 [after.items]
 === Category
 Item | Description

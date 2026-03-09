@@ -1,5 +1,5 @@
 ---
-apply: manually
+apply: always
 ---
 
 1. Make your main action 3x more obvious than anything else on the screen.
