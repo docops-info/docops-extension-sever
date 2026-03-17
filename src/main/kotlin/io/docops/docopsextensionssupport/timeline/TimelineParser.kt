@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.timeline
 
 import io.docops.docopsextensionssupport.util.ParsingUtils
+import kotlin.text.get
 
 
 class TimelineParser {
@@ -34,22 +35,24 @@ class TimelineParser {
             if (trimmedLine.isEmpty()) continue
 
             when {
-                trimmedLine.startsWith("date:") -> {
+                trimmedLine.startsWith("date=") -> {
                     // Save previous event if exists; if incomplete, warn and drop
                     if (currentDate != null && currentText != null) {
                         events.add(TimelineEvent(currentDate, currentText))
                     } else if (currentDate != null && currentText == null) {
                     }
-                    currentDate = trimmedLine.removePrefix("date:").trim()
+                    currentDate = trimmedLine.removePrefix("date=").trim()
                     currentText = null
                 }
-                trimmedLine.startsWith("text:") -> {
+
+                trimmedLine.startsWith("text=") -> {
                     if (currentDate == null) {
                         // Text without a preceding date - cannot associate; warn and skip
                         continue
                     }
-                    currentText = trimmedLine.removePrefix("text:").trim()
+                    currentText = trimmedLine.removePrefix("text=").trim()
                 }
+
                 trimmedLine == "---" -> {
                     // Separator between events
                     if (currentDate != null && currentText != null) {
@@ -59,6 +62,7 @@ class TimelineParser {
                     currentDate = null
                     currentText = null
                 }
+
                 else -> {
                     // Continuation of text
                     if (currentText != null) {
