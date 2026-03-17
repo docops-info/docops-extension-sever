@@ -1,31 +1,26 @@
 package io.docops.docopsextensionssupport.chart
 
-import io.docops.docopsextensionssupport.chart.pie.Pie
-import io.docops.docopsextensionssupport.chart.pie.PieDisplay
-import io.docops.docopsextensionssupport.chart.pie.PieMaker
-import io.docops.docopsextensionssupport.chart.pie.PieMakerImproved
-import io.docops.docopsextensionssupport.chart.pie.Pies
-import io.docops.docopsextensionssupport.chart.pie.piesToCsv
+import io.docops.docopsextensionssupport.chart.pie.*
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.update
-import kotlinx.serialization.json.Json
 
 class PieHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
-    private val json = Json { ignoreUnknownKeys = true }
 
     fun handleSVGInternal(payload: String, context: DocOpsContext): String {
-        val pies = parseInput(payload, context.useDark)
+        val pies = parseTabularInput(payload.trim(), context.useDark)
 
-        csvResponse.update(pies.piesToCsv())
-        return if (pies.pieDisplay.visualVersion >= 3) {
+        val svg =  if (pies.pieDisplay.visualVersion >= 3) {
             PieMakerImproved().makePies(pies.copy(pieDisplay = pies.pieDisplay))
         } else {
             PieMaker().makePies(pies.copy(pieDisplay = pies.pieDisplay))
         }
+
+        csvResponse.update(pies.piesToCsv())
+        return svg
     }
 
     override fun handleSVG(
@@ -35,40 +30,6 @@ class PieHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
         return handleSVGInternal(payload, context)
     }
 
-
-    /**
-     * Parse input data supporting both JSON and tabular formats
-     */
-    private fun parseInput(payload: String, useDark: Boolean): Pies {
-        val trimmedPayload = payload.trim()
-
-        return if (trimmedPayload.startsWith("{") && trimmedPayload.endsWith("}")) {
-            // JSON format
-            parseJsonInput(trimmedPayload)
-        } else {
-            // Tabular format
-            parseTabularInput(trimmedPayload, useDark)
-        }
-    }
-
-    /**
-     * Parse JSON input format
-     * Example:
-     * {
-     *   "pies": [
-     *     {"percent": 14, "label": "Toys"},
-     *     {"percent": 43, "label": "Furniture"}
-     *   ],
-     *   "pieDisplay": {"baseColor": "#A6AEBF", "outlineColor": "#FA4032", "scale": 4, "useDark": true}
-     * }
-     */
-    private fun parseJsonInput(jsonPayload: String): Pies {
-        return try {
-            json.decodeFromString<Pies>(jsonPayload)
-        } catch (e: Exception) {
-            throw IllegalArgumentException("Invalid JSON format for pie data: ${e.message}", e)
-        }
-    }
 
     /**
      * Parse tabular input format

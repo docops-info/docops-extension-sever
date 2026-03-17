@@ -44,7 +44,6 @@ class TimelineParser {
                     currentDate = trimmedLine.removePrefix("date=").trim()
                     currentText = null
                 }
-
                 trimmedLine.startsWith("text=") -> {
                     if (currentDate == null) {
                         // Text without a preceding date - cannot associate; warn and skip
@@ -52,7 +51,6 @@ class TimelineParser {
                     }
                     currentText = trimmedLine.removePrefix("text=").trim()
                 }
-
                 trimmedLine == "---" -> {
                     // Separator between events
                     if (currentDate != null && currentText != null) {
@@ -62,7 +60,6 @@ class TimelineParser {
                     currentDate = null
                     currentText = null
                 }
-
                 else -> {
                     // Continuation of text
                     if (currentText != null) {
