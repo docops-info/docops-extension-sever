@@ -29,40 +29,26 @@ class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
      * @param useDark A boolean indicating whether to use dark mode for the SVG image.
      * @return The ResponseEntity containing the SVG image as a byte array.
      */
-    fun handleSVGInternal(payload: String, type: String, scale: String, useDark: Boolean, backend: String): String {
+    fun handleSVGInternal(payload: String, type: String, scale: String, useDark: Boolean, backend: String): Pair<ShapeResponse, CsvResponse> {
         val svg = fromRequestToConnector(payload, scale = scale.toFloat(), useDark = useDark, "SVG", backend)
-        return svg.shapeSvg
+        return svg
     }
 
 
 
-    fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG", backend: String): ShapeResponse {
+    fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG", backend: String): Pair<ShapeResponse, CsvResponse> {
         val isPDF = "pdf".equals(backend, ignoreCase = true)
-        val connectors = if (isTableFormat(contents)) {
-            parseTableData(contents)
-        } else {
-            decodeFromJson(contents)
-        }
+        val connectors = parseTableData(contents)
         val resp = connectors.connectors.toCsv()
-        csvResponse.update(resp)
+
         var docType = type
         if(isPDF) {
             docType = "PDF"
         }
         val maker = createConnectorMaker(connectors.connectors, useDark, docType, isPDF)
-        return makeConnectorImage(maker, scale)
+        return Pair(makeConnectorImage(maker, scale), resp)
     }
 
-    /**
-     * Determines if the data is in table format
-     */
-    private fun isTableFormat(data: String): Boolean {
-        return data.contains("---") || (!data.trim().startsWith("{") && data.contains("|"))
-    }
-
-    /**
-     * Parses table-like data into Connectors object
-     */
     private fun parseTableData(data: String): Connectors {
         val lines = data.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         val connectorsList = mutableListOf<Connector>()
@@ -86,18 +72,11 @@ class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
         return Connectors(connectors = connectorsList)
     }
 
-    /**
-     * Helper function to detect header rows in table format
-     */
     private fun isHeaderRow(line: String): Boolean {
         val lowerLine = line.lowercase()
-        return lowerLine.contains("text") || 
-               lowerLine.contains("description") || 
-               lowerLine.contains("color")
-    }
-
-    private fun decodeFromJson(contents: String): Connectors {
-        return Json.decodeFromString<Connectors>(contents)
+        return lowerLine.contains("text") ||
+                lowerLine.contains("description") ||
+                lowerLine.contains("color")
     }
 
     private fun createConnectorMaker(
@@ -117,7 +96,9 @@ class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
         payload: String,
         context: DocOpsContext
     ): String {
-        return handleSVGInternal(payload, type = context.type, context.scale, context.useDark, context.backend)
+        val resp = handleSVGInternal(payload, type = context.type, context.scale, context.useDark, context.backend)
+        csvResponse.update(resp.second)
+        return resp.first.shapeSvg
     }
 
 
