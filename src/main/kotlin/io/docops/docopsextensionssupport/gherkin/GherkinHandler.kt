@@ -11,19 +11,6 @@ import kotlinx.serialization.json.Json
 class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
 
-    private fun parseGherkinContent(payload: String): GherkinSpec {
-        return when {
-            payload.trim().startsWith("{") -> {
-                // JSON format
-                Json.decodeFromString<GherkinSpec>(payload)
-            }
-            else -> {
-                // Plain text Gherkin format
-                parseGherkinText(payload)
-            }
-        }
-    }
-
     private fun parseGherkinText(content: String): GherkinSpec {
         val lines = content.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
         var featureTitle = ""
@@ -123,18 +110,17 @@ class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         )
     }
 
+
     override fun handleSVG(
         payload: String,
         context: DocOpsContext
     ): String {
         return try {
             val gherkinMaker = GherkinMaker(context.useDark)
-            val gherkinSpec = parseGherkinContent(payload)
-
+            val gherkinSpec = parseGherkinText(payload)
             val finalSpec = gherkinSpec.copy(
                 theme = gherkinSpec.theme.copy(useDark = context.useDark)
             )
-
             // Update CSV response similar to other handlers
             csvResponse.update(finalSpec.toCsv())
             val svg = gherkinMaker.makeGherkin(finalSpec)
