@@ -12,26 +12,10 @@ import kotlinx.serialization.json.Json
 class BarGroupHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
     fun handleSVGInternal(payload: String, backend: String, useDark: Boolean): String {
         val isPdf = backend == "pdf"
-        // Check if the data is in table format (contains "---" separator)
-        val svg = if (payload.contains("---") || !payload.trim().startsWith("{")) {
-            // Use BarChartImproved for table format
-            val barChartImproved = BarChartImproved(useDark)
-            barChartImproved.makeGroupBarSvg(payload,  isPdf)
-        } else {
-            // Use traditional JSON format
-            val maker = BarGroupMaker(useDark)
-            val bar = Json.decodeFromString<BarGroup>(payload)
-            if(bar.display.vBar) {
-                maker.makeVGroupBar(bar, isPdf)
-            } else if (bar.display.condensed) {
-                maker.makeCondensed(bar)
-            } else {
-                maker.makeBar(bar, isPdf)
-            }
-        }
-        csvResponse.update(svg.second)
-
-        return svg.first
+        val barChartImproved = BarChartImproved(useDark)
+        val svgPair = barChartImproved.makeGroupBarSvg(payload, isPdf)
+        csvResponse.update(svgPair.second)
+        return svgPair.first
     }
 
     override fun handleSVG(
