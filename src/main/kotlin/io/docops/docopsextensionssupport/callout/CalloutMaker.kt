@@ -3,24 +3,16 @@ package io.docops.docopsextensionssupport.callout
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.web.CsvResponse
-import kotlinx.serialization.json.Json
-import kotlin.compareTo
-import kotlin.div
-import kotlin.rem
-import kotlin.times
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /**
  * Generic class for creating callout SVGs
  */
-open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
+open class CalloutMaker(val useDark: Boolean) {
 
-    private val json = Json { ignoreUnknownKeys = true }
+    private val theme = ThemeFactory.getThemeByName("brand", useDark)
 
-    private val theme = if(useDark) ThemeFactory.getThemeByName("tokyo") else ThemeFactory.getThemeByName("modernlight")
-
-    // Table format parsing methods
     fun createSystematicApproachFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "systematic", useDark)
         val svg = generateSystematicSvg(calloutData, width, height)
@@ -35,38 +27,6 @@ open class CalloutMaker(val csvResponse: CsvResponse, val useDark: Boolean) {
 
     fun createTimelineFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "timeline", useDark)
-        val svg = generateTimelineSvg(calloutData, width, height)
-        return Pair(svg, calloutData.toCsv())
-    }
-
-    // JSON format methods
-    fun createSystematicApproachSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
-        val calloutData = try {
-            json.decodeFromString<CalloutData>(payload).copy(useDark = useDark)
-        } catch (e: Exception) {
-            createDefaultCalloutData().copy(useDark = useDark)
-        }
-
-        val svg = generateSystematicSvg(calloutData, width, height)
-        return Pair(svg, calloutData.toCsv())
-    }
-
-    fun createMetricsSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
-        val calloutData = try {
-            json.decodeFromString<CalloutData>(payload).copy(useDark = useDark)
-        } catch (e: Exception) {
-            createDefaultCalloutData().copy(useDark = useDark)
-        }
-        val svg = generateMetricsSvg(calloutData, width, height)
-        return Pair(svg, calloutData.toCsv())
-    }
-
-    fun createTimelineSvg(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
-        val calloutData = try {
-            json.decodeFromString<CalloutData>(payload).copy(useDark = useDark)
-        } catch (e: Exception) {
-            createDefaultCalloutData().copy(useDark = useDark)
-        }
         val svg = generateTimelineSvg(calloutData, width, height)
         return Pair(svg, calloutData.toCsv())
     }
