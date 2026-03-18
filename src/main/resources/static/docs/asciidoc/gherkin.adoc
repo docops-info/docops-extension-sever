@@ -8,12 +8,7 @@ include::_base.adoc[]
 = image:icons/GherkinIcon.svg[Gherkin Icon,36,36] 🥒 DocOps Gherkin
 
 
-
 [[top]]
-
-[.back-to-top]
-<<top, 🔝>>
-
 == Introduction
 
 _BDD test scenarios with visual Given-When-Then formatting_
@@ -147,35 +142,7 @@ Feature: Feature Name
 ----
 ....
 
-=== JSON with Status Indicators
-[source,asciidoc]
-....
-[docops,gherkin]
-----
-{
-  "feature": "User Authentication",
-  "scenarios": [
-    {
-      "title": "Failed Login",
-      "status": "FAILING",
-      "steps": [
-        { "type": "GIVEN", "text": "the user is on the login page", "status": "PASSING" },
-        { "type": "WHEN", "text": "they enter invalid credentials", "status": "FAILING" },
-        { "type": "THEN", "text": "they should see an error message", "status": "PENDING" }
-      ]
-    }
-  ],
-  "theme": {
-    "colors": { "passing": "#28a745", "failing": "#dc3545" }
-  }
-}
-----
-....
 
-[docops,gherkin]
-----
-include::data/gherkin/gherkin5.json[]
-----
 
 === Data Tables (Experimental)
 [source,asciidoc]
@@ -253,13 +220,9 @@ Scenario Outline: eating
 * *Use AND for lists* - Chain related preconditions without repeating Given/When/Then
 * *Include edge cases* - Show both happy path and error scenarios
 * *Embed .feature files* - Use `include::` to maintain single source of truth
-* *Reserve JSON for status* - Plain text for initial specs, JSON for CI/CD test reports
 * *Limit table columns* - Data tables have width constraints (3-4 columns max)
 
-[TIP]
-====
-*For CI/CD integration:* Parse test results into JSON format with status indicators. This creates living documentation where passing/failing states sync with your test suite automatically.
-====
+
 
 [.back-to-top]
 <<top, 🔝>>
