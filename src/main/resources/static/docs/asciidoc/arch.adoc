@@ -7,14 +7,7 @@ include::_base.adoc[]
 :next-page-url: buttons.html
 = DocOps Extension Server Architecture
 
-
-
-
-
-
 [[top]]
-include::shared/buttons.adoc[]
-
 == Executive Summary
 
 The DocOps Extension Server represents a transformative approach to technical documentation, bridging the gap between static documentation and dynamic, interactive visualizations. Built as a comprehensive Spring Boot microservice, this platform extends AsciiDoctor's capabilities by providing on-demand SVG generation for over 15 different visualization types, from simple pie charts to complex architectural diagrams.
@@ -275,8 +268,8 @@ This architecture provides a solid foundation for the DocOps Extension Server wh
 
 [plantuml, comp,format=svg, role="popup-diagram"]
 ----
-@startuml
-!theme docops from plantuml/themes
+
+!include plantuml/themes/puml-theme-docops.puml
 
 
 title DocOps Extension Server Architecture \n <color:#8E8E93><size:13>Modern Visualization Platform for AsciiDoctor</size></color>
@@ -420,7 +413,6 @@ note bottom of spring
     • Web MVC
 end note
 
-@enduml
 ----
 
 [.back-to-top]
@@ -504,8 +496,7 @@ sequenceDiagram
 
 [plantuml,badge,format=svg, role="popup-diagram"]
 ----
-@startuml
-!theme docops from plantuml/themes
+!include plantuml/themes/puml-theme-docops.puml
 
 title DocOps Badge Generation Flow\n<color:#8E8E93><size:13>SpringBoot Architecture</size></color>
 
@@ -592,7 +583,6 @@ end note
 Router --> C: ResponseEntity<ByteArray>(svg, headers, 200)
 deactivate Router
 
-@enduml
 ----
 
 [.back-to-top]
