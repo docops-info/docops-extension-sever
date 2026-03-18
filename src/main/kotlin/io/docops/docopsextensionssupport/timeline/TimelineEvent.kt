@@ -6,7 +6,8 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 
 data class TimelineEvent(
     val date: String,
-    val text: String
+    val text: String,
+    val bullets: List<String> = emptyList()
 )
 
 enum class Orientation {

@@ -3,6 +3,8 @@ package io.docops.docopsextensionssupport.timeline
 
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import kotlin.rem
+import kotlin.times
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -185,9 +187,11 @@ class TimelineSvgGenerator {
             // Description card
             val maxTextWidth = 260
             val lines = wrapText(item.text, maxTextWidth)
+            val bulletLines = item.bullets.sumOf { wrapText(it, maxTextWidth - 16).size }
+            val bulletHeight = if (item.bullets.isNotEmpty()) bulletLines * 16 + 8 else 0
             val textHeight = lines.size * 18
             val cardWidth = maxTextWidth + 24
-            val cardHeight = textHeight + 24
+            val cardHeight = textHeight + 24 + bulletHeight
             val cardX = x - cardWidth / 2
             val cardY = if (above) datePillY - cardHeight - 10 else datePillY + 34
 
@@ -197,10 +201,28 @@ class TimelineSvgGenerator {
 
             // Text inside card
             val textColor = if (isDarkMode) "#e2e8f0" else "#1f2937"
+            val bulletColor = if (isDarkMode) "#94a3b8" else "#64748b"
             var ty = cardY + 20
             lines.forEach { line ->
                 appendTextWithLinks(sb, escapeXml(line), cardX + 12, ty, textColor, color.text, isDarkMode)
                 ty += 18
+            }
+
+            // Bullet points
+            if (item.bullets.isNotEmpty()) {
+                ty += 4
+                item.bullets.forEach { bullet ->
+                    val bLines = wrapText(bullet, maxTextWidth - 16)
+                    bLines.forEachIndexed { i, bLine ->
+                        if (i == 0) {
+                            sb.append("""<circle cx="${cardX + 17}" cy="${ty - 4}" r="2.5" fill="$bulletColor"/>""")
+                            sb.append("""<text x="${cardX + 26}" y="$ty" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
+                        } else {
+                            sb.append("""<text x="${cardX + 26}" y="$ty" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
+                        }
+                        ty += 16
+                    }
+                }
             }
 
             x += itemSpacing
@@ -305,6 +327,7 @@ class TimelineSvgGenerator {
         val cardX = if (isRight) centerX + 80 else 40
         val lineEndX = if (isRight) centerX + 80 else centerX - 80
         val textColor = if (isDarkMode) "#e2e8f0" else "#475569"
+        val bulletColor = if (isDarkMode) "#94a3b8" else "#64748b"
         val cardGradient = if (index % 4 < 2) "cardGradient1_$svgId" else "cardGradient2_$svgId"
 
         sb.append("""<g class="timeline-item">""")
@@ -341,8 +364,27 @@ class TimelineSvgGenerator {
             textY += 17
         }
 
+        // Bullet points
+        if (item.bullets.isNotEmpty()) {
+            textY += 4
+            item.bullets.forEach { bullet ->
+                val bulletLines = wrapText(bullet, maxWidth - 56)
+                bulletLines.forEachIndexed { i, bLine ->
+                    if (i == 0) {
+                        // Bullet dot
+                        sb.append("""<circle cx="${textX + 5}" cy="${textY - 4}" r="2.5" fill="$bulletColor"/>""")
+                        sb.append("""<text x="${textX + 15}" y="$textY" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
+                    } else {
+                        sb.append("""<text x="${textX + 15}" y="$textY" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
+                    }
+                    textY += 16
+                }
+            }
+        }
+
         sb.append("</g>")
     }
+
 
     private fun appendTextWithLinks(
         sb: StringBuilder,
@@ -399,7 +441,9 @@ class TimelineSvgGenerator {
     private fun calculateItemHeight(item: TimelineEvent, maxWidth: Int): Int {
         val lines = wrapText(item.text, maxWidth - 40)
         val textHeight = lines.size * 17
-        return 80 + textHeight.coerceAtLeast(20)
+        val bulletLines = item.bullets.sumOf { wrapText(it, maxWidth - 56).size }
+        val bulletHeight = if (item.bullets.isNotEmpty()) bulletLines * 16 + 4 else 0
+        return 80 + textHeight.coerceAtLeast(20) + bulletHeight
     }
 
     private fun wrapText(text: String, maxWidth: Int): List<String> {

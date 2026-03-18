@@ -29,6 +29,13 @@ class TimelineParser {
         val events = mutableListOf<TimelineEvent>()
         var currentDate: String? = null
         var currentText: String? = null
+        val currentBullets = mutableListOf<String>()
+
+        fun flushEvent() {
+            if (currentDate != null && currentText != null) {
+                events.add(TimelineEvent(currentDate!!, currentText!!, currentBullets.toList()))
+            }
+        }
 
         for (line in lines) {
             val trimmedLine = line.trim()
@@ -36,46 +43,36 @@ class TimelineParser {
 
             when {
                 trimmedLine.startsWith("date=") -> {
-                    // Save previous event if exists; if incomplete, warn and drop
-                    if (currentDate != null && currentText != null) {
-                        events.add(TimelineEvent(currentDate, currentText))
-                    } else if (currentDate != null && currentText == null) {
-                    }
+                    flushEvent()
                     currentDate = trimmedLine.removePrefix("date=").trim()
                     currentText = null
+                    currentBullets.clear()
                 }
                 trimmedLine.startsWith("text=") -> {
-                    if (currentDate == null) {
-                        // Text without a preceding date - cannot associate; warn and skip
-                        continue
-                    }
+                    if (currentDate == null) continue
                     currentText = trimmedLine.removePrefix("text=").trim()
                 }
-                trimmedLine == "---" -> {
-                    // Separator between events
-                    if (currentDate != null && currentText != null) {
-                        events.add(TimelineEvent(currentDate, currentText))
-                    } else if (currentDate != null && currentText == null) {
+                trimmedLine.startsWith("• ") || trimmedLine.startsWith("* ") -> {
+                    if (currentText != null) {
+                        currentBullets.add(trimmedLine.removePrefix("• ").removePrefix("* ").trim())
                     }
+                }
+                trimmedLine == "---" -> {
+                    flushEvent()
                     currentDate = null
                     currentText = null
+                    currentBullets.clear()
                 }
                 else -> {
-                    // Continuation of text
                     if (currentText != null) {
                         currentText += " $trimmedLine"
-                    } else if (currentDate == null) {
-                        // Stray content; ignore softly
                     }
                 }
             }
         }
 
-        // Add last event, warn if incomplete
-        if (currentDate != null && currentText != null) {
-            events.add(TimelineEvent(currentDate, currentText))
-        } else if (currentDate != null && currentText == null) {
-        }
+        // Flush final event
+        flushEvent()
 
         // Apply parsed visual config into TimelineConfig (if supported)
         return TimelineConfig(
