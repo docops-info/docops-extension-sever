@@ -433,6 +433,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -780,6 +781,194 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
     }
 
+    .source-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 20, 25, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 2147483647;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+
+    .source-modal.active {
+        display: flex;
+    }
+
+    .source-modal-content {
+        width: 95vw;
+        max-width: 1200px;
+        height: 90vh;
+        background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(126, 87, 255, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(126, 87, 255, 0.2);
+        animation: sourceModalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes sourceModalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .source-modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
+        font-weight: 300;
+    }
+
+    .source-modal-close:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: rotate(90deg);
+    }
+
+    .source-modal-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 3rem 2rem 2rem 2rem;
+    }
+
+    .source-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+
+    .source-modal-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--accent-secondary, #b392ff);
+        font-size: 1rem;
+    }
+
+    .source-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .source-action-btn {
+        background: rgba(126, 87, 255, 0.15);
+        border: 1px solid rgba(126, 87, 255, 0.4);
+        color: var(--accent-secondary, #b392ff);
+        font-family: 'Syne', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .source-action-btn:hover {
+        background: rgba(126, 87, 255, 0.8);
+        color: #fff;
+        border-color: var(--accent-primary, #7e57ff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    }
+
+    .btn-icon {
+        font-size: 1em;
+    }
+
+    .source-code-pre {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        overflow: auto;
+        margin: 0;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .source-code {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e2e8f0;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .source-error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Light mode overrides */
+    @media (prefers-color-scheme: light) {
+        .source-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .source-modal-content {
+            background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .source-modal-title {
+            color: #6a3de8;
+        }
+
+        .source-code-pre {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .source-code {
+            color: #334155;
+        }
+    }
 </style>
 
 <!--slide show style-->
@@ -1060,6 +1249,96 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         display: block; /* Important for scroll calculations */
     }
 
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
     /* Centering Fix for SVG diagrams */
     .modal-svg-wrapper {
         display: flex;
@@ -1067,12 +1346,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         align-items: center;
         min-height: 100%;
         width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
     }
 
     .modal-svg-wrapper svg {
         max-width: 100%;
-        height: auto !important; /* Allow natural aspect ratio */
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
     }
 
     /* Body locking when modal is open */
@@ -1218,18 +1500,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         showContent(itemId, title, kind, content) {
             const modal = document.getElementById('showcase-content-modal');
-            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
-            modal.querySelector('.showcase-content-code').textContent = content;
+            if (!modal) return;
 
-            this.hideTOC(); // Hide TOC before showing modal
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
             modal.style.display = 'flex';
             modal.querySelector('.showcase-modal-body').scrollTop = 0;
         },
 
         expandItem(itemId, title) {
             const item = document.getElementById(itemId);
-            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
             const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
 
             modal.querySelector('.showcase-modal-title').textContent = title;
             modal.querySelector('.showcase-modal-body').innerHTML =
@@ -2187,6 +2481,131 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     };
 
 </script>
+<script>
+    const docopsSource = {
+        toggle(btn) {
+            const card = btn.closest('.docops-media-card');
+            const id = card.id;
+            const modal = document.getElementById(`source-modal-${id}`);
+
+            if (!modal) {
+                console.error('Source modal not found for', id);
+                return;
+            }
+
+            this.renderSource(card, modal);
+
+            // Move modal to body to avoid z-index/transform issues
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+
+        close(id) {
+            const modal = document.getElementById(`source-modal-${id}`);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        renderSource(card, modal) {
+            const container = modal.querySelector('.source-modal-body');
+            if (!container || container.dataset.rendered === 'true') return;
+
+            const originalContent = card.getAttribute('data-original-content');
+
+            if (!originalContent || !originalContent.trim()) {
+                container.innerHTML = '<div class="source-error">No source content available.</div>';
+                return;
+            }
+
+            // Decode HTML entities
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            const kind = card.getAttribute('data-kind') || 'source';
+
+            container.innerHTML = `
+            <div class="source-modal-header">
+                <span class="source-modal-title">${kind.toUpperCase()} Source</span>
+                <div class="source-modal-actions">
+                    <button class="source-action-btn" onclick="docopsSource.copySource('${card.id}')">
+                        <span class="btn-icon">📋</span> COPY
+                    </button>
+                </div>
+            </div>
+            <pre class="source-code-pre"><code class="source-code">${this.escapeHtml(decoded)}</code></pre>
+        `;
+
+            container.dataset.rendered = 'true';
+        },
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        },
+
+        copySource(cardId) {
+            const card = document.getElementById(cardId);
+            const originalContent = card.getAttribute('data-original-content');
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            navigator.clipboard.writeText(decoded).then(() => {
+                const btn = document.querySelector(`#source-modal-${cardId} .source-action-btn`);
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span class="btn-icon">✓</span> COPIED!';
+                    btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+    };
+</script>
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
 
 <style>
 .hidden {
@@ -2438,97 +2857,97 @@ window.onload = function() {
 <div class="literalblock">
 <div class="title">Use Elasticsearch for Search Functionality</div>
 <div class="content">
-<pre>title: Use Elasticsearch for Search Functionality
-status: Accepted
-date: 2024-05-15
-context:
+<pre>title= Use Elasticsearch for Search Functionality
+status= Accepted
+date= 2024-05-15
+context=
 - Our application needs robust search capabilities across multiple data types
 - We need to support full-text search with relevance ranking
 - The search functionality must scale with growing data volumes
 - We need to support faceted search and filtering
-decision:
+decision=
 - We will use Elasticsearch as our search engine
 - We will integrate it with our existing PostgreSQL database
 - We will implement a synchronization mechanism to keep data in sync
-consequences:
+consequences=
 - Improved search performance and capabilities
 - Additional infrastructure to maintain
 - Need for expertise in Elasticsearch configuration and optimization
 - Potential complexity in keeping data synchronized
-participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)</pre>
+participants= Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Adopt Microservices Architecture</div>
 <div class="content">
-<pre>title: Adopt Microservices Architecture
-status: Accepted
-date: 2024-06-01
-context:
+<pre>title= Adopt Microservices Architecture
+status= Accepted
+date= 2024-06-01
+context=
 - Our monolithic application is becoming difficult to maintain and scale
 - Development teams need to work independently on different parts of the system
 - We need to improve deployment frequency and reduce time-to-market
 - Different components have different scaling requirements
-decision:
+decision=
 - We will gradually migrate from monolith to microservices architecture
 - We will use [[https://martinfowler.com/bliki/DomainDrivenDesign.html domain-driven design]] to identify service boundaries
 - We will implement an [[https://aws.amazon.com/api-gateway API gateway]] for client communication
 - We will use containerization ([[https://www.docker.com/ Docker]]) and orchestration ([[https://kubernetes.io/ Kubernetes]])
-consequences:
+consequences=
 - Improved scalability and resilience
 - Faster development cycles and independent deployments
 - Increased operational complexity
 - Need for robust service discovery and monitoring
-participants: Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)</pre>
+participants= Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Implement GraphQL API Layer</div>
 <div class="content">
-<pre>title: Implement GraphQL API Layer
-status: Proposed
-date: 2024-06-10
-context:
+<pre>title= Implement GraphQL API Layer
+status= Proposed
+date= 2024-06-10
+context=
 - Our REST APIs require multiple round trips for complex data requirements
 - Mobile clients need efficient data loading with minimal bandwidth
 - Frontend teams need more flexibility in data fetching
 - API versioning and documentation are becoming challenging
-decision:
+decision=
 - We will implement a GraphQL API layer on top of existing services
 - We will use Apollo Server for the GraphQL implementation
 - We will maintain existing REST APIs for backward compatibility
 - We will develop a phased migration plan for clients
-consequences:
+consequences=
 - More efficient data fetching for clients
 - Reduced network overhead for mobile applications
 - Self-documenting API with introspection
 - Learning curve for teams unfamiliar with GraphQL
 - Additional complexity in the API layer
-participants: Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)</pre>
+participants= Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Migrate Database to NoSQL Solution</div>
 <div class="content">
-<pre>title: Migrate Database to NoSQL Solution
-status: Rejected
-date: 2024-05-20
-context:
+<pre>title= Migrate Database to NoSQL Solution
+status= Rejected
+date= 2024-05-20
+context=
 - We're experiencing performance issues with our relational database
 - Some of our data doesn't fit well into a relational model
 - We anticipate significant growth in data volume
 - We want to improve horizontal scalability
-decision:
-- We will not migrate from [[https://www.postgresql.org/ PostgreSQL]] to [[https://www.mongodb.com/ MongoDB]]
+decision=
+- We will not migrate from [[https=//www.postgresql.org/ PostgreSQL]] to [[https=//www.mongodb.com/ MongoDB]]
 - We will instead optimize our existing PostgreSQL setup
 - We will implement caching strategies for performance-critical queries
 - We will consider a hybrid approach for specific use cases
-consequences:
+consequences=
 - Avoid disruption of existing systems and processes
 - Leverage team's existing SQL expertise
 - Miss potential benefits of NoSQL for certain data patterns
-- Need to invest in [[https://www.postgresql.org/docs/current/performance-tips.html PostgreSQL optimization]] and tuning
-participants:
+- Need to invest in [[https=//www.postgresql.org/docs/current/performance-tips.html PostgreSQL optimization]] and tuning
+participants=
 Jennifer Lee (Database Administrator),
 Carlos Rodriguez (System Architect),
 Thomas Wright (Performance Engineer)</pre>
@@ -2537,74 +2956,74 @@ Thomas Wright (Performance Engineer)</pre>
 <div class="literalblock">
 <div class="title">Use JWT for Authentication</div>
 <div class="content">
-<pre>title: Use JWT for Authentication
-status: Superseded
-date: 2023-11-15
-context:
+<pre>title= Use JWT for Authentication
+status= Superseded
+date= 2023-11-15
+context=
 - We need a stateless authentication mechanism
 - We want to reduce database lookups for auth verification
-- We need to support authentication across [[https://microservices.io/ multiple services]]
+- We need to support authentication across [[https=//microservices.io/ multiple services]]
 - We need to include authorization claims in the token
-decision:
-- We will use [[https://jwt.io/ JWT (JSON Web Tokens)]] for authentication
+decision=
+- We will use [[https=//jwt.io/ JWT (JSON Web Tokens)]] for authentication
 - We will implement token refresh mechanism
 - We will store tokens in HTTP-only cookies
 - We will include basic user permissions in the token
-consequences:
+consequences=
 - Stateless authentication reducing server load
 - Simplified authentication for microservices
 - Potential security risks if tokens are compromised
 - Limited token size due to being included in every request
-participants: Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)</pre>
+participants= Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Use Server-Side Rendering for Web Application</div>
 <div class="content">
-<pre>title: Use Server-Side Rendering for Web Application
-status: Deprecated
-date: 2022-09-10
-context:
+<pre>title= Use Server-Side Rendering for Web Application
+status= Deprecated
+date= 2022-09-10
+context=
 - We need to optimize initial page load performance
 - SEO is important for our content-heavy application
 - We need to support users with slower internet connections
 - We want to reduce client-side JavaScript processing
-decision:
+decision=
 - We will use Next.js for server-side rendering
 - We will implement incremental static regeneration for content pages
 - We will use client-side hydration for interactive components
 - We will implement code splitting for performance optimization
-consequences:
+consequences=
 - Improved initial page load times
 - Better SEO performance
 - Reduced client-side processing requirements
 - Increased server resource usage
 - More complex deployment architecture
-participants: Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)</pre>
+participants= Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Implement Data Lake Architecture</div>
 <div class="content">
-<pre>title: Implement Data Lake Architecture
-status: Accepted
-date: 2024-06-20
-context:
+<pre>title= Implement Data Lake Architecture
+status= Accepted
+date= 2024-06-20
+context=
 - We need a centralized repository for all our data assets
 - Current data silos are preventing cross-functional analytics
 - We need to support both structured and unstructured data
 - Future machine learning initiatives require access to historical data
-decision:
+decision=
 - We will implement a data lake architecture using cloud storage
 - We will use a layered approach (raw, cleansed, and curated zones)
 - We will implement data cataloging and metadata management
 - We will establish data governance policies for the lake
-consequences:
+consequences=
 - Improved data accessibility across the organization
 - Reduced data duplication and inconsistencies
 - Increased storage costs initially
 - Need for new skills in data engineering and governance
-participants:
+participants=
 Rebecca Chen ||(rebecca.chen@example.com)|
 Mark Johnson ||(mark.johnson@example.com)|
 Priya Patel || (priya.patel@example.com)|
@@ -2615,25 +3034,25 @@ Sarah Kim ||(sarah.kim@example.com)|</pre>
 <div class="literalblock">
 <div class="title">Adopt Cloud-Native CI/CD Pipeline</div>
 <div class="content">
-<pre>title: Adopt Cloud-Native CI/CD Pipeline
-status: Accepted
-date: 2024-07-01
-context:
+<pre>title= Adopt Cloud-Native CI/CD Pipeline
+status= Accepted
+date= 2024-07-01
+context=
 - Our current CI/CD process is manual and error-prone
 - We need to improve deployment frequency and reliability
 - We want to standardize our deployment process across teams
 - We need better visibility into the deployment pipeline
-decision:
+decision=
 - We will implement a cloud-native CI/CD pipeline
 - We will use GitOps principles for infrastructure and application deployments
 - We will implement automated testing at all stages
 - We will use containerization for consistent environments
-consequences:
+consequences=
 - Faster and more reliable deployments
 - Improved developer productivity
 - Better traceability of changes
 - Initial learning curve for teams
-participants:
+participants=
 Jason Lee | DevOps Engineer | jason.lee@example.com | #3B82F6 | 🚀
 Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
 Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
@@ -2644,29 +3063,29 @@ Sinclair Washington | Ops Lead | sinclair.washington@example.com | #511D43 | �
 <div class="literalblock">
 <div class="title">Adopt GraphQL for API Layer</div>
 <div class="content">
-<pre>title: Adopt GraphQL for API Layer
-status: Accepted
-date: 2024-07-15
-context:
+<pre>title= Adopt GraphQL for API Layer
+status= Accepted
+date= 2024-07-15
+context=
 - Our REST APIs have become complex with many endpoints
 - Mobile clients need to fetch data from multiple endpoints
 - Different clients need different data shapes
 - We need to reduce over-fetching and under-fetching of data
-decision:
+decision=
 - We will adopt GraphQL for our API layer
 - We will maintain existing REST endpoints for backward compatibility
 - We will implement a gradual migration strategy
 - We will use Apollo Server for the GraphQL implementation
-consequences:
+consequences=
 - More efficient data fetching for clients
 - Improved developer experience with self-documenting API
 - Potential learning curve for the team
 - Need for new tooling and monitoring
-participants:
+participants=
 Alex Rivera | API Architect | alex.rivera@example.com | #4F46E5 | 🔌
 Jasmine Wong | Frontend Lead | jasmine.wong@example.com | #059669 | 📱
 David Kim | Backend Developer | david.kim@example.com | #D97706 | 💻
-references:
+references=
 [[https://graphql.org/ GraphQL Official Documentation]]
 [[https://www.apollographql.com/docs/ Apollo GraphQL Documentation]]
 [[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
@@ -2676,100 +3095,100 @@ references:
 <div class="literalblock">
 <div class="title">Use Elasticsearch for Search Functionality - brutalist</div>
 <div class="content">
-<pre>title: Use Elasticsearch for Search Functionality
-status: Accepted
-date: 2024-05-15
-context:
+<pre>title= Use Elasticsearch for Search Functionality
+status= Accepted
+date= 2024-05-15
+context=
 - Our application needs robust search capabilities across multiple data types
 - We need to support full-text search with relevance ranking
 - The search functionality must scale with growing data volumes
 - We need to support faceted search and filtering
-decision:
+decision=
 - We will use Elasticsearch as our search engine
 - We will integrate it with our existing PostgreSQL database
 - We will implement a synchronization mechanism to keep data in sync
-consequences:
+consequences=
 - Improved search performance and capabilities
 - Additional infrastructure to maintain
 - Need for expertise in Elasticsearch configuration and optimization
 - Potential complexity in keeping data synchronized
-participants: Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)</pre>
+participants= Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Adopt Microservices Architecture - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Adopt Microservices Architecture
-status: Accepted
-date: 2024-06-01
-context:
+<pre>template=brutalist
+title= Adopt Microservices Architecture
+status= Accepted
+date= 2024-06-01
+context=
 - Our monolithic application is becoming difficult to maintain and scale
 - Development teams need to work independently on different parts of the system
 - We need to improve deployment frequency and reduce time-to-market
 - Different components have different scaling requirements
-decision:
+decision=
 - We will gradually migrate from monolith to microservices architecture
 - We will use [[https://martinfowler.com/bliki/DomainDrivenDesign.html domain-driven design]] to identify service boundaries
 - We will implement an [[https://aws.amazon.com/api-gateway API gateway]] for client communication
 - We will use containerization ([[https://www.docker.com/ Docker]]) and orchestration ([[https://kubernetes.io/ Kubernetes]])
-consequences:
+consequences=
 - Improved scalability and resilience
 - Faster development cycles and independent deployments
 - Increased operational complexity
 - Need for robust service discovery and monitoring
-participants: Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)</pre>
+participants= Michael Chen (Chief Architect), Sarah Johnson (DevOps Lead), David Wilson (Development Manager)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Implement GraphQL API Layer - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Implement GraphQL API Layer
-status: Proposed
-date: 2024-06-10
-context:
+<pre>template=brutalist
+title= Implement GraphQL API Layer
+status= Proposed
+date= 2024-06-10
+context=
 - Our REST APIs require multiple round trips for complex data requirements
 - Mobile clients need efficient data loading with minimal bandwidth
 - Frontend teams need more flexibility in data fetching
 - API versioning and documentation are becoming challenging
-decision:
+decision=
 - We will implement a GraphQL API layer on top of existing services
 - We will use Apollo Server for the GraphQL implementation
 - We will maintain existing REST APIs for backward compatibility
 - We will develop a phased migration plan for clients
-consequences:
+consequences=
 - More efficient data fetching for clients
 - Reduced network overhead for mobile applications
 - Self-documenting API with introspection
 - Learning curve for teams unfamiliar with GraphQL
 - Additional complexity in the API layer
-participants: Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)</pre>
+participants= Emma Davis (API Architect), Ryan Thompson (Mobile Lead), Olivia Martinez (Frontend Lead)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Migrate Database to NoSQL Solution - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Migrate Database to NoSQL Solution
-status: Rejected
-date: 2024-05-20
-context:
+<pre>template=brutalist
+title= Migrate Database to NoSQL Solution
+status= Rejected
+date= 2024-05-20
+context=
 - We're experiencing performance issues with our relational database
 - Some of our data doesn't fit well into a relational model
 - We anticipate significant growth in data volume
 - We want to improve horizontal scalability
-decision:
-- We will not migrate from [[https://www.postgresql.org/ PostgreSQL]] to [[https://www.mongodb.com/ MongoDB]]
+decision=
+- We will not migrate from [[https=//www.postgresql.org/ PostgreSQL]] to [[https=//www.mongodb.com/ MongoDB]]
 - We will instead optimize our existing PostgreSQL setup
 - We will implement caching strategies for performance-critical queries
 - We will consider a hybrid approach for specific use cases
-consequences:
+consequences=
 - Avoid disruption of existing systems and processes
 - Leverage team's existing SQL expertise
 - Miss potential benefits of NoSQL for certain data patterns
-- Need to invest in [[https://www.postgresql.org/docs/current/performance-tips.html PostgreSQL optimization]] and tuning
-participants:
+- Need to invest in [[https=//www.postgresql.org/docs/current/performance-tips.html PostgreSQL optimization]] and tuning
+participants=
 Jennifer Lee (Database Administrator),
 Carlos Rodriguez (System Architect),
 Thomas Wright (Performance Engineer)</pre>
@@ -2778,77 +3197,77 @@ Thomas Wright (Performance Engineer)</pre>
 <div class="literalblock">
 <div class="title">Use JWT for Authentication - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Use JWT for Authentication
-status: Superseded
-date: 2023-11-15
-context:
+<pre>template=brutalist
+title= Use JWT for Authentication
+status= Superseded
+date= 2023-11-15
+context=
 - We need a stateless authentication mechanism
 - We want to reduce database lookups for auth verification
-- We need to support authentication across [[https://microservices.io/ multiple services]]
+- We need to support authentication across [[https=//microservices.io/ multiple services]]
 - We need to include authorization claims in the token
-decision:
-- We will use [[https://jwt.io/ JWT (JSON Web Tokens)]] for authentication
+decision=
+- We will use [[https=//jwt.io/ JWT (JSON Web Tokens)]] for authentication
 - We will implement token refresh mechanism
 - We will store tokens in HTTP-only cookies
 - We will include basic user permissions in the token
-consequences:
+consequences=
 - Stateless authentication reducing server load
 - Simplified authentication for microservices
 - Potential security risks if tokens are compromised
 - Limited token size due to being included in every request
-participants: Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)</pre>
+participants= Alex Johnson (Security Lead), Maria Garcia (Backend Developer), Kevin Brown (API Designer)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Use Server-Side Rendering for Web Application - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Use Server-Side Rendering for Web Application
-status: Deprecated
-date: 2022-09-10
-context:
+<pre>template=brutalist
+title= Use Server-Side Rendering for Web Application
+status= Deprecated
+date= 2022-09-10
+context=
 - We need to optimize initial page load performance
 - SEO is important for our content-heavy application
 - We need to support users with slower internet connections
 - We want to reduce client-side JavaScript processing
-decision:
+decision=
 - We will use Next.js for server-side rendering
 - We will implement incremental static regeneration for content pages
 - We will use client-side hydration for interactive components
 - We will implement code splitting for performance optimization
-consequences:
+consequences=
 - Improved initial page load times
 - Better SEO performance
 - Reduced client-side processing requirements
 - Increased server resource usage
 - More complex deployment architecture
-participants: Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)</pre>
+participants= Sophia Williams (Frontend Architect), Daniel Kim (Performance Engineer), Ethan Taylor (UX Designer)</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Implement Data Lake Architecture - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Implement Data Lake Architecture
-status: Accepted
-date: 2024-06-20
-context:
+<pre>template=brutalist
+title= Implement Data Lake Architecture
+status= Accepted
+date= 2024-06-20
+context=
 - We need a centralized repository for all our data assets
 - Current data silos are preventing cross-functional analytics
 - We need to support both structured and unstructured data
 - Future machine learning initiatives require access to historical data
-decision:
+decision=
 - We will implement a data lake architecture using cloud storage
 - We will use a layered approach (raw, cleansed, and curated zones)
 - We will implement data cataloging and metadata management
 - We will establish data governance policies for the lake
-consequences:
+consequences=
 - Improved data accessibility across the organization
 - Reduced data duplication and inconsistencies
 - Increased storage costs initially
 - Need for new skills in data engineering and governance
-participants:
+participants=
 Rebecca Chen ||(rebecca.chen@example.com)|
 Mark Johnson ||(mark.johnson@example.com)|
 Priya Patel || (priya.patel@example.com)|
@@ -2859,26 +3278,26 @@ Sarah Kim ||(sarah.kim@example.com)|</pre>
 <div class="literalblock">
 <div class="title">Adopt Cloud-Native CI/CD Pipeline - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Adopt Cloud-Native CI/CD Pipeline
-status: Accepted
-date: 2024-07-01
-context:
+<pre>template=brutalist
+title= Adopt Cloud-Native CI/CD Pipeline
+status= Accepted
+date= 2024-07-01
+context=
 - Our current CI/CD process is manual and error-prone
 - We need to improve deployment frequency and reliability
 - We want to standardize our deployment process across teams
 - We need better visibility into the deployment pipeline
-decision:
+decision=
 - We will implement a cloud-native CI/CD pipeline
 - We will use GitOps principles for infrastructure and application deployments
 - We will implement automated testing at all stages
 - We will use containerization for consistent environments
-consequences:
+consequences=
 - Faster and more reliable deployments
 - Improved developer productivity
 - Better traceability of changes
 - Initial learning curve for teams
-participants:
+participants=
 Jason Lee | DevOps Engineer | jason.lee@example.com | #3B82F6 | 🚀
 Emma Wilson | Cloud Architect | emma.wilson@example.com | #10B981 | ☁️
 Michael Brown | Development Lead | michael.brown@example.com | #F59E0B | 👨‍💻
@@ -2889,30 +3308,30 @@ Sinclair Washington | Ops Lead | sinclair.washington@example.com | #511D43 | �
 <div class="literalblock">
 <div class="title">Adopt GraphQL for API Layer - brutalist</div>
 <div class="content">
-<pre>template:brutalist
-title: Adopt GraphQL for API Layer
-status: Accepted
-date: 2024-07-15
-context:
+<pre>template=brutalist
+title= Adopt GraphQL for API Layer
+status= Accepted
+date= 2024-07-15
+context=
 - Our REST APIs have become complex with many endpoints
 - Mobile clients need to fetch data from multiple endpoints
 - Different clients need different data shapes
 - We need to reduce over-fetching and under-fetching of data
-decision:
+decision=
 - We will adopt GraphQL for our API layer
 - We will maintain existing REST endpoints for backward compatibility
 - We will implement a gradual migration strategy
 - We will use Apollo Server for the GraphQL implementation
-consequences:
+consequences=
 - More efficient data fetching for clients
 - Improved developer experience with self-documenting API
 - Potential learning curve for the team
 - Need for new tooling and monitoring
-participants:
+participants=
 Alex Rivera | API Architect | alex.rivera@example.com | #4F46E5 | 🔌
 Jasmine Wong | Frontend Lead | jasmine.wong@example.com | #059669 | 📱
 David Kim | Backend Developer | david.kim@example.com | #D97706 | 💻
-references:
+references=
 [[https://graphql.org/ GraphQL Official Documentation]]
 [[https://www.apollographql.com/docs/ Apollo GraphQL Documentation]]
 [[https://engineering.example.com/graphql-best-practices GraphQL Best Practices]]
@@ -2929,43 +3348,7 @@ if (!hljs.initHighlighting.called) {
   ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
 }
 </script>
-<style>
-/* Reading Time Styles */
-.reading-time {
-    position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    background: var(--bg-base); /* Uses the dynamic background variable */
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--accent-secondary);
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    z-index: 1005;
-    
-    /* Double-accent shadow follows the light/dark mode logic */
-    box-shadow: 6px 6px 0px var(--accent-pink);
-    
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-main); /* Switches between grey and dark slate */
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
 
-.reading-time p {
-    margin: 0 !important;
-    font-weight: 600;
-}
-
-/* Light Mode specific opacity tweak */
-body.light-mode .reading-time {
-    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
-}
-</style>
-<div class="reading-time">
-    <p>📖 3 min read • 1194 words</p>
-</div>
 <style>
 .listingblock {
     position: relative;
