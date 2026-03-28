@@ -32,3 +32,10 @@ val organicWaveTheme = QRTheme(
     finderStyle = "flower",
     backgroundPattern = "dots" // using the existing backgroundPattern property
 )
+val buttonWaveTheme = QRTheme(
+    foreground = "#1F5E4A", // forest green
+    background = "none", // transparent
+    moduleRadius = 0.15, // fully rounded (dots)
+    finderStyle = "flower",
+    backgroundPattern = "rounded-square" // using the existing backgroundPattern property
+)

@@ -33,6 +33,7 @@ DocOps Tree Chart converts indented lists into hierarchical diagrams. It is perf
 title=Organization Chart
 width=800
 height=600
+theme=everest
 ---
 CEO
     CTO
@@ -61,6 +62,7 @@ CEO
 title=Product Taxonomy
 width=800
 height=520
+theme=brand
 ---
 Platform
     Core Services

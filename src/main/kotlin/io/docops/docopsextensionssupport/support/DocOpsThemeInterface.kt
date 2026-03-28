@@ -27,4 +27,9 @@ interface DocOpsTheme {
         SVGColor("#e6d800"), SVGColor("#9b19f5"), SVGColor("#ffa300"),
         SVGColor("#dc0ab4"), SVGColor("#00bfa0")
         )
+    /**
+     * Convenience accessor for chartPalette as plain hex strings.
+     */
+    val chartPaletteHex: List<String>
+        get() = chartPalette.map { it.color }
 }

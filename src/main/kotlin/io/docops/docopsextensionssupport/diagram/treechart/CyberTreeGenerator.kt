@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.diagram.treechart
 
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.util.ParsingUtils
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
@@ -16,14 +17,19 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         "#f39c12"  // Amber
     )
 
+    private var theme = ThemeFactory.getTheme(useDark)
+
     fun makeTree(payload: String, csvResponse: CsvResponse): String {
         val (config, chartData) = ParsingUtils.parseConfigAndData(payload)
         val treeData = parseTreeChartData(chartData)
         csvResponse.update(treeData.toCsv())
+        val themeName = config["theme"]?: "modern"
+        theme = ThemeFactory.getThemeByName(themeName, useDark)
 
         val title = config.getOrDefault("title", "Project Roadmap")
         val orientation = config.getOrDefault("orientation", "vertical")
-        val customColors = config["colors"]?.split(",")?.map { it.trim() } ?: neonPalette
+        val customColors = config["colors"]?.split(",")?.map { it.trim() } ?: theme.chartPaletteHex
+
 
         val depth = calculateDepth(treeData)
         val maxWidth = calculateMaxWidth(treeData)
@@ -57,8 +63,8 @@ class CyberTreeMaker(val useDark: Boolean = false) {
                     /* <![CDATA[ */
                     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap');
                     .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-                    .link { fill: none; stroke: #00f2ff; stroke-opacity: 0.15; stroke-width: 1.5; }
-                    .label-main { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; }
+                    .link { fill: none; stroke: ${theme.accentColor}; stroke-opacity: 0.15; stroke-width: 1.5; }
+                    .label-main { font-family: ${theme.fontFamily}; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; }
                     .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; }
                     @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
                     /* ]]> */
@@ -67,8 +73,8 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         """.trimIndent())
 
         // Background
-        val bgFill = if (useDark) "#020617" else "#f8fafc"
-        val glowColor = if (useDark) "#7000ff" else "#818cf8"
+        val bgFill = theme.canvas
+        val glowColor = theme.accentColor
         val nodeInnerFill = if (useDark) "rgba(15, 23, 42, 0.8)" else "rgba(255, 255, 255, 0.9)"
         val titleColor = if (useDark) "#ffffff" else "#0f172a"
 
@@ -82,7 +88,7 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         // Title
         svgBuilder.append("""
             <g transform="translate(40, 60)">
-                <text font-family="Syne, sans-serif" font-size="28" fill="$titleColor" font-weight="700">${title.uppercase()}</text>
+                <text font-family="${theme.fontFamily}" font-size="28" fill="$titleColor" font-weight="700">${title.uppercase()}</text>
                 <rect y="15" width="100" height="4" fill="#7000ff" rx="2" />
             </g>
         """.trimIndent())

@@ -20,10 +20,13 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.button.EmbeddedImage
+import io.docops.docopsextensionssupport.qrcode.ErrorCorrectionLevel
+import io.docops.docopsextensionssupport.qrcode.QRCodeGenerator
+import io.docops.docopsextensionssupport.qrcode.buttonWaveTheme
+import io.docops.docopsextensionssupport.qrcode.organicWaveTheme
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import io.docops.docopsextensionssupport.util.BackgroundHelper
-import io.nayuki.qrcodegen.QrCode
 
 /**
  * Represents a class that extends the Regular class and implements additional functionality for drawing large buttons.
@@ -201,12 +204,20 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
 
     private fun createDefaultIcon(button: Button): String {
-
-        val qrCode = QrCode.encodeText("${button.link}", QrCode.Ecc.HIGH)
-        val svg = toSvgString(qrCode, 4, "#FFFFFF", "#640D5F", buttons.useDark)
+        val generator = QRCodeGenerator(useXml = false, 150, 150, theme = buttonWaveTheme)
+        val svg = generator.generate(button.link, ErrorCorrectionLevel.M)
         val sb = StringBuilder()
-        sb.append("""<g transform="translate(75, 10)">""")
+        sb.append("""<g transform="translate(150, 95)">""")
+
+        // White circular background with subtle glow (matching spotlight style)
+        sb.append("""<circle cx="0" cy="0" r="80" fill="rgba(255,255,255,0.2)" filter="url(#iconGlow)"/>""")
+        sb.append("""<circle cx="0" cy="0" r="75" fill="rgba(255,255,255,0.95)"/>""")
+
+        // QR code centered within the circle
+        sb.append("""<g transform="translate(-75, -75)">""")
         sb.append(svg)
+        sb.append("</g>")
+
         sb.append("</g>")
         return sb.toString()
     }
@@ -221,37 +232,6 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 	 * @throws NullPointerException if any object is {@code null}
 	 * @throws IllegalArgumentException if the border is negative
 	 */
-	private fun toSvgString(qr: QrCode, border: Int, lightColor: String, darkColor: String , useDark: Boolean = false) : String {
-
-        val fillColor = if(useDark) {
-            lightColor
-        } else {
-            darkColor
-        }
-		if (border < 0)
-			throw  IllegalArgumentException("Border must be non-negative");
-		val brd = border
-		val sb =  StringBuilder()
-			.append(
-                """<?xml version="1.0" encoding="UTF-8"?>
-                <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${qr.size + brd * 2} ${qr.size + brd * 2}" height="150" width="150" stroke="none">
-			    <rect width="100%" height="100%" fill="none"/>""")
-			.append("""<path d=" """)
-            for (y in 0 until qr.size) {
-                for (x in 0 until qr.size) {
-                    if (qr.getModule(x, y)) {
-                        if (x != 0 || y != 0)
-                            sb.append(" ")
-                        sb.append("""M${x + brd},${y + brd}h1v1h-1z""")
-                    }
-                }
-            }
-		return sb
-			.append("""" fill="$fillColor"/>""")
-			.append("</svg>")
-			.toString();
-	}
 
     private fun createTextContent(button: Button, primary: String, secondary: String, accent: String): String {
         val sb = StringBuilder()
