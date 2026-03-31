@@ -15,7 +15,8 @@
 !define iOS_Gray #8E8E93
 !define iOS_LightGray #F2F2F7
 !define iOS_DarkGray #1C1C1E
-!define iOS_White #FFFFFF
+!define iOS_White #FAFBFC
+!define iOS_DarkBackground #0A0E27
 !define iOS_SystemGray2 #AEAEB2
 !define iOS_SystemGray3 #C7C7CC
 !define iOS_SystemGray4 #D1D1D6
@@ -31,17 +32,37 @@
 !define C4_ExternalSystemColor #999999
 
 '' Global Settings
-skinparam backgroundColor iOS_SystemGray6
-skinparam defaultFontName Helvetica
+skinparam backgroundColor iOS_White
+skinparam defaultFontName "Inter", "Helvetica", sans-serif
 skinparam defaultFontSize 13
 skinparam defaultTextAlignment center
-skinparam roundcorner 12
+skinparam roundcorner 8
 skinparam shadowing false
+!if %variable_exists("$DARK") && ($DARK == "true")
+  skinparam backgroundColor iOS_DarkBackground
+  skinparam defaultFontColor iOS_White
+  skinparam arrowColor iOS_SystemGray4
+  skinparam sequence {
+    LifeLineBorderColor iOS_SystemGray4
+    ParticipantBackgroundColor iOS_DarkBackground
+    ParticipantFontColor iOS_White
+    BoxBackgroundColor #161B3D
+  }
+  skinparam class {
+    BackgroundColor iOS_DarkBackground
+    HeaderBackgroundColor #161B3D
+    AttributeFontColor iOS_LightGray
+  }
+  skinparam activity {
+    BackgroundColor iOS_DarkBackground
+    FontColor iOS_White
+  }
+!endif
 skinparam linetype ortho
-skinparam padding 3
+skinparam padding 8
 skinparam minClassWidth 100
-skinparam nodesep 15
-skinparam ranksep 20
+skinparam nodesep 16
+skinparam ranksep 24
 
 '' Arrow Settings
 skinparam arrow {
@@ -487,6 +508,3 @@ skinparam wbs {
     FontColor iOS_DarkGray
     FontSize 12
 }
-
-skinparam roundcorner 8
-skinparam shadowing true
