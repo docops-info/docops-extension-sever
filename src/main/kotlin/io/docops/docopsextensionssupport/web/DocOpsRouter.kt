@@ -12,6 +12,7 @@ import io.docops.docopsextensionssupport.diagram.*
 import io.docops.docopsextensionssupport.domainviz.DomainVizHandler
 import io.docops.docopsextensionssupport.gherkin.GherkinHandler
 import io.docops.docopsextensionssupport.metricscard.MetricsCardHandler
+import io.docops.docopsextensionssupport.recipe.RecipeHandler
 import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.PlannerHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
@@ -90,6 +91,7 @@ class DocOpsRouter(
             "domain" -> DomainVizHandler(csvResponse)
             "vcard" -> VCardHandler(csvResponse)
             "treemap" -> TreemapHandler(csvResponse)
+            "recipe" -> RecipeHandler(csvResponse)
             else -> throw IllegalArgumentException("Unknown handler kind: $kind")
         }
     }
