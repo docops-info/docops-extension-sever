@@ -14,7 +14,8 @@ object ColorPaletteFactory {
         OCEAN_BREEZE,
         COSMIC_NEBULA,
         URBAN_NIGHT,
-        TROPICAL_PARADISE
+        TROPICAL_PARADISE,
+        AYU_LIGHT
     }
 
     private val palettes = mapOf(
@@ -56,7 +57,8 @@ object ColorPaletteFactory {
         ),
         PaletteType.TROPICAL_PARADISE to listOf(
             "#F72585", "#7209B7", "#3A0CA3", "#4361EE", "#4CC9F0", "#06FFA5"
-        )
+        ),
+        PaletteType.AYU_LIGHT to listOf("#f07171", "#f2a191", "#fa8532", "#eba400", "#e59645", "#a37acc", "#86b300", "#4cbf99", "#22a4e6", "#55b4d4")
     )
 
     /**
