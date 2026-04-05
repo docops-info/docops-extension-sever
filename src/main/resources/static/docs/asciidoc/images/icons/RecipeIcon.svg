@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700;800&amp;display=swap');
+    </style>
+    <linearGradient id="recipe-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c2d12;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+    </linearGradient>
+    <clipPath id="circle-clip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+  </defs>
+
+  <!-- Circular background -->
+  <circle cx="256" cy="256" r="240" fill="url(#recipe-bg)"/>
+
+  <!-- Content clipped to circle -->
+  <g clip-path="url(#circle-clip)">
+    <!-- Warm decorative pattern -->
+    <g opacity="0.08">
+      <circle cx="180" cy="160" r="70" fill="none" stroke="#ffffff" stroke-width="2"/>
+      <circle cx="350" cy="185" r="55" fill="none" stroke="#ffffff" stroke-width="2"/>
+      <circle cx="280" cy="340" r="95" fill="none" stroke="#ffffff" stroke-width="2"/>
+      <path d="M90,256 L422,256" stroke="#ffffff" stroke-width="1"/>
+      <path d="M256,90 L256,422" stroke="#ffffff" stroke-width="1"/>
+    </g>
+
+    <!-- Recipe card -->
+    <g transform="translate(128, 110)">
+      <rect x="0" y="0" width="256" height="270" rx="18" fill="#fff7ed" stroke="#fed7aa" stroke-width="3"/>
+      <rect x="0" y="0" width="256" height="44" rx="18" fill="#fb923c"/>
+      <rect x="0" y="26" width="256" height="18" fill="#fb923c"/>
+
+      <!-- Top label -->
+      <text x="128" y="30"
+            font-family="'JetBrains Mono', monospace"
+            font-weight="800"
+            font-size="18"
+            fill="#fff7ed"
+            text-anchor="middle"
+            letter-spacing="2">RECIPE</text>
+
+      <!-- Plate -->
+      <ellipse cx="128" cy="148" rx="78" ry="50" fill="#ffffff" stroke="#fdba74" stroke-width="4"/>
+      <ellipse cx="128" cy="148" rx="58" ry="34" fill="#fff7ed" stroke="#ffedd5" stroke-width="2"/>
+
+      <!-- Food illustration -->
+      <g transform="translate(82, 110)">
+        <circle cx="30" cy="18" r="11" fill="#dc2626"/>
+        <circle cx="48" cy="30" r="12" fill="#16a34a"/>
+        <circle cx="66" cy="18" r="10" fill="#facc15"/>
+        <circle cx="42" cy="46" r="9" fill="#fb7185"/>
+        <path d="M18 52 C28 34, 42 28, 66 30" fill="none" stroke="#c2410c" stroke-width="4" stroke-linecap="round"/>
+      </g>
+
+      <!-- Fork -->
+      <g transform="translate(28, 88)">
+        <rect x="0" y="0" width="10" height="120" rx="5" fill="#9a3412"/>
+        <rect x="-2" y="0" width="3" height="28" rx="1.5" fill="#9a3412"/>
+        <rect x="1" y="0" width="3" height="28" rx="1.5" fill="#9a3412"/>
+        <rect x="4" y="0" width="3" height="28" rx="1.5" fill="#9a3412"/>
+        <rect x="7" y="0" width="3" height="28" rx="1.5" fill="#9a3412"/>
+      </g>
+
+      <!-- Spoon -->
+      <g transform="translate(216, 82)">
+        <rect x="0" y="28" width="10" height="125" rx="5" fill="#9a3412"/>
+        <ellipse cx="5" cy="16" rx="18" ry="26" fill="#9a3412"/>
+        <ellipse cx="5" cy="16" rx="12" ry="18" fill="#fff7ed" opacity="0.45"/>
+      </g>
+
+      <!-- Small ingredient lines -->
+      <g opacity="0.65" fill="#c2410c">
+        <rect x="34" y="220" width="80" height="4" rx="2"/>
+        <rect x="34" y="234" width="120" height="4" rx="2"/>
+        <rect x="34" y="248" width="70" height="4" rx="2"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- "RECIPES" label -->
+  <text x="256" y="440"
+        font-family="'JetBrains Mono', monospace"
+        font-weight="800"
+        font-size="34"
+        fill="#fff7ed"
+        text-anchor="middle"
+        letter-spacing="3">RECIPES</text>
+
+  <!-- Circular border -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#fed7aa" stroke-width="3" opacity="0.55"/>
+</svg>

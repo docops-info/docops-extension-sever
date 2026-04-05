@@ -1,0 +1,1855 @@
+            <!DOCTYPE html>
+            <html lang="en" data-theme="light">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>index</title>
+                                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* DocOps Design System — Signal (v1) : Markdown Light
+   Goals: calm, audit-friendly, high-contrast, “ink as authority”, cyan as action. */
+
+.markdown-body {
+  /* -----------------------------
+     1) Core tokens (DocOps Signal)
+     ----------------------------- */
+  --ds-brand-ink: #0b1220;
+  --ds-brand-cloud: #f6f8fb;
+  --ds-brand-slate: #2a3447;
+  --ds-brand-steel: #8a96ad;
+  --ds-brand-cyan: #00b7d6;
+  --ds-brand-gold: #c9a227;
+
+  --ds-semantic-success: #16a34a;
+  --ds-semantic-warning: #d97706;
+  --ds-semantic-error: #dc2626;
+  --ds-semantic-info: #2563eb;
+
+  --ds-canvas: var(--ds-brand-cloud);
+  --ds-surface-1: #ffffff;
+  --ds-surface-2: #eef2f7;
+  --ds-border: rgba(11, 18, 32, 0.12);
+
+  --ds-text-primary: var(--ds-brand-ink);
+  --ds-text-secondary: var(--ds-brand-slate);
+  --ds-text-tertiary: var(--ds-brand-steel);
+
+  --ds-accent: var(--ds-brand-cyan);
+
+  --ds-radius-sm: 8px;
+  --ds-radius-md: 12px;
+  --ds-radius-lg: 16px;
+  --ds-radius-pill: 999px;
+
+  --ds-shadow-sm: 0 6px 18px rgba(11, 18, 32, 0.08);
+  --ds-shadow-md: 0 16px 40px rgba(11, 18, 32, 0.12);
+  --ds-focus-glow: 0 0 0 4px rgba(0, 183, 214, 0.22);
+
+  --ds-dur-fast: 120ms;
+  --ds-dur-base: 220ms;
+  --ds-dur-slow: 420ms;
+  --ds-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-ease-snappy: cubic-bezier(0.2, 0.9, 0.2, 1);
+
+  /* -----------------------------
+     2) Markdown-specific roles
+     ----------------------------- */
+  --md-max-width: 920px;
+  --md-pad-x: 48px;
+  --md-pad-y: 48px;
+
+  --md-prose: var(--ds-text-secondary);
+  --md-heading: var(--ds-text-primary);
+  --md-muted: var(--ds-text-tertiary);
+
+  --md-link: var(--ds-accent);
+  --md-link-underline: rgba(0, 183, 214, 0.28);
+  --md-link-hover-bg: rgba(0, 183, 214, 0.10);
+
+  --md-inline-code-bg: rgba(11, 18, 32, 0.06);
+  --md-inline-code-border: rgba(11, 18, 32, 0.12);
+
+  --md-code-bg: var(--ds-brand-ink);
+  --md-code-fg: #f1f5ff;
+  --md-code-border: rgba(11, 18, 32, 0.20);
+
+  --md-table-stripe: rgba(11, 18, 32, 0.03);
+
+  /* Atmosphere: “calm corporate depth” (subtle, not noisy) */
+  background:
+    radial-gradient(900px 420px at 12% 0%, rgba(0, 183, 214, 0.08), transparent 55%),
+    radial-gradient(760px 360px at 92% 18%, rgba(201, 162, 39, 0.08), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.70)),
+    var(--ds-canvas);
+
+  color: var(--md-prose);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+
+  max-width: var(--md-max-width);
+  margin: 40px auto;
+  padding: var(--md-pad-y) var(--md-pad-x);
+
+  border-radius: 24px;
+  border: 1px solid var(--ds-border);
+  box-shadow: var(--ds-shadow-sm);
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Let long IDs/URLs behave */
+  overflow-wrap: anywhere;
+}
+
+/* Responsive padding (keeps 8px rhythm while respecting smaller screens) */
+@media (max-width: 768px) {
+  .markdown-body {
+    --md-pad-x: 20px;
+    --md-pad-y: 28px;
+    margin: 16px;
+    border-radius: 18px;
+  }
+}
+
+/* -----------------------------
+   3) Page-load motion (restrained)
+   ----------------------------- */
+@keyframes docops-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.markdown-body {
+  animation: docops-reveal var(--ds-dur-slow) var(--ds-ease-standard) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markdown-body { animation: none; }
+  .markdown-body * { scroll-behavior: auto; transition: none !important; }
+}
+
+/* -----------------------------
+   4) Typography (DocOps scale)
+   ----------------------------- */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--md-heading);
+  font-weight: 600; /* Headline/Display mapping */
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  scroll-margin-top: 96px;
+}
+
+.markdown-body h1 {
+  font-size: 40px;        /* Display (desktop) */
+  line-height: 48px;
+  letter-spacing: -0.6px;
+  margin-top: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.markdown-body h2 {
+  font-size: 28px;        /* Headline (desktop) */
+  line-height: 34px;
+  letter-spacing: -0.3px;
+  padding-top: 8px;
+}
+
+.markdown-body h3 {
+  font-size: 22px;        /* Title (desktop) */
+  line-height: 28px;
+  letter-spacing: -0.2px;
+}
+
+.markdown-body h4 {
+  font-size: 16px;        /* Body as “section label” */
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.markdown-body p {
+  margin: 0 0 16px 0;
+}
+
+.markdown-body strong {
+  color: var(--ds-text-primary);
+  font-weight: 600;
+}
+
+.markdown-body small {
+  color: var(--md-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* -----------------------------
+   5) Links + focus visibility
+   ----------------------------- */
+.markdown-body a {
+  color: var(--md-link);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid var(--md-link-underline);
+  transition: background-color var(--ds-dur-fast) var(--ds-ease-standard),
+              border-color var(--ds-dur-fast) var(--ds-ease-standard),
+              color var(--ds-dur-fast) var(--ds-ease-standard);
+  padding: 0 2px;
+  border-radius: 6px;
+}
+
+.markdown-body a:hover {
+  background: var(--md-link-hover-bg);
+  border-bottom-color: rgba(0, 183, 214, 0.55);
+}
+
+.markdown-body a:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  box-shadow: var(--ds-focus-glow);
+  border-bottom-color: transparent;
+}
+
+/* Selection should feel “system-level” */
+.markdown-body ::selection {
+  background: rgba(0, 183, 214, 0.18);
+}
+
+/* -----------------------------
+   6) Lists, rules, and spacing
+   ----------------------------- */
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+.markdown-body li {
+  margin: 6px 0;
+}
+
+.markdown-body hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ds-border), transparent);
+  margin: 24px 0;
+}
+
+/* -----------------------------
+   7) Inline code + code blocks
+   ----------------------------- */
+.markdown-body code {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+}
+
+.markdown-body :not(pre) > code {
+  background: var(--md-inline-code-bg);
+  border: 1px solid var(--md-inline-code-border);
+  color: var(--ds-text-primary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: break-spaces;
+}
+
+.markdown-body pre {
+  background: var(--md-code-bg);
+  color: var(--md-code-fg);
+  border: 1px solid var(--md-code-border);
+  box-shadow: var(--ds-shadow-sm);
+  padding: 16px;
+  border-radius: var(--ds-radius-lg);
+  overflow: auto;
+  margin: 0 0 24px 0;
+  line-height: 1.55;
+}
+
+.markdown-body pre code {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  font-size: 13px;
+  white-space: pre;
+}
+
+/* -----------------------------
+   8) Quotes / callouts
+   ----------------------------- */
+.markdown-body blockquote {
+  margin: 24px 0;
+  padding: 16px 16px 16px 18px;
+
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
+              var(--ds-surface-2);
+
+  border: 1px solid var(--ds-border);
+  border-left: 4px solid var(--ds-brand-gold); /* Gold = governance/attention (not error) */
+  border-radius: var(--ds-radius-lg);
+  box-shadow: none;
+
+  color: var(--ds-text-secondary);
+}
+
+.markdown-body blockquote > :first-child { margin-top: 0; }
+.markdown-body blockquote > :last-child { margin-bottom: 0; }
+
+/* -----------------------------
+   9) Tables (audit-friendly)
+   ----------------------------- */
+.markdown-body table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 0 24px 0;
+
+  background: rgba(255, 255, 255, 0.70);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+}
+
+.markdown-body thead th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  background: linear-gradient(180deg, rgba(238, 242, 247, 0.95), rgba(238, 242, 247, 0.78));
+  border-bottom: 1px solid var(--ds-border);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.markdown-body tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(11, 18, 32, 0.08);
+  color: var(--ds-text-secondary);
+  vertical-align: top;
+}
+
+.markdown-body tbody tr:nth-child(even) td {
+  background: var(--md-table-stripe);
+}
+
+.markdown-body tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Numeric density: make tables/KPIs scanable if author uses <code> or numbers */
+.markdown-body td code,
+.markdown-body th code {
+  font-size: 0.92em;
+}
+
+/* -----------------------------
+   10) Media, kbd, mark
+   ----------------------------- */
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border);
+  background: var(--ds-surface-1);
+}
+
+.markdown-body kbd {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ds-text-primary);
+
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(11, 18, 32, 0.18);
+  border-bottom-color: rgba(11, 18, 32, 0.28);
+  border-radius: 10px;
+
+  padding: 2px 8px;
+  box-shadow: 0 1px 0 rgba(11, 18, 32, 0.08);
+}
+
+.markdown-body mark {
+  background: rgba(201, 162, 39, 0.22); /* audit gold, soft */
+  color: var(--ds-text-primary);
+  padding: 0 3px;
+  border-radius: 6px;
+}
+
+/* -----------------------------
+   11) GitHub-ish conveniences (without cloning GitHub)
+   ----------------------------- */
+.markdown-body .task-list-item {
+  list-style: none;
+}
+
+.markdown-body .task-list-item input[type="checkbox"] {
+  transform: translateY(1px);
+  accent-color: var(--ds-accent);
+}
+
+/* Make anchor icons / autolinks not ugly if present */
+.markdown-body a.anchor {
+  border-bottom: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* -----------------------------
+   12) Print: keep it “audit export” ready
+   ----------------------------- */
+@media print {
+  .markdown-body {
+    background: #ffffff;
+    box-shadow: none;
+    border: 0;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  .markdown-body a {
+    color: var(--ds-text-primary);
+    border-bottom-color: rgba(11, 18, 32, 0.22);
+  }
+
+  .markdown-body pre {
+    box-shadow: none;
+  }
+}
+
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    cursor: default !important;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+
+.markdown-body img {
+    border-style: none;
+    max-width: 100%;
+    box-sizing: content-box;
+}
+
+/* Constrain SVGs and their interactive containers */
+.markdown-body svg,
+.svg-viewer-container,
+.svg-with-controls {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure the DocOps specific media cards respect the boundary */
+.docops-media-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 970px;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-data-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+    border-top: 1px solid var(--accent-primary);
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.docops-data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+.docops-data-actions {
+    display: flex;
+    gap: 12px;
+}
+.docops-action-btn {
+    background: rgba(126, 87, 255, 0.1);
+    border: 1px solid rgba(126, 87, 255, 0.3);
+    color: var(--accent-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docops-action-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    border-color: var(--accent-primary);
+}
+
+.docops-data-header span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+}
+
+/* ui.md: Distinctive Table Design */
+.docops-data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.docops-data-table th {
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-primary);
+    font-weight: 500;
+}
+
+/* ui.md: Motion - Staggered Row Entry */
+.docops-data-table tr {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: rowSlideIn 0.4s ease forwards;
+}
+
+@keyframes rowSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.docops-data-table td {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.docops-data-table tr:hover td {
+    background: rgba(126, 87, 255, 0.1);
+    color: #fff;
+}
+
+.docops-container {
+    display: inline-block;
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: center;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+    /* New variables for the control bar */
+    --control-bar-bg: rgba(245, 245, 245, 0.8);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #7e57ff;
+    --btn-border: rgba(126, 87, 255, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+        /* Dark mode overrides */
+        --control-bar-bg: rgba(0, 0, 0, 0.4);
+        --control-bar-border: rgba(255, 255, 255, 0.1);
+        --btn-text: #b392ff;
+        --btn-border: rgba(126, 87, 255, 0.4);
+    }
+}
+/* Support the manual override from the converter */
+[data-theme="dark"] {
+    --svg-bg: #2b2b2b;
+    --svg-border: #444;
+    --text-color: #aaa;
+    --modal-bg: #1e1e1e;
+    --control-bar-bg: rgba(0, 0, 0, 0.4);
+    --control-bar-border: rgba(255, 255, 255, 0.1);
+    --btn-text: #b392ff;
+}
+
+[data-theme="light"] {
+    --control-bar-bg: rgba(240, 240, 240, 0.9);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #6a3de8;
+    --btn-border: rgba(106, 61, 232, 0.4);
+}
+
+
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 1200px;
+    min-width: 600px;
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                          @media (prefers-color-scheme: dark) {
+                              body {
+                                  background-color: #f5f5f5;
+                              }
+                          }
+                          
+                           /* Fix for DocOps visuals sizing - prevents them from being too large */
+                          .svg-container svg {
+                              width: auto !important;
+                              height: auto !important;
+                              max-width: 100% !important;
+                              min-width: 0 !important;
+                              margin: 0 auto;
+                              display: block;
+                          }
+                          
+                          /* Consistent Modal Styles matching AsciiDoc implementation */
+                          .svg-modal-overlay {
+                              display: none;
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(15, 20, 25, 0.95);
+                              backdrop-filter: blur(8px);
+                              z-index: 2147483647;
+                              align-items: center;
+                              justify-content: center;
+                              padding: 40px;
+                              box-sizing: border-box;
+                          }
+                          .svg-modal-overlay.active {
+                              display: flex;
+                          }
+                          .svg-modal-content {
+                              width: 95vw;
+                              max-width: 1400px;
+                              height: 90vh;
+                              background: var(--docops-card-bg, #1e293b);
+                              border-radius: 20px;
+                              padding: 48px 24px 24px 24px;
+                              position: relative;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              display: flex;
+                              flex-direction: column;
+                              overflow: hidden;
+                              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                              animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                          }
+                          .svg-modal-close {
+                              position: absolute;
+                              top: 12px;
+                              right: 12px;
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border: none;
+                              width: 36px;
+                              height: 36px;
+                              border-radius: 50%;
+                              font-size: 24px;
+                              cursor: pointer;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              transition: all 0.2s ease;
+                              z-index: 10;
+                          }
+                          .svg-modal-close:hover {
+                              background: rgba(255,255,255,0.2);
+                              transform: rotate(90deg);
+                          }
+                          .svg-modal-body {
+                              flex: 1;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 100%;
+                              height: 100%;
+                              overflow: auto;
+                              padding: 10px;
+                          }
+                          .svg-modal-body svg {
+                              max-width: 100%;
+                              max-height: 100%;
+                              width: auto;
+                              height: auto;
+                              object-fit: contain;
+                          }
+                          @keyframes scaleInModal {
+                              from { opacity: 0; transform: scale(0.9); }
+                              to { opacity: 1; transform: scale(1); }
+                          }
+                          
+                          /* CSV Modal Styles */
+                          #globalCsvModal .csv-table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              color: #e2e8f0;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 13px;
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table th {
+                              text-align: left;
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              position: sticky;
+                              top: 0;
+                          }
+                          #globalCsvModal .csv-table td {
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              color: #cbd5e1;
+                          }
+                          #globalCsvModal .csv-table tr {
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table tr:hover {
+                              background: rgba(255,255,255,0.05);
+                          }
+                          
+                          /* Sliding Controls Styles (Consistent with Asciidoctor) */
+                          .svg-with-controls {
+                              position: relative;
+                              display: inline-block;
+                              border-radius: 8px;
+                              overflow: hidden;
+                          }
+                          .svg-bottom-controls {
+                              position: absolute;
+                              bottom: 12px;
+                              left: 50%;
+                              transform: translateX(-50%) translateY(150%);
+                              display: flex;
+                              gap: 6px;
+                              background: rgba(15, 20, 30, 0.85);
+                              padding: 6px 8px;
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              opacity: 0;
+                              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                              z-index: 100;
+                              backdrop-filter: blur(8px);
+                              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                          }
+                          .svg-with-controls:hover .svg-bottom-controls {
+                              opacity: 1;
+                              transform: translateX(-50%) translateY(0);
+                          }
+                          .svg-control-btn {
+                              background: transparent;
+                              border: 1px solid rgba(255,255,255,0.15);
+                              color: #94a3b8;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 10px;
+                              font-weight: 600;
+                              padding: 4px 10px;
+                              border-radius: 4px;
+                              cursor: pointer;
+                              transition: all 0.2s;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                          }
+                          .svg-control-btn:hover {
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border-color: rgba(255,255,255,0.3);
+                              transform: translateY(-1px);
+                          }
+                    </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
+                
+            </head>
+            <body>
+                    <article class="markdown-body">
+                        <h1 id="docops-recipes">DocOps Recipes</h1>
+<div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 32px; margin-bottom: 48px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+  <div style="display: flex; align-items: center; gap: 24px;">
+<div style="background: linear-gradient(135deg, #7c2d12 0%, #f97316 100%); padding: 20px; border-radius: 12px;">
+      <img src="../images/RecipeIcon.svg" alt="Recipe Icon" width="80" height="80" />
+    </div>
+    <div>
+      <h1 style="margin: 0 0 12px 0; color: #7c2d12; font-size: 32px;">DocOps Recipes</h1>
+      <p style="margin: 0; color: #64748b; font-size: 16px;">Create beautiful, structured cooking recipes with ingredients, steps, and notes</p>
+    </div>
+  </div>
+</div>
+<ul>
+<li><a href="#what-are-docops-recipes">What are DocOps Recipes?</a></li>
+<li><a href="#default-look">Default Look</a></li>
+</ul>
+<h2 id="what-are-docops-recipes">What are DocOps Recipes?</h2>
+<p>The DocOps recipe macro is designed to present food recipes in a clean, structured format. It helps you document ingredients, preparation steps, timings, and notes in a way that is easy to read and visually appealing.</p>
+<p>Recipes are ideal for:</p>
+<ul>
+<li><strong>Cookbooks</strong> - Present recipe collections consistently</li>
+<li><strong>Meal Planning</strong> - Organize weekly meals and shopping lists</li>
+<li><strong>Food Blogs</strong> - Turn structured recipe text into polished documentation</li>
+<li><strong>Kitchen References</strong> - Keep preparation and cooking details together</li>
+<li><strong>Training Materials</strong> - Standardize recipe formatting for teams</li>
+</ul>
+<h2 id="default-look">Default Look</h2>
+<div id="docops-recipe-1775388201731-100" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAAAAAAAA_3WW247bNhCG7_kUA-TO8DrrPbRpAF8kThco2hyQ3SYoggBLSWOLMSWqJGXHfaM-R1-s_5DyYZ3dG8PSzJBz-PhT0UTLM5r33m_prW6XTm0N22pGVxTYr027DKrz3M1oek2NafvIQZXOrWZ0cb5_EfUyzKiUVca08L2JY1rzkqP2Rrcq9E2j_XamXsGol163kXRbUems84ve5kjamFhTI0nsogvLYZxcN9o3FDpTcpgoZOW5MtzGMFNndEHedJwjkcwZTcm1xrXJVFq35kBL7a0pky0WoRt27NymYp_elj1eutKhIJRlVzm47wKevnN1lBAst9pGio6iDpEVEX47pDKdwNLH__6lWHPOISWfN6e-jcbuOzBRFxN6VVUPUknuIRpPhTe8sNuJusxexw0ZepRbeEh5oq6QgGkarJP3kjQOgaQ9U-QW-0zUNVwxYM6dTa336O4E1VDrMFTp7KvqWx9i7jtZXrPdVz2B-bPzq0AbtjYv8E0HEMFpIXKeFlbHwrOuZNUvzyvk2oWvSj17Rp9l17lrFs5HunGuoj8AlVJfstNLzyVm-lXFDOhH5yJ9OlSStpMpYDI3JtQ7ai9PqT2CNFN7dUpt0Gsn2HpUasoxVaZtwcQRszVrH7cwhBod1ZEKbXULEkkM9Za8ZLc-yU56X3GHf26BTVKqCyzxCL6dizpmdMGc9t7FjHHYMMfBLC-uz5fHS52gnsB2xuLhtdXlijruOrDwKKgfGMNMBNWuS8meVmFaBGLmLXWG07kDsLdOr2S03rSBU9hRPmQW1DJXXCVsb4D14SBkIoNbgECuxmLB6QDZ4pIbc5VRP6U2Ye5WO6aPAdZhOGIhsVy7eAowMvOM1Gr2RaCEc8GgjnekCMh_BsE7hFQMCs_9YPhidmmQUl3Bpe6HqnO5SM4K31ssJqnwI6S_dUi3pTfar-iu5oafIl1ss9LqECBUA_fzGk44RUxzveId5S8oWFHCpxi_vD5hvEJt7CHKJVYZy8jzqseU49DWuZWm6SwfnFJQZlqn-VHp-6b4geMpTZ8Pkrmwrj_IaughgPKUzUmz9EF7L4iXy3BkH-R395iJhm6D7kKvsOsu9gHPnnFOYwZOoAW80xfn80TtW_M9jxFEHmUtk9ZUuI3dy6x4bTg-8NprcgawdE1h0qjB6wcUmk-KJkTogKPQ6cxkIX0bsOcTMOfO2UdAfCN8plabUgpNrUtS6h0sOsgojX-Ms995K4LagUJJGuBq-pjYUupXjdlm0ChuoebaWulEaXus91JJA0ejO2FuNKIz4ZRaDVSP8Jc-jkZ_CYHJ5x0YgLiIuA2SK3n-3eNqM1DLzruqL7mSxo5GmE5Hd6YZlsefQShkTEKxXE1HPZfWjkZzOfVPRSVJwI7SZRED5A_WkyeOs3xVWF2wBYxwKsHx0nnzj46ilj-J-21mP0Xc1nIPoRclPiXE5UHlP4v7b4fsckj0fRl7vDtKnKwJUb1IywuayfO9B6zCRaozZYCQkOLxP6hfxP-doDEU2uGSX8u3U7KPpcyhyULEEsKU4qbnqWwRjhT4yYReA7a4teLqUiUJjtu-61Ch3JbONzoqdZcUrswfTqUHv2WJ2yrsjv-Kt8_X2vYidRh5PgVNb0GzXPFSJ3LKBUxkj2f0WkO5Dn1R6v7-PvL3SKdaR_trPSeQwKMfvzzph09P2incXvIoKxx-p2P5vUi_l7SXtqdnm7OZkDpVssOoafrw8WKnOHJiboyXJuBFuhkZX2JVetwdc8S-TztiKPKKssbTIPL_A3tnLFt9CwAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Curry Mango
+yield= 4 servings
+prep= 15 minutes
+cook= 20 minutes
+tags= curry, fruit, vegetarian
+summary=
+A fragrant and colorful curry with mango, vegetables, and warm spices.
+ingredients=
+- 2 ripe mangoes
+- 1 onion
+- 2 cloves garlic
+- 1 tbsp curry powder
+- 1 cup coconut milk
+- 2 cups mixed vegetables
+- Salt to taste
+steps=
+1. Sauté the onion and garlic until fragrant.
+2. Add curry powder and stir briefly.
+3. Add vegetables, mango, and coconut milk.
+4. Simmer until the vegetables are tender.
+5. Serve warm with rice.
+notes=
+- Adjust spice level to taste.
+- Works well with jasmine rice or flatbread.
+[/docops]
+<h2 id="warm-comfort-food-look">Warm Comfort Food Look</h2>
+<div id="docops-recipe-1775388201809-633" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAAAAAAAA_12SzW7bMBCE73yKeQBXSJzkqEN6yLlo0NwpcWSxpkmCXDvQ22dJu6iRgwByf2a_4Uq8BI74nZLggweKnQIrPr2seLdB6PDm62o2z-BGPKGyXHw8VJML84j9A04-noXVzCkdRzz_D4g91BHVXlLZdijnKn7ewfkYWUw9n062bKN5xUpbZNNEXSGrFUw22DgrRkusG0qju3yjk5VwzHpKiw7pqItKDEbxCp1nlDqaH9gjJ7GSlKhdZltKknZ-RP0k5ZZugZeHw71Ur0nRp9g7ZaoZyQe9_Ax2PiIzZxZIgtgqNPplHfk44BcZYKPDvKbcUb978FHbeGFE9lSvg9kPeE_2iFRQfKzsbXc08Asi6egG8zTgrWy9ovPhHMUH1LQII92uZSKsc73k-izPA15vgTuODqmbuylou2MZzIvC0FZVbgVt6cSaZDAx6WrbszatpVC5Vpap4q_uFxOXVPjvJxm07I8a0Tm1O1HX18eg1ura-g6btYmzPd8sX70qWSi0blOxxqGuvwDj2FvLrAIAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Root Vegetables with Salted Fish
+yield= 3 servings
+prep= 20 minutes
+cook= 40 minutes
+tags= savory, rustic, dinner
+summary=
+A hearty dish that balances earthy root vegetables with the depth of salted fish.
+ingredients=
+- 2 potatoes
+- 2 carrots
+- 1 sweet potato
+- 150g salted fish
+- 1 onion
+- 2 tbsp oil
+- Black pepper to taste
+steps=
+1. Peel and chop the root vegetables into even pieces.
+2. Soak or rinse the salted fish if needed.
+3. Fry the onion until softened, then add the fish.
+4. Add the vegetables and cook until tender.
+5. Season and serve hot.
+notes=
+- Add fresh herbs just before serving.
+- Use less salt in the rest of the dish because the fish is already seasoned." data-kind="recipe">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_3db96e34d5114c37aaef850a45777222">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Root Vegetables with Salted Fish","3 servings","20 minutes","40 minutes","classic","savory; rustic; dinner","A hearty dish that balances earthy root vegetables with the depth of salted fish.","2 potatoes | 2 carrots | 1 sweet potato | 150g salted fish | 1 onion | 2 tbsp oil | Black pepper to taste","Peel and chop the root vegetables into even pieces. | Soak or rinse the salted fish if needed. | Fry the onion until softened, then add the fish. | Add the vegetables and cook until tender. | Season and serve hot.","Add fresh herbs just before serving. | Use less salt in the rest of the dish because the fish is already seasoned."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#e2e8f0"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#4338ca"/></linearGradient><style><![CDATA[ .recipe-title { font-family: Arial, Helvetica, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .section-title { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(255,255,255,0.92)" stroke="rgba(15,23,42,0.12)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#2563eb" opacity="0.10"/><circle cx="180" cy="1180" r="220" fill="#4338ca" opacity="0.06"/><text x="130" y="145" class="recipe-title" fill="#4338ca" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#111111">Root Vegetables with Salted Fish</text><rect x="860" y="130" width="220" height="44" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#111111">savory • rustic • dinner</text></g><g><rect x="90" y="300" width="1020" height="188" rx="20" fill="#ffffff" fill-opacity="0.65" stroke="#2563eb" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#111111" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#111111" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#111111" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="488" stroke="#111111" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#4338ca">yield</text><text x="125" y="375" class="meta-label" fill="#4338ca">prep</text><text x="125" y="420" class="meta-label" fill="#4338ca">cook</text><text x="125" y="465" class="meta-label" fill="#4338ca">summary</text><text x="640" y="330" class="meta-value" fill="#111111">3 servings</text><text x="640" y="375" class="meta-value" fill="#111111">20 minutes</text><text x="640" y="420" class="meta-value" fill="#111111">40 minutes</text><text x="640" y="450" class="meta-value" fill="#111111">A hearty dish that balances earthy root vegetables with</text><text x="640" y="474" class="meta-value" fill="#111111">the depth of salted fish.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="518" width="500" height="348" rx="24" fill="#ffffff" fill-opacity="0.82" stroke="#2563eb" stroke-opacity="0.12"/><rect x="90" y="518" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="568" class="section-title" fill="#4338ca">ingredients</text><line x1="120" y1="598" x2="560" y2="598" stroke="#111111" stroke-opacity="0.10"/><g><text x="125" y="636" class="body-text" fill="#111111">2 potatoes</text><text x="125" y="670" class="body-text" fill="#111111">2 carrots</text><text x="125" y="704" class="body-text" fill="#111111">1 sweet potato</text><text x="125" y="738" class="body-text" fill="#111111">150g salted fish</text><text x="125" y="772" class="body-text" fill="#111111">1 onion</text><text x="125" y="806" class="body-text" fill="#111111">2 tbsp oil</text><text x="125" y="840" class="body-text" fill="#111111">Black pepper to taste</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="518" width="490" height="348" rx="24" fill="#ffffff" fill-opacity="0.82" stroke="#2563eb" stroke-opacity="0.12"/><rect x="620" y="518" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="568" class="section-title" fill="#4338ca">steps</text><line x1="650" y1="598" x2="1080" y2="598" stroke="#111111" stroke-opacity="0.10"/><g><g><rect x="655" y="642" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="657" text-anchor="middle" class="badge-text" fill="#ffffff">1</text></g><text x="689" y="656" class="body-text" fill="#111111">Peel and chop the root vegetables into even pieces.</text><g><rect x="655" y="678" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="693" text-anchor="middle" class="badge-text" fill="#ffffff">2</text></g><text x="689" y="692" class="body-text" fill="#111111">Soak or rinse the salted fish if needed.</text><g><rect x="655" y="714" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="729" text-anchor="middle" class="badge-text" fill="#ffffff">3</text></g><text x="689" y="728" class="body-text" fill="#111111">Fry the onion until softened, then add the fish.</text><g><rect x="655" y="750" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="765" text-anchor="middle" class="badge-text" fill="#ffffff">4</text></g><text x="689" y="764" class="body-text" fill="#111111">Add the vegetables and cook until tender.</text><g><rect x="655" y="786" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="801" text-anchor="middle" class="badge-text" fill="#ffffff">5</text></g><text x="689" y="800" class="body-text" fill="#111111">Season and serve hot.</text></g></g><g><rect x="90" y="896" width="1020" height="192" rx="20" fill="#ffffff" fill-opacity="0.72" stroke="#2563eb" stroke-opacity="0.10"/><line x1="90" y1="946" x2="1110" y2="946" stroke="#111111" stroke-opacity="0.10"/><line x1="600" y1="896" x2="600" y2="1088" stroke="#111111" stroke-opacity="0.10"/><text x="125" y="931" class="meta-label" fill="#4338ca">tags</text><text x="655" y="931" class="meta-label" fill="#4338ca">notes</text><rect x="125" y="976" width="82" height="36" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="166" y="999" text-anchor="middle" class="body-text" font-size="16" fill="#111111">savory</text><rect x="219" y="976" width="82" height="36" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="260" y="999" text-anchor="middle" class="body-text" font-size="16" fill="#111111">rustic</text><rect x="313" y="976" width="82" height="36" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="354" y="999" text-anchor="middle" class="body-text" font-size="16" fill="#111111">dinner</text><text x="655" y="991" class="body-text" fill="#111111">Add fresh herbs just before serving.</text><text x="655" y="1015" class="body-text" fill="#111111">Use less salt in the rest of the dish because the fish is</text><text x="655" y="1039" class="body-text" fill="#111111">already seasoned.</text></g></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="modern-dark-theme-look">Modern Dark Theme Look</h2>
+<div id="docops-recipe-1775388201822-311" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAAAAAAAA_1VRQY7bMAy86xXzgK66ybbAXnxYZK8F-gVZYmwismSI9Gbz-9IKtk0vhjnD4ZAjnWmhIeYgwtEpa6YBp7nGmoMSTuFC7saU04BXSOZI4tZG64DjMxYumxoQa70MePn5F9AwyYBEItT0G6JNse_XVCfbsoR2G9wbGscZoSQIL2umf01dhCur0ZB6VsS2LaN3XKZGiamoDO4JBxy-HxG3VXDOdWsdshKyTaFXdxrRBges9Zpoh4-gaZIHfuF8eSgr5z5KZcUYLub6pRWl1awPHr8bzRQUOhPqBxVoxeH1-eTd0eMXf3YitRsedrZ_O2is1-zdi8dbSr3rSvpfV49EuWErytmWX0YulLz7YbZ2pjWbWYApglDCGkrXjHtqd42Qeleqvcee06nWjJHOtZEx7cPMvMHvm-g9ZY77jT011IZzq8YE2V-RbS3_B5yQz-QqAgAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="theme=classic
+title= Chocolate Cake
+yield= 8 slices
+prep= 20 minutes
+cook= 35 minutes
+tags= dessert, cake, chocolate
+summary=
+A rich and simple chocolate cake with a soft crumb.
+ingredients=
+- 1 1/2 cups flour
+- 1 cup sugar
+- 1/2 cup cocoa powder
+- 2 eggs
+- 1/2 cup milk
+- 1/2 cup oil
+- 1 tsp baking powder
+steps=
+1. Preheat the oven to 180C.
+2. Mix the dry ingredients in a bowl.
+3. Add the wet ingredients and stir until combined.
+4. Pour into a greased pan and bake until set.
+notes=
+- Cool before serving.
+- Dust with icing sugar or frost as desired." data-kind="recipe">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_c546d028849a4fe3a380072202294ffa">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Chocolate Cake","8 slices","20 minutes","35 minutes","classic","dessert; cake; chocolate","A rich and simple chocolate cake with a soft crumb.","1 1/2 cups flour | 1 cup sugar | 1/2 cup cocoa powder | 2 eggs | 1/2 cup milk | 1/2 cup oil | 1 tsp baking powder","Preheat the oven to 180C. | Mix the dry ingredients in a bowl. | Add the wet ingredients and stir until combined. | Pour into a greased pan and bake until set.","Cool before serving. | Dust with icing sugar or frost as desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#e2e8f0"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#4338ca"/></linearGradient><style><![CDATA[ .recipe-title { font-family: Arial, Helvetica, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .section-title { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(255,255,255,0.92)" stroke="rgba(15,23,42,0.12)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#2563eb" opacity="0.10"/><circle cx="180" cy="1180" r="220" fill="#4338ca" opacity="0.06"/><text x="130" y="145" class="recipe-title" fill="#4338ca" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#111111">Chocolate Cake</text><rect x="860" y="130" width="220" height="44" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#111111">dessert • cake • chocolate</text></g><g><rect x="90" y="300" width="1020" height="180" rx="20" fill="#ffffff" fill-opacity="0.65" stroke="#2563eb" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#111111" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#111111" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#111111" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="480" stroke="#111111" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#4338ca">yield</text><text x="125" y="375" class="meta-label" fill="#4338ca">prep</text><text x="125" y="420" class="meta-label" fill="#4338ca">cook</text><text x="125" y="465" class="meta-label" fill="#4338ca">summary</text><text x="640" y="330" class="meta-value" fill="#111111">8 slices</text><text x="640" y="375" class="meta-value" fill="#111111">20 minutes</text><text x="640" y="420" class="meta-value" fill="#111111">35 minutes</text><text x="640" y="460" class="meta-value" fill="#111111">A rich and simple chocolate cake with a soft crumb.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="510" width="500" height="312" rx="24" fill="#ffffff" fill-opacity="0.82" stroke="#2563eb" stroke-opacity="0.12"/><rect x="90" y="510" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="560" class="section-title" fill="#4338ca">ingredients</text><line x1="120" y1="590" x2="560" y2="590" stroke="#111111" stroke-opacity="0.10"/><g><text x="125" y="628" class="body-text" fill="#111111">1 1/2 cups flour</text><text x="125" y="662" class="body-text" fill="#111111">1 cup sugar</text><text x="125" y="696" class="body-text" fill="#111111">1/2 cup cocoa powder</text><text x="125" y="730" class="body-text" fill="#111111">2 eggs</text><text x="125" y="764" class="body-text" fill="#111111">1/2 cup milk</text><text x="125" y="798" class="body-text" fill="#111111">1/2 cup oil</text><text x="125" y="832" class="body-text" fill="#111111">1 tsp baking powder</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="510" width="490" height="312" rx="24" fill="#ffffff" fill-opacity="0.82" stroke="#2563eb" stroke-opacity="0.12"/><rect x="620" y="510" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="560" class="section-title" fill="#4338ca">steps</text><line x1="650" y1="590" x2="1080" y2="590" stroke="#111111" stroke-opacity="0.10"/><g><g><rect x="655" y="634" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="649" text-anchor="middle" class="badge-text" fill="#ffffff">1</text></g><text x="689" y="648" class="body-text" fill="#111111">Preheat the oven to 180C.</text><g><rect x="655" y="670" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="685" text-anchor="middle" class="badge-text" fill="#ffffff">2</text></g><text x="689" y="684" class="body-text" fill="#111111">Mix the dry ingredients in a bowl.</text><g><rect x="655" y="706" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="721" text-anchor="middle" class="badge-text" fill="#ffffff">3</text></g><text x="689" y="720" class="body-text" fill="#111111">Add the wet ingredients and stir until combined.</text><g><rect x="655" y="742" width="24" height="20" rx="10" fill="#2563eb" opacity="0.96"/><text x="667" y="757" text-anchor="middle" class="badge-text" fill="#ffffff">4</text></g><text x="689" y="756" class="body-text" fill="#111111">Pour into a greased pan and bake until set.</text></g></g><g><rect x="90" y="852" width="1020" height="180" rx="20" fill="#ffffff" fill-opacity="0.72" stroke="#2563eb" stroke-opacity="0.10"/><line x1="90" y1="902" x2="1110" y2="902" stroke="#111111" stroke-opacity="0.10"/><line x1="600" y1="852" x2="600" y2="1032" stroke="#111111" stroke-opacity="0.10"/><text x="125" y="887" class="meta-label" fill="#4338ca">tags</text><text x="655" y="887" class="meta-label" fill="#4338ca">notes</text><rect x="125" y="932" width="91" height="36" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="170" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#111111">dessert</text><rect x="228" y="932" width="72" height="36" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="264" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#111111">cake</text><rect x="312" y="932" width="109" height="36" rx="999" fill="rgba(0, 0, 0, 0.05)" stroke="#2563eb" stroke-opacity="0.35"/><text x="366" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#111111">chocolate</text><text x="655" y="947" class="body-text" fill="#111111">Cool before serving.</text><text x="655" y="971" class="body-text" fill="#111111">Dust with icing sugar or frost as desired.</text></g></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="docopsCopy.png(this)">PNG</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="key-components-of-a-recipe">Key Components of a Recipe</h2>
+<p>Each recipe typically includes:</p>
+<ol>
+<li><strong>Title</strong> - The name of the dish</li>
+<li><strong>Yield</strong> - Number of servings or quantity produced</li>
+<li><strong>Prep Time</strong> - Time needed to prepare ingredients</li>
+<li><strong>Cook Time</strong> - Time needed to cook or bake</li>
+<li><strong>Tags</strong> - Useful labels for categorization</li>
+<li><strong>Summary</strong> - Short description of the dish</li>
+<li><strong>Ingredients</strong> - Structured ingredient list</li>
+<li><strong>Steps</strong> - Ordered preparation instructions</li>
+<li><strong>Notes</strong> - Tips, variations, or serving suggestions</li>
+<li><strong>Theme</strong> - Visual styling option</li>
+</ol>
+<h2 id="supported-format">Supported Format</h2>
+<p>The recipe macro accepts simple key/value fields and multiline list sections.</p>
+<h3 id="basic-structure">Basic Structure</h3>
+<pre><code class="language-text">[docops:recipe] 
+title= Recipe Title 
+yield= 4 servings 
+prep= 15 minutes 
+cook= 30 minutes tags= tag1, tag2, tag3 
+summary= Short description of the recipe. 
+
+ingredients=
+- Ingredient 1
+- Ingredient 2 steps=
+
+1. First step
+2. Second step notes=
+
+- Optional note theme= classic&quot; data-kind=&quot;recipe&quot;&gt;
+&lt;figure class=&quot;docops-figure-card&quot;&gt;
+&lt;div class=&quot;svg-container&quot;&gt;
+&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;1200&quot; height=&quot;2272&quot; viewBox=&quot;0 0 1200 2272&quot; id=&quot;recipe_af496d47b93e4e2c94efe3d7efb76a53&quot;&gt;      &lt;metadata&gt;&lt;rdf:RDF xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot; xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:cc=&quot;http://creativecommons.org/ns#&quot;&gt;&lt;cc:Work rdf:about=&quot;&quot;&gt;&lt;dc:creator&gt;DocOps.io&lt;/dc:creator&gt;&lt;dc:rights&gt;MIT License&lt;/dc:rights&gt;&lt;dc:source&gt;https://docops.io&lt;/dc:source&gt;&lt;dc:date&gt;2026-04-05&lt;/dc:date&gt;&lt;/cc:Work&gt;&lt;/rdf:RDF&gt;&lt;/metadata&gt;&lt;metadata type=&quot;text/csv&quot;&gt;&lt;![CDATA[ {&quot;headers&quot;:[&quot;Title&quot;,&quot;Yield&quot;,&quot;Prep&quot;,&quot;Cook&quot;,&quot;Theme&quot;,&quot;Tags&quot;,&quot;Summary&quot;,&quot;Ingredients&quot;,&quot;Steps&quot;,&quot;Notes&quot;],&quot;rows&quot;:[[&quot;Recipe Title&quot;,&quot;4 servings&quot;,&quot;15 minutes&quot;,&quot;30 minutes tags= tag1, tag2, tag3&quot;,&quot;classic&quot;,&quot;curry; fruit; vegetarian; savory; rustic; dinner; dessert; cake; chocolate&quot;,&quot;Short description of the recipe.&quot;,&quot;2 ripe mangoes | 1 onion | 2 cloves garlic | 1 tbsp curry powder | 1 cup coconut milk | 2 cups mixed vegetables | Salt to taste | 2 potatoes | 2 carrots | 1 sweet potato | 150g salted fish | 1 onion | 2 tbsp oil | Black pepper to taste | 1 1/2 cups flour | 1 cup sugar | 1/2 cup cocoa powder | 2 eggs | 1/2 cup milk | 1/2 cup oil | 1 tsp baking powder | Ingredient 1 | Ingredient 2 steps= | 1. First step | 2. Second step notes= | Optional note theme= classic&quot;,&quot;Sauté the onion and garlic until fragrant. | Add curry powder and stir briefly. | Add vegetables, mango, and coconut milk. | Simmer until the vegetables are tender. | Serve warm with rice. | Peel and chop the root vegetables into even pieces. | Soak or rinse the salted fish if needed. | Fry the onion until softened, then add the fish. | Add the vegetables and cook until tender. | Season and serve hot. | Preheat the oven to 180C. | Mix the dry ingredients in a bowl. | Add the wet ingredients and stir until combined. | Pour into a greased pan and bake until set.&quot;,&quot;Adjust spice level to taste. | Works well with jasmine rice or flatbread. | [/docops] | ## Warm Comfort Food Look | [docops:recipe] | Add fresh herbs just before serving. | Use less salt in the rest of the dish because the fish is already seasoned. | [/docops] | ## Modern Dark Theme Look | [docops:recipe] | Cool before serving. | Dust with icing sugar or frost as desired. | [/docops] | ## Key Components of a Recipe | Each recipe typically includes: | 1. **Title** - The name of the dish | 2. **Yield** - Number of servings or quantity produced | 3. **Prep Time** - Time needed to prepare ingredients | 4. **Cook Time** - Time needed to cook or bake | 5. **Tags** - Useful labels for categorization | 6. **Summary** - Short description of the dish | 7. **Ingredients** - Structured ingredient list | 8. **Steps** - Ordered preparation instructions | 9. **Notes** - Tips, variations, or serving suggestions | 10. **Theme** - Visual styling option | ## Supported Format | The recipe macro accepts simple key/value fields and multiline list sections. | ### Basic Structure | ```text | [docops:recipe]&quot;]]} ]]&gt;&lt;/metadata&gt;&lt;desc&gt;Generated by DocOps.io - Licensed under MIT License&lt;/desc&gt;&lt;desc&gt;DocOps Recipe Card&lt;/desc&gt;&lt;defs&gt;&lt;linearGradient id=&quot;recipe_bg&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;1&quot;&gt;&lt;stop offset=&quot;0%&quot; stop-color=&quot;#f8fafc&quot;/&gt;&lt;stop offset=&quot;100%&quot; stop-color=&quot;#e2e8f0&quot;/&gt;&lt;/linearGradient&gt;&lt;pattern id=&quot;recipe_grid&quot; width=&quot;40&quot; height=&quot;40&quot; patternUnits=&quot;userSpaceOnUse&quot;&gt;&lt;path d=&quot;M 40 0 L 0 0 0 40&quot; fill=&quot;none&quot; stroke=&quot;#ffffff&quot; stroke-opacity=&quot;0.07&quot; stroke-width=&quot;1&quot;/&gt;&lt;/pattern&gt;&lt;linearGradient id=&quot;accent_bar&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;0&quot;&gt;&lt;stop offset=&quot;0%&quot; stop-color=&quot;#2563eb&quot;/&gt;&lt;stop offset=&quot;100%&quot; stop-color=&quot;#4338ca&quot;/&gt;&lt;/linearGradient&gt;&lt;style&gt;&lt;![CDATA[ .recipe-title { font-family: Arial, Helvetica, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .section-title { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; } ]]&gt;&lt;/style&gt;&lt;/defs&gt;&lt;g transform=&quot;scale(1.0)&quot;&gt;&lt;rect width=&quot;1200&quot; height=&quot;2272&quot; fill=&quot;url(#recipe_bg)&quot;/&gt;&lt;rect width=&quot;1200&quot; height=&quot;2272&quot; fill=&quot;url(#recipe_grid)&quot; opacity=&quot;0.9&quot;/&gt;&lt;rect x=&quot;60&quot; y=&quot;60&quot; width=&quot;1080&quot; height=&quot;2152&quot; rx=&quot;28&quot; fill=&quot;rgba(255,255,255,0.92)&quot; stroke=&quot;rgba(15,23,42,0.12)&quot; stroke-width=&quot;1.5&quot;/&gt;&lt;g&gt;&lt;circle cx=&quot;1030&quot; cy=&quot;170&quot; r=&quot;170&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.10&quot;/&gt;&lt;circle cx=&quot;180&quot; cy=&quot;1180&quot; r=&quot;220&quot; fill=&quot;#4338ca&quot; opacity=&quot;0.06&quot;/&gt;&lt;text x=&quot;130&quot; y=&quot;145&quot; class=&quot;recipe-title&quot; fill=&quot;#4338ca&quot; font-size=&quot;18&quot; font-weight=&quot;600&quot; letter-spacing=&quot;2&quot; style=&quot;text-transform:uppercase;&quot;&gt;recipe dossier&lt;/text&gt;&lt;text x=&quot;130&quot; y=&quot;205&quot; class=&quot;recipe-title&quot; fill=&quot;#111111&quot;&gt;Recipe Title&lt;/text&gt;&lt;rect x=&quot;860&quot; y=&quot;130&quot; width=&quot;220&quot; height=&quot;44&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;970&quot; y=&quot;158&quot; text-anchor=&quot;middle&quot; class=&quot;meta-value&quot; font-size=&quot;16&quot; font-weight=&quot;500&quot; fill=&quot;#111111&quot;&gt;curry • fruit • vegetarian • savory • rustic • dinner • dessert • cake • chocolate&lt;/text&gt;&lt;/g&gt;&lt;g&gt;&lt;rect x=&quot;90&quot; y=&quot;300&quot; width=&quot;1020&quot; height=&quot;180&quot; rx=&quot;20&quot; fill=&quot;#ffffff&quot; fill-opacity=&quot;0.65&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.12&quot;/&gt;&lt;line x1=&quot;90&quot; y1=&quot;345&quot; x2=&quot;1110&quot; y2=&quot;345&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;line x1=&quot;90&quot; y1=&quot;390&quot; x2=&quot;1110&quot; y2=&quot;390&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;line x1=&quot;90&quot; y1=&quot;435&quot; x2=&quot;1110&quot; y2=&quot;435&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;line x1=&quot;600&quot; y1=&quot;300&quot; x2=&quot;600&quot; y2=&quot;480&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;text x=&quot;125&quot; y=&quot;330&quot; class=&quot;meta-label&quot; fill=&quot;#4338ca&quot;&gt;yield&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;375&quot; class=&quot;meta-label&quot; fill=&quot;#4338ca&quot;&gt;prep&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;420&quot; class=&quot;meta-label&quot; fill=&quot;#4338ca&quot;&gt;cook&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;465&quot; class=&quot;meta-label&quot; fill=&quot;#4338ca&quot;&gt;summary&lt;/text&gt;&lt;text x=&quot;640&quot; y=&quot;330&quot; class=&quot;meta-value&quot; fill=&quot;#111111&quot;&gt;4 servings&lt;/text&gt;&lt;text x=&quot;640&quot; y=&quot;375&quot; class=&quot;meta-value&quot; fill=&quot;#111111&quot;&gt;15 minutes&lt;/text&gt;&lt;text x=&quot;640&quot; y=&quot;420&quot; class=&quot;meta-value&quot; fill=&quot;#111111&quot;&gt;30 minutes tags= tag1, tag2, tag3&lt;/text&gt;&lt;text x=&quot;640&quot; y=&quot;460&quot; class=&quot;meta-value&quot; fill=&quot;#111111&quot;&gt;Short description of the recipe.&lt;/text&gt;&lt;/g&gt;&lt;g opacity=&quot;0&quot;&gt;&lt;animate attributeName=&quot;opacity&quot; from=&quot;0&quot; to=&quot;1&quot; dur=&quot;0.7s&quot; begin=&quot;220ms&quot; fill=&quot;freeze&quot;/&gt;&lt;rect x=&quot;90&quot; y=&quot;510&quot; width=&quot;500&quot; height=&quot;754&quot; rx=&quot;24&quot; fill=&quot;#ffffff&quot; fill-opacity=&quot;0.82&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;90&quot; y=&quot;510&quot; width=&quot;500&quot; height=&quot;8&quot; fill=&quot;url(#accent_bar)&quot; rx=&quot;4&quot;/&gt;&lt;text x=&quot;125&quot; y=&quot;560&quot; class=&quot;section-title&quot; fill=&quot;#4338ca&quot;&gt;ingredients&lt;/text&gt;&lt;line x1=&quot;120&quot; y1=&quot;590&quot; x2=&quot;560&quot; y2=&quot;590&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;g&gt;&lt;text x=&quot;125&quot; y=&quot;628&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2 ripe mangoes&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;662&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 onion&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;696&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2 cloves garlic&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;730&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 tbsp curry powder&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;764&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 cup coconut milk&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;798&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2 cups mixed vegetables&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;832&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Salt to taste&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;866&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2 potatoes&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;900&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2 carrots&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;934&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 sweet potato&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;968&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;150g salted fish&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1002&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 onion&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1036&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2 tbsp oil&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1070&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Black pepper to taste&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1104&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 1/2 cups flour&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1138&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 cup sugar&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1172&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1/2 cup cocoa powder&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1206&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2 eggs&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1240&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1/2 cup milk&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1274&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1/2 cup oil&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1308&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1 tsp baking powder&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1342&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Ingredient 1&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1376&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Ingredient 2 steps=&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1410&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;1. First step&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1444&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;2. Second step notes=&lt;/text&gt;&lt;text x=&quot;125&quot; y=&quot;1478&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Optional note theme= classic&lt;/text&gt;&lt;/g&gt;&lt;/g&gt;&lt;g opacity=&quot;0&quot;&gt;&lt;animate attributeName=&quot;opacity&quot; from=&quot;0&quot; to=&quot;1&quot; dur=&quot;0.7s&quot; begin=&quot;320ms&quot; fill=&quot;freeze&quot;/&gt;&lt;rect x=&quot;620&quot; y=&quot;510&quot; width=&quot;490&quot; height=&quot;754&quot; rx=&quot;24&quot; fill=&quot;#ffffff&quot; fill-opacity=&quot;0.82&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.12&quot;/&gt;&lt;rect x=&quot;620&quot; y=&quot;510&quot; width=&quot;490&quot; height=&quot;8&quot; fill=&quot;url(#accent_bar)&quot; rx=&quot;4&quot;/&gt;&lt;text x=&quot;655&quot; y=&quot;560&quot; class=&quot;section-title&quot; fill=&quot;#4338ca&quot;&gt;steps&lt;/text&gt;&lt;line x1=&quot;650&quot; y1=&quot;590&quot; x2=&quot;1080&quot; y2=&quot;590&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;g&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;634&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;649&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;1&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;648&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Sauté the onion and garlic until fragrant.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;670&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;685&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;2&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;684&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Add curry powder and stir briefly.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;706&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;721&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;3&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;720&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Add vegetables, mango, and coconut milk.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;742&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;757&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;4&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;756&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Simmer until the vegetables are tender.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;778&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;793&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;5&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;792&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Serve warm with rice.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;814&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;829&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;6&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;828&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Peel and chop the root vegetables into even pieces.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;850&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;865&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;7&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;864&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Soak or rinse the salted fish if needed.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;886&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;901&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;8&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;900&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Fry the onion until softened, then add the fish.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;922&quot; width=&quot;24&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;667&quot; y=&quot;937&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;9&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;689&quot; y=&quot;936&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Add the vegetables and cook until tender.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;958&quot; width=&quot;30&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;670&quot; y=&quot;973&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;10&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;695&quot; y=&quot;972&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Season and serve hot.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;994&quot; width=&quot;30&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;670&quot; y=&quot;1009&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;11&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;695&quot; y=&quot;1008&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Preheat the oven to 180C.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;1030&quot; width=&quot;30&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;670&quot; y=&quot;1045&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;12&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;695&quot; y=&quot;1044&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Mix the dry ingredients in a bowl.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;1066&quot; width=&quot;30&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;670&quot; y=&quot;1081&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;13&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;695&quot; y=&quot;1080&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Add the wet ingredients and stir until combined.&lt;/text&gt;&lt;g&gt;&lt;rect x=&quot;655&quot; y=&quot;1102&quot; width=&quot;30&quot; height=&quot;20&quot; rx=&quot;10&quot; fill=&quot;#2563eb&quot; opacity=&quot;0.96&quot;/&gt;&lt;text x=&quot;670&quot; y=&quot;1117&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot; fill=&quot;#ffffff&quot;&gt;14&lt;/text&gt;&lt;/g&gt;&lt;text x=&quot;695&quot; y=&quot;1116&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Pour into a greased pan and bake until set.&lt;/text&gt;&lt;/g&gt;&lt;/g&gt;&lt;g&gt;&lt;rect x=&quot;90&quot; y=&quot;1294&quot; width=&quot;1020&quot; height=&quot;888&quot; rx=&quot;20&quot; fill=&quot;#ffffff&quot; fill-opacity=&quot;0.72&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;line x1=&quot;90&quot; y1=&quot;1344&quot; x2=&quot;1110&quot; y2=&quot;1344&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;line x1=&quot;600&quot; y1=&quot;1294&quot; x2=&quot;600&quot; y2=&quot;2182&quot; stroke=&quot;#111111&quot; stroke-opacity=&quot;0.10&quot;/&gt;&lt;text x=&quot;125&quot; y=&quot;1329&quot; class=&quot;meta-label&quot; fill=&quot;#4338ca&quot;&gt;tags&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1329&quot; class=&quot;meta-label&quot; fill=&quot;#4338ca&quot;&gt;notes&lt;/text&gt;&lt;rect x=&quot;125&quot; y=&quot;1374&quot; width=&quot;73&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;161&quot; y=&quot;1397&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;curry&lt;/text&gt;&lt;rect x=&quot;210&quot; y=&quot;1374&quot; width=&quot;73&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;246&quot; y=&quot;1397&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;fruit&lt;/text&gt;&lt;rect x=&quot;295&quot; y=&quot;1374&quot; width=&quot;118&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;354&quot; y=&quot;1397&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;vegetarian&lt;/text&gt;&lt;rect x=&quot;425&quot; y=&quot;1374&quot; width=&quot;82&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;466&quot; y=&quot;1397&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;savory&lt;/text&gt;&lt;rect x=&quot;125&quot; y=&quot;1424&quot; width=&quot;82&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;166&quot; y=&quot;1447&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;rustic&lt;/text&gt;&lt;rect x=&quot;219&quot; y=&quot;1424&quot; width=&quot;82&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;260&quot; y=&quot;1447&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;dinner&lt;/text&gt;&lt;rect x=&quot;313&quot; y=&quot;1424&quot; width=&quot;91&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;358&quot; y=&quot;1447&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;dessert&lt;/text&gt;&lt;rect x=&quot;416&quot; y=&quot;1424&quot; width=&quot;72&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;452&quot; y=&quot;1447&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;cake&lt;/text&gt;&lt;rect x=&quot;125&quot; y=&quot;1474&quot; width=&quot;109&quot; height=&quot;36&quot; rx=&quot;999&quot; fill=&quot;rgba(0, 0, 0, 0.05)&quot; stroke=&quot;#2563eb&quot; stroke-opacity=&quot;0.35&quot;/&gt;&lt;text x=&quot;179&quot; y=&quot;1497&quot; text-anchor=&quot;middle&quot; class=&quot;body-text&quot; font-size=&quot;16&quot; fill=&quot;#111111&quot;&gt;chocolate&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1389&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Adjust spice level to taste.&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1413&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Works well with jasmine rice or flatbread.&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1437&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;[/docops]&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1461&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;## Warm Comfort Food Look&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1485&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;[docops:recipe]&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1509&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Add fresh herbs just before serving.&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1533&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Use less salt in the rest of the dish because the fish is&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1557&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;already seasoned.&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1581&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;[/docops]&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1605&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;## Modern Dark Theme Look&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1629&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;[docops:recipe]&lt;/text&gt;&lt;text x=&quot;655&quot; y=&quot;1653&quot; class=&quot;body-text&quot; fill=&quot;#111111&quot;&gt;Cool before serving.&lt;/text&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;
+&lt;/div&gt;
+&lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;div class=&quot;svg-bottom-controls&quot;&gt;
+&lt;button class=&quot;svg-control-btn&quot; onclick=&quot;openModal(this.closest('.docops-media-card').querySelector('.svg-container'))&quot;&gt;VIEW&lt;/button&gt;
+&lt;button class=&quot;svg-control-btn&quot; onclick=&quot;docopsData.toggle(this)&quot;&gt;DATA&lt;/button&gt;
+&lt;button class=&quot;svg-control-btn&quot; onclick=&quot;docopsSource.toggle(this)&quot;&gt;SOURCE&lt;/button&gt;
+&lt;button class=&quot;svg-control-btn&quot; onclick=&quot;docopsCopy.url(this)&quot;&gt;LINK&lt;/button&gt;
+&lt;button class=&quot;svg-control-btn&quot; onclick=&quot;docopsCopy.svg(this)&quot;&gt;SVG&lt;/button&gt;
+&lt;button class=&quot;svg-control-btn&quot; onclick=&quot;docopsCopy.png(this)&quot;&gt;PNG&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class=&quot;docops-data-panel&quot; style=&quot;display: none;&quot;&gt;
+&lt;div class=&quot;docops-data-header&quot;&gt;
+&lt;span&gt;Embedded Data&lt;/span&gt;
+&lt;button onclick=&quot;this.closest('.docops-data-panel').style.display='none'&quot;&gt;×&lt;/button&gt;
+&lt;/div&gt;
+&lt;div class=&quot;docops-data-table-container&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;pre&gt;&lt;code&gt;### Field Guide
+
+| Field | Purpose |
+|---|---|
+| `title` | Recipe title shown at the top |
+| `yield` | Serving size or output amount |
+| `prep` | Preparation time |
+| `cook` | Cooking time |
+| `tags` | Comma- or semicolon-separated tags |
+| `summary` | Short description of the dish |
+| `ingredients` | Ingredient list |
+| `steps` | Step-by-step cooking instructions |
+| `notes` | Extra tips, substitutions, or serving advice |
+| `theme` | Visual theme name |
+
+## Formatting Tips
+
+- Use short, clear titles
+- Keep ingredients in the order they are used
+- Write each step as a single action
+- Use notes for substitutions and serving suggestions
+- Add tags to make recipes easier to browse
+
+&amp;lt;div style=&amp;quot;background: #f8fafc; border-left: 4px solid #f97316; padding: 16px 24px; margin: 32px 0; border-radius: 4px;&amp;quot;&amp;gt;
+  &amp;lt;p style=&amp;quot;margin: 0; color: #7c2d12; font-weight: 600;&amp;quot;&amp;gt;💡 Best Practice&amp;lt;/p&amp;gt;
+  &amp;lt;p style=&amp;quot;margin: 8px 0 0 0; color: #475569;&amp;quot;&amp;gt;Keep the recipe concise and scannable. A good recipe card should help the reader cook quickly without searching for key details.&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+
+                    </article>
+                    
+                    <!-- Global Shared Modal for Markdown View -->
+                    <div class="svg-modal-overlay" id="globalSvgModal" onclick="if(event.target === this) closeGlobalModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalModal()">×</button>
+                            <div id="globalModalBody" class="svg-modal-body"></div>
+                        </div>
+                    </div>
+
+                    <!-- Global Shared Modal for Data View -->
+                        <div class="svg-modal-overlay" id="globalCsvModal" onclick="if(event.target === this) closeGlobalCsvModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalCsvModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+                                </div>
+                                <div id="globalCsvModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Global Shared Modal for Source View -->
+                        <div class="svg-modal-overlay" id="globalSourceModal" onclick="if(event.target === this) closeGlobalSourceModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalSourceModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+                                </div>
+                                <div id="globalSourceModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                    <script>
+                            // Unified Modal Logic for Markdown
+                            function openModal(container) {
+                                const modal = document.getElementById('globalSvgModal');
+                                const targetContainer = document.getElementById('globalModalBody');
+                            
+                                // Find SVG in the container passed from the button
+                                const sourceSvg = container.querySelector ? container.querySelector('svg') : container; 
+                            
+                                if (sourceSvg && targetContainer) {
+                                    targetContainer.innerHTML = '';
+                                    const clone = sourceSvg.cloneNode(true);
+                                
+                                    // Reset dimensions to allow CSS to control scaling
+                                    clone.removeAttribute('width');
+                                    clone.removeAttribute('height');
+                                    clone.style.width = '100%';
+                                    clone.style.height = '100%';
+                                
+                                    targetContainer.appendChild(clone);
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                }
+                            }
+
+                            function closeGlobalModal() {
+                                const modal = document.getElementById('globalSvgModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                        
+                            function closeGlobalCsvModal() {
+                                const modal = document.getElementById('globalCsvModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                            
+                            function closeGlobalSourceModal() {
+                                const modal = document.getElementById('globalSourceModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+
+                            // Close modals with Escape key
+                            document.addEventListener('keydown', function(event) {
+                                if (event.key === 'Escape') {
+                                    closeGlobalModal();
+                                    closeGlobalCsvModal();
+                                    closeGlobalSourceModal();
+                                }
+                            });
+                        
+                            const docopsData = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const svg = container.querySelector('.svg-container svg') || container.querySelector('svg');
+                                
+                                    if (!svg) return;
+                                
+                                    let csvData = null;
+                                
+                                    // Method 1: Standard metadata with type
+                                    let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                                    if (csvMetadata) {
+                                        try {
+                                            csvData = JSON.parse(csvMetadata.textContent.trim());
+                                        } catch(e) { console.error("Error parsing CSV JSON", e); }
+                                    }
+
+                                    // Method 2: Custom csv-data element
+                                    if (!csvData) {
+                                        csvMetadata = svg.querySelector('metadata csv-data');
+                                        if (csvMetadata) {
+                                            try {
+                                                csvData = JSON.parse(csvMetadata.textContent.trim());
+                                            } catch(e) {}
+                                        }
+                                    }
+
+                                    // Method 3: Data attribute
+                                    if (!csvData) {
+                                        const csvDataAttr = svg.getAttribute('data-csv');
+                                        if (csvDataAttr) {
+                                            try {
+                                                csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                                            } catch(e) {}
+                                        }
+                                    }
+                                
+                                    if (csvData) {
+                                        const modal = document.getElementById('globalCsvModal');
+                                        const body = document.getElementById('globalCsvModalBody');
+                                    
+                                        let html = '<table class="csv-table">';
+                                         if (csvData.headers) {
+                                            html += '<thead><tr>';
+                                            csvData.headers.forEach(h => html += '<th>' + h + '</th>');
+                                            html += '</tr></thead>';
+                                        }
+                                        if (csvData.rows) {
+                                            html += '<tbody>';
+                                            csvData.rows.forEach(row => {
+                                                html += '<tr>';
+                                                row.forEach(cell => html += '<td>' + cell + '</td>');
+                                                html += '</tr>';
+                                            });
+                                            html += '</tbody>';
+                                        }
+                                        html += '</table>';
+                                    
+                                        body.innerHTML = html;
+                                        modal.classList.add('active');
+                                        document.body.style.overflow = 'hidden';
+                                    } else {
+                                        console.log("No CSV data found in SVG");
+                                    }
+                                }
+                            };
+                            
+                            const docopsSource = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const originalContent = container.getAttribute('data-original-content');
+                                    const kind = container.getAttribute('data-kind') || 'source';
+                                    
+                                    if (!originalContent || !originalContent.trim()) {
+                                        console.log("No source content available");
+                                        return;
+                                    }
+                                    
+                                    // Decode HTML entities
+                                    const decoded = originalContent
+                                        .replace(/&quot;/g, '"')
+                                        .replace(/&amp;/g, '&')
+                                        .replace(/&lt;/g, '<')
+                                        .replace(/&gt;/g, '>');
+                                    
+                                    const modal = document.getElementById('globalSourceModal');
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    
+                                    const escapedHtml = decoded
+                                        .replace(/&/g, '&amp;')
+                                        .replace(/</g, '&lt;')
+                                        .replace(/>/g, '&gt;');
+                                    
+                                    body.innerHTML = `
+                                        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem; padding: 0 1rem;">
+                                            <button class="docops-action-btn" onclick="docopsSource.copyFromModal()">
+                                                <span style="margin-right: 6px;">📋</span> COPY
+                                            </button>
+                                        </div>
+                                        <pre style="
+                                            background: rgba(0, 0, 0, 0.4);
+                                            border: 1px solid rgba(255, 255, 255, 0.1);
+                                            border-radius: 12px;
+                                            padding: 2rem;
+                                            overflow: auto;
+                                            margin: 0 1rem 1rem 1rem;
+                                            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+                                        "><code style="
+                                            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                                            font-size: 0.85rem;
+                                            line-height: 1.7;
+                                            color: #e2e8f0;
+                                            display: block;
+                                            white-space: pre-wrap;
+                                            word-wrap: break-word;
+                                        ">${escapedHtml}</code></pre>
+                                    `;
+                                    
+                                    // Store decoded content for copying
+                                    body.dataset.sourceContent = decoded;
+                                    
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                },
+                                
+                                copyFromModal: function() {
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    const content = body.dataset.sourceContent;
+                                    
+                                    if (content) {
+                                        navigator.clipboard.writeText(content).then(() => {
+                                            const btn = document.querySelector('#globalSourceModal .docops-action-btn');
+                                            if (btn) {
+                                                const originalHtml = btn.innerHTML;
+                                                btn.innerHTML = '<span style="margin-right: 6px;">✓</span> COPIED!';
+                                                btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                                                setTimeout(() => {
+                                                    btn.innerHTML = originalHtml;
+                                                    btn.style.background = '';
+                                                }, 2000);
+                                            }
+                                        }).catch(err => {
+                                            console.error('Copy failed:', err);
+                                        });
+                                    }
+                                }
+                            };
+                        
+                        const docopsCopy = {
+                            url: (btn) => {
+                                    const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                },
+                            svg: (btn) => {
+                                const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                                navigator.clipboard.writeText(svg).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                            png: (btn) => {
+                                const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                                const svgData = new XMLSerializer().serializeToString(svgElement);
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                const img = new Image();
+                            
+                                img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(blob => {
+                                        const item = new ClipboardItem({ "image/png": blob });
+                                        navigator.clipboard.write([item]);
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                };
+                                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            }
+                        };
+                    
+                    </script>
+                    <script>
+                        mermaid.initialize({ startOnLoad: true });
+                    </script>
+                    <script>
+                    (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                    const docopsDataX = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+
+                    </script>
+                
+                </body>
+                </html>
