@@ -312,7 +312,7 @@ fun main() {
     connectors.add(Connector("Test Engine", description = "Test Engine write documentation"))
     connectors.add(Connector("API Documentation Output", description = "Documentation is committed"))
     connectors.add(Connector("GitHub", ""))
-    val maker = ConnectorMaker(connectors, true, "PDF")
+    val maker = ConnectorMaker(connectors, true, "SVG")
     val svg = maker.makeConnectorImage()
     File("gen/connector.svg").writeText(svg.shapeSvg)
 }
