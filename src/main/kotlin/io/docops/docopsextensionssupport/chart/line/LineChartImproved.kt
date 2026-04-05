@@ -184,7 +184,6 @@ class LineChartImproved {
         svgBuilder.append("<svg width='$width' height='$height' xmlns='http://www.w3.org/2000/svg' id='ID_$id' preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 $width $height\">")
 
         svgBuilder.append("<defs>")
-        svgBuilder.append(theme.fontImport)
 
         // Signal: keep defs minimal; no default atmosphere/patterns.
         val chartStyle = """
@@ -199,6 +198,7 @@ class LineChartImproved {
             """
             <style>
                 <![CDATA[
+                ${theme.fontImport}
                 $chartStyle
 
                 /* Hover effects (optional) */
