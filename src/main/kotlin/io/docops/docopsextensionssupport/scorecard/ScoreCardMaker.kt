@@ -86,15 +86,15 @@ class ScoreCardMaker(val useDark: Boolean, val scale: Float = 1.0f) {
                     ${theme.fontImport}
                     .main-title_$id { font-family: ${theme.fontFamily}; font-size: ${16/theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; text-transform: uppercase; letter-spacing: -0.5px; font-weight: 800; }
                     .sec-header_$id { font-family: ${theme.fontFamily}; font-size: ${14 / theme.fontWidthMultiplier}px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
-                    .item-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: ${theme.secondaryText}; }
-                    .item-desc_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.secondaryText}; }
-                    .meta-text_$id { font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: ${theme.secondaryText}; opacity: 0.5; }
+                    .item-text_$id { font-family: ${theme.fontFamily}, monospace; font-size: 13px; fill: ${theme.secondaryText}; }
+                    .item-desc_$id { font-family: ${theme.fontFamily}, monospace; font-size: 11px; fill: ${theme.secondaryText}; }
+                    .meta-text_$id { font-family: ${theme.fontFamily}, monospace; font-size: 10px; fill: ${theme.secondaryText}; opacity: 0.5; }
                 
                 @keyframes slideUp_$id { 
                     from { opacity: 0; transform: translateY(30px); } 
                     to { opacity: 1; transform: translateY(0); } 
                 }
-                .anim-panel_$id { animation: slideUp_$id 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+                .anim-panel_$id { animation: slideUp_$id 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 1; }
                 .delay-1_$id { animation-delay: 0.1s; }
                 .delay-2_$id { animation-delay: 0.3s; }
             </style>
