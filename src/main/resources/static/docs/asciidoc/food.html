@@ -1,0 +1,3985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
+<title>DocOps Recipes</title>
+<style>
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap);@keyframes docops-reveal{to{opacity:1;transform:translateY(0)}}:root{--brand-ink:#0B1220;--brand-cloud:#F6F8FB;--brand-slate:#2A3447;--brand-steel:#8A96AD;--brand-cyan:#00B7D6;--brand-gold:#C9A227;--semantic-success:#16A34A;--semantic-warning:#D97706;--semantic-error:#DC2626;--semantic-info:#2563EB;--canvas:var(--brand-cloud);--surface-1:#FFFFFF;--surface-2:#EEF2F7;--border:rgba(11, 18, 32, 0.12);--text-1:var(--brand-ink);--text-2:var(--brand-slate);--text-3:var(--brand-steel);--accent:var(--brand-cyan);--font-sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;--font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;--content-max:1100px;--content-reading:920px;--r-sm:8px;--r-md:12px;--r-lg:16px;--shadow-sm:0 6px 18px rgba(11, 18, 32, 0.08);--shadow-md:0 16px 40px rgba(11, 18, 32, 0.12);--focus-glow:0 0 0 4px rgba(0, 183, 214, 0.22);--dur-fast:120ms;--dur-base:220ms;--dur-slow:420ms;--ease-standard:cubic-bezier(0.16, 1, 0.3, 1);--grid-ink:rgba(11, 18, 32, 0.05);--halo-cyan:rgba(0, 183, 214, 0.10);--halo-gold:rgba(201, 162, 39, 0.08)}:root.dark-mode{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}}html{box-sizing:border-box;text-size-adjust:100%;scroll-behavior:smooth}*,::after,::before{box-sizing:inherit}::selection{background:rgba(0,183,214,.22)}body{margin:0;font-family:var(--font-sans);color:var(--text-2);background:var(--canvas);line-height:1.6;background-image:radial-gradient(1200px 800px at 12% -10%,var(--halo-cyan),transparent 55%),radial-gradient(900px 700px at 100% 10%,var(--halo-gold),transparent 50%),linear-gradient(to right,var(--grid-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-ink) 1px,transparent 1px);background-size:auto,auto,28px 28px,28px 28px;background-attachment:fixed}#header{max-width:var(--content-max)}#content,#footer,#footnotes,#header{margin:0 auto;padding:28px 20px}#footer,#footnotes{max-width:var(--content-max)}#content{max-width:var(--content-reading)}#content,#footer,#footnotes,#header>h1:first-child,#toc{opacity:0;transform:translateY(10px);animation:docops-reveal var(--dur-slow) var(--ease-standard) forwards}#header>h1:first-child{animation-delay:40ms}#toc{animation-delay:90ms}#content{animation-delay:140ms}#footnotes{animation-delay:190ms}#footer{animation-delay:240ms}@media (prefers-reduced-motion:reduce){#content,#footer,#footnotes,#header>h1:first-child,#toc{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}h1,h2,h3,h4{color:var(--text-1)}h1,h4,h5{letter-spacing:-.01em}h1,h2,h3,h4,h5,h6{line-height:1.2;margin:2.2rem 0 .9rem;scroll-margin-top:96px}#header>h1:first-child{margin:0 0 12px;font-size:40px;font-weight:600;letter-spacing:-.6px;padding:18px 18px 18px 16px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.2));border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative}#header>h1:first-child::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;border-radius:var(--r-lg)0 0 var(--r-lg);background:linear-gradient(180deg,var(--accent),rgba(0,183,214,.35))}h2,h4,h5,h6{font-weight:600}h2{font-size:28px;letter-spacing:-.3px;border-bottom:1px solid var(--border);padding-bottom:10px}h3{font-size:22px;font-weight:500;letter-spacing:-.2px}h4,h5,h6{font-size:16px}h5,h6{font-size:14px;color:var(--text-2)}h6{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.12em}p{margin:0 0 1rem}a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,183,214,.35);transition:border-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard)}a:focus,a:hover{color:var(--accent);border-bottom-color:var(--accent)}hr{border:0;height:1px;background:var(--border);margin:2rem 0}ol,ul{margin:0 0 1rem;padding-left:1.25rem}li{margin:.3rem 0}code,kbd,pre{font-family:var(--font-mono);font-variant-ligatures:none}code{font-size:.92em;color:var(--text-1);background:rgba(0,183,214,.1);border:1px solid rgba(0,183,214,.18);padding:.16em .4em;border-radius:10px}blockquote,pre{border:1px solid var(--border);box-shadow:var(--shadow-sm)}pre{margin:0 0 1.25rem;padding:16px 18px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(11,18,32,.92),rgba(11,18,32,.84));color:#eaf0ff;overflow:auto;line-height:1.55}pre code{background:0 0;border:0;padding:0;color:inherit}blockquote{margin:1.5rem 0;padding:14px 16px;border-radius:var(--r-md);background:var(--surface-1);position:relative}blockquote::before{content:"";position:absolute;inset:10px auto 10px 10px;width:3px;border-radius:999px;background:rgba(138,150,173,.55)}blockquote p:last-child{margin-bottom:0}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);box-shadow:var(--shadow-sm)}td,th{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}th{font-weight:600;color:var(--text-1);background:linear-gradient(180deg,var(--surface-2),rgba(238,242,247,.25));text-transform:uppercase;letter-spacing:.08em;font-size:12px}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(0,183,214,.06)}#toc,.admonitionblock,.exampleblock,.sidebarblock{border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#toc{background:color-mix(in srgb,var(--surface-1) 78%,transparent);backdrop-filter:blur(10px);border:1px solid var(--border);padding:16px}#toc .title,#toctitle,.admonitionblock .title{color:var(--text-1);font-weight:600;font-size:12px;text-transform:uppercase}#toc .title,#toctitle{margin:0 0 10px;letter-spacing:.12em;display:flex;align-items:center;gap:10px}#toc .title::after,#toctitle::after{content:"";flex:1;height:1px;background:var(--border)}#toc ul{list-style:none;padding-left:0;margin:0}#toc li{margin:6px 0}#toc a{color:var(--text-2);border-bottom:0;display:inline-block;padding:2px 0}#toc a:hover{color:var(--text-1)}#toc ul ul{padding-left:14px;border-left:1px solid var(--border);margin-left:6px}#toc.toc2{position:fixed!important;top:20px;left:20px;width:320px;max-height:calc(100vh - 40px);overflow:auto;z-index:5000}body.toc2{padding-left:360px;max-width:none}@media (max-width:1100px){#toc.toc2{position:static!important;width:auto;max-height:none;left:auto;top:auto;margin:0 0 16px}body.toc2{padding-left:0}}.admonitionblock,.exampleblock,.sidebarblock{margin:1.5rem 0;background:var(--surface-1)}.admonitionblock{overflow:hidden;border:1px solid var(--border)}.admonitionblock>table{border:0;margin:0;box-shadow:none}.admonitionblock td.icon{width:52px;padding:14px 10px;text-align:center;background:var(--surface-2);border-right:1px solid var(--border)}.admonitionblock td.content{padding:14px 16px}.admonitionblock .title{letter-spacing:.1em;margin-bottom:6px}.admonitionblock.note{border-left:4px solid var(--semantic-info)}.admonitionblock.tip{border-left:4px solid var(--semantic-success)}.admonitionblock.warning{border-left:4px solid var(--semantic-warning)}.admonitionblock.caution{border-left:4px solid var(--semantic-error)}.admonitionblock.important{border-left:4px solid var(--brand-gold)}.admonitionblock.important td.icon{background:color-mix(in srgb,var(--brand-gold) 14%,var(--surface-2))}.exampleblock,.sidebarblock{padding:16px}.exampleblock>.content>.title,.sidebarblock>.content>.title{margin:0 0 10px;font-weight:600;color:var(--text-1)}.exampleblock,.sidebarblock,img,kbd{border:1px solid var(--border)}kbd{display:inline-block;padding:.14rem .4rem;border-radius:10px;background:var(--surface-2);color:var(--text-1);font-size:.85em;box-shadow:0 2px 0 rgba(11,18,32,.08)}img{max-width:100%;height:auto;border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#footer,.page-navigation{border-top:1px solid var(--border)}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0}.nav-container{max-width:var(--content-max);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-sans);font-weight:600;font-size:.9rem;color:var(--brand-cyan);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:var(--r-md);background:var(--surface-1);border:1px solid var(--border);transition:all var(--dur-base) var(--ease-standard);box-shadow:var(--shadow-sm);border-bottom:1px solid var(--border)}.nav-next:hover,.nav-prev:hover{color:var(--surface-1);background:var(--brand-cyan);border-color:var(--brand-cyan);transform:translateY(-2px);box-shadow:var(--shadow-md);border-bottom:1px solid var(--brand-cyan)}#footer{color:var(--text-3)}#footer-text{opacity:.9}:focus{outline:2px solid var(--accent);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--focus-glow)}@media print{body{background:#fff!important}#toc.toc2{display:none!important}a,body,pre{color:#000!important}a{border-bottom:0!important;text-decoration:underline!important}pre{background:#f6f8fb!important}}.theme-toggle{position:fixed;top:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--surface-1);border:1px solid var(--border);box-shadow:var(--shadow-md);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all var(--dur-base) var(--ease-standard);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(11,18,32,.2);border-color:var(--accent)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all var(--dur-base) ease}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.admonitionblock td.icon i.fa{font-family:"Font Awesome 6 Free";font-weight:900;font-style:normal;display:inline-block;line-height:1;font-size:18px;color:var(--text-1)}.admonitionblock td.icon i.fa::before{display:inline-block}.admonitionblock td.icon i.fa.icon-note::before{content:"";color:var(--semantic-info)}.admonitionblock td.icon i.fa.icon-tip::before{content:"";color:var(--semantic-success)}.admonitionblock td.icon i.fa.icon-warning::before{content:"";color:var(--semantic-warning)}.admonitionblock td.icon i.fa.icon-caution::before{content:"";color:var(--semantic-error)}.admonitionblock td.icon i.fa.icon-important::before{content:"";color:var(--brand-gold)}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+        --docops-bg: #0f172a;
+        --docops-card-bg: rgba(30, 41, 59, 0.7);
+        --docops-accent: #38bdf8;
+        --docops-accent-glow: rgba(56, 189, 248, 0.3);
+        --docops-text: #f1f5f9;
+        --docops-text-dim: #94a3b8;
+        --docops-border: rgba(255, 255, 255, 0.1);
+        --docops-glass: blur(12px);
+        --docops-font-main: 'Outfit', system-ui, sans-serif;
+        --docops-font-mono: 'JetBrains Mono', monospace;
+    }
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .source-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 20, 25, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 2147483647;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+
+    .source-modal.active {
+        display: flex;
+    }
+
+    .source-modal-content {
+        width: 95vw;
+        max-width: 1200px;
+        height: 90vh;
+        background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(126, 87, 255, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(126, 87, 255, 0.2);
+        animation: sourceModalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes sourceModalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .source-modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
+        font-weight: 300;
+    }
+
+    .source-modal-close:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: rotate(90deg);
+    }
+
+    .source-modal-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 3rem 2rem 2rem 2rem;
+    }
+
+    .source-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+
+    .source-modal-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--accent-secondary, #b392ff);
+        font-size: 1rem;
+    }
+
+    .source-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .source-action-btn {
+        background: rgba(126, 87, 255, 0.15);
+        border: 1px solid rgba(126, 87, 255, 0.4);
+        color: var(--accent-secondary, #b392ff);
+        font-family: 'Syne', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .source-action-btn:hover {
+        background: rgba(126, 87, 255, 0.8);
+        color: #fff;
+        border-color: var(--accent-primary, #7e57ff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    }
+
+    .btn-icon {
+        font-size: 1em;
+    }
+
+    .source-code-pre {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        overflow: auto;
+        margin: 0;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .source-code {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e2e8f0;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .source-error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Light mode overrides */
+    @media (prefers-color-scheme: light) {
+        .source-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .source-modal-content {
+            background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .source-modal-title {
+            color: #6a3de8;
+        }
+
+        .source-code-pre {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .source-code {
+            color: #334155;
+        }
+    }
+</style>
+
+<!--slide show style-->
+<style>
+    /* Slideshow Container */
+    .docops-slideshow {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 8px 8px 0px var(--accent-pink, #f472b6); /* Rule #4: 8pt grid adjustment */
+        margin: 3rem 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    /* Progress Bar (The "Movement" Indicator) */
+    .slideshow-progress-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(0,0,0,0.05);
+        z-index: 30;
+    }
+    .slideshow-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-primary);
+        transition: width linear;
+    }
+
+    /* Slide Counter */
+    .slideshow-counter {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-family: var(--docops-font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        opacity: 0.5;
+        z-index: 20;
+        letter-spacing: 0.2em;
+    }
+    .docops-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+
+    .docops-slide.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+    }
+
+    .slide-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-title {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        color: var(--accent-secondary);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+    }
+
+    .slide-image {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .slide-image svg {
+        max-width: 100%;
+        max-height: 100%;
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
+
+    /* Navigation Dots */
+    .slideshow-nav {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px; /* Rule #4: 8pt grid (1.5 * 8) */
+        z-index: 10;
+    }
+
+    .nav-dot {
+        width: 8px; /* Rule #4: 8px */
+        height: 8px;
+        background: transparent;
+        border: 1.5px solid var(--accent-primary);
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-dot.active {
+        background: var(--accent-primary);
+        width: 24px; /* Distinctive shape change for active state */
+        border-color: var(--accent-primary);
+    }
+
+</style>
+
+<!--gallery showcase style-->
+<style>
+    /* Showcase Gallery Layout */
+    .docops-workbench-showcase {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        perspective: 1000px;
+    }
+
+    .workbench-item {
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 6px 6px 0px var(--accent-pink);
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: itemSlideIn 0.6s ease forwards;
+    }
+
+    .workbench-item:hover {
+        transform: translate(-4px, -4px) rotate(0.5deg);
+        box-shadow: 12px 12px 0px var(--accent-pink);
+        border-color: var(--accent-secondary);
+    }
+
+    /* Workbench Chrome (Header) */
+    .workbench-chrome {
+        background: #1a1a2e;
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--accent-primary);
+    }
+
+    .workbench-kind {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--accent-secondary);
+        font-weight: 500;
+    }
+
+    .workbench-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--accent-primary);
+        color: #fff;
+        font-family: var(--font-heading);
+        font-size: 0.6rem;
+        padding: 2px 8px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--accent-primary);
+        color: #fff;
+    }
+
+    /* Canvas & Content */
+    .workbench-canvas {
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+    }
+
+    .workbench-canvas svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.5s ease;
+    }
+
+    .workbench-footer {
+        padding: 0.75rem 1rem;
+        background: rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .workbench-title {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-heading);
+    }
+
+    /* Modal System */
+    .showcase-modal {
+        position: fixed; /* Lock to viewport, ignore page scroll */
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 5000; /* Significant jump to stay on top of everything */
+        display: none;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; /* Lock container */
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(13, 13, 18, 0.98); /* Near opaque for focus */
+        backdrop-filter: blur(20px);
+        z-index: 5001;
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        z-index: 5002;
+        background: var(--bg-base);
+        border: 4px solid var(--accent-secondary);
+        box-shadow: 25px 25px 0px var(--accent-pink);
+        width: 95%;
+        max-width: 1200px;
+        max-height: 90vh; /* Stay within viewport */
+        display: flex;
+        flex-direction: column;
+        animation: brutalistReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes brutalistReveal {
+        from { transform: scale(0.9) translateY(30px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .showcase-modal-body {
+        padding: 3rem;
+        overflow-y: auto; /* Internal scrolling only */
+        flex: 1;
+        display: block; /* Important for scroll calculations */
+    }
+
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
+    /* Centering Fix for SVG diagrams */
+    .modal-svg-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+
+    .modal-svg-wrapper svg {
+        max-width: 100%;
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
+    }
+
+    /* Body locking when modal is open */
+    body.modal-open {
+        overflow: hidden !important;
+        padding-right: 15px; /* Prevent layout shift from scrollbar removal */
+    }
+</style>
+<!--Slide show script-->
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const slideshows = document.querySelectorAll('.docops-slideshow');
+
+        slideshows.forEach(ss => {
+            const slides = ss.querySelectorAll('.docops-slide');
+            if (slides.length === 0) return; // Skip empty slideshows
+
+            const interval = parseInt(ss.dataset.interval) || 5000;
+            let currentIndex = 0;
+
+            // Add Progress Bar
+            const progressCont = document.createElement('div');
+            progressCont.className = 'slideshow-progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'slideshow-progress-bar';
+            progressCont.appendChild(progressBar);
+            ss.appendChild(progressCont);
+
+            // Add Counter
+            const counter = document.createElement('div');
+            counter.className = 'slideshow-counter';
+            ss.appendChild(counter);
+
+            // Create navigation dots
+            const nav = document.createElement('div');
+            nav.className = 'slideshow-nav';
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(i);
+                };
+                nav.appendChild(dot);
+            });
+            ss.appendChild(nav);
+
+            function updateCounter() {
+                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+
+            function resetProgress() {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${interval}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 50);
+            }
+
+            function goToSlide(index) {
+                slides[currentIndex].classList.remove('active');
+                nav.children[currentIndex].classList.remove('active');
+
+                currentIndex = index;
+
+                slides[currentIndex].classList.add('active');
+                nav.children[currentIndex].classList.add('active');
+                updateCounter();
+                resetProgress();
+            }
+
+            function nextSlide() {
+                let next = (currentIndex + 1) % slides.length;
+                goToSlide(next);
+            }
+
+            // Initial State
+            updateCounter();
+            resetProgress();
+
+            // Start autoplay
+            let slideTimer = setInterval(nextSlide, interval);
+
+            // Pause on hover
+            ss.addEventListener('mouseenter', () => {
+                clearInterval(slideTimer);
+                progressBar.style.opacity = '0.3';
+            });
+            ss.addEventListener('mouseleave', () => {
+                slideTimer = setInterval(nextSlide, interval);
+                progressBar.style.opacity = '1';
+                resetProgress();
+            });
+        });
+    });
+</script>
+<!-- Showcase Gallery Script -->
+<script>
+    window.showcaseGallery = {
+        // Track TOC state so we can restore it exactly as it was
+        tocWasActive: false,
+
+        hideTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            if (toc) {
+                // Save current state
+                this.tocWasActive = toc.classList.contains('toc-active');
+                // Force hide
+                toc.classList.remove('toc-active');
+            }
+            if (toggle) {
+                toggle.classList.remove('active');
+                toggle.style.display = 'none'; // Completely remove from UI during modal
+            }
+            document.body.classList.add('modal-open');
+        },
+
+        restoreTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            document.body.classList.remove('modal-open');
+
+            if (toggle) {
+                toggle.style.display = 'flex'; // Bring toggle back
+            }
+
+            // Restore TOC to its previous state (if it was open, re-open it)
+            if (toc && this.tocWasActive) {
+                toc.classList.add('toc-active');
+                if (toggle) {
+                    toggle.classList.add('active');
+                    toggle.querySelector('span').textContent = 'CLOSE';
+                }
+            } else if (toggle) {
+                toggle.querySelector('span').textContent = 'CONTENTS';
+            }
+        },
+
+        showContent(itemId, title, kind, content) {
+            const modal = document.getElementById('showcase-content-modal');
+            if (!modal) return;
+
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        expandItem(itemId, title) {
+            const item = document.getElementById(itemId);
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
+            const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
+
+            modal.querySelector('.showcase-modal-title').textContent = title;
+            modal.querySelector('.showcase-modal-body').innerHTML =
+                `<div class="modal-svg-wrapper">${svgContent}</div>`;
+
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        closeContentModal() {
+            document.getElementById('showcase-content-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        closeModal() {
+            document.getElementById('showcase-gallery-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        copyContent() {
+            const code = document.querySelector('.showcase-content-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.showcase-copy-btn');
+                const oldText = btn.textContent;
+                btn.textContent = 'COPIED! ✅';
+                setTimeout(() => btn.textContent = oldText, 2000);
+            });
+        }
+    };
+
+    // Escape key to close modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            showcaseGallery.closeModal();
+            showcaseGallery.closeContentModal();
+        }
+    });
+</script>
+<script>
+    window.svgViewer = window.svgViewer || {
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            // Updated to target the nested <g> tag per ui.md rules
+            const target = container.querySelector('.docops-transform-group') || container.querySelector('svg');
+            if (!target) return;
+
+            let currentZoom = parseFloat(target.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            target.dataset.zoom = currentZoom;
+            target.style.transform = `scale(${currentZoom})`;
+            target.style.transformOrigin = "center center";
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+        },
+
+        closeCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            container.style.display = 'none';
+        },
+        async loadCsvData(id) {
+            const svgContainer = document.getElementById(id);
+            const svg = svgContainer.querySelector('svg');
+
+            if (!svg) {
+                console.error('No SVG found');
+                return;
+            }
+
+            try {
+                // Method 1: Standard metadata with type
+                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                    return;
+                }
+
+                // Method 2: Custom csv-data element
+                csvMetadata = svg.querySelector('metadata csv-data');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                // Method 3: Data attribute
+                const csvDataAttr = svg.getAttribute('data-csv');
+                if (csvDataAttr) {
+                    const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                console.error('No CSV data found in SVG');
+            } catch (error) {
+                console.error('Failed to parse CSV data:', error);
+            }
+        },
+
+        renderCsvTable(container, csvData, tableId) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+                return;
+            }
+
+            // Generate a unique table ID if not provided or make existing ID unique
+            const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+            const table = document.createElement('table');
+            table.className = 'csv-table';
+            table.id = uniqueTableId;
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            csvData.headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+
+            // Add button cell to header
+            const buttonTh = document.createElement('th');
+            buttonTh.className = 'csv-header-button-cell';
+
+            // Create copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'csv-copy-button';
+            copyButton.textContent = 'Copy';
+            copyButton.title = 'Copy as Tab-Delimited';
+            copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+            buttonTh.appendChild(copyButton);
+            headerRow.appendChild(buttonTh);
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create body
+            const tbody = document.createElement('tbody');
+
+            csvData.rows.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                // Add empty cell for button column
+                const emptyTd = document.createElement('td');
+                tr.appendChild(emptyTd);
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            container.innerHTML = '';
+            container.appendChild(table);
+            const tableElement = document.getElementById(uniqueTableId);
+            if (tableElement) {
+                tableElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+
+
+        },
+
+        copyCsvAsTabDelimited(csvData) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                console.error('Invalid CSV data for copying');
+                return;
+            }
+
+            // Create tab-delimited string
+            let tabDelimitedData = '';
+
+            // Add headers
+            tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+            // Add rows
+            csvData.rows.forEach(row => {
+                tabDelimitedData += row.join('\t') + '\n';
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(tabDelimitedData).then(() => {
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            }).catch(err => {
+                console.error('Failed to copy to clipboard:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = tabDelimitedData;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    // Provide visual feedback
+                    const buttons = document.querySelectorAll('.csv-copy-button');
+                    buttons.forEach(button => {
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        button.style.background = '#28a745';
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.background = '#007acc';
+                        }, 2000);
+                    });
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed:', fallbackErr);
+                    alert('Copy failed. Please select and copy the data manually.');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+    };
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+
+
+<script>
+    class ThemeToggleTop {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            this.createToggleButton();
+            this.loadSavedTheme();
+            this.setupEventListeners();
+        }
+
+        createToggleButton() {
+            const button = document.createElement('button');
+            button.className = 'theme-toggle';
+            button.setAttribute('aria-label', 'Toggle theme');
+            button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+            document.body.appendChild(button);
+            this.toggleButton = button;
+        }
+
+        setupEventListeners() {
+            this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+            // Listen for system theme changes only when in auto mode
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (this.getThemePreference() === 'auto') {
+                    this.updateTheme();
+                }
+            });
+        }
+
+        toggleTheme() {
+            const currentTheme = this.getThemePreference();
+            let newTheme;
+
+            switch (currentTheme) {
+                case 'light':
+                    newTheme = 'dark';
+                    break;
+                case 'dark':
+                    newTheme = 'auto';
+                    break;
+                case 'auto':
+                    newTheme = 'light';
+                    break;
+                default:
+                    // Check current state of the document
+                    const root = document.documentElement;
+                    if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                        newTheme = 'light';
+                    } else {
+                        newTheme = 'dark';
+                    }
+            }
+
+            this.setTheme(newTheme);
+        }
+
+        setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            this.updateTheme();
+        }
+
+        getThemePreference() {
+            const saved = localStorage.getItem('theme');
+            if (saved) {
+                return saved;
+            }
+
+            // If no saved preference, detect current state from DOM
+            const root = document.documentElement;
+            if (root.classList.contains('dark-mode')) {
+                return 'dark';
+            } else if (root.classList.contains('dark-mode-auto')) {
+                return 'auto';
+            }
+            return 'light';
+        }
+
+        updateTheme() {
+            const theme = this.getThemePreference();
+            const root = document.documentElement;
+
+            // Remove existing theme classes
+            root.classList.remove('dark-mode', 'dark-mode-auto');
+
+            switch (theme) {
+                case 'dark':
+                    root.classList.add('dark-mode');
+                    break;
+                case 'auto':
+                    root.classList.add('dark-mode-auto');
+                    break;
+                // 'light' theme uses default styles
+            }
+
+            // Update button aria-label
+            const themeNames = {
+                light: 'light',
+                dark: 'dark',
+                auto: 'auto (follows system)'
+            };
+            this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+        }
+
+        loadSavedTheme() {
+            this.updateTheme();
+        }
+    }
+
+    // Initialize theme toggle when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+    } else {
+        new ThemeToggleTop();
+    }
+</script>
+<style>
+    #footer-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+        border-top: 1px solid var(--docops-border);
+        font-family: var(--docops-font-main);
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--docops-accent);
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-link:hover {
+        color: #fff;
+        background: var(--docops-accent-glow);
+        border-color: var(--docops-accent);
+        box-shadow: 0 0 15px var(--docops-accent-glow);
+    }
+
+    .nav-link.next::after { content: ' →'; }
+    .nav-link.prev::before { content: '← '; }
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--modal-overlay-bg); /* Use variable */
+        backdrop-filter: blur(15px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10000;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        position: relative;
+        width: 90vw;
+        height: 85vh;
+        background: var(--modal-content-bg); /* Use variable */
+        border: 1px solid var(--modal-content-border); /* Use variable */
+        box-shadow: var(--modal-shadow);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        transform: scale(0.8) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    #modalSvgContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #modalSvgContainer svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .close-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--docops-accent);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10002;
+    }
+
+    .close-button:hover {
+        background: var(--docops-accent);
+    }
+    .modal-zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 8px 12px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .modal-zoom-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 4px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+    }
+
+    .modal-zoom-level {
+        color: white;
+        font-family: var(--docops-font-mono);
+        font-size: 12px;
+        min-width: 45px;
+        text-align: center;
+    }
+</style>
+<script>
+
+    // Zoom state
+    let modalZoomLevel = 1;
+    const MODAL_ZOOM_MIN = 0.25;
+    const MODAL_ZOOM_MAX = 4;
+    const MODAL_ZOOM_STEP = 0.25;
+
+    function openModal(container) {
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+
+        if (!modalOverlay || !modalSvgContainer) {
+            console.error("Modal elements not found in DOM");
+            return;
+        }
+        // Reset zoom level
+        modalZoomLevel = 1;
+        updateZoomDisplay();
+
+        // Clone the SVG from the clicked container
+        const svg = container.querySelector('svg');
+        const svgClone = svg.cloneNode(true);
+        svgClone.style.transform = 'scale(1)';
+        svgClone.style.transition = 'transform 0.2s ease';
+
+        // Clear previous content and add new SVG
+        modalSvgContainer.innerHTML = '';
+        modalSvgContainer.appendChild(svgClone);
+
+        // Show modal with animation
+        modalOverlay.classList.add('active');
+
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        modalZoomLevel = 1;
+    }
+
+    function closeModalOnBackdrop(event) {
+        // Only close if clicking the overlay itself, not the content
+        if (event.target === modalOverlay) {
+            closeModal();
+        }
+    }
+
+    function modalZoomIn() {
+        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomOut() {
+        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomReset() {
+        modalZoomLevel = 1;
+        applyModalZoom();
+    }
+
+    function applyModalZoom() {
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+        const svg = modalSvgContainer.querySelector('svg');
+        if (svg) {
+            // Same here: use concatenation
+            svg.style.transform = "scale(" + modalZoomLevel + ")";
+        }
+        updateZoomDisplay();
+    }
+
+    function updateZoomDisplay() {
+        const display = document.getElementById('modalZoomLevel');
+        if (display) {
+            // Change from template literal to standard concatenation
+            // to avoid issues with Kotlin/Asciidoctor interpolation
+            display.textContent = Math.round(modalZoomLevel * 100) + "%";
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+    const docopsCopy = {
+        url: (btn) => {
+            const url = btn.closest('.docops-media-card').getAttribute('data-url');
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        svg: (btn) => {
+            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+            navigator.clipboard.writeText(svg).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        png: (btn) => {
+            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(blob => {
+                    const item = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([item]);
+                    const originalText = btn.innerText;
+                    btn.innerText = 'COPIED!';
+                    setTimeout(() => btn.innerText = originalText, 2000);
+                });
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        }
+    };
+
+</script>
+<script>
+    const docopsSource = {
+        toggle(btn) {
+            const card = btn.closest('.docops-media-card');
+            const id = card.id;
+            const modal = document.getElementById(`source-modal-${id}`);
+
+            if (!modal) {
+                console.error('Source modal not found for', id);
+                return;
+            }
+
+            this.renderSource(card, modal);
+
+            // Move modal to body to avoid z-index/transform issues
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+
+        close(id) {
+            const modal = document.getElementById(`source-modal-${id}`);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        renderSource(card, modal) {
+            const container = modal.querySelector('.source-modal-body');
+            if (!container || container.dataset.rendered === 'true') return;
+
+            const originalContent = card.getAttribute('data-original-content');
+
+            if (!originalContent || !originalContent.trim()) {
+                container.innerHTML = '<div class="source-error">No source content available.</div>';
+                return;
+            }
+
+            // Decode HTML entities
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            const kind = card.getAttribute('data-kind') || 'source';
+
+            container.innerHTML = `
+            <div class="source-modal-header">
+                <span class="source-modal-title">${kind.toUpperCase()} Source</span>
+                <div class="source-modal-actions">
+                    <button class="source-action-btn" onclick="docopsSource.copySource('${card.id}')">
+                        <span class="btn-icon">📋</span> COPY
+                    </button>
+                </div>
+            </div>
+            <pre class="source-code-pre"><code class="source-code">${this.escapeHtml(decoded)}</code></pre>
+        `;
+
+            container.dataset.rendered = 'true';
+        },
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        },
+
+        copySource(cardId) {
+            const card = document.getElementById(cardId);
+            const originalContent = card.getAttribute('data-original-content');
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            navigator.clipboard.writeText(decoded).then(() => {
+                const btn = document.querySelector(`#source-modal-${cardId} .source-action-btn`);
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span class="btn-icon">✓</span> COPIED!';
+                    btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+    };
+</script>
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+<script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+</head>
+<body class="book">
+<div id="header">
+<h1><span class="image"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIEBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PUpldEJyYWlucytNb25vOndnaHRANzAwOzgwMCZhbXA7ZGlzcGxheT1zd2FwJyk7CiAgICA8L3N0eWxlPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJyZWNpcGUtYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojN2MyZDEyO3N0b3Atb3BhY2l0eToxIiAvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmOTczMTY7c3RvcC1vcGFjaXR5OjEiIC8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGNsaXBQYXRoIGlkPSJjaXJjbGUtY2xpcCI+CiAgICAgIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjQwIi8+CiAgICA8L2NsaXBQYXRoPgogIDwvZGVmcz4KCiAgPCEtLSBDaXJjdWxhciBiYWNrZ3JvdW5kIC0tPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjQwIiBmaWxsPSJ1cmwoI3JlY2lwZS1iZykiLz4KCiAgPCEtLSBDb250ZW50IGNsaXBwZWQgdG8gY2lyY2xlIC0tPgogIDxnIGNsaXAtcGF0aD0idXJsKCNjaXJjbGUtY2xpcCkiPgogICAgPCEtLSBXYXJtIGRlY29yYXRpdmUgcGF0dGVybiAtLT4KICAgIDxnIG9wYWNpdHk9IjAuMDgiPgogICAgICA8Y2lyY2xlIGN4PSIxODAiIGN5PSIxNjAiIHI9IjcwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8Y2lyY2xlIGN4PSIzNTAiIGN5PSIxODUiIHI9IjU1IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8Y2lyY2xlIGN4PSIyODAiIGN5PSIzNDAiIHI9Ijk1IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8cGF0aCBkPSJNOTAsMjU2IEw0MjIsMjU2IiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgICA8cGF0aCBkPSJNMjU2LDkwIEwyNTYsNDIyIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPC9nPgoKICAgIDwhLS0gUmVjaXBlIGNhcmQgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjgsIDExMCkiPgogICAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI3MCIgcng9IjE4IiBmaWxsPSIjZmZmN2VkIiBzdHJva2U9IiNmZWQ3YWEiIHN0cm9rZS13aWR0aD0iMyIvPgogICAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjQ0IiByeD0iMTgiIGZpbGw9IiNmYjkyM2MiLz4KICAgICAgPHJlY3QgeD0iMCIgeT0iMjYiIHdpZHRoPSIyNTYiIGhlaWdodD0iMTgiIGZpbGw9IiNmYjkyM2MiLz4KCiAgICAgIDwhLS0gVG9wIGxhYmVsIC0tPgogICAgICA8dGV4dCB4PSIxMjgiIHk9IjMwIgogICAgICAgICAgICBmb250LWZhbWlseT0iJ0pldEJyYWlucyBNb25vJywgbW9ub3NwYWNlIgogICAgICAgICAgICBmb250LXdlaWdodD0iODAwIgogICAgICAgICAgICBmb250LXNpemU9IjE4IgogICAgICAgICAgICBmaWxsPSIjZmZmN2VkIgogICAgICAgICAgICB0ZXh0LWFuY2hvcj0ibWlkZGxlIgogICAgICAgICAgICBsZXR0ZXItc3BhY2luZz0iMiI+UkVDSVBFPC90ZXh0PgoKICAgICAgPCEtLSBQbGF0ZSAtLT4KICAgICAgPGVsbGlwc2UgY3g9IjEyOCIgY3k9IjE0OCIgcng9Ijc4IiByeT0iNTAiIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iI2ZkYmE3NCIgc3Ryb2tlLXdpZHRoPSI0Ii8+CiAgICAgIDxlbGxpcHNlIGN4PSIxMjgiIGN5PSIxNDgiIHJ4PSI1OCIgcnk9IjM0IiBmaWxsPSIjZmZmN2VkIiBzdHJva2U9IiNmZmVkZDUiIHN0cm9rZS13aWR0aD0iMiIvPgoKICAgICAgPCEtLSBGb29kIGlsbHVzdHJhdGlvbiAtLT4KICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoODIsIDExMCkiPgogICAgICAgIDxjaXJjbGUgY3g9IjMwIiBjeT0iMTgiIHI9IjExIiBmaWxsPSIjZGMyNjI2Ii8+CiAgICAgICAgPGNpcmNsZSBjeD0iNDgiIGN5PSIzMCIgcj0iMTIiIGZpbGw9IiMxNmEzNGEiLz4KICAgICAgICA8Y2lyY2xlIGN4PSI2NiIgY3k9IjE4IiByPSIxMCIgZmlsbD0iI2ZhY2MxNSIvPgogICAgICAgIDxjaXJjbGUgY3g9IjQyIiBjeT0iNDYiIHI9IjkiIGZpbGw9IiNmYjcxODUiLz4KICAgICAgICA8cGF0aCBkPSJNMTggNTIgQzI4IDM0LCA0MiAyOCwgNjYgMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2MyNDEwYyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICAgICAgPC9nPgoKICAgICAgPCEtLSBGb3JrIC0tPgogICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyOCwgODgpIj4KICAgICAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTIwIiByeD0iNSIgZmlsbD0iIzlhMzQxMiIvPgogICAgICAgIDxyZWN0IHg9Ii0yIiB5PSIwIiB3aWR0aD0iMyIgaGVpZ2h0PSIyOCIgcng9IjEuNSIgZmlsbD0iIzlhMzQxMiIvPgogICAgICAgIDxyZWN0IHg9IjEiIHk9IjAiIHdpZHRoPSIzIiBoZWlnaHQ9IjI4IiByeD0iMS41IiBmaWxsPSIjOWEzNDEyIi8+CiAgICAgICAgPHJlY3QgeD0iNCIgeT0iMCIgd2lkdGg9IjMiIGhlaWdodD0iMjgiIHJ4PSIxLjUiIGZpbGw9IiM5YTM0MTIiLz4KICAgICAgICA8cmVjdCB4PSI3IiB5PSIwIiB3aWR0aD0iMyIgaGVpZ2h0PSIyOCIgcng9IjEuNSIgZmlsbD0iIzlhMzQxMiIvPgogICAgICA8L2c+CgogICAgICA8IS0tIFNwb29uIC0tPgogICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMTYsIDgyKSI+CiAgICAgICAgPHJlY3QgeD0iMCIgeT0iMjgiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMjUiIHJ4PSI1IiBmaWxsPSIjOWEzNDEyIi8+CiAgICAgICAgPGVsbGlwc2UgY3g9IjUiIGN5PSIxNiIgcng9IjE4IiByeT0iMjYiIGZpbGw9IiM5YTM0MTIiLz4KICAgICAgICA8ZWxsaXBzZSBjeD0iNSIgY3k9IjE2IiByeD0iMTIiIHJ5PSIxOCIgZmlsbD0iI2ZmZjdlZCIgb3BhY2l0eT0iMC40NSIvPgogICAgICA8L2c+CgogICAgICA8IS0tIFNtYWxsIGluZ3JlZGllbnQgbGluZXMgLS0+CiAgICAgIDxnIG9wYWNpdHk9IjAuNjUiIGZpbGw9IiNjMjQxMGMiPgogICAgICAgIDxyZWN0IHg9IjM0IiB5PSIyMjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI0IiByeD0iMiIvPgogICAgICAgIDxyZWN0IHg9IjM0IiB5PSIyMzQiIHdpZHRoPSIxMjAiIGhlaWdodD0iNCIgcng9IjIiLz4KICAgICAgICA8cmVjdCB4PSIzNCIgeT0iMjQ4IiB3aWR0aD0iNzAiIGhlaWdodD0iNCIgcng9IjIiLz4KICAgICAgPC9nPgogICAgPC9nPgogIDwvZz4KCiAgPCEtLSAiUkVDSVBFUyIgbGFiZWwgLS0+CiAgPHRleHQgeD0iMjU2IiB5PSI0NDAiCiAgICAgICAgZm9udC1mYW1pbHk9IidKZXRCcmFpbnMgTW9ubycsIG1vbm9zcGFjZSIKICAgICAgICBmb250LXdlaWdodD0iODAwIgogICAgICAgIGZvbnQtc2l6ZT0iMzQiCiAgICAgICAgZmlsbD0iI2ZmZjdlZCIKICAgICAgICB0ZXh0LWFuY2hvcj0ibWlkZGxlIgogICAgICAgIGxldHRlci1zcGFjaW5nPSIzIj5SRUNJUEVTPC90ZXh0PgoKICA8IS0tIENpcmN1bGFyIGJvcmRlciAtLT4KICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmVkN2FhIiBzdHJva2Utd2lkdGg9IjMiIG9wYWNpdHk9IjAuNTUiLz4KPC9zdmc+Cg==" alt="RecipeIcon" width="36" height="36"></span> DocOps Recipes</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#top">1. Showcase</a></li>
+<li><a href="#_introduction">2. Introduction</a></li>
+<li><a href="#_default_example">3. Default Example</a></li>
+<li><a href="#_focused_examples">4. Focused Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_simple_weeknight_pasta">4.1. Simple Weeknight Pasta</a></li>
+<li><a href="#_dark_theme_version">4.2. Dark Theme Version</a></li>
+</ul>
+</li>
+<li><a href="#_common_use_cases">5. Common Use Cases</a></li>
+<li><a href="#_format_options">6. Format Options</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_structure">6.1. Basic Structure</a></li>
+<li><a href="#_supported_fields">6.2. Supported Fields</a></li>
+<li><a href="#_list_formatting_rules">6.3. List Formatting Rules</a></li>
+</ul>
+</li>
+<li><a href="#_best_practices">7. Best Practices</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="top">1. Showcase</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="recipe_showcase.html">Showcase</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">2. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Create beautiful, structured cooking recipes with ingredients, steps, and notes</em></p>
+</div>
+<div class="paragraph">
+<p><strong>Key features:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Clear recipe metadata: title, yield, prep time, cook time</p>
+</li>
+<li>
+<p>Structured sections for tags, summary, ingredients, steps, and notes</p>
+</li>
+<li>
+<p>Supports multiline content for readable recipe authoring</p>
+</li>
+<li>
+<p>Theme support for light and dark presentations</p>
+</li>
+<li>
+<p>Ideal for cooking docs, meal plans, and food blogs</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_default_example">3. Default Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Basic recipe for a chocolate cake:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,recipe,controls="true"]
+----
+title=Classic Pancakes
+yield=4 servings
+prep=10 min
+cook=15 min
+tags=breakfast, sweet, quick
+summary=Fluffy pancakes with a golden crust and a soft, tender center.
+
+ingredients=
+- 1 1/2 cups flour
+- 3 1/2 tsp baking powder
+- 1 tsp salt
+- 1 tbsp sugar
+- 1 1/4 cups milk
+- 1 egg
+- 3 tbsp butter, melted
+
+steps=
+1. Sift flour, baking powder, salt, and sugar into a large bowl.
+2. Make a well in the center and add milk, egg, and melted butter.
+3. Stir until the batter is smooth and just combined.
+4. Heat a lightly oiled griddle or pan over medium-high heat.
+5. Pour batter onto the hot surface and cook until golden on both sides.
+
+notes=
+- Do not overmix the batter.
+- Let the pan fully preheat before cooking.
+- Add blueberries or chocolate chips if desired.
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-ff461ec6ff760b75 {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-ff461ec6ff760b75.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-ff461ec6ff760b75 {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-ff461ec6ff760b75 {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-ff461ec6ff760b75:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-ff461ec6ff760b75 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-ff461ec6ff760b75 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_ff461ec6ff760b75 = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-ff461ec6ff760b75');
+          const sourceContainer = document.getElementById('svgviewer-ff461ec6ff760b75');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-ff461ec6ff760b75');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-ff461ec6ff760b75');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_ff461ec6ff760b75 = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-ff461ec6ff760b75');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-ff461ec6ff760b75');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-ff461ec6ff760b75');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-ff461ec6ff760b75');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_ff461ec6ff760b75.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-ff461ec6ff760b75');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_ff461ec6ff760b75.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-ff461ec6ff760b75" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAGVD0mkA_1VSS27cMAzd6xQ8gON2ksnSi6JF0UUCBOgJZIm2GcuiK1GZzu1LyS7QriRR5PuQFJKAw9dgcyYHbzY6u2I2d8LghytkTB8U52z2hPtw-QwbReOY1-Hy3O5i5zyMCe062Swd5BuiHr8KudXksm023YfvoUzTHfYTHW4kC1iYOXiM4FLJAjZ6DWWetFowekzgMAqm3hhVkNCTPvNgHuACl0-P4MqeYQpckoaeWkjyDqNdNR12vilES67RbIMcj7G-ymzTCXQ9gDYKa4vgPDe8ljgWUQUdbBgEvTFZcFcJlx5-0iQHe_c_Zde4uuan8QBFYbUWbJoRRr6F3jz28Kqd0OgNQ9AMkAVPv0cnvG-SuqrnADs0nJJ686QahBKUKBRa-WjrD1CGvDHXDmvVe-2t422kiL431x5-oJUqh-ZFwh2YgqLOibwPCJzqlIA_FGjTlpftYdFEWLSoN889vKnjv0xcjVXmhUW9psk6bKR1QU5h54w5qnOVlMlj1olGFmyz_Mag90a40e9_fPT6-YLSIlXSVIKq1TWsUmDEiRM2Im19zf2iHRtDwRFTIt0xdeIWdhysaN5COmOaQNlJV6n_A8mutP73AgAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="title=Classic Pancakes
+yield=4 servings
+prep=10 min
+cook=15 min
+tags=breakfast, sweet, quick
+summary=Fluffy pancakes with a golden crust and a soft, tender center.
+
+ingredients=
+- 1 1/2 cups flour
+- 3 1/2 tsp baking powder
+- 1 tsp salt
+- 1 tbsp sugar
+- 1 1/4 cups milk
+- 1 egg
+- 3 tbsp butter, melted
+
+steps=
+1. Sift flour, baking powder, salt, and sugar into a large bowl.
+2. Make a well in the center and add milk, egg, and melted butter.
+3. Stir until the batter is smooth and just combined.
+4. Heat a lightly oiled griddle or pan over medium-high heat.
+5. Pour batter onto the hot surface and cook until golden on both sides.
+
+notes=
+- Do not overmix the batter.
+- Let the pan fully preheat before cooking.
+- Add blueberries or chocolate chips if desired." data-kind="recipe">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_d298f0a76c064242bef82a888646c6e8">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","classic","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1 1/2 cups flour | 3 1/2 tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1 1/4 cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b0f14"/><stop offset="100%" stop-color="#111827"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient><style><![CDATA[ .recipe-title { font-family: Arial, Helvetica, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .section-title { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(10,14,20,0.78)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#6366f1" opacity="0.12"/><circle cx="180" cy="1180" r="220" fill="#94a3b8" opacity="0.08"/><text x="130" y="145" class="recipe-title" fill="#94a3b8" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#ffffff">Classic Pancakes</text><rect x="860" y="130" width="220" height="44" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#ffffff">breakfast • sweet • quick</text></g><g><rect x="90" y="300" width="1020" height="188" rx="20" fill="#1e293b" fill-opacity="0.14" stroke="#6366f1" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#ffffff" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#ffffff" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#ffffff" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="488" stroke="#ffffff" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#94a3b8">yield</text><text x="125" y="375" class="meta-label" fill="#94a3b8">prep</text><text x="125" y="420" class="meta-label" fill="#94a3b8">cook</text><text x="125" y="465" class="meta-label" fill="#94a3b8">summary</text><text x="640" y="330" class="meta-value" fill="#ffffff">4 servings</text><text x="640" y="375" class="meta-value" fill="#ffffff">10 min</text><text x="640" y="420" class="meta-value" fill="#ffffff">15 min</text><text x="640" y="450" class="meta-value" fill="#ffffff">Fluffy pancakes with a golden crust and a soft, tender</text><text x="640" y="474" class="meta-value" fill="#ffffff">center.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="518" width="500" height="444" rx="24" fill="#1e293b" fill-opacity="0.12" stroke="#6366f1" stroke-opacity="0.12"/><rect x="90" y="518" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="568" class="section-title" fill="#94a3b8">ingredients</text><line x1="120" y1="598" x2="560" y2="598" stroke="#ffffff" stroke-opacity="0.10"/><g><text x="125" y="636" class="body-text" fill="#ffffff">1 1/2 cups flour</text><text x="125" y="670" class="body-text" fill="#ffffff">3 1/2 tsp baking powder</text><text x="125" y="704" class="body-text" fill="#ffffff">1 tsp salt</text><text x="125" y="738" class="body-text" fill="#ffffff">1 tbsp sugar</text><text x="125" y="772" class="body-text" fill="#ffffff">1 1/4 cups milk</text><text x="125" y="806" class="body-text" fill="#ffffff">1 egg</text><text x="125" y="840" class="body-text" fill="#ffffff">3 tbsp butter, melted</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="518" width="490" height="444" rx="24" fill="#1e293b" fill-opacity="0.12" stroke="#6366f1" stroke-opacity="0.12"/><rect x="620" y="518" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="568" class="section-title" fill="#94a3b8">steps</text><line x1="650" y1="598" x2="1080" y2="598" stroke="#ffffff" stroke-opacity="0.10"/><g><g><rect x="655" y="642" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="657" text-anchor="middle" class="badge-text" fill="#0b0f14">1</text></g><text x="689" y="656" class="body-text" fill="#ffffff">Sift flour, baking powder, salt, and sugar into a</text><text x="689" y="680" class="body-text" fill="#ffffff">large bowl.</text><g><rect x="655" y="702" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="717" text-anchor="middle" class="badge-text" fill="#0b0f14">2</text></g><text x="689" y="716" class="body-text" fill="#ffffff">Make a well in the center and add milk, egg, and</text><text x="689" y="740" class="body-text" fill="#ffffff">melted butter.</text><g><rect x="655" y="762" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="777" text-anchor="middle" class="badge-text" fill="#0b0f14">3</text></g><text x="689" y="776" class="body-text" fill="#ffffff">Stir until the batter is smooth and just combined.</text><g><rect x="655" y="798" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="813" text-anchor="middle" class="badge-text" fill="#0b0f14">4</text></g><text x="689" y="812" class="body-text" fill="#ffffff">Heat a lightly oiled griddle or pan over medium-high</text><text x="689" y="836" class="body-text" fill="#ffffff">heat.</text><g><rect x="655" y="858" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="873" text-anchor="middle" class="badge-text" fill="#0b0f14">5</text></g><text x="689" y="872" class="body-text" fill="#ffffff">Pour batter onto the hot surface and cook until</text><text x="689" y="896" class="body-text" fill="#ffffff">golden on both sides.</text></g></g><g><rect x="90" y="992" width="1020" height="192" rx="20" fill="#1e293b" fill-opacity="0.10" stroke="#6366f1" stroke-opacity="0.10"/><line x1="90" y1="1042" x2="1110" y2="1042" stroke="#ffffff" stroke-opacity="0.10"/><line x1="600" y1="992" x2="600" y2="1184" stroke="#ffffff" stroke-opacity="0.10"/><text x="125" y="1027" class="meta-label" fill="#94a3b8">tags</text><text x="655" y="1027" class="meta-label" fill="#94a3b8">notes</text><rect x="125" y="1072" width="109" height="36" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="179" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#ffffff">breakfast</text><rect x="246" y="1072" width="73" height="36" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="282" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#ffffff">sweet</text><rect x="331" y="1072" width="73" height="36" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="367" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#ffffff">quick</text><text x="655" y="1087" class="body-text" fill="#ffffff">Do not overmix the batter.</text><text x="655" y="1111" class="body-text" fill="#ffffff">Let the pan fully preheat before cooking.</text><text x="655" y="1135" class="body-text" fill="#ffffff">Add blueberries or chocolate chips if desired.</text></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_ff461ec6ff760b75.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_ff461ec6ff760b75.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-ff461ec6ff760b75')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-ff461ec6ff760b75')">PNG</button>
+</div>
+<div id="modal-svgviewer-ff461ec6ff760b75" class="svg-modal-svgviewer-ff461ec6ff760b75" onclick="if(event.target === this) svgModalsvgviewer_ff461ec6ff760b75.close()">
+    <div class="svg-modal-content-svgviewer-ff461ec6ff760b75">
+        <button class="svg-modal-close-svgviewer-ff461ec6ff760b75" onclick="svgModalsvgviewer_ff461ec6ff760b75.close()">×</button>
+        <div id="modal-body-svgviewer-ff461ec6ff760b75" class="svg-modal-body-svgviewer-ff461ec6ff760b75"></div>
+    </div>
+</div>
+
+<div id="csv-modal-svgviewer-ff461ec6ff760b75" class="svg-modal-svgviewer-ff461ec6ff760b75" onclick="if(event.target === this) csvModalsvgviewer_ff461ec6ff760b75.close()">
+    <div class="svg-modal-content-svgviewer-ff461ec6ff760b75">
+        <button class="svg-modal-close-svgviewer-ff461ec6ff760b75" onclick="csvModalsvgviewer_ff461ec6ff760b75.close()">×</button>
+        <div class="svg-modal-header-svgviewer-ff461ec6ff760b75" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-ff461ec6ff760b75" class="svg-modal-body-svgviewer-ff461ec6ff760b75" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-svgviewer-ff461ec6ff760b75" class="svg-modal-svgviewer-ff461ec6ff760b75" onclick="if(event.target === this) docopsSource.close('svgviewer-ff461ec6ff760b75')">
+    <div class="svg-modal-content-svgviewer-ff461ec6ff760b75">
+        <button class="svg-modal-close-svgviewer-ff461ec6ff760b75" onclick="docopsSource.close('svgviewer-ff461ec6ff760b75')">×</button>
+        <div class="svg-modal-header-svgviewer-ff461ec6ff760b75" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-svgviewer-ff461ec6ff760b75" class="svg-modal-body-svgviewer-ff461ec6ff760b75" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_focused_examples">4. Focused Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_simple_weeknight_pasta">4.1. Simple Weeknight Pasta</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,recipe,controls="true"]
+----
+theme=ayu
+title= Weeknight Pasta
+yield= 2 servings
+prep= 10 minutes
+cook= 15 minutes
+tags= pasta, quick, vegetarian
+summary=
+A fast, flavorful pasta dish for busy evenings.
+ingredients=
+- 200g pasta
+- 2 cloves garlic
+- 2 tbsp olive oil
+- 1/2 tsp chili flakes
+- Salt to taste
+steps=
+1. Cook the pasta until al dente.
+2. Sauté garlic in olive oil.
+3. Toss pasta with chili flakes and salt.
+4. Serve immediately.
+notes=
+- Add parmesan for extra flavor.
+- Use gluten-free pasta if needed.
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-7c21d2b3383dd229 {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-7c21d2b3383dd229.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-7c21d2b3383dd229 {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-7c21d2b3383dd229 {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-7c21d2b3383dd229:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-7c21d2b3383dd229 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-7c21d2b3383dd229 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_7c21d2b3383dd229 = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-7c21d2b3383dd229');
+          const sourceContainer = document.getElementById('svgviewer-7c21d2b3383dd229');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-7c21d2b3383dd229');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-7c21d2b3383dd229');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_7c21d2b3383dd229 = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-7c21d2b3383dd229');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-7c21d2b3383dd229');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-7c21d2b3383dd229');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-7c21d2b3383dd229');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_7c21d2b3383dd229.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-7c21d2b3383dd229');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_7c21d2b3383dd229.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-7c21d2b3383dd229" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAGVD0mkA_1VQS07DMBDd-xTvAK1pCyyzqLgAEiDWbjxJRnXsYE8CORLn4GJM2gBi4ZH8NO8zTzrqqXLzaIQlUIVXonPkthM8uiLOzEzBVzigUJ44tsUMmYYK-x16jqNQMXVKZwXufwFxbakwLPwN3kauzxtM1JK4zC6aMva9y3Nljmh0Z4MmuCnlZgxXDjyXDk3KOI1lBk0UF2NrdGbyTFFKZbY47HbtlbF8UIc0UUHrcuD6gsipDEiBJ0LioND-RkHF6o4DL7ZnTbvFkwsCSRDVIqNvUP29xYMeBulojTVG4QAX4DUBWXOwyhzl63P1BMc_N2tuLZ5TKSv5naX75wsXPYo6W3OnQtougfte73NCYbYmJu1yufPovYrknoqLl1roQ7JbW7O68FIIbdDq47bJ9BOXG0QiT95-Ayz2ubvlAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="theme=ayu
+title= Weeknight Pasta
+yield= 2 servings
+prep= 10 minutes
+cook= 15 minutes
+tags= pasta, quick, vegetarian
+summary=
+A fast, flavorful pasta dish for busy evenings.
+ingredients=
+- 200g pasta
+- 2 cloves garlic
+- 2 tbsp olive oil
+- 1/2 tsp chili flakes
+- Salt to taste
+steps=
+1. Cook the pasta until al dente.
+2. Sauté garlic in olive oil.
+3. Toss pasta with chili flakes and salt.
+4. Serve immediately.
+notes=
+- Add parmesan for extra flavor.
+- Use gluten-free pasta if needed." data-kind="recipe">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_4f2595f953c8415fa0d3f898c61d234b">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Weeknight Pasta","2 servings","10 minutes","15 minutes","ayu","pasta; quick; vegetarian","A fast, flavorful pasta dish for busy evenings.","200g pasta | 2 cloves garlic | 2 tbsp olive oil | 1/2 tsp chili flakes | Salt to taste","Cook the pasta until al dente. | Sauté garlic in olive oil. | Toss pasta with chili flakes and salt. | Serve immediately.","Add parmesan for extra flavor. | Use gluten-free pasta if needed."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#e2e8f0"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a37acc"/><stop offset="100%" stop-color="#fa8532"/></linearGradient><style><![CDATA[ .recipe-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(255,255,255,0.92)" stroke="rgba(15,23,42,0.12)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#a37acc" opacity="0.10"/><circle cx="180" cy="1180" r="220" fill="#fa8532" opacity="0.06"/><text x="130" y="145" class="recipe-title" fill="#fa8532" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#f07171">Weeknight Pasta</text><rect x="860" y="130" width="220" height="44" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#f07171">pasta • quick • vegetarian</text></g><g><rect x="90" y="300" width="1020" height="180" rx="20" fill="#fcfcfc" fill-opacity="0.65" stroke="#a37acc" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#f07171" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#f07171" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#f07171" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="480" stroke="#f07171" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#fa8532">yield</text><text x="125" y="375" class="meta-label" fill="#fa8532">prep</text><text x="125" y="420" class="meta-label" fill="#fa8532">cook</text><text x="125" y="465" class="meta-label" fill="#fa8532">summary</text><text x="640" y="330" class="meta-value" fill="#f07171">2 servings</text><text x="640" y="375" class="meta-value" fill="#f07171">10 minutes</text><text x="640" y="420" class="meta-value" fill="#f07171">15 minutes</text><text x="640" y="460" class="meta-value" fill="#f07171">A fast, flavorful pasta dish for busy evenings.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="510" width="500" height="312" rx="24" fill="#fcfcfc" fill-opacity="0.82" stroke="#a37acc" stroke-opacity="0.12"/><rect x="90" y="510" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="560" class="section-title" fill="#fa8532">ingredients</text><line x1="120" y1="590" x2="560" y2="590" stroke="#f07171" stroke-opacity="0.10"/><g><text x="125" y="628" class="body-text" fill="#f07171">200g pasta</text><text x="125" y="662" class="body-text" fill="#f07171">2 cloves garlic</text><text x="125" y="696" class="body-text" fill="#f07171">2 tbsp olive oil</text><text x="125" y="730" class="body-text" fill="#f07171">1/2 tsp chili flakes</text><text x="125" y="764" class="body-text" fill="#f07171">Salt to taste</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="510" width="490" height="312" rx="24" fill="#fcfcfc" fill-opacity="0.82" stroke="#a37acc" stroke-opacity="0.12"/><rect x="620" y="510" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="560" class="section-title" fill="#fa8532">steps</text><line x1="650" y1="590" x2="1080" y2="590" stroke="#f07171" stroke-opacity="0.10"/><g><g><rect x="655" y="634" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="649" text-anchor="middle" class="badge-text" fill="#ffffff">1</text></g><text x="689" y="648" class="body-text" fill="#f07171">Cook the pasta until al dente.</text><g><rect x="655" y="670" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="685" text-anchor="middle" class="badge-text" fill="#ffffff">2</text></g><text x="689" y="684" class="body-text" fill="#f07171">Sauté garlic in olive oil.</text><g><rect x="655" y="706" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="721" text-anchor="middle" class="badge-text" fill="#ffffff">3</text></g><text x="689" y="720" class="body-text" fill="#f07171">Toss pasta with chili flakes and salt.</text><g><rect x="655" y="742" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="757" text-anchor="middle" class="badge-text" fill="#ffffff">4</text></g><text x="689" y="756" class="body-text" fill="#f07171">Serve immediately.</text></g></g><g><rect x="90" y="852" width="1020" height="180" rx="20" fill="#fcfcfc" fill-opacity="0.72" stroke="#a37acc" stroke-opacity="0.10"/><line x1="90" y1="902" x2="1110" y2="902" stroke="#f07171" stroke-opacity="0.10"/><line x1="600" y1="852" x2="600" y2="1032" stroke="#f07171" stroke-opacity="0.10"/><text x="125" y="887" class="meta-label" fill="#fa8532">tags</text><text x="655" y="887" class="meta-label" fill="#fa8532">notes</text><rect x="125" y="932" width="73" height="36" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="161" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#f07171">pasta</text><rect x="210" y="932" width="73" height="36" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="246" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#f07171">quick</text><rect x="295" y="932" width="118" height="36" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="354" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#f07171">vegetarian</text><text x="655" y="947" class="body-text" fill="#f07171">Add parmesan for extra flavor.</text><text x="655" y="971" class="body-text" fill="#f07171">Use gluten-free pasta if needed.</text></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_7c21d2b3383dd229.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_7c21d2b3383dd229.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-7c21d2b3383dd229')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-7c21d2b3383dd229')">PNG</button>
+</div>
+<div id="modal-svgviewer-7c21d2b3383dd229" class="svg-modal-svgviewer-7c21d2b3383dd229" onclick="if(event.target === this) svgModalsvgviewer_7c21d2b3383dd229.close()">
+    <div class="svg-modal-content-svgviewer-7c21d2b3383dd229">
+        <button class="svg-modal-close-svgviewer-7c21d2b3383dd229" onclick="svgModalsvgviewer_7c21d2b3383dd229.close()">×</button>
+        <div id="modal-body-svgviewer-7c21d2b3383dd229" class="svg-modal-body-svgviewer-7c21d2b3383dd229"></div>
+    </div>
+</div>
+
+<div id="csv-modal-svgviewer-7c21d2b3383dd229" class="svg-modal-svgviewer-7c21d2b3383dd229" onclick="if(event.target === this) csvModalsvgviewer_7c21d2b3383dd229.close()">
+    <div class="svg-modal-content-svgviewer-7c21d2b3383dd229">
+        <button class="svg-modal-close-svgviewer-7c21d2b3383dd229" onclick="csvModalsvgviewer_7c21d2b3383dd229.close()">×</button>
+        <div class="svg-modal-header-svgviewer-7c21d2b3383dd229" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-7c21d2b3383dd229" class="svg-modal-body-svgviewer-7c21d2b3383dd229" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-svgviewer-7c21d2b3383dd229" class="svg-modal-svgviewer-7c21d2b3383dd229" onclick="if(event.target === this) docopsSource.close('svgviewer-7c21d2b3383dd229')">
+    <div class="svg-modal-content-svgviewer-7c21d2b3383dd229">
+        <button class="svg-modal-close-svgviewer-7c21d2b3383dd229" onclick="docopsSource.close('svgviewer-7c21d2b3383dd229')">×</button>
+        <div class="svg-modal-header-svgviewer-7c21d2b3383dd229" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-svgviewer-7c21d2b3383dd229" class="svg-modal-body-svgviewer-7c21d2b3383dd229" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dark_theme_version">4.2. Dark Theme Version</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,recipe,useDark=true,controls="true"]
+----
+theme=ayu
+title=Classic Pancakes
+yield=4 servings
+prep=10 min
+cook=15 min
+tags=breakfast, sweet, quick
+summary=Fluffy pancakes with a golden crust and a soft, tender center.
+
+ingredients=
+- 1 1/2 cups flour
+- 3 1/2 tsp baking powder
+- 1 tsp salt
+- 1 tbsp sugar
+- 1 1/4 cups milk
+- 1 egg
+- 3 tbsp butter, melted
+
+steps=
+1. Sift flour, baking powder, salt, and sugar into a large bowl.
+2. Make a well in the center and add milk, egg, and melted butter.
+3. Stir until the batter is smooth and just combined.
+4. Heat a lightly oiled griddle or pan over medium-high heat.
+5. Pour batter onto the hot surface and cook until golden on both sides.
+
+notes=
+- Do not overmix the batter.
+- Let the pan fully preheat before cooking.
+- Add blueberries or chocolate chips if desired.
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-svgviewer-355d34b75c873418 {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-svgviewer-355d34b75c873418.active {
+      display: flex;
+  }
+  .svg-modal-content-svgviewer-355d34b75c873418 {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-svgviewer-355d34b75c873418 {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-svgviewer-355d34b75c873418:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-svgviewer-355d34b75c873418 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-svgviewer-355d34b75c873418 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-svgviewer-355d34b75c873418 .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-355d34b75c873418 .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-355d34b75c873418 .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-svgviewer-355d34b75c873418 .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-svgviewer-355d34b75c873418 .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-svgviewer-355d34b75c873418 .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  // View Modal Control
+  window.svgModalsvgviewer_355d34b75c873418 = {
+      open: function() {
+          const modal = document.getElementById('modal-svgviewer-355d34b75c873418');
+          const sourceContainer = document.getElementById('svgviewer-355d34b75c873418');
+
+          if (!modal || !sourceContainer) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          const sourceSvg = sourceContainer.querySelector('svg');
+          const targetContainer = document.getElementById('modal-body-svgviewer-355d34b75c873418');
+
+          if (sourceSvg && targetContainer) {
+              targetContainer.innerHTML = '';
+              const clone = sourceSvg.cloneNode(true);
+
+              clone.removeAttribute('width');
+              clone.removeAttribute('height');
+              clone.style.width = '100%';
+              clone.style.height = '100%';
+
+              targetContainer.appendChild(clone);
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('modal-svgviewer-355d34b75c873418');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Data Modal Control
+  window.csvModalsvgviewer_355d34b75c873418 = {
+      open: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-355d34b75c873418');
+          if (!modal) return;
+
+          if (modal.parentNode !== document.body) {
+              document.body.appendChild(modal);
+          }
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+
+          if (window.svgViewer && window.svgViewer.loadCsvData) {
+              window.svgViewer.loadCsvData('svgviewer-355d34b75c873418');
+          }
+      },
+      close: function() {
+          const modal = document.getElementById('csv-modal-svgviewer-355d34b75c873418');
+          if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = '';
+          }
+      }
+  };
+
+  // Register escape key handler for both
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          const viewModal = document.getElementById('modal-svgviewer-355d34b75c873418');
+          if (viewModal && viewModal.classList.contains('active')) {
+              window.svgModalsvgviewer_355d34b75c873418.close();
+          }
+          const csvModal = document.getElementById('csv-modal-svgviewer-355d34b75c873418');
+          if (csvModal && csvModal.classList.contains('active')) {
+              window.csvModalsvgviewer_355d34b75c873418.close();
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="svgviewer-355d34b75c873418" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAGVD0mkA_1VSS27cMAzd6xQ8gKN2ksnSi6JF0UUCBOgJZIm2GevjSlSmc_tSsgu0K0kU-T4kecWAo7lXxcQex6_elEIW3ky0ZsOi7oTejVcomD8oLkXtGffx8hkCRWVT2sbLc7-zWco4ZTTbbAoPUG6IcvyqZDdVaggm38fvvs7zHfYTHW7EKxhYkncYweZaGEx0EipplmrG6DCDxciYtVKiIKMjeZZRPcAFLp8ewda9wOxTzRJ66iEuO0xmk3TY000genKLFuP5eEztVReTT6DrARTIbz2Cy9LxeuJUWRQMENAzOqUK4y4SLhp-0swH-_A_5dC5hu6n8wBFTmLNm7wgTOnmtXrU8CqdkOgNvZcM4BVPv0cnnOuShqbnADs0nJK0ehINTBlqZPK9fDLtB6hACSm1DkvVe-utTWGiiE6rq4YfaLjJoWVlf4dEXlCXTM55hJTblCB9CFCQltfwsEoirFKk1bOGN3H8lyk1Y415TSxe82wsdtK2IKewc8YpinORVMhhkYnGxNhn-S2B3DthoN__-NDy-YLcI03SXL2olTVsUmDCOWXsRNL6lvtFOjb5ihPmTLJj4sSuySZvWPJWkhnTDMJOskr6D9HfF_ABAwAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="theme=ayu
+title=Classic Pancakes
+yield=4 servings
+prep=10 min
+cook=15 min
+tags=breakfast, sweet, quick
+summary=Fluffy pancakes with a golden crust and a soft, tender center.
+
+ingredients=
+- 1 1/2 cups flour
+- 3 1/2 tsp baking powder
+- 1 tsp salt
+- 1 tbsp sugar
+- 1 1/4 cups milk
+- 1 egg
+- 3 tbsp butter, melted
+
+steps=
+1. Sift flour, baking powder, salt, and sugar into a large bowl.
+2. Make a well in the center and add milk, egg, and melted butter.
+3. Stir until the batter is smooth and just combined.
+4. Heat a lightly oiled griddle or pan over medium-high heat.
+5. Pour batter onto the hot surface and cook until golden on both sides.
+
+notes=
+- Do not overmix the batter.
+- Let the pan fully preheat before cooking.
+- Add blueberries or chocolate chips if desired." data-kind="recipe">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_b0dfcfda8a634cc0a401a386bad96159">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","ayu","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1 1/2 cups flour | 3 1/2 tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1 1/4 cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b0f14"/><stop offset="100%" stop-color="#111827"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#aad94c"/><stop offset="100%" stop-color="#e6c08a"/></linearGradient><style><![CDATA[ .recipe-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(10,14,20,0.78)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#aad94c" opacity="0.12"/><circle cx="180" cy="1180" r="220" fill="#e6c08a" opacity="0.08"/><text x="130" y="145" class="recipe-title" fill="#e6c08a" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#f29668">Classic Pancakes</text><rect x="860" y="130" width="220" height="44" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#f29668">breakfast • sweet • quick</text></g><g><rect x="90" y="300" width="1020" height="188" rx="20" fill="#10141c" fill-opacity="0.14" stroke="#aad94c" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#f29668" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#f29668" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#f29668" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="488" stroke="#f29668" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#e6c08a">yield</text><text x="125" y="375" class="meta-label" fill="#e6c08a">prep</text><text x="125" y="420" class="meta-label" fill="#e6c08a">cook</text><text x="125" y="465" class="meta-label" fill="#e6c08a">summary</text><text x="640" y="330" class="meta-value" fill="#f29668">4 servings</text><text x="640" y="375" class="meta-value" fill="#f29668">10 min</text><text x="640" y="420" class="meta-value" fill="#f29668">15 min</text><text x="640" y="450" class="meta-value" fill="#f29668">Fluffy pancakes with a golden crust and a soft, tender</text><text x="640" y="474" class="meta-value" fill="#f29668">center.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="518" width="500" height="444" rx="24" fill="#10141c" fill-opacity="0.12" stroke="#aad94c" stroke-opacity="0.12"/><rect x="90" y="518" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="568" class="section-title" fill="#e6c08a">ingredients</text><line x1="120" y1="598" x2="560" y2="598" stroke="#f29668" stroke-opacity="0.10"/><g><text x="125" y="636" class="body-text" fill="#f29668">1 1/2 cups flour</text><text x="125" y="670" class="body-text" fill="#f29668">3 1/2 tsp baking powder</text><text x="125" y="704" class="body-text" fill="#f29668">1 tsp salt</text><text x="125" y="738" class="body-text" fill="#f29668">1 tbsp sugar</text><text x="125" y="772" class="body-text" fill="#f29668">1 1/4 cups milk</text><text x="125" y="806" class="body-text" fill="#f29668">1 egg</text><text x="125" y="840" class="body-text" fill="#f29668">3 tbsp butter, melted</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="518" width="490" height="444" rx="24" fill="#10141c" fill-opacity="0.12" stroke="#aad94c" stroke-opacity="0.12"/><rect x="620" y="518" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="568" class="section-title" fill="#e6c08a">steps</text><line x1="650" y1="598" x2="1080" y2="598" stroke="#f29668" stroke-opacity="0.10"/><g><g><rect x="655" y="642" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="657" text-anchor="middle" class="badge-text" fill="#0b0f14">1</text></g><text x="689" y="656" class="body-text" fill="#f29668">Sift flour, baking powder, salt, and sugar into a</text><text x="689" y="680" class="body-text" fill="#f29668">large bowl.</text><g><rect x="655" y="702" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="717" text-anchor="middle" class="badge-text" fill="#0b0f14">2</text></g><text x="689" y="716" class="body-text" fill="#f29668">Make a well in the center and add milk, egg, and</text><text x="689" y="740" class="body-text" fill="#f29668">melted butter.</text><g><rect x="655" y="762" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="777" text-anchor="middle" class="badge-text" fill="#0b0f14">3</text></g><text x="689" y="776" class="body-text" fill="#f29668">Stir until the batter is smooth and just combined.</text><g><rect x="655" y="798" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="813" text-anchor="middle" class="badge-text" fill="#0b0f14">4</text></g><text x="689" y="812" class="body-text" fill="#f29668">Heat a lightly oiled griddle or pan over medium-high</text><text x="689" y="836" class="body-text" fill="#f29668">heat.</text><g><rect x="655" y="858" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="873" text-anchor="middle" class="badge-text" fill="#0b0f14">5</text></g><text x="689" y="872" class="body-text" fill="#f29668">Pour batter onto the hot surface and cook until</text><text x="689" y="896" class="body-text" fill="#f29668">golden on both sides.</text></g></g><g><rect x="90" y="992" width="1020" height="192" rx="20" fill="#10141c" fill-opacity="0.10" stroke="#aad94c" stroke-opacity="0.10"/><line x1="90" y1="1042" x2="1110" y2="1042" stroke="#f29668" stroke-opacity="0.10"/><line x1="600" y1="992" x2="600" y2="1184" stroke="#f29668" stroke-opacity="0.10"/><text x="125" y="1027" class="meta-label" fill="#e6c08a">tags</text><text x="655" y="1027" class="meta-label" fill="#e6c08a">notes</text><rect x="125" y="1072" width="109" height="36" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="179" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#f29668">breakfast</text><rect x="246" y="1072" width="73" height="36" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="282" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#f29668">sweet</text><rect x="331" y="1072" width="73" height="36" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="367" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#f29668">quick</text><text x="655" y="1087" class="body-text" fill="#f29668">Do not overmix the batter.</text><text x="655" y="1111" class="body-text" fill="#f29668">Let the pan fully preheat before cooking.</text><text x="655" y="1135" class="body-text" fill="#f29668">Add blueberries or chocolate chips if desired.</text></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgModalsvgviewer_355d34b75c873418.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_355d34b75c873418.open()">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-355d34b75c873418')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-355d34b75c873418')">PNG</button>
+</div>
+<div id="modal-svgviewer-355d34b75c873418" class="svg-modal-svgviewer-355d34b75c873418" onclick="if(event.target === this) svgModalsvgviewer_355d34b75c873418.close()">
+    <div class="svg-modal-content-svgviewer-355d34b75c873418">
+        <button class="svg-modal-close-svgviewer-355d34b75c873418" onclick="svgModalsvgviewer_355d34b75c873418.close()">×</button>
+        <div id="modal-body-svgviewer-355d34b75c873418" class="svg-modal-body-svgviewer-355d34b75c873418"></div>
+    </div>
+</div>
+
+<div id="csv-modal-svgviewer-355d34b75c873418" class="svg-modal-svgviewer-355d34b75c873418" onclick="if(event.target === this) csvModalsvgviewer_355d34b75c873418.close()">
+    <div class="svg-modal-content-svgviewer-355d34b75c873418">
+        <button class="svg-modal-close-svgviewer-355d34b75c873418" onclick="csvModalsvgviewer_355d34b75c873418.close()">×</button>
+        <div class="svg-modal-header-svgviewer-355d34b75c873418" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-svgviewer-355d34b75c873418" class="svg-modal-body-svgviewer-355d34b75c873418" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-svgviewer-355d34b75c873418" class="svg-modal-svgviewer-355d34b75c873418" onclick="if(event.target === this) docopsSource.close('svgviewer-355d34b75c873418')">
+    <div class="svg-modal-content-svgviewer-355d34b75c873418">
+        <button class="svg-modal-close-svgviewer-355d34b75c873418" onclick="docopsSource.close('svgviewer-355d34b75c873418')">×</button>
+        <div class="svg-modal-header-svgviewer-355d34b75c873418" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-svgviewer-355d34b75c873418" class="svg-modal-body-svgviewer-355d34b75c873418" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_use_cases">5. Common Use Cases</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cookbook pages</strong> - Present recipes in a consistent, attractive format</p>
+</li>
+<li>
+<p><strong>Meal planning</strong> - Document ingredients and steps for weekly menus</p>
+</li>
+<li>
+<p><strong>Food blogs</strong> - Turn structured recipe text into a polished visual</p>
+</li>
+<li>
+<p><strong>Kitchen reference docs</strong> - Keep prep, cook, and serving details together</p>
+</li>
+<li>
+<p><strong>Training materials</strong> - Standardize recipe formatting for teams</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_format_options">6. Format Options</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_structure">6.1. Basic Structure</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,recipe]
+----
+title= Recipe Title
+yield= 4 servings
+prep= 15 minutes
+cook= 30 minutes
+tags= tag1, tag2, tag3
+summary= Short description of the recipe.
+ingredients=
+- Ingredient 1
+- Ingredient 2
+steps=
+1. First step
+2. Second step
+notes=
+- Optional note
+theme= classic
+----</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_supported_fields">6.2. Supported Fields</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recipe name shown at the top</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yield</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Serving size or batch yield</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">prep</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Preparation time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">cook</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cooking time</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tags</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma- or semicolon-separated tags</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Short description of the recipe</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ingredients</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of ingredients</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">steps</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ordered or unordered step list</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">notes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Additional recipe notes or tips</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">theme</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Theme name used for styling</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_list_formatting_rules">6.3. List Formatting Rules</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>tags=</code> accepts comma-separated or semicolon-separated values</p>
+</li>
+<li>
+<p><code>ingredients=</code> accepts bullet lists or plain lines</p>
+</li>
+<li>
+<p><code>steps=</code> accepts numbered lists or bullet lists</p>
+</li>
+<li>
+<p><code>notes=</code> accepts bullet lists or plain lines</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">ingredients=
+- 2 cups flour
+- 1 cup sugar
+- 2 eggs
+
+steps=
+1. Preheat oven to 180C.
+2. Mix ingredients.
+3. Bake for 30 minutes.</code></pre>
+</div>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices">7. Best Practices</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Keep titles short and clear</strong> - Use the recipe name, not a full sentence</p>
+</li>
+<li>
+<p><strong>Use consistent yield formatting</strong> - For example, <code>4 servings</code> or <code>1 loaf</code></p>
+</li>
+<li>
+<p><strong>Keep steps concise</strong> - One action per step improves readability</p>
+</li>
+<li>
+<p><strong>Prefer bullet ingredients</strong> - Makes scanning easier in the rendered output</p>
+</li>
+<li>
+<p><strong>Add useful notes</strong> - Include substitutions, storage tips, or serving suggestions</p>
+</li>
+<li>
+<p><strong>Use tags for discovery</strong> - Help readers find vegetarian, quick, dessert, or seasonal recipes</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For best results, keep ingredients in the order they are used and keep steps short and action-oriented. If a recipe has special preparation notes, put them in <code>notes=</code> so the main steps stay clean.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+
+<style>
+.listingblock {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.listingblock:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #999;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: rgba(45, 45, 45, 0.9);
+        color: #fff;
+        border-color: #666;
+    }
+    
+    .copy-button:hover {
+        background: rgba(45, 45, 45, 1);
+        border-color: #999;
+    }
+}
+
+</style>
+<script type="text/javascript">
+// Simple clipboard functionality without external dependencies
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise((resolve, reject) => {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject();
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy buttons to all code blocks
+    const codeBlocks = document.querySelectorAll('pre.highlight, div.listingblock pre, .literalblock pre');
+
+    codeBlocks.forEach(function(block, index) {
+        // Create wrapper div if it doesn't exist
+        let wrapper = block.closest('.listingblock, .literalblock');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'listingblock';
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+        }
+
+        // Add copy button
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.title = 'Copy to clipboard';
+
+        // Insert button
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(button);
+
+        // Add click handler
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the text content of the code block
+            const code = block.textContent || block.innerText;
+
+            copyToClipboard(code).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.backgroundColor = '#28a745';
+
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(function() {
+                button.innerHTML = '❌ Error';
+                button.style.backgroundColor = '#dc3545';
+
+                setTimeout(function() {
+                    button.innerHTML = '📋 Copy';
+                    button.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-content" id="modalContent">
+        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+        <!-- The JS specifically fails because this ID is missing -->
+        <div id="modalSvgContainer"></div>
+
+        <div class="modal-zoom-controls">
+            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+        </div>
+    </div>
+</div>
+<script>
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+        // Typography - Matching pro-style.css
+        fontFamily: "'Outfit', sans-serif",
+        fontSize: "14px",
+        
+        // Colors - Using your CSS Variables
+        primaryColor: 'var(--bg-surface)',
+        primaryTextColor: 'var(--text-main)',
+        primaryBorderColor: 'var(--accent-primary)',
+        lineColor: 'var(--accent-secondary)',
+        secondaryColor: 'var(--bg-base)',
+        tertiaryColor: 'var(--bg-surface)',
+        
+        // Specific Element Overrides
+        nodeBorder: 'var(--accent-primary)',
+        clusterBkg: 'var(--bg-base)',
+        clusterBorder: 'var(--border-color)',
+        titleColor: 'var(--text-heading)',
+        edgeLabelBackground: 'var(--bg-surface)',
+        
+        // Sequence Diagram specific
+        actorBkg: 'var(--bg-surface)',
+        actorBorder: 'var(--accent-primary)',
+        actorTextColor: 'var(--text-heading)',
+        noteBkgColor: 'var(--accent-glow)',
+        noteTextColor: 'var(--accent-primary)',
+    },
+    // Custom CSS for "AI Assistant" flair
+    themeCSS: `
+        .node rect, .node circle, .node ellipse, .node polygon {
+            stroke-width: 2px;
+            filter: drop-shadow(2px 2px 0px var(--accent-glow));
+        }
+        .label-container {
+            fill: var(--bg-surface);
+        }
+        .edgePath .path {
+            stroke: var(--accent-secondary) !important;
+            stroke-width: 1.5px !important;
+        }
+        .marker {
+            fill: var(--accent-secondary) !important;
+            stroke: var(--accent-secondary) !important;
+        }
+        text.titleText {
+            font-family: 'Syne', sans-serif !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+        }
+    `
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-container">
+    <span class="nav-prev-disabled">&larr; Previous</span>
+          <a href="timeline.html" class="nav-next">Timeline &rarr;</a>
+  </div>
+</nav>
+</body>
+</html>

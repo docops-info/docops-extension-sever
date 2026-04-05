@@ -1,0 +1,237 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+:next-page-title: Timeline
+:next-page-url: timeline.html
+= image:icons/RecipeIcon.svg[width=36,height=36] DocOps Recipes
+
+[[top]]
+
+== Showcase
+
+link:recipe_showcase.html[Showcase,target=_blank]
+
+== Introduction
+
+_Create beautiful, structured cooking recipes with ingredients, steps, and notes_
+
+*Key features:*
+
+* Clear recipe metadata: title, yield, prep time, cook time
+* Structured sections for tags, summary, ingredients, steps, and notes
+* Supports multiline content for readable recipe authoring
+* Theme support for light and dark presentations
+* Ideal for cooking docs, meal plans, and food blogs
+
+== Default Example
+
+Basic recipe for a chocolate cake:
+
+[source,asciidoc]
+....
+[docops,recipe,controls="true"]
+----
+include::data/recipe/recipe1.txt[]
+----
+....
+
+[docops,recipe,useDark=true,controls="true"]
+----
+include::data/recipe/recipe1.txt[]
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Focused Examples
+
+=== Simple Weeknight Pasta
+
+[source,asciidoc]
+....
+[docops,recipe,controls="true"]
+----
+theme=ayu
+title= Weeknight Pasta
+yield= 2 servings
+prep= 10 minutes
+cook= 15 minutes
+tags= pasta, quick, vegetarian
+summary=
+A fast, flavorful pasta dish for busy evenings.
+ingredients=
+- 200g pasta
+- 2 cloves garlic
+- 2 tbsp olive oil
+- 1/2 tsp chili flakes
+- Salt to taste
+steps=
+1. Cook the pasta until al dente.
+2. Sauté garlic in olive oil.
+3. Toss pasta with chili flakes and salt.
+4. Serve immediately.
+notes=
+- Add parmesan for extra flavor.
+- Use gluten-free pasta if needed.
+----
+....
+
+[docops,recipe,controls="true"]
+----
+theme=ayu
+title= Weeknight Pasta
+yield= 2 servings
+prep= 10 minutes
+cook= 15 minutes
+tags= pasta, quick, vegetarian
+summary=
+A fast, flavorful pasta dish for busy evenings.
+ingredients=
+- 200g pasta
+- 2 cloves garlic
+- 2 tbsp olive oil
+- 1/2 tsp chili flakes
+- Salt to taste
+steps=
+1. Cook the pasta until al dente.
+2. Sauté garlic in olive oil.
+3. Toss pasta with chili flakes and salt.
+4. Serve immediately.
+notes=
+- Add parmesan for extra flavor.
+- Use gluten-free pasta if needed.
+----
+
+=== Dark Theme Version
+
+[source,asciidoc]
+....
+[docops,recipe,useDark=true,controls="true"]
+----
+theme=ayu
+include::data/recipe/recipe1.txt[]
+----
+....
+
+[docops,recipe,useDark=true,controls="true"]
+----
+theme=ayu
+include::data/recipe/recipe1.txt[]
+----
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Cookbook pages* - Present recipes in a consistent, attractive format
+* *Meal planning* - Document ingredients and steps for weekly menus
+* *Food blogs* - Turn structured recipe text into a polished visual
+* *Kitchen reference docs* - Keep prep, cook, and serving details together
+* *Training materials* - Standardize recipe formatting for teams
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Structure
+[source,asciidoc]
+....
+[docops,recipe]
+----
+title= Recipe Title
+yield= 4 servings
+prep= 15 minutes
+cook= 30 minutes
+tags= tag1, tag2, tag3
+summary= Short description of the recipe.
+ingredients=
+- Ingredient 1
+- Ingredient 2
+steps=
+1. First step
+2. Second step
+notes=
+- Optional note
+theme= classic
+----
+....
+
+=== Supported Fields
+
+[cols="1,3"]
+|===
+|Field |Purpose
+
+|title
+|Recipe name shown at the top
+
+|yield
+|Serving size or batch yield
+
+|prep
+|Preparation time
+
+|cook
+|Cooking time
+
+|tags
+|Comma- or semicolon-separated tags
+
+|summary
+|Short description of the recipe
+
+|ingredients
+|List of ingredients
+
+|steps
+|Ordered or unordered step list
+
+|notes
+|Additional recipe notes or tips
+
+|theme
+|Theme name used for styling
+|===
+
+=== List Formatting Rules
+
+* `tags=` accepts comma-separated or semicolon-separated values
+* `ingredients=` accepts bullet lists or plain lines
+* `steps=` accepts numbered lists or bullet lists
+* `notes=` accepts bullet lists or plain lines
+
+Example:
+
+[source]
+----
+ingredients=
+- 2 cups flour
+- 1 cup sugar
+- 2 eggs
+
+steps=
+1. Preheat oven to 180C.
+2. Mix ingredients.
+3. Bake for 30 minutes.
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+* *Keep titles short and clear* - Use the recipe name, not a full sentence
+* *Use consistent yield formatting* - For example, `4 servings` or `1 loaf`
+* *Keep steps concise* - One action per step improves readability
+* *Prefer bullet ingredients* - Makes scanning easier in the rendered output
+* *Add useful notes* - Include substitutions, storage tips, or serving suggestions
+* *Use tags for discovery* - Help readers find vegetarian, quick, dessert, or seasonal recipes
+
+[TIP]
+====
+For best results, keep ingredients in the order they are used and keep steps short and action-oriented. If a recipe has special preparation notes, put them in `notes=` so the main steps stay clean.
+====
+
+[.back-to-top]
+<<top, 🔝>>
