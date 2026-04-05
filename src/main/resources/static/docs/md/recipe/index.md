@@ -54,7 +54,7 @@ ingredients=
    notes=
 - Adjust spice level to taste.
 - Works well with jasmine rice or flatbread.
-  [/docops]
+[/docops]
 
 ## Warm Comfort Food Look
 
@@ -83,7 +83,7 @@ ingredients=
    notes=
 - Add fresh herbs just before serving.
 - Use less salt in the rest of the dish because the fish is already seasoned.
-  [/docops]
+[/docops]
 
 ## Modern Dark Theme Look
 
@@ -112,7 +112,7 @@ ingredients=
    notes=
 - Cool before serving.
 - Dust with icing sugar or frost as desired.
-  [/docops]
+[/docops]
 
 ## Key Components of a Recipe
 
@@ -142,17 +142,15 @@ yield= 4 servings
 prep= 15 minutes 
 cook= 30 minutes tags= tag1, tag2, tag3 
 summary= Short description of the recipe. 
-
 ingredients=
 - Ingredient 1
 - Ingredient 2 steps=
-
 1. First step
 2. Second step notes=
-
 - Optional note theme= classic 
 [/docops]
 ```
+
 ### Field Guide
 
 | Field | Purpose |
