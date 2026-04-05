@@ -51,6 +51,7 @@ object ThemeFactory {
      */
     fun getThemeByName(themeName: String, useDark: Boolean = false): DocOpsTheme {
         return when (themeName.lowercase()) {
+            "ayu", "ayutheme" -> if(useDark) AyuDarkTheme() else AyuLightTheme()
             "signal", "signaltheme" -> if (useDark) SignalDarkTheme() else SignalLightTheme()
             "brand", "brandtheme" -> if (useDark) BrandDarkTheme() else BrandLightTheme()
             "tallinn", "tallinntheme" -> if(useDark)ProDarkTheme() else TallinnTheme()
@@ -519,3 +520,47 @@ class SignalDarkTheme : DocOpsTheme {
         SVGColor("#DB2777", "Rose")
     )
 }
+
+class AyuLightTheme: DocOpsTheme {
+    override val name: String = "AyuLightTheme"
+    override val canvas: String = "#fcfcfc"
+    override val primaryText: String = "#f07171"
+    override val secondaryText: String = "#fa8532"
+    override val accentColor: String = "#a37acc"
+    override val glassEffect: String = "#86b300"
+    override val surfaceImpact: String = "#55b4d4"
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport =
+        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
+    override val fontLineHeight = 1.25f
+    override val cornerRadius = 12
+}
+
+class AyuDarkTheme: DocOpsTheme {
+    override val name: String = "AyuDarkTheme"
+    override val canvas: String = "#10141c"
+    override val primaryText: String = "#f29668"
+    override val secondaryText: String = "#e6c08a"
+    override val accentColor: String = "#aad94c"
+    override val glassEffect: String = "#95e6cb"
+    override val surfaceImpact: String = "#39bae6"
+    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontImport =
+        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+    override val fontWidthMultiplier = 1.15f
+    override val fontLineHeight = 1.25f
+    override val cornerRadius = 12
+}
+/*
+#f07171,
+#f2a191,
+#fa8532,
+#eba400,
+#e59645,
+#a37acc,
+#86b300,
+#4cbf99,
+#22a4e6,
+#55b4d4
+ */
