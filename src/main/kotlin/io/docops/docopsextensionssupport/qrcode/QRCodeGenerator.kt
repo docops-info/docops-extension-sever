@@ -618,8 +618,8 @@ class QRCode(private val text: String, private val ecLevel: ErrorCorrectionLevel
                   <circle cx="2" cy="2" r="1" fill="${theme.foreground}" opacity="0.1"/>
                 </pattern>
               </defs>
-              <rect width="$totalSize" height="$totalSize" fill="${theme.background}"/>
-              <rect width="$totalSize" height="$totalSize" fill="url(#dots)"/>
+              <rect width="$totalSize" height="$totalSize" fill="${theme.background}" rx="18" ry="18"/>
+              <rect width="$totalSize" height="$totalSize" fill="url(#dots)" rx="18" ry="18"/>
             """.trimIndent())
         } else {
             svg.append("  <rect width=\"$totalSize\" height=\"$totalSize\" fill=\"${theme.background}\"/>\n")
