@@ -2582,7 +2582,7 @@ notes=
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-ff461ec6ff760b75 {
+  .svg-modal-svgviewer-ba2a0758f52428b3 {
       display: none;
       position: fixed;
       top: 0;
@@ -2597,10 +2597,10 @@ notes=
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-ff461ec6ff760b75.active {
+  .svg-modal-svgviewer-ba2a0758f52428b3.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-ff461ec6ff760b75 {
+  .svg-modal-content-svgviewer-ba2a0758f52428b3 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2615,7 +2615,7 @@ notes=
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-ff461ec6ff760b75 {
+  .svg-modal-close-svgviewer-ba2a0758f52428b3 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2633,11 +2633,11 @@ notes=
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-ff461ec6ff760b75:hover {
+  .svg-modal-close-svgviewer-ba2a0758f52428b3:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-ff461ec6ff760b75 {
+  .svg-modal-body-svgviewer-ba2a0758f52428b3 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2647,7 +2647,7 @@ notes=
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-ff461ec6ff760b75 svg {
+  .svg-modal-body-svgviewer-ba2a0758f52428b3 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2656,10 +2656,10 @@ notes=
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-content {
+  #csv-modal-svgviewer-ba2a0758f52428b3 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table {
+  #csv-modal-svgviewer-ba2a0758f52428b3 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2667,7 +2667,7 @@ notes=
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table th {
+  #csv-modal-svgviewer-ba2a0758f52428b3 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2676,15 +2676,15 @@ notes=
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table td {
+  #csv-modal-svgviewer-ba2a0758f52428b3 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table tr {
+  #csv-modal-svgviewer-ba2a0758f52428b3 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-ff461ec6ff760b75 .csv-table tr:hover {
+  #csv-modal-svgviewer-ba2a0758f52428b3 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2692,10 +2692,10 @@ notes=
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_ff461ec6ff760b75 = {
+  window.svgModalsvgviewer_ba2a0758f52428b3 = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-ff461ec6ff760b75');
-          const sourceContainer = document.getElementById('svgviewer-ff461ec6ff760b75');
+          const modal = document.getElementById('modal-svgviewer-ba2a0758f52428b3');
+          const sourceContainer = document.getElementById('svgviewer-ba2a0758f52428b3');
 
           if (!modal || !sourceContainer) return;
 
@@ -2704,7 +2704,7 @@ notes=
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-ff461ec6ff760b75');
+          const targetContainer = document.getElementById('modal-body-svgviewer-ba2a0758f52428b3');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -2721,7 +2721,7 @@ notes=
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-ff461ec6ff760b75');
+          const modal = document.getElementById('modal-svgviewer-ba2a0758f52428b3');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2730,9 +2730,9 @@ notes=
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_ff461ec6ff760b75 = {
+  window.csvModalsvgviewer_ba2a0758f52428b3 = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-ff461ec6ff760b75');
+          const modal = document.getElementById('csv-modal-svgviewer-ba2a0758f52428b3');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -2743,11 +2743,11 @@ notes=
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-ff461ec6ff760b75');
+              window.svgViewer.loadCsvData('svgviewer-ba2a0758f52428b3');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-ff461ec6ff760b75');
+          const modal = document.getElementById('csv-modal-svgviewer-ba2a0758f52428b3');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -2758,20 +2758,20 @@ notes=
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-ff461ec6ff760b75');
+          const viewModal = document.getElementById('modal-svgviewer-ba2a0758f52428b3');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_ff461ec6ff760b75.close();
+              window.svgModalsvgviewer_ba2a0758f52428b3.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-ff461ec6ff760b75');
+          const csvModal = document.getElementById('csv-modal-svgviewer-ba2a0758f52428b3');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_ff461ec6ff760b75.close();
+              window.csvModalsvgviewer_ba2a0758f52428b3.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-ff461ec6ff760b75" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAGVD0mkA_1VSS27cMAzd6xQ8gON2ksnSi6JF0UUCBOgJZIm2GcuiK1GZzu1LyS7QriRR5PuQFJKAw9dgcyYHbzY6u2I2d8LghytkTB8U52z2hPtw-QwbReOY1-Hy3O5i5zyMCe062Swd5BuiHr8KudXksm023YfvoUzTHfYTHW4kC1iYOXiM4FLJAjZ6DWWetFowekzgMAqm3hhVkNCTPvNgHuACl0-P4MqeYQpckoaeWkjyDqNdNR12vilES67RbIMcj7G-ymzTCXQ9gDYKa4vgPDe8ljgWUQUdbBgEvTFZcFcJlx5-0iQHe_c_Zde4uuan8QBFYbUWbJoRRr6F3jz28Kqd0OgNQ9AMkAVPv0cnvG-SuqrnADs0nJJ686QahBKUKBRa-WjrD1CGvDHXDmvVe-2t422kiL431x5-oJUqh-ZFwh2YgqLOibwPCJzqlIA_FGjTlpftYdFEWLSoN889vKnjv0xcjVXmhUW9psk6bKR1QU5h54w5qnOVlMlj1olGFmyz_Mag90a40e9_fPT6-YLSIlXSVIKq1TWsUmDEiRM2Im19zf2iHRtDwRFTIt0xdeIWdhysaN5COmOaQNlJV6n_A8mutP73AgAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="title=Classic Pancakes
+<div class="svg-with-controls docops-media-card" id="svgviewer-ba2a0758f52428b3" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAB1d1GkA_1VSS27cMAzd6xQ8gON2ksnSi6JF0UUCBOgJZIm2GcuiK1GZzu1LyS7QriRR5PuQFJKAw9dgcyYHbzY6u2I2d8LghytkTB8U52z2hPtw-QwbReOY1-Hy3O5i5zyMCe062Swd5BuiHr8KudXksm023YfvoUzTHfYTHW4kC1iYOXiM4FLJAjZ6DWWetFowekzgMAqm3hhVkNCTPvNgHuACl0-P4MqeYQpckoaeWkjyDqNdNR12vilES67RbIMcj7G-ymzTCXQ9gDYKa4vgPDe8ljgWUQUdbBgEvTFZcFcJlx5-0iQHe_c_Zde4uuan8QBFYbUWbJoRRr6F3jz28Kqd0OgNQ9AMkAVPv0cnvG-SuqrnADs0nJJ686QahBKUKBRa-WjrD1CGvDHXDmvVe-2t422kiL431x5-oJUqh-ZFwh2YgqLOibwPCJzqlIA_FGjTlpftYdFEWLSoN889vKnjv0xcjVXmhUW9psk6bKR1QU5h54w5qnOVlMlj1olGFmyz_Mag90a40e9_fPT6-YLSIlXSVIKq1TWsUmDEiRM2Im19zf2iHRtDwRFTIt0xdeIWdhysaN5COmOaQNlJV6n_A8mutP73AgAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="title=Classic Pancakes
 yield=4 servings
 prep=10 min
 cook=15 min
@@ -2798,41 +2798,41 @@ notes=
 - Do not overmix the batter.
 - Let the pan fully preheat before cooking.
 - Add blueberries or chocolate chips if desired." data-kind="recipe">
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_d298f0a76c064242bef82a888646c6e8">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","classic","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1 1/2 cups flour | 3 1/2 tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1 1/4 cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b0f14"/><stop offset="100%" stop-color="#111827"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient><style><![CDATA[ .recipe-title { font-family: Arial, Helvetica, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .section-title { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: Arial, Helvetica, sans-serif; font-size: 18px; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(10,14,20,0.78)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#6366f1" opacity="0.12"/><circle cx="180" cy="1180" r="220" fill="#94a3b8" opacity="0.08"/><text x="130" y="145" class="recipe-title" fill="#94a3b8" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#ffffff">Classic Pancakes</text><rect x="860" y="130" width="220" height="44" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#ffffff">breakfast • sweet • quick</text></g><g><rect x="90" y="300" width="1020" height="188" rx="20" fill="#1e293b" fill-opacity="0.14" stroke="#6366f1" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#ffffff" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#ffffff" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#ffffff" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="488" stroke="#ffffff" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#94a3b8">yield</text><text x="125" y="375" class="meta-label" fill="#94a3b8">prep</text><text x="125" y="420" class="meta-label" fill="#94a3b8">cook</text><text x="125" y="465" class="meta-label" fill="#94a3b8">summary</text><text x="640" y="330" class="meta-value" fill="#ffffff">4 servings</text><text x="640" y="375" class="meta-value" fill="#ffffff">10 min</text><text x="640" y="420" class="meta-value" fill="#ffffff">15 min</text><text x="640" y="450" class="meta-value" fill="#ffffff">Fluffy pancakes with a golden crust and a soft, tender</text><text x="640" y="474" class="meta-value" fill="#ffffff">center.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="518" width="500" height="444" rx="24" fill="#1e293b" fill-opacity="0.12" stroke="#6366f1" stroke-opacity="0.12"/><rect x="90" y="518" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="568" class="section-title" fill="#94a3b8">ingredients</text><line x1="120" y1="598" x2="560" y2="598" stroke="#ffffff" stroke-opacity="0.10"/><g><text x="125" y="636" class="body-text" fill="#ffffff">1 1/2 cups flour</text><text x="125" y="670" class="body-text" fill="#ffffff">3 1/2 tsp baking powder</text><text x="125" y="704" class="body-text" fill="#ffffff">1 tsp salt</text><text x="125" y="738" class="body-text" fill="#ffffff">1 tbsp sugar</text><text x="125" y="772" class="body-text" fill="#ffffff">1 1/4 cups milk</text><text x="125" y="806" class="body-text" fill="#ffffff">1 egg</text><text x="125" y="840" class="body-text" fill="#ffffff">3 tbsp butter, melted</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="518" width="490" height="444" rx="24" fill="#1e293b" fill-opacity="0.12" stroke="#6366f1" stroke-opacity="0.12"/><rect x="620" y="518" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="568" class="section-title" fill="#94a3b8">steps</text><line x1="650" y1="598" x2="1080" y2="598" stroke="#ffffff" stroke-opacity="0.10"/><g><g><rect x="655" y="642" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="657" text-anchor="middle" class="badge-text" fill="#0b0f14">1</text></g><text x="689" y="656" class="body-text" fill="#ffffff">Sift flour, baking powder, salt, and sugar into a</text><text x="689" y="680" class="body-text" fill="#ffffff">large bowl.</text><g><rect x="655" y="702" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="717" text-anchor="middle" class="badge-text" fill="#0b0f14">2</text></g><text x="689" y="716" class="body-text" fill="#ffffff">Make a well in the center and add milk, egg, and</text><text x="689" y="740" class="body-text" fill="#ffffff">melted butter.</text><g><rect x="655" y="762" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="777" text-anchor="middle" class="badge-text" fill="#0b0f14">3</text></g><text x="689" y="776" class="body-text" fill="#ffffff">Stir until the batter is smooth and just combined.</text><g><rect x="655" y="798" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="813" text-anchor="middle" class="badge-text" fill="#0b0f14">4</text></g><text x="689" y="812" class="body-text" fill="#ffffff">Heat a lightly oiled griddle or pan over medium-high</text><text x="689" y="836" class="body-text" fill="#ffffff">heat.</text><g><rect x="655" y="858" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="873" text-anchor="middle" class="badge-text" fill="#0b0f14">5</text></g><text x="689" y="872" class="body-text" fill="#ffffff">Pour batter onto the hot surface and cook until</text><text x="689" y="896" class="body-text" fill="#ffffff">golden on both sides.</text></g></g><g><rect x="90" y="992" width="1020" height="192" rx="20" fill="#1e293b" fill-opacity="0.10" stroke="#6366f1" stroke-opacity="0.10"/><line x1="90" y1="1042" x2="1110" y2="1042" stroke="#ffffff" stroke-opacity="0.10"/><line x1="600" y1="992" x2="600" y2="1184" stroke="#ffffff" stroke-opacity="0.10"/><text x="125" y="1027" class="meta-label" fill="#94a3b8">tags</text><text x="655" y="1027" class="meta-label" fill="#94a3b8">notes</text><rect x="125" y="1072" width="109" height="36" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="179" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#ffffff">breakfast</text><rect x="246" y="1072" width="73" height="36" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="282" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#ffffff">sweet</text><rect x="331" y="1072" width="73" height="36" rx="999" fill="rgba(255, 255, 255, 0.05)" stroke="#6366f1" stroke-opacity="0.35"/><text x="367" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#ffffff">quick</text><text x="655" y="1087" class="body-text" fill="#ffffff">Do not overmix the batter.</text><text x="655" y="1111" class="body-text" fill="#ffffff">Let the pan fully preheat before cooking.</text><text x="655" y="1135" class="body-text" fill="#ffffff">Add blueberries or chocolate chips if desired.</text></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1368" viewBox="0 0 1200 1368" id="recipe_090ddd31bf2f4230a36b16db6ca6375c">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","classic","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1 1/2 cups flour | 3 1/2 tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1 1/4 cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#020617"/></linearGradient><pattern id="recipe_grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="#6366f1" stroke-opacity="0.05" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient><filter id="glass" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="drop_shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dx="4" dy="8" result="offsetblur"/><feFlood flood-color="0,0,0" flood-opacity="0.5"/><feComposite in2="offsetblur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><style><![CDATA[ :root { --primary: #ffffff; --secondary: #94a3b8; --accent: #6366f1; --canvas: #1e293b; } .recipe-title { font-family: Arial, Helvetica, sans-serif; font-size: 64px; font-weight: 800; letter-spacing: -1.5px; } .recipe-subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; opacity: 0.6; } .meta-label { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.7; } .meta-value { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 500; } .section-title { font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; } .body-text { font-family: Arial, Helvetica, sans-serif; font-size: 18px; line-height: 1.6; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 800; } .animate-stagger { opacity: 0; animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1368" fill="url(#recipe_bg)"/><rect width="1200" height="1368" fill="url(#recipe_grid)" opacity="0.9"/><g><circle cx="1100" cy="100" r="300" fill="#6366f1" opacity="0.05"/><circle cx="100" cy="1200" r="400" fill="#6366f1" opacity="0.03"/><g class="animate-stagger" style="animation-delay: 100ms"><text x="130" y="140" class="recipe-subtitle" fill="var(--secondary)">Recipe Dossier</text><text x="130" y="210" class="recipe-title" fill="var(--primary)" filter="url(#drop_shadow)">Classic Pancakes</text></g><g class="animate-stagger" style="animation-delay: 200ms"><rect x="828" y="135" width="252" height="40" rx="20" fill="rgba(255, 255, 255, 0.05)" stroke="var(--accent)" stroke-opacity="0.2"/><text x="954" y="161" text-anchor="middle" class="meta-value" font-size="14" font-weight="600" fill="var(--primary)">breakfast • sweet • quick</text></g><line x1="130" y1="260" x2="1080" y2="260" stroke="var(--accent)" stroke-width="2" stroke-opacity="0.3"/></g><g class="animate-stagger" style="animation-delay: 250ms"><rect x="90" y="290" width="1050" height="200" rx="24" fill="#1e293b" fill-opacity="0.3" filter="url(#drop_shadow)"/><text x="130" y="320" class="meta-label" fill="var(--accent)">Description</text><text x="130" y="338" class="body-text" fill="var(--primary)" opacity="0.9">Fluffy pancakes with a golden crust and a soft, tender center.</text><line x1="740" y1="310" x2="740" y2="470" stroke="var(--primary)" stroke-opacity="0.1" stroke-dasharray="4 4"/><g class="animate-stagger" style="animation-delay: 300ms"><text x="780" y="330" class="meta-label" fill="var(--secondary)">Yield</text><text x="780" y="360" class="meta-value" fill="var(--primary)">4 servings</text></g><g class="animate-stagger" style="animation-delay: 350ms"><text x="780" y="390" class="meta-label" fill="var(--secondary)">Prep Time</text><text x="780" y="420" class="meta-value" fill="var(--primary)">10 min</text></g><g class="animate-stagger" style="animation-delay: 400ms"><text x="780" y="450" class="meta-label" fill="var(--secondary)">Cook Time</text><text x="780" y="480" class="meta-value" fill="var(--primary)">15 min</text></g></g><g class="animate-stagger" style="animation-delay: 220ms"><rect x="90" y="520" width="500" height="444" rx="24" fill="#1e293b" fill-opacity="0.2" filter="url(#drop_shadow)"/><rect x="90" y="520" width="6" height="444" fill="var(--accent)" rx="3"/><text x="125" y="570" class="section-title" fill="var(--accent)">ingredients</text><line x1="125" y1="590" x2="190" y2="590" stroke="var(--accent)" stroke-width="3"/><g><text x="125" y="638" class="body-text" fill="var(--primary)">1 1/2 cups flour</text><text x="125" y="672" class="body-text" fill="var(--primary)">3 1/2 tsp baking powder</text><text x="125" y="706" class="body-text" fill="var(--primary)">1 tsp salt</text><text x="125" y="740" class="body-text" fill="var(--primary)">1 tbsp sugar</text><text x="125" y="774" class="body-text" fill="var(--primary)">1 1/4 cups milk</text><text x="125" y="808" class="body-text" fill="var(--primary)">1 egg</text><text x="125" y="842" class="body-text" fill="var(--primary)">3 tbsp butter, melted</text></g></g><g class="animate-stagger" style="animation-delay: 320ms"><rect x="620" y="520" width="520" height="444" rx="24" fill="#1e293b" fill-opacity="0.2" filter="url(#drop_shadow)"/><rect x="620" y="520" width="6" height="444" fill="var(--accent)" rx="3"/><text x="655" y="570" class="section-title" fill="var(--accent)">steps</text><line x1="655" y1="590" x2="720" y2="590" stroke="var(--accent)" stroke-width="3"/><g><g><rect x="655" y="644" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="659" text-anchor="middle" class="badge-text" fill="#0b0f14">1</text></g><text x="689" y="658" class="body-text" fill="var(--primary)">Sift flour, baking powder, salt, and sugar into a large</text><text x="689" y="682" class="body-text" fill="var(--primary)">bowl.</text><g><rect x="655" y="704" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="719" text-anchor="middle" class="badge-text" fill="#0b0f14">2</text></g><text x="689" y="718" class="body-text" fill="var(--primary)">Make a well in the center and add milk, egg, and melted</text><text x="689" y="742" class="body-text" fill="var(--primary)">butter.</text><g><rect x="655" y="764" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="779" text-anchor="middle" class="badge-text" fill="#0b0f14">3</text></g><text x="689" y="778" class="body-text" fill="var(--primary)">Stir until the batter is smooth and just combined.</text><g><rect x="655" y="800" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="815" text-anchor="middle" class="badge-text" fill="#0b0f14">4</text></g><text x="689" y="814" class="body-text" fill="var(--primary)">Heat a lightly oiled griddle or pan over medium-high</text><text x="689" y="838" class="body-text" fill="var(--primary)">heat.</text><g><rect x="655" y="860" width="24" height="20" rx="10" fill="#6366f1" opacity="0.96"/><text x="667" y="875" text-anchor="middle" class="badge-text" fill="#0b0f14">5</text></g><text x="689" y="874" class="body-text" fill="var(--primary)">Pour batter onto the hot surface and cook until golden</text><text x="689" y="898" class="body-text" fill="var(--primary)">on both sides.</text></g></g><g class="animate-stagger" style="animation-delay: 500ms"><rect x="90" y="1004" width="1050" height="264" rx="24" fill="#1e293b" fill-opacity="0.2" filter="url(#drop_shadow)"/><text x="130" y="1054" class="section-title" fill="var(--accent)">Notes &amp; Tags</text><line x1="130" y1="1069" x2="200" y2="1069" stroke="var(--accent)" stroke-width="3"/><g class="animate-stagger" style="animation-delay: 600ms"><rect x="130" y="1084" width="122" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="191" y="1108" text-anchor="middle" class="badge-text" fill="var(--primary)">breakfast</text></g><g class="animate-stagger" style="animation-delay: 630ms"><rect x="264" y="1084" width="82" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="305" y="1108" text-anchor="middle" class="badge-text" fill="var(--primary)">sweet</text></g><g class="animate-stagger" style="animation-delay: 660ms"><rect x="358" y="1084" width="82" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="399" y="1108" text-anchor="middle" class="badge-text" fill="var(--primary)">quick</text></g><g transform="translate(0, 80)"><text x="130" y="1114" class="body-text" fill="var(--primary)" opacity="0.8">Do not overmix the batter.</text><text x="130" y="1142" class="body-text" fill="var(--primary)" opacity="0.8">Let the pan fully preheat before cooking.</text><text x="130" y="1170" class="body-text" fill="var(--primary)" opacity="0.8">Add blueberries or chocolate chips if desired.</text></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_ff461ec6ff760b75.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_ff461ec6ff760b75.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_ba2a0758f52428b3.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_ba2a0758f52428b3.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-ff461ec6ff760b75')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-ff461ec6ff760b75')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-ba2a0758f52428b3')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-ba2a0758f52428b3')">PNG</button>
 </div>
-<div id="modal-svgviewer-ff461ec6ff760b75" class="svg-modal-svgviewer-ff461ec6ff760b75" onclick="if(event.target === this) svgModalsvgviewer_ff461ec6ff760b75.close()">
-    <div class="svg-modal-content-svgviewer-ff461ec6ff760b75">
-        <button class="svg-modal-close-svgviewer-ff461ec6ff760b75" onclick="svgModalsvgviewer_ff461ec6ff760b75.close()">×</button>
-        <div id="modal-body-svgviewer-ff461ec6ff760b75" class="svg-modal-body-svgviewer-ff461ec6ff760b75"></div>
+<div id="modal-svgviewer-ba2a0758f52428b3" class="svg-modal-svgviewer-ba2a0758f52428b3" onclick="if(event.target === this) svgModalsvgviewer_ba2a0758f52428b3.close()">
+    <div class="svg-modal-content-svgviewer-ba2a0758f52428b3">
+        <button class="svg-modal-close-svgviewer-ba2a0758f52428b3" onclick="svgModalsvgviewer_ba2a0758f52428b3.close()">×</button>
+        <div id="modal-body-svgviewer-ba2a0758f52428b3" class="svg-modal-body-svgviewer-ba2a0758f52428b3"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-ff461ec6ff760b75" class="svg-modal-svgviewer-ff461ec6ff760b75" onclick="if(event.target === this) csvModalsvgviewer_ff461ec6ff760b75.close()">
-    <div class="svg-modal-content-svgviewer-ff461ec6ff760b75">
-        <button class="svg-modal-close-svgviewer-ff461ec6ff760b75" onclick="csvModalsvgviewer_ff461ec6ff760b75.close()">×</button>
-        <div class="svg-modal-header-svgviewer-ff461ec6ff760b75" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-ba2a0758f52428b3" class="svg-modal-svgviewer-ba2a0758f52428b3" onclick="if(event.target === this) csvModalsvgviewer_ba2a0758f52428b3.close()">
+    <div class="svg-modal-content-svgviewer-ba2a0758f52428b3">
+        <button class="svg-modal-close-svgviewer-ba2a0758f52428b3" onclick="csvModalsvgviewer_ba2a0758f52428b3.close()">×</button>
+        <div class="svg-modal-header-svgviewer-ba2a0758f52428b3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-ff461ec6ff760b75" class="svg-modal-body-svgviewer-ff461ec6ff760b75" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-ba2a0758f52428b3" class="svg-modal-body-svgviewer-ba2a0758f52428b3" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-ff461ec6ff760b75" class="svg-modal-svgviewer-ff461ec6ff760b75" onclick="if(event.target === this) docopsSource.close('svgviewer-ff461ec6ff760b75')">
-    <div class="svg-modal-content-svgviewer-ff461ec6ff760b75">
-        <button class="svg-modal-close-svgviewer-ff461ec6ff760b75" onclick="docopsSource.close('svgviewer-ff461ec6ff760b75')">×</button>
-        <div class="svg-modal-header-svgviewer-ff461ec6ff760b75" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-svgviewer-ba2a0758f52428b3" class="svg-modal-svgviewer-ba2a0758f52428b3" onclick="if(event.target === this) docopsSource.close('svgviewer-ba2a0758f52428b3')">
+    <div class="svg-modal-content-svgviewer-ba2a0758f52428b3">
+        <button class="svg-modal-close-svgviewer-ba2a0758f52428b3" onclick="docopsSource.close('svgviewer-ba2a0758f52428b3')">×</button>
+        <div class="svg-modal-header-svgviewer-ba2a0758f52428b3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-ff461ec6ff760b75" class="svg-modal-body-svgviewer-ff461ec6ff760b75" style="display: block; overflow: auto;">
+        <div id="source-content-svgviewer-ba2a0758f52428b3" class="svg-modal-body-svgviewer-ba2a0758f52428b3" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -2941,7 +2941,7 @@ notes=
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-7c21d2b3383dd229 {
+  .svg-modal-svgviewer-65fcf9c53ed80e2c {
       display: none;
       position: fixed;
       top: 0;
@@ -2956,10 +2956,10 @@ notes=
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-7c21d2b3383dd229.active {
+  .svg-modal-svgviewer-65fcf9c53ed80e2c.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-7c21d2b3383dd229 {
+  .svg-modal-content-svgviewer-65fcf9c53ed80e2c {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2974,7 +2974,7 @@ notes=
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-7c21d2b3383dd229 {
+  .svg-modal-close-svgviewer-65fcf9c53ed80e2c {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2992,11 +2992,11 @@ notes=
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-7c21d2b3383dd229:hover {
+  .svg-modal-close-svgviewer-65fcf9c53ed80e2c:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-7c21d2b3383dd229 {
+  .svg-modal-body-svgviewer-65fcf9c53ed80e2c {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3006,7 +3006,7 @@ notes=
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-7c21d2b3383dd229 svg {
+  .svg-modal-body-svgviewer-65fcf9c53ed80e2c svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3015,10 +3015,10 @@ notes=
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-content {
+  #csv-modal-svgviewer-65fcf9c53ed80e2c .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table {
+  #csv-modal-svgviewer-65fcf9c53ed80e2c .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3026,7 +3026,7 @@ notes=
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table th {
+  #csv-modal-svgviewer-65fcf9c53ed80e2c .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3035,15 +3035,15 @@ notes=
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table td {
+  #csv-modal-svgviewer-65fcf9c53ed80e2c .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table tr {
+  #csv-modal-svgviewer-65fcf9c53ed80e2c .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-7c21d2b3383dd229 .csv-table tr:hover {
+  #csv-modal-svgviewer-65fcf9c53ed80e2c .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3051,10 +3051,10 @@ notes=
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_7c21d2b3383dd229 = {
+  window.svgModalsvgviewer_65fcf9c53ed80e2c = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-7c21d2b3383dd229');
-          const sourceContainer = document.getElementById('svgviewer-7c21d2b3383dd229');
+          const modal = document.getElementById('modal-svgviewer-65fcf9c53ed80e2c');
+          const sourceContainer = document.getElementById('svgviewer-65fcf9c53ed80e2c');
 
           if (!modal || !sourceContainer) return;
 
@@ -3063,7 +3063,7 @@ notes=
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-7c21d2b3383dd229');
+          const targetContainer = document.getElementById('modal-body-svgviewer-65fcf9c53ed80e2c');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -3080,7 +3080,7 @@ notes=
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-7c21d2b3383dd229');
+          const modal = document.getElementById('modal-svgviewer-65fcf9c53ed80e2c');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3089,9 +3089,9 @@ notes=
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_7c21d2b3383dd229 = {
+  window.csvModalsvgviewer_65fcf9c53ed80e2c = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-7c21d2b3383dd229');
+          const modal = document.getElementById('csv-modal-svgviewer-65fcf9c53ed80e2c');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -3102,11 +3102,11 @@ notes=
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-7c21d2b3383dd229');
+              window.svgViewer.loadCsvData('svgviewer-65fcf9c53ed80e2c');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-7c21d2b3383dd229');
+          const modal = document.getElementById('csv-modal-svgviewer-65fcf9c53ed80e2c');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3117,20 +3117,20 @@ notes=
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-7c21d2b3383dd229');
+          const viewModal = document.getElementById('modal-svgviewer-65fcf9c53ed80e2c');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_7c21d2b3383dd229.close();
+              window.svgModalsvgviewer_65fcf9c53ed80e2c.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-7c21d2b3383dd229');
+          const csvModal = document.getElementById('csv-modal-svgviewer-65fcf9c53ed80e2c');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_7c21d2b3383dd229.close();
+              window.csvModalsvgviewer_65fcf9c53ed80e2c.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-7c21d2b3383dd229" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAGVD0mkA_1VQS07DMBDd-xTvAK1pCyyzqLgAEiDWbjxJRnXsYE8CORLn4GJM2gBi4ZH8NO8zTzrqqXLzaIQlUIVXonPkthM8uiLOzEzBVzigUJ44tsUMmYYK-x16jqNQMXVKZwXufwFxbakwLPwN3kauzxtM1JK4zC6aMva9y3Nljmh0Z4MmuCnlZgxXDjyXDk3KOI1lBk0UF2NrdGbyTFFKZbY47HbtlbF8UIc0UUHrcuD6gsipDEiBJ0LioND-RkHF6o4DL7ZnTbvFkwsCSRDVIqNvUP29xYMeBulojTVG4QAX4DUBWXOwyhzl63P1BMc_N2tuLZ5TKSv5naX75wsXPYo6W3OnQtougfte73NCYbYmJu1yufPovYrknoqLl1roQ7JbW7O68FIIbdDq47bJ9BOXG0QiT95-Ayz2ubvlAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="theme=ayu
+<div class="svg-with-controls docops-media-card" id="svgviewer-65fcf9c53ed80e2c" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAB1d1GkA_1VQS07DMBDd-xTvAK1pCyyzqLgAEiDWbjxJRnXsYE8CORLn4GJM2gBi4ZH8NO8zTzrqqXLzaIQlUIVXonPkthM8uiLOzEzBVzigUJ44tsUMmYYK-x16jqNQMXVKZwXufwFxbakwLPwN3kauzxtM1JK4zC6aMva9y3Nljmh0Z4MmuCnlZgxXDjyXDk3KOI1lBk0UF2NrdGbyTFFKZbY47HbtlbF8UIc0UUHrcuD6gsipDEiBJ0LioND-RkHF6o4DL7ZnTbvFkwsCSRDVIqNvUP29xYMeBulojTVG4QAX4DUBWXOwyhzl63P1BMc_N2tuLZ5TKSv5naX75wsXPYo6W3OnQtougfte73NCYbYmJu1yufPovYrknoqLl1roQ7JbW7O68FIIbdDq47bJ9BOXG0QiT95-Ayz2ubvlAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="theme=ayu
 title= Weeknight Pasta
 yield= 2 servings
 prep= 10 minutes
@@ -3152,41 +3152,41 @@ steps=
 notes=
 - Add parmesan for extra flavor.
 - Use gluten-free pasta if needed." data-kind="recipe">
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_4f2595f953c8415fa0d3f898c61d234b">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Weeknight Pasta","2 servings","10 minutes","15 minutes","ayu","pasta; quick; vegetarian","A fast, flavorful pasta dish for busy evenings.","200g pasta | 2 cloves garlic | 2 tbsp olive oil | 1/2 tsp chili flakes | Salt to taste","Cook the pasta until al dente. | Sauté garlic in olive oil. | Toss pasta with chili flakes and salt. | Serve immediately.","Add parmesan for extra flavor. | Use gluten-free pasta if needed."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#e2e8f0"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.07" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a37acc"/><stop offset="100%" stop-color="#fa8532"/></linearGradient><style><![CDATA[ .recipe-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(255,255,255,0.92)" stroke="rgba(15,23,42,0.12)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#a37acc" opacity="0.10"/><circle cx="180" cy="1180" r="220" fill="#fa8532" opacity="0.06"/><text x="130" y="145" class="recipe-title" fill="#fa8532" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#f07171">Weeknight Pasta</text><rect x="860" y="130" width="220" height="44" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#f07171">pasta • quick • vegetarian</text></g><g><rect x="90" y="300" width="1020" height="180" rx="20" fill="#fcfcfc" fill-opacity="0.65" stroke="#a37acc" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#f07171" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#f07171" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#f07171" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="480" stroke="#f07171" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#fa8532">yield</text><text x="125" y="375" class="meta-label" fill="#fa8532">prep</text><text x="125" y="420" class="meta-label" fill="#fa8532">cook</text><text x="125" y="465" class="meta-label" fill="#fa8532">summary</text><text x="640" y="330" class="meta-value" fill="#f07171">2 servings</text><text x="640" y="375" class="meta-value" fill="#f07171">10 minutes</text><text x="640" y="420" class="meta-value" fill="#f07171">15 minutes</text><text x="640" y="460" class="meta-value" fill="#f07171">A fast, flavorful pasta dish for busy evenings.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="510" width="500" height="312" rx="24" fill="#fcfcfc" fill-opacity="0.82" stroke="#a37acc" stroke-opacity="0.12"/><rect x="90" y="510" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="560" class="section-title" fill="#fa8532">ingredients</text><line x1="120" y1="590" x2="560" y2="590" stroke="#f07171" stroke-opacity="0.10"/><g><text x="125" y="628" class="body-text" fill="#f07171">200g pasta</text><text x="125" y="662" class="body-text" fill="#f07171">2 cloves garlic</text><text x="125" y="696" class="body-text" fill="#f07171">2 tbsp olive oil</text><text x="125" y="730" class="body-text" fill="#f07171">1/2 tsp chili flakes</text><text x="125" y="764" class="body-text" fill="#f07171">Salt to taste</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="510" width="490" height="312" rx="24" fill="#fcfcfc" fill-opacity="0.82" stroke="#a37acc" stroke-opacity="0.12"/><rect x="620" y="510" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="560" class="section-title" fill="#fa8532">steps</text><line x1="650" y1="590" x2="1080" y2="590" stroke="#f07171" stroke-opacity="0.10"/><g><g><rect x="655" y="634" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="649" text-anchor="middle" class="badge-text" fill="#ffffff">1</text></g><text x="689" y="648" class="body-text" fill="#f07171">Cook the pasta until al dente.</text><g><rect x="655" y="670" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="685" text-anchor="middle" class="badge-text" fill="#ffffff">2</text></g><text x="689" y="684" class="body-text" fill="#f07171">Sauté garlic in olive oil.</text><g><rect x="655" y="706" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="721" text-anchor="middle" class="badge-text" fill="#ffffff">3</text></g><text x="689" y="720" class="body-text" fill="#f07171">Toss pasta with chili flakes and salt.</text><g><rect x="655" y="742" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="757" text-anchor="middle" class="badge-text" fill="#ffffff">4</text></g><text x="689" y="756" class="body-text" fill="#f07171">Serve immediately.</text></g></g><g><rect x="90" y="852" width="1020" height="180" rx="20" fill="#fcfcfc" fill-opacity="0.72" stroke="#a37acc" stroke-opacity="0.10"/><line x1="90" y1="902" x2="1110" y2="902" stroke="#f07171" stroke-opacity="0.10"/><line x1="600" y1="852" x2="600" y2="1032" stroke="#f07171" stroke-opacity="0.10"/><text x="125" y="887" class="meta-label" fill="#fa8532">tags</text><text x="655" y="887" class="meta-label" fill="#fa8532">notes</text><rect x="125" y="932" width="73" height="36" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="161" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#f07171">pasta</text><rect x="210" y="932" width="73" height="36" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="246" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#f07171">quick</text><rect x="295" y="932" width="118" height="36" rx="999" fill="#55b4d4" stroke="#a37acc" stroke-opacity="0.35"/><text x="354" y="955" text-anchor="middle" class="body-text" font-size="16" fill="#f07171">vegetarian</text><text x="655" y="947" class="body-text" fill="#f07171">Add parmesan for extra flavor.</text><text x="655" y="971" class="body-text" fill="#f07171">Use gluten-free pasta if needed.</text></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_cc1a915908ca4178b284280954f45b0a">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Weeknight Pasta","2 servings","10 minutes","15 minutes","ayu","pasta; quick; vegetarian","A fast, flavorful pasta dish for busy evenings.","200g pasta | 2 cloves garlic | 2 tbsp olive oil | 1/2 tsp chili flakes | Salt to taste","Cook the pasta until al dente. | Sauté garlic in olive oil. | Toss pasta with chili flakes and salt. | Serve immediately.","Add parmesan for extra flavor. | Use gluten-free pasta if needed."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#f1f5f9"/></linearGradient><pattern id="recipe_grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="#a37acc" stroke-opacity="0.08" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a37acc"/><stop offset="100%" stop-color="#fa8532"/></linearGradient><filter id="glass" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="drop_shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dx="4" dy="8" result="offsetblur"/><feFlood flood-color="0,0,0" flood-opacity="0.12"/><feComposite in2="offsetblur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><style><![CDATA[ :root { --primary: #f07171; --secondary: #fa8532; --accent: #a37acc; --canvas: #fcfcfc; } .recipe-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 64px; font-weight: 800; letter-spacing: -1.5px; } .recipe-subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; opacity: 0.6; } .meta-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.7; } .meta-value { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 500; } .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; } .body-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; line-height: 1.6; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 800; } .animate-stagger { opacity: 0; animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><g><circle cx="1100" cy="100" r="300" fill="#a37acc" opacity="0.05"/><circle cx="100" cy="1200" r="400" fill="#a37acc" opacity="0.03"/><g class="animate-stagger" style="animation-delay: 100ms"><text x="130" y="140" class="recipe-subtitle" fill="var(--secondary)">Recipe Dossier</text><text x="130" y="210" class="recipe-title" fill="var(--primary)" filter="">Weeknight Pasta</text></g><g class="animate-stagger" style="animation-delay: 200ms"><rect x="819" y="135" width="261" height="40" rx="20" fill="#55b4d4" stroke="var(--accent)" stroke-opacity="0.2"/><text x="949" y="161" text-anchor="middle" class="meta-value" font-size="14" font-weight="600" fill="var(--primary)">pasta • quick • vegetarian</text></g><line x1="130" y1="260" x2="1080" y2="260" stroke="var(--accent)" stroke-width="2" stroke-opacity="0.3"/></g><g class="animate-stagger" style="animation-delay: 250ms"><rect x="90" y="290" width="1050" height="200" rx="24" fill="#fcfcfc" fill-opacity="0.95" filter="url(#drop_shadow)"/><text x="130" y="320" class="meta-label" fill="var(--accent)">Description</text><text x="130" y="338" class="body-text" fill="var(--primary)" opacity="0.9">A fast, flavorful pasta dish for busy evenings.</text><line x1="740" y1="310" x2="740" y2="470" stroke="var(--primary)" stroke-opacity="0.1" stroke-dasharray="4 4"/><g class="animate-stagger" style="animation-delay: 300ms"><text x="780" y="330" class="meta-label" fill="var(--secondary)">Yield</text><text x="780" y="360" class="meta-value" fill="var(--primary)">2 servings</text></g><g class="animate-stagger" style="animation-delay: 350ms"><text x="780" y="390" class="meta-label" fill="var(--secondary)">Prep Time</text><text x="780" y="420" class="meta-value" fill="var(--primary)">10 minutes</text></g><g class="animate-stagger" style="animation-delay: 400ms"><text x="780" y="450" class="meta-label" fill="var(--secondary)">Cook Time</text><text x="780" y="480" class="meta-value" fill="var(--primary)">15 minutes</text></g></g><g class="animate-stagger" style="animation-delay: 220ms"><rect x="90" y="520" width="500" height="312" rx="24" fill="#fcfcfc" fill-opacity="0.98" filter="url(#drop_shadow)"/><rect x="90" y="520" width="6" height="312" fill="var(--accent)" rx="3"/><text x="125" y="570" class="section-title" fill="var(--accent)">ingredients</text><line x1="125" y1="590" x2="190" y2="590" stroke="var(--accent)" stroke-width="3"/><g><text x="125" y="638" class="body-text" fill="var(--primary)">200g pasta</text><text x="125" y="672" class="body-text" fill="var(--primary)">2 cloves garlic</text><text x="125" y="706" class="body-text" fill="var(--primary)">2 tbsp olive oil</text><text x="125" y="740" class="body-text" fill="var(--primary)">1/2 tsp chili flakes</text><text x="125" y="774" class="body-text" fill="var(--primary)">Salt to taste</text></g></g><g class="animate-stagger" style="animation-delay: 320ms"><rect x="620" y="520" width="520" height="312" rx="24" fill="#fcfcfc" fill-opacity="0.98" filter="url(#drop_shadow)"/><rect x="620" y="520" width="6" height="312" fill="var(--accent)" rx="3"/><text x="655" y="570" class="section-title" fill="var(--accent)">steps</text><line x1="655" y1="590" x2="720" y2="590" stroke="var(--accent)" stroke-width="3"/><g><g><rect x="655" y="644" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="659" text-anchor="middle" class="badge-text" fill="#ffffff">1</text></g><text x="689" y="658" class="body-text" fill="var(--primary)">Cook the pasta until al dente.</text><g><rect x="655" y="680" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="695" text-anchor="middle" class="badge-text" fill="#ffffff">2</text></g><text x="689" y="694" class="body-text" fill="var(--primary)">Sauté garlic in olive oil.</text><g><rect x="655" y="716" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="731" text-anchor="middle" class="badge-text" fill="#ffffff">3</text></g><text x="689" y="730" class="body-text" fill="var(--primary)">Toss pasta with chili flakes and salt.</text><g><rect x="655" y="752" width="24" height="20" rx="10" fill="#a37acc" opacity="0.96"/><text x="667" y="767" text-anchor="middle" class="badge-text" fill="#ffffff">4</text></g><text x="689" y="766" class="body-text" fill="var(--primary)">Serve immediately.</text></g></g><g class="animate-stagger" style="animation-delay: 500ms"><rect x="90" y="872" width="1050" height="220" rx="24" fill="#fcfcfc" fill-opacity="0.96" filter="url(#drop_shadow)"/><text x="130" y="922" class="section-title" fill="var(--accent)">Notes &amp; Tags</text><line x1="130" y1="937" x2="200" y2="937" stroke="var(--accent)" stroke-width="3"/><g class="animate-stagger" style="animation-delay: 600ms"><rect x="130" y="952" width="82" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="171" y="976" text-anchor="middle" class="badge-text" fill="var(--primary)">pasta</text></g><g class="animate-stagger" style="animation-delay: 630ms"><rect x="224" y="952" width="82" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="265" y="976" text-anchor="middle" class="badge-text" fill="var(--primary)">quick</text></g><g class="animate-stagger" style="animation-delay: 660ms"><rect x="318" y="952" width="132" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="384" y="976" text-anchor="middle" class="badge-text" fill="var(--primary)">vegetarian</text></g><g transform="translate(0, 80)"><text x="130" y="982" class="body-text" fill="var(--primary)" opacity="0.8">Add parmesan for extra flavor.</text><text x="130" y="1010" class="body-text" fill="var(--primary)" opacity="0.8">Use gluten-free pasta if needed.</text></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_7c21d2b3383dd229.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_7c21d2b3383dd229.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_65fcf9c53ed80e2c.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_65fcf9c53ed80e2c.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-7c21d2b3383dd229')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-7c21d2b3383dd229')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-65fcf9c53ed80e2c')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-65fcf9c53ed80e2c')">PNG</button>
 </div>
-<div id="modal-svgviewer-7c21d2b3383dd229" class="svg-modal-svgviewer-7c21d2b3383dd229" onclick="if(event.target === this) svgModalsvgviewer_7c21d2b3383dd229.close()">
-    <div class="svg-modal-content-svgviewer-7c21d2b3383dd229">
-        <button class="svg-modal-close-svgviewer-7c21d2b3383dd229" onclick="svgModalsvgviewer_7c21d2b3383dd229.close()">×</button>
-        <div id="modal-body-svgviewer-7c21d2b3383dd229" class="svg-modal-body-svgviewer-7c21d2b3383dd229"></div>
+<div id="modal-svgviewer-65fcf9c53ed80e2c" class="svg-modal-svgviewer-65fcf9c53ed80e2c" onclick="if(event.target === this) svgModalsvgviewer_65fcf9c53ed80e2c.close()">
+    <div class="svg-modal-content-svgviewer-65fcf9c53ed80e2c">
+        <button class="svg-modal-close-svgviewer-65fcf9c53ed80e2c" onclick="svgModalsvgviewer_65fcf9c53ed80e2c.close()">×</button>
+        <div id="modal-body-svgviewer-65fcf9c53ed80e2c" class="svg-modal-body-svgviewer-65fcf9c53ed80e2c"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-7c21d2b3383dd229" class="svg-modal-svgviewer-7c21d2b3383dd229" onclick="if(event.target === this) csvModalsvgviewer_7c21d2b3383dd229.close()">
-    <div class="svg-modal-content-svgviewer-7c21d2b3383dd229">
-        <button class="svg-modal-close-svgviewer-7c21d2b3383dd229" onclick="csvModalsvgviewer_7c21d2b3383dd229.close()">×</button>
-        <div class="svg-modal-header-svgviewer-7c21d2b3383dd229" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-65fcf9c53ed80e2c" class="svg-modal-svgviewer-65fcf9c53ed80e2c" onclick="if(event.target === this) csvModalsvgviewer_65fcf9c53ed80e2c.close()">
+    <div class="svg-modal-content-svgviewer-65fcf9c53ed80e2c">
+        <button class="svg-modal-close-svgviewer-65fcf9c53ed80e2c" onclick="csvModalsvgviewer_65fcf9c53ed80e2c.close()">×</button>
+        <div class="svg-modal-header-svgviewer-65fcf9c53ed80e2c" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-7c21d2b3383dd229" class="svg-modal-body-svgviewer-7c21d2b3383dd229" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-65fcf9c53ed80e2c" class="svg-modal-body-svgviewer-65fcf9c53ed80e2c" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-7c21d2b3383dd229" class="svg-modal-svgviewer-7c21d2b3383dd229" onclick="if(event.target === this) docopsSource.close('svgviewer-7c21d2b3383dd229')">
-    <div class="svg-modal-content-svgviewer-7c21d2b3383dd229">
-        <button class="svg-modal-close-svgviewer-7c21d2b3383dd229" onclick="docopsSource.close('svgviewer-7c21d2b3383dd229')">×</button>
-        <div class="svg-modal-header-svgviewer-7c21d2b3383dd229" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-svgviewer-65fcf9c53ed80e2c" class="svg-modal-svgviewer-65fcf9c53ed80e2c" onclick="if(event.target === this) docopsSource.close('svgviewer-65fcf9c53ed80e2c')">
+    <div class="svg-modal-content-svgviewer-65fcf9c53ed80e2c">
+        <button class="svg-modal-close-svgviewer-65fcf9c53ed80e2c" onclick="docopsSource.close('svgviewer-65fcf9c53ed80e2c')">×</button>
+        <div class="svg-modal-header-svgviewer-65fcf9c53ed80e2c" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-7c21d2b3383dd229" class="svg-modal-body-svgviewer-7c21d2b3383dd229" style="display: block; overflow: auto;">
+        <div id="source-content-svgviewer-65fcf9c53ed80e2c" class="svg-modal-body-svgviewer-65fcf9c53ed80e2c" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -3294,7 +3294,7 @@ notes=
   }
 
   /* Shared Modal Styles */
-  .svg-modal-svgviewer-355d34b75c873418 {
+  .svg-modal-svgviewer-da6af4cfa149dded {
       display: none;
       position: fixed;
       top: 0;
@@ -3309,10 +3309,10 @@ notes=
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-svgviewer-355d34b75c873418.active {
+  .svg-modal-svgviewer-da6af4cfa149dded.active {
       display: flex;
   }
-  .svg-modal-content-svgviewer-355d34b75c873418 {
+  .svg-modal-content-svgviewer-da6af4cfa149dded {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -3327,7 +3327,7 @@ notes=
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-svgviewer-355d34b75c873418 {
+  .svg-modal-close-svgviewer-da6af4cfa149dded {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -3345,11 +3345,11 @@ notes=
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-svgviewer-355d34b75c873418:hover {
+  .svg-modal-close-svgviewer-da6af4cfa149dded:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-svgviewer-355d34b75c873418 {
+  .svg-modal-body-svgviewer-da6af4cfa149dded {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3359,7 +3359,7 @@ notes=
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-svgviewer-355d34b75c873418 svg {
+  .svg-modal-body-svgviewer-da6af4cfa149dded svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3368,10 +3368,10 @@ notes=
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-355d34b75c873418 .csv-content {
+  #csv-modal-svgviewer-da6af4cfa149dded .csv-content {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-355d34b75c873418 .csv-table {
+  #csv-modal-svgviewer-da6af4cfa149dded .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3379,7 +3379,7 @@ notes=
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-svgviewer-355d34b75c873418 .csv-table th {
+  #csv-modal-svgviewer-da6af4cfa149dded .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3388,15 +3388,15 @@ notes=
       position: sticky;
       top: 0;
   }
-  #csv-modal-svgviewer-355d34b75c873418 .csv-table td {
+  #csv-modal-svgviewer-da6af4cfa149dded .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-svgviewer-355d34b75c873418 .csv-table tr {
+  #csv-modal-svgviewer-da6af4cfa149dded .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-svgviewer-355d34b75c873418 .csv-table tr:hover {
+  #csv-modal-svgviewer-da6af4cfa149dded .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3404,10 +3404,10 @@ notes=
 
 <script>
   // View Modal Control
-  window.svgModalsvgviewer_355d34b75c873418 = {
+  window.svgModalsvgviewer_da6af4cfa149dded = {
       open: function() {
-          const modal = document.getElementById('modal-svgviewer-355d34b75c873418');
-          const sourceContainer = document.getElementById('svgviewer-355d34b75c873418');
+          const modal = document.getElementById('modal-svgviewer-da6af4cfa149dded');
+          const sourceContainer = document.getElementById('svgviewer-da6af4cfa149dded');
 
           if (!modal || !sourceContainer) return;
 
@@ -3416,7 +3416,7 @@ notes=
           }
 
           const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-355d34b75c873418');
+          const targetContainer = document.getElementById('modal-body-svgviewer-da6af4cfa149dded');
 
           if (sourceSvg && targetContainer) {
               targetContainer.innerHTML = '';
@@ -3433,7 +3433,7 @@ notes=
           }
       },
       close: function() {
-          const modal = document.getElementById('modal-svgviewer-355d34b75c873418');
+          const modal = document.getElementById('modal-svgviewer-da6af4cfa149dded');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3442,9 +3442,9 @@ notes=
   };
 
   // Data Modal Control
-  window.csvModalsvgviewer_355d34b75c873418 = {
+  window.csvModalsvgviewer_da6af4cfa149dded = {
       open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-355d34b75c873418');
+          const modal = document.getElementById('csv-modal-svgviewer-da6af4cfa149dded');
           if (!modal) return;
 
           if (modal.parentNode !== document.body) {
@@ -3455,11 +3455,11 @@ notes=
           document.body.style.overflow = 'hidden';
 
           if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-355d34b75c873418');
+              window.svgViewer.loadCsvData('svgviewer-da6af4cfa149dded');
           }
       },
       close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-355d34b75c873418');
+          const modal = document.getElementById('csv-modal-svgviewer-da6af4cfa149dded');
           if (modal) {
               modal.classList.remove('active');
               document.body.style.overflow = '';
@@ -3470,20 +3470,20 @@ notes=
   // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-355d34b75c873418');
+          const viewModal = document.getElementById('modal-svgviewer-da6af4cfa149dded');
           if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_355d34b75c873418.close();
+              window.svgModalsvgviewer_da6af4cfa149dded.close();
           }
-          const csvModal = document.getElementById('csv-modal-svgviewer-355d34b75c873418');
+          const csvModal = document.getElementById('csv-modal-svgviewer-da6af4cfa149dded');
           if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_355d34b75c873418.close();
+              window.csvModalsvgviewer_da6af4cfa149dded.close();
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-355d34b75c873418" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAGVD0mkA_1VSS27cMAzd6xQ8gKN2ksnSi6JF0UUCBOgJZIm2GevjSlSmc_tSsgu0K0kU-T4kecWAo7lXxcQex6_elEIW3ky0ZsOi7oTejVcomD8oLkXtGffx8hkCRWVT2sbLc7-zWco4ZTTbbAoPUG6IcvyqZDdVaggm38fvvs7zHfYTHW7EKxhYkncYweZaGEx0EipplmrG6DCDxciYtVKiIKMjeZZRPcAFLp8ewda9wOxTzRJ66iEuO0xmk3TY000genKLFuP5eEztVReTT6DrARTIbz2Cy9LxeuJUWRQMENAzOqUK4y4SLhp-0swH-_A_5dC5hu6n8wBFTmLNm7wgTOnmtXrU8CqdkOgNvZcM4BVPv0cnnOuShqbnADs0nJK0ehINTBlqZPK9fDLtB6hACSm1DkvVe-utTWGiiE6rq4YfaLjJoWVlf4dEXlCXTM55hJTblCB9CFCQltfwsEoirFKk1bOGN3H8lyk1Y415TSxe82wsdtK2IKewc8YpinORVMhhkYnGxNhn-S2B3DthoN__-NDy-YLcI03SXL2olTVsUmDCOWXsRNL6lvtFOjb5ihPmTLJj4sSuySZvWPJWkhnTDMJOskr6D9HfF_ABAwAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="theme=ayu
+<div class="svg-with-controls docops-media-card" id="svgviewer-da6af4cfa149dded" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAB1d1GkA_1VSS27cMAzd6xQ8gKN2ksnSi6JF0UUCBOgJZIm2GevjSlSmc_tSsgu0K0kU-T4kecWAo7lXxcQex6_elEIW3ky0ZsOi7oTejVcomD8oLkXtGffx8hkCRWVT2sbLc7-zWco4ZTTbbAoPUG6IcvyqZDdVaggm38fvvs7zHfYTHW7EKxhYkncYweZaGEx0EipplmrG6DCDxciYtVKiIKMjeZZRPcAFLp8ewda9wOxTzRJ66iEuO0xmk3TY000genKLFuP5eEztVReTT6DrARTIbz2Cy9LxeuJUWRQMENAzOqUK4y4SLhp-0swH-_A_5dC5hu6n8wBFTmLNm7wgTOnmtXrU8CqdkOgNvZcM4BVPv0cnnOuShqbnADs0nJK0ehINTBlqZPK9fDLtB6hACSm1DkvVe-utTWGiiE6rq4YfaLjJoWVlf4dEXlCXTM55hJTblCB9CFCQltfwsEoirFKk1bOGN3H8lyk1Y415TSxe82wsdtK2IKewc8YpinORVMhhkYnGxNhn-S2B3DthoN__-NDy-YLcI03SXL2olTVsUmDCOWXsRNL6lvtFOjb5ihPmTLJj4sSuySZvWPJWkhnTDMJOskr6D9HfF_ABAwAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=food&filename=ghi.svg" data-original-content="theme=ayu
 title=Classic Pancakes
 yield=4 servings
 prep=10 min
@@ -3511,41 +3511,41 @@ notes=
 - Do not overmix the batter.
 - Let the pan fully preheat before cooking.
 - Add blueberries or chocolate chips if desired." data-kind="recipe">
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1320" viewBox="0 0 1200 1320" id="recipe_b0dfcfda8a634cc0a401a386bad96159">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-05</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","ayu","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1 1/2 cups flour | 3 1/2 tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1 1/4 cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b0f14"/><stop offset="100%" stop-color="#111827"/></linearGradient><pattern id="recipe_grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#aad94c"/><stop offset="100%" stop-color="#e6c08a"/></linearGradient><style><![CDATA[ .recipe-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 54px; font-weight: 700; } .meta-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; } .meta-value { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; } .body-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 700; } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1320" fill="url(#recipe_bg)"/><rect width="1200" height="1320" fill="url(#recipe_grid)" opacity="0.9"/><rect x="60" y="60" width="1080" height="1200" rx="28" fill="rgba(10,14,20,0.78)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/><g><circle cx="1030" cy="170" r="170" fill="#aad94c" opacity="0.12"/><circle cx="180" cy="1180" r="220" fill="#e6c08a" opacity="0.08"/><text x="130" y="145" class="recipe-title" fill="#e6c08a" font-size="18" font-weight="600" letter-spacing="2" style="text-transform:uppercase;">recipe dossier</text><text x="130" y="205" class="recipe-title" fill="#f29668">Classic Pancakes</text><rect x="860" y="130" width="220" height="44" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="970" y="158" text-anchor="middle" class="meta-value" font-size="16" font-weight="500" fill="#f29668">breakfast • sweet • quick</text></g><g><rect x="90" y="300" width="1020" height="188" rx="20" fill="#10141c" fill-opacity="0.14" stroke="#aad94c" stroke-opacity="0.12"/><line x1="90" y1="345" x2="1110" y2="345" stroke="#f29668" stroke-opacity="0.10"/><line x1="90" y1="390" x2="1110" y2="390" stroke="#f29668" stroke-opacity="0.10"/><line x1="90" y1="435" x2="1110" y2="435" stroke="#f29668" stroke-opacity="0.10"/><line x1="600" y1="300" x2="600" y2="488" stroke="#f29668" stroke-opacity="0.10"/><text x="125" y="330" class="meta-label" fill="#e6c08a">yield</text><text x="125" y="375" class="meta-label" fill="#e6c08a">prep</text><text x="125" y="420" class="meta-label" fill="#e6c08a">cook</text><text x="125" y="465" class="meta-label" fill="#e6c08a">summary</text><text x="640" y="330" class="meta-value" fill="#f29668">4 servings</text><text x="640" y="375" class="meta-value" fill="#f29668">10 min</text><text x="640" y="420" class="meta-value" fill="#f29668">15 min</text><text x="640" y="450" class="meta-value" fill="#f29668">Fluffy pancakes with a golden crust and a soft, tender</text><text x="640" y="474" class="meta-value" fill="#f29668">center.</text></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="220ms" fill="freeze"/><rect x="90" y="518" width="500" height="444" rx="24" fill="#10141c" fill-opacity="0.12" stroke="#aad94c" stroke-opacity="0.12"/><rect x="90" y="518" width="500" height="8" fill="url(#accent_bar)" rx="4"/><text x="125" y="568" class="section-title" fill="#e6c08a">ingredients</text><line x1="120" y1="598" x2="560" y2="598" stroke="#f29668" stroke-opacity="0.10"/><g><text x="125" y="636" class="body-text" fill="#f29668">1 1/2 cups flour</text><text x="125" y="670" class="body-text" fill="#f29668">3 1/2 tsp baking powder</text><text x="125" y="704" class="body-text" fill="#f29668">1 tsp salt</text><text x="125" y="738" class="body-text" fill="#f29668">1 tbsp sugar</text><text x="125" y="772" class="body-text" fill="#f29668">1 1/4 cups milk</text><text x="125" y="806" class="body-text" fill="#f29668">1 egg</text><text x="125" y="840" class="body-text" fill="#f29668">3 tbsp butter, melted</text></g></g><g opacity="0"><animate attributeName="opacity" from="0" to="1" dur="0.7s" begin="320ms" fill="freeze"/><rect x="620" y="518" width="490" height="444" rx="24" fill="#10141c" fill-opacity="0.12" stroke="#aad94c" stroke-opacity="0.12"/><rect x="620" y="518" width="490" height="8" fill="url(#accent_bar)" rx="4"/><text x="655" y="568" class="section-title" fill="#e6c08a">steps</text><line x1="650" y1="598" x2="1080" y2="598" stroke="#f29668" stroke-opacity="0.10"/><g><g><rect x="655" y="642" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="657" text-anchor="middle" class="badge-text" fill="#0b0f14">1</text></g><text x="689" y="656" class="body-text" fill="#f29668">Sift flour, baking powder, salt, and sugar into a</text><text x="689" y="680" class="body-text" fill="#f29668">large bowl.</text><g><rect x="655" y="702" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="717" text-anchor="middle" class="badge-text" fill="#0b0f14">2</text></g><text x="689" y="716" class="body-text" fill="#f29668">Make a well in the center and add milk, egg, and</text><text x="689" y="740" class="body-text" fill="#f29668">melted butter.</text><g><rect x="655" y="762" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="777" text-anchor="middle" class="badge-text" fill="#0b0f14">3</text></g><text x="689" y="776" class="body-text" fill="#f29668">Stir until the batter is smooth and just combined.</text><g><rect x="655" y="798" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="813" text-anchor="middle" class="badge-text" fill="#0b0f14">4</text></g><text x="689" y="812" class="body-text" fill="#f29668">Heat a lightly oiled griddle or pan over medium-high</text><text x="689" y="836" class="body-text" fill="#f29668">heat.</text><g><rect x="655" y="858" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="873" text-anchor="middle" class="badge-text" fill="#0b0f14">5</text></g><text x="689" y="872" class="body-text" fill="#f29668">Pour batter onto the hot surface and cook until</text><text x="689" y="896" class="body-text" fill="#f29668">golden on both sides.</text></g></g><g><rect x="90" y="992" width="1020" height="192" rx="20" fill="#10141c" fill-opacity="0.10" stroke="#aad94c" stroke-opacity="0.10"/><line x1="90" y1="1042" x2="1110" y2="1042" stroke="#f29668" stroke-opacity="0.10"/><line x1="600" y1="992" x2="600" y2="1184" stroke="#f29668" stroke-opacity="0.10"/><text x="125" y="1027" class="meta-label" fill="#e6c08a">tags</text><text x="655" y="1027" class="meta-label" fill="#e6c08a">notes</text><rect x="125" y="1072" width="109" height="36" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="179" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#f29668">breakfast</text><rect x="246" y="1072" width="73" height="36" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="282" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#f29668">sweet</text><rect x="331" y="1072" width="73" height="36" rx="999" fill="#39bae6" stroke="#aad94c" stroke-opacity="0.35"/><text x="367" y="1095" text-anchor="middle" class="body-text" font-size="16" fill="#f29668">quick</text><text x="655" y="1087" class="body-text" fill="#f29668">Do not overmix the batter.</text><text x="655" y="1111" class="body-text" fill="#f29668">Let the pan fully preheat before cooking.</text><text x="655" y="1135" class="body-text" fill="#f29668">Add blueberries or chocolate chips if desired.</text></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1368" viewBox="0 0 1200 1368" id="recipe_ff66779b11b940b7a45a7bb6d5f2c780">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","ayu","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1 1/2 cups flour | 3 1/2 tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1 1/4 cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><desc>DocOps Recipe Card</desc><defs><linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#020617"/></linearGradient><pattern id="recipe_grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M 60 0 L 0 0 0 60" fill="none" stroke="#aad94c" stroke-opacity="0.05" stroke-width="1"/></pattern><linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#aad94c"/><stop offset="100%" stop-color="#e6c08a"/></linearGradient><filter id="glass" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="drop_shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dx="4" dy="8" result="offsetblur"/><feFlood flood-color="0,0,0" flood-opacity="0.5"/><feComposite in2="offsetblur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><style><![CDATA[ :root { --primary: #f29668; --secondary: #e6c08a; --accent: #aad94c; --canvas: #10141c; } .recipe-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 64px; font-weight: 800; letter-spacing: -1.5px; } .recipe-subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; opacity: 0.6; } .meta-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.7; } .meta-value { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 500; } .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; } .body-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; line-height: 1.6; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 800; } .animate-stagger { opacity: 0; animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } ]]></style></defs><g transform="scale(1.0)"><rect width="1200" height="1368" fill="url(#recipe_bg)"/><rect width="1200" height="1368" fill="url(#recipe_grid)" opacity="0.9"/><g><circle cx="1100" cy="100" r="300" fill="#aad94c" opacity="0.05"/><circle cx="100" cy="1200" r="400" fill="#aad94c" opacity="0.03"/><g class="animate-stagger" style="animation-delay: 100ms"><text x="130" y="140" class="recipe-subtitle" fill="var(--secondary)">Recipe Dossier</text><text x="130" y="210" class="recipe-title" fill="var(--primary)" filter="url(#drop_shadow)">Classic Pancakes</text></g><g class="animate-stagger" style="animation-delay: 200ms"><rect x="828" y="135" width="252" height="40" rx="20" fill="#39bae6" stroke="var(--accent)" stroke-opacity="0.2"/><text x="954" y="161" text-anchor="middle" class="meta-value" font-size="14" font-weight="600" fill="var(--primary)">breakfast • sweet • quick</text></g><line x1="130" y1="260" x2="1080" y2="260" stroke="var(--accent)" stroke-width="2" stroke-opacity="0.3"/></g><g class="animate-stagger" style="animation-delay: 250ms"><rect x="90" y="290" width="1050" height="200" rx="24" fill="#10141c" fill-opacity="0.3" filter="url(#drop_shadow)"/><text x="130" y="320" class="meta-label" fill="var(--accent)">Description</text><text x="130" y="338" class="body-text" fill="var(--primary)" opacity="0.9">Fluffy pancakes with a golden crust and a soft, tender center.</text><line x1="740" y1="310" x2="740" y2="470" stroke="var(--primary)" stroke-opacity="0.1" stroke-dasharray="4 4"/><g class="animate-stagger" style="animation-delay: 300ms"><text x="780" y="330" class="meta-label" fill="var(--secondary)">Yield</text><text x="780" y="360" class="meta-value" fill="var(--primary)">4 servings</text></g><g class="animate-stagger" style="animation-delay: 350ms"><text x="780" y="390" class="meta-label" fill="var(--secondary)">Prep Time</text><text x="780" y="420" class="meta-value" fill="var(--primary)">10 min</text></g><g class="animate-stagger" style="animation-delay: 400ms"><text x="780" y="450" class="meta-label" fill="var(--secondary)">Cook Time</text><text x="780" y="480" class="meta-value" fill="var(--primary)">15 min</text></g></g><g class="animate-stagger" style="animation-delay: 220ms"><rect x="90" y="520" width="500" height="444" rx="24" fill="#10141c" fill-opacity="0.2" filter="url(#drop_shadow)"/><rect x="90" y="520" width="6" height="444" fill="var(--accent)" rx="3"/><text x="125" y="570" class="section-title" fill="var(--accent)">ingredients</text><line x1="125" y1="590" x2="190" y2="590" stroke="var(--accent)" stroke-width="3"/><g><text x="125" y="638" class="body-text" fill="var(--primary)">1 1/2 cups flour</text><text x="125" y="672" class="body-text" fill="var(--primary)">3 1/2 tsp baking powder</text><text x="125" y="706" class="body-text" fill="var(--primary)">1 tsp salt</text><text x="125" y="740" class="body-text" fill="var(--primary)">1 tbsp sugar</text><text x="125" y="774" class="body-text" fill="var(--primary)">1 1/4 cups milk</text><text x="125" y="808" class="body-text" fill="var(--primary)">1 egg</text><text x="125" y="842" class="body-text" fill="var(--primary)">3 tbsp butter, melted</text></g></g><g class="animate-stagger" style="animation-delay: 320ms"><rect x="620" y="520" width="520" height="444" rx="24" fill="#10141c" fill-opacity="0.2" filter="url(#drop_shadow)"/><rect x="620" y="520" width="6" height="444" fill="var(--accent)" rx="3"/><text x="655" y="570" class="section-title" fill="var(--accent)">steps</text><line x1="655" y1="590" x2="720" y2="590" stroke="var(--accent)" stroke-width="3"/><g><g><rect x="655" y="644" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="659" text-anchor="middle" class="badge-text" fill="#0b0f14">1</text></g><text x="689" y="658" class="body-text" fill="var(--primary)">Sift flour, baking powder, salt, and sugar into a large</text><text x="689" y="682" class="body-text" fill="var(--primary)">bowl.</text><g><rect x="655" y="704" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="719" text-anchor="middle" class="badge-text" fill="#0b0f14">2</text></g><text x="689" y="718" class="body-text" fill="var(--primary)">Make a well in the center and add milk, egg, and melted</text><text x="689" y="742" class="body-text" fill="var(--primary)">butter.</text><g><rect x="655" y="764" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="779" text-anchor="middle" class="badge-text" fill="#0b0f14">3</text></g><text x="689" y="778" class="body-text" fill="var(--primary)">Stir until the batter is smooth and just combined.</text><g><rect x="655" y="800" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="815" text-anchor="middle" class="badge-text" fill="#0b0f14">4</text></g><text x="689" y="814" class="body-text" fill="var(--primary)">Heat a lightly oiled griddle or pan over medium-high</text><text x="689" y="838" class="body-text" fill="var(--primary)">heat.</text><g><rect x="655" y="860" width="24" height="20" rx="10" fill="#aad94c" opacity="0.96"/><text x="667" y="875" text-anchor="middle" class="badge-text" fill="#0b0f14">5</text></g><text x="689" y="874" class="body-text" fill="var(--primary)">Pour batter onto the hot surface and cook until golden</text><text x="689" y="898" class="body-text" fill="var(--primary)">on both sides.</text></g></g><g class="animate-stagger" style="animation-delay: 500ms"><rect x="90" y="1004" width="1050" height="264" rx="24" fill="#10141c" fill-opacity="0.2" filter="url(#drop_shadow)"/><text x="130" y="1054" class="section-title" fill="var(--accent)">Notes &amp; Tags</text><line x1="130" y1="1069" x2="200" y2="1069" stroke="var(--accent)" stroke-width="3"/><g class="animate-stagger" style="animation-delay: 600ms"><rect x="130" y="1084" width="122" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="191" y="1108" text-anchor="middle" class="badge-text" fill="var(--primary)">breakfast</text></g><g class="animate-stagger" style="animation-delay: 630ms"><rect x="264" y="1084" width="82" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="305" y="1108" text-anchor="middle" class="badge-text" fill="var(--primary)">sweet</text></g><g class="animate-stagger" style="animation-delay: 660ms"><rect x="358" y="1084" width="82" height="38" rx="19" fill="var(--accent)" fill-opacity="0.15" stroke="var(--accent)" stroke-opacity="0.3"/><text x="399" y="1108" text-anchor="middle" class="badge-text" fill="var(--primary)">quick</text></g><g transform="translate(0, 80)"><text x="130" y="1114" class="body-text" fill="var(--primary)" opacity="0.8">Do not overmix the batter.</text><text x="130" y="1142" class="body-text" fill="var(--primary)" opacity="0.8">Let the pan fully preheat before cooking.</text><text x="130" y="1170" class="body-text" fill="var(--primary)" opacity="0.8">Add blueberries or chocolate chips if desired.</text></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_355d34b75c873418.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_355d34b75c873418.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgModalsvgviewer_da6af4cfa149dded.open()">VIEW</button>
+<button class="svg-control-btn" onclick="csvModalsvgviewer_da6af4cfa149dded.open()">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-355d34b75c873418')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-355d34b75c873418')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-da6af4cfa149dded')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-da6af4cfa149dded')">PNG</button>
 </div>
-<div id="modal-svgviewer-355d34b75c873418" class="svg-modal-svgviewer-355d34b75c873418" onclick="if(event.target === this) svgModalsvgviewer_355d34b75c873418.close()">
-    <div class="svg-modal-content-svgviewer-355d34b75c873418">
-        <button class="svg-modal-close-svgviewer-355d34b75c873418" onclick="svgModalsvgviewer_355d34b75c873418.close()">×</button>
-        <div id="modal-body-svgviewer-355d34b75c873418" class="svg-modal-body-svgviewer-355d34b75c873418"></div>
+<div id="modal-svgviewer-da6af4cfa149dded" class="svg-modal-svgviewer-da6af4cfa149dded" onclick="if(event.target === this) svgModalsvgviewer_da6af4cfa149dded.close()">
+    <div class="svg-modal-content-svgviewer-da6af4cfa149dded">
+        <button class="svg-modal-close-svgviewer-da6af4cfa149dded" onclick="svgModalsvgviewer_da6af4cfa149dded.close()">×</button>
+        <div id="modal-body-svgviewer-da6af4cfa149dded" class="svg-modal-body-svgviewer-da6af4cfa149dded"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-355d34b75c873418" class="svg-modal-svgviewer-355d34b75c873418" onclick="if(event.target === this) csvModalsvgviewer_355d34b75c873418.close()">
-    <div class="svg-modal-content-svgviewer-355d34b75c873418">
-        <button class="svg-modal-close-svgviewer-355d34b75c873418" onclick="csvModalsvgviewer_355d34b75c873418.close()">×</button>
-        <div class="svg-modal-header-svgviewer-355d34b75c873418" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-svgviewer-da6af4cfa149dded" class="svg-modal-svgviewer-da6af4cfa149dded" onclick="if(event.target === this) csvModalsvgviewer_da6af4cfa149dded.close()">
+    <div class="svg-modal-content-svgviewer-da6af4cfa149dded">
+        <button class="svg-modal-close-svgviewer-da6af4cfa149dded" onclick="csvModalsvgviewer_da6af4cfa149dded.close()">×</button>
+        <div class="svg-modal-header-svgviewer-da6af4cfa149dded" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-355d34b75c873418" class="svg-modal-body-svgviewer-355d34b75c873418" style="display: block; overflow: auto;">
+        <div id="csv-content-svgviewer-da6af4cfa149dded" class="svg-modal-body-svgviewer-da6af4cfa149dded" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-355d34b75c873418" class="svg-modal-svgviewer-355d34b75c873418" onclick="if(event.target === this) docopsSource.close('svgviewer-355d34b75c873418')">
-    <div class="svg-modal-content-svgviewer-355d34b75c873418">
-        <button class="svg-modal-close-svgviewer-355d34b75c873418" onclick="docopsSource.close('svgviewer-355d34b75c873418')">×</button>
-        <div class="svg-modal-header-svgviewer-355d34b75c873418" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-svgviewer-da6af4cfa149dded" class="svg-modal-svgviewer-da6af4cfa149dded" onclick="if(event.target === this) docopsSource.close('svgviewer-da6af4cfa149dded')">
+    <div class="svg-modal-content-svgviewer-da6af4cfa149dded">
+        <button class="svg-modal-close-svgviewer-da6af4cfa149dded" onclick="docopsSource.close('svgviewer-da6af4cfa149dded')">×</button>
+        <div class="svg-modal-header-svgviewer-da6af4cfa149dded" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-355d34b75c873418" class="svg-modal-body-svgviewer-355d34b75c873418" style="display: block; overflow: auto;">
+        <div id="source-content-svgviewer-da6af4cfa149dded" class="svg-modal-body-svgviewer-da6af4cfa149dded" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
