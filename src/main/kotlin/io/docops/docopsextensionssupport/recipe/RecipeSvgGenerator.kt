@@ -445,7 +445,7 @@ class RecipeSvgGenerator(
                   fill-opacity="${if (useDark) "0.2" else "0.98"}"
                   filter="url(#drop_shadow)"/>
             
-            <rect x="$x" y="$y" width="6" height="$h" fill="var(--accent)" rx="3"/>
+            <path d="M ${x + 24} $y a 24 24 0 0 0 -24 24 v ${h - 48} a 24 24 0 0 0 24 24 v -6 a 18 18 0 0 1 -18 -18 v -${h - 48} a 18 18 0 0 1 18 -18 z" fill="var(--accent)"/>
             
             <text x="${x + 35}" y="${y + 50}"
                   class="section-title"
