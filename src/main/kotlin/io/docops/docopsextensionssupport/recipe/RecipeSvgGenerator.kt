@@ -3,6 +3,7 @@ package io.docops.docopsextensionssupport.recipe
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.wrapTextToWidth
+import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.uuid.ExperimentalUuidApi
@@ -13,6 +14,11 @@ class RecipeSvgGenerator(
 ) {
 
     private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
+    @OptIn(ExperimentalUuidApi::class)
+    private val id = "recipe_${Uuid.random().toHexString()}"
+    private fun avgCharWidth() = 7.5f * theme.fontWidthMultiplier
+    private fun defId(suffix: String) = "${id}_$suffix"
+    private fun defUrl(suffix: String) = "url(#${defId(suffix)})"
 
     private data class Layout(
         val summaryHeight: Int,
@@ -33,9 +39,7 @@ class RecipeSvgGenerator(
         val text: String
     )
 
-    @OptIn(ExperimentalUuidApi::class)
     fun createSvg(recipe: Recipe, scale: Double = 1.0, isPdf: Boolean = false): String {
-        val id = "recipe_${Uuid.random().toHexString()}"
         val width = 1200
 
         theme = ThemeFactory.getThemeByName(recipe.theme, useDark)
@@ -69,13 +73,13 @@ class RecipeSvgGenerator(
 
         return """
             <svg xmlns="http://www.w3.org/2000/svg"
-                 width="${(width * scale).roundToInt()}" height="${(layout.totalHeight * scale).roundToInt()}"
+                 width="${(width * scale).roundToInt() / DISPLAY_RATIO_16_9}" height="${(layout.totalHeight * scale).roundToInt() / DISPLAY_RATIO_16_9}"
                  viewBox="0 0 $width ${layout.totalHeight}" id="$id">
                 <desc>DocOps Recipe Card</desc>
                 ${if (!isPdf) svgDefs() else ""}
                 <g transform="scale($scale)">
-                    <rect width="$width" height="${layout.totalHeight}" fill="url(#recipe_bg)"/>
-                    <rect width="$width" height="${layout.totalHeight}" fill="url(#recipe_grid)" opacity="0.9"/>
+                    <rect width="$width" height="${layout.totalHeight}" fill="${defUrl("bg")}"/>
+                    <rect width="$width" height="${layout.totalHeight}" fill="${defUrl("grid")}" opacity="0.9"/>
 
                     ${buildHeader(title, tags)}
                     ${buildMetaTable(yield, prep, cook, summary, layout.summaryHeight)}
@@ -87,12 +91,12 @@ class RecipeSvgGenerator(
     }
 
     private fun measureLayout(recipe: Recipe): Layout {
-        val summaryLines = wrapTextToWidth(recipe.summary.orEmpty(), 600f)
+        val summaryLines = wrapTextToWidth(recipe.summary.orEmpty(), 600f, avgCharWidth())
             .ifEmpty { listOf(recipe.summary.orEmpty()) }
             .take(4)
 
         val ingredientLines = recipe.ingredients.flatMap { line ->
-            wrapTextToWidth(line, 430f)
+            wrapTextToWidth(line, 430f, avgCharWidth())
         }.ifEmpty { listOf("No ingredients provided.") }
 
         val stepRowGap = 24
@@ -105,7 +109,7 @@ class RecipeSvgGenerator(
                 .removePrefix("* ")
                 .trim()
                 .replace(Regex("^\\d+[.)]\\s*"), "")
-            val wrapped = wrapTextToWidth(clean, 390f).ifEmpty { listOf("") }
+            val wrapped = wrapTextToWidth(clean, 390f, avgCharWidth()).ifEmpty { listOf("") }
             stepContentHeight += (wrapped.size * stepRowGap) + stepInterGap
         }
         if (recipe.steps.isEmpty()) {
@@ -113,7 +117,7 @@ class RecipeSvgGenerator(
         }
 
         val noteLines = recipe.notes.flatMap { line ->
-            wrapTextToWidth(line, 940f)
+            wrapTextToWidth(line, 940f, avgCharWidth())
         }.ifEmpty { listOf("No notes provided.") }
 
         val summaryHeight = max(200, 160 + summaryLines.size * 28)
@@ -153,29 +157,29 @@ class RecipeSvgGenerator(
 
     private fun svgDefs(): String = """
         <defs>
-            <linearGradient id="recipe_bg" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="${defId("bg")}" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="${if (useDark) "#0f172a" else "#f8fafc"}"/>
                 <stop offset="100%" stop-color="${if (useDark) "#020617" else "#f1f5f9"}"/>
             </linearGradient>
 
-            <pattern id="recipe_grid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <pattern id="${defId("grid")}" width="60" height="60" patternUnits="userSpaceOnUse">
                 <path d="M 60 0 L 0 0 0 60" fill="none"
                       stroke="${theme.accentColor}"
                       stroke-opacity="${if (useDark) "0.05" else "0.08"}"
                       stroke-width="1"/>
             </pattern>
 
-            <linearGradient id="accent_bar" x1="0" y1="0" x2="1" y2="0">
+            <linearGradient id="${defId("accent_bar")}" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%" stop-color="${theme.accentColor}"/>
                 <stop offset="100%" stop-color="${theme.secondaryText}"/>
             </linearGradient>
-            
-            <filter id="glass" x="-20%" y="-20%" width="140%" height="140%">
+        
+            <filter id="${defId("glass")}" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
                 <feComposite in="SourceGraphic" in2="blur" operator="over"/>
             </filter>
-            
-            <filter id="drop_shadow" x="-20%" y="-20%" width="140%" height="140%">
+        
+            <filter id="${defId("drop_shadow")}" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
                 <feOffset dx="4" dy="8" result="offsetblur"/>
                 <feFlood flood-color="0,0,0" flood-opacity="${if (useDark) "0.5" else "0.12"}"/>
@@ -188,19 +192,19 @@ class RecipeSvgGenerator(
 
             <style>
                 <![CDATA[
-                    :root {
+                    #$id {
                         --primary: ${theme.primaryText};
                         --secondary: ${theme.secondaryText};
                         --accent: ${theme.accentColor};
                         --canvas: ${theme.canvas};
                     }
-                    .recipe-title {
+                    #$id .recipe-title {
                         font-family: ${theme.fontFamily};
                         font-size: 64px;
                         font-weight: 800;
                         letter-spacing: -1.5px;
                     }
-                    .recipe-subtitle {
+                    #$id .recipe-subtitle {
                         font-family: ${theme.fontFamily};
                         font-size: 16px;
                         font-weight: 600;
@@ -208,7 +212,7 @@ class RecipeSvgGenerator(
                         text-transform: uppercase;
                         opacity: 0.6;
                     }
-                    .meta-label {
+                    #$id .meta-label {
                         font-family: ${theme.fontFamily};
                         font-size: 14px;
                         font-weight: 700;
@@ -216,29 +220,29 @@ class RecipeSvgGenerator(
                         text-transform: uppercase;
                         opacity: 0.7;
                     }
-                    .meta-value {
+                    #$id .meta-value {
                         font-family: ${theme.fontFamily};
                         font-size: 20px;
                         font-weight: 500;
                     }
-                    .section-title {
+                    #$id .section-title {
                         font-family: ${theme.fontFamily};
                         font-size: 22px;
                         font-weight: 700;
                         text-transform: uppercase;
                         letter-spacing: 3px;
                     }
-                    .body-text {
+                    #$id .body-text {
                         font-family: ${theme.fontFamily};
                         font-size: 18px;
                         line-height: 1.6;
                     }
-                    .badge-text {
+                    #$id .badge-text {
                         font-family: ${theme.fontFamily};
                         font-size: 12px;
                         font-weight: 800;
                     }
-                    .animate-stagger {
+                    #$id .animate-stagger {
                         opacity: 0;
                         animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                     }
@@ -252,42 +256,71 @@ class RecipeSvgGenerator(
     """.trimIndent()
 
     private fun buildHeader(title: String, tags: String): String {
-        val tagWidth = max(220, (tags.length * 8.5).toInt() + 40)
-        val tagX = 1080 - tagWidth
+        val leftX = 130
+        val rightEdge = 1080
+        val titleToTagGap = 26
+
+        val tagWidth = max(220, (tags.length * 8.5 * theme.fontWidthMultiplier).toInt() + 40)
+        val tagX = rightEdge - tagWidth
+
+        val titleMaxWidth = max(220, tagX - leftX - titleToTagGap)
+        val wrappedTitle = wrapTextToWidth(title, titleMaxWidth.toFloat(), avgCharWidth() * 1.45f)
+
+        val titleLines = when {
+            wrappedTitle.isEmpty() -> listOf("Recipe")
+            wrappedTitle.size <= 2 -> wrappedTitle
+            else -> {
+                val second = wrappedTitle[1].trimEnd('.', ',', ';', ':') + "…"
+                listOf(wrappedTitle[0], second)
+            }
+        }
+
+        val titleStartY = 218
+        val titleLineGap = 58
+        val tagRectY = 118
+        val tagTextY = 144
+
+        val titleSvg = titleLines.mapIndexed { index, line ->
+            val y = titleStartY + (index * titleLineGap)
+            """
+            <text x="$leftX" y="$y"
+                  class="recipe-title"
+                  fill="var(--primary)"
+                  filter="${if (!useDark) "" else defUrl("drop_shadow")}">${escapeXml(line)}</text>
+            """.trimIndent()
+        }.joinToString("\n")
+
         return """
         <g>
             <circle cx="1100" cy="100" r="300" fill="${theme.accentColor}" opacity="0.05"/>
             <circle cx="100" cy="1200" r="400" fill="${theme.accentColor}" opacity="0.03"/>
-            
+        
             <g class="animate-stagger" style="animation-delay: 100ms">
-                <text x="130" y="140"
+                <text x="$leftX" y="140"
                       class="recipe-subtitle"
                       fill="var(--secondary)">Recipe Dossier</text>
-    
-                <text x="130" y="210"
-                      class="recipe-title"
-                      fill="var(--primary)"
-                      filter="${if (!useDark) "" else "url(#drop_shadow)"}">${escapeXml(title)}</text>
+
+                $titleSvg
             </g>
 
             <g class="animate-stagger" style="animation-delay: 200ms">
-                <rect x="$tagX" y="135" width="$tagWidth" height="40" rx="20"
+                <rect x="$tagX" y="$tagRectY" width="$tagWidth" height="40" rx="20"
                       fill="${theme.surfaceImpact}"
                       stroke="var(--accent)" stroke-opacity="0.2"/>
-                <text x="${tagX + tagWidth / 2}" y="161" text-anchor="middle"
+                <text x="${tagX + tagWidth / 2}" y="$tagTextY" text-anchor="middle"
                       class="meta-value"
                       font-size="14"
                       font-weight="600"
                       fill="var(--primary)">${escapeXml(tags)}</text>
             </g>
-            
+        
             <line x1="130" y1="260" x2="1080" y2="260" stroke="var(--accent)" stroke-width="2" stroke-opacity="0.3"/>
         </g>
     """.trimIndent()
     }
 
     private fun buildMetaTable(yield: String, prep: String, cook: String, summary: String, summaryHeight: Int): String {
-        val summaryLines = wrapTextToWidth(summary, 600f)
+        val summaryLines = wrapTextToWidth(summary, 600f, avgCharWidth())
             .ifEmpty { listOf(summary) }
             .take(4)
 
@@ -321,16 +354,15 @@ class RecipeSvgGenerator(
                 <rect x="90" y="290" width="1050" height="$summaryHeight" rx="24"
                       fill="${theme.canvas}"
                       fill-opacity="${if (useDark) "0.3" else "0.95"}"
-                      filter="url(#drop_shadow)"/>
-                
+                      filter="${defUrl("drop_shadow")}"/>
+            
                 <text x="130" y="320" class="meta-label" fill="var(--accent)">Description</text>
                 $summarySvg
-                
                 <line x1="740" y1="310" x2="740" y2="${270 + summaryHeight}" stroke="var(--primary)" stroke-opacity="0.1" stroke-dasharray="4 4"/>
-                
                 $metaItemsSvg
             </g>
         """.trimIndent()
+
     }
 
     private fun buildBodyPanels(ingredientsText: String, stepsText: String, layout: Layout): String {
@@ -406,7 +438,7 @@ class RecipeSvgGenerator(
             val availableWidth = if (hasBadge) contentWidth - badgeWidth - badgeGap else contentWidth
             val wrapWidth = if (hasBadge) (availableWidth - 6).toFloat() else availableWidth.toFloat()
 
-            val wrapped = wrapTextToWidth(entry.text, wrapWidth)
+            val wrapped = wrapTextToWidth(entry.text, wrapWidth, avgCharWidth())
                 .ifEmpty { listOf("") }
 
             if (hasBadge) {
@@ -443,17 +475,13 @@ class RecipeSvgGenerator(
             <rect x="$x" y="$y" width="$w" height="$h" rx="24"
                   fill="${theme.canvas}"
                   fill-opacity="${if (useDark) "0.2" else "0.98"}"
-                  filter="url(#drop_shadow)"/>
-            
+                  filter="${defUrl("drop_shadow")}"/>
             <path d="M ${x + 24} $y a 24 24 0 0 0 -24 24 v ${h - 48} a 24 24 0 0 0 24 24 v -6 a 18 18 0 0 1 -18 -18 v -${h - 48} a 18 18 0 0 1 18 -18 z" fill="var(--accent)"/>
-            
             <text x="${x + 35}" y="${y + 50}"
                   class="section-title"
                   fill="var(--accent)">$title</text>
-            
             <line x1="${x + 35}" y1="${y + 70}" x2="${x + 100}" y2="${y + 70}"
                   stroke="var(--accent)" stroke-width="3"/>
-                  
             <g>
                 $sb
             </g>
@@ -467,7 +495,7 @@ class RecipeSvgGenerator(
         val notesLines = notes.split("\n")
             .map { it.trim() }
             .filter { it.isNotBlank() }
-            .flatMap { line -> wrapTextToWidth(line, 940f) }
+            .flatMap { line -> wrapTextToWidth(line, 940f, avgCharWidth()) }
             .take(12)
 
         val notesY = layout.notesY
@@ -483,8 +511,8 @@ class RecipeSvgGenerator(
                 <rect x="90" y="$notesY" width="1050" height="${layout.notesHeight}" rx="24"
                       fill="${theme.canvas}"
                       fill-opacity="${if (useDark) "0.2" else "0.96"}"
-                      filter="url(#drop_shadow)"/>
-                
+                      filter="${defUrl("drop_shadow")}"/>
+            
                 <text x="130" y="${notesY + 50}" class="section-title" fill="var(--accent)">Notes &amp; Tags</text>
                 <line x1="130" y1="${notesY + 65}" x2="200" y2="${notesY + 65}" stroke="var(--accent)" stroke-width="3"/>
 

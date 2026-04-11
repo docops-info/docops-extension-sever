@@ -3,6 +3,9 @@ package io.docops.docopsextensionssupport.recipe
 
 class RecipeParser {
 
+    private val mixedFractionRegex = Regex("""(?<![\d/])(\d+)\s+(\d{1,2})/(\d{1,2})(?![\d/])""")
+    private val simpleFractionRegex = Regex("""(?<![\d/])(\d{1,2})/(\d{1,2})(?![\d/])""")
+
     fun parse(content: String): Recipe {
         var title: String? = null
         var yield: String? = null
@@ -135,6 +138,7 @@ class RecipeParser {
                     else -> emptyList()
                 }
             }
+            .map { normalizeFractions(it) }
             .filter { it.isNotBlank() }
 
     private fun splitNumberedOrLines(text: String): List<String> =
@@ -146,5 +150,42 @@ class RecipeParser {
                     .replace(Regex("^[-*+]\\s*"), "")
                     .trim()
             }
+            .map { normalizeFractions(it) }
             .filter { it.isNotBlank() }
+
+    private fun normalizeFractions(text: String): String {
+        val withMixedFractions = mixedFractionRegex.replace(text) { match ->
+            val whole = match.groupValues[1]
+            val numerator = match.groupValues[2]
+            val denominator = match.groupValues[3]
+            val unicode = toUnicodeFraction(numerator, denominator)
+            if (unicode != null) "$whole$unicode" else match.value
+        }
+
+        return simpleFractionRegex.replace(withMixedFractions) { match ->
+            val numerator = match.groupValues[1]
+            val denominator = match.groupValues[2]
+            toUnicodeFraction(numerator, denominator) ?: match.value
+        }
+
+    }
+    private fun toUnicodeFraction(numerator: String, denominator: String): String? =
+        when ("$numerator/$denominator") {
+            "1/2" -> "½"
+            "1/3" -> "⅓"
+            "2/3" -> "⅔"
+            "1/4" -> "¼"
+            "3/4" -> "¾"
+            "1/5" -> "⅕"
+            "2/5" -> "⅖"
+            "3/5" -> "⅗"
+            "4/5" -> "⅘"
+            "1/6" -> "⅙"
+            "5/6" -> "⅚"
+            "1/8" -> "⅛"
+            "3/8" -> "⅜"
+            "5/8" -> "⅝"
+            "7/8" -> "⅞"
+            else -> null
+        }
 }
