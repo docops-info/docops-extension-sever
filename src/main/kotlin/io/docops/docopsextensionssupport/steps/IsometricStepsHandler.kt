@@ -14,8 +14,13 @@ class IsometricStepsHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvRes
     ): String {
         val parser = IsometricStepsParser()
         val model = parser.parse(payload)
-        val generator = IsometricStepsSvgGenerator(context.useDark)
-        val svg = generator.createSvg(model, context.scale.toDouble())
+        val svg = if (model.config.view.lowercase() == "road") {
+            val generator = RoadStepsSvgGenerator(context.useDark)
+            generator.createSvg(model, context.scale.toDouble())
+        } else {
+            val generator = IsometricStepsSvgGenerator(context.useDark)
+            generator.createSvg(model, context.scale.toDouble())
+        }
         csvResponse.update(model.toCSV())
         return svg
     }

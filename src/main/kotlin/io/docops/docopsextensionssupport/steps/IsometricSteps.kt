@@ -21,6 +21,7 @@ data class IsometricStepsConfig(
     val version: String = "1",
     val title: String,
     val subtitle: String? = null,
+    val view: String = "isometric",
     val canvasWidth: Int = 1220,
     val canvasHeight: Int = 760,
     val theme: String = "classic",
@@ -38,5 +39,7 @@ data class IsometricStep(
     val order: Int,
     val title: String,
     val desc: String = "",
-    val color: String? = null
+    val color: String? = null,
+    val icon: String? = null
 )
+

@@ -2557,7 +2557,8 @@ window.onload = function() {
 <ul class="sectlevel2">
 <li><a href="#_software_development_lifecycle">3.1. Software Development Lifecycle</a></li>
 <li><a href="#_dark_theme_version">3.2. Dark Theme Version</a></li>
-<li><a href="#_minimal_three_step_process">3.3. Minimal Three-Step Process</a></li>
+<li><a href="#_road_view">3.3. Road View</a></li>
+<li><a href="#_minimal_three_step_process">3.4. Minimal Three-Step Process</a></li>
 </ul>
 </li>
 <li><a href="#_common_use_cases">4. Common Use Cases</a></li>
@@ -2615,13 +2616,8 @@ window.onload = function() {
 <pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,steps,controls=true]
 ----
 infographic=isometric-steps
-version=1
 title=Enterprise Advantage Highlights
 subtitle=Showcasing core strengths and performance across key dimensions
-canvasWidth=1220
-canvasHeight=760
-theme=brand
-palette=vibrant
 ---
 Order | Title | Description | Color
 1 | Brand Influence | Widely recognized and trusted by customers | #6EAEFF
@@ -2684,7 +2680,7 @@ Order | Title | Description | Color
   }
 
   /* Shared Modal Styles */
-  .svg-modal-sv-e001ef3258686f9b {
+  .svg-modal-sv-6f52f97d49fbfc43 {
       display: none;
       position: fixed;
       top: 0;
@@ -2699,10 +2695,10 @@ Order | Title | Description | Color
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-sv-e001ef3258686f9b.active {
+  .svg-modal-sv-6f52f97d49fbfc43.active {
       display: flex;
   }
-  .svg-modal-content-sv-e001ef3258686f9b {
+  .svg-modal-content-sv-6f52f97d49fbfc43 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2717,7 +2713,7 @@ Order | Title | Description | Color
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-sv-e001ef3258686f9b {
+  .svg-modal-close-sv-6f52f97d49fbfc43 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -2735,11 +2731,11 @@ Order | Title | Description | Color
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-sv-e001ef3258686f9b:hover {
+  .svg-modal-close-sv-6f52f97d49fbfc43:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-sv-e001ef3258686f9b {
+  .svg-modal-body-sv-6f52f97d49fbfc43 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -2749,7 +2745,7 @@ Order | Title | Description | Color
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-sv-e001ef3258686f9b svg {
+  .svg-modal-body-sv-6f52f97d49fbfc43 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -2758,10 +2754,10 @@ Order | Title | Description | Color
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-sv-e001ef3258686f9b .csv-content {
+  #csv-modal-sv-6f52f97d49fbfc43 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-sv-e001ef3258686f9b .csv-table {
+  #csv-modal-sv-6f52f97d49fbfc43 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -2769,7 +2765,7 @@ Order | Title | Description | Color
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-sv-e001ef3258686f9b .csv-table th {
+  #csv-modal-sv-6f52f97d49fbfc43 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -2778,15 +2774,15 @@ Order | Title | Description | Color
       position: sticky;
       top: 0;
   }
-  #csv-modal-sv-e001ef3258686f9b .csv-table td {
+  #csv-modal-sv-6f52f97d49fbfc43 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-sv-e001ef3258686f9b .csv-table tr {
+  #csv-modal-sv-6f52f97d49fbfc43 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-sv-e001ef3258686f9b .csv-table tr:hover {
+  #csv-modal-sv-6f52f97d49fbfc43 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -2796,22 +2792,18 @@ Order | Title | Description | Color
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
           if (window.svgViewer) {
-              window.svgViewer.closeModal('sv-e001ef3258686f9b');
-              window.svgViewer.closeCsvModal('sv-e001ef3258686f9b');
+              window.svgViewer.closeModal('sv-6f52f97d49fbfc43');
+              window.svgViewer.closeCsvModal('sv-6f52f97d49fbfc43');
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="sv-e001ef3258686f9b" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=step&payload=H4sIACfH3GkA_0WSQW_bMAyF7_oVBALsFiDJljQ9-JA0zlpgw4B1w86MzNhEbEmlZGce-uNHOQF6MEQJxOP3Hs3u7GvB0LAtOPqOkrCdx0QhmoEksnfF0iROLRWlSyRBOBLsqgFdwprgmeum1S9FE_vTrfG18VeLkV0N1gtBTEKuTk0EdBUEkrOXDp0lQCs-RrjQCBV35PK8aCy6AeMfrlJTLFerxf3hmfKc4mGzMKmhjoqTqJ4J2FJKVAyc78nM53PzQyoSeIdfmUfPA0UrHJLK6-3Jt17MUqt9VoAXd257yjzvoFOpHUHI-trxP6om5iS9ZlLBaQSrleYkUZtnm3JXHo9mpfXPTwd4vRvVq5Ze_bObN77XxNg5P-AEYDHgiVtOTDeRx0NZrs3nLIKBK_iOcqEEX8VfJ63fMY_LHEIDuZ6gFrrCW8_2oqzswDuCkTBbnh23-6fHtfmSIUgGVlvlX0tte3eYNwZRUeIZ7QSUleO99a1HJRsh5s1NeIdH9bg16xwjJlRR20tuUVx_0jQgiE_0IWV9F1qe9htHja2bZPaL3fq4NxutXz6y-Eaom4oNB32f_iqrMatg1dt0i55s43RhtS7FY9Vh7pztHsr1dvcfU9ofeL4CAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
-version=1
+<div class="svg-with-controls docops-media-card" id="sv-6f52f97d49fbfc43" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=step&payload=H4sIAKHh3GkA_0WST2-bQBDF7_spRrLUG1L_hNQ--IBjnEZqValp1POyO4aRYZfMLHap8uE7iy3lgBjQ4-3vvYHCMbZsx47cliQOmJhcIQlHMYlSj9s6JOSRSRAqf7Yh2RbhG7Vdr1cSI1NzFT538eKsUGjBRUaQxBja1AnY4GFEPkYebHAI1nEUgRPO4GnAIBSDHtfhgNuGVW2KojA_2SPDG_zO7nrfozimMalYnx5iH9l80mmXv4CncOwnzO5v8Ic89jMwutgG-od-IUg8aS4PzQxOJ83KouLVfV3Vh4P5rPOvD3t4vmHro45R01Aoujhpfgohnu0C4OxoG-opEV5NNvu6Ls2XbGJH8vDD8gkTPHK8LF4vko_LHIxnDBNCy3iB14ncSVkpQAwIM9oceXVY7x42pbnLEMhn0lj1X4d9f0uY-wdRFDlatwBlZ7lJXyerZDNI3sOCt99oxrUpc402WTV1E2eJ4sZG24CRY8J3KxeHsadlWzJrbcNis_tYlYedudf56b2L72h1U9LRqO-Xf8RpzWroJ5eu1aPrgi6s1aVE6weblavqa12uq_899BsmggIAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
 title=Enterprise Advantage Highlights
 subtitle=Showcasing core strengths and performance across key dimensions
-canvasWidth=1220
-canvasHeight=760
 theme=brand
-palette=vibrant
 ---
 Order | Title | Description | Color
 1 | Brand Influence | Widely recognized and trusted by customers | #6EAEFF
@@ -2822,40 +2814,40 @@ Order | Title | Description | Color
 6 | Innovation Leadership | Advanced product and technology roadmap | #A7E58A" data-kind="step">
 <svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Brand Influence","Widely recognized and trusted by customers","#6EAEFF"],["2","R&D Strength","Strong in-house innovation capabilities","#69DEE5"],["3","Rapid Market Growth","Users and revenue grew quickly in one year","#F8BC95"],["4","Service Excellence","High satisfaction and service quality scores","#D9AEF8"],["5","Data Security","Robust protection and compliance systems","#B0A5FB"],["6","Innovation Leadership","Advanced product and technology roadmap","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#F6F9FC"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#0F2230">Enterprise Advantage Highlights</text><text x="0" y="30" class="subtitle" fill="#335D79">Showcasing core strengths and performance across key dimensions</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#0F2230">Brand Influence</text><text x="280.0" y="720.0" class="desc" fill="#335D79">Widely recognized and</text><text x="280.0" y="738.0" class="desc" fill="#335D79">trusted by customers</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="224.0,527.0 224.0,547.0 284.0,577.0 284.0,557.0" fill="#54b1b7" /><!-- Right Side --><polygon points="344.0,527.0 344.0,547.0 284.0,577.0 284.0,557.0" fill="#69DEE5" /><!-- Top --><polygon points="284.0,497.0 344.0,527.0 284.0,557.0 224.0,527.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="284.0" cy="482.0" r="15" fill="#69DEE5" /><text x="284.0" y="487.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="414.0" y="612.0" class="step-title" fill="#0F2230">R&amp;D Strength</text><text x="414.0" y="637.0" class="desc" fill="#335D79">Strong in-house innovation</text><text x="414.0" y="655.0" class="desc" fill="#335D79">capabilities</text><line x1="284.0" y1="527.0" x2="414.0" y2="602.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="358.0,444.0 358.0,464.0 418.0,494.0 418.0,474.0" fill="#c69677" /><!-- Right Side --><polygon points="478.0,444.0 478.0,464.0 418.0,494.0 418.0,474.0" fill="#F8BC95" /><!-- Top --><polygon points="418.0,414.0 478.0,444.0 418.0,474.0 358.0,444.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="418.0" cy="399.0" r="15" fill="#F8BC95" /><text x="418.0" y="404.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="548.0" y="529.0" class="step-title" fill="#0F2230">Rapid Market Growth</text><text x="548.0" y="554.0" class="desc" fill="#335D79">Users and revenue grew</text><text x="548.0" y="572.0" class="desc" fill="#335D79">quickly in one year</text><line x1="418.0" y1="444.0" x2="548.0" y2="519.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="492.0,361.0 492.0,381.0 552.0,411.0 552.0,391.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="612.0,361.0 612.0,381.0 552.0,411.0 552.0,391.0" fill="#D9AEF8" /><!-- Top --><polygon points="552.0,331.0 612.0,361.0 552.0,391.0 492.0,361.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="552.0" cy="316.0" r="15" fill="#D9AEF8" /><text x="552.0" y="321.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="682.0" y="446.0" class="step-title" fill="#0F2230">Service Excellence</text><text x="682.0" y="471.0" class="desc" fill="#335D79">High satisfaction and</text><text x="682.0" y="489.0" class="desc" fill="#335D79">service quality scores</text><line x1="552.0" y1="361.0" x2="682.0" y2="436.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="626.0,278.0 626.0,298.0 686.0,328.0 686.0,308.0" fill="#8c84c8" /><!-- Right Side --><polygon points="746.0,278.0 746.0,298.0 686.0,328.0 686.0,308.0" fill="#B0A5FB" /><!-- Top --><polygon points="686.0,248.0 746.0,278.0 686.0,308.0 626.0,278.0" fill="#d3c6ff" stroke="#d3c6ff" stroke-width="0.5"/><!-- Badge --><circle cx="686.0" cy="233.0" r="15" fill="#B0A5FB" /><text x="686.0" y="238.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="816.0" y="363.0" class="step-title" fill="#0F2230">Data Security</text><text x="816.0" y="388.0" class="desc" fill="#335D79">Robust protection and</text><text x="816.0" y="406.0" class="desc" fill="#335D79">compliance systems</text><line x1="686.0" y1="278.0" x2="816.0" y2="353.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 950ms"><!-- Left Side --><polygon points="760.0,195.0 760.0,215.0 820.0,245.0 820.0,225.0" fill="#85b76e" /><!-- Right Side --><polygon points="880.0,195.0 880.0,215.0 820.0,245.0 820.0,225.0" fill="#A7E58A" /><!-- Top --><polygon points="820.0,165.0 880.0,195.0 820.0,225.0 760.0,195.0" fill="#c8ffa5" stroke="#c8ffa5" stroke-width="0.5"/><!-- Badge --><circle cx="820.0" cy="150.0" r="15" fill="#A7E58A" /><text x="820.0" y="155.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">6</text><!-- Label --><g><text x="950.0" y="280.0" class="step-title" fill="#0F2230">Innovation Leadership</text><text x="950.0" y="305.0" class="desc" fill="#335D79">Advanced product and</text><text x="950.0" y="323.0" class="desc" fill="#335D79">technology roadmap</text><line x1="820.0" y1="195.0" x2="950.0" y2="270.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgViewer.openModal('sv-e001ef3258686f9b')">VIEW</button>
-<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-e001ef3258686f9b')">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-6f52f97d49fbfc43')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-6f52f97d49fbfc43')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-e001ef3258686f9b')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-e001ef3258686f9b')">PNG</button>
-<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-e001ef3258686f9b')">PRINT</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-6f52f97d49fbfc43')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-6f52f97d49fbfc43')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-6f52f97d49fbfc43')">PRINT</button>
 </div>
-<div id="modal-sv-e001ef3258686f9b" class="svg-modal-sv-e001ef3258686f9b" onclick="if(event.target === this) svgViewer.closeModal('sv-e001ef3258686f9b')">
-    <div class="svg-modal-content-sv-e001ef3258686f9b">
-        <button class="svg-modal-close-sv-e001ef3258686f9b" onclick="svgViewer.closeModal('sv-e001ef3258686f9b')">×</button>
-        <div id="modal-body-sv-e001ef3258686f9b" class="svg-modal-body-sv-e001ef3258686f9b"></div>
+<div id="modal-sv-6f52f97d49fbfc43" class="svg-modal-sv-6f52f97d49fbfc43" onclick="if(event.target === this) svgViewer.closeModal('sv-6f52f97d49fbfc43')">
+    <div class="svg-modal-content-sv-6f52f97d49fbfc43">
+        <button class="svg-modal-close-sv-6f52f97d49fbfc43" onclick="svgViewer.closeModal('sv-6f52f97d49fbfc43')">×</button>
+        <div id="modal-body-sv-6f52f97d49fbfc43" class="svg-modal-body-sv-6f52f97d49fbfc43"></div>
     </div>
 </div>
 
-<div id="csv-modal-sv-e001ef3258686f9b" class="svg-modal-sv-e001ef3258686f9b" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-e001ef3258686f9b')">
-    <div class="svg-modal-content-sv-e001ef3258686f9b">
-        <button class="svg-modal-close-sv-e001ef3258686f9b" onclick="svgViewer.closeCsvModal('sv-e001ef3258686f9b')">×</button>
-        <div class="svg-modal-header-sv-e001ef3258686f9b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-6f52f97d49fbfc43" class="svg-modal-sv-6f52f97d49fbfc43" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-6f52f97d49fbfc43')">
+    <div class="svg-modal-content-sv-6f52f97d49fbfc43">
+        <button class="svg-modal-close-sv-6f52f97d49fbfc43" onclick="svgViewer.closeCsvModal('sv-6f52f97d49fbfc43')">×</button>
+        <div class="svg-modal-header-sv-6f52f97d49fbfc43" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-sv-e001ef3258686f9b" class="svg-modal-body-sv-e001ef3258686f9b" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-6f52f97d49fbfc43" class="svg-modal-body-sv-6f52f97d49fbfc43" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-sv-e001ef3258686f9b" class="svg-modal-sv-e001ef3258686f9b" onclick="if(event.target === this) docopsSource.close('sv-e001ef3258686f9b')">
-    <div class="svg-modal-content-sv-e001ef3258686f9b">
-        <button class="svg-modal-close-sv-e001ef3258686f9b" onclick="docopsSource.close('sv-e001ef3258686f9b')">×</button>
-        <div class="svg-modal-header-sv-e001ef3258686f9b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-6f52f97d49fbfc43" class="svg-modal-sv-6f52f97d49fbfc43" onclick="if(event.target === this) docopsSource.close('sv-6f52f97d49fbfc43')">
+    <div class="svg-modal-content-sv-6f52f97d49fbfc43">
+        <button class="svg-modal-close-sv-6f52f97d49fbfc43" onclick="docopsSource.close('sv-6f52f97d49fbfc43')">×</button>
+        <div class="svg-modal-header-sv-6f52f97d49fbfc43" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-sv-e001ef3258686f9b" class="svg-modal-body-sv-e001ef3258686f9b" style="display: block; overflow: auto;">
+        <div id="source-content-sv-6f52f97d49fbfc43" class="svg-modal-body-sv-6f52f97d49fbfc43" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -2894,7 +2886,7 @@ title=Software Development Lifecycle
 subtitle=Key phases from planning to deployment
 canvasWidth=1220
 canvasHeight=760
-theme=classic
+theme=ayu
 palette=vibrant
 ---
 Order | Title | Description | Color
@@ -2957,7 +2949,7 @@ Order | Title | Description | Color
   }
 
   /* Shared Modal Styles */
-  .svg-modal-sv-7c5701e998b9261a {
+  .svg-modal-sv-0ac5c707536d34f3 {
       display: none;
       position: fixed;
       top: 0;
@@ -2972,10 +2964,10 @@ Order | Title | Description | Color
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-sv-7c5701e998b9261a.active {
+  .svg-modal-sv-0ac5c707536d34f3.active {
       display: flex;
   }
-  .svg-modal-content-sv-7c5701e998b9261a {
+  .svg-modal-content-sv-0ac5c707536d34f3 {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -2990,7 +2982,7 @@ Order | Title | Description | Color
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-sv-7c5701e998b9261a {
+  .svg-modal-close-sv-0ac5c707536d34f3 {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -3008,11 +3000,11 @@ Order | Title | Description | Color
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-sv-7c5701e998b9261a:hover {
+  .svg-modal-close-sv-0ac5c707536d34f3:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-sv-7c5701e998b9261a {
+  .svg-modal-body-sv-0ac5c707536d34f3 {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3022,7 +3014,7 @@ Order | Title | Description | Color
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-sv-7c5701e998b9261a svg {
+  .svg-modal-body-sv-0ac5c707536d34f3 svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3031,10 +3023,10 @@ Order | Title | Description | Color
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-sv-7c5701e998b9261a .csv-content {
+  #csv-modal-sv-0ac5c707536d34f3 .csv-content {
       background: transparent !important;
   }
-  #csv-modal-sv-7c5701e998b9261a .csv-table {
+  #csv-modal-sv-0ac5c707536d34f3 .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3042,7 +3034,7 @@ Order | Title | Description | Color
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-sv-7c5701e998b9261a .csv-table th {
+  #csv-modal-sv-0ac5c707536d34f3 .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3051,15 +3043,15 @@ Order | Title | Description | Color
       position: sticky;
       top: 0;
   }
-  #csv-modal-sv-7c5701e998b9261a .csv-table td {
+  #csv-modal-sv-0ac5c707536d34f3 .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-sv-7c5701e998b9261a .csv-table tr {
+  #csv-modal-sv-0ac5c707536d34f3 .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-sv-7c5701e998b9261a .csv-table tr:hover {
+  #csv-modal-sv-0ac5c707536d34f3 .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3069,21 +3061,21 @@ Order | Title | Description | Color
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
           if (window.svgViewer) {
-              window.svgViewer.closeModal('sv-7c5701e998b9261a');
-              window.svgViewer.closeCsvModal('sv-7c5701e998b9261a');
+              window.svgViewer.closeModal('sv-0ac5c707536d34f3');
+              window.svgViewer.closeCsvModal('sv-0ac5c707536d34f3');
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="sv-7c5701e998b9261a" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=step&payload=H4sIACfH3GkA_0VRS2_CMAy-51dE4owEbLwOPXRQNGmTNm3TOIfUpZ5CEhy3DIkfvySAdopt-Xv4C9rG7Un5FnWBwR2ACfUwMPggeqCAzhZjwcgGik_X8EkRyDX0YJw_gGX5ig3oszYgQre77r3AWfpWBQiyIXeQ3ihr0e4lO1mDN-6ckEIr26uwxZrbYjyZjG6DZ8B9y8V8NhLcwgEKbVQIqIVXBpih6HFHKuKHw6F4oxpIXuRXEo7vGoIm9Bxtx27ljCMxjtX73UJaadCCJDh2SJCcBKlsLT25H9Asg3Y-UQ1mVVltNmJypcV9YixJt8hpLXqTwZkuSyW8JlAcZx50yPDluqqm4iHD__O6yC1Fhgwh6BFOUrs6C24WT6vlVDymeyDw1e63Mlgn4mMXKz5nYIO_MckYPGep9TI6XYhplrrnG5sPMBC_IeUer6s7nc2C7ZGcve0Mynk1XZR_Q268gAgCAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+<div class="svg-with-controls docops-media-card" id="sv-0ac5c707536d34f3" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=step&payload=H4sIAKHh3GkA_0VRS2_CMAy-51dE4owEbLwOPTAomrRJm7ZpnEPqUk8hCY5bVokfvySAdopt-Xv4C9raHUj5BnWBwR2BCfUwMPggOqCAzhZjwcgGik9X81kRyA10YJw_gmX5ijXoXhsQod1f916gl75RAYKsyR2lN8patAfJTlbgjesTUmhlOxV2WHFTjCeT0W3wDHhouJjPRoIbOEKh-lZ4ZYAZig73pCJ2OByKN6qA5EV-JdH4biBoQs_RcuzWzjgS41i93-XTSo0WJMGpRYLkIkhlK-nJ_YBmGbTziWowK1fldismV1o8JMYV6QY5rUVfMjjTZqmE1wSK48yDDhm-3JTlVDxk-H9WF7mjyJAhBB3CWWpXZcHt4mm9nIrHdA8Evtr9VgarRHxqY8V9Btb4G1OMoXOW2iyj04WYZql7trH5AAPxC1Lm8bqq1dks2A7J2dvOYDUvp4vVHzFWYvwEAgAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
 version=1
 title=Software Development Lifecycle
 subtitle=Key phases from planning to deployment
 canvasWidth=1220
 canvasHeight=760
-theme=classic
+theme=ayu
 palette=vibrant
 ---
 Order | Title | Description | Color
@@ -3092,42 +3084,42 @@ Order | Title | Description | Color
 3 | Development | Write and review code | #F8BC95
 4 | Testing | Validate quality and fix defects | #D9AEF8
 5 | Deployment | Release to production environment | #A7E58A" data-kind="step">
-<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Planning","Define requirements and project scope","#6EAEFF"],["2","Design","Architect the solution and create specs","#69DEE5"],["3","Development","Write and review code","#F8BC95"],["4","Testing","Validate quality and fix defects","#D9AEF8"],["5","Deployment","Release to production environment","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#ffffff"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#111111">Software Development Lifecycle</text><text x="0" y="30" class="subtitle" fill="#4338ca">Key phases from planning to deployment</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#111111">Planning</text><text x="280.0" y="720.0" class="desc" fill="#4338ca">Define requirements and</text><text x="280.0" y="738.0" class="desc" fill="#4338ca">project scope</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#111111">Design</text><text x="447.0" y="616.0" class="desc" fill="#4338ca">Architect the solution and</text><text x="447.0" y="634.0" class="desc" fill="#4338ca">create specs</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#111111">Development</text><text x="614.0" y="512.0" class="desc" fill="#4338ca">Write and review code</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#111111">Testing</text><text x="781.0" y="408.0" class="desc" fill="#4338ca">Validate quality and fix</text><text x="781.0" y="426.0" class="desc" fill="#4338ca">defects</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#85b76e" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#A7E58A" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#c8ffa5" stroke="#c8ffa5" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#A7E58A" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#111111">Deployment</text><text x="948.0" y="304.0" class="desc" fill="#4338ca">Release to production</text><text x="948.0" y="322.0" class="desc" fill="#4338ca">environment</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Planning","Define requirements and project scope","#6EAEFF"],["2","Design","Architect the solution and create specs","#69DEE5"],["3","Development","Write and review code","#F8BC95"],["4","Testing","Validate quality and fix defects","#D9AEF8"],["5","Deployment","Release to production environment","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#fcfcfc"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#f07171">Software Development Lifecycle</text><text x="0" y="30" class="subtitle" fill="#fa8532">Key phases from planning to deployment</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#f07171">Planning</text><text x="280.0" y="720.0" class="desc" fill="#fa8532">Define requirements and</text><text x="280.0" y="738.0" class="desc" fill="#fa8532">project scope</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#a37acc" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#f07171">Design</text><text x="447.0" y="616.0" class="desc" fill="#fa8532">Architect the solution and</text><text x="447.0" y="634.0" class="desc" fill="#fa8532">create specs</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#a37acc" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#f07171">Development</text><text x="614.0" y="512.0" class="desc" fill="#fa8532">Write and review code</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#a37acc" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#f07171">Testing</text><text x="781.0" y="408.0" class="desc" fill="#fa8532">Validate quality and fix</text><text x="781.0" y="426.0" class="desc" fill="#fa8532">defects</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#a37acc" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#85b76e" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#A7E58A" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#c8ffa5" stroke="#c8ffa5" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#A7E58A" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#f07171">Deployment</text><text x="948.0" y="304.0" class="desc" fill="#fa8532">Release to production</text><text x="948.0" y="322.0" class="desc" fill="#fa8532">environment</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#a37acc" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgViewer.openModal('sv-7c5701e998b9261a')">VIEW</button>
-<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-7c5701e998b9261a')">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-0ac5c707536d34f3')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-0ac5c707536d34f3')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-7c5701e998b9261a')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-7c5701e998b9261a')">PNG</button>
-<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-7c5701e998b9261a')">PRINT</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-0ac5c707536d34f3')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-0ac5c707536d34f3')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-0ac5c707536d34f3')">PRINT</button>
 </div>
-<div id="modal-sv-7c5701e998b9261a" class="svg-modal-sv-7c5701e998b9261a" onclick="if(event.target === this) svgViewer.closeModal('sv-7c5701e998b9261a')">
-    <div class="svg-modal-content-sv-7c5701e998b9261a">
-        <button class="svg-modal-close-sv-7c5701e998b9261a" onclick="svgViewer.closeModal('sv-7c5701e998b9261a')">×</button>
-        <div id="modal-body-sv-7c5701e998b9261a" class="svg-modal-body-sv-7c5701e998b9261a"></div>
+<div id="modal-sv-0ac5c707536d34f3" class="svg-modal-sv-0ac5c707536d34f3" onclick="if(event.target === this) svgViewer.closeModal('sv-0ac5c707536d34f3')">
+    <div class="svg-modal-content-sv-0ac5c707536d34f3">
+        <button class="svg-modal-close-sv-0ac5c707536d34f3" onclick="svgViewer.closeModal('sv-0ac5c707536d34f3')">×</button>
+        <div id="modal-body-sv-0ac5c707536d34f3" class="svg-modal-body-sv-0ac5c707536d34f3"></div>
     </div>
 </div>
 
-<div id="csv-modal-sv-7c5701e998b9261a" class="svg-modal-sv-7c5701e998b9261a" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-7c5701e998b9261a')">
-    <div class="svg-modal-content-sv-7c5701e998b9261a">
-        <button class="svg-modal-close-sv-7c5701e998b9261a" onclick="svgViewer.closeCsvModal('sv-7c5701e998b9261a')">×</button>
-        <div class="svg-modal-header-sv-7c5701e998b9261a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-0ac5c707536d34f3" class="svg-modal-sv-0ac5c707536d34f3" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-0ac5c707536d34f3')">
+    <div class="svg-modal-content-sv-0ac5c707536d34f3">
+        <button class="svg-modal-close-sv-0ac5c707536d34f3" onclick="svgViewer.closeCsvModal('sv-0ac5c707536d34f3')">×</button>
+        <div class="svg-modal-header-sv-0ac5c707536d34f3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-sv-7c5701e998b9261a" class="svg-modal-body-sv-7c5701e998b9261a" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-0ac5c707536d34f3" class="svg-modal-body-sv-0ac5c707536d34f3" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-sv-7c5701e998b9261a" class="svg-modal-sv-7c5701e998b9261a" onclick="if(event.target === this) docopsSource.close('sv-7c5701e998b9261a')">
-    <div class="svg-modal-content-sv-7c5701e998b9261a">
-        <button class="svg-modal-close-sv-7c5701e998b9261a" onclick="docopsSource.close('sv-7c5701e998b9261a')">×</button>
-        <div class="svg-modal-header-sv-7c5701e998b9261a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-0ac5c707536d34f3" class="svg-modal-sv-0ac5c707536d34f3" onclick="if(event.target === this) docopsSource.close('sv-0ac5c707536d34f3')">
+    <div class="svg-modal-content-sv-0ac5c707536d34f3">
+        <button class="svg-modal-close-sv-0ac5c707536d34f3" onclick="docopsSource.close('sv-0ac5c707536d34f3')">×</button>
+        <div class="svg-modal-header-sv-0ac5c707536d34f3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-sv-7c5701e998b9261a" class="svg-modal-body-sv-7c5701e998b9261a" style="display: block; overflow: auto;">
+        <div id="source-content-sv-0ac5c707536d34f3" class="svg-modal-body-sv-0ac5c707536d34f3" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -3159,7 +3151,7 @@ title=Customer Onboarding Journey
 subtitle=Steps to welcome and activate new customers
 canvasWidth=1220
 canvasHeight=760
-theme=brand
+theme=ayu
 palette=vibrant
 ---
 Order | Title | Description | Color
@@ -3222,7 +3214,7 @@ Order | Title | Description | Color
   }
 
   /* Shared Modal Styles */
-  .svg-modal-sv-b4b928a9b4afd431 {
+  .svg-modal-sv-10d8a756c338e0ce {
       display: none;
       position: fixed;
       top: 0;
@@ -3237,10 +3229,10 @@ Order | Title | Description | Color
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-sv-b4b928a9b4afd431.active {
+  .svg-modal-sv-10d8a756c338e0ce.active {
       display: flex;
   }
-  .svg-modal-content-sv-b4b928a9b4afd431 {
+  .svg-modal-content-sv-10d8a756c338e0ce {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -3255,7 +3247,7 @@ Order | Title | Description | Color
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-sv-b4b928a9b4afd431 {
+  .svg-modal-close-sv-10d8a756c338e0ce {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -3273,11 +3265,11 @@ Order | Title | Description | Color
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-sv-b4b928a9b4afd431:hover {
+  .svg-modal-close-sv-10d8a756c338e0ce:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-sv-b4b928a9b4afd431 {
+  .svg-modal-body-sv-10d8a756c338e0ce {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3287,7 +3279,7 @@ Order | Title | Description | Color
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-sv-b4b928a9b4afd431 svg {
+  .svg-modal-body-sv-10d8a756c338e0ce svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3296,10 +3288,10 @@ Order | Title | Description | Color
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-sv-b4b928a9b4afd431 .csv-content {
+  #csv-modal-sv-10d8a756c338e0ce .csv-content {
       background: transparent !important;
   }
-  #csv-modal-sv-b4b928a9b4afd431 .csv-table {
+  #csv-modal-sv-10d8a756c338e0ce .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3307,7 +3299,7 @@ Order | Title | Description | Color
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-sv-b4b928a9b4afd431 .csv-table th {
+  #csv-modal-sv-10d8a756c338e0ce .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3316,15 +3308,15 @@ Order | Title | Description | Color
       position: sticky;
       top: 0;
   }
-  #csv-modal-sv-b4b928a9b4afd431 .csv-table td {
+  #csv-modal-sv-10d8a756c338e0ce .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-sv-b4b928a9b4afd431 .csv-table tr {
+  #csv-modal-sv-10d8a756c338e0ce .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-sv-b4b928a9b4afd431 .csv-table tr:hover {
+  #csv-modal-sv-10d8a756c338e0ce .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3334,21 +3326,21 @@ Order | Title | Description | Color
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
           if (window.svgViewer) {
-              window.svgViewer.closeModal('sv-b4b928a9b4afd431');
-              window.svgViewer.closeCsvModal('sv-b4b928a9b4afd431');
+              window.svgViewer.closeModal('sv-10d8a756c338e0ce');
+              window.svgViewer.closeCsvModal('sv-10d8a756c338e0ce');
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="sv-b4b928a9b4afd431" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIACfH3GkA_1WQTW_bMAyG7_oVBHIOkGRL1hx8aBJ77S4tmrU7KxJtE3Ekg6IcBOiPL-1lh530kuLH85JCHRu2fUuuoBQvKExungT7ZAbkRDEUSyMkHRb7nEQrGF7CKVr2FBr4FTMHvJmUT3-LjmMrSIQrdk6rwQYP1gkNVhACXsHdxyTjbBhs-kNe2mK5Wi3uiSekppXix2ZhpMULFifWIaa3HYpgMdAYi5nP5-aFvfJ8wu9xt74HTI6pF8XWaB-7yGap6khNgPd-zP0z4RiVKCmf4rmYg-jvbFM-llVlVqo_kKkmZ-_Dnj0GtXibDOHFUgfD_xWzzfZQlmvzTfUrx5oU6YiSp7Xx0is-Qs9YI2Nw02oPST3pIdPYXz3s9tu1-a66Ik4C72k09TOTRw9X252l5ZibFmINZ7xBrRYy49R82Cr5g1mrLkNjGz3cZOkNm9xZhpw0N62sEf3JujN0MY5ss93icV3tvgDrsx9_CwIAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+<div class="svg-with-controls docops-media-card" id="sv-10d8a756c338e0ce" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIAKHh3GkA_1WQQW_bMAyF7_oVBHIOkGRL1hx8aBJ77S4tmrU7KxJtE3Ekg6IcBOiPL-1lh530RJF83xOFOjZs-5ZcQSleUJjcPAn2yQzIiWIolkZIOiz2OYl2MLyEU7TsKTTwK2YOeDMpn_42HcdRkAhX7Jx2gw0erBMarCAEvIK7r0nG2TDY9Ie8tMVytVrcC09ITSvFj83CSIsXLOwtm952KILFQCe2Qcx8Pjcv7JXmE36PznoeMDmmXhRab_vYRTZLVUdqArz3Y-1fBMeoPEnpFM7FHERfZ5vysawqs1L9gUw1OXtf9uwxaMDbFAcvljoY_u-YbbaHslybb6pfOdakSEeUPNnGS6_4CD1jjYzBTdYekmbSb0zjfPWw22_X5rvqijgJvKcx1M9MHj1cbXeWlmNuWog1nPEGtUbIjNPwYavkD2atugyNbfTbpkhv2OTOMuSktcmyRvQn687QxTiyzXaLx3W1-wKiLhISCQIAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
 version=1
 title=Customer Onboarding Journey
 subtitle=Steps to welcome and activate new customers
 canvasWidth=1220
 canvasHeight=760
-theme=brand
+theme=ayu
 palette=vibrant
 ---
 Order | Title | Description | Color
@@ -3357,42 +3349,42 @@ Order | Title | Description | Color
 3 | Profile Setup | Complete preferences and settings | #F8BC95
 4 | First Use | Guided walkthrough of key features | #D9AEF8
 5 | Engagement | Regular usage and feedback loop | #B0A5FB" data-kind="steps">
-<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Sign Up","Customer creates an account","#6EAEFF"],["2","Verification","Identity and email verification","#69DEE5"],["3","Profile Setup","Complete preferences and settings","#F8BC95"],["4","First Use","Guided walkthrough of key features","#D9AEF8"],["5","Engagement","Regular usage and feedback loop","#B0A5FB"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#071925"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#EAF3F8">Customer Onboarding Journey</text><text x="0" y="30" class="subtitle" fill="#7FB0CD">Steps to welcome and activate new customers</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#EAF3F8">Sign Up</text><text x="280.0" y="720.0" class="desc" fill="#7FB0CD">Customer creates an account</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#EAF3F8">Verification</text><text x="447.0" y="616.0" class="desc" fill="#7FB0CD">Identity and email</text><text x="447.0" y="634.0" class="desc" fill="#7FB0CD">verification</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#EAF3F8">Profile Setup</text><text x="614.0" y="512.0" class="desc" fill="#7FB0CD">Complete preferences and</text><text x="614.0" y="530.0" class="desc" fill="#7FB0CD">settings</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#EAF3F8">First Use</text><text x="781.0" y="408.0" class="desc" fill="#7FB0CD">Guided walkthrough of key</text><text x="781.0" y="426.0" class="desc" fill="#7FB0CD">features</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#8c84c8" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#B0A5FB" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#d3c6ff" stroke="#d3c6ff" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#B0A5FB" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#EAF3F8">Engagement</text><text x="948.0" y="304.0" class="desc" fill="#7FB0CD">Regular usage and feedback</text><text x="948.0" y="322.0" class="desc" fill="#7FB0CD">loop</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Sign Up","Customer creates an account","#6EAEFF"],["2","Verification","Identity and email verification","#69DEE5"],["3","Profile Setup","Complete preferences and settings","#F8BC95"],["4","First Use","Guided walkthrough of key features","#D9AEF8"],["5","Engagement","Regular usage and feedback loop","#B0A5FB"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#10141c"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#f29668">Customer Onboarding Journey</text><text x="0" y="30" class="subtitle" fill="#e6c08a">Steps to welcome and activate new customers</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#f29668">Sign Up</text><text x="280.0" y="720.0" class="desc" fill="#e6c08a">Customer creates an account</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#aad94c" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#f29668">Verification</text><text x="447.0" y="616.0" class="desc" fill="#e6c08a">Identity and email</text><text x="447.0" y="634.0" class="desc" fill="#e6c08a">verification</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#aad94c" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#f29668">Profile Setup</text><text x="614.0" y="512.0" class="desc" fill="#e6c08a">Complete preferences and</text><text x="614.0" y="530.0" class="desc" fill="#e6c08a">settings</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#aad94c" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#f29668">First Use</text><text x="781.0" y="408.0" class="desc" fill="#e6c08a">Guided walkthrough of key</text><text x="781.0" y="426.0" class="desc" fill="#e6c08a">features</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#aad94c" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#8c84c8" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#B0A5FB" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#d3c6ff" stroke="#d3c6ff" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#B0A5FB" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#f29668">Engagement</text><text x="948.0" y="304.0" class="desc" fill="#e6c08a">Regular usage and feedback</text><text x="948.0" y="322.0" class="desc" fill="#e6c08a">loop</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#aad94c" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgViewer.openModal('sv-b4b928a9b4afd431')">VIEW</button>
-<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-b4b928a9b4afd431')">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-10d8a756c338e0ce')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-10d8a756c338e0ce')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-b4b928a9b4afd431')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-b4b928a9b4afd431')">PNG</button>
-<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-b4b928a9b4afd431')">PRINT</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-10d8a756c338e0ce')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-10d8a756c338e0ce')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-10d8a756c338e0ce')">PRINT</button>
 </div>
-<div id="modal-sv-b4b928a9b4afd431" class="svg-modal-sv-b4b928a9b4afd431" onclick="if(event.target === this) svgViewer.closeModal('sv-b4b928a9b4afd431')">
-    <div class="svg-modal-content-sv-b4b928a9b4afd431">
-        <button class="svg-modal-close-sv-b4b928a9b4afd431" onclick="svgViewer.closeModal('sv-b4b928a9b4afd431')">×</button>
-        <div id="modal-body-sv-b4b928a9b4afd431" class="svg-modal-body-sv-b4b928a9b4afd431"></div>
+<div id="modal-sv-10d8a756c338e0ce" class="svg-modal-sv-10d8a756c338e0ce" onclick="if(event.target === this) svgViewer.closeModal('sv-10d8a756c338e0ce')">
+    <div class="svg-modal-content-sv-10d8a756c338e0ce">
+        <button class="svg-modal-close-sv-10d8a756c338e0ce" onclick="svgViewer.closeModal('sv-10d8a756c338e0ce')">×</button>
+        <div id="modal-body-sv-10d8a756c338e0ce" class="svg-modal-body-sv-10d8a756c338e0ce"></div>
     </div>
 </div>
 
-<div id="csv-modal-sv-b4b928a9b4afd431" class="svg-modal-sv-b4b928a9b4afd431" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-b4b928a9b4afd431')">
-    <div class="svg-modal-content-sv-b4b928a9b4afd431">
-        <button class="svg-modal-close-sv-b4b928a9b4afd431" onclick="svgViewer.closeCsvModal('sv-b4b928a9b4afd431')">×</button>
-        <div class="svg-modal-header-sv-b4b928a9b4afd431" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-10d8a756c338e0ce" class="svg-modal-sv-10d8a756c338e0ce" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-10d8a756c338e0ce')">
+    <div class="svg-modal-content-sv-10d8a756c338e0ce">
+        <button class="svg-modal-close-sv-10d8a756c338e0ce" onclick="svgViewer.closeCsvModal('sv-10d8a756c338e0ce')">×</button>
+        <div class="svg-modal-header-sv-10d8a756c338e0ce" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-sv-b4b928a9b4afd431" class="svg-modal-body-sv-b4b928a9b4afd431" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-10d8a756c338e0ce" class="svg-modal-body-sv-10d8a756c338e0ce" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-sv-b4b928a9b4afd431" class="svg-modal-sv-b4b928a9b4afd431" onclick="if(event.target === this) docopsSource.close('sv-b4b928a9b4afd431')">
-    <div class="svg-modal-content-sv-b4b928a9b4afd431">
-        <button class="svg-modal-close-sv-b4b928a9b4afd431" onclick="docopsSource.close('sv-b4b928a9b4afd431')">×</button>
-        <div class="svg-modal-header-sv-b4b928a9b4afd431" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-10d8a756c338e0ce" class="svg-modal-sv-10d8a756c338e0ce" onclick="if(event.target === this) docopsSource.close('sv-10d8a756c338e0ce')">
+    <div class="svg-modal-content-sv-10d8a756c338e0ce">
+        <button class="svg-modal-close-sv-10d8a756c338e0ce" onclick="docopsSource.close('sv-10d8a756c338e0ce')">×</button>
+        <div class="svg-modal-header-sv-10d8a756c338e0ce" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-sv-b4b928a9b4afd431" class="svg-modal-body-sv-b4b928a9b4afd431" style="display: block; overflow: auto;">
+        <div id="source-content-sv-10d8a756c338e0ce" class="svg-modal-body-sv-10d8a756c338e0ce" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -3413,7 +3405,277 @@ imageblock .title {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_minimal_three_step_process">3.3. Minimal Three-Step Process</h3>
+<h3 id="_road_view">3.3. Road View</h3>
+<div class="paragraph">
+<p>Use <code>view=road</code> to switch from the default isometric blocks to a winding road layout with connected step cards:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,steps,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Product Launch Roadmap
+subtitle=From idea to market
+canvasWidth=1220
+canvasHeight=760
+view=road
+theme=ayu
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Ideation | Brainstorm and validate the concept | #6EAEFF
+2 | Prototype | Build a working proof of concept | #69DEE5
+3 | Beta Test | Gather feedback from early users | #F8BC95
+4 | Refinement | Polish based on user insights | #D9AEF8
+5 | Launch | Release to the public | #A7E58A
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-sv-57d4f5adabdb0a1e {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-sv-57d4f5adabdb0a1e.active {
+      display: flex;
+  }
+  .svg-modal-content-sv-57d4f5adabdb0a1e {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-sv-57d4f5adabdb0a1e {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-sv-57d4f5adabdb0a1e:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-sv-57d4f5adabdb0a1e {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-sv-57d4f5adabdb0a1e svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-sv-57d4f5adabdb0a1e .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-sv-57d4f5adabdb0a1e .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-sv-57d4f5adabdb0a1e .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-sv-57d4f5adabdb0a1e .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-sv-57d4f5adabdb0a1e .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-sv-57d4f5adabdb0a1e .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          if (window.svgViewer) {
+              window.svgViewer.closeModal('sv-57d4f5adabdb0a1e');
+              window.svgViewer.closeCsvModal('sv-57d4f5adabdb0a1e');
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-57d4f5adabdb0a1e" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIAKHh3GkA_01RwWobMRC96ysGejbEbp3Yhz3Y8botFBpCoOdZadY7WCsto9kNgX58RokPAYGeRvP05j1x6vNFcBrYN1zySCrsV0VpKm4hKZxTs3bKGql5khxmr_AH5-QHeM4YRpxcmbvP-7PkETgQgmYYUa6kzmNasPzjoEOz3mzuboVfxJdBm4f7O7cwvTZibzkdaKRGKLsJI6lSs3AnmNStViv3VwIJ_IeXqmX7iYoXntQmtNNjjlnc2tBvG-BWPApyKpplBEwBFowcUAlMCHxOnia1rm_37aE9n93GsFnUrG9TFTjOHAMgvGa5crrAJDn3YOsrdX9q2637XttJEV6o1PpPNAmBnih06K_Q12QIJb7BXCzVSj3vjo_7rfth-Jl6TuY9Ve5TjlwG6LBQALNRCWA2amAfxNPext25reHbT9QXIhmhBl_NTXMX2dfmw0O73R3eATWIDaTmAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Product Launch Roadmap
+subtitle=From idea to market
+canvasWidth=1220
+canvasHeight=760
+view=road
+theme=reo
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Ideation | Brainstorm and validate the concept | #6EAEFF
+2 | Prototype | Build a working proof of concept | #69DEE5
+3 | Beta Test | Gather feedback from early users | #F8BC95
+4 | Refinement | Polish based on user insights | #D9AEF8
+5 | Launch | Release to the public | #A7E58A" data-kind="steps">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="681.7499999914781" viewBox="0 0 1220.0 1212.0" id="road-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Ideation","Brainstorm and validate the concept","#6EAEFF"],["2","Prototype","Build a working proof of concept","#69DEE5"],["3","Beta Test","Gather feedback from early users","#F8BC95"],["4","Refinement","Polish based on user insights","#D9AEF8"],["5","Launch","Release to the public","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%"   stop-color="#F7FAF6"/><stop offset="100%" stop-color="#c5c8c4"/></linearGradient><pattern id="dot-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1.2" fill="#247A4C" opacity="0.3"/></pattern><filter id="card-shadow" x="-10%" y="-10%" width="120%" height="130%"><feGaussianBlur in="SourceAlpha" stdDeviation="6"/><feOffset dx="0" dy="6" result="offsetblur"/><feFlood flood-color="#000000" flood-opacity="0.2"/><feComposite in2="offsetblur" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&amp;family=DM+Sans:wght@400;500&amp;display=swap'); .road-title { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -1.0px; } .road-subtitle { font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 400; letter-spacing: 0.3px; } .box-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -0.3px; } .box-desc { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400; } .road-number { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; } .step-group { cursor: pointer; } @keyframes rise { from { opacity: 0; transform: translateY(16px); } to   { opacity: 1; transform: translateY(0); } } .step-group { opacity: 0; animation: rise 0.55s cubic-bezier(0.16,1,0.3,1) forwards; } .step-1 { animation-delay: 0.3s; } .step-2 { animation-delay: 0.6s; } .step-3 { animation-delay: 0.8999999999999999s; } .step-4 { animation-delay: 1.2s; } .step-5 { animation-delay: 1.5s; }</style><linearGradient id="grad-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%"   stop-color="#6EAEFF"/><stop offset="100%" stop-color="#588bcc"/></linearGradient><filter id="node-glow-1" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="blur"/><feFlood flood-color="#6EAEFF" flood-opacity="0.5" result="colour"/><feComposite in="colour" in2="blur" operator="in" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><marker id="arrow-1" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#6EAEFF"/></marker><linearGradient id="grad-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%"   stop-color="#69DEE5"/><stop offset="100%" stop-color="#54b1b7"/></linearGradient><filter id="node-glow-2" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="blur"/><feFlood flood-color="#69DEE5" flood-opacity="0.5" result="colour"/><feComposite in="colour" in2="blur" operator="in" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><marker id="arrow-2" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#69DEE5"/></marker><linearGradient id="grad-3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%"   stop-color="#F8BC95"/><stop offset="100%" stop-color="#c69677"/></linearGradient><filter id="node-glow-3" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="blur"/><feFlood flood-color="#F8BC95" flood-opacity="0.5" result="colour"/><feComposite in="colour" in2="blur" operator="in" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><marker id="arrow-3" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#F8BC95"/></marker><linearGradient id="grad-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%"   stop-color="#D9AEF8"/><stop offset="100%" stop-color="#ad8bc6"/></linearGradient><filter id="node-glow-4" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="blur"/><feFlood flood-color="#D9AEF8" flood-opacity="0.5" result="colour"/><feComposite in="colour" in2="blur" operator="in" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><marker id="arrow-4" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#D9AEF8"/></marker><linearGradient id="grad-5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%"   stop-color="#A7E58A"/><stop offset="100%" stop-color="#85b76e"/></linearGradient><filter id="node-glow-5" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="6" result="blur"/><feFlood flood-color="#A7E58A" flood-opacity="0.5" result="colour"/><feComposite in="colour" in2="blur" operator="in" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter><marker id="arrow-5" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#A7E58A"/></marker></defs><g transform="scale(1.0)"><!-- Background --><rect width="1220.0" height="1212.0" fill="url(#bg-grad)"/><rect width="1220.0" height="1212.0" fill="url(#dot-grid)"/><!-- Header --><g><rect x="96.0" y="48" width="6" height="56" rx="3" fill="#007A47"/><text x="116.0" y="88" class="road-title" fill="#5F9849">Product Launch Roadmap</text><text x="116.0" y="116" class="road-subtitle" fill="#247A4C">From idea to market</text><line x1="96.0" y1="136" x2="1124.0" y2="136" stroke="#247A4C" stroke-opacity="0.6" stroke-width="1"/></g><!-- START flag --><g transform="translate(610.0, 156)"><rect x="-36" y="0" width="72" height="26" rx="13" fill="#5F9849"/><text x="0" y="18" text-anchor="middle" font-family="'Syne',sans-serif" font-size="11" font-weight="800" fill="#F7FAF6" letter-spacing="2">START</text></g><!-- Road --><path id="road-body" d="M 610.0 182.0 Q 460.0 182.0, 460.0 270.0 Q 460.0 358.0, 610.0 358.0 Q 760.0 358.0, 760.0 446.0 Q 760.0 534.0, 610.0 534.0 Q 460.0 534.0, 460.0 622.0 Q 460.0 710.0, 610.0 710.0 Q 760.0 710.0, 760.0 798.0 Q 760.0 886.0, 610.0 886.0 Q 460.0 886.0, 460.0 974.0 Q 460.0 1062.0, 610.0 1062.0 L 610.0 1112.0" fill="none" stroke="#3a3530" stroke-width="104" stroke-linejoin="round" stroke-linecap="round"/><path d="M 610.0 182.0 Q 460.0 182.0, 460.0 270.0 Q 460.0 358.0, 610.0 358.0 Q 760.0 358.0, 760.0 446.0 Q 760.0 534.0, 610.0 534.0 Q 460.0 534.0, 460.0 622.0 Q 460.0 710.0, 610.0 710.0 Q 760.0 710.0, 760.0 798.0 Q 760.0 886.0, 610.0 886.0 Q 460.0 886.0, 460.0 974.0 Q 460.0 1062.0, 610.0 1062.0 L 610.0 1112.0" fill="none" stroke="#ffffff" stroke-width="104" stroke-opacity="0.06" stroke-linejoin="round" stroke-linecap="round"/><path d="M 610.0 182.0 Q 460.0 182.0, 460.0 270.0 Q 460.0 358.0, 610.0 358.0 Q 760.0 358.0, 760.0 446.0 Q 760.0 534.0, 610.0 534.0 Q 460.0 534.0, 460.0 622.0 Q 460.0 710.0, 610.0 710.0 Q 760.0 710.0, 760.0 798.0 Q 760.0 886.0, 610.0 886.0 Q 460.0 886.0, 460.0 974.0 Q 460.0 1062.0, 610.0 1062.0 L 610.0 1112.0" fill="none" stroke="#f5e6c8" stroke-width="5" stroke-dasharray="18 14" stroke-opacity="0.75" stroke-linejoin="round" stroke-linecap="round"/><!-- FINISH flag --><g transform="translate(610.0, 1122.0)"><rect x="-36" y="0" width="72" height="26" rx="13" fill="#5F9849"/><text x="0" y="18" text-anchor="middle" font-family="'Syne',sans-serif" font-size="11" font-weight="800" fill="#F7FAF6" letter-spacing="2">FINISH</text></g><!-- Steps --><g class="step-group step-1"><!-- connector line --><line x1="160.0" y1="270.0" x2="428.0" y2="270.0" stroke="#6EAEFF" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrow-1)"/><!-- card --><rect x="0.0" y="210.0" width="260.0" height="120.0" rx="18" fill="url(#grad-1)" filter="url(#card-shadow)"/><rect x="0.0" y="210.0" width="6" height="120.0" rx="3" fill="#ffffff" fill-opacity="0.35"/><polygon points="22.0,252.0 34.0,240.0 46.0,252.0 34.0,264.0" fill="#ffffff" fill-opacity="0.9"/><!-- title --><text x="58.0" y="256.0" class="box-title" fill="#ffffff">Ideation</text><!-- desc --><text x="58.0" y="276.0" class="box-desc" fill="#ffffff" opacity="0.85">Brainstorm and validate</text><text x="58.0" y="292.0" class="box-desc" fill="#ffffff" opacity="0.85">the concept</text><!-- node --><circle cx="460.0" cy="270.0" r="30" fill="#ffffff" stroke="#6EAEFF" stroke-width="4" filter="url(#node-glow-1)"/><text x="460.0" y="276.0" text-anchor="middle" class="road-number" fill="#6EAEFF">01</text></g><g class="step-group step-2"><!-- connector line --><line x1="792.0" y1="446.0" x2="960.0" y2="446.0" stroke="#69DEE5" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrow-2)"/><!-- card --><rect x="960.0" y="386.0" width="260.0" height="120.0" rx="18" fill="url(#grad-2)" filter="url(#card-shadow)"/><rect x="960.0" y="386.0" width="6" height="120.0" rx="3" fill="#ffffff" fill-opacity="0.35"/><polygon points="982.0,428.0 994.0,416.0 1006.0,428.0 994.0,440.0" fill="#ffffff" fill-opacity="0.9"/><!-- title --><text x="1018.0" y="432.0" class="box-title" fill="#ffffff">Prototype</text><!-- desc --><text x="1018.0" y="452.0" class="box-desc" fill="#ffffff" opacity="0.85">Build a working proof of</text><text x="1018.0" y="468.0" class="box-desc" fill="#ffffff" opacity="0.85">concept</text><!-- node --><circle cx="760.0" cy="446.0" r="30" fill="#ffffff" stroke="#69DEE5" stroke-width="4" filter="url(#node-glow-2)"/><text x="760.0" y="452.0" text-anchor="middle" class="road-number" fill="#69DEE5">02</text></g><g class="step-group step-3"><!-- connector line --><line x1="160.0" y1="622.0" x2="428.0" y2="622.0" stroke="#F8BC95" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrow-3)"/><!-- card --><rect x="0.0" y="562.0" width="260.0" height="120.0" rx="18" fill="url(#grad-3)" filter="url(#card-shadow)"/><rect x="0.0" y="562.0" width="6" height="120.0" rx="3" fill="#ffffff" fill-opacity="0.35"/><polygon points="22.0,604.0 34.0,592.0 46.0,604.0 34.0,616.0" fill="#ffffff" fill-opacity="0.9"/><!-- title --><text x="58.0" y="608.0" class="box-title" fill="#ffffff">Beta Test</text><!-- desc --><text x="58.0" y="628.0" class="box-desc" fill="#ffffff" opacity="0.85">Gather feedback from</text><text x="58.0" y="644.0" class="box-desc" fill="#ffffff" opacity="0.85">early users</text><!-- node --><circle cx="460.0" cy="622.0" r="30" fill="#ffffff" stroke="#F8BC95" stroke-width="4" filter="url(#node-glow-3)"/><text x="460.0" y="628.0" text-anchor="middle" class="road-number" fill="#F8BC95">03</text></g><g class="step-group step-4"><!-- connector line --><line x1="792.0" y1="798.0" x2="960.0" y2="798.0" stroke="#D9AEF8" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrow-4)"/><!-- card --><rect x="960.0" y="738.0" width="260.0" height="120.0" rx="18" fill="url(#grad-4)" filter="url(#card-shadow)"/><rect x="960.0" y="738.0" width="6" height="120.0" rx="3" fill="#ffffff" fill-opacity="0.35"/><polygon points="982.0,780.0 994.0,768.0 1006.0,780.0 994.0,792.0" fill="#ffffff" fill-opacity="0.9"/><!-- title --><text x="1018.0" y="784.0" class="box-title" fill="#ffffff">Refinement</text><!-- desc --><text x="1018.0" y="804.0" class="box-desc" fill="#ffffff" opacity="0.85">Polish based on user</text><text x="1018.0" y="820.0" class="box-desc" fill="#ffffff" opacity="0.85">insights</text><!-- node --><circle cx="760.0" cy="798.0" r="30" fill="#ffffff" stroke="#D9AEF8" stroke-width="4" filter="url(#node-glow-4)"/><text x="760.0" y="804.0" text-anchor="middle" class="road-number" fill="#D9AEF8">04</text></g><g class="step-group step-5"><!-- connector line --><line x1="160.0" y1="974.0" x2="428.0" y2="974.0" stroke="#A7E58A" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arrow-5)"/><!-- card --><rect x="0.0" y="914.0" width="260.0" height="120.0" rx="18" fill="url(#grad-5)" filter="url(#card-shadow)"/><rect x="0.0" y="914.0" width="6" height="120.0" rx="3" fill="#ffffff" fill-opacity="0.35"/><polygon points="22.0,956.0 34.0,944.0 46.0,956.0 34.0,968.0" fill="#ffffff" fill-opacity="0.9"/><!-- title --><text x="58.0" y="960.0" class="box-title" fill="#ffffff">Launch</text><!-- desc --><text x="58.0" y="980.0" class="box-desc" fill="#ffffff" opacity="0.85">Release to the public</text><!-- node --><circle cx="460.0" cy="974.0" r="30" fill="#ffffff" stroke="#A7E58A" stroke-width="4" filter="url(#node-glow-5)"/><text x="460.0" y="980.0" text-anchor="middle" class="road-number" fill="#A7E58A">05</text></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-57d4f5adabdb0a1e')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-57d4f5adabdb0a1e')">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-57d4f5adabdb0a1e')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-57d4f5adabdb0a1e')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-57d4f5adabdb0a1e')">PRINT</button>
+</div>
+<div id="modal-sv-57d4f5adabdb0a1e" class="svg-modal-sv-57d4f5adabdb0a1e" onclick="if(event.target === this) svgViewer.closeModal('sv-57d4f5adabdb0a1e')">
+    <div class="svg-modal-content-sv-57d4f5adabdb0a1e">
+        <button class="svg-modal-close-sv-57d4f5adabdb0a1e" onclick="svgViewer.closeModal('sv-57d4f5adabdb0a1e')">×</button>
+        <div id="modal-body-sv-57d4f5adabdb0a1e" class="svg-modal-body-sv-57d4f5adabdb0a1e"></div>
+    </div>
+</div>
+
+<div id="csv-modal-sv-57d4f5adabdb0a1e" class="svg-modal-sv-57d4f5adabdb0a1e" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-57d4f5adabdb0a1e')">
+    <div class="svg-modal-content-sv-57d4f5adabdb0a1e">
+        <button class="svg-modal-close-sv-57d4f5adabdb0a1e" onclick="svgViewer.closeCsvModal('sv-57d4f5adabdb0a1e')">×</button>
+        <div class="svg-modal-header-sv-57d4f5adabdb0a1e" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-sv-57d4f5adabdb0a1e" class="svg-modal-body-sv-57d4f5adabdb0a1e" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-sv-57d4f5adabdb0a1e" class="svg-modal-sv-57d4f5adabdb0a1e" onclick="if(event.target === this) docopsSource.close('sv-57d4f5adabdb0a1e')">
+    <div class="svg-modal-content-sv-57d4f5adabdb0a1e">
+        <button class="svg-modal-close-sv-57d4f5adabdb0a1e" onclick="docopsSource.close('sv-57d4f5adabdb0a1e')">×</button>
+        <div class="svg-modal-header-sv-57d4f5adabdb0a1e" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-sv-57d4f5adabdb0a1e" class="svg-modal-body-sv-57d4f5adabdb0a1e" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_minimal_three_step_process">3.4. Minimal Three-Step Process</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,steps,controls=true]
@@ -3484,7 +3746,7 @@ Order | Title | Description
   }
 
   /* Shared Modal Styles */
-  .svg-modal-sv-6ae8a72f4f9ccbb7 {
+  .svg-modal-sv-ae1ad2ccc0b30ccb {
       display: none;
       position: fixed;
       top: 0;
@@ -3499,10 +3761,10 @@ Order | Title | Description
       padding: 40px;
       box-sizing: border-box;
   }
-  .svg-modal-sv-6ae8a72f4f9ccbb7.active {
+  .svg-modal-sv-ae1ad2ccc0b30ccb.active {
       display: flex;
   }
-  .svg-modal-content-sv-6ae8a72f4f9ccbb7 {
+  .svg-modal-content-sv-ae1ad2ccc0b30ccb {
       width: 95vw;
       max-width: 1400px;
       height: 90vh;
@@ -3517,7 +3779,7 @@ Order | Title | Description
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .svg-modal-close-sv-6ae8a72f4f9ccbb7 {
+  .svg-modal-close-sv-ae1ad2ccc0b30ccb {
       position: absolute;
       top: 12px;
       right: 12px;
@@ -3535,11 +3797,11 @@ Order | Title | Description
       transition: all 0.2s ease;
       z-index: 10;
   }
-  .svg-modal-close-sv-6ae8a72f4f9ccbb7:hover {
+  .svg-modal-close-sv-ae1ad2ccc0b30ccb:hover {
       background: rgba(255,255,255,0.2);
       transform: rotate(90deg);
   }
-  .svg-modal-body-sv-6ae8a72f4f9ccbb7 {
+  .svg-modal-body-sv-ae1ad2ccc0b30ccb {
       flex: 1;
       display: flex;
       align-items: center;
@@ -3549,7 +3811,7 @@ Order | Title | Description
       overflow: auto;
       padding: 10px;
   }
-  .svg-modal-body-sv-6ae8a72f4f9ccbb7 svg {
+  .svg-modal-body-sv-ae1ad2ccc0b30ccb svg {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -3558,10 +3820,10 @@ Order | Title | Description
   }
 
   /* CSV Modal Specific Overrides */
-  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-content {
+  #csv-modal-sv-ae1ad2ccc0b30ccb .csv-content {
       background: transparent !important;
   }
-  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table {
+  #csv-modal-sv-ae1ad2ccc0b30ccb .csv-table {
      width: 100%;
       border-collapse: collapse;
       color: #e2e8f0 !important;
@@ -3569,7 +3831,7 @@ Order | Title | Description
       font-size: 13px;
       background: transparent !important;
   }
-  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table th {
+  #csv-modal-sv-ae1ad2ccc0b30ccb .csv-table th {
       text-align: left;
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -3578,15 +3840,15 @@ Order | Title | Description
       position: sticky;
       top: 0;
   }
-  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table td {
+  #csv-modal-sv-ae1ad2ccc0b30ccb .csv-table td {
       padding: 12px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       color: #cbd5e1 !important;
   }
-  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table tr {
+  #csv-modal-sv-ae1ad2ccc0b30ccb .csv-table tr {
       background: transparent !important;
   }
-  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table tr:hover {
+  #csv-modal-sv-ae1ad2ccc0b30ccb .csv-table tr:hover {
       background: rgba(255,255,255,0.05) !important;
   }
 
@@ -3596,15 +3858,15 @@ Order | Title | Description
   document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
           if (window.svgViewer) {
-              window.svgViewer.closeModal('sv-6ae8a72f4f9ccbb7');
-              window.svgViewer.closeCsvModal('sv-6ae8a72f4f9ccbb7');
+              window.svgViewer.closeModal('sv-ae1ad2ccc0b30ccb');
+              window.svgViewer.closeCsvModal('sv-ae1ad2ccc0b30ccb');
           }
       }
   });
 </script>
 
 <div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="sv-6ae8a72f4f9ccbb7" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIACfH3GkA_y2PQUsEMQyF7_0V_QMDOyPoqScFFRZEVvAc28xMsJuWJB0R_PF2hj2FvPfyPkI8l0WgrhQDabmiCcVBDau6DUWpcBidkWUM743it78YiPnnRgldBN5APynZGsZpOt2EF6RltfBwf3K24hVDzKBK0VXIaIZhoy8BNjcMg3uThOL__MfO6PMJNQpV62Q39v2V1SDn3Sk_nAskD5w83eQO8FBrpgjHydSDj4VnWprsdRc036r_LU18FZxRkCOqu-veGRrHdQ8dPzUlXo7CKiW1aP9mL7ALHQEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+<div class="svg-with-controls docops-media-card" id="sv-ae1ad2ccc0b30ccb" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIAKHh3GkA_y2PQUsEMQyF7_0V_QMDOyPoqScFFRZEVvAc28xMsJuWJB0R_PF2hj2FvPfyPkI8l0WgrhQDabmiCcVBDau6DUWpcBidkWUM743it78YiPnnRgldBN5APynZGsZpOt2EF6RltfBwf3K24hVDzKBK0VXIaIZhoy8BNjcMg3uThOL__MfO6PMJNQpV62Q39v2V1SDn3Sk_nAskD5w83eQO8FBrpgjHydSDj4VnWprsdRc036r_LU18FZxRkCOqu-veGRrHdQ8dPzUlXo7CKiW1aP9mL7ALHQEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
 version=1
 title=Quick Start Guide
 canvasWidth=1220
@@ -3618,40 +3880,40 @@ Order | Title | Description
 3 | Launch | Start using the product" data-kind="steps">
 <svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Install","Download and install the application",""],["2","Configure","Set up your preferences",""],["3","Launch","Start using the product",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#ffffff"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#111111">Quick Start Guide</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#b8003a" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#e60049" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#ff0057" stroke="#ff0057" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#e60049" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#111111">Install</text><text x="280.0" y="720.0" class="desc" fill="#4338ca">Download and install the</text><text x="280.0" y="738.0" class="desc" fill="#4338ca">application</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="425.0,402.0 425.0,422.0 485.0,452.0 485.0,432.0" fill="#0890cc" /><!-- Right Side --><polygon points="545.0,402.0 545.0,422.0 485.0,452.0 485.0,432.0" fill="#0bb4ff" /><!-- Top --><polygon points="485.0,372.0 545.0,402.0 485.0,432.0 425.0,402.0" fill="#0dd8ff" stroke="#0dd8ff" stroke-width="0.5"/><!-- Badge --><circle cx="485.0" cy="357.0" r="15" fill="#0bb4ff" /><text x="485.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="615.0" y="487.0" class="step-title" fill="#111111">Configure</text><text x="615.0" y="512.0" class="desc" fill="#4338ca">Set up your preferences</text><line x1="485.0" y1="402.0" x2="615.0" y2="477.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="760.0,194.0 760.0,214.0 820.0,244.0 820.0,224.0" fill="#40ba74" /><!-- Right Side --><polygon points="880.0,194.0 880.0,214.0 820.0,244.0 820.0,224.0" fill="#50e991" /><!-- Top --><polygon points="820.0,164.0 880.0,194.0 820.0,224.0 760.0,194.0" fill="#60ffae" stroke="#60ffae" stroke-width="0.5"/><!-- Badge --><circle cx="820.0" cy="149.0" r="15" fill="#50e991" /><text x="820.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="950.0" y="279.0" class="step-title" fill="#111111">Launch</text><text x="950.0" y="304.0" class="desc" fill="#4338ca">Start using the product</text><line x1="820.0" y1="194.0" x2="950.0" y2="269.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgViewer.openModal('sv-6ae8a72f4f9ccbb7')">VIEW</button>
-<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-6ae8a72f4f9ccbb7')">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-ae1ad2ccc0b30ccb')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-ae1ad2ccc0b30ccb')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-6ae8a72f4f9ccbb7')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-6ae8a72f4f9ccbb7')">PNG</button>
-<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-6ae8a72f4f9ccbb7')">PRINT</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-ae1ad2ccc0b30ccb')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-ae1ad2ccc0b30ccb')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-ae1ad2ccc0b30ccb')">PRINT</button>
 </div>
-<div id="modal-sv-6ae8a72f4f9ccbb7" class="svg-modal-sv-6ae8a72f4f9ccbb7" onclick="if(event.target === this) svgViewer.closeModal('sv-6ae8a72f4f9ccbb7')">
-    <div class="svg-modal-content-sv-6ae8a72f4f9ccbb7">
-        <button class="svg-modal-close-sv-6ae8a72f4f9ccbb7" onclick="svgViewer.closeModal('sv-6ae8a72f4f9ccbb7')">×</button>
-        <div id="modal-body-sv-6ae8a72f4f9ccbb7" class="svg-modal-body-sv-6ae8a72f4f9ccbb7"></div>
+<div id="modal-sv-ae1ad2ccc0b30ccb" class="svg-modal-sv-ae1ad2ccc0b30ccb" onclick="if(event.target === this) svgViewer.closeModal('sv-ae1ad2ccc0b30ccb')">
+    <div class="svg-modal-content-sv-ae1ad2ccc0b30ccb">
+        <button class="svg-modal-close-sv-ae1ad2ccc0b30ccb" onclick="svgViewer.closeModal('sv-ae1ad2ccc0b30ccb')">×</button>
+        <div id="modal-body-sv-ae1ad2ccc0b30ccb" class="svg-modal-body-sv-ae1ad2ccc0b30ccb"></div>
     </div>
 </div>
 
-<div id="csv-modal-sv-6ae8a72f4f9ccbb7" class="svg-modal-sv-6ae8a72f4f9ccbb7" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-6ae8a72f4f9ccbb7')">
-    <div class="svg-modal-content-sv-6ae8a72f4f9ccbb7">
-        <button class="svg-modal-close-sv-6ae8a72f4f9ccbb7" onclick="svgViewer.closeCsvModal('sv-6ae8a72f4f9ccbb7')">×</button>
-        <div class="svg-modal-header-sv-6ae8a72f4f9ccbb7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-ae1ad2ccc0b30ccb" class="svg-modal-sv-ae1ad2ccc0b30ccb" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-ae1ad2ccc0b30ccb')">
+    <div class="svg-modal-content-sv-ae1ad2ccc0b30ccb">
+        <button class="svg-modal-close-sv-ae1ad2ccc0b30ccb" onclick="svgViewer.closeCsvModal('sv-ae1ad2ccc0b30ccb')">×</button>
+        <div class="svg-modal-header-sv-ae1ad2ccc0b30ccb" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-sv-6ae8a72f4f9ccbb7" class="svg-modal-body-sv-6ae8a72f4f9ccbb7" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-ae1ad2ccc0b30ccb" class="svg-modal-body-sv-ae1ad2ccc0b30ccb" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-sv-6ae8a72f4f9ccbb7" class="svg-modal-sv-6ae8a72f4f9ccbb7" onclick="if(event.target === this) docopsSource.close('sv-6ae8a72f4f9ccbb7')">
-    <div class="svg-modal-content-sv-6ae8a72f4f9ccbb7">
-        <button class="svg-modal-close-sv-6ae8a72f4f9ccbb7" onclick="docopsSource.close('sv-6ae8a72f4f9ccbb7')">×</button>
-        <div class="svg-modal-header-sv-6ae8a72f4f9ccbb7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-ae1ad2ccc0b30ccb" class="svg-modal-sv-ae1ad2ccc0b30ccb" onclick="if(event.target === this) docopsSource.close('sv-ae1ad2ccc0b30ccb')">
+    <div class="svg-modal-content-sv-ae1ad2ccc0b30ccb">
+        <button class="svg-modal-close-sv-ae1ad2ccc0b30ccb" onclick="docopsSource.close('sv-ae1ad2ccc0b30ccb')">×</button>
+        <div class="svg-modal-header-sv-ae1ad2ccc0b30ccb" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-sv-6ae8a72f4f9ccbb7" class="svg-modal-body-sv-6ae8a72f4f9ccbb7" style="display: block; overflow: auto;">
+        <div id="source-content-sv-ae1ad2ccc0b30ccb" class="svg-modal-body-sv-ae1ad2ccc0b30ccb" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -3763,6 +4025,11 @@ Order | Title | Description | Color
 <td class="tableblock halign-left valign-top"><p class="tableblock">subtitle</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><em>(none)</em></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optional subtitle below the title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">view</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isometric</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">View style: <code>isometric</code> (default 3D blocks) or <code>road</code> (winding road layout)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">canvasWidth</p></td>

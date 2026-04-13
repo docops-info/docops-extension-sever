@@ -88,6 +88,29 @@ Order | Title | Description | Color
 5 | Engagement | Regular usage and feedback loop | #B0A5FB
 [/docops]
 
+## Road View
+
+Use `view=road` to switch from the default isometric blocks to a winding road layout with connected step cards:
+
+[docops:steps]
+infographic=isometric-steps
+version=1
+title=Product Launch Roadmap
+subtitle=From idea to market
+canvasWidth=1220
+canvasHeight=760
+view=road
+theme=ayu
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Ideation | Brainstorm and validate the concept | #6EAEFF
+2 | Prototype | Build a working proof of concept | #69DEE5
+3 | Beta Test | Gather feedback from early users | #F8BC95
+4 | Refinement | Polish based on user insights | #D9AEF8
+5 | Launch | Release to the public | #A7E58A
+[/docops]
+
 ## Minimal Three-Step Process
 
 [docops:steps]
@@ -117,6 +140,7 @@ Each steps infographic includes two sections separated by `---`:
 | `version`      | `1`          | Format version                               |
 | `title`        | _(required)_ | Main title displayed on the infographic      |
 | `subtitle`     | _(none)_     | Optional subtitle below the title            |
+| `view`         | `isometric`  | View style: `isometric` (default 3D blocks) or `road` (winding road layout) |
 | `canvasWidth`  | `1220`       | Width of the SVG canvas in pixels            |
 | `canvasHeight` | `760`        | Height of the SVG canvas in pixels           |
 | `theme`        | `classic`    | Visual theme name (e.g., `classic`, `brand`) |

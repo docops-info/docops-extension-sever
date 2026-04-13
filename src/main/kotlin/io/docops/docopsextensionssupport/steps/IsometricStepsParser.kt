@@ -46,6 +46,7 @@ class IsometricStepsParser {
             version = map["version"] ?: "1",
             title = map["title"] ?: throw IllegalArgumentException("title is required"),
             subtitle = map["subtitle"],
+            view = map["view"] ?: "isometric",
             canvasWidth = map["canvasWidth"]?.toIntOrNull() ?: 1220,
             canvasHeight = map["canvasHeight"]?.toIntOrNull() ?: 760,
             theme = map["theme"] ?: "classic",
@@ -83,8 +84,9 @@ class IsometricStepsParser {
                 val title = stepMap["title"] ?: throw IllegalArgumentException("title is required for each step")
                 val desc = stepMap["desc"] ?: ""
                 val color = stepMap["color"]
+                val icon = stepMap["icon"]
 
-                steps.add(IsometricStep(order, title, desc, color))
+                steps.add(IsometricStep(order, title, desc, color, icon))
             }
         } else {
             val header = firstLine.split("|").map { it.trim().lowercase() }
@@ -92,6 +94,7 @@ class IsometricStepsParser {
             val titleIdx = header.indexOfFirst { it == "title" }
             val descIdx = header.indexOfFirst { it == "description" || it == "desc" }
             val colorIdx = header.indexOfFirst { it == "color" }
+            val iconIdx = header.indexOfFirst { it == "icon" }
 
             if (orderIdx == -1 || titleIdx == -1) {
                 throw IllegalArgumentException("Header must contain 'Order' and 'Title' columns. Found: $header")
@@ -106,8 +109,9 @@ class IsometricStepsParser {
                 val title = if (titleIdx < row.size) row[titleIdx] else throw IllegalArgumentException("Row $i: title is required")
                 val desc = if (descIdx != -1 && descIdx < row.size) row[descIdx] else ""
                 val color = if (colorIdx != -1 && colorIdx < row.size) row[colorIdx] else null
+                val icon = if (iconIdx != -1 && iconIdx < row.size) row[iconIdx] else null
 
-                steps.add(IsometricStep(order, title, desc, color))
+                steps.add(IsometricStep(order, title, desc, color, icon))
             }
         }
         return steps
