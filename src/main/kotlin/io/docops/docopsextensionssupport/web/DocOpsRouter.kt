@@ -17,6 +17,7 @@ import io.docops.docopsextensionssupport.releasestrategy.ReleaseHandler
 import io.docops.docopsextensionssupport.roadmap.PlannerHandler
 import io.docops.docopsextensionssupport.roadmap.RoadmapHandler
 import io.docops.docopsextensionssupport.scorecard.ScorecardHandler
+import io.docops.docopsextensionssupport.steps.IsometricStepsHandler
 import io.docops.docopsextensionssupport.svgsupport.addSvgMetadata
 import io.docops.docopsextensionssupport.svgsupport.joinXmlLines
 import io.docops.docopsextensionssupport.svgsupport.uncompressString
@@ -92,6 +93,7 @@ class DocOpsRouter(
             "vcard" -> VCardHandler(csvResponse)
             "treemap" -> TreemapHandler(csvResponse)
             "recipe" -> RecipeHandler(csvResponse)
+            "steps", "step" -> IsometricStepsHandler(csvResponse)
             else -> throw IllegalArgumentException("Unknown handler kind: $kind")
         }
     }
