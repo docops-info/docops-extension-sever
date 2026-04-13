@@ -1,0 +1,1914 @@
+            <!DOCTYPE html>
+            <html lang="en" data-theme="light">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>index</title>
+                                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* DocOps Design System — Signal (v1) : Markdown Light
+   Goals: calm, audit-friendly, high-contrast, “ink as authority”, cyan as action. */
+
+.markdown-body {
+  /* -----------------------------
+     1) Core tokens (DocOps Signal)
+     ----------------------------- */
+  --ds-brand-ink: #0b1220;
+  --ds-brand-cloud: #f6f8fb;
+  --ds-brand-slate: #2a3447;
+  --ds-brand-steel: #8a96ad;
+  --ds-brand-cyan: #00b7d6;
+  --ds-brand-gold: #c9a227;
+
+  --ds-semantic-success: #16a34a;
+  --ds-semantic-warning: #d97706;
+  --ds-semantic-error: #dc2626;
+  --ds-semantic-info: #2563eb;
+
+  --ds-canvas: var(--ds-brand-cloud);
+  --ds-surface-1: #ffffff;
+  --ds-surface-2: #eef2f7;
+  --ds-border: rgba(11, 18, 32, 0.12);
+
+  --ds-text-primary: var(--ds-brand-ink);
+  --ds-text-secondary: var(--ds-brand-slate);
+  --ds-text-tertiary: var(--ds-brand-steel);
+
+  --ds-accent: var(--ds-brand-cyan);
+
+  --ds-radius-sm: 8px;
+  --ds-radius-md: 12px;
+  --ds-radius-lg: 16px;
+  --ds-radius-pill: 999px;
+
+  --ds-shadow-sm: 0 6px 18px rgba(11, 18, 32, 0.08);
+  --ds-shadow-md: 0 16px 40px rgba(11, 18, 32, 0.12);
+  --ds-focus-glow: 0 0 0 4px rgba(0, 183, 214, 0.22);
+
+  --ds-dur-fast: 120ms;
+  --ds-dur-base: 220ms;
+  --ds-dur-slow: 420ms;
+  --ds-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-ease-snappy: cubic-bezier(0.2, 0.9, 0.2, 1);
+
+  /* -----------------------------
+     2) Markdown-specific roles
+     ----------------------------- */
+  --md-max-width: 920px;
+  --md-pad-x: 48px;
+  --md-pad-y: 48px;
+
+  --md-prose: var(--ds-text-secondary);
+  --md-heading: var(--ds-text-primary);
+  --md-muted: var(--ds-text-tertiary);
+
+  --md-link: var(--ds-accent);
+  --md-link-underline: rgba(0, 183, 214, 0.28);
+  --md-link-hover-bg: rgba(0, 183, 214, 0.10);
+
+  --md-inline-code-bg: rgba(11, 18, 32, 0.06);
+  --md-inline-code-border: rgba(11, 18, 32, 0.12);
+
+  --md-code-bg: var(--ds-brand-ink);
+  --md-code-fg: #f1f5ff;
+  --md-code-border: rgba(11, 18, 32, 0.20);
+
+  --md-table-stripe: rgba(11, 18, 32, 0.03);
+
+  /* Atmosphere: “calm corporate depth” (subtle, not noisy) */
+  background:
+    radial-gradient(900px 420px at 12% 0%, rgba(0, 183, 214, 0.08), transparent 55%),
+    radial-gradient(760px 360px at 92% 18%, rgba(201, 162, 39, 0.08), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.70)),
+    var(--ds-canvas);
+
+  color: var(--md-prose);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+
+  max-width: var(--md-max-width);
+  margin: 40px auto;
+  padding: var(--md-pad-y) var(--md-pad-x);
+
+  border-radius: 24px;
+  border: 1px solid var(--ds-border);
+  box-shadow: var(--ds-shadow-sm);
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Let long IDs/URLs behave */
+  overflow-wrap: anywhere;
+}
+
+/* Responsive padding (keeps 8px rhythm while respecting smaller screens) */
+@media (max-width: 768px) {
+  .markdown-body {
+    --md-pad-x: 20px;
+    --md-pad-y: 28px;
+    margin: 16px;
+    border-radius: 18px;
+  }
+}
+
+/* -----------------------------
+   3) Page-load motion (restrained)
+   ----------------------------- */
+@keyframes docops-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.markdown-body {
+  animation: docops-reveal var(--ds-dur-slow) var(--ds-ease-standard) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markdown-body { animation: none; }
+  .markdown-body * { scroll-behavior: auto; transition: none !important; }
+}
+
+/* -----------------------------
+   4) Typography (DocOps scale)
+   ----------------------------- */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--md-heading);
+  font-weight: 600; /* Headline/Display mapping */
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  scroll-margin-top: 96px;
+}
+
+.markdown-body h1 {
+  font-size: 40px;        /* Display (desktop) */
+  line-height: 48px;
+  letter-spacing: -0.6px;
+  margin-top: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.markdown-body h2 {
+  font-size: 28px;        /* Headline (desktop) */
+  line-height: 34px;
+  letter-spacing: -0.3px;
+  padding-top: 8px;
+}
+
+.markdown-body h3 {
+  font-size: 22px;        /* Title (desktop) */
+  line-height: 28px;
+  letter-spacing: -0.2px;
+}
+
+.markdown-body h4 {
+  font-size: 16px;        /* Body as “section label” */
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.markdown-body p {
+  margin: 0 0 16px 0;
+}
+
+.markdown-body strong {
+  color: var(--ds-text-primary);
+  font-weight: 600;
+}
+
+.markdown-body small {
+  color: var(--md-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* -----------------------------
+   5) Links + focus visibility
+   ----------------------------- */
+.markdown-body a {
+  color: var(--md-link);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid var(--md-link-underline);
+  transition: background-color var(--ds-dur-fast) var(--ds-ease-standard),
+              border-color var(--ds-dur-fast) var(--ds-ease-standard),
+              color var(--ds-dur-fast) var(--ds-ease-standard);
+  padding: 0 2px;
+  border-radius: 6px;
+}
+
+.markdown-body a:hover {
+  background: var(--md-link-hover-bg);
+  border-bottom-color: rgba(0, 183, 214, 0.55);
+}
+
+.markdown-body a:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  box-shadow: var(--ds-focus-glow);
+  border-bottom-color: transparent;
+}
+
+/* Selection should feel “system-level” */
+.markdown-body ::selection {
+  background: rgba(0, 183, 214, 0.18);
+}
+
+/* -----------------------------
+   6) Lists, rules, and spacing
+   ----------------------------- */
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+.markdown-body li {
+  margin: 6px 0;
+}
+
+.markdown-body hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ds-border), transparent);
+  margin: 24px 0;
+}
+
+/* -----------------------------
+   7) Inline code + code blocks
+   ----------------------------- */
+.markdown-body code {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+}
+
+.markdown-body :not(pre) > code {
+  background: var(--md-inline-code-bg);
+  border: 1px solid var(--md-inline-code-border);
+  color: var(--ds-text-primary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: break-spaces;
+}
+
+.markdown-body pre {
+  background: var(--md-code-bg);
+  color: var(--md-code-fg);
+  border: 1px solid var(--md-code-border);
+  box-shadow: var(--ds-shadow-sm);
+  padding: 16px;
+  border-radius: var(--ds-radius-lg);
+  overflow: auto;
+  margin: 0 0 24px 0;
+  line-height: 1.55;
+}
+
+.markdown-body pre code {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  font-size: 13px;
+  white-space: pre;
+}
+
+/* -----------------------------
+   8) Quotes / callouts
+   ----------------------------- */
+.markdown-body blockquote {
+  margin: 24px 0;
+  padding: 16px 16px 16px 18px;
+
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
+              var(--ds-surface-2);
+
+  border: 1px solid var(--ds-border);
+  border-left: 4px solid var(--ds-brand-gold); /* Gold = governance/attention (not error) */
+  border-radius: var(--ds-radius-lg);
+  box-shadow: none;
+
+  color: var(--ds-text-secondary);
+}
+
+.markdown-body blockquote > :first-child { margin-top: 0; }
+.markdown-body blockquote > :last-child { margin-bottom: 0; }
+
+/* -----------------------------
+   9) Tables (audit-friendly)
+   ----------------------------- */
+.markdown-body table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 0 24px 0;
+
+  background: rgba(255, 255, 255, 0.70);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+}
+
+.markdown-body thead th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  background: linear-gradient(180deg, rgba(238, 242, 247, 0.95), rgba(238, 242, 247, 0.78));
+  border-bottom: 1px solid var(--ds-border);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.markdown-body tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(11, 18, 32, 0.08);
+  color: var(--ds-text-secondary);
+  vertical-align: top;
+}
+
+.markdown-body tbody tr:nth-child(even) td {
+  background: var(--md-table-stripe);
+}
+
+.markdown-body tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Numeric density: make tables/KPIs scanable if author uses <code> or numbers */
+.markdown-body td code,
+.markdown-body th code {
+  font-size: 0.92em;
+}
+
+/* -----------------------------
+   10) Media, kbd, mark
+   ----------------------------- */
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border);
+  background: var(--ds-surface-1);
+}
+
+.markdown-body kbd {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ds-text-primary);
+
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(11, 18, 32, 0.18);
+  border-bottom-color: rgba(11, 18, 32, 0.28);
+  border-radius: 10px;
+
+  padding: 2px 8px;
+  box-shadow: 0 1px 0 rgba(11, 18, 32, 0.08);
+}
+
+.markdown-body mark {
+  background: rgba(201, 162, 39, 0.22); /* audit gold, soft */
+  color: var(--ds-text-primary);
+  padding: 0 3px;
+  border-radius: 6px;
+}
+
+/* -----------------------------
+   11) GitHub-ish conveniences (without cloning GitHub)
+   ----------------------------- */
+.markdown-body .task-list-item {
+  list-style: none;
+}
+
+.markdown-body .task-list-item input[type="checkbox"] {
+  transform: translateY(1px);
+  accent-color: var(--ds-accent);
+}
+
+/* Make anchor icons / autolinks not ugly if present */
+.markdown-body a.anchor {
+  border-bottom: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* -----------------------------
+   12) Print: keep it “audit export” ready
+   ----------------------------- */
+@media print {
+  .markdown-body {
+    background: #ffffff;
+    box-shadow: none;
+    border: 0;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  .markdown-body a {
+    color: var(--ds-text-primary);
+    border-bottom-color: rgba(11, 18, 32, 0.22);
+  }
+
+  .markdown-body pre {
+    box-shadow: none;
+  }
+}
+
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    cursor: default !important;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+
+.markdown-body img {
+    border-style: none;
+    max-width: 100%;
+    box-sizing: content-box;
+}
+
+/* Constrain SVGs and their interactive containers */
+.markdown-body svg,
+.svg-viewer-container,
+.svg-with-controls {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure the DocOps specific media cards respect the boundary */
+.docops-media-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 970px;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-data-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+    border-top: 1px solid var(--accent-primary);
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.docops-data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+.docops-data-actions {
+    display: flex;
+    gap: 12px;
+}
+.docops-action-btn {
+    background: rgba(126, 87, 255, 0.1);
+    border: 1px solid rgba(126, 87, 255, 0.3);
+    color: var(--accent-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docops-action-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    border-color: var(--accent-primary);
+}
+
+.docops-data-header span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+}
+
+/* ui.md: Distinctive Table Design */
+.docops-data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.docops-data-table th {
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-primary);
+    font-weight: 500;
+}
+
+/* ui.md: Motion - Staggered Row Entry */
+.docops-data-table tr {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: rowSlideIn 0.4s ease forwards;
+}
+
+@keyframes rowSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.docops-data-table td {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.docops-data-table tr:hover td {
+    background: rgba(126, 87, 255, 0.1);
+    color: #fff;
+}
+
+.docops-container {
+    display: inline-block;
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: center;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+    /* New variables for the control bar */
+    --control-bar-bg: rgba(245, 245, 245, 0.8);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #7e57ff;
+    --btn-border: rgba(126, 87, 255, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+        /* Dark mode overrides */
+        --control-bar-bg: rgba(0, 0, 0, 0.4);
+        --control-bar-border: rgba(255, 255, 255, 0.1);
+        --btn-text: #b392ff;
+        --btn-border: rgba(126, 87, 255, 0.4);
+    }
+}
+/* Support the manual override from the converter */
+[data-theme="dark"] {
+    --svg-bg: #2b2b2b;
+    --svg-border: #444;
+    --text-color: #aaa;
+    --modal-bg: #1e1e1e;
+    --control-bar-bg: rgba(0, 0, 0, 0.4);
+    --control-bar-border: rgba(255, 255, 255, 0.1);
+    --btn-text: #b392ff;
+}
+
+[data-theme="light"] {
+    --control-bar-bg: rgba(240, 240, 240, 0.9);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #6a3de8;
+    --btn-border: rgba(106, 61, 232, 0.4);
+}
+
+
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 1200px;
+    min-width: 600px;
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                          @media (prefers-color-scheme: dark) {
+                              body {
+                                  background-color: #f5f5f5;
+                              }
+                          }
+                          
+                           /* Fix for DocOps visuals sizing - prevents them from being too large */
+                          .svg-container svg {
+                              width: auto !important;
+                              height: auto !important;
+                              max-width: 100% !important;
+                              min-width: 0 !important;
+                              margin: 0 auto;
+                              display: block;
+                          }
+                          
+                          /* Consistent Modal Styles matching AsciiDoc implementation */
+                          .svg-modal-overlay {
+                              display: none;
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(15, 20, 25, 0.95);
+                              backdrop-filter: blur(8px);
+                              z-index: 2147483647;
+                              align-items: center;
+                              justify-content: center;
+                              padding: 40px;
+                              box-sizing: border-box;
+                          }
+                          .svg-modal-overlay.active {
+                              display: flex;
+                          }
+                          .svg-modal-content {
+                              width: 95vw;
+                              max-width: 1400px;
+                              height: 90vh;
+                              background: var(--docops-card-bg, #1e293b);
+                              border-radius: 20px;
+                              padding: 48px 24px 24px 24px;
+                              position: relative;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              display: flex;
+                              flex-direction: column;
+                              overflow: hidden;
+                              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                              animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                          }
+                          .svg-modal-close {
+                              position: absolute;
+                              top: 12px;
+                              right: 12px;
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border: none;
+                              width: 36px;
+                              height: 36px;
+                              border-radius: 50%;
+                              font-size: 24px;
+                              cursor: pointer;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              transition: all 0.2s ease;
+                              z-index: 10;
+                          }
+                          .svg-modal-close:hover {
+                              background: rgba(255,255,255,0.2);
+                              transform: rotate(90deg);
+                          }
+                          .svg-modal-body {
+                              flex: 1;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 100%;
+                              height: 100%;
+                              overflow: auto;
+                              padding: 10px;
+                          }
+                          .svg-modal-body svg {
+                              max-width: 100%;
+                              max-height: 100%;
+                              width: auto;
+                              height: auto;
+                              object-fit: contain;
+                          }
+                          @keyframes scaleInModal {
+                              from { opacity: 0; transform: scale(0.9); }
+                              to { opacity: 1; transform: scale(1); }
+                          }
+                          
+                          /* CSV Modal Styles */
+                          #globalCsvModal .csv-table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              color: #e2e8f0;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 13px;
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table th {
+                              text-align: left;
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              position: sticky;
+                              top: 0;
+                          }
+                          #globalCsvModal .csv-table td {
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              color: #cbd5e1;
+                          }
+                          #globalCsvModal .csv-table tr {
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table tr:hover {
+                              background: rgba(255,255,255,0.05);
+                          }
+                          
+                          /* Sliding Controls Styles (Consistent with Asciidoctor) */
+                          .svg-with-controls {
+                              position: relative;
+                              display: inline-block;
+                              border-radius: 8px;
+                              overflow: hidden;
+                          }
+                          .svg-bottom-controls {
+                              position: absolute;
+                              bottom: 12px;
+                              left: 50%;
+                              transform: translateX(-50%) translateY(150%);
+                              display: flex;
+                              gap: 6px;
+                              background: rgba(15, 20, 30, 0.85);
+                              padding: 6px 8px;
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              opacity: 0;
+                              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                              z-index: 100;
+                              backdrop-filter: blur(8px);
+                              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                          }
+                          .svg-with-controls:hover .svg-bottom-controls {
+                              opacity: 1;
+                              transform: translateX(-50%) translateY(0);
+                          }
+                          .svg-control-btn {
+                              background: transparent;
+                              border: 1px solid rgba(255,255,255,0.15);
+                              color: #94a3b8;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 10px;
+                              font-weight: 600;
+                              padding: 4px 10px;
+                              border-radius: 4px;
+                              cursor: pointer;
+                              transition: all 0.2s;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                          }
+                          .svg-control-btn:hover {
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border-color: rgba(255,255,255,0.3);
+                              transform: translateY(-1px);
+                          }
+                    </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js"></script>
+                
+            </head>
+            <body>
+                    <article class="markdown-body">
+                        <h1 id="docops-steps">DocOps Steps</h1>
+<div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; padding: 32px; margin-bottom: 48px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+  <div style="display: flex; align-items: center; gap: 24px;">
+<div style="background: linear-gradient(135deg, #1e3a5f 0%, #4a90d9 100%); padding: 20px; border-radius: 12px;">
+      <img src="../images/StepsIcon.svg" alt="Steps Icon" width="80" height="80" />
+    </div>
+    <div>
+      <h1 style="margin: 0 0 12px 0; color: #1e3a5f; font-size: 32px;">DocOps Steps</h1>
+      <p style="margin: 0; color: #64748b; font-size: 16px;">Create beautiful isometric step infographics to visualize processes, workflows, and progress</p>
+    </div>
+  </div>
+</div>
+<ul>
+<li><a href="#what-are-docops-steps">What are DocOps Steps?</a></li>
+<li><a href="#default-look">Default Look</a></li>
+<li><a href="#software-development-lifecycle">Software Development Lifecycle</a></li>
+<li><a href="#customer-onboarding-journey">Customer Onboarding Journey</a></li>
+<li><a href="#minimal-three-step-process">Minimal Three-Step Process</a></li>
+<li><a href="#key-components">Key Components</a>
+<ul>
+<li><a href="#configuration-section">Configuration Section</a></li>
+<li><a href="#step-data-columns">Step Data Columns</a></li>
+</ul>
+</li>
+<li><a href="#supported-format">Supported Format</a>
+<ul>
+<li><a href="#basic-structure">Basic Structure</a></li>
+<li><a href="#data-format-rules">Data Format Rules</a></li>
+</ul>
+</li>
+<li><a href="#formatting-tips">Formatting Tips</a></li>
+</ul>
+<h2 id="what-are-docops-steps">What are DocOps Steps?</h2>
+<p>The DocOps steps macro generates isometric 3D step infographics from simple structured text. It helps you visualize processes, workflows, and progress in a clean, numbered format that is easy to read and visually compelling.</p>
+<p>Steps are ideal for:</p>
+<ul>
+<li><strong>Process Documentation</strong> - Visualize workflows and business processes</li>
+<li><strong>Onboarding Guides</strong> - Show step-by-step user or employee onboarding</li>
+<li><strong>Project Milestones</strong> - Display key phases of a project lifecycle</li>
+<li><strong>Training Materials</strong> - Break down learning paths into clear stages</li>
+<li><strong>Product Roadmaps</strong> - Illustrate feature development progression</li>
+</ul>
+<h2 id="default-look">Default Look</h2>
+<div id="docops-steps-1776076570348-543" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIAAAAAAAA_0WSQW_bMAyF7_oVBALsFiDJljQ9-JA0zlpgw4B1w86MzNhEbEmlZGce-uNHOQF6MEQJxOP3Hs3u7GvB0LAtOPqOkrCdx0QhmoEksnfF0iROLRWlSyRBOBLsqgFdwprgmeum1S9FE_vTrfG18VeLkV0N1gtBTEKuTk0EdBUEkrOXDp0lQCs-RrjQCBV35PK8aCy6AeMfrlJTLFerxf3hmfKc4mGzMKmhjoqTqJ4J2FJKVAyc78nM53PzQyoSeIdfmUfPA0UrHJLK6-3Jt17MUqt9VoAXd257yjzvoFOpHUHI-trxP6om5iS9ZlLBaQSrleYkUZtnm3JXHo9mpfXPTwd4vRvVq5Ze_bObN77XxNg5P-AEYDHgiVtOTDeRx0NZrs3nLIKBK_iOcqEEX8VfJ63fMY_LHEIDuZ6gFrrCW8_2oqzswDuCkTBbnh23-6fHtfmSIUgGVlvlX0tte3eYNwZRUeIZ7QSUleO99a1HJRsh5s1NeIdH9bg16xwjJlRR20tuUVx_0jQgiE_0IWV9F1qe9htHja2bZPaL3fq4NxutXz6y-Eaom4oNB32f_iqrMatg1dt0i55s43RhtS7FY9Vh7pztHsr1dvcfU9ofeL4CAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Enterprise Advantage Highlights
+subtitle=Showcasing core strengths and performance across key dimensions
+canvasWidth=1220
+canvasHeight=760
+theme=brand
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Brand Influence | Widely recognized and trusted by customers | #6EAEFF
+2 | R&amp;D Strength | Strong in-house innovation capabilities | #69DEE5
+3 | Rapid Market Growth | Users and revenue grew quickly in one year | #F8BC95
+4 | Service Excellence | High satisfaction and service quality scores | #D9AEF8
+5 | Data Security | Robust protection and compliance systems | #B0A5FB
+6 | Innovation Leadership | Advanced product and technology roadmap | #A7E58A" data-kind="steps">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Brand Influence","Widely recognized and trusted by customers","#6EAEFF"],["2","R&D Strength","Strong in-house innovation capabilities","#69DEE5"],["3","Rapid Market Growth","Users and revenue grew quickly in one year","#F8BC95"],["4","Service Excellence","High satisfaction and service quality scores","#D9AEF8"],["5","Data Security","Robust protection and compliance systems","#B0A5FB"],["6","Innovation Leadership","Advanced product and technology roadmap","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#F6F9FC"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#0F2230">Enterprise Advantage Highlights</text><text x="0" y="30" class="subtitle" fill="#335D79">Showcasing core strengths and performance across key dimensions</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#0F2230">Brand Influence</text><text x="280.0" y="720.0" class="desc" fill="#335D79">Widely recognized and</text><text x="280.0" y="738.0" class="desc" fill="#335D79">trusted by customers</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="224.0,527.0 224.0,547.0 284.0,577.0 284.0,557.0" fill="#54b1b7" /><!-- Right Side --><polygon points="344.0,527.0 344.0,547.0 284.0,577.0 284.0,557.0" fill="#69DEE5" /><!-- Top --><polygon points="284.0,497.0 344.0,527.0 284.0,557.0 224.0,527.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="284.0" cy="482.0" r="15" fill="#69DEE5" /><text x="284.0" y="487.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="414.0" y="612.0" class="step-title" fill="#0F2230">R&amp;D Strength</text><text x="414.0" y="637.0" class="desc" fill="#335D79">Strong in-house innovation</text><text x="414.0" y="655.0" class="desc" fill="#335D79">capabilities</text><line x1="284.0" y1="527.0" x2="414.0" y2="602.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="358.0,444.0 358.0,464.0 418.0,494.0 418.0,474.0" fill="#c69677" /><!-- Right Side --><polygon points="478.0,444.0 478.0,464.0 418.0,494.0 418.0,474.0" fill="#F8BC95" /><!-- Top --><polygon points="418.0,414.0 478.0,444.0 418.0,474.0 358.0,444.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="418.0" cy="399.0" r="15" fill="#F8BC95" /><text x="418.0" y="404.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="548.0" y="529.0" class="step-title" fill="#0F2230">Rapid Market Growth</text><text x="548.0" y="554.0" class="desc" fill="#335D79">Users and revenue grew</text><text x="548.0" y="572.0" class="desc" fill="#335D79">quickly in one year</text><line x1="418.0" y1="444.0" x2="548.0" y2="519.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="492.0,361.0 492.0,381.0 552.0,411.0 552.0,391.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="612.0,361.0 612.0,381.0 552.0,411.0 552.0,391.0" fill="#D9AEF8" /><!-- Top --><polygon points="552.0,331.0 612.0,361.0 552.0,391.0 492.0,361.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="552.0" cy="316.0" r="15" fill="#D9AEF8" /><text x="552.0" y="321.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="682.0" y="446.0" class="step-title" fill="#0F2230">Service Excellence</text><text x="682.0" y="471.0" class="desc" fill="#335D79">High satisfaction and</text><text x="682.0" y="489.0" class="desc" fill="#335D79">service quality scores</text><line x1="552.0" y1="361.0" x2="682.0" y2="436.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="626.0,278.0 626.0,298.0 686.0,328.0 686.0,308.0" fill="#8c84c8" /><!-- Right Side --><polygon points="746.0,278.0 746.0,298.0 686.0,328.0 686.0,308.0" fill="#B0A5FB" /><!-- Top --><polygon points="686.0,248.0 746.0,278.0 686.0,308.0 626.0,278.0" fill="#d3c6ff" stroke="#d3c6ff" stroke-width="0.5"/><!-- Badge --><circle cx="686.0" cy="233.0" r="15" fill="#B0A5FB" /><text x="686.0" y="238.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="816.0" y="363.0" class="step-title" fill="#0F2230">Data Security</text><text x="816.0" y="388.0" class="desc" fill="#335D79">Robust protection and</text><text x="816.0" y="406.0" class="desc" fill="#335D79">compliance systems</text><line x1="686.0" y1="278.0" x2="816.0" y2="353.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 950ms"><!-- Left Side --><polygon points="760.0,195.0 760.0,215.0 820.0,245.0 820.0,225.0" fill="#85b76e" /><!-- Right Side --><polygon points="880.0,195.0 880.0,215.0 820.0,245.0 820.0,225.0" fill="#A7E58A" /><!-- Top --><polygon points="820.0,165.0 880.0,195.0 820.0,225.0 760.0,195.0" fill="#c8ffa5" stroke="#c8ffa5" stroke-width="0.5"/><!-- Badge --><circle cx="820.0" cy="150.0" r="15" fill="#A7E58A" /><text x="820.0" y="155.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">6</text><!-- Label --><g><text x="950.0" y="280.0" class="step-title" fill="#0F2230">Innovation Leadership</text><text x="950.0" y="305.0" class="desc" fill="#335D79">Advanced product and</text><text x="950.0" y="323.0" class="desc" fill="#335D79">technology roadmap</text><line x1="820.0" y1="195.0" x2="950.0" y2="270.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-steps-1776076570348-543').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.png(this)">PNG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.print(this)">PRINT</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="software-development-lifecycle">Software Development Lifecycle</h2>
+<div id="docops-steps-1776076570461-797" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIAAAAAAAA_0VRS2_CMAy-51dE4owEbLwOPXRQNGmTNm3TOIfUpZ5CEhy3DIkfvySAdopt-Xv4C9rG7Un5FnWBwR2ACfUwMPggeqCAzhZjwcgGik_X8EkRyDX0YJw_gGX5ig3oszYgQre77r3AWfpWBQiyIXeQ3ihr0e4lO1mDN-6ckEIr26uwxZrbYjyZjG6DZ8B9y8V8NhLcwgEKbVQIqIVXBpih6HFHKuKHw6F4oxpIXuRXEo7vGoIm9Bxtx27ljCMxjtX73UJaadCCJDh2SJCcBKlsLT25H9Asg3Y-UQ1mVVltNmJypcV9YixJt8hpLXqTwZkuSyW8JlAcZx50yPDluqqm4iHD__O6yC1Fhgwh6BFOUrs6C24WT6vlVDymeyDw1e63Mlgn4mMXKz5nYIO_MckYPGep9TI6XYhplrrnG5sPMBC_IeUer6s7nc2C7ZGcve0Mynk1XZR_Q268gAgCAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Software Development Lifecycle
+subtitle=Key phases from planning to deployment
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Planning | Define requirements and project scope | #6EAEFF
+2 | Design | Architect the solution and create specs | #69DEE5
+3 | Development | Write and review code | #F8BC95
+4 | Testing | Validate quality and fix defects | #D9AEF8
+5 | Deployment | Release to production environment | #A7E58A" data-kind="steps">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Planning","Define requirements and project scope","#6EAEFF"],["2","Design","Architect the solution and create specs","#69DEE5"],["3","Development","Write and review code","#F8BC95"],["4","Testing","Validate quality and fix defects","#D9AEF8"],["5","Deployment","Release to production environment","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#ffffff"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#111111">Software Development Lifecycle</text><text x="0" y="30" class="subtitle" fill="#4338ca">Key phases from planning to deployment</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#111111">Planning</text><text x="280.0" y="720.0" class="desc" fill="#4338ca">Define requirements and</text><text x="280.0" y="738.0" class="desc" fill="#4338ca">project scope</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#111111">Design</text><text x="447.0" y="616.0" class="desc" fill="#4338ca">Architect the solution and</text><text x="447.0" y="634.0" class="desc" fill="#4338ca">create specs</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#111111">Development</text><text x="614.0" y="512.0" class="desc" fill="#4338ca">Write and review code</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#111111">Testing</text><text x="781.0" y="408.0" class="desc" fill="#4338ca">Validate quality and fix</text><text x="781.0" y="426.0" class="desc" fill="#4338ca">defects</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#85b76e" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#A7E58A" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#c8ffa5" stroke="#c8ffa5" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#A7E58A" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#111111">Deployment</text><text x="948.0" y="304.0" class="desc" fill="#4338ca">Release to production</text><text x="948.0" y="322.0" class="desc" fill="#4338ca">environment</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-steps-1776076570461-797').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.png(this)">PNG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.print(this)">PRINT</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="customer-onboarding-journey">Customer Onboarding Journey</h2>
+<div id="docops-steps-1776076570483-546" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIAAAAAAAA_1WQTW_bMAyG7_oVBHIOkGRL1hx8aBJ77S4tmrU7KxJtE3Ekg6IcBOiPL-1lh530kuLH85JCHRu2fUuuoBQvKExungT7ZAbkRDEUSyMkHRb7nEQrGF7CKVr2FBr4FTMHvJmUT3-LjmMrSIQrdk6rwQYP1gkNVhACXsHdxyTjbBhs-kNe2mK5Wi3uiSekppXix2ZhpMULFifWIaa3HYpgMdAYi5nP5-aFvfJ8wu9xt74HTI6pF8XWaB-7yGap6khNgPd-zP0z4RiVKCmf4rmYg-jvbFM-llVlVqo_kKkmZ-_Dnj0GtXibDOHFUgfD_xWzzfZQlmvzTfUrx5oU6YiSp7Xx0is-Qs9YI2Nw02oPST3pIdPYXz3s9tu1-a66Ik4C72k09TOTRw9X252l5ZibFmINZ7xBrRYy49R82Cr5g1mrLkNjGz3cZOkNm9xZhpw0N62sEf3JujN0MY5ss93icV3tvgDrsx9_CwIAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Customer Onboarding Journey
+subtitle=Steps to welcome and activate new customers
+canvasWidth=1220
+canvasHeight=760
+theme=brand
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Sign Up | Customer creates an account | #6EAEFF
+2 | Verification | Identity and email verification | #69DEE5
+3 | Profile Setup | Complete preferences and settings | #F8BC95
+4 | First Use | Guided walkthrough of key features | #D9AEF8
+5 | Engagement | Regular usage and feedback loop | #B0A5FB" data-kind="steps">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Sign Up","Customer creates an account","#6EAEFF"],["2","Verification","Identity and email verification","#69DEE5"],["3","Profile Setup","Complete preferences and settings","#F8BC95"],["4","First Use","Guided walkthrough of key features","#D9AEF8"],["5","Engagement","Regular usage and feedback loop","#B0A5FB"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#F6F9FC"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#0F2230">Customer Onboarding Journey</text><text x="0" y="30" class="subtitle" fill="#335D79">Steps to welcome and activate new customers</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#0F2230">Sign Up</text><text x="280.0" y="720.0" class="desc" fill="#335D79">Customer creates an account</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#0F2230">Verification</text><text x="447.0" y="616.0" class="desc" fill="#335D79">Identity and email</text><text x="447.0" y="634.0" class="desc" fill="#335D79">verification</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#0F2230">Profile Setup</text><text x="614.0" y="512.0" class="desc" fill="#335D79">Complete preferences and</text><text x="614.0" y="530.0" class="desc" fill="#335D79">settings</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#0F2230">First Use</text><text x="781.0" y="408.0" class="desc" fill="#335D79">Guided walkthrough of key</text><text x="781.0" y="426.0" class="desc" fill="#335D79">features</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#8c84c8" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#B0A5FB" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#d3c6ff" stroke="#d3c6ff" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#B0A5FB" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#0F2230">Engagement</text><text x="948.0" y="304.0" class="desc" fill="#335D79">Regular usage and feedback</text><text x="948.0" y="322.0" class="desc" fill="#335D79">loop</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-steps-1776076570483-546').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.png(this)">PNG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.print(this)">PRINT</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="minimal-three-step-process">Minimal Three-Step Process</h2>
+<div id="docops-steps-1776076570501-702" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIAAAAAAAA_y2PQUsEMQyF7_0V_QMDOyPoqScFFRZEVvAc28xMsJuWJB0R_PF2hj2FvPfyPkI8l0WgrhQDabmiCcVBDau6DUWpcBidkWUM743it78YiPnnRgldBN5APynZGsZpOt2EF6RltfBwf3K24hVDzKBK0VXIaIZhoy8BNjcMg3uThOL__MfO6PMJNQpV62Q39v2V1SDn3Sk_nAskD5w83eQO8FBrpgjHydSDj4VnWprsdRc036r_LU18FZxRkCOqu-veGRrHdQ8dPzUlXo7CKiW1aP9mL7ALHQEAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Quick Start Guide
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description
+1 | Install | Download and install the application
+2 | Configure | Set up your preferences
+3 | Launch | Start using the product" data-kind="steps">
+<figure class="docops-figure-card">
+<div class="svg-container">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Install","Download and install the application",""],["2","Configure","Set up your preferences",""],["3","Launch","Start using the product",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#ffffff"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#111111">Quick Start Guide</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#b8003a" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#e60049" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#ff0057" stroke="#ff0057" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#e60049" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#111111">Install</text><text x="280.0" y="720.0" class="desc" fill="#4338ca">Download and install the</text><text x="280.0" y="738.0" class="desc" fill="#4338ca">application</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="425.0,402.0 425.0,422.0 485.0,452.0 485.0,432.0" fill="#0890cc" /><!-- Right Side --><polygon points="545.0,402.0 545.0,422.0 485.0,452.0 485.0,432.0" fill="#0bb4ff" /><!-- Top --><polygon points="485.0,372.0 545.0,402.0 485.0,432.0 425.0,402.0" fill="#0dd8ff" stroke="#0dd8ff" stroke-width="0.5"/><!-- Badge --><circle cx="485.0" cy="357.0" r="15" fill="#0bb4ff" /><text x="485.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="615.0" y="487.0" class="step-title" fill="#111111">Configure</text><text x="615.0" y="512.0" class="desc" fill="#4338ca">Set up your preferences</text><line x1="485.0" y1="402.0" x2="615.0" y2="477.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="760.0,194.0 760.0,214.0 820.0,244.0 820.0,224.0" fill="#40ba74" /><!-- Right Side --><polygon points="880.0,194.0 880.0,214.0 820.0,244.0 820.0,224.0" fill="#50e991" /><!-- Top --><polygon points="820.0,164.0 880.0,194.0 820.0,224.0 760.0,194.0" fill="#60ffae" stroke="#60ffae" stroke-width="0.5"/><!-- Badge --><circle cx="820.0" cy="149.0" r="15" fill="#50e991" /><text x="820.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="950.0" y="279.0" class="step-title" fill="#111111">Launch</text><text x="950.0" y="304.0" class="desc" fill="#4338ca">Start using the product</text><line x1="820.0" y1="194.0" x2="950.0" y2="269.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+</div>
+<figcaption></figcaption>
+</figure>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-steps-1776076570501-702').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
+<button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.svg(this)">SVG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.png(this)">PNG</button>
+<button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.print(this)">PRINT</button>
+</div>
+<div class="docops-data-panel" style="display: none;">
+<div class="docops-data-header">
+<span>Embedded Data</span>
+<button onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+</div>
+<div class="docops-data-table-container"></div>
+</div>
+</div>
+<h2 id="key-components">Key Components</h2>
+<p>Each steps infographic includes two sections separated by <code>---</code>:</p>
+<h3 id="configuration-section">Configuration Section</h3>
+<table>
+<thead>
+<tr><th>Field</th><th>Default</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>infographic</code></td><td><em>(required)</em></td><td>Type of infographic (use <code>isometric-steps</code>)</td></tr>
+<tr><td><code>version</code></td><td><code>1</code></td><td>Format version</td></tr>
+<tr><td><code>title</code></td><td><em>(required)</em></td><td>Main title displayed on the infographic</td></tr>
+<tr><td><code>subtitle</code></td><td><em>(none)</em></td><td>Optional subtitle below the title</td></tr>
+<tr><td><code>canvasWidth</code></td><td><code>1220</code></td><td>Width of the SVG canvas in pixels</td></tr>
+<tr><td><code>canvasHeight</code></td><td><code>760</code></td><td>Height of the SVG canvas in pixels</td></tr>
+<tr><td><code>theme</code></td><td><code>classic</code></td><td>Visual theme name (e.g., <code>classic</code>, <code>brand</code>)</td></tr>
+<tr><td><code>palette</code></td><td><code>vibrant</code></td><td>Color palette for step rendering</td></tr>
+<tr><td><code>startX</code></td><td><em>(auto)</em></td><td>Custom X starting position</td></tr>
+<tr><td><code>startY</code></td><td><em>(auto)</em></td><td>Custom Y starting position</td></tr>
+<tr><td><code>dx</code></td><td><em>(auto)</em></td><td>Horizontal offset between steps</td></tr>
+<tr><td><code>dy</code></td><td><em>(auto)</em></td><td>Vertical offset between steps</td></tr>
+<tr><td><code>labelOffsetX</code></td><td><code>130</code></td><td>Horizontal offset for step labels</td></tr>
+<tr><td><code>labelOffsetY</code></td><td><code>65</code></td><td>Vertical offset for step labels</td></tr>
+<tr><td><code>maxDescLines</code></td><td><code>2</code></td><td>Maximum description lines per step</td></tr>
+</tbody>
+</table>
+<h3 id="step-data-columns">Step Data Columns</h3>
+<table>
+<thead>
+<tr><th>Column</th><th>Required</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>Order</code></td><td>Yes</td><td>Numeric order of the step (must be unique)</td></tr>
+<tr><td><code>Title</code></td><td>Yes</td><td>Short title for the step</td></tr>
+<tr><td><code>Description</code></td><td>No</td><td>Brief description text</td></tr>
+<tr><td><code>Color</code></td><td>No</td><td>Custom hex color (e.g., <code>#6EAEFF</code>)</td></tr>
+</tbody>
+</table>
+<h2 id="supported-format">Supported Format</h2>
+<p>The steps macro accepts a config block followed by pipe-delimited CSV data.</p>
+<h3 id="basic-structure">Basic Structure</h3>
+<pre><code class="language-text">[docops:steps]
+infographic=isometric-steps
+version=1
+title=My Steps Title
+subtitle=Optional subtitle text
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Step One | Description of step one | #6EAEFF
+2 | Step Two | Description of step two | #69DEE5
+[/docops]
+</code></pre>
+<h3 id="data-format-rules">Data Format Rules</h3>
+<ul>
+<li>Config section and data section are separated by <code>---</code></li>
+<li>First row after <code>---</code> is the header row</li>
+<li>Columns are separated by <code>|</code> (pipe)</li>
+<li>Order values must be unique integers</li>
+<li>Color is optional; palette colors are used when omitted</li>
+</ul>
+<h2 id="formatting-tips">Formatting Tips</h2>
+<ul>
+<li>Keep titles short — use 2-3 words per step for best visual results</li>
+<li>Limit to 3-8 steps — too many steps reduce readability</li>
+<li>Use consistent colors — stick to a palette or let the theme handle it</li>
+<li>Write concise descriptions — one line per step works best</li>
+<li>Order sequentially — use 1, 2, 3... for clear progression</li>
+<li>Choose meaningful subtitles — they provide context for the entire infographic</li>
+</ul>
+<div style="background: #f8fafc; border-left: 4px solid #4a90d9; padding: 16px 24px; margin: 32px 0; border-radius: 4px;">
+  <p style="margin: 0; color: #1e3a5f; font-weight: 600;">💡 Best Practice</p>
+  <p style="margin: 8px 0 0 0; color: #475569;">Keep step titles short and action-oriented. Use the description field for additional context, and let the color palette create visual harmony unless you need specific brand colors.</p>
+</div>
+
+                    </article>
+                    
+                    <!-- Global Shared Modal for Markdown View -->
+                    <div class="svg-modal-overlay" id="globalSvgModal" onclick="if(event.target === this) closeGlobalModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalModal()">×</button>
+                            <div id="globalModalBody" class="svg-modal-body"></div>
+                        </div>
+                    </div>
+
+                    <!-- Global Shared Modal for Data View -->
+                        <div class="svg-modal-overlay" id="globalCsvModal" onclick="if(event.target === this) closeGlobalCsvModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalCsvModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+                                </div>
+                                <div id="globalCsvModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Global Shared Modal for Source View -->
+                        <div class="svg-modal-overlay" id="globalSourceModal" onclick="if(event.target === this) closeGlobalSourceModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalSourceModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+                                </div>
+                                <div id="globalSourceModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                    <script>
+                            // Unified Modal Logic for Markdown
+                            function openModal(container) {
+                                const modal = document.getElementById('globalSvgModal');
+                                const targetContainer = document.getElementById('globalModalBody');
+                            
+                                // Find SVG in the container passed from the button
+                                const sourceSvg = container.querySelector ? container.querySelector('svg') : container; 
+                            
+                                if (sourceSvg && targetContainer) {
+                                    targetContainer.innerHTML = '';
+                                    const clone = sourceSvg.cloneNode(true);
+                                
+                                    // Reset dimensions to allow CSS to control scaling
+                                    clone.removeAttribute('width');
+                                    clone.removeAttribute('height');
+                                    clone.style.width = '100%';
+                                    clone.style.height = '100%';
+                                
+                                    targetContainer.appendChild(clone);
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                }
+                            }
+
+                            function closeGlobalModal() {
+                                const modal = document.getElementById('globalSvgModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                        
+                            function closeGlobalCsvModal() {
+                                const modal = document.getElementById('globalCsvModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                            
+                            function closeGlobalSourceModal() {
+                                const modal = document.getElementById('globalSourceModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+
+                            // Close modals with Escape key
+                            document.addEventListener('keydown', function(event) {
+                                if (event.key === 'Escape') {
+                                    closeGlobalModal();
+                                    closeGlobalCsvModal();
+                                    closeGlobalSourceModal();
+                                }
+                            });
+                        
+                            const docopsData = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const svg = container.querySelector('.svg-container svg') || container.querySelector('svg');
+                                
+                                    if (!svg) return;
+                                
+                                    let csvData = null;
+                                
+                                    // Method 1: Standard metadata with type
+                                    let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                                    if (csvMetadata) {
+                                        try {
+                                            csvData = JSON.parse(csvMetadata.textContent.trim());
+                                        } catch(e) { console.error("Error parsing CSV JSON", e); }
+                                    }
+
+                                    // Method 2: Custom csv-data element
+                                    if (!csvData) {
+                                        csvMetadata = svg.querySelector('metadata csv-data');
+                                        if (csvMetadata) {
+                                            try {
+                                                csvData = JSON.parse(csvMetadata.textContent.trim());
+                                            } catch(e) {}
+                                        }
+                                    }
+
+                                    // Method 3: Data attribute
+                                    if (!csvData) {
+                                        const csvDataAttr = svg.getAttribute('data-csv');
+                                        if (csvDataAttr) {
+                                            try {
+                                                csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                                            } catch(e) {}
+                                        }
+                                    }
+                                
+                                    if (csvData) {
+                                        const modal = document.getElementById('globalCsvModal');
+                                        const body = document.getElementById('globalCsvModalBody');
+                                    
+                                        let html = '<table class="csv-table">';
+                                         if (csvData.headers) {
+                                            html += '<thead><tr>';
+                                            csvData.headers.forEach(h => html += '<th>' + h + '</th>');
+                                            html += '</tr></thead>';
+                                        }
+                                        if (csvData.rows) {
+                                            html += '<tbody>';
+                                            csvData.rows.forEach(row => {
+                                                html += '<tr>';
+                                                row.forEach(cell => html += '<td>' + cell + '</td>');
+                                                html += '</tr>';
+                                            });
+                                            html += '</tbody>';
+                                        }
+                                        html += '</table>';
+                                    
+                                        body.innerHTML = html;
+                                        modal.classList.add('active');
+                                        document.body.style.overflow = 'hidden';
+                                    } else {
+                                        console.log("No CSV data found in SVG");
+                                    }
+                                }
+                            };
+                            
+                            const docopsSource = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const originalContent = container.getAttribute('data-original-content');
+                                    const kind = container.getAttribute('data-kind') || 'source';
+                                    
+                                    if (!originalContent || !originalContent.trim()) {
+                                        console.log("No source content available");
+                                        return;
+                                    }
+                                    
+                                    // Decode HTML entities
+                                    const decoded = originalContent
+                                        .replace(/&quot;/g, '"')
+                                        .replace(/&amp;/g, '&')
+                                        .replace(/&lt;/g, '<')
+                                        .replace(/&gt;/g, '>');
+                                    
+                                    const modal = document.getElementById('globalSourceModal');
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    
+                                    const escapedHtml = decoded
+                                        .replace(/&/g, '&amp;')
+                                        .replace(/</g, '&lt;')
+                                        .replace(/>/g, '&gt;');
+                                    
+                                    body.innerHTML = `
+                                        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem; padding: 0 1rem;">
+                                            <button class="docops-action-btn" onclick="docopsSource.copyFromModal()">
+                                                <span style="margin-right: 6px;">📋</span> COPY
+                                            </button>
+                                        </div>
+                                        <pre style="
+                                            background: rgba(0, 0, 0, 0.4);
+                                            border: 1px solid rgba(255, 255, 255, 0.1);
+                                            border-radius: 12px;
+                                            padding: 2rem;
+                                            overflow: auto;
+                                            margin: 0 1rem 1rem 1rem;
+                                            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+                                        "><code style="
+                                            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                                            font-size: 0.85rem;
+                                            line-height: 1.7;
+                                            color: #e2e8f0;
+                                            display: block;
+                                            white-space: pre-wrap;
+                                            word-wrap: break-word;
+                                        ">${escapedHtml}</code></pre>
+                                    `;
+                                    
+                                    // Store decoded content for copying
+                                    body.dataset.sourceContent = decoded;
+                                    
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                },
+                                
+                                copyFromModal: function() {
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    const content = body.dataset.sourceContent;
+                                    
+                                    if (content) {
+                                        navigator.clipboard.writeText(content).then(() => {
+                                            const btn = document.querySelector('#globalSourceModal .docops-action-btn');
+                                            if (btn) {
+                                                const originalHtml = btn.innerHTML;
+                                                btn.innerHTML = '<span style="margin-right: 6px;">✓</span> COPIED!';
+                                                btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                                                setTimeout(() => {
+                                                    btn.innerHTML = originalHtml;
+                                                    btn.style.background = '';
+                                                }, 2000);
+                                            }
+                                        }).catch(err => {
+                                            console.error('Copy failed:', err);
+                                        });
+                                    }
+                                }
+                            };
+                        
+                        window.docopsCopy = {
+                            url: (btn) => {
+                                    const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                },
+                            svg: (btn) => {
+                                const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                                navigator.clipboard.writeText(svg).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                            png: (btn) => {
+                                const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                                const svgData = new XMLSerializer().serializeToString(svgElement);
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                const img = new Image();
+                            
+                                img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(blob => {
+                                        const item = new ClipboardItem({ "image/png": blob });
+                                        navigator.clipboard.write([item]);
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                };
+                                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            },
+                            print: (btn) => {
+                                const card = btn.closest('.docops-media-card');
+                                const svgElement = card.querySelector('svg');
+                                if (!svgElement) return;
+
+                                const svgClone = svgElement.cloneNode(true);
+                                // For Markdown, we don't have svgViewer.inlineStyles readily available 
+                                // unless we also inline it here. But let's at least provide the basic print.
+                                const svgData = new XMLSerializer().serializeToString(svgClone);
+                                const printWindow = window.open('', '_blank');
+                                printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+                                printWindow.document.write(svgData);
+                                printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script></body></html>');
+                                printWindow.document.close();
+                            }
+                        };
+                    
+                    </script>
+                    <script>
+                        mermaid.initialize({ startOnLoad: true });
+                    </script>
+                    <script>
+                    (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                    const docopsDataX = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+
+                    </script>
+                
+                </body>
+                </html>

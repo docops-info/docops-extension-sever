@@ -1,0 +1,4160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
+<title>DocOps Steps</title>
+<style>
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap);@keyframes docops-reveal{to{opacity:1;transform:translateY(0)}}:root{--brand-ink:#0B1220;--brand-cloud:#F6F8FB;--brand-slate:#2A3447;--brand-steel:#8A96AD;--brand-cyan:#00B7D6;--brand-gold:#C9A227;--semantic-success:#16A34A;--semantic-warning:#D97706;--semantic-error:#DC2626;--semantic-info:#2563EB;--canvas:var(--brand-cloud);--surface-1:#FFFFFF;--surface-2:#EEF2F7;--border:rgba(11, 18, 32, 0.12);--text-1:var(--brand-ink);--text-2:var(--brand-slate);--text-3:var(--brand-steel);--accent:var(--brand-cyan);--font-sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;--font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;--content-max:1100px;--content-reading:920px;--r-sm:8px;--r-md:12px;--r-lg:16px;--shadow-sm:0 6px 18px rgba(11, 18, 32, 0.08);--shadow-md:0 16px 40px rgba(11, 18, 32, 0.12);--focus-glow:0 0 0 4px rgba(0, 183, 214, 0.22);--dur-fast:120ms;--dur-base:220ms;--dur-slow:420ms;--ease-standard:cubic-bezier(0.16, 1, 0.3, 1);--grid-ink:rgba(11, 18, 32, 0.05);--halo-cyan:rgba(0, 183, 214, 0.10);--halo-gold:rgba(201, 162, 39, 0.08)}:root.dark-mode{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}}html{box-sizing:border-box;text-size-adjust:100%;scroll-behavior:smooth}*,::after,::before{box-sizing:inherit}::selection{background:rgba(0,183,214,.22)}body{margin:0;font-family:var(--font-sans);color:var(--text-2);background:var(--canvas);line-height:1.6;background-image:radial-gradient(1200px 800px at 12% -10%,var(--halo-cyan),transparent 55%),radial-gradient(900px 700px at 100% 10%,var(--halo-gold),transparent 50%),linear-gradient(to right,var(--grid-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-ink) 1px,transparent 1px);background-size:auto,auto,28px 28px,28px 28px;background-attachment:fixed}#header{max-width:var(--content-max)}#content,#footer,#footnotes,#header{margin:0 auto;padding:28px 20px}#footer,#footnotes{max-width:var(--content-max)}#content{max-width:var(--content-reading)}#content,#footer,#footnotes,#header>h1:first-child,#toc{opacity:0;transform:translateY(10px);animation:docops-reveal var(--dur-slow) var(--ease-standard) forwards}#header>h1:first-child{animation-delay:40ms}#toc{animation-delay:90ms}#content{animation-delay:140ms}#footnotes{animation-delay:190ms}#footer{animation-delay:240ms}@media (prefers-reduced-motion:reduce){#content,#footer,#footnotes,#header>h1:first-child,#toc{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}h1,h2,h3,h4{color:var(--text-1)}h1,h4,h5{letter-spacing:-.01em}h1,h2,h3,h4,h5,h6{line-height:1.2;margin:2.2rem 0 .9rem;scroll-margin-top:96px}#header>h1:first-child{margin:0 0 12px;font-size:40px;font-weight:600;letter-spacing:-.6px;padding:18px 18px 18px 16px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.2));border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative}#header>h1:first-child::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;border-radius:var(--r-lg)0 0 var(--r-lg);background:linear-gradient(180deg,var(--accent),rgba(0,183,214,.35))}h2,h4,h5,h6{font-weight:600}h2{font-size:28px;letter-spacing:-.3px;border-bottom:1px solid var(--border);padding-bottom:10px}h3{font-size:22px;font-weight:500;letter-spacing:-.2px}h4,h5,h6{font-size:16px}h5,h6{font-size:14px;color:var(--text-2)}h6{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.12em}p{margin:0 0 1rem}a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,183,214,.35);transition:border-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard)}a:focus,a:hover{color:var(--accent);border-bottom-color:var(--accent)}hr{border:0;height:1px;background:var(--border);margin:2rem 0}ol,ul{margin:0 0 1rem;padding-left:1.25rem}li{margin:.3rem 0}code,kbd,pre{font-family:var(--font-mono);font-variant-ligatures:none}code{font-size:.92em;color:var(--text-1);background:rgba(0,183,214,.1);border:1px solid rgba(0,183,214,.18);padding:.16em .4em;border-radius:10px}blockquote,pre{border:1px solid var(--border);box-shadow:var(--shadow-sm)}pre{margin:0 0 1.25rem;padding:16px 18px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(11,18,32,.92),rgba(11,18,32,.84));color:#eaf0ff;overflow:auto;line-height:1.55}pre code{background:0 0;border:0;padding:0;color:inherit}blockquote{margin:1.5rem 0;padding:14px 16px;border-radius:var(--r-md);background:var(--surface-1);position:relative}blockquote::before{content:"";position:absolute;inset:10px auto 10px 10px;width:3px;border-radius:999px;background:rgba(138,150,173,.55)}blockquote p:last-child{margin-bottom:0}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);box-shadow:var(--shadow-sm)}td,th{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}th{font-weight:600;color:var(--text-1);background:linear-gradient(180deg,var(--surface-2),rgba(238,242,247,.25));text-transform:uppercase;letter-spacing:.08em;font-size:12px}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(0,183,214,.06)}#toc,.admonitionblock,.exampleblock,.sidebarblock{border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#toc{background:color-mix(in srgb,var(--surface-1) 78%,transparent);backdrop-filter:blur(10px);border:1px solid var(--border);padding:16px}#toc .title,#toctitle,.admonitionblock .title{color:var(--text-1);font-weight:600;font-size:12px;text-transform:uppercase}#toc .title,#toctitle{margin:0 0 10px;letter-spacing:.12em;display:flex;align-items:center;gap:10px}#toc .title::after,#toctitle::after{content:"";flex:1;height:1px;background:var(--border)}#toc ul{list-style:none;padding-left:0;margin:0}#toc li{margin:6px 0}#toc a{color:var(--text-2);border-bottom:0;display:inline-block;padding:2px 0}#toc a:hover{color:var(--text-1)}#toc ul ul{padding-left:14px;border-left:1px solid var(--border);margin-left:6px}#toc.toc2{position:fixed!important;top:20px;left:20px;width:320px;max-height:calc(100vh - 40px);overflow:auto;z-index:5000}body.toc2{padding-left:360px;max-width:none}@media (max-width:1100px){#toc.toc2{position:static!important;width:auto;max-height:none;left:auto;top:auto;margin:0 0 16px}body.toc2{padding-left:0}}.admonitionblock,.exampleblock,.sidebarblock{margin:1.5rem 0;background:var(--surface-1)}.admonitionblock{overflow:hidden;border:1px solid var(--border)}.admonitionblock>table{border:0;margin:0;box-shadow:none}.admonitionblock td.icon{width:52px;padding:14px 10px;text-align:center;background:var(--surface-2);border-right:1px solid var(--border)}.admonitionblock td.content{padding:14px 16px}.admonitionblock .title{letter-spacing:.1em;margin-bottom:6px}.admonitionblock.note{border-left:4px solid var(--semantic-info)}.admonitionblock.tip{border-left:4px solid var(--semantic-success)}.admonitionblock.warning{border-left:4px solid var(--semantic-warning)}.admonitionblock.caution{border-left:4px solid var(--semantic-error)}.admonitionblock.important{border-left:4px solid var(--brand-gold)}.admonitionblock.important td.icon{background:color-mix(in srgb,var(--brand-gold) 14%,var(--surface-2))}.exampleblock,.sidebarblock{padding:16px}.exampleblock>.content>.title,.sidebarblock>.content>.title{margin:0 0 10px;font-weight:600;color:var(--text-1)}.exampleblock,.sidebarblock,img,kbd{border:1px solid var(--border)}kbd{display:inline-block;padding:.14rem .4rem;border-radius:10px;background:var(--surface-2);color:var(--text-1);font-size:.85em;box-shadow:0 2px 0 rgba(11,18,32,.08)}img{max-width:100%;height:auto;border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#footer,.page-navigation{border-top:1px solid var(--border)}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0}.nav-container{max-width:var(--content-max);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-sans);font-weight:600;font-size:.9rem;color:var(--brand-cyan);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:var(--r-md);background:var(--surface-1);border:1px solid var(--border);transition:all var(--dur-base) var(--ease-standard);box-shadow:var(--shadow-sm);border-bottom:1px solid var(--border)}.nav-next:hover,.nav-prev:hover{color:var(--surface-1);background:var(--brand-cyan);border-color:var(--brand-cyan);transform:translateY(-2px);box-shadow:var(--shadow-md);border-bottom:1px solid var(--brand-cyan)}#footer{color:var(--text-3)}#footer-text{opacity:.9}:focus{outline:2px solid var(--accent);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--focus-glow)}@media print{body{background:#fff!important}#toc.toc2{display:none!important}a,body,pre{color:#000!important}a{border-bottom:0!important;text-decoration:underline!important}pre{background:#f6f8fb!important}}.theme-toggle{position:fixed;top:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--surface-1);border:1px solid var(--border);box-shadow:var(--shadow-md);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all var(--dur-base) var(--ease-standard);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(11,18,32,.2);border-color:var(--accent)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all var(--dur-base) ease}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.admonitionblock td.icon i.fa{font-family:"Font Awesome 6 Free";font-weight:900;font-style:normal;display:inline-block;line-height:1;font-size:18px;color:var(--text-1)}.admonitionblock td.icon i.fa::before{display:inline-block}.admonitionblock td.icon i.fa.icon-note::before{content:"";color:var(--semantic-info)}.admonitionblock td.icon i.fa.icon-tip::before{content:"";color:var(--semantic-success)}.admonitionblock td.icon i.fa.icon-warning::before{content:"";color:var(--semantic-warning)}.admonitionblock td.icon i.fa.icon-caution::before{content:"";color:var(--semantic-error)}.admonitionblock td.icon i.fa.icon-important::before{content:"";color:var(--brand-gold)}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+        --docops-bg: #0f172a;
+        --docops-card-bg: rgba(30, 41, 59, 0.7);
+        --docops-accent: #38bdf8;
+        --docops-accent-glow: rgba(56, 189, 248, 0.3);
+        --docops-text: #f1f5f9;
+        --docops-text-dim: #94a3b8;
+        --docops-border: rgba(255, 255, 255, 0.1);
+        --docops-glass: blur(12px);
+        --docops-font-main: 'Outfit', system-ui, sans-serif;
+        --docops-font-mono: 'JetBrains Mono', monospace;
+    }
+    /* Outer container handles alignment */
+    .svg-viewer-container {
+        width: 100%;
+        /* text-align will be set via inline style based on role */
+    }
+
+    /* Inner container groups SVG and controls together */
+    .svg-with-controls {
+        position: relative;
+        display: inline-block; /* This makes it respect text-align and stay together */
+        max-width: 100%;
+    }
+
+    .svg-with-controls svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.3s ease;
+        transform-origin: center center;
+        display: block;
+    }
+
+    .svg-floating-controls {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 100;
+    }
+
+    .svg-controls-toggle {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .svg-controls-toggle:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .svg-controls-panel {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 6px;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+        animation: slideIn 0.2s ease-out;
+    }
+
+    .svg-controls-panel.show {
+        display: flex;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .svg-control-btn {
+        padding: 6px 10px;
+        border: none;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        text-align: center;
+        color: #333;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .svg-control-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Dark theme support */
+    [data-theme="dark"] .svg-controls-toggle,
+    [data-theme="dark"] .svg-controls-panel,
+    [data-theme="dark"] .svg-control-btn {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .svg-controls-toggle:hover,
+    [data-theme="dark"] .svg-control-btn:hover {
+        background: rgba(50, 50, 50, 0.95);
+    }
+
+    /* Fullscreen mode */
+    .svg-fullscreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .svg-fullscreen svg {
+        max-width: 90vw !important;
+        max-height: 90vh !important;
+    }
+
+    .svg-fullscreen .svg-floating-controls {
+        top: 20px;
+        right: 20px;
+    }
+
+    /* Copy success message */
+    .copy-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(34, 197, 94, 0.95);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 101;
+    }
+
+    .copy-message.show {
+        opacity: 1;
+    }
+
+    .copy-message.error {
+        background: rgba(239, 68, 68, 0.95);
+    }
+
+    /* CSV Container Styles */
+    .csv-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(8px);
+        z-index: 99;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .csv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(249, 250, 251, 0.9);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px 8px 0 0;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .csv-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #666;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .csv-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    .csv-content {
+        padding: 16px;
+        max-height: 300px;
+        overflow: auto;
+    }
+
+    .csv-loading {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-style: italic;
+    }
+
+    .csv-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: white;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .csv-table th {
+        background: rgba(249, 250, 251, 0.9);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .csv-error {
+        color: #dc2626;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 12px;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    /* Dark theme for CSV */
+    [data-theme="dark"] .csv-container {
+        background: rgba(30, 30, 30, 0.98);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-header {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table {
+        background: rgba(30, 30, 30, 0.9);
+        color: #f0f0f0;
+    }
+
+    [data-theme="dark"] .csv-table th {
+        background: rgba(55, 65, 81, 0.9);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    [data-theme="dark"] .csv-table td {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .csv-table tr:hover {
+        background: rgba(59, 130, 246, 0.1);
+    }
+    .csv-table-container {
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+
+    .csv-copy-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        float: right;
+    }
+
+    .csv-copy-button:hover {
+        background: #005a9e;
+    }
+
+    .csv-header-button-cell {
+        text-align: right;
+        width: 120px;
+        min-width: 120px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .source-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 20, 25, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 2147483647;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+
+    .source-modal.active {
+        display: flex;
+    }
+
+    .source-modal-content {
+        width: 95vw;
+        max-width: 1200px;
+        height: 90vh;
+        background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(126, 87, 255, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(126, 87, 255, 0.2);
+        animation: sourceModalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes sourceModalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .source-modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
+        font-weight: 300;
+    }
+
+    .source-modal-close:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: rotate(90deg);
+    }
+
+    .source-modal-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 3rem 2rem 2rem 2rem;
+    }
+
+    .source-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+
+    .source-modal-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--accent-secondary, #b392ff);
+        font-size: 1rem;
+    }
+
+    .source-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .source-action-btn {
+        background: rgba(126, 87, 255, 0.15);
+        border: 1px solid rgba(126, 87, 255, 0.4);
+        color: var(--accent-secondary, #b392ff);
+        font-family: 'Syne', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .source-action-btn:hover {
+        background: rgba(126, 87, 255, 0.8);
+        color: #fff;
+        border-color: var(--accent-primary, #7e57ff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    }
+
+    .btn-icon {
+        font-size: 1em;
+    }
+
+    .source-code-pre {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        overflow: auto;
+        margin: 0;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .source-code {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e2e8f0;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .source-error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Light mode overrides */
+    @media (prefers-color-scheme: light) {
+        .source-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .source-modal-content {
+            background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .source-modal-title {
+            color: #6a3de8;
+        }
+
+        .source-code-pre {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .source-code {
+            color: #334155;
+        }
+    }
+</style>
+
+<!--slide show style-->
+<style>
+    /* Slideshow Container */
+    .docops-slideshow {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 8px 8px 0px var(--accent-pink, #f472b6); /* Rule #4: 8pt grid adjustment */
+        margin: 3rem 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    /* Progress Bar (The "Movement" Indicator) */
+    .slideshow-progress-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(0,0,0,0.05);
+        z-index: 30;
+    }
+    .slideshow-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent-primary);
+        transition: width linear;
+    }
+
+    /* Slide Counter */
+    .slideshow-counter {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-family: var(--docops-font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--accent-primary);
+        opacity: 0.5;
+        z-index: 20;
+        letter-spacing: 0.2em;
+    }
+    .docops-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+
+    .docops-slide.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+    }
+
+    .slide-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-title {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        color: var(--accent-secondary);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+    }
+
+    .slide-image {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .slide-image svg {
+        max-width: 100%;
+        max-height: 100%;
+        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    }
+
+    /* Navigation Dots */
+    .slideshow-nav {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px; /* Rule #4: 8pt grid (1.5 * 8) */
+        z-index: 10;
+    }
+
+    .nav-dot {
+        width: 8px; /* Rule #4: 8px */
+        height: 8px;
+        background: transparent;
+        border: 1.5px solid var(--accent-primary);
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-dot.active {
+        background: var(--accent-primary);
+        width: 24px; /* Distinctive shape change for active state */
+        border-color: var(--accent-primary);
+    }
+
+</style>
+
+<!--gallery showcase style-->
+<style>
+    /* Showcase Gallery Layout */
+    .docops-workbench-showcase {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        perspective: 1000px;
+    }
+
+    .workbench-item {
+        background: var(--bg-surface);
+        border: 2px solid var(--accent-primary);
+        box-shadow: 6px 6px 0px var(--accent-pink);
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: itemSlideIn 0.6s ease forwards;
+    }
+
+    .workbench-item:hover {
+        transform: translate(-4px, -4px) rotate(0.5deg);
+        box-shadow: 12px 12px 0px var(--accent-pink);
+        border-color: var(--accent-secondary);
+    }
+
+    /* Workbench Chrome (Header) */
+    .workbench-chrome {
+        background: #1a1a2e;
+        padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--accent-primary);
+    }
+
+    .workbench-kind {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--accent-secondary);
+        font-weight: 500;
+    }
+
+    .workbench-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .action-btn {
+        background: transparent;
+        border: 1px solid var(--accent-primary);
+        color: #fff;
+        font-family: var(--font-heading);
+        font-size: 0.6rem;
+        padding: 2px 8px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--accent-primary);
+        color: #fff;
+    }
+
+    /* Canvas & Content */
+    .workbench-canvas {
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%);
+    }
+
+    .workbench-canvas svg {
+        max-width: 100%;
+        height: auto;
+        transition: transform 0.5s ease;
+    }
+
+    .workbench-footer {
+        padding: 0.75rem 1rem;
+        background: rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .workbench-title {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-heading);
+    }
+
+    /* Modal System */
+    .showcase-modal {
+        position: fixed; /* Lock to viewport, ignore page scroll */
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 5000; /* Significant jump to stay on top of everything */
+        display: none;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; /* Lock container */
+    }
+
+    .showcase-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(13, 13, 18, 0.98); /* Near opaque for focus */
+        backdrop-filter: blur(20px);
+        z-index: 5001;
+    }
+
+    .showcase-modal-content {
+        position: relative;
+        z-index: 5002;
+        background: var(--bg-base);
+        border: 4px solid var(--accent-secondary);
+        box-shadow: 25px 25px 0px var(--accent-pink);
+        width: 95%;
+        max-width: 1200px;
+        max-height: 90vh; /* Stay within viewport */
+        display: flex;
+        flex-direction: column;
+        animation: brutalistReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes brutalistReveal {
+        from { transform: scale(0.9) translateY(30px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .showcase-modal-body {
+        padding: 3rem;
+        overflow-y: auto; /* Internal scrolling only */
+        flex: 1;
+        display: block; /* Important for scroll calculations */
+    }
+
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
+    /* Centering Fix for SVG diagrams */
+    .modal-svg-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+
+    .modal-svg-wrapper svg {
+        max-width: 100%;
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
+    }
+
+    /* Body locking when modal is open */
+    body.modal-open {
+        overflow: hidden !important;
+        padding-right: 15px; /* Prevent layout shift from scrollbar removal */
+    }
+</style>
+<!--Slide show script-->
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const slideshows = document.querySelectorAll('.docops-slideshow');
+
+        slideshows.forEach(ss => {
+            const slides = ss.querySelectorAll('.docops-slide');
+            if (slides.length === 0) return; // Skip empty slideshows
+
+            const interval = parseInt(ss.dataset.interval) || 5000;
+            let currentIndex = 0;
+
+            // Add Progress Bar
+            const progressCont = document.createElement('div');
+            progressCont.className = 'slideshow-progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'slideshow-progress-bar';
+            progressCont.appendChild(progressBar);
+            ss.appendChild(progressCont);
+
+            // Add Counter
+            const counter = document.createElement('div');
+            counter.className = 'slideshow-counter';
+            ss.appendChild(counter);
+
+            // Create navigation dots
+            const nav = document.createElement('div');
+            nav.className = 'slideshow-nav';
+            slides.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(i);
+                };
+                nav.appendChild(dot);
+            });
+            ss.appendChild(nav);
+
+            function updateCounter() {
+                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+            }
+
+            function resetProgress() {
+                progressBar.style.transition = 'none';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.transition = `width ${interval}ms linear`;
+                    progressBar.style.width = '100%';
+                }, 50);
+            }
+
+            function goToSlide(index) {
+                slides[currentIndex].classList.remove('active');
+                nav.children[currentIndex].classList.remove('active');
+
+                currentIndex = index;
+
+                slides[currentIndex].classList.add('active');
+                nav.children[currentIndex].classList.add('active');
+                updateCounter();
+                resetProgress();
+            }
+
+            function nextSlide() {
+                let next = (currentIndex + 1) % slides.length;
+                goToSlide(next);
+            }
+
+            // Initial State
+            updateCounter();
+            resetProgress();
+
+            // Start autoplay
+            let slideTimer = setInterval(nextSlide, interval);
+
+            // Pause on hover
+            ss.addEventListener('mouseenter', () => {
+                clearInterval(slideTimer);
+                progressBar.style.opacity = '0.3';
+            });
+            ss.addEventListener('mouseleave', () => {
+                slideTimer = setInterval(nextSlide, interval);
+                progressBar.style.opacity = '1';
+                resetProgress();
+            });
+        });
+    });
+</script>
+<!-- Showcase Gallery Script -->
+<script>
+    window.showcaseGallery = {
+        // Track TOC state so we can restore it exactly as it was
+        tocWasActive: false,
+
+        hideTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            if (toc) {
+                // Save current state
+                this.tocWasActive = toc.classList.contains('toc-active');
+                // Force hide
+                toc.classList.remove('toc-active');
+            }
+            if (toggle) {
+                toggle.classList.remove('active');
+                toggle.style.display = 'none'; // Completely remove from UI during modal
+            }
+            document.body.classList.add('modal-open');
+        },
+
+        restoreTOC() {
+            const toc = document.getElementById('toc');
+            const toggle = document.querySelector('.toc-toggle');
+
+            document.body.classList.remove('modal-open');
+
+            if (toggle) {
+                toggle.style.display = 'flex'; // Bring toggle back
+            }
+
+            // Restore TOC to its previous state (if it was open, re-open it)
+            if (toc && this.tocWasActive) {
+                toc.classList.add('toc-active');
+                if (toggle) {
+                    toggle.classList.add('active');
+                    toggle.querySelector('span').textContent = 'CLOSE';
+                }
+            } else if (toggle) {
+                toggle.querySelector('span').textContent = 'CONTENTS';
+            }
+        },
+
+        showContent(itemId, title, kind, content) {
+            const modal = document.getElementById('showcase-content-modal');
+            if (!modal) return;
+
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        expandItem(itemId, title) {
+            const item = document.getElementById(itemId);
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
+            const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
+
+            modal.querySelector('.showcase-modal-title').textContent = title;
+            modal.querySelector('.showcase-modal-body').innerHTML =
+                `<div class="modal-svg-wrapper">${svgContent}</div>`;
+
+            this.hideTOC(); // Hide TOC before showing modal
+            modal.style.display = 'flex';
+            modal.querySelector('.showcase-modal-body').scrollTop = 0;
+        },
+
+        closeContentModal() {
+            document.getElementById('showcase-content-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        closeModal() {
+            document.getElementById('showcase-gallery-modal').style.display = 'none';
+            this.restoreTOC(); // Restore TOC state
+        },
+
+        copyContent() {
+            const code = document.querySelector('.showcase-content-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.showcase-copy-btn');
+                const oldText = btn.textContent;
+                btn.textContent = 'COPIED! ✅';
+                setTimeout(() => btn.textContent = oldText, 2000);
+            });
+        }
+    };
+
+    // Escape key to close modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            showcaseGallery.closeModal();
+            showcaseGallery.closeContentModal();
+        }
+    });
+</script>
+<script>
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        toggleControls(id) {
+            const panel = document.getElementById(`controls-panel-${id}`);
+            const isVisible = panel.classList.contains('show');
+
+            // Hide all other panels
+            document.querySelectorAll('.svg-controls-panel').forEach(p => {
+                p.classList.remove('show');
+            });
+
+            // Toggle current panel
+            if (!isVisible) {
+                panel.classList.add('show');
+            }
+        },
+
+        zoomIn(id) {
+            const container = document.getElementById(id);
+            // Updated to target the nested <g> tag per ui.md rules
+            const target = container.querySelector('.docops-transform-group') || container.querySelector('svg');
+            if (!target) return;
+
+            let currentZoom = parseFloat(target.dataset.zoom) || 1;
+            currentZoom = Math.min(currentZoom * 1.3, 5);
+            target.dataset.zoom = currentZoom;
+            target.style.transform = `scale(${currentZoom})`;
+            target.style.transformOrigin = "center center";
+        },
+
+        zoomOut(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            let currentZoom = parseFloat(svg.dataset.zoom) || 1;
+            currentZoom = Math.max(currentZoom / 1.3, 0.2);
+            svg.dataset.zoom = currentZoom;
+            svg.style.transform = `scale(${currentZoom})`;
+        },
+
+        resetZoom(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+            if (!svg) return;
+
+            svg.dataset.zoom = 1;
+            svg.style.transform = 'scale(1)';
+        },
+
+        toggleFullscreen(id) {
+            const container = document.getElementById(id);
+            if (container.classList.contains('svg-fullscreen')) {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            } else {
+                container.classList.add('svg-fullscreen');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        async copyAsSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+                this.showMessage(container, 'SVG copied as text! 📋');
+            } catch (error) {
+                console.error('SVG copy failed:', error);
+                this.showMessage(container, 'SVG copy failed 😞', 'error');
+            }
+        },
+
+        async copyAsPng(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            try {
+                this.showMessage(container, 'Converting to PNG...', 'info');
+                const pngBlob = await this.convertSvgToPng(svg);
+                const item = new ClipboardItem({ 'image/png': pngBlob });
+                await navigator.clipboard.write([item]);
+                this.showMessage(container, 'PNG copied to clipboard! 🖼️');
+            } catch (error) {
+                console.error('PNG copy failed:', error);
+                this.showMessage(container, 'PNG copy failed 😞', 'error');
+            }
+        },
+
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
+        convertSvgToPng(svgElement) {
+            return new Promise((resolve, reject) => {
+                // Clone the SVG to avoid modifying the original
+                const svgClone = svgElement.cloneNode(true);
+
+                // Get SVG dimensions
+                let svgWidth = parseInt(svgClone.getAttribute('width')) || svgElement.getBoundingClientRect().width || 800;
+                let svgHeight = parseInt(svgClone.getAttribute('height')) || svgElement.getBoundingClientRect().height || 600;
+
+                // Handle viewBox if no explicit width/height
+                if (!svgClone.getAttribute('width') && !svgClone.getAttribute('height')) {
+                    const viewBox = svgClone.getAttribute('viewBox');
+                    if (viewBox) {
+                        const [x, y, w, h] = viewBox.split(' ').map(Number);
+                        svgWidth = w;
+                        svgHeight = h;
+                    }
+                }
+
+                // Ensure the cloned SVG has explicit dimensions
+                svgClone.setAttribute('width', svgWidth.toString());
+                svgClone.setAttribute('height', svgHeight.toString());
+
+                // Add XML namespace if missing
+                if (!svgClone.getAttribute('xmlns')) {
+                    svgClone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                }
+
+                // Handle external stylesheets and fonts
+                this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
+
+                const svgData = new XMLSerializer().serializeToString(svgClone);
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+
+                // Set canvas size with scaling for better quality
+                const scale = 2; // For higher resolution
+                canvas.width = svgWidth * scale;
+                canvas.height = svgHeight * scale;
+                ctx.scale(scale, scale);
+
+                // Create a blob URL for the SVG
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(svgBlob);
+
+                img.onload = function() {
+                    // Set white background (optional - remove if you want transparency)
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, svgWidth, svgHeight);
+
+                    // Draw the image
+                    ctx.drawImage(img, 0, 0, svgWidth, svgHeight);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(blob);
+                        } else {
+                            reject(new Error('Failed to create PNG blob'));
+                        }
+                    }, 'image/png', 0.95);
+
+                    URL.revokeObjectURL(url);
+                };
+
+                img.onerror = (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('Failed to load SVG as image: ' + error));
+                };
+
+                img.src = url;
+            });
+        },
+
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
+        inlineStyles(svgElement) {
+            // Get all stylesheets from the document
+            const stylesheets = Array.from(document.styleSheets);
+            let cssText = '';
+
+            stylesheets.forEach(sheet => {
+                try {
+                    const rules = Array.from(sheet.cssRules || sheet.rules || []);
+                    rules.forEach(rule => {
+                        if (rule.type === CSSRule.STYLE_RULE) {
+                            cssText += rule.cssText + ' ';
+                        }
+                    });
+                } catch (e) {
+                    // Cross-origin stylesheets might throw errors
+                    console.warn('Could not access stylesheet:', e);
+                }
+            });
+
+            // Create a style element and add it to the SVG
+            if (cssText) {
+                const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                styleElement.textContent = cssText;
+                svgElement.insertBefore(styleElement, svgElement.firstChild);
+            }
+        },
+
+        // Legacy method for backward compatibility
+        async copyToClipboard(id) {
+            await this.copyAsSvg(id);
+        },
+
+        showMessage(container, message, type = 'success') {
+            const existing = container.querySelector('.copy-message');
+            if (existing) existing.remove();
+
+            const messageEl = document.createElement('div');
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
+
+            // Different background colors for different message types
+            if (type === 'info') {
+                messageEl.style.background = 'rgba(59, 130, 246, 0.95)';
+            }
+
+            messageEl.textContent = message;
+            container.appendChild(messageEl);
+
+            setTimeout(() => messageEl.classList.add('show'), 10);
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+                setTimeout(() => messageEl.remove(), 300);
+            }, type === 'info' ? 1500 : 2500);
+        },
+        toggleCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            const isVisible = container.style.display !== 'none';
+
+            if (isVisible) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                this.loadCsvData(id);
+            }
+        },
+
+        closeCsv(id) {
+            const container = document.getElementById(`csv-container-${id}`);
+            container.style.display = 'none';
+        },
+        async loadCsvData(id) {
+            const svgContainer = document.getElementById(id);
+            const svg = svgContainer.querySelector('svg');
+
+            if (!svg) {
+                console.error('No SVG found');
+                return;
+            }
+
+            try {
+                // Method 1: Standard metadata with type
+                let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData);
+                    return;
+                }
+
+                // Method 2: Custom csv-data element
+                csvMetadata = svg.querySelector('metadata csv-data');
+                if (csvMetadata) {
+                    const csvData = JSON.parse(csvMetadata.textContent.trim());
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                // Method 3: Data attribute
+                const csvDataAttr = svg.getAttribute('data-csv');
+                if (csvDataAttr) {
+                    const csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                    this.renderCsvTable(document.getElementById(`csv-content-${id}`), csvData, `csv-table-${id}`);
+                    return;
+                }
+
+                console.error('No CSV data found in SVG');
+            } catch (error) {
+                console.error('Failed to parse CSV data:', error);
+            }
+        },
+
+        renderCsvTable(container, csvData, tableId) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                container.innerHTML = '<div class="csv-error">Invalid CSV data format</div>';
+                return;
+            }
+
+            // Generate a unique table ID if not provided or make existing ID unique
+            const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+            const table = document.createElement('table');
+            table.className = 'csv-table';
+            table.id = uniqueTableId;
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            csvData.headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+
+            // Add button cell to header
+            const buttonTh = document.createElement('th');
+            buttonTh.className = 'csv-header-button-cell';
+
+            // Create copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'csv-copy-button';
+            copyButton.textContent = 'Copy';
+            copyButton.title = 'Copy as Tab-Delimited';
+            copyButton.onclick = () => this.copyCsvAsTabDelimited(csvData);
+
+            buttonTh.appendChild(copyButton);
+            headerRow.appendChild(buttonTh);
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create body
+            const tbody = document.createElement('tbody');
+
+            csvData.rows.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                // Add empty cell for button column
+                const emptyTd = document.createElement('td');
+                tr.appendChild(emptyTd);
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(tbody);
+            container.innerHTML = '';
+            container.appendChild(table);
+            const tableElement = document.getElementById(uniqueTableId);
+            if (tableElement) {
+                tableElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+
+
+        },
+
+        copyCsvAsTabDelimited(csvData) {
+            if (!csvData || !csvData.headers || !csvData.rows) {
+                console.error('Invalid CSV data for copying');
+                return;
+            }
+
+            // Create tab-delimited string
+            let tabDelimitedData = '';
+
+            // Add headers
+            tabDelimitedData += csvData.headers.join('\t') + '\n';
+
+            // Add rows
+            csvData.rows.forEach(row => {
+                tabDelimitedData += row.join('\t') + '\n';
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(tabDelimitedData).then(() => {
+                // Provide visual feedback
+                const buttons = document.querySelectorAll('.csv-copy-button');
+                buttons.forEach(button => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#007acc';
+                    }, 2000);
+                });
+            }).catch(err => {
+                console.error('Failed to copy to clipboard:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = tabDelimitedData;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    // Provide visual feedback
+                    const buttons = document.querySelectorAll('.csv-copy-button');
+                    buttons.forEach(button => {
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        button.style.background = '#28a745';
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.background = '#007acc';
+                        }, 2000);
+                    });
+                } catch (fallbackErr) {
+                    console.error('Fallback copy failed:', fallbackErr);
+                    alert('Copy failed. Please select and copy the data manually.');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+    });
+
+    // Close controls when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.svg-floating-controls')) {
+            document.querySelectorAll('.svg-controls-panel').forEach(panel => {
+                panel.classList.remove('show');
+            });
+        }
+    });
+
+    // Escape key for fullscreen
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.svg-fullscreen').forEach(container => {
+                container.classList.remove('svg-fullscreen');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+</script>
+<script>
+    class UserTracker {
+        constructor() {
+            this.cookieName = 'unique_user_id';
+            this.sessionCookieName = 'session_id';
+            this.visitCookieName = 'visit_count';
+        }
+
+        generateUniqueId() {
+            return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        getCookie(name) {
+            const nameEQ = name + '=';
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        initializeUser() {
+            // Get or create persistent user ID
+            let userId = this.getCookie(this.cookieName);
+            if (!userId) {
+                userId = this.generateUniqueId();
+                this.setCookie(this.cookieName, userId, 365); // 1 year
+            }
+
+            // Create session ID (expires when browser closes)
+            let sessionId = this.getCookie(this.sessionCookieName);
+            if (!sessionId) {
+                sessionId = this.generateSessionId();
+                this.setCookie(this.sessionCookieName, sessionId, 0); // Session cookie
+            }
+
+            // Track visit count
+            let visitCount = parseInt(this.getCookie(this.visitCookieName) || '0') + 1;
+            this.setCookie(this.visitCookieName, visitCount.toString(), 365);
+
+            return {
+                userId,
+                sessionId,
+                visitCount,
+                timestamp: new Date().toISOString(),
+                page: window.location.pathname,
+                referrer: document.referrer
+            };
+        }
+
+        trackPageView(userInfo) {
+            // Log to console (replace with your analytics endpoint)
+            console.log('User tracking info:', userInfo);
+
+            // Optional: Send to your analytics endpoint
+            this.sendToAnalytics(userInfo);
+        }
+
+        sendToAnalytics(userInfo) {
+            fetch('/analytics/api/pageview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userInfo)
+            }).catch(error => {
+                console.error('Analytics tracking failed:', error);
+            });
+        }
+    }
+
+    // Initialize tracking when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tracker = new UserTracker();
+        const userInfo = tracker.initializeUser();
+        tracker.trackPageView(userInfo);
+    });
+</script>
+
+
+<script>
+    class ThemeToggleTop {
+        constructor() {
+            this.init();
+        }
+
+        init() {
+            this.createToggleButton();
+            this.loadSavedTheme();
+            this.setupEventListeners();
+        }
+
+        createToggleButton() {
+            const button = document.createElement('button');
+            button.className = 'theme-toggle';
+            button.setAttribute('aria-label', 'Toggle theme');
+            button.innerHTML = `
+            <span class="light-icon">☀️</span>
+            <span class="dark-icon">🌙</span>
+        `;
+            document.body.appendChild(button);
+            this.toggleButton = button;
+        }
+
+        setupEventListeners() {
+            this.toggleButton.addEventListener('click', () => this.toggleTheme());
+
+            // Listen for system theme changes only when in auto mode
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (this.getThemePreference() === 'auto') {
+                    this.updateTheme();
+                }
+            });
+        }
+
+        toggleTheme() {
+            const currentTheme = this.getThemePreference();
+            let newTheme;
+
+            switch (currentTheme) {
+                case 'light':
+                    newTheme = 'dark';
+                    break;
+                case 'dark':
+                    newTheme = 'auto';
+                    break;
+                case 'auto':
+                    newTheme = 'light';
+                    break;
+                default:
+                    // Check current state of the document
+                    const root = document.documentElement;
+                    if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
+                        newTheme = 'light';
+                    } else {
+                        newTheme = 'dark';
+                    }
+            }
+
+            this.setTheme(newTheme);
+        }
+
+        setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            this.updateTheme();
+        }
+
+        getThemePreference() {
+            const saved = localStorage.getItem('theme');
+            if (saved) {
+                return saved;
+            }
+
+            // If no saved preference, detect current state from DOM
+            const root = document.documentElement;
+            if (root.classList.contains('dark-mode')) {
+                return 'dark';
+            } else if (root.classList.contains('dark-mode-auto')) {
+                return 'auto';
+            }
+            return 'light';
+        }
+
+        updateTheme() {
+            const theme = this.getThemePreference();
+            const root = document.documentElement;
+
+            // Remove existing theme classes
+            root.classList.remove('dark-mode', 'dark-mode-auto');
+
+            switch (theme) {
+                case 'dark':
+                    root.classList.add('dark-mode');
+                    break;
+                case 'auto':
+                    root.classList.add('dark-mode-auto');
+                    break;
+                // 'light' theme uses default styles
+            }
+
+            // Update button aria-label
+            const themeNames = {
+                light: 'light',
+                dark: 'dark',
+                auto: 'auto (follows system)'
+            };
+            this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
+        }
+
+        loadSavedTheme() {
+            this.updateTheme();
+        }
+    }
+
+    // Initialize theme toggle when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
+    } else {
+        new ThemeToggleTop();
+    }
+</script>
+<style>
+    #footer-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+        border-top: 1px solid var(--docops-border);
+        font-family: var(--docops-font-main);
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--docops-accent);
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border: 1px solid transparent;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-link:hover {
+        color: #fff;
+        background: var(--docops-accent-glow);
+        border-color: var(--docops-accent);
+        box-shadow: 0 0 15px var(--docops-accent-glow);
+    }
+
+    .nav-link.next::after { content: ' →'; }
+    .nav-link.prev::before { content: '← '; }
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: var(--modal-overlay-bg); /* Use variable */
+        backdrop-filter: blur(15px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 10000;
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        position: relative;
+        width: 90vw;
+        height: 85vh;
+        background: var(--modal-content-bg); /* Use variable */
+        border: 1px solid var(--modal-content-border); /* Use variable */
+        box-shadow: var(--modal-shadow);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        transform: scale(0.8) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .modal-overlay.active .modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    #modalSvgContainer {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #modalSvgContainer svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .close-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--docops-accent);
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10002;
+    }
+
+    .close-button:hover {
+        background: var(--docops-accent);
+    }
+    .modal-zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 8px 12px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .modal-zoom-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 4px;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+    }
+
+    .modal-zoom-level {
+        color: white;
+        font-family: var(--docops-font-mono);
+        font-size: 12px;
+        min-width: 45px;
+        text-align: center;
+    }
+</style>
+<script>
+
+    // Zoom state
+    let modalZoomLevel = 1;
+    const MODAL_ZOOM_MIN = 0.25;
+    const MODAL_ZOOM_MAX = 4;
+    const MODAL_ZOOM_STEP = 0.25;
+
+    function openModal(container) {
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+
+        if (!modalOverlay || !modalSvgContainer) {
+            console.error("Modal elements not found in DOM");
+            return;
+        }
+        // Reset zoom level
+        modalZoomLevel = 1;
+        updateZoomDisplay();
+
+        // Clone the SVG from the clicked container
+        const svg = container.querySelector('svg');
+        const svgClone = svg.cloneNode(true);
+        svgClone.style.transform = 'scale(1)';
+        svgClone.style.transition = 'transform 0.2s ease';
+
+        // Clear previous content and add new SVG
+        modalSvgContainer.innerHTML = '';
+        modalSvgContainer.appendChild(svgClone);
+
+        // Show modal with animation
+        modalOverlay.classList.add('active');
+
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        modalZoomLevel = 1;
+    }
+
+    function closeModalOnBackdrop(event) {
+        // Only close if clicking the overlay itself, not the content
+        if (event.target === modalOverlay) {
+            closeModal();
+        }
+    }
+
+    function modalZoomIn() {
+        if (modalZoomLevel < MODAL_ZOOM_MAX) {
+            modalZoomLevel = Math.min(modalZoomLevel + MODAL_ZOOM_STEP, MODAL_ZOOM_MAX);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomOut() {
+        if (modalZoomLevel > MODAL_ZOOM_MIN) {
+            modalZoomLevel = Math.max(modalZoomLevel - MODAL_ZOOM_STEP, MODAL_ZOOM_MIN);
+            applyModalZoom();
+        }
+    }
+
+    function modalZoomReset() {
+        modalZoomLevel = 1;
+        applyModalZoom();
+    }
+
+    function applyModalZoom() {
+        const modalSvgContainer = document.getElementById('modalSvgContainer');
+        const svg = modalSvgContainer.querySelector('svg');
+        if (svg) {
+            // Same here: use concatenation
+            svg.style.transform = "scale(" + modalZoomLevel + ")";
+        }
+        updateZoomDisplay();
+    }
+
+    function updateZoomDisplay() {
+        const display = document.getElementById('modalZoomLevel');
+        if (display) {
+            // Change from template literal to standard concatenation
+            // to avoid issues with Kotlin/Asciidoctor interpolation
+            display.textContent = Math.round(modalZoomLevel * 100) + "%";
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
+        url: (btn) => {
+            const url = btn.closest('.docops-media-card').getAttribute('data-url');
+            navigator.clipboard.writeText(url).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        svg: (btn) => {
+            const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+            navigator.clipboard.writeText(svg).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'COPIED!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        },
+        png: (btn) => {
+            const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                canvas.toBlob(blob => {
+                    const item = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([item]);
+                    const originalText = btn.innerText;
+                    btn.innerText = 'COPIED!';
+                    setTimeout(() => btn.innerText = originalText, 2000);
+                });
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer && window.svgViewer.inlineStyles) {
+                window.svgViewer.inlineStyles(svgClone);
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <span class="nav-prev-disabled">&larr; Previous</span>
+          <span class="nav-next-disabled">Next &rarr;</span>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
+        }
+    });
+
+</script>
+<script>
+    const docopsSource = {
+        toggle(btn) {
+            const card = btn.closest('.docops-media-card');
+            const id = card.id;
+            const modal = document.getElementById(`source-modal-${id}`);
+
+            if (!modal) {
+                console.error('Source modal not found for', id);
+                return;
+            }
+
+            this.renderSource(card, modal);
+
+            // Move modal to body to avoid z-index/transform issues
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+
+        close(id) {
+            const modal = document.getElementById(`source-modal-${id}`);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        renderSource(card, modal) {
+            const container = modal.querySelector('.source-modal-body');
+            if (!container || container.dataset.rendered === 'true') return;
+
+            const originalContent = card.getAttribute('data-original-content');
+
+            if (!originalContent || !originalContent.trim()) {
+                container.innerHTML = '<div class="source-error">No source content available.</div>';
+                return;
+            }
+
+            // Decode HTML entities
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            const kind = card.getAttribute('data-kind') || 'source';
+
+            container.innerHTML = `
+            <div class="source-modal-header">
+                <span class="source-modal-title">${kind.toUpperCase()} Source</span>
+                <div class="source-modal-actions">
+                    <button class="source-action-btn" onclick="docopsSource.copySource('${card.id}')">
+                        <span class="btn-icon">📋</span> COPY
+                    </button>
+                </div>
+            </div>
+            <pre class="source-code-pre"><code class="source-code">${this.escapeHtml(decoded)}</code></pre>
+        `;
+
+            container.dataset.rendered = 'true';
+        },
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        },
+
+        copySource(cardId) {
+            const card = document.getElementById(cardId);
+            const originalContent = card.getAttribute('data-original-content');
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            navigator.clipboard.writeText(decoded).then(() => {
+                const btn = document.querySelector(`#source-modal-${cardId} .source-action-btn`);
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span class="btn-icon">✓</span> COPIED!';
+                    btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+    };
+</script>
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.hidden {
+    display: none;
+}
+
+.switch {
+    display: inline-flex;
+    background-color: #f1f5f9;
+    border-radius: 8px 8px 0 0; /* Remove bottom border radius */
+    padding: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    border-bottom: none; /* Remove bottom border to connect with content */
+    margin-bottom: 0; /* Remove the space between tabs and content */
+}
+
+.switch--item {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #64748b;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0; /* Remove bottom border radius */
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    position: relative;
+    white-space: nowrap;
+}
+
+.switch--item:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.switch--item.selected {
+    background-color: #ffffff;
+    color: #1e293b;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+}
+
+.switch--item:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #3b82f6;
+    ring-opacity: 0.5;
+}
+
+/* Add styling for tab content containers */
+.content[data-block-name] {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 8px 8px 8px; /* Connect with tabs - no top-left radius */
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 100px; /* Ensure minimum height */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Ensure images within tab content have proper spacing */
+.content[data-block-name] img {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure paragraphs and other content have proper spacing */
+.content[data-block-name] p:last-child {
+    margin-bottom: 0;
+}
+
+.content[data-block-name] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Handle code blocks within tabs */
+.content[data-block-name] pre {
+    margin-bottom: 16px;
+}
+
+.content[data-block-name] pre:last-child {
+    margin-bottom: 0;
+}
+
+/* Alternative dark mode friendly version */
+@media (prefers-color-scheme: dark) {
+    .switch {
+        background-color: #1e293b;
+        border-color: #334155;
+        border-bottom: none;
+    }
+
+    .switch--item {
+        color: #94a3b8;
+    }
+
+    .switch--item:hover {
+        background-color: #334155;
+        color: #f1f5f9;
+    }
+
+    .switch--item.selected {
+        background-color: #475569;
+        color: #f8fafc;
+    }
+
+    /* Dark mode for content containers */
+    .content[data-block-name] {
+        background-color: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+}
+</style>
+<script type="text/javascript">
+function addBlockSwitches() {
+    for (var primary of document.querySelectorAll('.primary')) {
+        var switchItem = createSwitchItem(primary, createBlockSwitch(primary));
+        switchItem.item.classList.add("selected");
+        var title = primary.querySelector('.title')
+        title.remove();
+    }
+    for (var secondary of document.querySelectorAll('.secondary')) {
+        var primary = findPrimary(secondary);
+        if (primary === null) {
+            console.error("Found secondary block with no primary sibling");
+        }
+        else {
+            var switchItem = createSwitchItem(secondary, primary.querySelector('.switch'));
+            switchItem.content.classList.add("hidden");
+            primary.append(switchItem.content);
+            secondary.remove();
+        }
+    }
+}
+
+function createElementFromHtml(html) {
+    var template = document.createElement('template');
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+function createBlockSwitch(primary) {
+    var blockSwitch = createElementFromHtml('<div class="switch"></div>');
+    primary.prepend(blockSwitch)
+    return blockSwitch;
+}
+
+function findPrimary(secondary) {
+    var candidate = secondary.previousElementSibling;
+    while (candidate != null && !candidate.classList.contains('primary')) {
+        candidate = candidate.previousElementSibling;
+    }
+    return candidate;
+}
+
+function createSwitchItem(block, blockSwitch) {
+    var titleElement = block.querySelector('.title');
+    var fullTitle = titleElement.textContent;
+
+    var blockName = fullTitle.replace(/^Example \d+\.\s*/, '');
+
+    var content = block.querySelectorAll('.content').item(0);
+    var colist = nextSibling(block, '.colist');
+    if (colist != null) {
+        content.append(colist);
+    }
+    var item = createElementFromHtml('<div class="switch--item">' + blockName + '</div>');
+    item.dataset.blockName = blockName;
+    content.dataset.blockName = blockName;
+    blockSwitch.append(item);
+    return {'item': item, 'content': content};
+}
+
+function nextSibling(element, selector) {
+    var sibling = element.nextElementSibling;
+    while (sibling) {
+        if (sibling.matches(selector)) {
+            return sibling;
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+function globalSwitch() {
+    document.querySelectorAll(".switch--item").forEach(function(item) {
+        var blockId = blockIdForSwitchItem(item);
+        var handler = function(event) {
+            selectedText = event.target.textContent;
+            window.localStorage.setItem(blockId, selectedText);
+            for (var switchItem of document.querySelectorAll(".switch--item")) {
+                if (blockIdForSwitchItem(switchItem) === blockId && switchItem.textContent === selectedText) {
+                    select(switchItem);
+                }
+            }
+        }
+        item.addEventListener("click", handler);
+        if (item.textContent === window.localStorage.getItem(blockId)) {
+            select(item);
+        }
+    });
+}
+
+function select(selected) {
+    for (var child of selected.parentNode.children) {
+        child.classList.remove("selected");
+    }
+    selected.classList.add("selected");
+    for (var child of selected.parentNode.parentNode.children) {
+        if (child.classList.contains("content")) {
+            if (selected.dataset.blockName === child.dataset.blockName) {
+                child.classList.remove("hidden");
+            }
+            else {
+                child.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function blockIdForSwitchItem(item) {
+    idComponents = []
+    for (var switchItem of item.parentNode.querySelectorAll(".switch--item")) {
+        idComponents.push(switchItem.textContent.toLowerCase());
+    }
+    return idComponents.sort().join("-")
+}
+
+window.onload = function() {
+    addBlockSwitches();
+    globalSwitch();
+};
+</script>
+
+<script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+</head>
+<body class="book">
+<div id="header">
+<h1><span class="image"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMWUzYTVmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzRhOTBkOSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ic3RlcDEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6IzZFQUVGRiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM0YTdmYmYiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InN0ZXAyIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2OURFRTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojM2ZiNWJjIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzdGVwMyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRjhCQzk1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2Q0OTU2YSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ic3RlcDQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I0Q5QUVGOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhODdjYzkiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InN0ZXA1IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNBN0U1OEEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNmZiODVhIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8IS0tIEJhY2tncm91bmQgY2lyY2xlIC0tPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjQ1IiBmaWxsPSJ1cmwoI2JnKSIvPgogIDwhLS0gSXNvbWV0cmljIHN0ZXBzIGFzY2VuZGluZyBsZWZ0IHRvIHJpZ2h0IC0tPgogIDwhLS0gU3RlcCAxIChib3R0b20tbGVmdCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoODAsIDM0MCkiPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgNzAsLTM1IDE0MCwwIDcwLDM1IiBmaWxsPSJ1cmwoI3N0ZXAxKSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgMCw0MCA3MCw3NSA3MCwzNSIgZmlsbD0iIzRhN2ZiZiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI3MCwzNSA3MCw3NSAxNDAsNDAgMTQwLDAiIGZpbGw9IiM1YThmZDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDx0ZXh0IHg9IjcwIiB5PSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIj4xPC90ZXh0PgogIDwvZz4KICA8IS0tIFN0ZXAgMiAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNDUsIDI5NSkiPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgNzAsLTM1IDE0MCwwIDcwLDM1IiBmaWxsPSJ1cmwoI3N0ZXAyKSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgMCw0MCA3MCw3NSA3MCwzNSIgZmlsbD0iIzNmYjViYyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI3MCwzNSA3MCw3NSAxNDAsNDAgMTQwLDAiIGZpbGw9IiM0ZmM1Y2MiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDx0ZXh0IHg9IjcwIiB5PSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIj4yPC90ZXh0PgogIDwvZz4KICA8IS0tIFN0ZXAgMyAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMTAsIDI1MCkiPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgNzAsLTM1IDE0MCwwIDcwLDM1IiBmaWxsPSJ1cmwoI3N0ZXAzKSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgMCw0MCA3MCw3NSA3MCwzNSIgZmlsbD0iI2Q0OTU2YSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI3MCwzNSA3MCw3NSAxNDAsNDAgMTQwLDAiIGZpbGw9IiNlMGE1N2EiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDx0ZXh0IHg9IjcwIiB5PSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIj4zPC90ZXh0PgogIDwvZz4KICA8IS0tIFN0ZXAgNCAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNzUsIDIwNSkiPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgNzAsLTM1IDE0MCwwIDcwLDM1IiBmaWxsPSJ1cmwoI3N0ZXA0KSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgMCw0MCA3MCw3NSA3MCwzNSIgZmlsbD0iI2E4N2NjOSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI3MCwzNSA3MCw3NSAxNDAsNDAgMTQwLDAiIGZpbGw9IiNiODhjZDkiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDx0ZXh0IHg9IjcwIiB5PSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIj40PC90ZXh0PgogIDwvZz4KICA8IS0tIFN0ZXAgNSAodG9wLXJpZ2h0KSAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNDAsIDE2MCkiPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgNzAsLTM1IDE0MCwwIDcwLDM1IiBmaWxsPSJ1cmwoI3N0ZXA1KSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSIwLDAgMCw0MCA3MCw3NSA3MCwzNSIgZmlsbD0iIzZmYjg1YSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI3MCwzNSA3MCw3NSAxNDAsNDAgMTQwLDAiIGZpbGw9IiM3ZmM4NmEiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICAgIDx0ZXh0IHg9IjcwIiB5PSI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjE4IiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIj41PC90ZXh0PgogIDwvZz4KICA8IS0tIEZsYWcgb24gdG9wIHN0ZXAgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLCAxMDApIj4KICAgIDxsaW5lIHgxPSIxMCIgeTE9IjYwIiB4Mj0iMTAiIHkyPSIwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjEyLDAgNDAsMTAgMTIsMjAiIGZpbGw9IiNGOEJDOTUiLz4KICA8L2c+CiAgPCEtLSBMYWJlbCAtLT4KICA8dGV4dCB4PSIyNTYiIHk9IjQ0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZmZmZiIgZm9udC1zaXplPSIyOCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgbGV0dGVyLXNwYWNpbmc9IjMiPlNURVBTPC90ZXh0Pgo8L3N2Zz4K" alt="StepsIcon" width="36" height="36"></span> DocOps Steps</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#top">1. Introduction</a></li>
+<li><a href="#_default_example">2. Default Example</a></li>
+<li><a href="#_focused_examples">3. Focused Examples</a>
+<ul class="sectlevel2">
+<li><a href="#_software_development_lifecycle">3.1. Software Development Lifecycle</a></li>
+<li><a href="#_dark_theme_version">3.2. Dark Theme Version</a></li>
+<li><a href="#_minimal_three_step_process">3.3. Minimal Three-Step Process</a></li>
+</ul>
+</li>
+<li><a href="#_common_use_cases">4. Common Use Cases</a></li>
+<li><a href="#_format_options">5. Format Options</a>
+<ul class="sectlevel2">
+<li><a href="#_basic_structure">5.1. Basic Structure</a></li>
+<li><a href="#_configuration_fields">5.2. Configuration Fields</a></li>
+<li><a href="#_step_data_columns">5.3. Step Data Columns</a></li>
+<li><a href="#_data_format_rules">5.4. Data Format Rules</a></li>
+</ul>
+</li>
+<li><a href="#_best_practices">6. Best Practices</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="top">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Create beautiful isometric step infographics to visualize processes, workflows, and progress</em></p>
+</div>
+<div class="paragraph">
+<p><strong>Key features:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Isometric 3D step visualization with numbered stages</p>
+</li>
+<li>
+<p>Configurable themes and color palettes</p>
+</li>
+<li>
+<p>CSV-style data format with header row for easy authoring</p>
+</li>
+<li>
+<p>Support for custom colors per step</p>
+</li>
+<li>
+<p>Adjustable canvas size, layout offsets, and label positioning</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_default_example">2. Default Example</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Basic isometric steps showing enterprise highlights:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,steps,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Enterprise Advantage Highlights
+subtitle=Showcasing core strengths and performance across key dimensions
+canvasWidth=1220
+canvasHeight=760
+theme=brand
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Brand Influence | Widely recognized and trusted by customers | #6EAEFF
+2 | R&amp;D Strength | Strong in-house innovation capabilities | #69DEE5
+3 | Rapid Market Growth | Users and revenue grew quickly in one year | #F8BC95
+4 | Service Excellence | High satisfaction and service quality scores | #D9AEF8
+5 | Data Security | Robust protection and compliance systems | #B0A5FB
+6 | Innovation Leadership | Advanced product and technology roadmap | #A7E58A
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-sv-e001ef3258686f9b {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-sv-e001ef3258686f9b.active {
+      display: flex;
+  }
+  .svg-modal-content-sv-e001ef3258686f9b {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-sv-e001ef3258686f9b {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-sv-e001ef3258686f9b:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-sv-e001ef3258686f9b {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-sv-e001ef3258686f9b svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-sv-e001ef3258686f9b .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-sv-e001ef3258686f9b .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-sv-e001ef3258686f9b .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-sv-e001ef3258686f9b .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-sv-e001ef3258686f9b .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-sv-e001ef3258686f9b .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          if (window.svgViewer) {
+              window.svgViewer.closeModal('sv-e001ef3258686f9b');
+              window.svgViewer.closeCsvModal('sv-e001ef3258686f9b');
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-e001ef3258686f9b" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=step&payload=H4sIACfH3GkA_0WSQW_bMAyF7_oVBALsFiDJljQ9-JA0zlpgw4B1w86MzNhEbEmlZGce-uNHOQF6MEQJxOP3Hs3u7GvB0LAtOPqOkrCdx0QhmoEksnfF0iROLRWlSyRBOBLsqgFdwprgmeum1S9FE_vTrfG18VeLkV0N1gtBTEKuTk0EdBUEkrOXDp0lQCs-RrjQCBV35PK8aCy6AeMfrlJTLFerxf3hmfKc4mGzMKmhjoqTqJ4J2FJKVAyc78nM53PzQyoSeIdfmUfPA0UrHJLK6-3Jt17MUqt9VoAXd257yjzvoFOpHUHI-trxP6om5iS9ZlLBaQSrleYkUZtnm3JXHo9mpfXPTwd4vRvVq5Ze_bObN77XxNg5P-AEYDHgiVtOTDeRx0NZrs3nLIKBK_iOcqEEX8VfJ63fMY_LHEIDuZ6gFrrCW8_2oqzswDuCkTBbnh23-6fHtfmSIUgGVlvlX0tte3eYNwZRUeIZ7QSUleO99a1HJRsh5s1NeIdH9bg16xwjJlRR20tuUVx_0jQgiE_0IWV9F1qe9htHja2bZPaL3fq4NxutXz6y-Eaom4oNB32f_iqrMatg1dt0i55s43RhtS7FY9Vh7pztHsr1dvcfU9ofeL4CAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Enterprise Advantage Highlights
+subtitle=Showcasing core strengths and performance across key dimensions
+canvasWidth=1220
+canvasHeight=760
+theme=brand
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Brand Influence | Widely recognized and trusted by customers | #6EAEFF
+2 | R&D Strength | Strong in-house innovation capabilities | #69DEE5
+3 | Rapid Market Growth | Users and revenue grew quickly in one year | #F8BC95
+4 | Service Excellence | High satisfaction and service quality scores | #D9AEF8
+5 | Data Security | Robust protection and compliance systems | #B0A5FB
+6 | Innovation Leadership | Advanced product and technology roadmap | #A7E58A" data-kind="step">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Brand Influence","Widely recognized and trusted by customers","#6EAEFF"],["2","R&D Strength","Strong in-house innovation capabilities","#69DEE5"],["3","Rapid Market Growth","Users and revenue grew quickly in one year","#F8BC95"],["4","Service Excellence","High satisfaction and service quality scores","#D9AEF8"],["5","Data Security","Robust protection and compliance systems","#B0A5FB"],["6","Innovation Leadership","Advanced product and technology roadmap","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#F6F9FC"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#0F2230">Enterprise Advantage Highlights</text><text x="0" y="30" class="subtitle" fill="#335D79">Showcasing core strengths and performance across key dimensions</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#0F2230">Brand Influence</text><text x="280.0" y="720.0" class="desc" fill="#335D79">Widely recognized and</text><text x="280.0" y="738.0" class="desc" fill="#335D79">trusted by customers</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="224.0,527.0 224.0,547.0 284.0,577.0 284.0,557.0" fill="#54b1b7" /><!-- Right Side --><polygon points="344.0,527.0 344.0,547.0 284.0,577.0 284.0,557.0" fill="#69DEE5" /><!-- Top --><polygon points="284.0,497.0 344.0,527.0 284.0,557.0 224.0,527.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="284.0" cy="482.0" r="15" fill="#69DEE5" /><text x="284.0" y="487.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="414.0" y="612.0" class="step-title" fill="#0F2230">R&amp;D Strength</text><text x="414.0" y="637.0" class="desc" fill="#335D79">Strong in-house innovation</text><text x="414.0" y="655.0" class="desc" fill="#335D79">capabilities</text><line x1="284.0" y1="527.0" x2="414.0" y2="602.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="358.0,444.0 358.0,464.0 418.0,494.0 418.0,474.0" fill="#c69677" /><!-- Right Side --><polygon points="478.0,444.0 478.0,464.0 418.0,494.0 418.0,474.0" fill="#F8BC95" /><!-- Top --><polygon points="418.0,414.0 478.0,444.0 418.0,474.0 358.0,444.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="418.0" cy="399.0" r="15" fill="#F8BC95" /><text x="418.0" y="404.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="548.0" y="529.0" class="step-title" fill="#0F2230">Rapid Market Growth</text><text x="548.0" y="554.0" class="desc" fill="#335D79">Users and revenue grew</text><text x="548.0" y="572.0" class="desc" fill="#335D79">quickly in one year</text><line x1="418.0" y1="444.0" x2="548.0" y2="519.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="492.0,361.0 492.0,381.0 552.0,411.0 552.0,391.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="612.0,361.0 612.0,381.0 552.0,411.0 552.0,391.0" fill="#D9AEF8" /><!-- Top --><polygon points="552.0,331.0 612.0,361.0 552.0,391.0 492.0,361.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="552.0" cy="316.0" r="15" fill="#D9AEF8" /><text x="552.0" y="321.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="682.0" y="446.0" class="step-title" fill="#0F2230">Service Excellence</text><text x="682.0" y="471.0" class="desc" fill="#335D79">High satisfaction and</text><text x="682.0" y="489.0" class="desc" fill="#335D79">service quality scores</text><line x1="552.0" y1="361.0" x2="682.0" y2="436.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="626.0,278.0 626.0,298.0 686.0,328.0 686.0,308.0" fill="#8c84c8" /><!-- Right Side --><polygon points="746.0,278.0 746.0,298.0 686.0,328.0 686.0,308.0" fill="#B0A5FB" /><!-- Top --><polygon points="686.0,248.0 746.0,278.0 686.0,308.0 626.0,278.0" fill="#d3c6ff" stroke="#d3c6ff" stroke-width="0.5"/><!-- Badge --><circle cx="686.0" cy="233.0" r="15" fill="#B0A5FB" /><text x="686.0" y="238.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="816.0" y="363.0" class="step-title" fill="#0F2230">Data Security</text><text x="816.0" y="388.0" class="desc" fill="#335D79">Robust protection and</text><text x="816.0" y="406.0" class="desc" fill="#335D79">compliance systems</text><line x1="686.0" y1="278.0" x2="816.0" y2="353.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 950ms"><!-- Left Side --><polygon points="760.0,195.0 760.0,215.0 820.0,245.0 820.0,225.0" fill="#85b76e" /><!-- Right Side --><polygon points="880.0,195.0 880.0,215.0 820.0,245.0 820.0,225.0" fill="#A7E58A" /><!-- Top --><polygon points="820.0,165.0 880.0,195.0 820.0,225.0 760.0,195.0" fill="#c8ffa5" stroke="#c8ffa5" stroke-width="0.5"/><!-- Badge --><circle cx="820.0" cy="150.0" r="15" fill="#A7E58A" /><text x="820.0" y="155.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">6</text><!-- Label --><g><text x="950.0" y="280.0" class="step-title" fill="#0F2230">Innovation Leadership</text><text x="950.0" y="305.0" class="desc" fill="#335D79">Advanced product and</text><text x="950.0" y="323.0" class="desc" fill="#335D79">technology roadmap</text><line x1="820.0" y1="195.0" x2="950.0" y2="270.0" stroke="#E39A3B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-e001ef3258686f9b')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-e001ef3258686f9b')">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-e001ef3258686f9b')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-e001ef3258686f9b')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-e001ef3258686f9b')">PRINT</button>
+</div>
+<div id="modal-sv-e001ef3258686f9b" class="svg-modal-sv-e001ef3258686f9b" onclick="if(event.target === this) svgViewer.closeModal('sv-e001ef3258686f9b')">
+    <div class="svg-modal-content-sv-e001ef3258686f9b">
+        <button class="svg-modal-close-sv-e001ef3258686f9b" onclick="svgViewer.closeModal('sv-e001ef3258686f9b')">×</button>
+        <div id="modal-body-sv-e001ef3258686f9b" class="svg-modal-body-sv-e001ef3258686f9b"></div>
+    </div>
+</div>
+
+<div id="csv-modal-sv-e001ef3258686f9b" class="svg-modal-sv-e001ef3258686f9b" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-e001ef3258686f9b')">
+    <div class="svg-modal-content-sv-e001ef3258686f9b">
+        <button class="svg-modal-close-sv-e001ef3258686f9b" onclick="svgViewer.closeCsvModal('sv-e001ef3258686f9b')">×</button>
+        <div class="svg-modal-header-sv-e001ef3258686f9b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-sv-e001ef3258686f9b" class="svg-modal-body-sv-e001ef3258686f9b" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-sv-e001ef3258686f9b" class="svg-modal-sv-e001ef3258686f9b" onclick="if(event.target === this) docopsSource.close('sv-e001ef3258686f9b')">
+    <div class="svg-modal-content-sv-e001ef3258686f9b">
+        <button class="svg-modal-close-sv-e001ef3258686f9b" onclick="docopsSource.close('sv-e001ef3258686f9b')">×</button>
+        <div class="svg-modal-header-sv-e001ef3258686f9b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-sv-e001ef3258686f9b" class="svg-modal-body-sv-e001ef3258686f9b" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_focused_examples">3. Focused Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_software_development_lifecycle">3.1. Software Development Lifecycle</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,step,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Software Development Lifecycle
+subtitle=Key phases from planning to deployment
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Planning | Define requirements and project scope | #6EAEFF
+2 | Design | Architect the solution and create specs | #69DEE5
+3 | Development | Write and review code | #F8BC95
+4 | Testing | Validate quality and fix defects | #D9AEF8
+5 | Deployment | Release to production environment | #A7E58A
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-sv-7c5701e998b9261a {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-sv-7c5701e998b9261a.active {
+      display: flex;
+  }
+  .svg-modal-content-sv-7c5701e998b9261a {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-sv-7c5701e998b9261a {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-sv-7c5701e998b9261a:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-sv-7c5701e998b9261a {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-sv-7c5701e998b9261a svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-sv-7c5701e998b9261a .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-sv-7c5701e998b9261a .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-sv-7c5701e998b9261a .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-sv-7c5701e998b9261a .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-sv-7c5701e998b9261a .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-sv-7c5701e998b9261a .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          if (window.svgViewer) {
+              window.svgViewer.closeModal('sv-7c5701e998b9261a');
+              window.svgViewer.closeCsvModal('sv-7c5701e998b9261a');
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-7c5701e998b9261a" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=step&payload=H4sIACfH3GkA_0VRS2_CMAy-51dE4owEbLwOPXRQNGmTNm3TOIfUpZ5CEhy3DIkfvySAdopt-Xv4C9rG7Un5FnWBwR2ACfUwMPggeqCAzhZjwcgGik_X8EkRyDX0YJw_gGX5ig3oszYgQre77r3AWfpWBQiyIXeQ3ihr0e4lO1mDN-6ckEIr26uwxZrbYjyZjG6DZ8B9y8V8NhLcwgEKbVQIqIVXBpih6HFHKuKHw6F4oxpIXuRXEo7vGoIm9Bxtx27ljCMxjtX73UJaadCCJDh2SJCcBKlsLT25H9Asg3Y-UQ1mVVltNmJypcV9YixJt8hpLXqTwZkuSyW8JlAcZx50yPDluqqm4iHD__O6yC1Fhgwh6BFOUrs6C24WT6vlVDymeyDw1e63Mlgn4mMXKz5nYIO_MckYPGep9TI6XYhplrrnG5sPMBC_IeUer6s7nc2C7ZGcve0Mynk1XZR_Q268gAgCAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Software Development Lifecycle
+subtitle=Key phases from planning to deployment
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Planning | Define requirements and project scope | #6EAEFF
+2 | Design | Architect the solution and create specs | #69DEE5
+3 | Development | Write and review code | #F8BC95
+4 | Testing | Validate quality and fix defects | #D9AEF8
+5 | Deployment | Release to production environment | #A7E58A" data-kind="step">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Planning","Define requirements and project scope","#6EAEFF"],["2","Design","Architect the solution and create specs","#69DEE5"],["3","Development","Write and review code","#F8BC95"],["4","Testing","Validate quality and fix defects","#D9AEF8"],["5","Deployment","Release to production environment","#A7E58A"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#ffffff"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#111111">Software Development Lifecycle</text><text x="0" y="30" class="subtitle" fill="#4338ca">Key phases from planning to deployment</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#111111">Planning</text><text x="280.0" y="720.0" class="desc" fill="#4338ca">Define requirements and</text><text x="280.0" y="738.0" class="desc" fill="#4338ca">project scope</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#111111">Design</text><text x="447.0" y="616.0" class="desc" fill="#4338ca">Architect the solution and</text><text x="447.0" y="634.0" class="desc" fill="#4338ca">create specs</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#111111">Development</text><text x="614.0" y="512.0" class="desc" fill="#4338ca">Write and review code</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#111111">Testing</text><text x="781.0" y="408.0" class="desc" fill="#4338ca">Validate quality and fix</text><text x="781.0" y="426.0" class="desc" fill="#4338ca">defects</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#85b76e" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#A7E58A" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#c8ffa5" stroke="#c8ffa5" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#A7E58A" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#111111">Deployment</text><text x="948.0" y="304.0" class="desc" fill="#4338ca">Release to production</text><text x="948.0" y="322.0" class="desc" fill="#4338ca">environment</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-7c5701e998b9261a')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-7c5701e998b9261a')">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-7c5701e998b9261a')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-7c5701e998b9261a')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-7c5701e998b9261a')">PRINT</button>
+</div>
+<div id="modal-sv-7c5701e998b9261a" class="svg-modal-sv-7c5701e998b9261a" onclick="if(event.target === this) svgViewer.closeModal('sv-7c5701e998b9261a')">
+    <div class="svg-modal-content-sv-7c5701e998b9261a">
+        <button class="svg-modal-close-sv-7c5701e998b9261a" onclick="svgViewer.closeModal('sv-7c5701e998b9261a')">×</button>
+        <div id="modal-body-sv-7c5701e998b9261a" class="svg-modal-body-sv-7c5701e998b9261a"></div>
+    </div>
+</div>
+
+<div id="csv-modal-sv-7c5701e998b9261a" class="svg-modal-sv-7c5701e998b9261a" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-7c5701e998b9261a')">
+    <div class="svg-modal-content-sv-7c5701e998b9261a">
+        <button class="svg-modal-close-sv-7c5701e998b9261a" onclick="svgViewer.closeCsvModal('sv-7c5701e998b9261a')">×</button>
+        <div class="svg-modal-header-sv-7c5701e998b9261a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-sv-7c5701e998b9261a" class="svg-modal-body-sv-7c5701e998b9261a" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-sv-7c5701e998b9261a" class="svg-modal-sv-7c5701e998b9261a" onclick="if(event.target === this) docopsSource.close('sv-7c5701e998b9261a')">
+    <div class="svg-modal-content-sv-7c5701e998b9261a">
+        <button class="svg-modal-close-sv-7c5701e998b9261a" onclick="docopsSource.close('sv-7c5701e998b9261a')">×</button>
+        <div class="svg-modal-header-sv-7c5701e998b9261a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-sv-7c5701e998b9261a" class="svg-modal-body-sv-7c5701e998b9261a" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dark_theme_version">3.2. Dark Theme Version</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,steps,controls=true,useDark=true]
+----
+infographic=isometric-steps
+version=1
+title=Customer Onboarding Journey
+subtitle=Steps to welcome and activate new customers
+canvasWidth=1220
+canvasHeight=760
+theme=brand
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Sign Up | Customer creates an account | #6EAEFF
+2 | Verification | Identity and email verification | #69DEE5
+3 | Profile Setup | Complete preferences and settings | #F8BC95
+4 | First Use | Guided walkthrough of key features | #D9AEF8
+5 | Engagement | Regular usage and feedback loop | #B0A5FB
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-sv-b4b928a9b4afd431 {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-sv-b4b928a9b4afd431.active {
+      display: flex;
+  }
+  .svg-modal-content-sv-b4b928a9b4afd431 {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-sv-b4b928a9b4afd431 {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-sv-b4b928a9b4afd431:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-sv-b4b928a9b4afd431 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-sv-b4b928a9b4afd431 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-sv-b4b928a9b4afd431 .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-sv-b4b928a9b4afd431 .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-sv-b4b928a9b4afd431 .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-sv-b4b928a9b4afd431 .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-sv-b4b928a9b4afd431 .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-sv-b4b928a9b4afd431 .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          if (window.svgViewer) {
+              window.svgViewer.closeModal('sv-b4b928a9b4afd431');
+              window.svgViewer.closeCsvModal('sv-b4b928a9b4afd431');
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-b4b928a9b4afd431" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIACfH3GkA_1WQTW_bMAyG7_oVBHIOkGRL1hx8aBJ77S4tmrU7KxJtE3Ekg6IcBOiPL-1lh530kuLH85JCHRu2fUuuoBQvKExungT7ZAbkRDEUSyMkHRb7nEQrGF7CKVr2FBr4FTMHvJmUT3-LjmMrSIQrdk6rwQYP1gkNVhACXsHdxyTjbBhs-kNe2mK5Wi3uiSekppXix2ZhpMULFifWIaa3HYpgMdAYi5nP5-aFvfJ8wu9xt74HTI6pF8XWaB-7yGap6khNgPd-zP0z4RiVKCmf4rmYg-jvbFM-llVlVqo_kKkmZ-_Dnj0GtXibDOHFUgfD_xWzzfZQlmvzTfUrx5oU6YiSp7Xx0is-Qs9YI2Nw02oPST3pIdPYXz3s9tu1-a66Ik4C72k09TOTRw9X252l5ZibFmINZ7xBrRYy49R82Cr5g1mrLkNjGz3cZOkNm9xZhpw0N62sEf3JujN0MY5ss93icV3tvgDrsx9_CwIAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Customer Onboarding Journey
+subtitle=Steps to welcome and activate new customers
+canvasWidth=1220
+canvasHeight=760
+theme=brand
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Sign Up | Customer creates an account | #6EAEFF
+2 | Verification | Identity and email verification | #69DEE5
+3 | Profile Setup | Complete preferences and settings | #F8BC95
+4 | First Use | Guided walkthrough of key features | #D9AEF8
+5 | Engagement | Regular usage and feedback loop | #B0A5FB" data-kind="steps">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Sign Up","Customer creates an account","#6EAEFF"],["2","Verification","Identity and email verification","#69DEE5"],["3","Profile Setup","Complete preferences and settings","#F8BC95"],["4","First Use","Guided walkthrough of key features","#D9AEF8"],["5","Engagement","Regular usage and feedback loop","#B0A5FB"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#071925"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#EAF3F8">Customer Onboarding Journey</text><text x="0" y="30" class="subtitle" fill="#7FB0CD">Steps to welcome and activate new customers</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#588bcc" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#6EAEFF" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#84d0ff" stroke="#84d0ff" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#6EAEFF" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#EAF3F8">Sign Up</text><text x="280.0" y="720.0" class="desc" fill="#7FB0CD">Customer creates an account</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="257.0,506.0 257.0,526.0 317.0,556.0 317.0,536.0" fill="#54b1b7" /><!-- Right Side --><polygon points="377.0,506.0 377.0,526.0 317.0,556.0 317.0,536.0" fill="#69DEE5" /><!-- Top --><polygon points="317.0,476.0 377.0,506.0 317.0,536.0 257.0,506.0" fill="#7effff" stroke="#7effff" stroke-width="0.5"/><!-- Badge --><circle cx="317.0" cy="461.0" r="15" fill="#69DEE5" /><text x="317.0" y="466.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="447.0" y="591.0" class="step-title" fill="#EAF3F8">Verification</text><text x="447.0" y="616.0" class="desc" fill="#7FB0CD">Identity and email</text><text x="447.0" y="634.0" class="desc" fill="#7FB0CD">verification</text><line x1="317.0" y1="506.0" x2="447.0" y2="581.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="424.0,402.0 424.0,422.0 484.0,452.0 484.0,432.0" fill="#c69677" /><!-- Right Side --><polygon points="544.0,402.0 544.0,422.0 484.0,452.0 484.0,432.0" fill="#F8BC95" /><!-- Top --><polygon points="484.0,372.0 544.0,402.0 484.0,432.0 424.0,402.0" fill="#ffe1b2" stroke="#ffe1b2" stroke-width="0.5"/><!-- Badge --><circle cx="484.0" cy="357.0" r="15" fill="#F8BC95" /><text x="484.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="614.0" y="487.0" class="step-title" fill="#EAF3F8">Profile Setup</text><text x="614.0" y="512.0" class="desc" fill="#7FB0CD">Complete preferences and</text><text x="614.0" y="530.0" class="desc" fill="#7FB0CD">settings</text><line x1="484.0" y1="402.0" x2="614.0" y2="477.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 650ms"><!-- Left Side --><polygon points="591.0,298.0 591.0,318.0 651.0,348.0 651.0,328.0" fill="#ad8bc6" /><!-- Right Side --><polygon points="711.0,298.0 711.0,318.0 651.0,348.0 651.0,328.0" fill="#D9AEF8" /><!-- Top --><polygon points="651.0,268.0 711.0,298.0 651.0,328.0 591.0,298.0" fill="#ffd0ff" stroke="#ffd0ff" stroke-width="0.5"/><!-- Badge --><circle cx="651.0" cy="253.0" r="15" fill="#D9AEF8" /><text x="651.0" y="258.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">4</text><!-- Label --><g><text x="781.0" y="383.0" class="step-title" fill="#EAF3F8">First Use</text><text x="781.0" y="408.0" class="desc" fill="#7FB0CD">Guided walkthrough of key</text><text x="781.0" y="426.0" class="desc" fill="#7FB0CD">features</text><line x1="651.0" y1="298.0" x2="781.0" y2="373.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g>        <g class="animate-fadeIn" style="animation-delay: 800ms"><!-- Left Side --><polygon points="758.0,194.0 758.0,214.0 818.0,244.0 818.0,224.0" fill="#8c84c8" /><!-- Right Side --><polygon points="878.0,194.0 878.0,214.0 818.0,244.0 818.0,224.0" fill="#B0A5FB" /><!-- Top --><polygon points="818.0,164.0 878.0,194.0 818.0,224.0 758.0,194.0" fill="#d3c6ff" stroke="#d3c6ff" stroke-width="0.5"/><!-- Badge --><circle cx="818.0" cy="149.0" r="15" fill="#B0A5FB" /><text x="818.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">5</text><!-- Label --><g><text x="948.0" y="279.0" class="step-title" fill="#EAF3F8">Engagement</text><text x="948.0" y="304.0" class="desc" fill="#7FB0CD">Regular usage and feedback</text><text x="948.0" y="322.0" class="desc" fill="#7FB0CD">loop</text><line x1="818.0" y1="194.0" x2="948.0" y2="269.0" stroke="#F2B45B" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-b4b928a9b4afd431')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-b4b928a9b4afd431')">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-b4b928a9b4afd431')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-b4b928a9b4afd431')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-b4b928a9b4afd431')">PRINT</button>
+</div>
+<div id="modal-sv-b4b928a9b4afd431" class="svg-modal-sv-b4b928a9b4afd431" onclick="if(event.target === this) svgViewer.closeModal('sv-b4b928a9b4afd431')">
+    <div class="svg-modal-content-sv-b4b928a9b4afd431">
+        <button class="svg-modal-close-sv-b4b928a9b4afd431" onclick="svgViewer.closeModal('sv-b4b928a9b4afd431')">×</button>
+        <div id="modal-body-sv-b4b928a9b4afd431" class="svg-modal-body-sv-b4b928a9b4afd431"></div>
+    </div>
+</div>
+
+<div id="csv-modal-sv-b4b928a9b4afd431" class="svg-modal-sv-b4b928a9b4afd431" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-b4b928a9b4afd431')">
+    <div class="svg-modal-content-sv-b4b928a9b4afd431">
+        <button class="svg-modal-close-sv-b4b928a9b4afd431" onclick="svgViewer.closeCsvModal('sv-b4b928a9b4afd431')">×</button>
+        <div class="svg-modal-header-sv-b4b928a9b4afd431" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-sv-b4b928a9b4afd431" class="svg-modal-body-sv-b4b928a9b4afd431" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-sv-b4b928a9b4afd431" class="svg-modal-sv-b4b928a9b4afd431" onclick="if(event.target === this) docopsSource.close('sv-b4b928a9b4afd431')">
+    <div class="svg-modal-content-sv-b4b928a9b4afd431">
+        <button class="svg-modal-close-sv-b4b928a9b4afd431" onclick="docopsSource.close('sv-b4b928a9b4afd431')">×</button>
+        <div class="svg-modal-header-sv-b4b928a9b4afd431" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-sv-b4b928a9b4afd431" class="svg-modal-body-sv-b4b928a9b4afd431" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_minimal_three_step_process">3.3. Minimal Three-Step Process</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,steps,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Quick Start Guide
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description
+1 | Install | Download and install the application
+2 | Configure | Set up your preferences
+3 | Launch | Start using the product
+----</code></pre>
+</div>
+</div>
+<div class="imageblock center"><style>
+  .svg-with-controls {
+    position: relative;
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .svg-bottom-controls {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    display: flex;
+    gap: 6px;
+    background: rgba(15, 20, 30, 0.85);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .svg-with-controls:hover .svg-bottom-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .svg-control-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #94a3b8;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .svg-control-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Shared Modal Styles */
+  .svg-modal-sv-6ae8a72f4f9ccbb7 {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 20, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2147483647; /* Highest possible z-index */
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+  }
+  .svg-modal-sv-6ae8a72f4f9ccbb7.active {
+      display: flex;
+  }
+  .svg-modal-content-sv-6ae8a72f4f9ccbb7 {
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      background: var(--docops-card-bg, #1e293b);
+      border-radius: 20px;
+      padding: 48px 24px 24px 24px;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .svg-modal-close-sv-6ae8a72f4f9ccbb7 {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 10;
+  }
+  .svg-modal-close-sv-6ae8a72f4f9ccbb7:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+  }
+  .svg-modal-body-sv-6ae8a72f4f9ccbb7 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      padding: 10px;
+  }
+  .svg-modal-body-sv-6ae8a72f4f9ccbb7 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+  }
+
+  /* CSV Modal Specific Overrides */
+  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-content {
+      background: transparent !important;
+  }
+  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table {
+     width: 100%;
+      border-collapse: collapse;
+      color: #e2e8f0 !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: transparent !important;
+  }
+  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.1) !important;
+      color: #fff !important;
+      position: sticky;
+      top: 0;
+  }
+  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1 !important;
+  }
+  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table tr {
+      background: transparent !important;
+  }
+  #csv-modal-sv-6ae8a72f4f9ccbb7 .csv-table tr:hover {
+      background: rgba(255,255,255,0.05) !important;
+  }
+
+</style>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+          if (window.svgViewer) {
+              window.svgViewer.closeModal('sv-6ae8a72f4f9ccbb7');
+              window.svgViewer.closeCsvModal('sv-6ae8a72f4f9ccbb7');
+          }
+      }
+  });
+</script>
+
+<div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-6ae8a72f4f9ccbb7" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=steps&payload=H4sIACfH3GkA_y2PQUsEMQyF7_0V_QMDOyPoqScFFRZEVvAc28xMsJuWJB0R_PF2hj2FvPfyPkI8l0WgrhQDabmiCcVBDau6DUWpcBidkWUM743it78YiPnnRgldBN5APynZGsZpOt2EF6RltfBwf3K24hVDzKBK0VXIaIZhoy8BNjcMg3uThOL__MfO6PMJNQpV62Q39v2V1SDn3Sk_nAskD5w83eQO8FBrpgjHydSDj4VnWprsdRc036r_LU18FZxRkCOqu-veGRrHdQ8dPzUlXo7CKiW1aP9mL7ALHQEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=steps&filename=ghi.svg" data-original-content="infographic=isometric-steps
+version=1
+title=Quick Start Guide
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description
+1 | Install | Download and install the application
+2 | Configure | Set up your preferences
+3 | Launch | Start using the product" data-kind="steps">
+<svg xmlns="http://www.w3.org/2000/svg" width="686.2499999914219" height="427.49999999465626" viewBox="0 0 1220 760" id="isometric-steps">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-13</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["order","title","desc","color"],"rows":[["1","Install","Download and install the application",""],["2","Configure","Set up your preferences",""],["3","Launch","Start using the product",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.title { font-family: Arial, Helvetica, sans-serif; font-size: 32px; font-weight: 800; } .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; font-weight: 400; opacity: 0.7; } .step-title { font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: 700; } .desc { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 400; } .badge-text { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 800; } .animate-fadeIn { opacity: 0; animation: fadeIn 0.6s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }</style></defs><g transform="scale(1.0)"><rect width="1220" height="760" fill="#ffffff"/><g transform="translate(40, 60)"><text x="0" y="0" class="title" fill="#111111">Quick Start Guide</text></g><g class="animate-fadeIn" style="animation-delay: 200ms"><!-- Left Side --><polygon points="90.0,610.0 90.0,630.0 150.0,660.0 150.0,640.0" fill="#b8003a" /><!-- Right Side --><polygon points="210.0,610.0 210.0,630.0 150.0,660.0 150.0,640.0" fill="#e60049" /><!-- Top --><polygon points="150.0,580.0 210.0,610.0 150.0,640.0 90.0,610.0" fill="#ff0057" stroke="#ff0057" stroke-width="0.5"/><!-- Badge --><circle cx="150.0" cy="565.0" r="15" fill="#e60049" /><text x="150.0" y="570.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">1</text><!-- Label --><g><text x="280.0" y="695.0" class="step-title" fill="#111111">Install</text><text x="280.0" y="720.0" class="desc" fill="#4338ca">Download and install the</text><text x="280.0" y="738.0" class="desc" fill="#4338ca">application</text><line x1="150.0" y1="610.0" x2="280.0" y2="685.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 350ms"><!-- Left Side --><polygon points="425.0,402.0 425.0,422.0 485.0,452.0 485.0,432.0" fill="#0890cc" /><!-- Right Side --><polygon points="545.0,402.0 545.0,422.0 485.0,452.0 485.0,432.0" fill="#0bb4ff" /><!-- Top --><polygon points="485.0,372.0 545.0,402.0 485.0,432.0 425.0,402.0" fill="#0dd8ff" stroke="#0dd8ff" stroke-width="0.5"/><!-- Badge --><circle cx="485.0" cy="357.0" r="15" fill="#0bb4ff" /><text x="485.0" y="362.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">2</text><!-- Label --><g><text x="615.0" y="487.0" class="step-title" fill="#111111">Configure</text><text x="615.0" y="512.0" class="desc" fill="#4338ca">Set up your preferences</text><line x1="485.0" y1="402.0" x2="615.0" y2="477.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g><g class="animate-fadeIn" style="animation-delay: 500ms"><!-- Left Side --><polygon points="760.0,194.0 760.0,214.0 820.0,244.0 820.0,224.0" fill="#40ba74" /><!-- Right Side --><polygon points="880.0,194.0 880.0,214.0 820.0,244.0 820.0,224.0" fill="#50e991" /><!-- Top --><polygon points="820.0,164.0 880.0,194.0 820.0,224.0 760.0,194.0" fill="#60ffae" stroke="#60ffae" stroke-width="0.5"/><!-- Badge --><circle cx="820.0" cy="149.0" r="15" fill="#50e991" /><text x="820.0" y="154.0" text-anchor="middle" class="badge-text" fill="#FFFFFF">3</text><!-- Label --><g><text x="950.0" y="279.0" class="step-title" fill="#111111">Launch</text><text x="950.0" y="304.0" class="desc" fill="#4338ca">Start using the product</text><line x1="820.0" y1="194.0" x2="950.0" y2="269.0" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/></g></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-6ae8a72f4f9ccbb7')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-6ae8a72f4f9ccbb7')">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-6ae8a72f4f9ccbb7')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-6ae8a72f4f9ccbb7')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-6ae8a72f4f9ccbb7')">PRINT</button>
+</div>
+<div id="modal-sv-6ae8a72f4f9ccbb7" class="svg-modal-sv-6ae8a72f4f9ccbb7" onclick="if(event.target === this) svgViewer.closeModal('sv-6ae8a72f4f9ccbb7')">
+    <div class="svg-modal-content-sv-6ae8a72f4f9ccbb7">
+        <button class="svg-modal-close-sv-6ae8a72f4f9ccbb7" onclick="svgViewer.closeModal('sv-6ae8a72f4f9ccbb7')">×</button>
+        <div id="modal-body-sv-6ae8a72f4f9ccbb7" class="svg-modal-body-sv-6ae8a72f4f9ccbb7"></div>
+    </div>
+</div>
+
+<div id="csv-modal-sv-6ae8a72f4f9ccbb7" class="svg-modal-sv-6ae8a72f4f9ccbb7" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-6ae8a72f4f9ccbb7')">
+    <div class="svg-modal-content-sv-6ae8a72f4f9ccbb7">
+        <button class="svg-modal-close-sv-6ae8a72f4f9ccbb7" onclick="svgViewer.closeCsvModal('sv-6ae8a72f4f9ccbb7')">×</button>
+        <div class="svg-modal-header-sv-6ae8a72f4f9ccbb7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-sv-6ae8a72f4f9ccbb7" class="svg-modal-body-sv-6ae8a72f4f9ccbb7" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-sv-6ae8a72f4f9ccbb7" class="svg-modal-sv-6ae8a72f4f9ccbb7" onclick="if(event.target === this) docopsSource.close('sv-6ae8a72f4f9ccbb7')">
+    <div class="svg-modal-content-sv-6ae8a72f4f9ccbb7">
+        <button class="svg-modal-close-sv-6ae8a72f4f9ccbb7" onclick="docopsSource.close('sv-6ae8a72f4f9ccbb7')">×</button>
+        <div class="svg-modal-header-sv-6ae8a72f4f9ccbb7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-sv-6ae8a72f4f9ccbb7" class="svg-modal-body-sv-6ae8a72f4f9ccbb7" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+<style>
+imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;  /* Changed from margin-bottom */
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
+</style>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_use_cases">4. Common Use Cases</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Process documentation</strong> - Visualize workflows and business processes</p>
+</li>
+<li>
+<p><strong>Onboarding guides</strong> - Show step-by-step user or employee onboarding</p>
+</li>
+<li>
+<p><strong>Project milestones</strong> - Display key phases of a project lifecycle</p>
+</li>
+<li>
+<p><strong>Training materials</strong> - Break down learning paths into clear stages</p>
+</li>
+<li>
+<p><strong>Product roadmaps</strong> - Illustrate feature development progression</p>
+</li>
+</ul>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_format_options">5. Format Options</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_basic_structure">5.1. Basic Structure</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,steps,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=My Steps Title
+subtitle=Optional subtitle text
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Step One | Description of step one | #6EAEFF
+2 | Step Two | Description of step two | #69DEE5
+----</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_fields">5.2. Configuration Fields</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">infographic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(required)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type of infographic (use <code>isometric-steps</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Format version</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(required)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Main title displayed on the infographic</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">subtitle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(none)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional subtitle below the title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">canvasWidth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1220</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Width of the SVG canvas in pixels</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">canvasHeight</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>760</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Height of the SVG canvas in pixels</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">theme</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>classic</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Visual theme name (e.g., <code>classic</code>, <code>brand</code>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">palette</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vibrant</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Color palette for step rendering</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">startX</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(auto)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom X starting position</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">startY</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(auto)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom Y starting position</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(auto)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Horizontal offset between steps</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>(auto)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vertical offset between steps</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">labelOffsetX</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>130</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Horizontal offset for step labels</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">labelOffsetY</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>65</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vertical offset for step labels</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">maxDescLines</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum description lines per step</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_step_data_columns">5.3. Step Data Columns</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Order</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric order of the step (must be unique)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Short title for the step</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Brief description text</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Color</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom hex color (e.g., <code>#6EAEFF</code>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_data_format_rules">5.4. Data Format Rules</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Config section and data section are separated by <code>---</code></p>
+</li>
+<li>
+<p>First row after <code>---</code> is the header row</p>
+</li>
+<li>
+<p>Columns are separated by <code>|</code> (pipe)</p>
+</li>
+<li>
+<p>Order values must be unique integers</p>
+</li>
+<li>
+<p>Color is optional; palette colors are used when omitted</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">infographic=isometric-steps
+version=1
+title=My Process
+---
+Order | Title | Description | Color
+1 | First Step | Getting started | #6EAEFF
+2 | Second Step | Making progress | #69DEE5
+3 | Final Step | Completing the task | #A7E58A</code></pre>
+</div>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_best_practices">6. Best Practices</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Keep titles short</strong> - Use 2-3 words per step for best visual results</p>
+</li>
+<li>
+<p><strong>Limit to 3-8 steps</strong> - Too many steps reduce readability</p>
+</li>
+<li>
+<p><strong>Use consistent colors</strong> - Stick to a palette or let the theme handle it</p>
+</li>
+<li>
+<p><strong>Write concise descriptions</strong> - One line per step works best</p>
+</li>
+<li>
+<p><strong>Order sequentially</strong> - Use 1, 2, 3&#8230;&#8203; for clear progression</p>
+</li>
+<li>
+<p><strong>Choose meaningful subtitles</strong> - They provide context for the entire infographic</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For best results, keep step titles short and action-oriented. Use the description field for additional context, and let the color palette create visual harmony unless you need specific brand colors.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph back-to-top">
+<p><a href="#top">🔝</a></p>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
+
+<style>
+.listingblock {
+    position: relative;
+}
+
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.listingblock:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: #999;
+}
+
+.copy-button:active {
+    transform: scale(0.95);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: rgba(45, 45, 45, 0.9);
+        color: #fff;
+        border-color: #666;
+    }
+    
+    .copy-button:hover {
+        background: rgba(45, 45, 45, 1);
+        border-color: #999;
+    }
+}
+
+</style>
+<script type="text/javascript">
+// Simple clipboard functionality without external dependencies
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        return new Promise((resolve, reject) => {
+            if (document.execCommand('copy')) {
+                resolve();
+            } else {
+                reject();
+            }
+            document.body.removeChild(textArea);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add copy buttons to all code blocks
+    const codeBlocks = document.querySelectorAll('pre.highlight, div.listingblock pre, .literalblock pre');
+
+    codeBlocks.forEach(function(block, index) {
+        // Create wrapper div if it doesn't exist
+        let wrapper = block.closest('.listingblock, .literalblock');
+        if (!wrapper) {
+            wrapper = document.createElement('div');
+            wrapper.className = 'listingblock';
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+        }
+
+        // Add copy button
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.title = 'Copy to clipboard';
+
+        // Insert button
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(button);
+
+        // Add click handler
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Get the text content of the code block
+            const code = block.textContent || block.innerText;
+
+            copyToClipboard(code).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.style.backgroundColor = '#28a745';
+
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }).catch(function() {
+                button.innerHTML = '❌ Error';
+                button.style.backgroundColor = '#dc3545';
+
+                setTimeout(function() {
+                    button.innerHTML = '📋 Copy';
+                    button.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+    });
+});
+</script>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-content" id="modalContent">
+        <button class="close-button" onclick="closeModal()" aria-label="Close modal">×</button>
+        <!-- The JS specifically fails because this ID is missing -->
+        <div id="modalSvgContainer"></div>
+
+        <div class="modal-zoom-controls">
+            <button class="modal-zoom-btn" onclick="modalZoomOut()" title="Zoom Out">−</button>
+            <span class="modal-zoom-level" id="modalZoomLevel">100%</span>
+            <button class="modal-zoom-btn" onclick="modalZoomIn()" title="Zoom In">+</button>
+            <button class="modal-zoom-btn" onclick="modalZoomReset()" title="Reset Zoom">⟲</button>
+        </div>
+    </div>
+</div>
+<script>
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+        // Typography - Matching pro-style.css
+        fontFamily: "'Outfit', sans-serif",
+        fontSize: "14px",
+        
+        // Colors - Using your CSS Variables
+        primaryColor: 'var(--bg-surface)',
+        primaryTextColor: 'var(--text-main)',
+        primaryBorderColor: 'var(--accent-primary)',
+        lineColor: 'var(--accent-secondary)',
+        secondaryColor: 'var(--bg-base)',
+        tertiaryColor: 'var(--bg-surface)',
+        
+        // Specific Element Overrides
+        nodeBorder: 'var(--accent-primary)',
+        clusterBkg: 'var(--bg-base)',
+        clusterBorder: 'var(--border-color)',
+        titleColor: 'var(--text-heading)',
+        edgeLabelBackground: 'var(--bg-surface)',
+        
+        // Sequence Diagram specific
+        actorBkg: 'var(--bg-surface)',
+        actorBorder: 'var(--accent-primary)',
+        actorTextColor: 'var(--text-heading)',
+        noteBkgColor: 'var(--accent-glow)',
+        noteTextColor: 'var(--accent-primary)',
+    },
+    // Custom CSS for "AI Assistant" flair
+    themeCSS: `
+        .node rect, .node circle, .node ellipse, .node polygon {
+            stroke-width: 2px;
+            filter: drop-shadow(2px 2px 0px var(--accent-glow));
+        }
+        .label-container {
+            fill: var(--bg-surface);
+        }
+        .edgePath .path {
+            stroke: var(--accent-secondary) !important;
+            stroke-width: 1.5px !important;
+        }
+        .marker {
+            fill: var(--accent-secondary) !important;
+            stroke: var(--accent-secondary) !important;
+        }
+        text.titleText {
+            font-family: 'Syne', sans-serif !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+        }
+    `
+});
+</script>
+</body>
+</html>
