@@ -1,0 +1,352 @@
+include::_base.adoc[]
+:enable-navigation:
+:page-navigation: true
+= image:icons/StepsIcon.svg[width=36,height=36] DocOps Steps
+
+[[top]]
+
+== Introduction
+
+_Create beautiful isometric step infographics to visualize processes, workflows, and progress_
+
+*Key features:*
+
+* Isometric 3D step visualization with numbered stages
+* Configurable themes and color palettes
+* CSV-style data format with header row for easy authoring
+* Support for custom colors per step
+* Adjustable canvas size, layout offsets, and label positioning
+
+== Default Example
+
+Basic isometric steps showing enterprise highlights:
+
+[source,asciidoc]
+....
+[docops,steps,controls=true]
+----
+infographic=isometric-steps
+title=Enterprise Advantage Highlights
+subtitle=Showcasing core strengths and performance across key dimensions
+---
+Order | Title | Description | Color
+1 | Brand Influence | Widely recognized and trusted by customers | #6EAEFF
+2 | R&D Strength | Strong in-house innovation capabilities | #69DEE5
+3 | Rapid Market Growth | Users and revenue grew quickly in one year | #F8BC95
+4 | Service Excellence | High satisfaction and service quality scores | #D9AEF8
+5 | Data Security | Robust protection and compliance systems | #B0A5FB
+6 | Innovation Leadership | Advanced product and technology roadmap | #A7E58A
+----
+....
+
+[docops,step,controls=true]
+----
+infographic=isometric-steps
+title=Enterprise Advantage Highlights
+subtitle=Showcasing core strengths and performance across key dimensions
+theme=brand
+---
+Order | Title | Description | Color
+1 | Brand Influence | Widely recognized and trusted by customers | #6EAEFF
+2 | R&D Strength | Strong in-house innovation capabilities | #69DEE5
+3 | Rapid Market Growth | Users and revenue grew quickly in one year | #F8BC95
+4 | Service Excellence | High satisfaction and service quality scores | #D9AEF8
+5 | Data Security | Robust protection and compliance systems | #B0A5FB
+6 | Innovation Leadership | Advanced product and technology roadmap | #A7E58A
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Focused Examples
+
+=== Software Development Lifecycle
+
+[source,asciidoc]
+....
+[docops,step,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Software Development Lifecycle
+subtitle=Key phases from planning to deployment
+canvasWidth=1220
+canvasHeight=760
+theme=ayu
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Planning | Define requirements and project scope | #6EAEFF
+2 | Design | Architect the solution and create specs | #69DEE5
+3 | Development | Write and review code | #F8BC95
+4 | Testing | Validate quality and fix defects | #D9AEF8
+5 | Deployment | Release to production environment | #A7E58A
+----
+....
+
+[docops,step,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Software Development Lifecycle
+subtitle=Key phases from planning to deployment
+canvasWidth=1220
+canvasHeight=760
+theme=ayu
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Planning | Define requirements and project scope | #6EAEFF
+2 | Design | Architect the solution and create specs | #69DEE5
+3 | Development | Write and review code | #F8BC95
+4 | Testing | Validate quality and fix defects | #D9AEF8
+5 | Deployment | Release to production environment | #A7E58A
+----
+
+=== Dark Theme Version
+
+[source,asciidoc]
+....
+[docops,steps,controls=true,useDark=true]
+----
+infographic=isometric-steps
+version=1
+title=Customer Onboarding Journey
+subtitle=Steps to welcome and activate new customers
+canvasWidth=1220
+canvasHeight=760
+theme=ayu
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Sign Up | Customer creates an account | #6EAEFF
+2 | Verification | Identity and email verification | #69DEE5
+3 | Profile Setup | Complete preferences and settings | #F8BC95
+4 | First Use | Guided walkthrough of key features | #D9AEF8
+5 | Engagement | Regular usage and feedback loop | #B0A5FB
+----
+....
+
+[docops,steps,controls=true,useDark=true]
+----
+infographic=isometric-steps
+version=1
+title=Customer Onboarding Journey
+subtitle=Steps to welcome and activate new customers
+canvasWidth=1220
+canvasHeight=760
+theme=ayu
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Sign Up | Customer creates an account | #6EAEFF
+2 | Verification | Identity and email verification | #69DEE5
+3 | Profile Setup | Complete preferences and settings | #F8BC95
+4 | First Use | Guided walkthrough of key features | #D9AEF8
+5 | Engagement | Regular usage and feedback loop | #B0A5FB
+----
+
+=== Minimal Three-Step Process
+
+[source,asciidoc]
+....
+[docops,steps,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Quick Start Guide
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description
+1 | Install | Download and install the application
+2 | Configure | Set up your preferences
+3 | Launch | Start using the product
+----
+....
+
+[docops,steps,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=Quick Start Guide
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description
+1 | Install | Download and install the application
+2 | Configure | Set up your preferences
+3 | Launch | Start using the product
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Common Use Cases
+
+* *Process documentation* - Visualize workflows and business processes
+* *Onboarding guides* - Show step-by-step user or employee onboarding
+* *Project milestones* - Display key phases of a project lifecycle
+* *Training materials* - Break down learning paths into clear stages
+* *Product roadmaps* - Illustrate feature development progression
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Format Options
+
+=== Basic Structure
+[source,asciidoc]
+....
+[docops,steps,controls=true]
+----
+infographic=isometric-steps
+version=1
+title=My Steps Title
+subtitle=Optional subtitle text
+canvasWidth=1220
+canvasHeight=760
+theme=classic
+palette=vibrant
+---
+Order | Title | Description | Color
+1 | Step One | Description of step one | #6EAEFF
+2 | Step Two | Description of step two | #69DEE5
+----
+....
+
+=== Configuration Fields
+
+[cols="1,1,3"]
+|===
+|Field |Default |Purpose
+
+|infographic
+|_(required)_
+|Type of infographic (use `isometric-steps`)
+
+|version
+|`1`
+|Format version
+
+|title
+|_(required)_
+|Main title displayed on the infographic
+
+|subtitle
+|_(none)_
+|Optional subtitle below the title
+
+|canvasWidth
+|`1220`
+|Width of the SVG canvas in pixels
+
+|canvasHeight
+|`760`
+|Height of the SVG canvas in pixels
+
+|theme
+|`classic`
+|Visual theme name (e.g., `classic`, `brand`)
+
+|palette
+|`vibrant`
+|Color palette for step rendering
+
+|startX
+|_(auto)_
+|Custom X starting position
+
+|startY
+|_(auto)_
+|Custom Y starting position
+
+|dx
+|_(auto)_
+|Horizontal offset between steps
+
+|dy
+|_(auto)_
+|Vertical offset between steps
+
+|labelOffsetX
+|`130`
+|Horizontal offset for step labels
+
+|labelOffsetY
+|`65`
+|Vertical offset for step labels
+
+|maxDescLines
+|`2`
+|Maximum description lines per step
+|===
+
+=== Step Data Columns
+
+[cols="1,1,3"]
+|===
+|Column |Required |Purpose
+
+|Order
+|Yes
+|Numeric order of the step (must be unique)
+
+|Title
+|Yes
+|Short title for the step
+
+|Description
+|No
+|Brief description text
+
+|Color
+|No
+|Custom hex color (e.g., `#6EAEFF`)
+|===
+
+=== Data Format Rules
+
+* Config section and data section are separated by `---`
+* First row after `---` is the header row
+* Columns are separated by `|` (pipe)
+* Order values must be unique integers
+* Color is optional; palette colors are used when omitted
+
+Example:
+
+[source]
+----
+infographic=isometric-steps
+version=1
+title=My Process
+---
+Order | Title | Description | Color
+1 | First Step | Getting started | #6EAEFF
+2 | Second Step | Making progress | #69DEE5
+3 | Final Step | Completing the task | #A7E58A
+----
+
+[.back-to-top]
+<<top, 🔝>>
+
+== Best Practices
+
+* *Keep titles short* - Use 2-3 words per step for best visual results
+* *Limit to 3-8 steps* - Too many steps reduce readability
+* *Use consistent colors* - Stick to a palette or let the theme handle it
+* *Write concise descriptions* - One line per step works best
+* *Order sequentially* - Use 1, 2, 3... for clear progression
+* *Choose meaningful subtitles* - They provide context for the entire infographic
+
+[TIP]
+====
+For best results, keep step titles short and action-oriented. Use the description field for additional context, and let the color palette create visual harmony unless you need specific brand colors.
+====
+
+[.back-to-top]
+<<top, 🔝>>

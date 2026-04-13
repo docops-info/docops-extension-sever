@@ -1908,7 +1908,7 @@ stateDiagram-v2
                                 }
                             };
                         
-                        const docopsCopy = {
+                        window.docopsCopy = {
                             url: (btn) => {
                                     const url = btn.closest('.docops-media-card').getAttribute('data-url');
                                     navigator.clipboard.writeText(url).then(() => {
@@ -1945,6 +1945,21 @@ stateDiagram-v2
                                     });
                                 };
                                 img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            },
+                            print: (btn) => {
+                                const card = btn.closest('.docops-media-card');
+                                const svgElement = card.querySelector('svg');
+                                if (!svgElement) return;
+
+                                const svgClone = svgElement.cloneNode(true);
+                                // For Markdown, we don't have svgViewer.inlineStyles readily available 
+                                // unless we also inline it here. But let's at least provide the basic print.
+                                const svgData = new XMLSerializer().serializeToString(svgClone);
+                                const printWindow = window.open('', '_blank');
+                                printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+                                printWindow.document.write(svgData);
+                                printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script></body></html>');
+                                printWindow.document.close();
                             }
                         };
                     
