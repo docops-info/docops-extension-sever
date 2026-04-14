@@ -95,14 +95,26 @@ class RecipeSvgGenerator(
             .ifEmpty { listOf(recipe.summary.orEmpty()) }
             .take(4)
 
-        val ingredientLines = recipe.ingredients.flatMap { line ->
-            wrapTextToWidth(line, 430f, avgCharWidth())
-        }.ifEmpty { listOf("No ingredients provided.") }
+        val ingredientRowGap = 24
+        val ingredientInterGap = 10
+        val ingredientContentTop = 118
+        var ingredientContentHeight = 0
+        val ingredientLines = mutableListOf<String>()
+        recipe.ingredients.forEach { line ->
+            val wrapped = wrapTextToWidth(line, 430f, avgCharWidth())
+            ingredientContentHeight += (wrapped.size * ingredientRowGap) + ingredientInterGap
+            ingredientLines.addAll(wrapped)
+        }
+        if (recipe.ingredients.isEmpty()) {
+            ingredientContentHeight = ingredientRowGap
+            ingredientLines.add("No ingredients provided.")
+        }
 
         val stepRowGap = 24
         val stepInterGap = 12
         val stepContentTop = 138
         var stepContentHeight = 0
+        val stepLines = mutableListOf<String>()
         recipe.steps.forEach { line ->
             val clean = line
                 .removePrefix("- ")
@@ -111,9 +123,11 @@ class RecipeSvgGenerator(
                 .replace(Regex("^\\d+[.)]\\s*"), "")
             val wrapped = wrapTextToWidth(clean, 390f, avgCharWidth()).ifEmpty { listOf("") }
             stepContentHeight += (wrapped.size * stepRowGap) + stepInterGap
+            stepLines.addAll(wrapped)
         }
         if (recipe.steps.isEmpty()) {
             stepContentHeight = stepRowGap
+            stepLines.add("No steps provided.")
         }
 
         val noteLines = recipe.notes.flatMap { line ->
@@ -121,7 +135,7 @@ class RecipeSvgGenerator(
         }.ifEmpty { listOf("No notes provided.") }
 
         val summaryHeight = max(200, 160 + summaryLines.size * 28)
-        val ingredientsHeight = max(190, 130 + ingredientLines.size * 24)
+        val ingredientsHeight = max(190, ingredientContentTop + ingredientContentHeight + 30)
         val stepsHeight = max(240, stepContentTop + stepContentHeight + 30)
 
         val noteLineCount = noteLines.size
@@ -149,7 +163,7 @@ class RecipeSvgGenerator(
             ingredientsHeight = ingredientsHeight,
             stepsHeight = stepsHeight,
             ingredientsLines = ingredientLines,
-            stepLines = emptyList(),
+            stepLines = stepLines,
             noteLines = noteLines,
             bodyPanelY = bodyPanelY
         )
@@ -324,7 +338,7 @@ class RecipeSvgGenerator(
             .ifEmpty { listOf(summary) }
             .take(4)
 
-        val summaryStartY = 338
+        val summaryStartY = 348
         val summaryLineHeight = 28
 
         val summarySvg = summaryLines.mapIndexed { index, line ->
