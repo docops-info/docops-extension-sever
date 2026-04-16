@@ -30,6 +30,7 @@ Recipes are ideal for:
 ## Default Look
 
 [docops:recipe]
+theme=food
 title= Curry Mango
 yield= 4 servings
 prep= 15 minutes
@@ -59,6 +60,7 @@ ingredients=
 ## Warm Comfort Food Look
 
 [docops:recipe]
+theme=food
 title= Root Vegetables with Salted Fish
 yield= 3 servings
 prep= 20 minutes
@@ -85,34 +87,7 @@ ingredients=
 - Use less salt in the rest of the dish because the fish is already seasoned.
 [/docops]
 
-## Modern Dark Theme Look
 
-[docops:recipe]
-theme=classic
-title= Chocolate Cake
-yield= 8 slices
-prep= 20 minutes
-cook= 35 minutes
-tags= dessert, cake, chocolate
-summary=
-A rich and simple chocolate cake with a soft crumb.
-ingredients=
-- 1 1/2 cups flour
-- 1 cup sugar
-- 1/2 cup cocoa powder
-- 2 eggs
-- 1/2 cup milk
-- 1/2 cup oil
-- 1 tsp baking powder
-  steps=
-1. Preheat the oven to 180C.
-2. Mix the dry ingredients in a bowl.
-3. Add the wet ingredients and stir until combined.
-4. Pour into a greased pan and bake until set.
-   notes=
-- Cool before serving.
-- Dust with icing sugar or frost as desired.
-[/docops]
 
 ## Key Components of a Recipe
 
@@ -138,6 +113,7 @@ The recipe macro accepts simple key/value fields and multiline list sections.
 ```text 
 [docops:recipe] 
 title= Recipe Title 
+theme=food
 yield= 4 servings 
 prep= 15 minutes 
 cook= 30 minutes tags= tag1, tag2, tag3 

@@ -1619,8 +1619,20 @@ stateDiagram-v2
                                 if (!svgElement) return;
 
                                 const svgClone = svgElement.cloneNode(true);
-                                // For Markdown, we don't have svgViewer.inlineStyles readily available 
-                                // unless we also inline it here. But let's at least provide the basic print.
+                                // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+                                const allElements = svgClone.querySelectorAll('*');
+                                allElements.forEach(el => {
+                                    el.style.opacity = '1';
+                                    el.style.animation = 'none';
+                                    el.style.transition = 'none';
+                                    el.style.visibility = 'visible';
+                                });
+                                svgClone.style.opacity = '1';
+                                svgClone.style.animation = 'none';
+                                svgClone.style.transition = 'none';
+                                // Remove SVG animation elements
+                                svgClone.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+
                                 const svgData = new XMLSerializer().serializeToString(svgClone);
                                 const printWindow = window.open('', '_blank');
                                 printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');

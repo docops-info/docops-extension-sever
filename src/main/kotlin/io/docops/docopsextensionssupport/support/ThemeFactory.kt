@@ -77,9 +77,92 @@ object ThemeFactory {
             "modern" -> if (useDark) ModernDarkTheme() else ModernLightTheme()
             "cyber" -> if (useDark) CyberDarkTheme() else CyberLightTheme()
             "pro" -> if (useDark) ProDarkTheme() else ClassicLightTheme()
+            "food" -> FoodTheme()
+            "spring" -> SpringTheme()
+            "summer" -> SummerTheme()
+            "guyana", "goldenarrowhead", "goldenarrowheadtheme" -> GoldenArrowheadTheme()
             else -> if (useDark) ProDarkTheme() else ClassicLightTheme()
         }
     }
+}
+
+/**
+ * Golden Arrowhead Theme — Guyana-inspired recipe theme
+ * Palette: rainforest green, Demerara gold, pepper pot red, cassava cream
+ */
+class GoldenArrowheadTheme : DocOpsTheme {
+    override val name = "GoldenArrowheadTheme"
+    override val canvas = "#faf3e2"           // cassava cream
+    override val primaryText = "#1a110a"       // burnt wood charcoal
+    override val secondaryText = "#1b4332"     // deep Essequibo rainforest
+    override val accentColor = "#e9a11a"       // flag gold / ripe mango
+    override val glassEffect = "rgba(250, 243, 226, 0.8)"
+    override val surfaceImpact = "rgba(27, 67, 50, 0.10)"
+    override val fontFamily = "'Cormorant Garamond', Georgia, serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=Jost:wght@400;500;600&amp;family=Jost:ital@1&amp;display=swap');"
+    override val fontWidthMultiplier = 1.0f
+    override val fontLineHeight = 1.2f
+    override val cornerRadius = 18
+    override val chartPalette: List<SVGColor>
+        get() = listOf(
+            SVGColor("#1b4332"), SVGColor("#2d6a4f"), SVGColor("#b8730a"),
+            SVGColor("#e9a11a"), SVGColor("#8c1a1e"), SVGColor("#6b5437"),
+            SVGColor("#f0e4c8"), SVGColor("#3a2710")
+        )
+}
+
+/**
+ * Food/Recipe Theme - Warm terracotta, parchment, Georgia serif
+ */
+class FoodTheme : DocOpsTheme {
+    override val name = "FoodTheme"
+    override val canvas = "#FBF5EC"
+    override val primaryText = "#3D1A08"
+    override val secondaryText = "#7A3010"
+    override val accentColor = "#B05C28"
+    override val glassEffect = "rgba(251, 245, 236, 0.8)"
+    override val surfaceImpact = "rgba(176, 92, 40, 0.1)"
+    override val fontFamily = "Georgia, serif"
+    override val fontImport = ""
+    override val fontWidthMultiplier = 1.0f
+    override val fontLineHeight = 1.2f
+    override val cornerRadius = 6
+}
+
+/**
+ * Spring Theme - Cherry blossom pink, mint green, ivory blush
+ */
+class SpringTheme : DocOpsTheme {
+    override val name = "SpringTheme"
+    override val canvas = "#FDF6F9"
+    override val primaryText = "#7A2848"
+    override val secondaryText = "#8C5870"
+    override val accentColor = "#D4789A"
+    override val glassEffect = "rgba(253, 246, 249, 0.8)"
+    override val surfaceImpact = "rgba(212, 120, 154, 0.1)"
+    override val fontFamily = "Georgia, serif"
+    override val fontImport = ""
+    override val fontWidthMultiplier = 1.0f
+    override val fontLineHeight = 1.2f
+    override val cornerRadius = 8
+}
+
+/**
+ * Summer Theme - Mediterranean cobalt blue, sunflower yellow, bright white
+ */
+class SummerTheme : DocOpsTheme {
+    override val name = "SummerTheme"
+    override val canvas = "#F7FBFE"
+    override val primaryText = "#0A3870"
+    override val secondaryText = "#1058A0"
+    override val accentColor = "#1568B0"
+    override val glassEffect = "rgba(247, 251, 254, 0.8)"
+    override val surfaceImpact = "rgba(21, 104, 176, 0.1)"
+    override val fontFamily = "Georgia, serif"
+    override val fontImport = ""
+    override val fontWidthMultiplier = 1.0f
+    override val fontLineHeight = 1.2f
+    override val cornerRadius = 8
 }
 
 /**
