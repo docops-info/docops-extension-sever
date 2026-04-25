@@ -69,8 +69,8 @@ Check for:
   Output: wiki/lint-report-[date].md with severity levels
 
 ## Focus Areas
-1. **Caribbean Cuisine**: Traditional Guyanese dishes and tropical flavors (Baigan Choka, Curry Mango, Bake, etc.).
-2. **Street Food & Tacos**: Restaurant-inspired and international street food favorites (Bartaco-style, Mexican Street Corn).
-3. **Plant-Based Cooking**: A strong focus on vegetarian and vegan recipes.
-4. **Quick Weeknight Meals**: Efficiency-focused dishes ready in under 30 minutes.
-5. **Kitchen Staples & Techniques**: Foundations like sauces (Romesco), breads (Naan, Bake), and essential kitchen methods.
+1. **AsciiDoc/Asciidoctor Visualization Workflows**: Authoring and rendering pipelines for diagrams, charts, and interactive visual components in Asciidoctor-based documentation.
+2. **Markdown Visualization Patterns**: Equivalent and complementary visualization techniques for Markdown sources, including portability and renderer compatibility.
+3. **DocOps Rendering & Conversion Pipelines**: Build-time and runtime conversion strategies (HTML/PDF/site output), theme application, and content-to-visual fidelity across formats.
+4. **Reusable Visual Components & Theming**: Shared styles, templates, and design tokens for consistent visual storytelling across AsciiDoc and Markdown outputs.
+5. **Documentation UX & Information Design**: Navigation, readability, and interaction design patterns that improve comprehension of technical content through purposeful visuals.
