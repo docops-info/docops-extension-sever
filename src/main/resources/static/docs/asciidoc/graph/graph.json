@@ -1,0 +1,906 @@
+{
+  "nodes": [
+    {
+      "id": "metricscard",
+      "label": "Metrics Cards",
+      "category": "Charts & Metrics",
+      "tags": [],
+      "description": "Metrics cards turn small KPI tables into clean, consistent summary visuals for fast scanning.",
+      "content": "Metrics cards turn small KPI tables into clean, consistent summary visuals for fast scanning.\n\n## Key Features\n- **Compact Layout**: Highlights the most important numbers (KPIs). [Source: metricscard.adoc]\n- **Dual Formats**: Supports simple table input and programmatic JSON format. [Source: metricscard.adoc]\n- **Visual Consistency**: Ensures metrics are presented uniformly across teams. [Source: metricscard.adoc]\n\n## Configuration Options\n- `title`: Header for the card.\n- `useDark=true`: Enables dark theme.\n- `scale`: Adjusts the overall size of the card.\n- `controls=true`: Adds export functionality.\n\n## Best Practices\n- Limit to 4-6 metrics per card to prevent visual overload. [Source: metricscard.adoc]\n- Show deltas (e.g., \"18% YoY Growth\") in sublabels to provide context. [Source: metricscard.adoc]\n- Use consistent units ($, %, counts) for comparability.\n- Treat cards as snapshots; link to deep reports for detailed analysis.\n\n## Backlinks\n- [[charts-and-metrics]]\n- [[visualizations]]"
+    },
+    {
+      "id": "placemat",
+      "label": "Place Mats",
+      "category": "Metadata & Status",
+      "tags": [],
+      "description": "Place mats are color-coded label grids used to organize and categorize complex systems, components, or concepts.",
+      "content": "Place mats are color-coded label grids used to organize and categorize complex systems, components, or concepts.\n\n## Key Features\n- **Grid-Based Layout**: Supports automatic wrapping of labels for clean organization. [Source: placemat.adoc]\n- **Category Legend**: Uses a legend system to map colors to specific categories. [Source: placemat.adoc]\n- **Visual Styles**: Supports both filled and outlined box styles. [Source: placemat.adoc]\n- **JSON Configuration**: Uses a structured JSON format for flexible definition of items and legends. [Source: placemat.adoc]\n\n## Configuration Options\n- `title`: Header for the label grid.\n- `placeMats`: Array of objects containing `name` and `legend` category.\n- `config.legend`: Defines the colors for each category.\n- `fill`: Set to `false` for outlined boxes (default is filled). [Source: placemat.adoc]\n\n## Best Practices\n- Limit categories to 5-7 to ensure visual distinction remains clear. [Source: placemat.adoc]\n- Use semantic colors (e.g., Blue for Frontend, Purple for Backend) to create natural associations.\n- Keep item names concise (1-3 words) to fit well within grid boxes.\n- Combine with connectors to show relationships between categorized components. [Source: placemat.adoc]\n\n## Backlinks\n- [[metadata-and-status]]\n- [[visualizations]]"
+    },
+    {
+      "id": "buttons",
+      "label": "Buttons",
+      "category": "Navigation & Organization",
+      "tags": [],
+      "description": "Buttons create organized navigation grids that turn link lists into scannable visual menus.",
+      "content": "Buttons create organized navigation grids that turn link lists into scannable visual menus.\n\n## Key Features\n- **Variety**: Supports 9 shapes including `REGULAR`, `PILL`, `LARGE`, `RECTANGLE`, `SLIM`, `HEX`, `CIRCLE`, `ROUND`, and `OVAL`. [Source: buttons.adoc]\n- **Auto-Coding**: Assign colors automatically by type for visual grouping. [Source: buttons.adoc]\n- **Signal Philosophy**: Prioritizes clarity and restraint. [Source: buttons.adoc]\n- **Rich Content**: Supports descriptions and embedded images/icons. [Source: buttons.adoc]\n\n## DocOps Signal Guidelines\n- **Cyan is Action**: Reserve accent color for primary actions or the current destination. [Source: buttons.adoc]\n- **Gold is Governance**: Use gold for review, audit, or attention items. [Source: buttons.adoc]\n- **Neutrality**: Prefer neutral surfaces; if everything is loud, nothing is legible. [Source: buttons.adoc]\n\n## Configuration Options\n- `buttonType`: Defines the shape of the buttons.\n- `columns`: Number of columns in the grid (2-4 recommended).\n- `scale`: Size multiplier (default 1.0).\n- `sortBy.sort`: Order by `LABEL`, `TYPE`, `DATE`, etc.\n\n## Best Practices\n- Keep labels short (1-3 words max). [Source: buttons.adoc]\n- Use 2-3 columns to prevent buttons from being too small on mobile.\n- Limit grid size to 6-12 buttons to prevent decision fatigue. [Source: buttons.adoc]\n- Match button shape to context (Core shapes for navigation, Specialty for diagrams).\n\n## Backlinks\n- [[navigation-and-organization]]\n- [[visualizations]]"
+    },
+    {
+      "id": "combination",
+      "label": "Combination Charts",
+      "category": "Charts & Metrics",
+      "tags": [],
+      "description": "Combination charts layer bars and lines on a single chart, ideal for showing related metrics with different scales.",
+      "content": "Combination charts layer bars and lines on a single chart, ideal for showing related metrics with different scales.\n\n## Key Features\n- **Hybrid Visualization**: Mixes BAR and LINE types. [Source: combination.adoc]\n- **Dual Y-Axes**: Supports different scales side-by-side (e.g., Revenue vs. Growth Rate). [Source: combination.adoc]\n- **Independent Scaling**: Each Y-axis scales automatically based on its series data. [Source: combination.adoc]\n\n## Configuration Options\n- `dualYAxis=true`: Enables the secondary Y-axis.\n- `type`: Specify `BAR` or `LINE` for each data series.\n- `yAxis`: Map series to `PRIMARY` or `SECONDARY` axis.\n\n## Best Practices\n- Use bars for absolute values (e.g., Volume) and lines for rates (e.g., %).\n- Limit to 2-4 series (one bar series, 1-3 line series). [Source: combination.adoc]\n- Label both Y-axes clearly including units.\n- Match colors to meaning (e.g., Blue for revenue, Red for costs).\n\n## Backlinks\n- [[charts-and-metrics]]\n- [[visualizations]]"
+    },
+    {
+      "id": "visualizations",
+      "label": "Visualizations",
+      "category": "Core Concepts",
+      "tags": [],
+      "description": "Overview of the visualization ecosystem provided by the DocOps Extension Server.",
+      "content": "Overview of the visualization ecosystem provided by the DocOps Extension Server.\n\n## Description\nDocOps provides 24 distinct visualization types, categorized to address different documentation needs ranging from technical architecture to project planning and data metrics. [Source: index.adoc]\n\n## Functional Categories\n- [[charts-and-metrics]]\n- [[navigation-and-organization]]\n- [[process-and-planning]]\n- [[technical-and-architecture]]\n- [[metadata-and-status]]\n\n## Backlinks\n- [[index]]\n- [[docops-extension-server]]\n- [[index-adoc-summary]]"
+    },
+    {
+      "id": "wordcloud",
+      "label": "Word Clouds",
+      "category": "Technical & Architecture",
+      "tags": [],
+      "description": "Word clouds transform text data into visual hierarchies where font size indicates importance or frequency.",
+      "content": "Word clouds transform text data into visual hierarchies where font size indicates importance or frequency.\n\n## Key Features\n- **Weight-Based Sizing**: Higher weights result in larger font sizes. [Source: wordcloud.adoc]\n- **Auto-Placement**: Intelligent algorithm prevents word overlaps. [Source: wordcloud.adoc]\n- **Interactivity**: Highlight words on mouseover with interactive hover effects. [Source: wordcloud.adoc]\n- **Responsive Scaling**: Scale the entire cloud using a single parameter. [Source: wordcloud.adoc]\n\n## Configuration Options\n- `minFontSize` / `maxFontSize`: Defines the range for word sizes.\n- `width` / `height`: Canvas dimensions.\n- `useDark=true`: Enables dark theme.\n- `scale`: Size multiplier.\n\n## Best Practices\n- Use 15-30 words; too few lack impact, too many create clutter. [Source: wordcloud.adoc]\n- Weight by significance (frequency, importance, or impact).\n- Color-code by category or sentiment to add a second layer of meaning. [Source: wordcloud.adoc]\n- Leave enough white space for readability; don't maximize every font size.\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]"
+    },
+    {
+      "id": "index-adoc-summary",
+      "label": "Source Summary: index.adoc",
+      "category": "Source Summaries",
+      "tags": [],
+      "description": "This page summarizes the main landing page for the DocOps Extension Server's AsciiDoctor visualization capabilities.",
+      "content": "This page summarizes the main landing page for the DocOps Extension Server's AsciiDoctor visualization capabilities.\n\n## Overview\nThe source document `index.adoc` serves as the primary entry point for users looking to incorporate visualizations into their AsciiDoctor documentation. It provides a comprehensive catalog of 24 visualization types, organized into five functional categories. [Source: index.adoc]\n\n## Key Highlights\n- **Total Visualizations**: 24 distinct types. [Source: index.adoc]\n- **Categories**:\n    - [[charts-and-metrics]]: 6 types.\n    - [[navigation-and-organization]]: 3 types.\n    - [[process-and-planning]]: 5 types.\n    - [[technical-and-architecture]]: 5 types.\n    - [[metadata-and-status]]: 5 types.\n- **Related Tools**: References a [[realtime-editor]] and a [[showcase-for-visuals]]. [Source: index.adoc]\n\n## Backlinks\n- [[index]]\n- [[docops-extension-server]]"
+    },
+    {
+      "id": "scorecard",
+      "label": "Scorecards",
+      "category": "Navigation & Organization",
+      "tags": [],
+      "description": "Scorecards create before/after comparisons that make improvements and changes immediately scannable.",
+      "content": "Scorecards create before/after comparisons that make improvements and changes immediately scannable.\n\n## Key Features\n- **Side-by-Side Comparison**: Before/After columns for instant impact. [Source: scorecard.adoc]\n- **Section Grouping**: Organize items by category (e.g., Features, Bugs, Security) using section headers (`===`). [Source: scorecard.adoc]\n- **Visual Indicators**: Red bullets for \"Before\" state and green checkmarks for \"After\" state. [Source: scorecard.adoc]\n- **Subtitle Support**: Add context with a subtitle line below the main title. [Source: scorecard.adoc]\n\n## Configuration Options\n- `title`: Main title of the scorecard.\n- `subtitle`: Optional explanatory text.\n- `useDark=true`: Enables dark theme.\n- `scale`: Adjusts the overall size (default 1.0).\n\n## Best Practices\n- Group related items to maintain visual organization.\n- Keep descriptions concise (one line per item) for scanability. [Source: scorecard.adoc]\n- Limit to 8-12 items per column to maintain visual impact.\n- Use parallel structure; keep before/after sections aligned by category.\n\n## Backlinks\n- [[navigation-and-organization]]\n- [[visualizations]]"
+    },
+    {
+      "id": "barchart",
+      "label": "Bar Charts",
+      "category": "Charts & Metrics",
+      "tags": [],
+      "description": "Bar charts turn category comparisons into visual rankings, making differences immediately scannable.",
+      "content": "Bar charts turn category comparisons into visual rankings, making differences immediately scannable.\n\n## Key Features\n- **Layouts**: Vertical and horizontal orientations. [Source: barchart.adoc]\n- **Grouped Comparisons**: Support for multiple series side-by-side (bargroup). [Source: barchart.adoc]\n- **Styles**: Classic rectangular and 3D-effect cylinder styles. [Source: barchart.adoc]\n- **Sorting**: Automatic sorting by value to highlight rankings. [Source: barchart.adoc]\n\n## Configuration Options\n- `type`: R (regular) or C (cylinder).\n- `vBar`: Set to `true` for vertical bars (useful for time-series).\n- `sorted`: Set to `true` for automatic ranking.\n- `paletteType`: Defines color schemes for grouped charts (e.g., OCEAN_BREEZE).\n\n## Best Practices\n- Use horizontal bars when category labels are long.\n- Use vertical bars (`vBar=true`) for time-series data like monthly trends.\n- Sort by value when the goal is to show rankings.\n- Limit groups to 3-5 series to avoid visual clutter. [Source: barchart.adoc]\n\n## Backlinks\n- [[charts-and-metrics]]\n- [[visualizations]]"
+    },
+    {
+      "id": "process-and-planning",
+      "label": "Process and Planning",
+      "category": "Categories",
+      "tags": [],
+      "description": "Visualization category focused on roadmaps, workflows, and prioritization mapping.",
+      "content": "Visualization category focused on roadmaps, workflows, and prioritization mapping.\n\n## Description\nThis category includes 5 types for planning releases, mapping priorities, and visualizing workflows. [Source: index.adoc]\n\n## Visualization Types\n- **[[callout]]**: Highlighted processes and key metrics.\n- **[[planner]]**: Kanban roadmaps and sprint planning.\n- **[[connectors]]**: Sequential workflow arrows.\n- **[[releasestrategy]]**: Milestone timelines and release plans.\n- **[[quadrant]]**: 2D priority mapping and risk assessment.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+    },
+    {
+      "id": "vcard",
+      "label": "VCard Maker",
+      "category": "Metadata & Status",
+      "tags": [],
+      "description": "The VCard Maker creates professional contact cards with automatic QR code generation for team directories and bios.",
+      "content": "The VCard Maker creates professional contact cards with automatic QR code generation for team directories and bios.\n\n## Key Features\n- **Format Support**: Fully compatible with the standard vCard 3.0 format. [Source: vcard.adoc]\n- **Design Templates**: Includes 6 design templates such as `modern_card`, `neo_brutalist`, and `tech_pattern_background`. [Source: vcard.adoc]\n- **QR Codes**: Automatically generates QR codes encoding the full vCard data for easy mobile saving. [Source: vcard.adoc]\n- **Scannable Layout**: Clean presentation of name, role, organization, and contact methods. [Source: vcard.adoc]\n\n## Configuration Options\n- `design`: Selects the template style.\n- `theme`: \"light\" (default) or \"dark\".\n- `scale`: Size multiplier.\n- **vCard Fields**: Supports standard fields like `FN`, `ORG`, `TITLE`, `TEL`, `EMAIL`, and `URL`. [Source: vcard.adoc]\n\n## Best Practices\n- Use `FN` (Full Name) and `N` (Structured Name) together for best parsing and display results. [Source: vcard.adoc]\n- Keep titles concise (e.g., \"Principal Engineer\") for better fit on the card.\n- Store vCards in external data files to allow for easy reuse across different documents. [Source: vcard.adoc]\n- Include at least one primary contact method (Email or Phone).\n\n## Backlinks\n- [[metadata-and-status]]\n- [[visualizations]]"
+    },
+    {
+      "id": "showcase-for-visuals",
+      "label": "Showcase for Visuals",
+      "category": "Core Concepts",
+      "tags": [],
+      "description": "A demonstration page showcasing the various visualization types available in the DocOps Extension Server.",
+      "content": "A demonstration page showcasing the various visualization types available in the DocOps Extension Server.\n\n## Description\nThe showcase provides live examples of the 24 visualization types. It is used to help users choose the right visualization for their documentation needs. [Source: index.adoc]\n\n## Backlinks\n- [[index-adoc-summary]]\n- [[visualizations]]"
+    },
+    {
+      "id": "technical-and-architecture",
+      "label": "Technical and Architecture",
+      "category": "Categories",
+      "tags": [],
+      "description": "Visualization category focused on system design, testing, and structural hierarchies.",
+      "content": "Visualization category focused on system design, testing, and structural hierarchies.\n\n## Description\nThis category includes 5 types for documenting architecture, tests, and text-based hierarchies. [Source: index.adoc]\n\n## Visualization Types\n- **[[wordcloud]]**: Text hierarchies and keyword analysis.\n- **[[domain]]**: Architecture maps and system landscapes.\n- **[[gherkin]]**: BDD test scenario visualization.\n- **[[treechart]]**: Hierarchical diagrams and org charts.\n- **[[treemap]]**: Proportional resource distribution.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+    },
+    {
+      "id": "todo",
+      "label": "Todo",
+      "category": "Metadata & Status",
+      "tags": [],
+      "description": "The Todo visualization provides flexible task tracking with support for Kanban boards, lists, and grids.",
+      "content": "The Todo visualization provides flexible task tracking with support for Kanban boards, lists, and grids.\n\n## Key Features\n- **Multiple Layouts**: Supports `kanban`, `list`, `grid`, and `timeline` views. [Source: todo.adoc]\n- **Status Tracking**: Built-in support for statuses such as `PENDING`, `IN_PROGRESS`, `COMPLETED`, `BLOCKED`, etc. [Source: todo.adoc]\n- **Priority Levels**: Visual indicators for `LOW`, `MEDIUM`, `HIGH`, and `CRITICAL` priorities. [Source: todo.adoc]\n- **Metadata Support**: Fields for assignees, categories, and due dates. [Source: todo.adoc]\n\n## Configuration Options\n- `layout`: \"kanban\", \"list\", \"grid\", or \"timeline\".\n- `groupBy`: Group tasks by `status`, `priority`, `category`, or `assignee`. [Source: todo.adoc]\n- `showStats`: Toggles the display of task count statistics.\n- **Data Formats**: Supports both simple tables and advanced JSON input. [Source: todo.adoc]\n\n## Best Practices\n- Choose the layout based on context (e.g., Kanban for active workflows, List for quick reference). [Source: todo.adoc]\n- Keep task names actionable (e.g., \"Deploy API\" instead of \"API stuff\").\n- Update statuses regularly to ensure the board remains a useful source of truth.\n- Set priorities realistically to avoid \"critical fatigue\". [Source: todo.adoc]\n\n## Backlinks\n- [[metadata-and-status]]\n- [[visualizations]]"
+    },
+    {
+      "id": "navigation-and-organization",
+      "label": "Navigation and Organization",
+      "category": "Categories",
+      "tags": [],
+      "description": "Visualization category focused on structuring documentation and providing chronological or navigational context.",
+      "content": "Visualization category focused on structuring documentation and providing chronological or navigational context.\n\n## Description\nThis category includes 3 types used for structural organization, timelines, and navigation grids. [Source: index.adoc]\n\n## Visualization Types\n- **[[scorecard]]**: Before/after comparisons and release summaries.\n- **[[timeline]]**: Chronological narratives and project roadmaps.\n- **[[buttons]]**: Navigation grids and resource directories.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+    },
+    {
+      "id": "callout",
+      "label": "Callouts",
+      "category": "Process & Planning",
+      "tags": [],
+      "description": "Callouts spotlight key processes, metrics, or timelines in visual formats that make information instantly digestible.",
+      "content": "Callouts spotlight key processes, metrics, or timelines in visual formats that make information instantly digestible.\n\n## Key Features\n- **3 Styles**: Supports `systematic` (process), `metrics` (KPIs), and `timeline` (events) callouts. [Source: callout.adoc]\n- **Structured Hierarchy**: Clean visual layout for steps, phases, and results. [Source: callout.adoc]\n- **Glass Morphism**: Modern design with translucent, layered visual effects. [Source: callout.adoc]\n- **Dynamic Sizing**: Cards auto-expand based on content height. [Source: callout.adoc]\n\n## Configuration Options\n- `type`: `systematic`, `metrics`, or `timeline` (required).\n- `title`: Header for the callout card.\n- `useDark=true`: Enables dark theme.\n- `width`: Customizable card width.\n\n## Best Practices\n- Use **systematic** for complex processes to break them into clear phases. [Source: callout.adoc]\n- Use **metrics** for 4-6 high-impact KPIs.\n- Use **timeline** for chronological sequences rather than detailed steps. [Source: callout.adoc]\n- Add \"improvement notes\" in the 4th column of systematic callouts to suggest next steps.\n\n## Backlinks\n- [[process-and-planning]]\n- [[visualizations]]"
+    },
+    {
+      "id": "connectors",
+      "label": "Connectors",
+      "category": "Process & Planning",
+      "tags": [],
+      "description": "Connectors visualize sequential processes with labeled boxes and flow arrows.",
+      "content": "Connectors visualize sequential processes with labeled boxes and flow arrows.\n\n## Key Features\n- **Auto-Labeling**: Steps are automatically lettered (A, B, C) for easy reference. [Source: connectors.adoc]\n- **Flow Arrows**: Visual arrows indicate the direction of the process from left to right. [Source: connectors.adoc]\n- **Color Coding**: Steps can be color-coded by phase or importance. [Source: connectors.adoc]\n- **Integrated Legend**: Descriptions for each step appear in a legend below the flow. [Source: connectors.adoc]\n\n## Configuration Options\n- `useDark=true`: Enables dark theme.\n- **Table Columns**: `Step` (label), `Color` (hex), and `Description`. [Source: connectors.adoc]\n\n## Best Practices\n- Limit to 5-7 steps per diagram to maintain clarity. [Source: connectors.adoc]\n- Color-code by phase (e.g., Green for automated, Yellow for manual). [Source: connectors.adoc]\n- Keep step names short (2-3 words); use the legend for detailed descriptions.\n- Use consistent colors for similar step types across multiple diagrams.\n\n## Backlinks\n- [[process-and-planning]]\n- [[visualizations]]"
+    },
+    {
+      "id": "timeline",
+      "label": "Timeline",
+      "category": "Navigation & Organization",
+      "tags": [],
+      "description": "Timelines transform chronological events into visual narratives, making sequences immediately understandable.",
+      "content": "Timelines transform chronological events into visual narratives, making sequences immediately understandable.\n\n## Key Features\n- **Horizontal Flow**: Events flow left-to-right along a center spine. [Source: timeline.adoc]\n- **Alternating Placement**: Events alternate above and below the spine for visual balance. [Source: timeline.adoc]\n- **Interactive Elements**: Supports clickable items with expandable details. [Source: timeline.adoc]\n- **Flexible Dates**: Support for any date format (e.g., Q1 2024, Jan 15). [Source: timeline.adoc]\n\n## Configuration Options\n- `type`: H (Horizontal) or V (Vertical). [Source: timeline.adoc]\n- `title`: Timeline title shown at the top.\n- `scale`: Size multiplier (default 1.0).\n- `useDark=true`: Enables dark theme.\n\n## Best Practices\n- Use consistent date formats throughout the timeline. [Source: timeline.adoc]\n- Keep descriptions brief (1-2 sentences) to maintain scanability.\n- Order events chronologically to match the left-to-right flow.\n- Limit to 6-10 events per timeline to avoid visual clutter. [Source: timeline.adoc]\n\n## Backlinks\n- [[navigation-and-organization]]\n- [[visualizations]]"
+    },
+    {
+      "id": "piechart",
+      "label": "Pie Charts",
+      "category": "Charts & Metrics",
+      "tags": [],
+      "description": "Pie charts show proportions of a whole, ideal for market share or budget breakdowns where parts sum to 100%.",
+      "content": "Pie charts show proportions of a whole, ideal for market share or budget breakdowns where parts sum to 100%.\n\n## Key Features\n- **Styles**: Classic pie and modern donut styles. [Source: piechart.adoc]\n- **Multi-Pie**: Compact radial percentage indicators for dashboards (Multi-Pie). [Source: piechart.adoc]\n- **Auto-Labels**: Automatic calculation of percentages and display of values. [Source: piechart.adoc]\n- **Interactive Legend**: Legend cards with hover effects. [Source: piechart.adoc]\n\n## Configuration Options\n- `donut=true`: Enables the modern donut style.\n- `percentages=true`: Displays percentage labels on slices.\n- `visualVersion`: Version 1 (default) or Version 3 (modern radial).\n- `baseColor` / `outlineColor`: Custom colors for radial displays.\n\n## Best Practices\n- Limit slices to 5-7 to maintain readability. [Source: piechart.adoc]\n- Order slices by size, starting with the largest at 12 o'clock.\n- Use donut style for a more modern appearance.\n- Avoid using pie charts for time-series trends; use line or bar charts instead.\n\n## Backlinks\n- [[charts-and-metrics]]\n- [[visualizations]]"
+    },
+    {
+      "id": "log",
+      "label": "Wiki Log",
+      "category": "Core",
+      "tags": [],
+      "description": "Chronological record of knowledge base updates.",
+      "content": "# Wiki Log\n\nChronological record of knowledge base updates.\n\n## [2026-04-25] ingest | Initial ingest of src/docs/asciidoc/index.adoc\n## [2026-04-25] ingest | Ingested Charts & Metrics details (6 pages)\n## [2026-04-25] ingest | Ingested Navigation & Organization details (3 pages)\n## [2026-04-25] ingest | Ingested Process & Planning details (5 pages)\n## [2026-04-25] ingest | Ingested Technical & Architecture details (5 pages)\n## [2026-04-25] ingest | Ingested Metadata & Status details (5 pages)\n## [2026-04-25] lint | Full health check performed; report generated in wiki/lint-report-2026-04-25.md"
+    },
+    {
+      "id": "domain",
+      "label": "Domain Visualizer",
+      "category": "Technical & Architecture",
+      "tags": [],
+      "description": "Domain visualizations map business or technical architectures into clean, hierarchical diagrams.",
+      "content": "Domain visualizations map business or technical architectures into clean, hierarchical diagrams.\n\n## Key Features\n- **Hierarchical Layout**: Organizes content into main nodes, common capabilities, and specialized groups. [Source: domain.adoc]\n- **Wiki-Style Links**: Transform nodes into clickable links to documentation or repositories. [Source: domain.adoc]\n- **Emoji Support**: Integrated visual icons for quick identification of verticals. [Source: domain.adoc]\n- **Auto-Layout**: Smart positioning prevents node and path overlaps. [Source: domain.adoc]\n\n## Configuration Options\n- `main`: Declares the root node of the domain. [Source: domain.adoc]\n- `type`: `COMMON` for shared foundations or custom names for specialized verticals.\n- `useNeural=true`: Alternative neural network visual style.\n- `useDark=true`: Enables dark theme.\n\n## Best Practices\n- Start by declaring the `main` node first. [Source: domain.adoc]\n- Group infrastructure and shared services in `COMMON` rows.\n- Limit to 2-3 rows per group to maintain readability. [Source: domain.adoc]\n- Use emojis sparingly (e.g., one per vertical) for visual distinction.\n- Keep node names short (1-2 words) and link to detailed documentation.\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]"
+    },
+    {
+      "id": "index",
+      "label": "Wiki Index",
+      "category": "Core",
+      "tags": [],
+      "description": "Central index of all knowledge base pages.",
+      "content": "# DocOps Extension Server Wiki Index\n\nCentral index of all knowledge base pages.\n\n## Core Concepts\n- [[docops-extension-server]]: Primary server for documentation extensions.\n- [[visualizations]]: Overview of all visualization types.\n- [[asciidoctor-support]]: Integration with AsciiDoctor.\n- [[realtime-editor]]: Live editing tool for DocOps visualizations.\n- [[showcase-for-visuals]]: Demonstration of visualization types.\n\n## Visualization Categories\n- [[charts-and-metrics]]: Data-driven visualizations like bar and pie charts.\n  - [[barchart]]: Category comparisons and rankings.\n  - [[piechart]]: Proportional data and market share.\n  - [[linechart]]: Trends over time and multi-series tracking.\n  - [[combination]]: Mixed chart types with dual Y-axes.\n  - [[gaugechart]]: Single metric status and speedometers.\n  - [[metricscard]]: KPI snapshots and executive summaries.\n- [[navigation-and-organization]]: Structural elements like timelines and scorecards.\n  - [[scorecard]]: Before/after comparisons and release summaries.\n  - [[timeline]]: Chronological narratives and project roadmaps.\n  - [[buttons]]: Navigation grids and resource directories.\n- [[process-and-planning]]: Workflow and priority mapping tools.\n  - [[callout]]: Highlighted processes and key metrics.\n  - [[planner]]: Kanban roadmaps and sprint planning.\n  - [[connectors]]: Sequential workflow arrows.\n  - [[releasestrategy]]: Milestone timelines and release plans.\n  - [[quadrant]]: 2D priority mapping and risk assessment.\n- [[technical-and-architecture]]: System design and hierarchy visualizations.\n  - [[wordcloud]]: Text hierarchies and keyword analysis.\n  - [[domain]]: Architecture maps and system landscapes.\n  - [[gherkin]]: BDD test scenario visualization.\n  - [[treechart]]: Hierarchical diagrams and org charts.\n  - [[treemap]]: Proportional resource distribution.\n- [[metadata-and-status]]: Tracking decisions, tasks, and indicators.\n  - [[shield]]: Status indicators, badges, and metadata tags.\n  - [[placemat]]: Color-coded label grids for component inventories.\n  - [[todo]]: Task tracking with Kanban, list, and grid layouts.\n  - [[vcard]]: Professional contact cards with QR code generation.\n  - [[adr]]: Architectural Decision Records with context and consequences.\n\n## Source Summaries\n- [[index-adoc-summary]]: Summary of the main AsciiDoctor index page."
+    },
+    {
+      "id": "charts-and-metrics",
+      "label": "Charts and Metrics",
+      "category": "Categories",
+      "tags": [],
+      "description": "Visualization category focused on data representation, KPIs, and trend analysis.",
+      "content": "Visualization category focused on data representation, KPIs, and trend analysis.\n\n## Description\nThis category includes 6 visualization types designed for category comparisons, proportional data, and single metric snapshots. [Source: index.adoc]\n\n## Visualization Types\n- **[[barchart]]**: Category comparisons and rankings.\n- **[[piechart]]**: Proportional data and market share.\n- **[[linechart]]**: Trends over time and multi-series tracking.\n- **[[combination]]**: Mixed chart types with dual Y-axes.\n- **[[gaugechart]]**: Single metric status and Speedometers.\n- **[[metricscard]]**: KPI snapshots and executive summaries.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+    },
+    {
+      "id": "releasestrategy",
+      "label": "Release Strategy",
+      "category": "Process & Planning",
+      "tags": [],
+      "description": "Release strategies visualize product release plans and milestone roadmaps.",
+      "content": "Release strategies visualize product release plans and milestone roadmaps.\n\n## Key Features\n- **2 Layout Styles**: `TLS` for condensed timeline views and `R` for detailed roadmap layouts. [Source: releasestrategy.adoc]\n- **Milestone Details**: Support for release types (M1, RC1, GA), goals, and activity lists. [Source: releasestrategy.adoc]\n- **Modern Design**: Glass morphism with translucent depth effects. [Source: releasestrategy.adoc]\n- **Custom Palettes**: Supports specific color palettes for brand alignment. [Source: releasestrategy.adoc]\n\n## Configuration Options\n- `style`: `TLS` (Timeline Summary) or `R` (Roadmap).\n- `releases`: Array of release objects containing `type`, `date`, `goal`, and `lines` (activities).\n- `displayConfig.colors`: Array of 3 hex colors for the theme.\n- `useDark=true`: Enables dark theme.\n\n## Best Practices\n- Use semantic release types (M1 for milestones, GA for general availability). [Source: releasestrategy.adoc]\n- Keep activity lists focused to 3-5 items per release. [Source: releasestrategy.adoc]\n- Use `R` style for multi-year or detailed quarterly plans.\n- Scale up (e.g., `1.5`) for presentations and down (e.g., `0.7`) for embedded docs.\n\n## Backlinks\n- [[process-and-planning]]\n- [[visualizations]]"
+    },
+    {
+      "id": "lint-report-2026-04-25",
+      "label": "Wiki Health Check Report - 2026-04-25",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "No errors found.",
+      "content": "# Wiki Health Check Report - 2026-04-25\n\n## \ud83d\udd34 Errors\nNo errors found.\n\n## \ud83d\udfe1 Warnings\n- Orphan page: [[lint-report-2026-04-25]] has no inbound links.\n\n## \ud83d\udd35 Info\n- Low connectivity: [[lint-report-2026-04-25]] has no outgoing internal links.\n\n## Knowledge Gap Analysis\nThe following areas represent the biggest gaps in the current knowledge base:\n\n1. **Markdown Visualization Parity**: While AsciiDoctor visuals are well-documented, the Markdown counterparts in `src/docs/md/` are not yet ingested.\n2. **Architectural Deep Dives**: Core system internals (`arch.adoc`, `parsing.adoc`) are missing, leaving a gap in understanding how the server actually processes data.\n3. **Operational Guides**: Tutorials and showcases are not yet represented, which limits the wiki's utility for end-users seeking implementation examples.\n\n### Suggested Next Articles\n- **DocOps Markdown Ecosystem** (`src/docs/md/index.md`): To establish the second pillar of the visualization suite.\n- **System Architecture** (`src/docs/asciidoc/arch.adoc`): To provide technical depth to the existing entity pages.\n- **Master Showcase** (`src/docs/asciidoc/showcase.adoc`): To link abstract concepts to concrete visual examples."
+    },
+    {
+      "id": "gherkin",
+      "label": "Gherkin",
+      "category": "Technical & Architecture",
+      "tags": [],
+      "description": "Gherkin visualizations transform BDD test scenarios into visual Given-When-Then formats.",
+      "content": "Gherkin visualizations transform BDD test scenarios into visual Given-When-Then formats.\n\n## Key Features\n- **Format Support**: Accepts plain Gherkin text or JSON formats. [Source: gherkin.adoc]\n- **Status Indicators**: Visual cues for `PASSING`, `FAILING`, `PENDING`, and `SKIPPED` steps. [Source: gherkin.adoc]\n- **Atomic Icons**: Distinct icons for Features, Scenarios, and individual Steps. [Source: gherkin.adoc]\n- **Custom Themes**: Full control over colors, layout, and typography via JSON. [Source: gherkin.adoc]\n\n## Step Keywords\n- **Given**: Initial context or preconditions (Blue).\n- **When**: Action or event triggering behavior (Orange).\n- **Then**: Expected outcome or assertion (Green).\n- **And** / **But**: Chain related steps or exceptions (Gray).\n\n## Best Practices\n- Keep steps atomic (one action or assertion per step). [Source: gherkin.adoc]\n- Use `AND` for lists to avoid repeating keywords.\n- Include both happy path and edge cases in documentation.\n- Embed `.feature` files directly using `include::` to maintain a single source of truth. [Source: gherkin.adoc]\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]"
+    },
+    {
+      "id": "docops-extension-server",
+      "label": "DocOps Extension Server",
+      "category": "Core Concepts",
+      "tags": [],
+      "description": "The DocOps Extension Server is a system designed to provide advanced visualization capabilities for documentation.",
+      "content": "The DocOps Extension Server is a system designed to provide advanced visualization capabilities for documentation.\n\n## Overview\nIt supports multiple formats including AsciiDoctor and Markdown. It enables documentation writers to embed complex visual elements like charts, timelines, and architecture maps using simple JSON-based configurations. [Source: index.adoc]\n\n## Integration\n- **AsciiDoctor**: Deep integration via custom blocks like `[docops]`.\n- **Markdown**: Supported as an alternative documentation format.\n\n## Backlinks\n- [[index]]\n- [[index-adoc-summary]]"
+    },
+    {
+      "id": "planner",
+      "label": "Planner",
+      "category": "Process & Planning",
+      "tags": [],
+      "description": "Planners organize tasks into a Kanban-style visualization with now, next, later, and done columns.",
+      "content": "Planners organize tasks into a Kanban-style visualization with now, next, later, and done columns.\n\n## Key Features\n- **4-Column Layout**: Organizes work into `now`, `next`, `later`, and `done` stages. [Source: planner.adoc]\n- **Task Cards**: Supports title and multi-line descriptions for each task. [Source: planner.adoc]\n- **Visual Distinction**: Color-coded columns for instant stage recognition. [Source: planner.adoc]\n- **Glass Design**: Modern, layered appearance for roadmaps and plans. [Source: planner.adoc]\n\n## Configuration Options\n- `title`: Header for the planner.\n- `useDark=true`: Enables dark theme.\n- **Stage Keywords**: Tasks must start with `- now`, `- next`, `- later`, or `- done`. [Source: planner.adoc]\n\n## Best Practices\n- Limit **NOW** to 2-4 items to maintain focus. [Source: planner.adoc]\n- Use **NEXT** for the immediate queue (3-5 items).\n- Use **DONE** to celebrate recent progress and velocity. [Source: planner.adoc]\n- Keep titles to one line; use descriptions for details.\n\n## Backlinks\n- [[process-and-planning]]\n- [[visualizations]]"
+    },
+    {
+      "id": "treechart",
+      "label": "Tree Charts",
+      "category": "Technical & Architecture",
+      "tags": [],
+      "description": "Tree charts provide hierarchical diagrams for organizational structures, taxonomies, and decision trees.",
+      "content": "Tree charts provide hierarchical diagrams for organizational structures, taxonomies, and decision trees.\n\n## Key Features\n- **Layout Orientations**: Supports both vertical (top-down) and horizontal (left-right) layouts. [Source: treechart.adoc]\n- **Indentation Syntax**: Simple indentation-based data format for easy authoring. [Source: treechart.adoc]\n- **Interactive Nodes**: Collapsible nodes for managing large, complex hierarchies. [Source: treechart.adoc]\n- **Glass Effect**: Modern visual style with translucent node backgrounds. [Source: treechart.adoc]\n\n## Configuration Options\n- `orientation`: \"vertical\" or \"horizontal\".\n- `collapsible`: Enable or disable interactive node expansion.\n- `colors`: Define a custom palette of hex colors.\n- `width` / `height`: Canvas dimensions.\n\n## Best Practices\n- Keep tree depth to 4-5 levels for better readability. [Source: treechart.adoc]\n- Use horizontal orientation for \"wide\" trees with many branches at each level.\n- Set `collapsible=false` for PDF exports to ensure all content is visible.\n- Color-code nodes by category (e.g., Department or Skill) for visual distinction.\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]"
+    },
+    {
+      "id": "gaugechart",
+      "label": "Gauge Charts",
+      "category": "Charts & Metrics",
+      "tags": [],
+      "description": "Gauge charts turn single metrics into visual speedometers, providing instant status feedback.",
+      "content": "Gauge charts turn single metrics into visual speedometers, providing instant status feedback.\n\n## Key Features\n- **Variety**: Supports 7 types including `SEMI_CIRCLE`, `DIGITAL`, `LINEAR`, and `MULTI_GAUGE`. [Source: gaugechart.adoc]\n- **Status Zones**: Automatic color-coding for Normal (Green), Caution (Yellow), and Critical (Red) ranges. [Source: gaugechart.adoc]\n- **Grid Layouts**: `MULTI_GAUGE` allows monitoring multiple metrics in a compact grid. [Source: gaugechart.adoc]\n\n## Gauge Types\n- `SEMI_CIRCLE`: Classic performance indicators (CPU, memory).\n- `DIGITAL`: Prominent single metrics requiring attention.\n- `LINEAR`: Horizontal progress bars with target lines.\n- `MULTI_GAUGE`: Grids of 3-9 gauges for fleet monitoring.\n\n## Configuration Options\n- `showRanges=true`: Displays color zones (default).\n- `showTarget=true`: Adds goal lines (for `LINEAR` type).\n- `columns`: Defines grid width for multi-gauge displays.\n\n## Best Practices\n- Reserve `DIGITAL` for \"hero metrics\" that demand immediate focus.\n- Use `MULTI_GAUGE` for comparing 3-9 related metrics side-by-side. [Source: gaugechart.adoc]\n- Set realistic min/max bounds based on actual operating limits.\n- Keep units consistent across all gauges in a grid.\n\n## Backlinks\n- [[charts-and-metrics]]\n- [[visualizations]]"
+    },
+    {
+      "id": "linechart",
+      "label": "Line Charts",
+      "category": "Charts & Metrics",
+      "tags": [],
+      "description": "Line charts reveal trends over time, making patterns, peaks, and valleys immediately visible.",
+      "content": "Line charts reveal trends over time, making patterns, peaks, and valleys immediately visible.\n\n## Key Features\n- **Multi-Series**: Supports up to 6 related trends side-by-side. [Source: linechart.adoc]\n- **Visual Styles**: Smooth (curved) or angular lines to fit the data type. [Source: linechart.adoc]\n- **Area Fill**: Optional area shading under the curve to emphasize volume. [Source: linechart.adoc]\n- **Auto-Scaling**: Smart axis ranges calculated based on provided data. [Source: linechart.adoc]\n\n## Configuration Options\n- `smoothLines=true`: Enables curved lines (good for volatile data trends).\n- `showArea=true`: Fills the area under the lines.\n- `width`: Customizable chart width.\n\n## Best Practices\n- Use consistent time intervals (e.g., don't skip months).\n- Limit to 4-6 series to prevent visual confusion. [Source: linechart.adoc]\n- Use smooth lines for overall trends and angular lines for exact data points.\n- Start the Y-axis at zero unless showing small variations in large numbers.\n\n## Backlinks\n- [[charts-and-metrics]]\n- [[visualizations]]"
+    },
+    {
+      "id": "adr",
+      "label": "Architectural Decision Records (ADR)",
+      "category": "Metadata & Status",
+      "tags": [],
+      "description": "Architectural Decision Records (ADR) document key technical choices along with their context, rationale, and consequences.",
+      "content": "Architectural Decision Records (ADR) document key technical choices along with their context, rationale, and consequences.\n\n## Key Features\n- **Structured Format**: Captures `Context`, `Decision`, `Consequences`, and `Participants`. [Source: adr.adoc]\n- **Status Tracking**: Visualizes the state of a decision (e.g., `Proposed`, `Accepted`, `Superseded`). [Source: adr.adoc]\n- **Participant Visualization**: Shows the people involved in the decision, including their roles and contact info. [Source: adr.adoc]\n- **Wiki-Style Links**: Enables linking to external references or related documentation. [Source: adr.adoc]\n\n## Decision Statuses\n- **Proposed**: Decision being considered.\n- **Accepted**: Decision approved and active.\n- **Superseded**: Replaced by a newer decision.\n- **Deprecated**: No longer relevant.\n- **Rejected**: Decision not approved.\n\n## Best Practices\n- Keep context concise (3-5 bullet points) to explain \"why now\". [Source: adr.adoc]\n- Make decisions actionable and definitive.\n- List both positive and negative outcomes in the consequences section. [Source: adr.adoc]\n- Use the status field to maintain a clear history of decision evolution; don't just edit old records. [Source: adr.adoc]\n\n## Backlinks\n- [[metadata-and-status]]\n- [[visualizations]]"
+    },
+    {
+      "id": "quadrant",
+      "label": "Quadrant Charts",
+      "category": "Process & Planning",
+      "tags": [],
+      "description": "Quadrant charts provide 2D priority mapping for strategic decision-making and risk analysis.",
+      "content": "Quadrant charts provide 2D priority mapping for strategic decision-making and risk analysis.\n\n## Key Features\n- **4-Quadrant Grid**: Best for impact vs. effort or business value vs. complexity mapping. [Source: quadrant.adoc]\n- **Custom Labels**: Full control over axis and individual quadrant titles. [Source: quadrant.adoc]\n- **Categorization**: Color-code data points by category (e.g., by team or priority). [Source: quadrant.adoc]\n- **Visual Version 2**: Enhanced modern design for better clarity. [Source: quadrant.adoc]\n\n## Standard Quadrant Meaning (Signal Profile)\n- **Leaders**: Top-right (High Impact, High Effort) - \"Big Bets\". [Source: quadrant.adoc]\n- **Challengers**: Top-left (High Impact, Low Effort) - \"Quick Wins\". [Source: quadrant.adoc]\n- **Visionaries**: Bottom-left (Low Impact, Low Effort) - \"Fill-ins\". [Source: quadrant.adoc]\n- **Niche**: Bottom-right (Low Impact, High Effort) - \"Avoid/Thankless\". [Source: quadrant.adoc]\n\n## Configuration Options\n- `xAxis` / `yAxis`: Customizable labels for the grid axes.\n- `leaders` / `challengers` / `visionaries` / `niche`: Custom labels for each quadrant.\n- `visualVersion=2`: Modern design style.\n\n## Best Practices\n- Label quadrants contextually (e.g., \"Quick Wins\") rather than using generic terms.\n- Limit to 8-12 items to prevent visual overlap and clutter. [Source: quadrant.adoc]\n- Match axes to the specific analysis (e.g., Probability vs. Impact for risks). [Source: quadrant.adoc]\n\n## Backlinks\n- [[process-and-planning]]\n- [[visualizations]]"
+    },
+    {
+      "id": "realtime-editor",
+      "label": "Realtime Editor",
+      "category": "Core Concepts",
+      "tags": [],
+      "description": "A tool for live editing and previewing DocOps visualizations.",
+      "content": "A tool for live editing and previewing DocOps visualizations.\n\n## Description\nThe Realtime Editor allows users to see changes to their DocOps configurations in real-time. It is linked from the main documentation index. [Source: index.adoc]\n\n## Backlinks\n- [[index-adoc-summary]]\n- [[docops-extension-server]]"
+    },
+    {
+      "id": "treemap",
+      "label": "Treemaps",
+      "category": "Technical & Architecture",
+      "tags": [],
+      "description": "Treemaps use proportional rectangles to visualize budget allocations, market share, and resource distribution.",
+      "content": "Treemaps use proportional rectangles to visualize budget allocations, market share, and resource distribution.\n\n## Key Features\n- **Nested Rectangles**: Rectangles are sized based on their relative numeric values. [Source: treemap.adoc]\n- **Proportional Sizing**: Makes it easy to see large vs. small contributors in a hierarchy. [Source: treemap.adoc]\n- **Multiple Themes**: Supports `modern` and `brutalist` (high-contrast) visual styles. [Source: treemap.adoc]\n- **Auto-Labels**: Automatic display of percentages and values within each rectangle. [Source: treemap.adoc]\n\n## Configuration Options\n- `theme`: `modern` (default) or `brutalist`.\n- `paletteType`: Color schemes like `OCEAN_BREEZE`, `SUNSET`, or `PASTEL`.\n- `showValues` / `showPercentages`: Toggle numeric data visibility.\n- `width` / `height`: Customizable dimensions (default 1200x800).\n\n## Best Practices\n- Limit to 6-10 main categories; too many rectangles reduce readability. [Source: treemap.adoc]\n- Use descriptive subtitles to clarify the data context.\n- Format metric values (e.g., \"$2.4M\" vs \"2400000\") for clarity. [Source: treemap.adoc]\n- Group very small items into an \"Other\" category to keep the map focused. [Source: treemap.adoc]\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]"
+    },
+    {
+      "id": "asciidoctor-support",
+      "label": "AsciiDoctor Support",
+      "category": "Core Concepts",
+      "tags": [],
+      "description": "Integration details for using DocOps extensions within AsciiDoctor documents.",
+      "content": "Integration details for using DocOps extensions within AsciiDoctor documents.\n\n## Implementation\nVisualizations are integrated into AsciiDoctor using custom extension blocks (e.g., `[docops,buttons]`). Configurations are provided as JSON objects within these blocks. [Source: index.adoc]\n\n## Key Features\n- **Conditional Rendering**: Uses `ifdef::backend-html5[]` to ensure visualizations are rendered in HTML outputs.\n- **Custom Attributes**: Supports attributes like `:icons:`, `:stylesdir:`, and `:stylesheet:`. [Source: index.adoc]\n\n## Backlinks\n- [[index]]\n- [[docops-extension-server]]"
+    },
+    {
+      "id": "shield",
+      "label": "Badges & Shields",
+      "category": "Metadata & Status",
+      "tags": [],
+      "description": "Badges and shields add visual metadata to documentation, providing compact and scannable indicators for status, versions, or metrics.",
+      "content": "Badges and shields add visual metadata to documentation, providing compact and scannable indicators for status, versions, or metrics.\n\n## Key Features\n- **7 Visual Styles**: Includes `classic`, `glassmorphic`, `neon`, `brutalist`, `gradient`, `minimal`, and `neumorphic`. [Source: shield.adoc]\n- **Icon Support**: Embed logos from the SimpleIcons library (1,000+ icons available). [Source: shield.adoc]\n- **Flexible Layouts**: Arrange badges in `HORIZONTAL`, `VERTICAL`, or `GRID` layouts. [Source: shield.adoc]\n- **Interactive**: Badges can be made clickable to link directly to builds, releases, or documentation. [Source: shield.adoc]\n\n## Configuration Options\n- `type`: Selects the visual style (e.g., `glass`).\n- `arrangement`: Defines the layout (Horizontal/Vertical/Grid).\n- `spacing`: Adjusts pixel space between badges.\n- **Pipe-Delimited Data**: `Label|Message|URL|LabelColor|MessageColor|Logo|FontColor`. [Source: shield.adoc]\n\n## Best Practices\n- Use icons (e.g., `<kotlin>`, `<docker>`) for instant recognition. [Source: shield.adoc]\n- Color-code by meaning (Green for success, Red for failure, Yellow for warning).\n- Keep labels short (1-2 words) to maintain scanability.\n- Group related badges into a grid to create status dashboards.\n\n## Backlinks\n- [[metadata-and-status]]\n- [[visualizations]]"
+    },
+    {
+      "id": "metadata-and-status",
+      "label": "Metadata and Status",
+      "category": "Categories",
+      "tags": [],
+      "description": "Visualization category focused on tracking decisions, tasks, and team information.",
+      "content": "Visualization category focused on tracking decisions, tasks, and team information.\n\n## Description\nThis category includes 5 types for status indicators, label grids, task lists, and contact information. [Source: index.adoc]\n\n## Visualization Types\n- **[[shield]]**: Status indicators, badges, and metadata tags.\n- **[[placemat]]**: Color-coded label grids for component inventories.\n- **[[todo]]**: Task tracking with Kanban, list, and grid layouts.\n- **[[vcard]]**: Professional contact cards with QR code generation.\n- **[[adr]]**: Architectural Decision Records with context and consequences.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+    }
+  ],
+  "edges": [
+    {
+      "source": "metricscard",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "metricscard",
+      "target": "visualizations"
+    },
+    {
+      "source": "placemat",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "placemat",
+      "target": "visualizations"
+    },
+    {
+      "source": "buttons",
+      "target": "navigation-and-organization"
+    },
+    {
+      "source": "buttons",
+      "target": "visualizations"
+    },
+    {
+      "source": "combination",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "combination",
+      "target": "visualizations"
+    },
+    {
+      "source": "visualizations",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "visualizations",
+      "target": "navigation-and-organization"
+    },
+    {
+      "source": "visualizations",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "visualizations",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "visualizations",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "visualizations",
+      "target": "index"
+    },
+    {
+      "source": "visualizations",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "visualizations",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "wordcloud",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "wordcloud",
+      "target": "visualizations"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "navigation-and-organization"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "realtime-editor"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "showcase-for-visuals"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "index"
+    },
+    {
+      "source": "index-adoc-summary",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "scorecard",
+      "target": "navigation-and-organization"
+    },
+    {
+      "source": "scorecard",
+      "target": "visualizations"
+    },
+    {
+      "source": "barchart",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "barchart",
+      "target": "visualizations"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "callout"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "planner"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "connectors"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "releasestrategy"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "quadrant"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "index"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "visualizations"
+    },
+    {
+      "source": "process-and-planning",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "vcard",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "vcard",
+      "target": "visualizations"
+    },
+    {
+      "source": "showcase-for-visuals",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "showcase-for-visuals",
+      "target": "visualizations"
+    },
+    {
+      "source": "showcase-for-visuals",
+      "target": "index"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "wordcloud"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "domain"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "gherkin"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "treechart"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "treemap"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "index"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "visualizations"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "todo",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "todo",
+      "target": "visualizations"
+    },
+    {
+      "source": "navigation-and-organization",
+      "target": "scorecard"
+    },
+    {
+      "source": "navigation-and-organization",
+      "target": "timeline"
+    },
+    {
+      "source": "navigation-and-organization",
+      "target": "buttons"
+    },
+    {
+      "source": "navigation-and-organization",
+      "target": "index"
+    },
+    {
+      "source": "navigation-and-organization",
+      "target": "visualizations"
+    },
+    {
+      "source": "navigation-and-organization",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "callout",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "callout",
+      "target": "visualizations"
+    },
+    {
+      "source": "connectors",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "connectors",
+      "target": "visualizations"
+    },
+    {
+      "source": "timeline",
+      "target": "navigation-and-organization"
+    },
+    {
+      "source": "timeline",
+      "target": "visualizations"
+    },
+    {
+      "source": "piechart",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "piechart",
+      "target": "visualizations"
+    },
+    {
+      "source": "domain",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "domain",
+      "target": "visualizations"
+    },
+    {
+      "source": "index",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "index",
+      "target": "visualizations"
+    },
+    {
+      "source": "index",
+      "target": "asciidoctor-support"
+    },
+    {
+      "source": "index",
+      "target": "realtime-editor"
+    },
+    {
+      "source": "index",
+      "target": "showcase-for-visuals"
+    },
+    {
+      "source": "index",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "index",
+      "target": "barchart"
+    },
+    {
+      "source": "index",
+      "target": "piechart"
+    },
+    {
+      "source": "index",
+      "target": "linechart"
+    },
+    {
+      "source": "index",
+      "target": "combination"
+    },
+    {
+      "source": "index",
+      "target": "gaugechart"
+    },
+    {
+      "source": "index",
+      "target": "metricscard"
+    },
+    {
+      "source": "index",
+      "target": "navigation-and-organization"
+    },
+    {
+      "source": "index",
+      "target": "scorecard"
+    },
+    {
+      "source": "index",
+      "target": "timeline"
+    },
+    {
+      "source": "index",
+      "target": "buttons"
+    },
+    {
+      "source": "index",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "index",
+      "target": "callout"
+    },
+    {
+      "source": "index",
+      "target": "planner"
+    },
+    {
+      "source": "index",
+      "target": "connectors"
+    },
+    {
+      "source": "index",
+      "target": "releasestrategy"
+    },
+    {
+      "source": "index",
+      "target": "quadrant"
+    },
+    {
+      "source": "index",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "index",
+      "target": "wordcloud"
+    },
+    {
+      "source": "index",
+      "target": "domain"
+    },
+    {
+      "source": "index",
+      "target": "gherkin"
+    },
+    {
+      "source": "index",
+      "target": "treechart"
+    },
+    {
+      "source": "index",
+      "target": "treemap"
+    },
+    {
+      "source": "index",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "index",
+      "target": "shield"
+    },
+    {
+      "source": "index",
+      "target": "placemat"
+    },
+    {
+      "source": "index",
+      "target": "todo"
+    },
+    {
+      "source": "index",
+      "target": "vcard"
+    },
+    {
+      "source": "index",
+      "target": "adr"
+    },
+    {
+      "source": "index",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "barchart"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "piechart"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "linechart"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "combination"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "gaugechart"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "metricscard"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "index"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "visualizations"
+    },
+    {
+      "source": "charts-and-metrics",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "releasestrategy",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "releasestrategy",
+      "target": "visualizations"
+    },
+    {
+      "source": "gherkin",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "gherkin",
+      "target": "visualizations"
+    },
+    {
+      "source": "docops-extension-server",
+      "target": "index"
+    },
+    {
+      "source": "docops-extension-server",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "planner",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "planner",
+      "target": "visualizations"
+    },
+    {
+      "source": "treechart",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "treechart",
+      "target": "visualizations"
+    },
+    {
+      "source": "gaugechart",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "gaugechart",
+      "target": "visualizations"
+    },
+    {
+      "source": "linechart",
+      "target": "charts-and-metrics"
+    },
+    {
+      "source": "linechart",
+      "target": "visualizations"
+    },
+    {
+      "source": "adr",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "adr",
+      "target": "visualizations"
+    },
+    {
+      "source": "quadrant",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "quadrant",
+      "target": "visualizations"
+    },
+    {
+      "source": "realtime-editor",
+      "target": "index-adoc-summary"
+    },
+    {
+      "source": "realtime-editor",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "realtime-editor",
+      "target": "index"
+    },
+    {
+      "source": "treemap",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "treemap",
+      "target": "visualizations"
+    },
+    {
+      "source": "asciidoctor-support",
+      "target": "index"
+    },
+    {
+      "source": "asciidoctor-support",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "shield",
+      "target": "metadata-and-status"
+    },
+    {
+      "source": "shield",
+      "target": "visualizations"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "shield"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "placemat"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "todo"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "vcard"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "adr"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "index"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "visualizations"
+    },
+    {
+      "source": "metadata-and-status",
+      "target": "index-adoc-summary"
+    }
+  ]
+}
