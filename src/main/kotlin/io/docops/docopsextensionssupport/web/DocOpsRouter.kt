@@ -86,6 +86,7 @@ class DocOpsRouter(
             "swim" -> SwimLaneHandler(csvResponse)
             "shield" -> ShieldHandler(csvResponse)
             "mermaid" -> DocOpsMermaid(csvResponse)
+            "plantuml" -> DocOpsPlantUml(csvResponse)
             "gauge" -> GaugeHandler(csvResponse)
             "gherkin" -> GherkinHandler(csvResponse)
             "todo" -> TodoHandler(csvResponse)
@@ -143,7 +144,7 @@ class DocOpsRouter(
             }
 
             val data = uncompressString(decodedPayload)
-            if(handler is DocOpsMermaid) {
+            if(handler is DocOpsMermaid || handler is DocOpsPlantUml) {
                  handler.handleSVG(data, context)
             } else {
                 joinXmlLines(addSvgMetadata(handler.handleSVG(data, context), response))

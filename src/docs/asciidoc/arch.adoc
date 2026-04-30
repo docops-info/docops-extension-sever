@@ -116,6 +116,8 @@ Cross-cutting concerns and utilities:
 [.back-to-top]
 <<top, 🔝>>
 
+
+
 ==== Spring Boot Infrastructure
 The foundational layer providing enterprise-grade capabilities:
 
@@ -266,18 +268,20 @@ This architecture provides a solid foundation for the DocOps Extension Server wh
 === Component Diagram
 
 
-[plantuml, comp,format=svg, role="popup-diagram"]
+
+
+[plantuml, comp,format=svg ]
 ----
+@startuml
+!pragma layout elk
+skinparam linetype ortho
+scale 0.4
 
-!include plantuml/themes/puml-theme-docops.puml
-
-
-title DocOps Extension Server Architecture \n <color:#8E8E93><size:13>Modern Visualization Platform for AsciiDoctor</size></color>
-
+title DocOps Extension Server Architecture  <color:#8E8E93><size:13>Modern Visualization Platform for AsciiDoctor</size></color>
 
 ' External Systems
-node "AsciiDoctor\nDocument" as asciidoc #FFEBEE {
-    component "[docops,kind]\nBlock Processor" as macro #FFCDD2
+node "AsciiDoctor Document" as asciidoc #FFEBEE {
+    component "[docops,kind] Block Processor" as macro #FFCDD2
 }
 
 package "DocOps Extension Server" as server #F2F2F7 {
@@ -412,7 +416,7 @@ note bottom of spring
     • Event handling
     • Web MVC
 end note
-
+@enduml
 ----
 
 [.back-to-top]
@@ -494,9 +498,10 @@ sequenceDiagram
 
 === Plantuml
 
-[plantuml,badge,format=svg, role="popup-diagram"]
+[plantuml,badge,format=svg]
 ----
-!include plantuml/themes/puml-theme-docops.puml
+@startuml
+
 
 title DocOps Badge Generation Flow\n<color:#8E8E93><size:13>SpringBoot Architecture</size></color>
 
@@ -582,16 +587,9 @@ end note
 
 Router --> C: ResponseEntity<ByteArray>(svg, headers, 200)
 deactivate Router
-
+@enduml
 ----
 
-[.back-to-top]
-<<top, 🔝>>
-
-== Reference
-
-Interested in the DocOps Plantuml Theme? Check out the following link:
-link:plantuml/showcase.html[DocOps PlantUML Themes]
 
 [.back-to-top]
 <<top, 🔝>>
