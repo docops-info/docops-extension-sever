@@ -1141,7 +1141,59 @@
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1241,6 +1293,33 @@
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1271,6 +1350,7 @@
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1315,6 +1395,22 @@
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1352,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1550,7 +1646,7 @@
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -2017,7 +2113,8 @@
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2054,8 +2151,36 @@
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <a href="planner.html" class="nav-prev">&larr; Planner</a>
+          <a href="releasestrategy.html" class="nav-next">Release Strategy &rarr;</a>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
 <script>
@@ -2422,6 +2547,9 @@ window.onload = function() {
 };
 </script>
 
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/viz-global.js'></script>
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/plantuml.js'></script>
+<script>plantumlLoad();</script>
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
@@ -2515,247 +2643,165 @@ Feature D | 20 | 30 | Optional
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
+<style>
+.imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
 
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-04307030879544b7 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-04307030879544b7.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-04307030879544b7 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-04307030879544b7 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-04307030879544b7:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-04307030879544b7 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-04307030879544b7 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
+.svg-with-controls {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-04307030879544b7 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-04307030879544b7 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-04307030879544b7 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-04307030879544b7 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-04307030879544b7 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-04307030879544b7 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
+.svg-bottom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  display: flex;
+  gap: 6px;
+  background: rgba(15, 20, 30, 0.85);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
+.svg-with-controls:hover .svg-bottom-controls {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.svg-control-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.svg-control-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.svg-modal.docops-svg-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 20, 25, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.svg-modal.docops-svg-modal.active {
+  display: flex;
+}
+
+.svg-modal-content.docops-svg-modal-content {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  background: var(--docops-card-bg, #1e293b);
+  border-radius: 20px;
+  padding: 48px 24px 24px 24px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.svg-modal-close.docops-svg-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.svg-modal-close.docops-svg-modal-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
+}
+
+.svg-modal-body.docops-svg-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.svg-modal-body.docops-svg-modal-body svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
 </style>
 
 <script>
-  // View Modal Control
-  window.svgModalsvgviewer_04307030879544b7 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-04307030879544b7');
-          const sourceContainer = document.getElementById('svgviewer-04307030879544b7');
+(function() {
+  if (window.__docopsEscapeHandlerInstalled) return;
+  window.__docopsEscapeHandlerInstalled = true;
 
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-04307030879544b7');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-04307030879544b7');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_04307030879544b7 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-04307030879544b7');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-04307030879544b7');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-04307030879544b7');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-04307030879544b7');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_04307030879544b7.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-04307030879544b7');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_04307030879544b7.close();
-          }
-      }
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.svg-modal.active').forEach(function(modal) {
+      modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
   });
+})();
 </script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-04307030879544b7" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=quadrant&payload=H4sIAFyhz2kA_0WMzQqCQBRG9z7FfYEB6X_jwnQEQdPM2g9yyQs2E9MtFHr4ZoJscxbnfHxMPGAEJ7aK8Uod1JaMJZ6gVGxpDMZ4pEcEMsuqpoVGHs95I9Ng-uq8rOOkhUJeZBEIIYIMFT8tQgxv2K4ddh6JsTinvRPL0HcPqXulO7yh5nmROL_xceVxoA4FG9Gr1_8kdWER_p6qO5PRavgA-IOpjc0AAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=quadrant&filename=ghi.svg" data-original-content="title= Strategic Priority Matrix
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-127ed6079383e0d0" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=quadrant&payload=H4sIAJAT-2kA_0WMzQqCQBRG9z7FfYEB6X_jwnQEQdPM2g9yyQs2E9MtFHr4ZoJscxbnfHxMPGAEJ7aK8Uod1JaMJZ6gVGxpDMZ4pEcEMsuqpoVGHs95I9Ng-uq8rOOkhUJeZBEIIYIMFT8tQgxv2K4ddh6JsTinvRPL0HcPqXulO7yh5nmROL_xceVxoA4FG9Gr1_8kdWER_p6qO5PRavgA-IOpjc0AAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=quadrant&filename=ghi.svg" data-original-content="title= Strategic Priority Matrix
 xAxis= EFFORT REQUIRED
 yAxis=IMPACT LEVEL
 ---
@@ -2763,59 +2809,49 @@ Feature A | 75 | 85 | Core
 Feature B | 30 | 70 | Enhancement
 Feature C | 60 | 40 | Nice-to-have
 Feature D | 20 | 30 | Optional" data-kind="quadrant">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_404427da4eb540f2981d98afc49eefdb">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","75.0","85.0","Core","12",""],["Feature B","30.0","70.0","Enhancement","12",""],["Feature C","60.0","40.0","Nice-to-have","12",""],["Feature D","20.0","30.0","Optional","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_404427da4eb540f2981d98afc49eefdb .bg-rect { fill: #ffffff; } #mq_404427da4eb540f2981d98afc49eefdb .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_404427da4eb540f2981d98afc49eefdb .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_404427da4eb540f2981d98afc49eefdb .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_404427da4eb540f2981d98afc49eefdb .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_404427da4eb540f2981d98afc49eefdb .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_404427da4eb540f2981d98afc49eefdb" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_404427da4eb540f2981d98afc49eefdb" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_404427da4eb540f2981d98afc49eefdb" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_404427da4eb540f2981d98afc49eefdb" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_404427da4eb540f2981d98afc49eefdb" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_404427da4eb540f2981d98afc49eefdb"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_404427da4eb540f2981d98afc49eefdb"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_404427da4eb540f2981d98afc49eefdb)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Strategic Priority Matrix</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="139" y="125" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_404427da4eb540f2981d98afc49eefdb)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CHALLENGERS</text><rect x="446" y="125" width="98" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_404427da4eb540f2981d98afc49eefdb)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">LEADERS</text><rect x="131" y="555" width="149" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_404427da4eb540f2981d98afc49eefdb)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">NICHE PLAYERS</text><rect x="429" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_404427da4eb540f2981d98afc49eefdb)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">VISIONARIES</text><text x="205" y="685" text-anchor="middle" class="axis-label">EFFORT REQUIRED</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT LEVEL</text><g class="company-node"><circle cx="495" cy="182" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="495" cy="182" r="10" fill="#10b981" filter="url(#glow_mq_404427da4eb540f2981d98afc49eefdb)"/><circle cx="495" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="495" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="234" cy="254" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="254" r="10" fill="#f59e0b" filter="url(#glow_mq_404427da4eb540f2981d98afc49eefdb)"/><circle cx="234" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="279" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="408" cy="398" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="408" cy="398" r="10" fill="#3b82f6" filter="url(#glow_mq_404427da4eb540f2981d98afc49eefdb)"/><circle cx="408" cy="398" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="423" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="176" cy="446" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="176" cy="446" r="10" fill="#f43f5e" filter="url(#glow_mq_404427da4eb540f2981d98afc49eefdb)"/><circle cx="176" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="176" y="471" text-anchor="middle" class="company-name">Feature D</text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_c371453b1c9b4827a55f489b813134f5">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","75.0","85.0","Core","12",""],["Feature B","30.0","70.0","Enhancement","12",""],["Feature C","60.0","40.0","Nice-to-have","12",""],["Feature D","20.0","30.0","Optional","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_c371453b1c9b4827a55f489b813134f5 .bg-rect { fill: #ffffff; } #mq_c371453b1c9b4827a55f489b813134f5 .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_c371453b1c9b4827a55f489b813134f5 .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_c371453b1c9b4827a55f489b813134f5 .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_c371453b1c9b4827a55f489b813134f5 .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_c371453b1c9b4827a55f489b813134f5 .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_c371453b1c9b4827a55f489b813134f5" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_c371453b1c9b4827a55f489b813134f5" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_c371453b1c9b4827a55f489b813134f5" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_c371453b1c9b4827a55f489b813134f5" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_c371453b1c9b4827a55f489b813134f5" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_c371453b1c9b4827a55f489b813134f5"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_c371453b1c9b4827a55f489b813134f5"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_c371453b1c9b4827a55f489b813134f5)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Strategic Priority Matrix</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="139" y="125" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_c371453b1c9b4827a55f489b813134f5)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">CHALLENGERS</text><rect x="446" y="125" width="98" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_c371453b1c9b4827a55f489b813134f5)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">LEADERS</text><rect x="131" y="555" width="149" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_c371453b1c9b4827a55f489b813134f5)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">NICHE PLAYERS</text><rect x="429" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_c371453b1c9b4827a55f489b813134f5)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">VISIONARIES</text><text x="205" y="685" text-anchor="middle" class="axis-label">EFFORT REQUIRED</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">IMPACT LEVEL</text><g class="company-node"><circle cx="495" cy="182" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="495" cy="182" r="10" fill="#10b981" filter="url(#glow_mq_c371453b1c9b4827a55f489b813134f5)"/><circle cx="495" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="495" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="234" cy="254" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="254" r="10" fill="#f59e0b" filter="url(#glow_mq_c371453b1c9b4827a55f489b813134f5)"/><circle cx="234" cy="254" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="279" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="408" cy="398" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="408" cy="398" r="10" fill="#3b82f6" filter="url(#glow_mq_c371453b1c9b4827a55f489b813134f5)"/><circle cx="408" cy="398" r="3" fill="#ffffff" opacity="0.4"/><text x="408" y="423" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="176" cy="446" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="176" cy="446" r="10" fill="#f43f5e" filter="url(#glow_mq_c371453b1c9b4827a55f489b813134f5)"/><circle cx="176" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="176" y="471" text-anchor="middle" class="company-name">Feature D</text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_04307030879544b7.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_04307030879544b7.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-127ed6079383e0d0')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-127ed6079383e0d0')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-04307030879544b7')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-04307030879544b7')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-127ed6079383e0d0')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-127ed6079383e0d0')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-127ed6079383e0d0')">PRINT</button>
 </div>
-<div id="modal-svgviewer-04307030879544b7" class="svg-modal-svgviewer-04307030879544b7" onclick="if(event.target === this) svgModalsvgviewer_04307030879544b7.close()">
-    <div class="svg-modal-content-svgviewer-04307030879544b7">
-        <button class="svg-modal-close-svgviewer-04307030879544b7" onclick="svgModalsvgviewer_04307030879544b7.close()">×</button>
-        <div id="modal-body-svgviewer-04307030879544b7" class="svg-modal-body-svgviewer-04307030879544b7"></div>
+<div id="modal-sv-127ed6079383e0d0" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-127ed6079383e0d0')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-127ed6079383e0d0')">×</button>
+        <div id="modal-body-sv-127ed6079383e0d0" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-04307030879544b7" class="svg-modal-svgviewer-04307030879544b7" onclick="if(event.target === this) csvModalsvgviewer_04307030879544b7.close()">
-    <div class="svg-modal-content-svgviewer-04307030879544b7">
-        <button class="svg-modal-close-svgviewer-04307030879544b7" onclick="csvModalsvgviewer_04307030879544b7.close()">×</button>
-        <div class="svg-modal-header-svgviewer-04307030879544b7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-127ed6079383e0d0" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-127ed6079383e0d0')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-127ed6079383e0d0')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-04307030879544b7" class="svg-modal-body-svgviewer-04307030879544b7" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-127ed6079383e0d0" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-04307030879544b7" class="svg-modal-svgviewer-04307030879544b7" onclick="if(event.target === this) docopsSource.close('svgviewer-04307030879544b7')">
-    <div class="svg-modal-content-svgviewer-04307030879544b7">
-        <button class="svg-modal-close-svgviewer-04307030879544b7" onclick="docopsSource.close('svgviewer-04307030879544b7')">×</button>
-        <div class="svg-modal-header-svgviewer-04307030879544b7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-127ed6079383e0d0" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-127ed6079383e0d0')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-127ed6079383e0d0')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-04307030879544b7" class="svg-modal-body-svgviewer-04307030879544b7" style="display: block; overflow: auto;">
+        <div id="source-content-sv-127ed6079383e0d0" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2849,247 +2885,8 @@ Feature E | 50 | 50 | Maintenance
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-b22fdd880228f13a {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-b22fdd880228f13a.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-b22fdd880228f13a {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-b22fdd880228f13a {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-b22fdd880228f13a:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-b22fdd880228f13a {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-b22fdd880228f13a svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-b22fdd880228f13a .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-b22fdd880228f13a .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-b22fdd880228f13a .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-b22fdd880228f13a .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-b22fdd880228f13a .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-b22fdd880228f13a .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_b22fdd880228f13a = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-b22fdd880228f13a');
-          const sourceContainer = document.getElementById('svgviewer-b22fdd880228f13a');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-b22fdd880228f13a');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-b22fdd880228f13a');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_b22fdd880228f13a = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-b22fdd880228f13a');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-b22fdd880228f13a');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-b22fdd880228f13a');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-b22fdd880228f13a');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_b22fdd880228f13a.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-b22fdd880228f13a');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_b22fdd880228f13a.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-b22fdd880228f13a" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=quadrant&payload=H4sIAFyhz2kA_0WP0U7DIBRA3_kKfoBkmVn0ZQ8toiFraZVW3SNhN-tNEAxjyzR-vKBpfTkJ55DLJWFysKV9DIezTfQBTDpHyGcMERN-mYTBk2t1xdOW8q7tG_Emhz35_DP1qKUSWtOXqhkFcWAOELN_GiXf0VepNLGTcQ788dfX8pHWYtDkgqc82ESEbNtOiT3tZfYe7ZT3kYo_i1aooWoIY4zMe1X0m643GXcFPERYUp3F7aqkAuEn4y28g0_LDT7HmwKFFlgKbDKX_yH3c10XdB_l98YtWWS5Wc1oDfoEvrzzA4ZHvgBHAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=quadrant&filename=ghi.svg" data-original-content="title= Product Feature Prioritization
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-ed9126ccd1559cfa" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=quadrant&payload=H4sIAJAT-2kA_0WP0U7DIBRA3_kKfoBkmVn0ZQ8toiFraZVW3SNhN-tNEAxjyzR-vKBpfTkJ55DLJWFysKV9DIezTfQBTDpHyGcMERN-mYTBk2t1xdOW8q7tG_Emhz35_DP1qKUSWtOXqhkFcWAOELN_GiXf0VepNLGTcQ788dfX8pHWYtDkgqc82ESEbNtOiT3tZfYe7ZT3kYo_i1aooWoIY4zMe1X0m643GXcFPERYUp3F7aqkAuEn4y28g0_LDT7HmwKFFlgKbDKX_yH3c10XdB_l98YtWWS5Wc1oDfoEvrzzA4ZHvgBHAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=quadrant&filename=ghi.svg" data-original-content="title= Product Feature Prioritization
 xAxis= COMPLEXITY
 yAxis= BUSINESS VALUE
 leaders= QUICK WINS
@@ -3102,59 +2899,49 @@ Feature B | 70 | 80 | Enhancement
 Feature C | 80 | 30 | Nice-to-have
 Feature D | 30 | 20 | Optional
 Feature E | 50 | 50 | Maintenance" data-kind="quadrant">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_eef857e031054099baab723ec97b4e50">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","25.0","85.0","Core","12",""],["Feature B","70.0","80.0","Enhancement","12",""],["Feature C","80.0","30.0","Nice-to-have","12",""],["Feature D","30.0","20.0","Optional","12",""],["Feature E","50.0","50.0","Maintenance","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_eef857e031054099baab723ec97b4e50 .bg-rect { fill: #ffffff; } #mq_eef857e031054099baab723ec97b4e50 .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_eef857e031054099baab723ec97b4e50 .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_eef857e031054099baab723ec97b4e50 .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_eef857e031054099baab723ec97b4e50 .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_eef857e031054099baab723ec97b4e50 .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_eef857e031054099baab723ec97b4e50" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_eef857e031054099baab723ec97b4e50" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_eef857e031054099baab723ec97b4e50" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_eef857e031054099baab723ec97b4e50" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_eef857e031054099baab723ec97b4e50" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_eef857e031054099baab723ec97b4e50"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_eef857e031054099baab723ec97b4e50"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_eef857e031054099baab723ec97b4e50)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Product Feature Prioritization</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_eef857e031054099baab723ec97b4e50)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">BIG BETS</text><rect x="433" y="125" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_eef857e031054099baab723ec97b4e50)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">QUICK WINS</text><rect x="139" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_eef857e031054099baab723ec97b4e50)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">INCREMENTAL</text><rect x="433" y="555" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_eef857e031054099baab723ec97b4e50)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">MONEY PITS</text><text x="205" y="685" text-anchor="middle" class="axis-label">COMPLEXITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">BUSINESS VALUE</text><g class="company-node"><circle cx="205" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="205" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_eef857e031054099baab723ec97b4e50)"/><circle cx="205" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="205" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="466" cy="206" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="206" r="10" fill="#10b981" filter="url(#glow_mq_eef857e031054099baab723ec97b4e50)"/><circle cx="466" cy="206" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="231" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="524" cy="446" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="524" cy="446" r="10" fill="#3b82f6" filter="url(#glow_mq_eef857e031054099baab723ec97b4e50)"/><circle cx="524" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="471" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="234" cy="494" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="234" cy="494" r="10" fill="#f43f5e" filter="url(#glow_mq_eef857e031054099baab723ec97b4e50)"/><circle cx="234" cy="494" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="519" text-anchor="middle" class="company-name">Feature D</text></g><g class="company-node"><circle cx="350" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="350" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_eef857e031054099baab723ec97b4e50)"/><circle cx="350" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="350" y="375" text-anchor="middle" class="company-name">Feature E</text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_fc472707a3124db3b839e00dd0ab0a30">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Feature A","25.0","85.0","Core","12",""],["Feature B","70.0","80.0","Enhancement","12",""],["Feature C","80.0","30.0","Nice-to-have","12",""],["Feature D","30.0","20.0","Optional","12",""],["Feature E","50.0","50.0","Maintenance","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>#mq_fc472707a3124db3b839e00dd0ab0a30 .bg-rect { fill: #ffffff; } #mq_fc472707a3124db3b839e00dd0ab0a30 .title-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 24.0px; font-weight: 800; letter-spacing: -0.5px; } #mq_fc472707a3124db3b839e00dd0ab0a30 .grid-line { stroke: #2563eb; stroke-width: 2; opacity: 0.2; } #mq_fc472707a3124db3b839e00dd0ab0a30 .axis-label { fill: #4338ca; font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_fc472707a3124db3b839e00dd0ab0a30 .quadrant-label { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: bold; } #mq_fc472707a3124db3b839e00dd0ab0a30 .company-name { fill: #111111; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_fc472707a3124db3b839e00dd0ab0a30" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2563eb" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_fc472707a3124db3b839e00dd0ab0a30" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_fc472707a3124db3b839e00dd0ab0a30" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_fc472707a3124db3b839e00dd0ab0a30" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_fc472707a3124db3b839e00dd0ab0a30" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_fc472707a3124db3b839e00dd0ab0a30"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_fc472707a3124db3b839e00dd0ab0a30"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_fc472707a3124db3b839e00dd0ab0a30)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Product Feature Prioritization</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="152" y="125" width="107" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><text x="205" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">BIG BETS</text><rect x="433" y="125" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><text x="495" y="145" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#10b981">QUICK WINS</text><rect x="139" y="555" width="132" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><text x="205" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">INCREMENTAL</text><rect x="433" y="555" width="124" height="30" rx="15" fill="rgba(255, 255, 255, 0.9)" opacity="0.9" filter="url(#labelShadow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><text x="495" y="575" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">MONEY PITS</text><text x="205" y="685" text-anchor="middle" class="axis-label">COMPLEXITY</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">BUSINESS VALUE</text><g class="company-node"><circle cx="205" cy="182" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="205" cy="182" r="10" fill="#f59e0b" filter="url(#glow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><circle cx="205" cy="182" r="3" fill="#ffffff" opacity="0.4"/><text x="205" y="207" text-anchor="middle" class="company-name">Feature A</text></g><g class="company-node"><circle cx="466" cy="206" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="466" cy="206" r="10" fill="#10b981" filter="url(#glow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><circle cx="466" cy="206" r="3" fill="#ffffff" opacity="0.4"/><text x="466" y="231" text-anchor="middle" class="company-name">Feature B</text></g><g class="company-node"><circle cx="524" cy="446" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="524" cy="446" r="10" fill="#3b82f6" filter="url(#glow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><circle cx="524" cy="446" r="3" fill="#ffffff" opacity="0.4"/><text x="524" y="471" text-anchor="middle" class="company-name">Feature C</text></g><g class="company-node"><circle cx="234" cy="494" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="234" cy="494" r="10" fill="#f43f5e" filter="url(#glow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><circle cx="234" cy="494" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="519" text-anchor="middle" class="company-name">Feature D</text></g><g class="company-node"><circle cx="350" cy="350" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="350" cy="350" r="10" fill="#10b981" filter="url(#glow_mq_fc472707a3124db3b839e00dd0ab0a30)"/><circle cx="350" cy="350" r="3" fill="#ffffff" opacity="0.4"/><text x="350" y="375" text-anchor="middle" class="company-name">Feature E</text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_b22fdd880228f13a.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_b22fdd880228f13a.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-ed9126ccd1559cfa')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-ed9126ccd1559cfa')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-b22fdd880228f13a')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-b22fdd880228f13a')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-ed9126ccd1559cfa')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-ed9126ccd1559cfa')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-ed9126ccd1559cfa')">PRINT</button>
 </div>
-<div id="modal-svgviewer-b22fdd880228f13a" class="svg-modal-svgviewer-b22fdd880228f13a" onclick="if(event.target === this) svgModalsvgviewer_b22fdd880228f13a.close()">
-    <div class="svg-modal-content-svgviewer-b22fdd880228f13a">
-        <button class="svg-modal-close-svgviewer-b22fdd880228f13a" onclick="svgModalsvgviewer_b22fdd880228f13a.close()">×</button>
-        <div id="modal-body-svgviewer-b22fdd880228f13a" class="svg-modal-body-svgviewer-b22fdd880228f13a"></div>
+<div id="modal-sv-ed9126ccd1559cfa" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-ed9126ccd1559cfa')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-ed9126ccd1559cfa')">×</button>
+        <div id="modal-body-sv-ed9126ccd1559cfa" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-b22fdd880228f13a" class="svg-modal-svgviewer-b22fdd880228f13a" onclick="if(event.target === this) csvModalsvgviewer_b22fdd880228f13a.close()">
-    <div class="svg-modal-content-svgviewer-b22fdd880228f13a">
-        <button class="svg-modal-close-svgviewer-b22fdd880228f13a" onclick="csvModalsvgviewer_b22fdd880228f13a.close()">×</button>
-        <div class="svg-modal-header-svgviewer-b22fdd880228f13a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-ed9126ccd1559cfa" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-ed9126ccd1559cfa')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-ed9126ccd1559cfa')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-b22fdd880228f13a" class="svg-modal-body-svgviewer-b22fdd880228f13a" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-ed9126ccd1559cfa" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-b22fdd880228f13a" class="svg-modal-svgviewer-b22fdd880228f13a" onclick="if(event.target === this) docopsSource.close('svgviewer-b22fdd880228f13a')">
-    <div class="svg-modal-content-svgviewer-b22fdd880228f13a">
-        <button class="svg-modal-close-svgviewer-b22fdd880228f13a" onclick="docopsSource.close('svgviewer-b22fdd880228f13a')">×</button>
-        <div class="svg-modal-header-svgviewer-b22fdd880228f13a" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-ed9126ccd1559cfa" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-ed9126ccd1559cfa')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-ed9126ccd1559cfa')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-b22fdd880228f13a" class="svg-modal-body-svgviewer-b22fdd880228f13a" style="display: block; overflow: auto;">
+        <div id="source-content-sv-ed9126ccd1559cfa" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3185,247 +2972,8 @@ Campaign F | 35 | 78 |
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-24d48831a4f63c55 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-24d48831a4f63c55.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-24d48831a4f63c55 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-24d48831a4f63c55 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-24d48831a4f63c55:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-24d48831a4f63c55 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-24d48831a4f63c55 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-24d48831a4f63c55 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-24d48831a4f63c55 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-24d48831a4f63c55 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-24d48831a4f63c55 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-24d48831a4f63c55 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-24d48831a4f63c55 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_24d48831a4f63c55 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-24d48831a4f63c55');
-          const sourceContainer = document.getElementById('svgviewer-24d48831a4f63c55');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-24d48831a4f63c55');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-24d48831a4f63c55');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_24d48831a4f63c55 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-24d48831a4f63c55');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-24d48831a4f63c55');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-24d48831a4f63c55');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-24d48831a4f63c55');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_24d48831a4f63c55.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-24d48831a4f63c55');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_24d48831a4f63c55.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-24d48831a4f63c55" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=quadrant&payload=H4sIAFyhz2kA_2WPwQ6CQAxE7_sV_QESoyJ68KCo8aAevHiuUNkmyy6BBTHx4y1KAomXJvtmdqb17A2t4UqYaECbAtkMM8rJenAPSDAvkDNbqXbTcrWGk3v25jccOdO_h3oN6n4I6C0DUYYwpVKcN4JKu9pIYVtIr0o0GiPlX_VClIJ3UJQud55UwxU7iyWTiGd8wZ2Ac1EbSpXlRH9PCKhBU6P4gyBQcb86bGSP2UTGQsaAt0Lm4RumszGNhYZRZ16N8U5ItOyC5mO87zImf_jQkbD_8gHBssVKYgEAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=quadrant&filename=ghi.svg" data-original-content="title= Reach and engagement of campaigns
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-2dcd9df54be8e5d2" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=quadrant&payload=H4sIAJAT-2kA_2WPwQ6CQAxE7_sV_QESoyJ68KCo8aAevHiuUNkmyy6BBTHx4y1KAomXJvtmdqb17A2t4UqYaECbAtkMM8rJenAPSDAvkDNbqXbTcrWGk3v25jccOdO_h3oN6n4I6C0DUYYwpVKcN4JKu9pIYVtIr0o0GiPlX_VClIJ3UJQud55UwxU7iyWTiGd8wZ2Ac1EbSpXlRH9PCKhBU6P4gyBQcb86bGSP2UTGQsaAt0Lm4RumszGNhYZRZ16N8U5ItOyC5mO87zImf_jQkbD_8gHBssVKYgEAAA==&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=quadrant&filename=ghi.svg" data-original-content="title= Reach and engagement of campaigns
 xAxis= Low Reach | High Reach
 yAxis= Low Engagement | High Engagement
 leaders= We should expand
@@ -3439,59 +2987,49 @@ Campaign C | 57 | 69 |
 Campaign D | 78 | 34 |
 Campaign E | 40 | 34 |
 Campaign F | 35 | 78 |" data-kind="quadrant">
-<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_3de790699c0241edbd5139cb5d015496">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-04-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Campaign A","30.0","60.0","","12",""],["Campaign B","45.0","23.0","","12",""],["Campaign C","57.0","69.0","","12",""],["Campaign D","78.0","34.0","","12",""],["Campaign E","40.0","34.0","","12",""],["Campaign F","35.0","78.0","","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_3de790699c0241edbd5139cb5d015496 .bg-rect { fill: #0f172a; } #mq_3de790699c0241edbd5139cb5d015496 .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_3de790699c0241edbd5139cb5d015496 .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_3de790699c0241edbd5139cb5d015496 .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_3de790699c0241edbd5139cb5d015496 .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_3de790699c0241edbd5139cb5d015496 .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_3de790699c0241edbd5139cb5d015496" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_3de790699c0241edbd5139cb5d015496" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_3de790699c0241edbd5139cb5d015496" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_3de790699c0241edbd5139cb5d015496" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_3de790699c0241edbd5139cb5d015496" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_3de790699c0241edbd5139cb5d015496"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_3de790699c0241edbd5139cb5d015496"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_3de790699c0241edbd5139cb5d015496)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Reach and engagement of campaigns</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="122" y="125" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_3de790699c0241edbd5139cb5d015496)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">NEED TO PROMOTE</text><rect x="408" y="125" width="174" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_3de790699c0241edbd5139cb5d015496)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">WE SHOULD EXPAND</text><rect x="139" y="555" width="132" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_3de790699c0241edbd5139cb5d015496)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">RE-EVALUATE</text><rect x="412" y="555" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_3de790699c0241edbd5139cb5d015496)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">MAY BE IMPROVED</text><text x="205" y="685" text-anchor="middle" class="axis-label">LOW REACH</text><text x="495" y="685" text-anchor="middle" class="axis-label">HIGH REACH →</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">LOW ENGAGEMENT</text><text x="20" y="230" text-anchor="middle" class="axis-label" transform="rotate(-90 20 230)">HIGH ENGAGEMENT →</text><g class="company-node"><circle cx="234" cy="302" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="302" r="10" fill="#f59e0b" filter="url(#glow_mq_3de790699c0241edbd5139cb5d015496)"/><circle cx="234" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="327" text-anchor="middle" class="company-name">Campaign A</text></g><g class="company-node"><circle cx="321" cy="480" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="321" cy="480" r="10" fill="#f43f5e" filter="url(#glow_mq_3de790699c0241edbd5139cb5d015496)"/><circle cx="321" cy="480" r="3" fill="#ffffff" opacity="0.4"/><text x="321" y="505" text-anchor="middle" class="company-name">Campaign B</text></g><g class="company-node"><circle cx="390" cy="259" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="390" cy="259" r="10" fill="#10b981" filter="url(#glow_mq_3de790699c0241edbd5139cb5d015496)"/><circle cx="390" cy="259" r="3" fill="#ffffff" opacity="0.4"/><text x="390" y="284" text-anchor="middle" class="company-name">Campaign C</text></g><g class="company-node"><circle cx="512" cy="427" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="512" cy="427" r="10" fill="#3b82f6" filter="url(#glow_mq_3de790699c0241edbd5139cb5d015496)"/><circle cx="512" cy="427" r="3" fill="#ffffff" opacity="0.4"/><text x="512" y="452" text-anchor="middle" class="company-name">Campaign D</text></g><g class="company-node"><circle cx="292" cy="427" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="292" cy="427" r="10" fill="#f43f5e" filter="url(#glow_mq_3de790699c0241edbd5139cb5d015496)"/><circle cx="292" cy="427" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="452" text-anchor="middle" class="company-name">Campaign E</text></g><g class="company-node"><circle cx="263" cy="216" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="263" cy="216" r="10" fill="#f59e0b" filter="url(#glow_mq_3de790699c0241edbd5139cb5d015496)"/><circle cx="263" cy="216" r="3" fill="#ffffff" opacity="0.4"/><text x="263" y="241" text-anchor="middle" class="company-name">Campaign F</text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg width="700" height="700" viewBox="0 0 700 700" xmlns="http://www.w3.org/2000/svg" id="mq_020b488d2ff14d7d82b175e271ae095a">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Company","X","Y","Description","Size","URL"],"rows":[["Campaign A","30.0","60.0","","12",""],["Campaign B","45.0","23.0","","12",""],["Campaign C","57.0","69.0","","12",""],["Campaign D","78.0","34.0","","12",""],["Campaign E","40.0","34.0","","12",""],["Campaign F","35.0","78.0","","12",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #mq_020b488d2ff14d7d82b175e271ae095a .bg-rect { fill: #0f172a; } #mq_020b488d2ff14d7d82b175e271ae095a .title-text { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 20.869566px; font-weight: 800; letter-spacing: -0.5px; } #mq_020b488d2ff14d7d82b175e271ae095a .grid-line { stroke: #38bdf8; stroke-width: 2; opacity: 0.2; } #mq_020b488d2ff14d7d82b175e271ae095a .axis-label { fill: #22d3ee; font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; } #mq_020b488d2ff14d7d82b175e271ae095a .quadrant-label { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: bold; } #mq_020b488d2ff14d7d82b175e271ae095a .company-name { fill: #f8fafc; font-family: 'Archivo', -apple-system, sans-serif; font-size: 12px; font-weight: 600; } @keyframes sonar { 0% { r: 10; opacity: 0.6; } 100% { r: 25; opacity: 0; } } .sonar-ring { animation: sonar 2.5s infinite; }</style><defs><pattern id="gridPattern_mq_020b488d2ff14d7d82b175e271ae095a" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.3"/></pattern><radialGradient id="gradLeaders_mq_020b488d2ff14d7d82b175e271ae095a" cx="100%" cy="0%"><stop offset="0%" stop-color="#10b981" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradChallengers_mq_020b488d2ff14d7d82b175e271ae095a" cx="0%" cy="0%"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradVisionaries_mq_020b488d2ff14d7d82b175e271ae095a" cx="100%" cy="100%"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><radialGradient id="gradNiche_mq_020b488d2ff14d7d82b175e271ae095a" cx="0%" cy="100%"><stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/><stop offset="100%" stop-opacity="0"/></radialGradient><filter id="glow_mq_020b488d2ff14d7d82b175e271ae095a"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter><filter id="labelShadow_mq_020b488d2ff14d7d82b175e271ae095a"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/></filter></defs><rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/><rect width="100%" height="100%" fill="url(#gridPattern_mq_020b488d2ff14d7d82b175e271ae095a)" rx="16" ry="16" opacity="0.4"/><text x="350" y="55" text-anchor="middle" class="title-text">Reach and engagement of campaigns</text><line x1="350" y1="110" x2="350" y2="590" class="grid-line" stroke-dasharray="4,4"/><line x1="60" y1="350" x2="640" y2="350" class="grid-line" stroke-dasharray="4,4"/><rect x="122" y="125" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_020b488d2ff14d7d82b175e271ae095a)"/><text x="205" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f59e0b">NEED TO PROMOTE</text><rect x="408" y="125" width="174" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_020b488d2ff14d7d82b175e271ae095a)"/><text x="495" y="145" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#10b981">WE SHOULD EXPAND</text><rect x="139" y="555" width="132" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_020b488d2ff14d7d82b175e271ae095a)"/><text x="205" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f43f5e">RE-EVALUATE</text><rect x="412" y="555" width="166" height="30" rx="15" fill="rgba(15, 23, 42, 0.8)" opacity="0.9" filter="url(#labelShadow_mq_020b488d2ff14d7d82b175e271ae095a)"/><text x="495" y="575" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="14" font-weight="600" fill="#3b82f6">MAY BE IMPROVED</text><text x="205" y="685" text-anchor="middle" class="axis-label">LOW REACH</text><text x="495" y="685" text-anchor="middle" class="axis-label">HIGH REACH →</text><text x="20" y="470" text-anchor="middle" class="axis-label" transform="rotate(-90 20 470)">LOW ENGAGEMENT</text><text x="20" y="230" text-anchor="middle" class="axis-label" transform="rotate(-90 20 230)">HIGH ENGAGEMENT →</text><g class="company-node"><circle cx="234" cy="302" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="234" cy="302" r="10" fill="#f59e0b" filter="url(#glow_mq_020b488d2ff14d7d82b175e271ae095a)"/><circle cx="234" cy="302" r="3" fill="#ffffff" opacity="0.4"/><text x="234" y="327" text-anchor="middle" class="company-name">Campaign A</text></g><g class="company-node"><circle cx="321" cy="480" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="321" cy="480" r="10" fill="#f43f5e" filter="url(#glow_mq_020b488d2ff14d7d82b175e271ae095a)"/><circle cx="321" cy="480" r="3" fill="#ffffff" opacity="0.4"/><text x="321" y="505" text-anchor="middle" class="company-name">Campaign B</text></g><g class="company-node"><circle cx="390" cy="259" r="10" class="sonar-ring" fill="none" stroke="#10b981" stroke-width="1.5"/><circle cx="390" cy="259" r="10" fill="#10b981" filter="url(#glow_mq_020b488d2ff14d7d82b175e271ae095a)"/><circle cx="390" cy="259" r="3" fill="#ffffff" opacity="0.4"/><text x="390" y="284" text-anchor="middle" class="company-name">Campaign C</text></g><g class="company-node"><circle cx="512" cy="427" r="10" class="sonar-ring" fill="none" stroke="#3b82f6" stroke-width="1.5"/><circle cx="512" cy="427" r="10" fill="#3b82f6" filter="url(#glow_mq_020b488d2ff14d7d82b175e271ae095a)"/><circle cx="512" cy="427" r="3" fill="#ffffff" opacity="0.4"/><text x="512" y="452" text-anchor="middle" class="company-name">Campaign D</text></g><g class="company-node"><circle cx="292" cy="427" r="10" class="sonar-ring" fill="none" stroke="#f43f5e" stroke-width="1.5"/><circle cx="292" cy="427" r="10" fill="#f43f5e" filter="url(#glow_mq_020b488d2ff14d7d82b175e271ae095a)"/><circle cx="292" cy="427" r="3" fill="#ffffff" opacity="0.4"/><text x="292" y="452" text-anchor="middle" class="company-name">Campaign E</text></g><g class="company-node"><circle cx="263" cy="216" r="10" class="sonar-ring" fill="none" stroke="#f59e0b" stroke-width="1.5"/><circle cx="263" cy="216" r="10" fill="#f59e0b" filter="url(#glow_mq_020b488d2ff14d7d82b175e271ae095a)"/><circle cx="263" cy="216" r="3" fill="#ffffff" opacity="0.4"/><text x="263" y="241" text-anchor="middle" class="company-name">Campaign F</text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_24d48831a4f63c55.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_24d48831a4f63c55.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-2dcd9df54be8e5d2')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-2dcd9df54be8e5d2')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-24d48831a4f63c55')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-24d48831a4f63c55')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-2dcd9df54be8e5d2')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-2dcd9df54be8e5d2')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-2dcd9df54be8e5d2')">PRINT</button>
 </div>
-<div id="modal-svgviewer-24d48831a4f63c55" class="svg-modal-svgviewer-24d48831a4f63c55" onclick="if(event.target === this) svgModalsvgviewer_24d48831a4f63c55.close()">
-    <div class="svg-modal-content-svgviewer-24d48831a4f63c55">
-        <button class="svg-modal-close-svgviewer-24d48831a4f63c55" onclick="svgModalsvgviewer_24d48831a4f63c55.close()">×</button>
-        <div id="modal-body-svgviewer-24d48831a4f63c55" class="svg-modal-body-svgviewer-24d48831a4f63c55"></div>
+<div id="modal-sv-2dcd9df54be8e5d2" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-2dcd9df54be8e5d2')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-2dcd9df54be8e5d2')">×</button>
+        <div id="modal-body-sv-2dcd9df54be8e5d2" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-24d48831a4f63c55" class="svg-modal-svgviewer-24d48831a4f63c55" onclick="if(event.target === this) csvModalsvgviewer_24d48831a4f63c55.close()">
-    <div class="svg-modal-content-svgviewer-24d48831a4f63c55">
-        <button class="svg-modal-close-svgviewer-24d48831a4f63c55" onclick="csvModalsvgviewer_24d48831a4f63c55.close()">×</button>
-        <div class="svg-modal-header-svgviewer-24d48831a4f63c55" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-2dcd9df54be8e5d2" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-2dcd9df54be8e5d2')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-2dcd9df54be8e5d2')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-24d48831a4f63c55" class="svg-modal-body-svgviewer-24d48831a4f63c55" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-2dcd9df54be8e5d2" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-24d48831a4f63c55" class="svg-modal-svgviewer-24d48831a4f63c55" onclick="if(event.target === this) docopsSource.close('svgviewer-24d48831a4f63c55')">
-    <div class="svg-modal-content-svgviewer-24d48831a4f63c55">
-        <button class="svg-modal-close-svgviewer-24d48831a4f63c55" onclick="docopsSource.close('svgviewer-24d48831a4f63c55')">×</button>
-        <div class="svg-modal-header-svgviewer-24d48831a4f63c55" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-2dcd9df54be8e5d2" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-2dcd9df54be8e5d2')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-2dcd9df54be8e5d2')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-24d48831a4f63c55" class="svg-modal-body-svgviewer-24d48831a4f63c55" style="display: block; overflow: auto;">
+        <div id="source-content-sv-2dcd9df54be8e5d2" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3954,11 +3492,5 @@ mermaid.initialize({
     `
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-container">
-    <a href="planner.html" class="nav-prev">&larr; Planner</a>
-          <a href="releasestrategy.html" class="nav-next">Release Strategy &rarr;</a>
-  </div>
-</nav>
 </body>
 </html>

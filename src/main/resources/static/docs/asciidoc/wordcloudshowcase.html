@@ -1141,7 +1141,59 @@
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1241,6 +1293,33 @@
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1271,6 +1350,7 @@
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1315,6 +1395,22 @@
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1352,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1550,7 +1646,7 @@
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -2017,7 +2113,8 @@
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2054,8 +2151,36 @@
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <a href="quadrant-showcase.html" class="nav-prev">&larr; Magic Quadrant Showcase</a>
+          <span class="nav-next-disabled">Next &rarr;</span>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
 <script>
@@ -2422,6 +2547,9 @@ window.onload = function() {
 };
 </script>
 
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/viz-global.js'></script>
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/plantuml.js'></script>
+<script>plantumlLoad();</script>
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
@@ -2467,7 +2595,7 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     --slideshow-radius-inner: 8px;
   }
 
-  .slideshow-gallery-container-slideshow0e37319fc48d6455 {
+  .slideshow-gallery-container-slideshow5402fb16f73d9e48 {
     position: relative;
     max-width: 1400px;
     margin: 3rem auto;
@@ -2478,7 +2606,7 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
   }
 
   /* Geometric background pattern */
-  .slideshow-gallery-container-slideshow0e37319fc48d6455::before {
+  .slideshow-gallery-container-slideshow5402fb16f73d9e48::before {
     content: '';
     position: absolute;
     top: 0;
@@ -2492,7 +2620,7 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     pointer-events: none;
   }
 
-  .slideshow-gallery-grid-slideshow0e37319fc48d6455 {
+  .slideshow-gallery-grid-slideshow5402fb16f73d9e48 {
     position: relative;
     z-index: 1;
     display: grid;
@@ -2501,7 +2629,7 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     margin-bottom: calc(var(--slideshow-spacing) * 8);
   }
 
-  .svg-slideshow-card-slideshow0e37319fc48d6455 {
+  .svg-slideshow-card-slideshow5402fb16f73d9e48 {
     background: var(--slideshow-surface);
     border-radius: var(--slideshow-radius-card);
     padding: calc(var(--slideshow-spacing) * 3);
@@ -2513,15 +2641,15 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     border: 1px solid rgba(255, 107, 53, 0.1);
   }
 
-  .svg-slideshow-card-slideshow0e37319fc48d6455:nth-child(1) { animation-delay: 0.1s; }
-  .svg-slideshow-card-slideshow0e37319fc48d6455:nth-child(2) { animation-delay: 0.15s; }
-  .svg-slideshow-card-slideshow0e37319fc48d6455:nth-child(3) { animation-delay: 0.2s; }
-  .svg-slideshow-card-slideshow0e37319fc48d6455:nth-child(4) { animation-delay: 0.25s; }
-  .svg-slideshow-card-slideshow0e37319fc48d6455:nth-child(5) { animation-delay: 0.3s; }
-  .svg-slideshow-card-slideshow0e37319fc48d6455:nth-child(6) { animation-delay: 0.35s; }
-  .svg-slideshow-card-slideshow0e37319fc48d6455:nth-child(n+7) { animation-delay: 0.4s; }
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:nth-child(1) { animation-delay: 0.1s; }
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:nth-child(2) { animation-delay: 0.15s; }
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:nth-child(3) { animation-delay: 0.2s; }
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:nth-child(4) { animation-delay: 0.25s; }
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:nth-child(5) { animation-delay: 0.3s; }
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:nth-child(6) { animation-delay: 0.35s; }
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:nth-child(n+7) { animation-delay: 0.4s; }
 
-  .svg-slideshow-card-slideshow0e37319fc48d6455::before {
+  .svg-slideshow-card-slideshow5402fb16f73d9e48::before {
     content: '';
     position: absolute;
     top: 0;
@@ -2534,15 +2662,15 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .svg-slideshow-card-slideshow0e37319fc48d6455:hover {
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:hover {
     transform: translateY(-4px);
   }
 
-  .svg-slideshow-card-slideshow0e37319fc48d6455:hover::before {
+  .svg-slideshow-card-slideshow5402fb16f73d9e48:hover::before {
     transform: scaleX(1);
   }
 
-  .svg-slideshow-preview-slideshow0e37319fc48d6455 {
+  .svg-slideshow-preview-slideshow5402fb16f73d9e48 {
     width: 100%;
     height: 200px;
     background: var(--slideshow-bg);
@@ -2555,19 +2683,19 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     overflow: hidden;
   }
 
-  .svg-slideshow-preview-slideshow0e37319fc48d6455 svg {
+  .svg-slideshow-preview-slideshow5402fb16f73d9e48 svg {
     max-width: 80%;
     max-height: 80%;
     filter: drop-shadow(0 4px 12px rgba(255, 107, 53, 0.2));
   }
 
-  .svg-slideshow-info-slideshow0e37319fc48d6455 {
+  .svg-slideshow-info-slideshow5402fb16f73d9e48 {
     display: flex;
     flex-direction: column;
     gap: calc(var(--slideshow-spacing) * 1);
   }
 
-  .svg-slideshow-name-slideshow0e37319fc48d6455 {
+  .svg-slideshow-name-slideshow5402fb16f73d9e48 {
     font-family: 'Courier New', monospace;
     font-size: 16px;
     font-weight: 700;
@@ -2575,14 +2703,14 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     letter-spacing: 0;
   }
 
-  .svg-slideshow-meta-slideshow0e37319fc48d6455 {
+  .svg-slideshow-meta-slideshow5402fb16f73d9e48 {
     font-family: 'Courier New', monospace;
     font-size: 12px;
     color: var(--slideshow-text-muted);
   }
 
   /* Modal for full view */
-  .slideshow-modal-slideshow0e37319fc48d6455 {
+  .slideshow-modal-slideshow5402fb16f73d9e48 {
     display: none;
     position: fixed;
     top: 0;
@@ -2598,11 +2726,11 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     box-sizing: border-box;
   }
 
-  .slideshow-modal-slideshow0e37319fc48d6455.active {
+  .slideshow-modal-slideshow5402fb16f73d9e48.active {
     display: flex;
   }
 
-  .slideshow-modal-content-slideshow0e37319fc48d6455 {
+  .slideshow-modal-content-slideshow5402fb16f73d9e48 {
     width: 95vw;
     max-width: 1400px;
     height: 90vh;
@@ -2618,7 +2746,7 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
-  .slideshow-modal-close-slideshow0e37319fc48d6455 {
+  .slideshow-modal-close-slideshow5402fb16f73d9e48 {
     position: absolute;
     top: 12px;
     right: 12px;
@@ -2638,11 +2766,11 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     z-index: 10;
   }
 
-  .slideshow-modal-close-slideshow0e37319fc48d6455:hover {
+  .slideshow-modal-close-slideshow5402fb16f73d9e48:hover {
     transform: rotate(90deg) scale(1.1);
   }
 
-  .slideshow-modal-svg-slideshow0e37319fc48d6455 {
+  .slideshow-modal-svg-slideshow5402fb16f73d9e48 {
     flex: 1;
     display: flex;
     align-items: center;
@@ -2653,7 +2781,7 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
     padding: 10px;
   }
 
-  .slideshow-modal-svg-slideshow0e37319fc48d6455 svg {
+  .slideshow-modal-svg-slideshow5402fb16f73d9e48 svg {
     max-width: 100%;
     max-height: 100%;
     width: auto;
@@ -2690,7 +2818,7 @@ Use this <a href="wordcloud.html">link</a> for full documentation.
 </style>
 
 <script>
-window.galleryslideshow0e37319fc48d6455 = {
+window.galleryslideshow5402fb16f73d9e48 = {
   openModal: function(cardId) {
     const card = document.getElementById(cardId);
     if (!card) {
@@ -2698,7 +2826,7 @@ window.galleryslideshow0e37319fc48d6455 = {
       return;
     }
 
-    const previewDiv = card.querySelector('.svg-slideshow-preview-slideshow0e37319fc48d6455');
+    const previewDiv = card.querySelector('.svg-slideshow-preview-slideshow5402fb16f73d9e48');
     if (!previewDiv) {
       console.error('Preview div not found');
       return;
@@ -2710,8 +2838,8 @@ window.galleryslideshow0e37319fc48d6455 = {
       return;
     }
 
-    const modal = document.getElementById('modal-slideshow0e37319fc48d6455');
-    const modalContent = document.getElementById('modalContent-slideshow0e37319fc48d6455');
+    const modal = document.getElementById('modal-slideshow5402fb16f73d9e48');
+    const modalContent = document.getElementById('modalContent-slideshow5402fb16f73d9e48');
 
     if (!modal || !modalContent) {
       console.error('Modal elements not found');
@@ -2743,7 +2871,7 @@ window.galleryslideshow0e37319fc48d6455 = {
   },
 
   closeModal: function() {
-    const modal = document.getElementById('modal-slideshow0e37319fc48d6455');
+    const modal = document.getElementById('modal-slideshow5402fb16f73d9e48');
     if (modal) {
       modal.classList.remove('active');
       document.body.style.overflow = '';
@@ -2752,50 +2880,50 @@ window.galleryslideshow0e37319fc48d6455 = {
 };
 </script>
 
-<div class="slideshow-gallery-container-slideshow0e37319fc48d6455">
-<div class="slideshow-gallery-grid-slideshow0e37319fc48d6455" id="galleryGrid-slideshow0e37319fc48d6455">
-<div class="svg-slideshow-card-slideshow0e37319fc48d6455" id="card-slideshow0e37319fc48d6455-0" onclick="galleryslideshow0e37319fc48d6455.openModal('card-slideshow0e37319fc48d6455-0')">
-  <div class="svg-slideshow-preview-slideshow0e37319fc48d6455">
-    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_c4f2ba378b4f48e381b3c40d1ce517c0" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["My Word Cloud Title","1","Word 1","85.0","70caccc961da45e191d68a7c5a0398e6","false","800","600","12","60","rectangle","1.0"],["","2","Word 2","92.0","b81a080ac8874a129c6cf674049632d2","","","","","","",""],["","3","Word 3","78.0","8ee26d4c63bd44628e09ed9ae1129d62","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_c4f2ba378b4f48e381b3c40d1ce517c0" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_c4f2ba378b4f48e381b3c40d1ce517c0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_c4f2ba378b4f48e381b3c40d1ce517c0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_c4f2ba378b4f48e381b3c40d1ce517c0" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_c4f2ba378b4f48e381b3c40d1ce517c0"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_c4f2ba378b4f48e381b3c40d1ce517c0"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_c4f2ba378b4f48e381b3c40d1ce517c0 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_c4f2ba378b4f48e381b3c40d1ce517c0 .word-text:hover { filter: url(#wordGlow_c4f2ba378b4f48e381b3c40d1ce517c0); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">My Word Cloud Title</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_c4f2ba378b4f48e381b3c40d1ce517c0)">Word 2<title>Word 2: weight 92.00</title></text><text class="word-text" x="407.3506238337651" y="263.560309092519" text-anchor="middle" font-size="36.0" fill="#3498db" filter="url(#wordShadow_c4f2ba378b4f48e381b3c40d1ce517c0)">Word 1<title>Word 1: weight 85.00</title></text><text class="word-text" x="406.53137104482613" y="383.3162284003646" text-anchor="middle" font-size="12.0" fill="#2ecc71" filter="url(#wordShadow_c4f2ba378b4f48e381b3c40d1ce517c0)">Word 3<title>Word 3: weight 78.00</title></text></g></svg>
+<div class="slideshow-gallery-container-slideshow5402fb16f73d9e48">
+<div class="slideshow-gallery-grid-slideshow5402fb16f73d9e48" id="galleryGrid-slideshow5402fb16f73d9e48">
+<div class="svg-slideshow-card-slideshow5402fb16f73d9e48" id="card-slideshow5402fb16f73d9e48-0" onclick="galleryslideshow5402fb16f73d9e48.openModal('card-slideshow5402fb16f73d9e48-0')">
+  <div class="svg-slideshow-preview-slideshow5402fb16f73d9e48">
+    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_4aa89cb7e5364923aa8cfdf879b932eb" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["My Word Cloud Title","1","Word 1","85.0","c0afc321633b40b4b8001dfb26314032","false","800","600","12","60","rectangle","1.0"],["","2","Word 2","92.0","eaff316fcd7a439ebd37d07bf4ad1c1b","","","","","","",""],["","3","Word 3","78.0","85ac0e55bccc4169b71b66960b37b366","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_4aa89cb7e5364923aa8cfdf879b932eb" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_4aa89cb7e5364923aa8cfdf879b932eb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_4aa89cb7e5364923aa8cfdf879b932eb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_4aa89cb7e5364923aa8cfdf879b932eb" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_4aa89cb7e5364923aa8cfdf879b932eb"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_4aa89cb7e5364923aa8cfdf879b932eb"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_4aa89cb7e5364923aa8cfdf879b932eb .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_4aa89cb7e5364923aa8cfdf879b932eb .word-text:hover { filter: url(#wordGlow_4aa89cb7e5364923aa8cfdf879b932eb); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">My Word Cloud Title</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_4aa89cb7e5364923aa8cfdf879b932eb)">Word 2<title>Word 2: weight 92.00</title></text><text class="word-text" x="405.80982409745354" y="263.6475248170632" text-anchor="middle" font-size="36.0" fill="#3498db" filter="url(#wordShadow_4aa89cb7e5364923aa8cfdf879b932eb)">Word 1<title>Word 1: weight 85.00</title></text><text class="word-text" x="390.7613299654729" y="383.39894958180633" text-anchor="middle" font-size="12.0" fill="#2ecc71" filter="url(#wordShadow_4aa89cb7e5364923aa8cfdf879b932eb)">Word 3<title>Word 3: weight 78.00</title></text></g></svg>
   </div>
-  <div class="svg-slideshow-info-slideshow0e37319fc48d6455">
-    <div class="svg-slideshow-name-slideshow0e37319fc48d6455">Wordcloud</div>
-    <div class="svg-slideshow-meta-slideshow0e37319fc48d6455">WORDCLOUD</div>
-  </div>
-</div>
-<div class="svg-slideshow-card-slideshow0e37319fc48d6455" id="card-slideshow0e37319fc48d6455-1" onclick="galleryslideshow0e37319fc48d6455.openModal('card-slideshow0e37319fc48d6455-1')">
-  <div class="svg-slideshow-preview-slideshow0e37319fc48d6455">
-    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_2431ea246ab645c2aec06a2bc41e9f4e" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Programming Languages 2024","1","JavaScript","90.0","292cd494795c455aa8c8d3d78a1745a4","false","800","600","10","60","rectangle","1.0"],["","2","Python","85.0","33876bb8ec7f4e1fa6adbf4a2efb8a35","","","","","","",""],["","3","Java","80.0","6d148a9c40614d7fb968aa7e84fa8d31","","","","","","",""],["","4","TypeScript","75.0","fc8dad7d20c048e8a0fa65991cb4b03b","","","","","","",""],["","5","C#","70.0","b2f08356a501401d9322763f4fb50b34","","","","","","",""],["","6","PHP","65.0","93eb4fd147a54e88abede1e3b857a1be","","","","","","",""],["","7","C++","60.0","28e7ae0807d24349a7f320b7be1a96e2","","","","","","",""],["","8","Ruby","55.0","f8d65fc773774503adf5720bc5e7d4a2","","","","","","",""],["","9","Go","50.0","9d83ee87ba824657857111570ee491e7","","","","","","",""],["","10","Rust","45.0","fb241eac5157477a96e79ce6ff29c314","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_2431ea246ab645c2aec06a2bc41e9f4e" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_2431ea246ab645c2aec06a2bc41e9f4e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_2431ea246ab645c2aec06a2bc41e9f4e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_2431ea246ab645c2aec06a2bc41e9f4e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_2431ea246ab645c2aec06a2bc41e9f4e"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_2431ea246ab645c2aec06a2bc41e9f4e"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_2431ea246ab645c2aec06a2bc41e9f4e .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_2431ea246ab645c2aec06a2bc41e9f4e .word-text:hover { filter: url(#wordGlow_2431ea246ab645c2aec06a2bc41e9f4e); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Programming Languages 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#f1e05a" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">JavaScript<title>JavaScript: weight 90.00</title></text><text class="word-text" x="401.6102878798479" y="407.8101064218452" text-anchor="middle" font-size="54.0" fill="#3572A5" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">Python<title>Python: weight 85.00</title></text><text class="word-text" x="403.5054761601484" y="256.31502120155494" text-anchor="middle" font-size="49.0" fill="#b07219" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">Java<title>Java: weight 80.00</title></text><text class="word-text" x="383.0415873366836" y="192.09653618571394" text-anchor="middle" font-size="43.0" fill="#2b7489" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">TypeScript<title>TypeScript: weight 75.00</title></text><text class="word-text" x="498.96004342345003" y="259.89440718220806" text-anchor="middle" font-size="38.0" fill="#178600" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">C#<title>C#: weight 70.00</title></text><text class="word-text" x="314.62192758985407" y="257.564797965348" text-anchor="middle" font-size="32.0" fill="#4F5D95" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">PHP<title>PHP: weight 65.00</title></text><text class="word-text" x="522.0891620569766" y="390.0942266466582" text-anchor="middle" font-size="27.0" fill="#f34b7d" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">C++<title>C++: weight 60.00</title></text><text class="word-text" x="380.15367127165894" y="462.20885004610955" text-anchor="middle" font-size="21.0" fill="#701516" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">Ruby<title>Ruby: weight 55.00</title></text><text class="word-text" x="277.7915853932715" y="387.0854337938875" text-anchor="middle" font-size="16.0" fill="#00ADD8" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">Go<title>Go: weight 50.00</title></text><text class="word-text" x="449.36124543669337" y="456.0402448761244" text-anchor="middle" font-size="10.0" fill="#dea584" filter="url(#wordShadow_2431ea246ab645c2aec06a2bc41e9f4e)">Rust<title>Rust: weight 45.00</title></text></g></svg>
-  </div>
-  <div class="svg-slideshow-info-slideshow0e37319fc48d6455">
-    <div class="svg-slideshow-name-slideshow0e37319fc48d6455">Wordcloud</div>
-    <div class="svg-slideshow-meta-slideshow0e37319fc48d6455">WORDCLOUD</div>
+  <div class="svg-slideshow-info-slideshow5402fb16f73d9e48">
+    <div class="svg-slideshow-name-slideshow5402fb16f73d9e48">Wordcloud</div>
+    <div class="svg-slideshow-meta-slideshow5402fb16f73d9e48">WORDCLOUD</div>
   </div>
 </div>
-<div class="svg-slideshow-card-slideshow0e37319fc48d6455" id="card-slideshow0e37319fc48d6455-2" onclick="galleryslideshow0e37319fc48d6455.openModal('card-slideshow0e37319fc48d6455-2')">
-  <div class="svg-slideshow-preview-slideshow0e37319fc48d6455">
-    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_a7f597c5f52d4130b3ab69595aa5c15e" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Technology Trends 2024","1","Cloud Computing","85.0","b962f28a08b44cca8c7177a4f5c0e077","false","800","600","12","60","rectangle","1.0"],["","2","Artificial Intelligence","92.0","00ce3c1ed387485fb4b78a955ad38c3e","","","","","","",""],["","3","Machine Learning","78.0","a590bd069c924d41820b88fb7721c6cb","","","","","","",""],["","4","Blockchain","65.0","d894d0a6cd64429ab9de840f7ba29dd0","","","","","","",""],["","5","IoT","70.0","4bd9191c6cb44176be4efb7d19a6c4da","","","","","","",""],["","6","Cybersecurity","88.0","008805143ac04b86a88c246f53a68173","","","","","","",""],["","7","Big Data","75.0","95cce718b9094616b5f08993e36dd9ad","","","","","","",""],["","8","DevOps","68.0","3f20761a12cd437e917d8cb8ec1329c6","","","","","","",""],["","9","Quantum Computing","55.0","115bc293dd154fbd8d2e099a6cb197ee","","","","","","",""],["","10","Edge Computing","60.0","5a1b6eebc5a3463f9425fee25d74eb7f","","","","","","",""],["","11","5G","72.0","3f082b5a5d5547d5a487380c51c333f5","","","","","","",""],["","12","AR/VR","58.0","b51c20a871994b3e9d11093e3c41eb52","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_a7f597c5f52d4130b3ab69595aa5c15e" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_a7f597c5f52d4130b3ab69595aa5c15e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_a7f597c5f52d4130b3ab69595aa5c15e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_a7f597c5f52d4130b3ab69595aa5c15e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_a7f597c5f52d4130b3ab69595aa5c15e"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_a7f597c5f52d4130b3ab69595aa5c15e"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_a7f597c5f52d4130b3ab69595aa5c15e .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_a7f597c5f52d4130b3ab69595aa5c15e .word-text:hover { filter: url(#wordGlow_a7f597c5f52d4130b3ab69595aa5c15e); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Technology Trends 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Artificial Intelligence<title>Artificial Intelligence: weight 92.00</title></text><text class="word-text" x="410.14220914223586" y="407.16308237849245" text-anchor="middle" font-size="55.0" fill="#1abc9c" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Cybersecurity<title>Cybersecurity: weight 88.00</title></text><text class="word-text" x="414.95261586031165" y="253.86641728886133" text-anchor="middle" font-size="51.0" fill="#3498db" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Cloud Computing<title>Cloud Computing: weight 85.00</title></text><text class="word-text" x="378.62381723466336" y="188.12312630283864" text-anchor="middle" font-size="42.0" fill="#2ecc71" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Machine Learning<title>Machine Learning: weight 78.00</title></text><text class="word-text" x="388.4703738404829" y="472.7746735531017" text-anchor="middle" font-size="38.0" fill="#34495e" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Big Data<title>Big Data: weight 75.00</title></text><text class="word-text" x="509.11410376837796" y="485.5824350613033" text-anchor="middle" font-size="34.0" fill="#3498db" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">5G<title>5G: weight 72.00</title></text><text class="word-text" x="270.63567356610724" y="469.851160165559" text-anchor="middle" font-size="31.0" fill="#f39c12" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">IoT<title>IoT: weight 70.00</title></text><text class="word-text" x="404.66923723663325" y="137.16072905213372" text-anchor="middle" font-size="29.0" fill="#e67e22" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">DevOps<title>DevOps: weight 68.00</title></text><text class="word-text" x="382.95854699346285" y="521.9018788671374" text-anchor="middle" font-size="25.0" fill="#e74c3c" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Blockchain<title>Blockchain: weight 65.00</title></text><text class="word-text" x="264.0002706075859" y="129.451108603731" text-anchor="middle" font-size="18.0" fill="#d35400" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Edge Computing<title>Edge Computing: weight 60.00</title></text><text class="word-text" x="559.2657457080807" y="461.0709446834041" text-anchor="middle" font-size="16.0" fill="#9b59b6" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">AR/VR<title>AR/VR: weight 58.00</title></text><text class="word-text" x="525.5289658994492" y="145.4266295190921" text-anchor="middle" font-size="12.0" fill="#27ae60" filter="url(#wordShadow_a7f597c5f52d4130b3ab69595aa5c15e)">Quantum Computing<title>Quantum Computing: weight 55.00</title></text></g></svg>
+<div class="svg-slideshow-card-slideshow5402fb16f73d9e48" id="card-slideshow5402fb16f73d9e48-1" onclick="galleryslideshow5402fb16f73d9e48.openModal('card-slideshow5402fb16f73d9e48-1')">
+  <div class="svg-slideshow-preview-slideshow5402fb16f73d9e48">
+    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_a04d1f5d303241a3a6941f0f65102afa" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Programming Languages 2024","1","JavaScript","90.0","2128ec110f044a0f9788d8b08d6488f8","false","800","600","10","60","rectangle","1.0"],["","2","Python","85.0","d74a356fcf7849388d8b80e828bfd42d","","","","","","",""],["","3","Java","80.0","b061b5990c69409eb5da87c55c0fabc9","","","","","","",""],["","4","TypeScript","75.0","d5b6d74cd8c14dc386367ce76cc217ee","","","","","","",""],["","5","C#","70.0","e7f1b933cd9a4c43b02527506ab40690","","","","","","",""],["","6","PHP","65.0","8623554f052c4210adc9205974e0c202","","","","","","",""],["","7","C++","60.0","8ef0026dc67f46969779b96a9d43f8c7","","","","","","",""],["","8","Ruby","55.0","eae5d2a2f0ce47cebe51be5f7ec13d9f","","","","","","",""],["","9","Go","50.0","95c13273338a4f9eabcae5fa6935ad90","","","","","","",""],["","10","Rust","45.0","329ef4beb5484a35bb4c3f79870c962e","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_a04d1f5d303241a3a6941f0f65102afa" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_a04d1f5d303241a3a6941f0f65102afa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_a04d1f5d303241a3a6941f0f65102afa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_a04d1f5d303241a3a6941f0f65102afa" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_a04d1f5d303241a3a6941f0f65102afa"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_a04d1f5d303241a3a6941f0f65102afa"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_a04d1f5d303241a3a6941f0f65102afa .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_a04d1f5d303241a3a6941f0f65102afa .word-text:hover { filter: url(#wordGlow_a04d1f5d303241a3a6941f0f65102afa); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Programming Languages 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#f1e05a" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">JavaScript<title>JavaScript: weight 90.00</title></text><text class="word-text" x="410.07173940069976" y="407.4130627939877" text-anchor="middle" font-size="54.0" fill="#3572A5" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">Python<title>Python: weight 85.00</title></text><text class="word-text" x="398.69053344032295" y="251.70671774265176" text-anchor="middle" font-size="49.0" fill="#b07219" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">Java<title>Java: weight 80.00</title></text><text class="word-text" x="420.2044201908453" y="186.2637726715896" text-anchor="middle" font-size="43.0" fill="#2b7489" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">TypeScript<title>TypeScript: weight 75.00</title></text><text class="word-text" x="314.1661825379962" y="246.7059582649062" text-anchor="middle" font-size="38.0" fill="#178600" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">C#<title>C#: weight 70.00</title></text><text class="word-text" x="496.55129725657264" y="266.0933147229571" text-anchor="middle" font-size="32.0" fill="#4F5D95" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">PHP<title>PHP: weight 65.00</title></text><text class="word-text" x="416.1465886091933" y="467.2797638832674" text-anchor="middle" font-size="27.0" fill="#f34b7d" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">C++<title>C++: weight 60.00</title></text><text class="word-text" x="286.60770025114573" y="395.24923003157215" text-anchor="middle" font-size="21.0" fill="#701516" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">Ruby<title>Ruby: weight 55.00</title></text><text class="word-text" x="371.71368425458286" y="462.86101269273973" text-anchor="middle" font-size="16.0" fill="#00ADD8" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">Go<title>Go: weight 50.00</title></text><text class="word-text" x="479.64237268381817" y="229.54028319007665" text-anchor="middle" font-size="10.0" fill="#dea584" filter="url(#wordShadow_a04d1f5d303241a3a6941f0f65102afa)">Rust<title>Rust: weight 45.00</title></text></g></svg>
   </div>
-  <div class="svg-slideshow-info-slideshow0e37319fc48d6455">
-    <div class="svg-slideshow-name-slideshow0e37319fc48d6455">Wordcloud</div>
-    <div class="svg-slideshow-meta-slideshow0e37319fc48d6455">WORDCLOUD</div>
-  </div>
-</div>
-<div class="svg-slideshow-card-slideshow0e37319fc48d6455" id="card-slideshow0e37319fc48d6455-3" onclick="galleryslideshow0e37319fc48d6455.openModal('card-slideshow0e37319fc48d6455-3')">
-  <div class="svg-slideshow-preview-slideshow0e37319fc48d6455">
-    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_7f769914515549f2aa497d587da82e2e" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Software Development Concepts","1","Agile","90.0","d0b8a80c04a3448581644dbf0f7f0305","false","800","600","14","50","rectangle","1.0"],["","2","CI/CD","85.0","740f99cb6fca464b96bbde9f7ebb9934","","","","","","",""],["","3","Testing","80.0","804d9cfbb9fa42bb88d3d5b9b6ff0cf6","","","","","","",""],["","4","Microservices","75.0","944508f60ef4482ea8e23a17c463aea0","","","","","","",""],["","5","Containers","70.0","766e076438694322a4f59cf22b8519b7","","","","","","",""],["","6","Serverless","65.0","34ff69e2cba84a1eb400f8fd7d867efa","","","","","","",""],["","7","API","60.0","56a81edff26d48c6a66903ea23e06356","","","","","","",""],["","8","Refactoring","55.0","2269b1d5eff3405381b0903c86eb63b8","","","","","","",""],["","9","Clean Code","50.0","707e087740ae43a5bdc12c9ddb929126","","","","","","",""],["","10","Design Patterns","45.0","b25081c0e7e54f89960d5362bf801287","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_7f769914515549f2aa497d587da82e2e" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_7f769914515549f2aa497d587da82e2e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_7f769914515549f2aa497d587da82e2e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_7f769914515549f2aa497d587da82e2e" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_7f769914515549f2aa497d587da82e2e"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_7f769914515549f2aa497d587da82e2e"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_7f769914515549f2aa497d587da82e2e .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_7f769914515549f2aa497d587da82e2e .word-text:hover { filter: url(#wordGlow_7f769914515549f2aa497d587da82e2e); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Software Development Concepts</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="50.0" fill="#ff7979" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Agile<title>Agile: weight 90.00</title></text><text class="word-text" x="392.422002515971" y="395.6932460204956" text-anchor="middle" font-size="46.0" fill="#7ed6df" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">CI/CD<title>CI/CD: weight 85.00</title></text><text class="word-text" x="391.82532833347665" y="264.37833161430706" text-anchor="middle" font-size="42.0" fill="#f6e58d" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Testing<title>Testing: weight 80.00</title></text><text class="word-text" x="384.1153944069374" y="208.32401331184397" text-anchor="middle" font-size="38.0" fill="#badc58" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Microservices<title>Microservices: weight 75.00</title></text><text class="word-text" x="422.66205957089034" y="452.05483639743545" text-anchor="middle" font-size="34.0" fill="#ffbe76" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Containers<title>Containers: weight 70.00</title></text><text class="word-text" x="560.7957932540444" y="335.9447672977589" text-anchor="middle" font-size="30.0" fill="#ff9ff3" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Serverless<title>Serverless: weight 65.00</title></text><text class="word-text" x="295.62109552664447" y="323.7677291097182" text-anchor="middle" font-size="26.0" fill="#f9ca24" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">API<title>API: weight 60.00</title></text><text class="word-text" x="533.3013237052253" y="402.6929480169273" text-anchor="middle" font-size="22.0" fill="#686de0" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Refactoring<title>Refactoring: weight 55.00</title></text><text class="word-text" x="263.78003429463604" y="365.82515816847945" text-anchor="middle" font-size="18.0" fill="#be2edd" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Clean Code<title>Clean Code: weight 50.00</title></text><text class="word-text" x="541.3907716915799" y="294.14758962582147" text-anchor="middle" font-size="14.0" fill="#eb4d4b" filter="url(#wordShadow_7f769914515549f2aa497d587da82e2e)">Design Patterns<title>Design Patterns: weight 45.00</title></text></g></svg>
-  </div>
-  <div class="svg-slideshow-info-slideshow0e37319fc48d6455">
-    <div class="svg-slideshow-name-slideshow0e37319fc48d6455">Wordcloud</div>
-    <div class="svg-slideshow-meta-slideshow0e37319fc48d6455">WORDCLOUD</div>
+  <div class="svg-slideshow-info-slideshow5402fb16f73d9e48">
+    <div class="svg-slideshow-name-slideshow5402fb16f73d9e48">Wordcloud</div>
+    <div class="svg-slideshow-meta-slideshow5402fb16f73d9e48">WORDCLOUD</div>
   </div>
 </div>
+<div class="svg-slideshow-card-slideshow5402fb16f73d9e48" id="card-slideshow5402fb16f73d9e48-2" onclick="galleryslideshow5402fb16f73d9e48.openModal('card-slideshow5402fb16f73d9e48-2')">
+  <div class="svg-slideshow-preview-slideshow5402fb16f73d9e48">
+    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_57874f1e4d3d4a169d465806beaf2acf" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Technology Trends 2024","1","Cloud Computing","85.0","c5c8ef8014424338bf6d48fc09d05f92","false","800","600","12","60","rectangle","1.0"],["","2","Artificial Intelligence","92.0","1252a18a70d0409595fdb39d69197e99","","","","","","",""],["","3","Machine Learning","78.0","d8f8ac1a91c34c4c9418dfc491e250e0","","","","","","",""],["","4","Blockchain","65.0","889066743cd242e79477db147ac0302a","","","","","","",""],["","5","IoT","70.0","c817af6900f94917b1349b806e3fc948","","","","","","",""],["","6","Cybersecurity","88.0","a0c0fe6ef1e946c989fa11346aeecb5b","","","","","","",""],["","7","Big Data","75.0","2f06ae57a6aa4554b0b2be7efb903b1f","","","","","","",""],["","8","DevOps","68.0","0774708be0a84030a20c5494d48102dc","","","","","","",""],["","9","Quantum Computing","55.0","89990d978ec94ab8a2ddfccdb6fe88e7","","","","","","",""],["","10","Edge Computing","60.0","e75bfc9941d547dcbef7a6a79a6460aa","","","","","","",""],["","11","5G","72.0","e5484be9236b4dcc8852c38d5a265f25","","","","","","",""],["","12","AR/VR","58.0","d8c4f830bde044c4aff9696963f03798","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_57874f1e4d3d4a169d465806beaf2acf" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_57874f1e4d3d4a169d465806beaf2acf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_57874f1e4d3d4a169d465806beaf2acf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_57874f1e4d3d4a169d465806beaf2acf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_57874f1e4d3d4a169d465806beaf2acf"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_57874f1e4d3d4a169d465806beaf2acf"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_57874f1e4d3d4a169d465806beaf2acf .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_57874f1e4d3d4a169d465806beaf2acf .word-text:hover { filter: url(#wordGlow_57874f1e4d3d4a169d465806beaf2acf); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Technology Trends 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Artificial Intelligence<title>Artificial Intelligence: weight 92.00</title></text><text class="word-text" x="395.7444925955661" y="409.14483788434586" text-anchor="middle" font-size="55.0" fill="#1abc9c" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Cybersecurity<title>Cybersecurity: weight 88.00</title></text><text class="word-text" x="391.24657152885163" y="255.07011908452694" text-anchor="middle" font-size="51.0" fill="#3498db" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Cloud Computing<title>Cloud Computing: weight 85.00</title></text><text class="word-text" x="373.70767232400965" y="191.13759917136014" text-anchor="middle" font-size="42.0" fill="#2ecc71" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Machine Learning<title>Machine Learning: weight 78.00</title></text><text class="word-text" x="377.1616842136199" y="474.3082105182948" text-anchor="middle" font-size="38.0" fill="#34495e" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Big Data<title>Big Data: weight 75.00</title></text><text class="word-text" x="496.9273641935706" y="470.79408537379516" text-anchor="middle" font-size="34.0" fill="#3498db" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">5G<title>5G: weight 72.00</title></text><text class="word-text" x="420.66727282622924" y="136.29376561385297" text-anchor="middle" font-size="31.0" fill="#f39c12" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">IoT<title>IoT: weight 70.00</title></text><text class="word-text" x="414.7771074789821" y="525.6808813710734" text-anchor="middle" font-size="29.0" fill="#e67e22" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">DevOps<title>DevOps: weight 68.00</title></text><text class="word-text" x="317.0262010236334" y="126.64227524988112" text-anchor="middle" font-size="25.0" fill="#e74c3c" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Blockchain<title>Blockchain: weight 65.00</title></text><text class="word-text" x="287.640924907297" y="517.8839121364857" text-anchor="middle" font-size="18.0" fill="#d35400" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Edge Computing<title>Edge Computing: weight 60.00</title></text><text class="word-text" x="553.0876249731057" y="461.37246397016196" text-anchor="middle" font-size="16.0" fill="#9b59b6" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">AR/VR<title>AR/VR: weight 58.00</title></text><text class="word-text" x="520.2461985860356" y="149.92717424098748" text-anchor="middle" font-size="12.0" fill="#27ae60" filter="url(#wordShadow_57874f1e4d3d4a169d465806beaf2acf)">Quantum Computing<title>Quantum Computing: weight 55.00</title></text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow5402fb16f73d9e48">
+    <div class="svg-slideshow-name-slideshow5402fb16f73d9e48">Wordcloud</div>
+    <div class="svg-slideshow-meta-slideshow5402fb16f73d9e48">WORDCLOUD</div>
+  </div>
+</div>
+<div class="svg-slideshow-card-slideshow5402fb16f73d9e48" id="card-slideshow5402fb16f73d9e48-3" onclick="galleryslideshow5402fb16f73d9e48.openModal('card-slideshow5402fb16f73d9e48-3')">
+  <div class="svg-slideshow-preview-slideshow5402fb16f73d9e48">
+    <?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_2e0db427506c438ba873a4f076a25b11" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Software Development Concepts","1","Agile","90.0","768425dc592d4c1083b124c67dd4fce1","false","800","600","14","50","rectangle","1.0"],["","2","CI/CD","85.0","f84af2784265497aa98a7ef07dcecccd","","","","","","",""],["","3","Testing","80.0","879f336a4c664ad1a0a0b7694c1f4bce","","","","","","",""],["","4","Microservices","75.0","d510a4e841f845998fc145431ba77b13","","","","","","",""],["","5","Containers","70.0","62698531e84a486988a19e26fc76b599","","","","","","",""],["","6","Serverless","65.0","d286ee5b0ca84f7fb1c54e95ca5bf740","","","","","","",""],["","7","API","60.0","1e7df8d6d41c4ab6a5548457f65cde43","","","","","","",""],["","8","Refactoring","55.0","ec66611249ed444781d76cc10878d637","","","","","","",""],["","9","Clean Code","50.0","d30dffd3b9694fe480a2fbc7f9bed19b","","","","","","",""],["","10","Design Patterns","45.0","ae0e29eb4e2a401e993da1c34b274aa2","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_2e0db427506c438ba873a4f076a25b11" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_2e0db427506c438ba873a4f076a25b11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_2e0db427506c438ba873a4f076a25b11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_2e0db427506c438ba873a4f076a25b11" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_2e0db427506c438ba873a4f076a25b11"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_2e0db427506c438ba873a4f076a25b11"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_2e0db427506c438ba873a4f076a25b11 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_2e0db427506c438ba873a4f076a25b11 .word-text:hover { filter: url(#wordGlow_2e0db427506c438ba873a4f076a25b11); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Software Development Concepts</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="50.0" fill="#ff7979" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Agile<title>Agile: weight 90.00</title></text><text class="word-text" x="391.21506272421374" y="395.783620321902" text-anchor="middle" font-size="46.0" fill="#7ed6df" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">CI/CD<title>CI/CD: weight 85.00</title></text><text class="word-text" x="413.79545069401445" y="266.54712048607576" text-anchor="middle" font-size="42.0" fill="#f6e58d" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Testing<title>Testing: weight 80.00</title></text><text class="word-text" x="381.5985991348458" y="208.92059260011223" text-anchor="middle" font-size="38.0" fill="#badc58" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Microservices<title>Microservices: weight 75.00</title></text><text class="word-text" x="388.87621327049857" y="455.07958470249747" text-anchor="middle" font-size="34.0" fill="#ffbe76" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Containers<title>Containers: weight 70.00</title></text><text class="word-text" x="240.30368929091463" y="327.76245134352075" text-anchor="middle" font-size="30.0" fill="#ff9ff3" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Serverless<title>Serverless: weight 65.00</title></text><text class="word-text" x="498.40664349279905" y="339.19419173906863" text-anchor="middle" font-size="26.0" fill="#f9ca24" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">API<title>API: weight 60.00</title></text><text class="word-text" x="533.9214070462195" y="384.7265837601249" text-anchor="middle" font-size="22.0" fill="#686de0" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Refactoring<title>Refactoring: weight 55.00</title></text><text class="word-text" x="270.0203316531038" y="284.3933830166698" text-anchor="middle" font-size="18.0" fill="#be2edd" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Clean Code<title>Clean Code: weight 50.00</title></text><text class="word-text" x="255.70433134976295" y="364.0244244712727" text-anchor="middle" font-size="14.0" fill="#eb4d4b" filter="url(#wordShadow_2e0db427506c438ba873a4f076a25b11)">Design Patterns<title>Design Patterns: weight 45.00</title></text></g></svg>
+  </div>
+  <div class="svg-slideshow-info-slideshow5402fb16f73d9e48">
+    <div class="svg-slideshow-name-slideshow5402fb16f73d9e48">Wordcloud</div>
+    <div class="svg-slideshow-meta-slideshow5402fb16f73d9e48">WORDCLOUD</div>
+  </div>
 </div>
 </div>
-<div class="slideshow-modal-slideshow0e37319fc48d6455" id="modal-slideshow0e37319fc48d6455" onclick="if(event.target.id === 'modal-slideshow0e37319fc48d6455') galleryslideshow0e37319fc48d6455.closeModal()">
-  <div class="slideshow-modal-content-slideshow0e37319fc48d6455">
-    <button class="slideshow-modal-close-slideshow0e37319fc48d6455" onclick="event.stopPropagation(); galleryslideshow0e37319fc48d6455.closeModal()">×</button>
-    <div class="slideshow-modal-svg-slideshow0e37319fc48d6455" id="modalContent-slideshow0e37319fc48d6455"></div>
+</div>
+<div class="slideshow-modal-slideshow5402fb16f73d9e48" id="modal-slideshow5402fb16f73d9e48" onclick="if(event.target.id === 'modal-slideshow5402fb16f73d9e48') galleryslideshow5402fb16f73d9e48.closeModal()">
+  <div class="slideshow-modal-content-slideshow5402fb16f73d9e48">
+    <button class="slideshow-modal-close-slideshow5402fb16f73d9e48" onclick="event.stopPropagation(); galleryslideshow5402fb16f73d9e48.closeModal()">×</button>
+    <div class="slideshow-modal-svg-slideshow5402fb16f73d9e48" id="modalContent-slideshow5402fb16f73d9e48"></div>
   </div>
 </div>
 
@@ -2803,7 +2931,7 @@ window.galleryslideshow0e37319fc48d6455 = {
 (function() {
   const handleEscape = function(e) {
     if (e.key === 'Escape') {
-      galleryslideshow0e37319fc48d6455.closeModal();
+      galleryslideshow5402fb16f73d9e48.closeModal();
     }
   };
   document.addEventListener('keydown', handleEscape);
@@ -3020,11 +3148,5 @@ mermaid.initialize({
     `
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-container">
-    <a href="quadrant-showcase.html" class="nav-prev">&larr; Magic Quadrant Showcase</a>
-          <span class="nav-next-disabled">Next &rarr;</span>
-  </div>
-</nav>
 </body>
 </html>

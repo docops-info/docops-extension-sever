@@ -1141,7 +1141,59 @@
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1241,6 +1293,33 @@
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1271,6 +1350,7 @@
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1315,6 +1395,22 @@
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1352,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1550,7 +1646,7 @@
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -2017,7 +2113,8 @@
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2054,8 +2151,36 @@
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <a href="tutorial.html" class="nav-prev">&larr; Tutorial</a>
+          <span class="nav-next-disabled">Next &rarr;</span>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
 <script>
@@ -2422,6 +2547,9 @@ window.onload = function() {
 };
 </script>
 
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/viz-global.js'></script>
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/plantuml.js'></script>
+<script>plantumlLoad();</script>
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
@@ -2517,306 +2645,214 @@ PostgreSQL | 72 | #9b59b6
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
+<style>
+.imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
 
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-8183890d9b7eb1c5 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-8183890d9b7eb1c5.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-8183890d9b7eb1c5 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-8183890d9b7eb1c5 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-8183890d9b7eb1c5:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-8183890d9b7eb1c5 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-8183890d9b7eb1c5 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
+.svg-with-controls {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-8183890d9b7eb1c5 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-8183890d9b7eb1c5 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-8183890d9b7eb1c5 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-8183890d9b7eb1c5 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-8183890d9b7eb1c5 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-8183890d9b7eb1c5 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
+.svg-bottom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  display: flex;
+  gap: 6px;
+  background: rgba(15, 20, 30, 0.85);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
+.svg-with-controls:hover .svg-bottom-controls {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.svg-control-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.svg-control-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.svg-modal.docops-svg-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 20, 25, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.svg-modal.docops-svg-modal.active {
+  display: flex;
+}
+
+.svg-modal-content.docops-svg-modal-content {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  background: var(--docops-card-bg, #1e293b);
+  border-radius: 20px;
+  padding: 48px 24px 24px 24px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.svg-modal-close.docops-svg-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.svg-modal-close.docops-svg-modal-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
+}
+
+.svg-modal-body.docops-svg-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.svg-modal-body.docops-svg-modal-body svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
 </style>
 
 <script>
-  // View Modal Control
-  window.svgModalsvgviewer_8183890d9b7eb1c5 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-8183890d9b7eb1c5');
-          const sourceContainer = document.getElementById('svgviewer-8183890d9b7eb1c5');
+(function() {
+  if (window.__docopsEscapeHandlerInstalled) return;
+  window.__docopsEscapeHandlerInstalled = true;
 
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-8183890d9b7eb1c5');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-8183890d9b7eb1c5');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_8183890d9b7eb1c5 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-8183890d9b7eb1c5');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-8183890d9b7eb1c5');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-8183890d9b7eb1c5');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-8183890d9b7eb1c5');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_8183890d9b7eb1c5.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-8183890d9b7eb1c5');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_8183890d9b7eb1c5.close();
-          }
-      }
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.svg-modal.active').forEach(function(modal) {
+      modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
   });
+})();
 </script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-8183890d9b7eb1c5" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAC4bqGkA_yvJLMlJtVXwrVQIzy9KUXDOyS9NUQgBCXLlZua55eeVBGdWARUYGnHlJlYg-GYGXLq6ulxgTYYKNQoWpkBC2djE0iIlCSJqBBSwBBHKlkmmlklmEFFjoIC5BUjUKDU52dwQAENx6RGAAAAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= My Word Cloud Title
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-2a33aeb80c3a7e92" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAJAT-2kA_yvJLMlJtVXwrVQIzy9KUXDOyS9NUQgBCXLlZua55eeVBGdWARUYGnHlJlYg-GYGXLq6ulxgTYYKNQoWpkBC2djE0iIlCSJqBBSwBBHKlkmmlklmEFFjoIC5BUjUKDU52dwQAENx6RGAAAAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= My Word Cloud Title
 minFontSize= 12
 maxFontSize= 60
 ---
 Word 1 | 85 | #3498db
 Word 2 | 92 | #9b59b6
 Word 3 | 78 | #2ecc71" data-kind="wordcloud">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_9adf3f8f1f08483c99b1e8c36e9e4102" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["My Word Cloud Title","1","Word 1","85.0","7c0c8883747a45db8c0ebb8097671a1a","false","800","600","12","60","rectangle","1.0"],["","2","Word 2","92.0","8d7396dfa18f4da080170ed803f81663","","","","","","",""],["","3","Word 3","78.0","d8e7bcb5ada14c8eb14d058e02a93ff3","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_9adf3f8f1f08483c99b1e8c36e9e4102" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_9adf3f8f1f08483c99b1e8c36e9e4102" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_9adf3f8f1f08483c99b1e8c36e9e4102" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_9adf3f8f1f08483c99b1e8c36e9e4102" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_9adf3f8f1f08483c99b1e8c36e9e4102"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_9adf3f8f1f08483c99b1e8c36e9e4102"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_9adf3f8f1f08483c99b1e8c36e9e4102 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_9adf3f8f1f08483c99b1e8c36e9e4102 .word-text:hover { filter: url(#wordGlow_9adf3f8f1f08483c99b1e8c36e9e4102); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">My Word Cloud Title</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_9adf3f8f1f08483c99b1e8c36e9e4102)">Word 2<title>Word 2: weight 92.00</title></text><text class="word-text" x="407.2174240479221" y="395.733837623326" text-anchor="middle" font-size="36.0" fill="#3498db" filter="url(#wordShadow_9adf3f8f1f08483c99b1e8c36e9e4102)">Word 1<title>Word 1: weight 85.00</title></text><text class="word-text" x="406.5505856098322" y="276.2051055525208" text-anchor="middle" font-size="12.0" fill="#2ecc71" filter="url(#wordShadow_9adf3f8f1f08483c99b1e8c36e9e4102)">Word 3<title>Word 3: weight 78.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_d4192ad2a17c443d861ae251f80ca781" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["My Word Cloud Title","1","Word 1","85.0","f7336686e9334fb88e22c3f0d4a3fc10","false","800","600","12","60","rectangle","1.0"],["","2","Word 2","92.0","a1fd297ee68b49d29d97620bbc5b3f06","","","","","","",""],["","3","Word 3","78.0","e454b7d929764b82a2b7718c39944620","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_d4192ad2a17c443d861ae251f80ca781" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_d4192ad2a17c443d861ae251f80ca781" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_d4192ad2a17c443d861ae251f80ca781" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_d4192ad2a17c443d861ae251f80ca781" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_d4192ad2a17c443d861ae251f80ca781"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_d4192ad2a17c443d861ae251f80ca781"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_d4192ad2a17c443d861ae251f80ca781 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_d4192ad2a17c443d861ae251f80ca781 .word-text:hover { filter: url(#wordGlow_d4192ad2a17c443d861ae251f80ca781); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">My Word Cloud Title</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_d4192ad2a17c443d861ae251f80ca781)">Word 2<title>Word 2: weight 92.00</title></text><text class="word-text" x="407.83000905449785" y="262.1729851173857" text-anchor="middle" font-size="36.0" fill="#3498db" filter="url(#wordShadow_d4192ad2a17c443d861ae251f80ca781)">Word 1<title>Word 1: weight 85.00</title></text><text class="word-text" x="412.51450672517126" y="381.25417380278014" text-anchor="middle" font-size="12.0" fill="#2ecc71" filter="url(#wordShadow_d4192ad2a17c443d861ae251f80ca781)">Word 3<title>Word 3: weight 78.00</title></text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_8183890d9b7eb1c5.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_8183890d9b7eb1c5.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-2a33aeb80c3a7e92')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-2a33aeb80c3a7e92')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-8183890d9b7eb1c5')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-8183890d9b7eb1c5')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-2a33aeb80c3a7e92')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-2a33aeb80c3a7e92')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-2a33aeb80c3a7e92')">PRINT</button>
 </div>
-<div id="modal-svgviewer-8183890d9b7eb1c5" class="svg-modal-svgviewer-8183890d9b7eb1c5" onclick="if(event.target === this) svgModalsvgviewer_8183890d9b7eb1c5.close()">
-    <div class="svg-modal-content-svgviewer-8183890d9b7eb1c5">
-        <button class="svg-modal-close-svgviewer-8183890d9b7eb1c5" onclick="svgModalsvgviewer_8183890d9b7eb1c5.close()">×</button>
-        <div id="modal-body-svgviewer-8183890d9b7eb1c5" class="svg-modal-body-svgviewer-8183890d9b7eb1c5"></div>
+<div id="modal-sv-2a33aeb80c3a7e92" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-2a33aeb80c3a7e92')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-2a33aeb80c3a7e92')">×</button>
+        <div id="modal-body-sv-2a33aeb80c3a7e92" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-8183890d9b7eb1c5" class="svg-modal-svgviewer-8183890d9b7eb1c5" onclick="if(event.target === this) csvModalsvgviewer_8183890d9b7eb1c5.close()">
-    <div class="svg-modal-content-svgviewer-8183890d9b7eb1c5">
-        <button class="svg-modal-close-svgviewer-8183890d9b7eb1c5" onclick="csvModalsvgviewer_8183890d9b7eb1c5.close()">×</button>
-        <div class="svg-modal-header-svgviewer-8183890d9b7eb1c5" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-2a33aeb80c3a7e92" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-2a33aeb80c3a7e92')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-2a33aeb80c3a7e92')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-8183890d9b7eb1c5" class="svg-modal-body-svgviewer-8183890d9b7eb1c5" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-2a33aeb80c3a7e92" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-8183890d9b7eb1c5" class="svg-modal-svgviewer-8183890d9b7eb1c5" onclick="if(event.target === this) docopsSource.close('svgviewer-8183890d9b7eb1c5')">
-    <div class="svg-modal-content-svgviewer-8183890d9b7eb1c5">
-        <button class="svg-modal-close-svgviewer-8183890d9b7eb1c5" onclick="docopsSource.close('svgviewer-8183890d9b7eb1c5')">×</button>
-        <div class="svg-modal-header-svgviewer-8183890d9b7eb1c5" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-2a33aeb80c3a7e92" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-2a33aeb80c3a7e92')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-2a33aeb80c3a7e92')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-8183890d9b7eb1c5" class="svg-modal-body-svgviewer-8183890d9b7eb1c5" style="display: block; overflow: auto;">
+        <div id="source-content-sv-2a33aeb80c3a7e92" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2828,247 +2864,8 @@ imageblock .title {
 <div class="paragraph">
 <p>Optimized colors for dark backgrounds:</p>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-09c650a946197d5f {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-09c650a946197d5f.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-09c650a946197d5f {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-09c650a946197d5f {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-09c650a946197d5f:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-09c650a946197d5f {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-09c650a946197d5f svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-09c650a946197d5f .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-09c650a946197d5f .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-09c650a946197d5f .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-09c650a946197d5f .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-09c650a946197d5f .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-09c650a946197d5f .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_09c650a946197d5f = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-09c650a946197d5f');
-          const sourceContainer = document.getElementById('svgviewer-09c650a946197d5f');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-09c650a946197d5f');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-09c650a946197d5f');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_09c650a946197d5f = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-09c650a946197d5f');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-09c650a946197d5f');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-09c650a946197d5f');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-09c650a946197d5f');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_09c650a946197d5f.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-09c650a946197d5f');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_09c650a946197d5f.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-09c650a946197d5f" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAC4bqGkA_z3NwQqCQBCA4fs8xYLHEGbXHXc9dJCkIjpI9QJrbiakhmkg9PDtbtBlYH4-ZqZ2etg1K8ehGU3XtX3DjqZvZtPYFxMoJMRxDAfzNufr2D4n9mEZuhHduEUyUC7Tfehd0ORrQkrkFLxvQVaoBM_gsjzt_4YKWlRK6gw2kS_BcqVTRCj3pdvSgOSWioxgs1r59PudyErVcJqrxa0UmEJOPIXd4EtQiHlRaKde_qMMqraGtPwCfXpdDvUAAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Programming Languages 2024
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-809d610253268f88" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAJAT-2kA_z3NwQqCQBCA4fs8xYLHEGbXHXc9dJCkIjpI9QJrbiakhmkg9PDtbtBlYH4-ZqZ2etg1K8ehGU3XtX3DjqZvZtPYFxMoJMRxDAfzNufr2D4n9mEZuhHduEUyUC7Tfehd0ORrQkrkFLxvQVaoBM_gsjzt_4YKWlRK6gw2kS_BcqVTRCj3pdvSgOSWioxgs1r59PudyErVcJqrxa0UmEJOPIXd4EtQiHlRaKde_qMMqraGtPwCfXpdDvUAAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Programming Languages 2024
 ---
 JavaScript | 90 | #f1e05a
 Python | 85 | #3572A5
@@ -3080,59 +2877,49 @@ C++ | 60 | #f34b7d
 Ruby | 55 | #701516
 Go | 50 | #00ADD8
 Rust | 45 | #dea584" data-kind="wordcloud">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_9c516091150e4f03bcecfc9f3ad70ae4" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Programming Languages 2024","1","JavaScript","90.0","86b0c90c38af4469b5fa4b3344a4cd82","true","800","600","10","60","rectangle","1.0"],["","2","Python","85.0","2f619bf13d4e4f52bb20739a7a98c916","","","","","","",""],["","3","Java","80.0","dc5fbf88048e4913b97b239070a48ca9","","","","","","",""],["","4","TypeScript","75.0","7070fbe4027d4ff691d1c807f6b8f0d7","","","","","","",""],["","5","C#","70.0","6cdeed5a38294dd0b3206c82ae758a22","","","","","","",""],["","6","PHP","65.0","db2f47ec0bd64f4da4ff90235d0c44fa","","","","","","",""],["","7","C++","60.0","5cf91c843cb74a53ad54bdc8f91e6402","","","","","","",""],["","8","Ruby","55.0","5c263b2cec9b438ea19a221290fe8aa3","","","","","","",""],["","9","Go","50.0","b8d42b8628e44d31967fea1c1304a143","","","","","","",""],["","10","Rust","45.0","fe22a1f9aaee4aff9d73bb0f162f7c50","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_9c516091150e4f03bcecfc9f3ad70ae4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_9c516091150e4f03bcecfc9f3ad70ae4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_9c516091150e4f03bcecfc9f3ad70ae4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_9c516091150e4f03bcecfc9f3ad70ae4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><filter id="wordShadow_9c516091150e4f03bcecfc9f3ad70ae4"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_9c516091150e4f03bcecfc9f3ad70ae4"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_9c516091150e4f03bcecfc9f3ad70ae4 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_9c516091150e4f03bcecfc9f3ad70ae4 .word-text:hover { filter: url(#wordGlow_9c516091150e4f03bcecfc9f3ad70ae4); transform: scale(1.1); }</style></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#backgroundGradient_9c516091150e4f03bcecfc9f3ad70ae4)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_9c516091150e4f03bcecfc9f3ad70ae4)" stroke-width="1.5" filter="url(#glassDropShadow_9c516091150e4f03bcecfc9f3ad70ae4)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#glassOverlay_9c516091150e4f03bcecfc9f3ad70ae4)" opacity="0.7" />        <g transform="translate(24.0, 38)"><text fill="#f9fafb" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Programming Languages 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#f1e05a" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">JavaScript<title>JavaScript: weight 90.00</title></text><text class="word-text" x="389.92477477581406" y="408.61618499832275" text-anchor="middle" font-size="54.0" fill="#3572A5" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">Python<title>Python: weight 85.00</title></text><text class="word-text" x="402.35017943664513" y="254.11947842262188" text-anchor="middle" font-size="49.0" fill="#b07219" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">Java<title>Java: weight 80.00</title></text><text class="word-text" x="384.76144312015634" y="189.01408924289615" text-anchor="middle" font-size="43.0" fill="#2b7489" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">TypeScript<title>TypeScript: weight 75.00</title></text><text class="word-text" x="318.8233630917719" y="249.4585661021892" text-anchor="middle" font-size="38.0" fill="#178600" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">C#<title>C#: weight 70.00</title></text><text class="word-text" x="503.52989444114405" y="258.0948980178587" text-anchor="middle" font-size="32.0" fill="#4F5D95" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">PHP<title>PHP: weight 65.00</title></text><text class="word-text" x="511.26495222166574" y="391.2416864901186" text-anchor="middle" font-size="27.0" fill="#f34b7d" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">C++<title>C++: weight 60.00</title></text><text class="word-text" x="404.61306084296393" y="467.9102043809306" text-anchor="middle" font-size="21.0" fill="#701516" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">Ruby<title>Ruby: weight 55.00</title></text><text class="word-text" x="274.5094069304977" y="386.2234437501995" text-anchor="middle" font-size="16.0" fill="#00ADD8" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">Go<title>Go: weight 50.00</title></text><text class="word-text" x="278.67027751601665" y="270.52562682461956" text-anchor="middle" font-size="10.0" fill="#dea584" filter="url(#wordShadow_9c516091150e4f03bcecfc9f3ad70ae4)">Rust<title>Rust: weight 45.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_a1ec62f9fc7a48d589b8837484c239ee" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Programming Languages 2024","1","JavaScript","90.0","4b81e4577fa44bd2bb4343d38332d4c3","true","800","600","10","60","rectangle","1.0"],["","2","Python","85.0","c1bfc7d38c3a4b038b8265669af694fe","","","","","","",""],["","3","Java","80.0","97e3ee904e92406f9d263187c1bda743","","","","","","",""],["","4","TypeScript","75.0","686e2ae728414e57aa519b3ca579c0e2","","","","","","",""],["","5","C#","70.0","18c41f439d084f6c9635d0a48994b276","","","","","","",""],["","6","PHP","65.0","5f510fb27dea4e9f8fbd7a5f8149989b","","","","","","",""],["","7","C++","60.0","e3b4f42fb7484a538312bbb82bf2d3f1","","","","","","",""],["","8","Ruby","55.0","6af8e1a1b3bc4a0aade442739765eb74","","","","","","",""],["","9","Go","50.0","28c2d4c2677240039cf174e446bbfe03","","","","","","",""],["","10","Rust","45.0","d513baabc2ed4b4da6ec3394f5c169a0","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_a1ec62f9fc7a48d589b8837484c239ee" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" /><stop offset="100%" style="stop-color:#16213e;stop-opacity:1" /></linearGradient><!-- Glass Border (Dark Mode) --><linearGradient id="glassBorder_a1ec62f9fc7a48d589b8837484c239ee" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /></linearGradient><!-- Link Border (Dark Mode) --><linearGradient id="linkBorder_a1ec62f9fc7a48d589b8837484c239ee" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Dark Mode) --><linearGradient id="glassOverlay_a1ec62f9fc7a48d589b8837484c239ee" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" /></linearGradient><filter id="wordShadow_a1ec62f9fc7a48d589b8837484c239ee"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_a1ec62f9fc7a48d589b8837484c239ee"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_a1ec62f9fc7a48d589b8837484c239ee .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_a1ec62f9fc7a48d589b8837484c239ee .word-text:hover { filter: url(#wordGlow_a1ec62f9fc7a48d589b8837484c239ee); transform: scale(1.1); }</style></defs>          <path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#backgroundGradient_a1ec62f9fc7a48d589b8837484c239ee)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="rgba(0,122,255,0.1)" stroke="url(#glassBorder_a1ec62f9fc7a48d589b8837484c239ee)" stroke-width="1.5" filter="url(#glassDropShadow_a1ec62f9fc7a48d589b8837484c239ee)" /><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="url(#glassOverlay_a1ec62f9fc7a48d589b8837484c239ee)" opacity="0.7" />        <g transform="translate(24.0, 38)"><text fill="#f9fafb" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Programming Languages 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#f1e05a" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">JavaScript<title>JavaScript: weight 90.00</title></text><text class="word-text" x="411.46650198247994" y="252.2985418958221" text-anchor="middle" font-size="54.0" fill="#3572A5" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">Python<title>Python: weight 85.00</title></text><text class="word-text" x="403.86971661990293" y="403.4276853347595" text-anchor="middle" font-size="49.0" fill="#b07219" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">Java<title>Java: weight 80.00</title></text><text class="word-text" x="391.4408391198489" y="469.3959358465187" text-anchor="middle" font-size="43.0" fill="#2b7489" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">TypeScript<title>TypeScript: weight 75.00</title></text><text class="word-text" x="309.7934070666928" y="398.3210590548697" text-anchor="middle" font-size="38.0" fill="#178600" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">C#<title>C#: weight 70.00</title></text><text class="word-text" x="492.95116649817896" y="412.2862848755923" text-anchor="middle" font-size="32.0" fill="#4F5D95" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">PHP<title>PHP: weight 65.00</title></text><text class="word-text" x="283.26105307705154" y="264.35729739956207" text-anchor="middle" font-size="27.0" fill="#f34b7d" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">C++<title>C++: weight 60.00</title></text><text class="word-text" x="378.80902866126564" y="198.00000178701143" text-anchor="middle" font-size="21.0" fill="#701516" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">Ruby<title>Ruby: weight 55.00</title></text><text class="word-text" x="517.857150148134" y="260.5579285121838" text-anchor="middle" font-size="16.0" fill="#00ADD8" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">Go<title>Go: weight 50.00</title></text><text class="word-text" x="434.8191851044445" y="202.90291136212352" text-anchor="middle" font-size="10.0" fill="#dea584" filter="url(#wordShadow_a1ec62f9fc7a48d589b8837484c239ee)">Rust<title>Rust: weight 45.00</title></text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_09c650a946197d5f.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_09c650a946197d5f.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-809d610253268f88')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-809d610253268f88')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-09c650a946197d5f')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-09c650a946197d5f')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-809d610253268f88')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-809d610253268f88')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-809d610253268f88')">PRINT</button>
 </div>
-<div id="modal-svgviewer-09c650a946197d5f" class="svg-modal-svgviewer-09c650a946197d5f" onclick="if(event.target === this) svgModalsvgviewer_09c650a946197d5f.close()">
-    <div class="svg-modal-content-svgviewer-09c650a946197d5f">
-        <button class="svg-modal-close-svgviewer-09c650a946197d5f" onclick="svgModalsvgviewer_09c650a946197d5f.close()">×</button>
-        <div id="modal-body-svgviewer-09c650a946197d5f" class="svg-modal-body-svgviewer-09c650a946197d5f"></div>
+<div id="modal-sv-809d610253268f88" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-809d610253268f88')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-809d610253268f88')">×</button>
+        <div id="modal-body-sv-809d610253268f88" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-09c650a946197d5f" class="svg-modal-svgviewer-09c650a946197d5f" onclick="if(event.target === this) csvModalsvgviewer_09c650a946197d5f.close()">
-    <div class="svg-modal-content-svgviewer-09c650a946197d5f">
-        <button class="svg-modal-close-svgviewer-09c650a946197d5f" onclick="csvModalsvgviewer_09c650a946197d5f.close()">×</button>
-        <div class="svg-modal-header-svgviewer-09c650a946197d5f" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-809d610253268f88" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-809d610253268f88')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-809d610253268f88')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-09c650a946197d5f" class="svg-modal-body-svgviewer-09c650a946197d5f" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-809d610253268f88" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-09c650a946197d5f" class="svg-modal-svgviewer-09c650a946197d5f" onclick="if(event.target === this) docopsSource.close('svgviewer-09c650a946197d5f')">
-    <div class="svg-modal-content-svgviewer-09c650a946197d5f">
-        <button class="svg-modal-close-svgviewer-09c650a946197d5f" onclick="docopsSource.close('svgviewer-09c650a946197d5f')">×</button>
-        <div class="svg-modal-header-svgviewer-09c650a946197d5f" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-809d610253268f88" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-809d610253268f88')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-809d610253268f88')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-09c650a946197d5f" class="svg-modal-body-svgviewer-09c650a946197d5f" style="display: block; overflow: auto;">
+        <div id="source-content-sv-809d610253268f88" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3144,247 +2931,8 @@ imageblock .title {
 <div class="paragraph">
 <p>Visualize feedback themes by frequency:</p>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-6b4fb80264a95010 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-6b4fb80264a95010.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-6b4fb80264a95010 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-6b4fb80264a95010 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-6b4fb80264a95010:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-6b4fb80264a95010 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-6b4fb80264a95010 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-6b4fb80264a95010 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-6b4fb80264a95010 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-6b4fb80264a95010 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-6b4fb80264a95010 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-6b4fb80264a95010 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-6b4fb80264a95010 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_6b4fb80264a95010 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-6b4fb80264a95010');
-          const sourceContainer = document.getElementById('svgviewer-6b4fb80264a95010');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-6b4fb80264a95010');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-6b4fb80264a95010');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_6b4fb80264a95010 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-6b4fb80264a95010');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-6b4fb80264a95010');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-6b4fb80264a95010');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-6b4fb80264a95010');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_6b4fb80264a95010.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-6b4fb80264a95010');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_6b4fb80264a95010.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-6b4fb80264a95010" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAC8bqGkA_1VQy07DMBC8-yssca5InacPOdAUUCUQolTcnfU2WeHYVeoARXw8dkAqvVjr3ZnZ2fHkDdZ8h9BbZ1x34rsRrT5ykYiMfZD2fc2rJGE9Utf7mhehHsjeOetf6CtQl4IN6vP8LxK2WCxYY9ykeeOGw-TJdvybV3l4rtJMVrplN6OnPQEpwzfWozHUoQUMCCkiTLa5bAv2qKAni_wB1Wh_ZcoqzgUClEu2Mg7eoFdkQ7OYF2CZQQps43YRnMTWPpUQbDanFscjwjSSP0VDs9JStSCBrajja-VVJP0ZzWSObI3vT4djVJ_RWJQoBHuelPXTcHFfPtNEqTBEcKs7vJgWsxOd5lkIML-Pa8T_PLbXr9soUp2v_wFKndMPnAEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Technology Trends 2024
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-101bc03f81da2aba" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAJAT-2kA_1VQy07DMBC8-yssca5InacPOdAUUCUQolTcnfU2WeHYVeoARXw8dkAqvVjr3ZnZ2fHkDdZ8h9BbZ1x34rsRrT5ykYiMfZD2fc2rJGE9Utf7mhehHsjeOetf6CtQl4IN6vP8LxK2WCxYY9ykeeOGw-TJdvybV3l4rtJMVrplN6OnPQEpwzfWozHUoQUMCCkiTLa5bAv2qKAni_wB1Wh_ZcoqzgUClEu2Mg7eoFdkQ7OYF2CZQQps43YRnMTWPpUQbDanFscjwjSSP0VDs9JStSCBrajja-VVJP0ZzWSObI3vT4djVJ_RWJQoBHuelPXTcHFfPtNEqTBEcKs7vJgWsxOd5lkIML-Pa8T_PLbXr9soUp2v_wFKndMPnAEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=wordcloud&filename=ghi.svg" data-original-content="title= Technology Trends 2024
 width= 800
 height= 600
 minFontSize= 12
@@ -3402,59 +2950,49 @@ Quantum Computing | 55 | #27ae60
 Edge Computing | 60 | #d35400
 5G | 72 | #3498db
 AR/VR | 58 | #9b59b6" data-kind="wordcloud">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_ec1da3583b58423d85f5df476b3cdbe3" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Technology Trends 2024","1","Cloud Computing","85.0","b108733a5f0042fda66a7a52da453058","false","800","600","12","60","rectangle","1.0"],["","2","Artificial Intelligence","92.0","ba5dfbb8ead645128e076a54034df501","","","","","","",""],["","3","Machine Learning","78.0","5c982cbc061f4d8e9ca13bda33dbfd9a","","","","","","",""],["","4","Blockchain","65.0","f7ed4d5069884467aeb7586ab6763e11","","","","","","",""],["","5","IoT","70.0","c87b2968fcb54073bb9f1e67eb504623","","","","","","",""],["","6","Cybersecurity","88.0","575447734a5e446e836c2795006fecd9","","","","","","",""],["","7","Big Data","75.0","333ecefffff44a2591c019230c5091c5","","","","","","",""],["","8","DevOps","68.0","b10f3dc883b441b2aeb46fe8d430a182","","","","","","",""],["","9","Quantum Computing","55.0","59405df26fc049cd96ad227c9aab38a9","","","","","","",""],["","10","Edge Computing","60.0","2058866fb59a445d90949593abaef721","","","","","","",""],["","11","5G","72.0","bb02f3bd9d644f6f8d5d6d6339716834","","","","","","",""],["","12","AR/VR","58.0","7b03aacb67794d84978f0526514f953b","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_ec1da3583b58423d85f5df476b3cdbe3" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_ec1da3583b58423d85f5df476b3cdbe3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_ec1da3583b58423d85f5df476b3cdbe3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_ec1da3583b58423d85f5df476b3cdbe3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_ec1da3583b58423d85f5df476b3cdbe3"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_ec1da3583b58423d85f5df476b3cdbe3"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_ec1da3583b58423d85f5df476b3cdbe3 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_ec1da3583b58423d85f5df476b3cdbe3 .word-text:hover { filter: url(#wordGlow_ec1da3583b58423d85f5df476b3cdbe3); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Technology Trends 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Artificial Intelligence<title>Artificial Intelligence: weight 92.00</title></text><text class="word-text" x="402.0460659888535" y="407.083419803443" text-anchor="middle" font-size="55.0" fill="#1abc9c" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Cybersecurity<title>Cybersecurity: weight 88.00</title></text><text class="word-text" x="395.1967001561018" y="254.71362756370786" text-anchor="middle" font-size="51.0" fill="#3498db" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Cloud Computing<title>Cloud Computing: weight 85.00</title></text><text class="word-text" x="397.5358428282251" y="187.73682025265904" text-anchor="middle" font-size="42.0" fill="#2ecc71" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Machine Learning<title>Machine Learning: weight 78.00</title></text><text class="word-text" x="412.8630832615771" y="472.9004183643389" text-anchor="middle" font-size="38.0" fill="#34495e" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Big Data<title>Big Data: weight 75.00</title></text><text class="word-text" x="296.6138829978412" y="478.2268109319641" text-anchor="middle" font-size="34.0" fill="#3498db" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">5G<title>5G: weight 72.00</title></text><text class="word-text" x="404.2131495065101" y="522.610985160627" text-anchor="middle" font-size="31.0" fill="#f39c12" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">IoT<title>IoT: weight 70.00</title></text><text class="word-text" x="388.4000353824731" y="132.43107259081842" text-anchor="middle" font-size="29.0" fill="#e67e22" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">DevOps<title>DevOps: weight 68.00</title></text><text class="word-text" x="513.8308055362861" y="523.9490430160932" text-anchor="middle" font-size="25.0" fill="#e74c3c" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Blockchain<title>Blockchain: weight 65.00</title></text><text class="word-text" x="576.8526100559385" y="465.01402136530334" text-anchor="middle" font-size="18.0" fill="#d35400" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Edge Computing<title>Edge Computing: weight 60.00</title></text><text class="word-text" x="332.75602022423857" y="518.9249188740324" text-anchor="middle" font-size="16.0" fill="#9b59b6" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">AR/VR<title>AR/VR: weight 58.00</title></text><text class="word-text" x="522.9092530383051" y="137.69445797099314" text-anchor="middle" font-size="12.0" fill="#27ae60" filter="url(#wordShadow_ec1da3583b58423d85f5df476b3cdbe3)">Quantum Computing<title>Quantum Computing: weight 55.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_96285c187eb84b998316195de17d8e29" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Technology Trends 2024","1","Cloud Computing","85.0","5a0778701878497d920023db0dde62ad","false","800","600","12","60","rectangle","1.0"],["","2","Artificial Intelligence","92.0","648135379c684ff9a7d766b2b0999ed2","","","","","","",""],["","3","Machine Learning","78.0","5ff773dcb10944578f18cd82edb5a12b","","","","","","",""],["","4","Blockchain","65.0","a1d80ac23fb54efa870ad60234ad4acd","","","","","","",""],["","5","IoT","70.0","6017beff4df74c52853de01b8de4a135","","","","","","",""],["","6","Cybersecurity","88.0","fabf0b62e472469f826b21221770f32a","","","","","","",""],["","7","Big Data","75.0","afcf99fedbb3447d9c05d701f45eccee","","","","","","",""],["","8","DevOps","68.0","9e7de294dd4943708c52f25ff35fc25b","","","","","","",""],["","9","Quantum Computing","55.0","ecb0e1cc79f645cc9cddf0c912744112","","","","","","",""],["","10","Edge Computing","60.0","9b4847654c434316ad6b5cb0e351e5dd","","","","","","",""],["","11","5G","72.0","9a2bb5ab385d402983d44bb0047bc5a9","","","","","","",""],["","12","AR/VR","58.0","4f943e12249f4ccabfbf753a1c1a74c6","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_96285c187eb84b998316195de17d8e29" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_96285c187eb84b998316195de17d8e29" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_96285c187eb84b998316195de17d8e29" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_96285c187eb84b998316195de17d8e29" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_96285c187eb84b998316195de17d8e29"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_96285c187eb84b998316195de17d8e29"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_96285c187eb84b998316195de17d8e29 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_96285c187eb84b998316195de17d8e29 .word-text:hover { filter: url(#wordGlow_96285c187eb84b998316195de17d8e29); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Technology Trends 2024</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="60.0" fill="#9b59b6" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Artificial Intelligence<title>Artificial Intelligence: weight 92.00</title></text><text class="word-text" x="405.59928087843394" y="407.3857298934645" text-anchor="middle" font-size="55.0" fill="#1abc9c" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Cybersecurity<title>Cybersecurity: weight 88.00</title></text><text class="word-text" x="396.3860683482625" y="252.2571856281789" text-anchor="middle" font-size="51.0" fill="#3498db" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Cloud Computing<title>Cloud Computing: weight 85.00</title></text><text class="word-text" x="415.58221669672304" y="188.33111932394678" text-anchor="middle" font-size="42.0" fill="#2ecc71" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Machine Learning<title>Machine Learning: weight 78.00</title></text><text class="word-text" x="386.7719817372124" y="472.3875851843115" text-anchor="middle" font-size="38.0" fill="#34495e" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Big Data<title>Big Data: weight 75.00</title></text><text class="word-text" x="499.29128894542094" y="488.65822152284585" text-anchor="middle" font-size="34.0" fill="#3498db" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">5G<title>5G: weight 72.00</title></text><text class="word-text" x="407.71307377487506" y="136.06386541487618" text-anchor="middle" font-size="31.0" fill="#f39c12" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">IoT<title>IoT: weight 70.00</title></text><text class="word-text" x="404.25875309165303" y="523.5651441361945" text-anchor="middle" font-size="29.0" fill="#e67e22" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">DevOps<title>DevOps: weight 68.00</title></text><text class="word-text" x="297.1703393667394" y="120.11753833293062" text-anchor="middle" font-size="25.0" fill="#e74c3c" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Blockchain<title>Blockchain: weight 65.00</title></text><text class="word-text" x="519.9455217305888" y="143.16729163187054" text-anchor="middle" font-size="18.0" fill="#d35400" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Edge Computing<title>Edge Computing: weight 60.00</title></text><text class="word-text" x="265.82325270374804" y="466.2478354128324" text-anchor="middle" font-size="16.0" fill="#9b59b6" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">AR/VR<title>AR/VR: weight 58.00</title></text><text class="word-text" x="262.0661040016223" y="511.2308815264703" text-anchor="middle" font-size="12.0" fill="#27ae60" filter="url(#wordShadow_96285c187eb84b998316195de17d8e29)">Quantum Computing<title>Quantum Computing: weight 55.00</title></text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_6b4fb80264a95010.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_6b4fb80264a95010.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-101bc03f81da2aba')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-101bc03f81da2aba')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-6b4fb80264a95010')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-6b4fb80264a95010')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-101bc03f81da2aba')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-101bc03f81da2aba')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-101bc03f81da2aba')">PRINT</button>
 </div>
-<div id="modal-svgviewer-6b4fb80264a95010" class="svg-modal-svgviewer-6b4fb80264a95010" onclick="if(event.target === this) svgModalsvgviewer_6b4fb80264a95010.close()">
-    <div class="svg-modal-content-svgviewer-6b4fb80264a95010">
-        <button class="svg-modal-close-svgviewer-6b4fb80264a95010" onclick="svgModalsvgviewer_6b4fb80264a95010.close()">×</button>
-        <div id="modal-body-svgviewer-6b4fb80264a95010" class="svg-modal-body-svgviewer-6b4fb80264a95010"></div>
+<div id="modal-sv-101bc03f81da2aba" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-101bc03f81da2aba')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-101bc03f81da2aba')">×</button>
+        <div id="modal-body-sv-101bc03f81da2aba" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-6b4fb80264a95010" class="svg-modal-svgviewer-6b4fb80264a95010" onclick="if(event.target === this) csvModalsvgviewer_6b4fb80264a95010.close()">
-    <div class="svg-modal-content-svgviewer-6b4fb80264a95010">
-        <button class="svg-modal-close-svgviewer-6b4fb80264a95010" onclick="csvModalsvgviewer_6b4fb80264a95010.close()">×</button>
-        <div class="svg-modal-header-svgviewer-6b4fb80264a95010" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-101bc03f81da2aba" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-101bc03f81da2aba')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-101bc03f81da2aba')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-6b4fb80264a95010" class="svg-modal-body-svgviewer-6b4fb80264a95010" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-101bc03f81da2aba" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-6b4fb80264a95010" class="svg-modal-svgviewer-6b4fb80264a95010" onclick="if(event.target === this) docopsSource.close('svgviewer-6b4fb80264a95010')">
-    <div class="svg-modal-content-svgviewer-6b4fb80264a95010">
-        <button class="svg-modal-close-svgviewer-6b4fb80264a95010" onclick="docopsSource.close('svgviewer-6b4fb80264a95010')">×</button>
-        <div class="svg-modal-header-svgviewer-6b4fb80264a95010" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-101bc03f81da2aba" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-101bc03f81da2aba')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-101bc03f81da2aba')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-6b4fb80264a95010" class="svg-modal-body-svgviewer-6b4fb80264a95010" style="display: block; overflow: auto;">
+        <div id="source-content-sv-101bc03f81da2aba" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3802,11 +3340,5 @@ mermaid.initialize({
     `
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-container">
-    <a href="tutorial.html" class="nav-prev">&larr; Tutorial</a>
-          <span class="nav-next-disabled">Next &rarr;</span>
-  </div>
-</nav>
 </body>
 </html>

@@ -1141,7 +1141,59 @@
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1241,6 +1293,33 @@
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1271,6 +1350,7 @@
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1315,6 +1395,22 @@
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1352,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1550,7 +1646,7 @@
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -2017,7 +2113,8 @@
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2054,8 +2151,36 @@
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <a href="placemat.html" class="nav-prev">&larr; Placemat</a>
+          <a href="quadrant.html" class="nav-next">Quadrant &rarr;</a>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
 <script>
@@ -2422,6 +2547,9 @@ window.onload = function() {
 };
 </script>
 
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/viz-global.js'></script>
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/plantuml.js'></script>
+<script>plantumlLoad();</script>
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
@@ -2506,247 +2634,165 @@ PostgreSQL upgrade completed successfully
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
+<style>
+.imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
 
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-3f7a497412a8103d {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-3f7a497412a8103d.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-3f7a497412a8103d {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-3f7a497412a8103d {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-3f7a497412a8103d:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-3f7a497412a8103d {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-3f7a497412a8103d svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
+.svg-with-controls {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-3f7a497412a8103d .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-3f7a497412a8103d .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-3f7a497412a8103d .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-3f7a497412a8103d .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-3f7a497412a8103d .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-3f7a497412a8103d .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
+.svg-bottom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  display: flex;
+  gap: 6px;
+  background: rgba(15, 20, 30, 0.85);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
+.svg-with-controls:hover .svg-bottom-controls {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.svg-control-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.svg-control-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.svg-modal.docops-svg-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 20, 25, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.svg-modal.docops-svg-modal.active {
+  display: flex;
+}
+
+.svg-modal-content.docops-svg-modal-content {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  background: var(--docops-card-bg, #1e293b);
+  border-radius: 20px;
+  padding: 48px 24px 24px 24px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.svg-modal-close.docops-svg-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.svg-modal-close.docops-svg-modal-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
+}
+
+.svg-modal-body.docops-svg-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.svg-modal-body.docops-svg-modal-body svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
 </style>
 
 <script>
-  // View Modal Control
-  window.svgModalsvgviewer_3f7a497412a8103d = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-3f7a497412a8103d');
-          const sourceContainer = document.getElementById('svgviewer-3f7a497412a8103d');
+(function() {
+  if (window.__docopsEscapeHandlerInstalled) return;
+  window.__docopsEscapeHandlerInstalled = true;
 
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-3f7a497412a8103d');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-3f7a497412a8103d');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_3f7a497412a8103d = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-3f7a497412a8103d');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-3f7a497412a8103d');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-3f7a497412a8103d');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-3f7a497412a8103d');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_3f7a497412a8103d.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-3f7a497412a8103d');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_3f7a497412a8103d.close();
-          }
-      }
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.svg-modal.active').forEach(function(modal) {
+      modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
   });
+})();
 </script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-3f7a497412a8103d" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAC4bqGkA_1WQQVICQQxF932KXIDyDCO4YCUFXCB0h5nW7nSTZNDx9AaqVFzm_9TP-1kBtw8YZpuILUe03Dhsay9UXYBZSQD_uaCLGtVwILc7rLdP6w303KlkprAWQiNIaHhCJdA4UcWwAqZPg_3L4QjDbhs2dKXS-q8AxKm3zKbhec4lwVkam4sQW-2N6eb8YSmhxAnOM8cbEpZsi98oflpg8HlxWg1DSoA_kzPpdGooKbx2yzV_EXSSc5OKHOkhHdP1pjiEd5mF1KOTM8CeLnOW-5KGnbQ3igbyIMKI_irJPIbBAbP5ggdAIs0jhyPFiVtp4wJqGN-9R6F7g29AoyOwhwEAAA==&scale=1.0&type=SVG&useDark=false&title=Q2+Roadmap&useGlass=false&backend=html5&docname=planner&filename=ghi.svg" data-original-content="- now Authentication
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-f1e258b3d0003e4d" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAJAT-2kA_1WQQVICQQxF932KXIDyDCO4YCUFXCB0h5nW7nSTZNDx9AaqVFzm_9TP-1kBtw8YZpuILUe03Dhsay9UXYBZSQD_uaCLGtVwILc7rLdP6w303KlkprAWQiNIaHhCJdA4UcWwAqZPg_3L4QjDbhs2dKXS-q8AxKm3zKbhec4lwVkam4sQW-2N6eb8YSmhxAnOM8cbEpZsi98oflpg8HlxWg1DSoA_kzPpdGooKbx2yzV_EXSSc5OKHOkhHdP1pjiEd5mF1KOTM8CeLnOW-5KGnbQ3igbyIMKI_irJPIbBAbP5ggdAIs0jhyPFiVtp4wJqGN-9R6F7g29AoyOwhwEAAA==&scale=1.0&type=SVG&useDark=false&title=Q2+Roadmap&useGlass=false&backend=html5&docname=planner&filename=ghi.svg" data-original-content="- now Authentication
 Implement user authentication system
 Set up CI/CD pipeline
 Create database schema
@@ -2762,59 +2808,49 @@ Implement advanced features
 Project requirements gathering
 Architecture design
 Technology stack selection" data-kind="planner">
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="430" viewBox="0 0 1600 430" id="id_3840ddc172fa4dcab1e361b75a2eead7" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","Implement user authentication system\nSet up CI/CD pipeline\nCreate database schema","true"],["next","2","Develop REST API endpoints\nBuild frontend components\nImplement search functionality","true"],["later","3","Add analytics dashboard\nOptimize performance\nImplement advanced features","true"],["done","4","Project requirements gathering\nArchitecture design\nTechnology stack selection\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>#id_3840ddc172fa4dcab1e361b75a2eead7 .planner-title { font-family: Arial, Helvetica, sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_3840ddc172fa4dcab1e361b75a2eead7 .column-title { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_3840ddc172fa4dcab1e361b75a2eead7 .card-title { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; } #id_3840ddc172fa4dcab1e361b75a2eead7 .card-body { font-family: Arial, Helvetica, sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#27272a" opacity="0.5"/></pattern></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#111111">Q2 Roadmap</text><rect y="15" width="60" height="5" fill="#2563eb" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Authentication</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Implement user authentication system</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Set up CI/CD pipeline</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Create database schema</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">REST API</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Develop REST API endpoints</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Build frontend components</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Implement search functionality</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Analytics</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Add analytics dashboard</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Optimize performance</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Implement advanced features</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Requirements</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Project requirements gathering</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Architecture design</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Technology stack selection</text><text x="0.0" y="90.0" class="card-body" fill="#4b5563"></text></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="430" viewBox="0 0 1600 430" id="id_105c444983d7442db422053d9432af31" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","Implement user authentication system\nSet up CI/CD pipeline\nCreate database schema","true"],["next","2","Develop REST API endpoints\nBuild frontend components\nImplement search functionality","true"],["later","3","Add analytics dashboard\nOptimize performance\nImplement advanced features","true"],["done","4","Project requirements gathering\nArchitecture design\nTechnology stack selection\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>#id_105c444983d7442db422053d9432af31 .planner-title { font-family: Arial, Helvetica, sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_105c444983d7442db422053d9432af31 .column-title { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_105c444983d7442db422053d9432af31 .card-title { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; } #id_105c444983d7442db422053d9432af31 .card-body { font-family: Arial, Helvetica, sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#27272a" opacity="0.5"/></pattern></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#111111">Q2 Roadmap</text><rect y="15" width="60" height="5" fill="#2563eb" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Authentication</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Implement user authentication system</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Set up CI/CD pipeline</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Create database schema</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">REST API</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Develop REST API endpoints</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Build frontend components</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Implement search functionality</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Analytics</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Add analytics dashboard</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Optimize performance</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Implement advanced features</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Requirements</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Project requirements gathering</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Architecture design</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Technology stack selection</text><text x="0.0" y="90.0" class="card-body" fill="#4b5563"></text></g></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_3f7a497412a8103d.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_3f7a497412a8103d.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-f1e258b3d0003e4d')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-f1e258b3d0003e4d')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-3f7a497412a8103d')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-3f7a497412a8103d')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-f1e258b3d0003e4d')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-f1e258b3d0003e4d')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-f1e258b3d0003e4d')">PRINT</button>
 </div>
-<div id="modal-svgviewer-3f7a497412a8103d" class="svg-modal-svgviewer-3f7a497412a8103d" onclick="if(event.target === this) svgModalsvgviewer_3f7a497412a8103d.close()">
-    <div class="svg-modal-content-svgviewer-3f7a497412a8103d">
-        <button class="svg-modal-close-svgviewer-3f7a497412a8103d" onclick="svgModalsvgviewer_3f7a497412a8103d.close()">×</button>
-        <div id="modal-body-svgviewer-3f7a497412a8103d" class="svg-modal-body-svgviewer-3f7a497412a8103d"></div>
+<div id="modal-sv-f1e258b3d0003e4d" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-f1e258b3d0003e4d')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-f1e258b3d0003e4d')">×</button>
+        <div id="modal-body-sv-f1e258b3d0003e4d" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-3f7a497412a8103d" class="svg-modal-svgviewer-3f7a497412a8103d" onclick="if(event.target === this) csvModalsvgviewer_3f7a497412a8103d.close()">
-    <div class="svg-modal-content-svgviewer-3f7a497412a8103d">
-        <button class="svg-modal-close-svgviewer-3f7a497412a8103d" onclick="csvModalsvgviewer_3f7a497412a8103d.close()">×</button>
-        <div class="svg-modal-header-svgviewer-3f7a497412a8103d" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-f1e258b3d0003e4d" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-f1e258b3d0003e4d')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-f1e258b3d0003e4d')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-3f7a497412a8103d" class="svg-modal-body-svgviewer-3f7a497412a8103d" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-f1e258b3d0003e4d" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-3f7a497412a8103d" class="svg-modal-svgviewer-3f7a497412a8103d" onclick="if(event.target === this) docopsSource.close('svgviewer-3f7a497412a8103d')">
-    <div class="svg-modal-content-svgviewer-3f7a497412a8103d">
-        <button class="svg-modal-close-svgviewer-3f7a497412a8103d" onclick="docopsSource.close('svgviewer-3f7a497412a8103d')">×</button>
-        <div class="svg-modal-header-svgviewer-3f7a497412a8103d" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-f1e258b3d0003e4d" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-f1e258b3d0003e4d')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-f1e258b3d0003e4d')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-3f7a497412a8103d" class="svg-modal-body-svgviewer-3f7a497412a8103d" style="display: block; overflow: auto;">
+        <div id="source-content-sv-f1e258b3d0003e4d" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-<div class="title">Figure 1. Q2 Roadmap</div></div>
+</div><div class="title">Figure 1. Q2 Roadmap</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2823,247 +2859,8 @@ imageblock .title {
 <div class="sect1">
 <h2 id="_dark_mode_planner">3. Dark Mode Planner</h2>
 <div class="sectionbody">
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-9e67dec43b5fad8b {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-9e67dec43b5fad8b.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-9e67dec43b5fad8b {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-9e67dec43b5fad8b {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-9e67dec43b5fad8b:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-9e67dec43b5fad8b {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-9e67dec43b5fad8b svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-9e67dec43b5fad8b .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-9e67dec43b5fad8b .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-9e67dec43b5fad8b .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-9e67dec43b5fad8b .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-9e67dec43b5fad8b .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-9e67dec43b5fad8b .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_9e67dec43b5fad8b = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-9e67dec43b5fad8b');
-          const sourceContainer = document.getElementById('svgviewer-9e67dec43b5fad8b');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-9e67dec43b5fad8b');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-9e67dec43b5fad8b');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_9e67dec43b5fad8b = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-9e67dec43b5fad8b');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-9e67dec43b5fad8b');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-9e67dec43b5fad8b');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-9e67dec43b5fad8b');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_9e67dec43b5fad8b.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-9e67dec43b5fad8b');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_9e67dec43b5fad8b.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-9e67dec43b5fad8b" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAC4bqGkA_z2QQVbDMAxE9z6FLsAhoN2w4L2-wgUUe5L61ZaCJVNyexxoWcoj_5nRE4ne6I3bFU5nGLjFSziopB6dotYVnl0bsXDZLFt4TRDP80bObRmfuKcMiQhHzFlAXfJnBxlKybLQqlncwhMJvp1OTX_BR3yh6FoHKhwa2EFrU1ffVoQPmNMt-4Vmjd1oadpXC-c__sSGRCo0A2nieB3sMgDt3mI3PXBdOS8S7j5U_6W6r2YuFk6FhUzjGKgiZSbzNtRlC6eGldueCWbUUDBM9xJJR4KXbiPIEHbCo_b0eKyaUMI7Yh-ALNl3_twlDffwbIY6FYzLDtXB9QfNrLm_gQEAAA==&scale=1.0&type=SVG&useDark=true&title=Development+Roadmap&useGlass=false&backend=html5&docname=planner&filename=ghi.svg" data-original-content="- now Market Research
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-9d72081324d2fabe" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAJAT-2kA_z2QQVbDMAxE9z6FLsAhoN2w4L2-wgUUe5L61ZaCJVNyexxoWcoj_5nRE4ne6I3bFU5nGLjFSziopB6dotYVnl0bsXDZLFt4TRDP80bObRmfuKcMiQhHzFlAXfJnBxlKybLQqlncwhMJvp1OTX_BR3yh6FoHKhwa2EFrU1ffVoQPmNMt-4Vmjd1oadpXC-c__sSGRCo0A2nieB3sMgDt3mI3PXBdOS8S7j5U_6W6r2YuFk6FhUzjGKgiZSbzNtRlC6eGldueCWbUUDBM9xJJR4KXbiPIEHbCo_b0eKyaUMI7Yh-ALNl3_twlDffwbIY6FYzLDtXB9QfNrLm_gQEAAA==&scale=1.0&type=SVG&useDark=true&title=Development+Roadmap&useGlass=false&backend=html5&docname=planner&filename=ghi.svg" data-original-content="- now Market Research
 Conduct competitor analysis
 Identify target audience
 Define unique selling points
@@ -3079,59 +2876,49 @@ Prepare press releases
 Define business model
 Secure initial funding
 Assemble core team" data-kind="planner">
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="430" viewBox="0 0 1600 430" id="id_d5356b278a9a44e091fffa1f8c066242" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","Conduct competitor analysis\nIdentify target audience\nDefine unique selling points","true"],["next","2","Create prototype\nTest with focus groups\nRefine based on feedback","true"],["later","3","Develop marketing materials\nPlan social media strategy\nPrepare press releases","true"],["done","4","Define business model\nSecure initial funding\nAssemble core team\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #id_d5356b278a9a44e091fffa1f8c066242 .planner-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_d5356b278a9a44e091fffa1f8c066242 .column-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_d5356b278a9a44e091fffa1f8c066242 .card-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 700; } #id_d5356b278a9a44e091fffa1f8c066242 .card-body { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#e2e8f0" opacity="0.5"/></pattern></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#f8fafc">Development Roadmap</text><rect y="15" width="60" height="5" fill="#38bdf8" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Market Research</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Conduct competitor analysis</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Identify target audience</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Define unique selling points</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Product Development</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Create prototype</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Test with focus groups</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Refine based on feedback</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Marketing Campaign</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Develop marketing materials</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Plan social media strategy</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Prepare press releases</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Business Plan</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Define business model</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Secure initial funding</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Assemble core team</text><text x="0.0" y="90.0" class="card-body" fill="#71717a"></text></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="430" viewBox="0 0 1600 430" id="id_07dd9f07b31f4cb6a15bb6e3eeb9a353" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","Conduct competitor analysis\nIdentify target audience\nDefine unique selling points","true"],["next","2","Create prototype\nTest with focus groups\nRefine based on feedback","true"],["later","3","Develop marketing materials\nPlan social media strategy\nPrepare press releases","true"],["done","4","Define business model\nSecure initial funding\nAssemble core team\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #id_07dd9f07b31f4cb6a15bb6e3eeb9a353 .planner-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_07dd9f07b31f4cb6a15bb6e3eeb9a353 .column-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_07dd9f07b31f4cb6a15bb6e3eeb9a353 .card-title { font-family: 'Archivo', -apple-system, sans-serif; font-size: 16px; font-weight: 700; } #id_07dd9f07b31f4cb6a15bb6e3eeb9a353 .card-body { font-family: 'Archivo', -apple-system, sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#e2e8f0" opacity="0.5"/></pattern></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#f8fafc">Development Roadmap</text><rect y="15" width="60" height="5" fill="#38bdf8" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Market Research</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Conduct competitor analysis</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Identify target audience</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Define unique selling points</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Product Development</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Create prototype</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Test with focus groups</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Refine based on feedback</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Marketing Campaign</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Develop marketing materials</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Plan social media strategy</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Prepare press releases</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#18181b" stroke="#27272a"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#f4f4f5">Business Plan</text><text x="0.0" y="30.0" class="card-body" fill="#71717a">Define business model</text><text x="0.0" y="50.0" class="card-body" fill="#71717a">Secure initial funding</text><text x="0.0" y="70.0" class="card-body" fill="#71717a">Assemble core team</text><text x="0.0" y="90.0" class="card-body" fill="#71717a"></text></g></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_9e67dec43b5fad8b.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_9e67dec43b5fad8b.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-9d72081324d2fabe')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-9d72081324d2fabe')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-9e67dec43b5fad8b')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-9e67dec43b5fad8b')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-9d72081324d2fabe')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-9d72081324d2fabe')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-9d72081324d2fabe')">PRINT</button>
 </div>
-<div id="modal-svgviewer-9e67dec43b5fad8b" class="svg-modal-svgviewer-9e67dec43b5fad8b" onclick="if(event.target === this) svgModalsvgviewer_9e67dec43b5fad8b.close()">
-    <div class="svg-modal-content-svgviewer-9e67dec43b5fad8b">
-        <button class="svg-modal-close-svgviewer-9e67dec43b5fad8b" onclick="svgModalsvgviewer_9e67dec43b5fad8b.close()">×</button>
-        <div id="modal-body-svgviewer-9e67dec43b5fad8b" class="svg-modal-body-svgviewer-9e67dec43b5fad8b"></div>
+<div id="modal-sv-9d72081324d2fabe" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-9d72081324d2fabe')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-9d72081324d2fabe')">×</button>
+        <div id="modal-body-sv-9d72081324d2fabe" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-9e67dec43b5fad8b" class="svg-modal-svgviewer-9e67dec43b5fad8b" onclick="if(event.target === this) csvModalsvgviewer_9e67dec43b5fad8b.close()">
-    <div class="svg-modal-content-svgviewer-9e67dec43b5fad8b">
-        <button class="svg-modal-close-svgviewer-9e67dec43b5fad8b" onclick="csvModalsvgviewer_9e67dec43b5fad8b.close()">×</button>
-        <div class="svg-modal-header-svgviewer-9e67dec43b5fad8b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-9d72081324d2fabe" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-9d72081324d2fabe')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-9d72081324d2fabe')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-9e67dec43b5fad8b" class="svg-modal-body-svgviewer-9e67dec43b5fad8b" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-9d72081324d2fabe" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-9e67dec43b5fad8b" class="svg-modal-svgviewer-9e67dec43b5fad8b" onclick="if(event.target === this) docopsSource.close('svgviewer-9e67dec43b5fad8b')">
-    <div class="svg-modal-content-svgviewer-9e67dec43b5fad8b">
-        <button class="svg-modal-close-svgviewer-9e67dec43b5fad8b" onclick="docopsSource.close('svgviewer-9e67dec43b5fad8b')">×</button>
-        <div class="svg-modal-header-svgviewer-9e67dec43b5fad8b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-9d72081324d2fabe" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-9d72081324d2fabe')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-9d72081324d2fabe')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-9e67dec43b5fad8b" class="svg-modal-body-svgviewer-9e67dec43b5fad8b" style="display: block; overflow: auto;">
+        <div id="source-content-sv-9d72081324d2fabe" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-<div class="title">Figure 2. Development Roadmap</div></div>
+</div><div class="title">Figure 2. Development Roadmap</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3140,247 +2927,8 @@ imageblock .title {
 <div class="sect1">
 <h2 id="_product_roadmap">4. Product Roadmap</h2>
 <div class="sectionbody">
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-8117a9b616c715a3 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-8117a9b616c715a3.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-8117a9b616c715a3 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-8117a9b616c715a3 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-8117a9b616c715a3:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-8117a9b616c715a3 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-8117a9b616c715a3 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-8117a9b616c715a3 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-8117a9b616c715a3 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-8117a9b616c715a3 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-8117a9b616c715a3 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-8117a9b616c715a3 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-8117a9b616c715a3 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_8117a9b616c715a3 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-8117a9b616c715a3');
-          const sourceContainer = document.getElementById('svgviewer-8117a9b616c715a3');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-8117a9b616c715a3');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-8117a9b616c715a3');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_8117a9b616c715a3 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-8117a9b616c715a3');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-8117a9b616c715a3');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-8117a9b616c715a3');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-8117a9b616c715a3');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_8117a9b616c715a3.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-8117a9b616c715a3');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_8117a9b616c715a3.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-8117a9b616c715a3" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAC4bqGkA_z1QS3bCMAzc-xSzbh9X4L0WNux4cAI3VhIVR3ZtJYHbVw6lGy1Gmo9mB0krDkmURPExB1Z3oYVpBd25KsuA7rl1p2CT-wcGnyu8BKRZg1cKYOlTmbxyEncoZNiLhYmHsi2Qoxe3g9BdcaTKg-A8-kovxsqF-uInqu5IC8WUsXCdfUR4XptkR1mr-5w5NlOl4jvlhZBL0qSPbNwdoqkV_GlMLfqVFHM2nX8IJAuXJNv6NOVIG9qXLXYwryknMai6kyHth5ZQR3z57tYu6qMqTc0v2CHO9p1YXW6_x1X9jcYUg8XYUrZCq3vHhX5m-7JZVatRRyqN8oZzSd_UKWqXMlnOnoVbab_KFFW5oAEAAA==&scale=1.0&type=SVG&useDark=false&title=Product+Features&useGlass=false&backend=html5&docname=planner&filename=ghi.svg" data-original-content="- now Content Audit
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-cc18d2cce84c7c2e" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=planner&payload=H4sIAJAT-2kA_z1QS3bCMAzc-xSzbh9X4L0WNux4cAI3VhIVR3ZtJYHbVw6lGy1Gmo9mB0krDkmURPExB1Z3oYVpBd25KsuA7rl1p2CT-wcGnyu8BKRZg1cKYOlTmbxyEncoZNiLhYmHsi2Qoxe3g9BdcaTKg-A8-kovxsqF-uInqu5IC8WUsXCdfUR4XptkR1mr-5w5NlOl4jvlhZBL0qSPbNwdoqkV_GlMLfqVFHM2nX8IJAuXJNv6NOVIG9qXLXYwryknMai6kyHth5ZQR3z57tYu6qMqTc0v2CHO9p1YXW6_x1X9jcYUg8XYUrZCq3vHhX5m-7JZVatRRyqN8oZzSd_UKWqXMlnOnoVbab_KFFW5oAEAAA==&scale=1.0&type=SVG&useDark=false&title=Product+Features&useGlass=false&backend=html5&docname=planner&filename=ghi.svg" data-original-content="- now Content Audit
 Review existing content
 Identify gaps and outdated information
 Create content migration plan
@@ -3396,59 +2944,49 @@ Integrate with backend systems
 >> Stakeholder interviews
 + Requirements gathering
 * Project scope definition" data-kind="planner">
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="430" viewBox="0 0 1600 430" id="id_c0b05c4ed8b945d28adea3cd287e412a" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","Review existing content\nIdentify gaps and outdated information\nCreate content migration plan","true"],["next","2","Create wireframes\nDevelop visual design concepts\nBuild interactive prototypes","true"],["later","3","Set up development environment\nImplement frontend components\nIntegrate with backend systems","true"],["done","4","[BULLET_CHEVRON]Stakeholder interviews\n[BULLET_PLUS]Requirements gathering\n[BULLET_DOT]Project scope definition\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>#id_c0b05c4ed8b945d28adea3cd287e412a .planner-title { font-family: Arial, Helvetica, sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_c0b05c4ed8b945d28adea3cd287e412a .column-title { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_c0b05c4ed8b945d28adea3cd287e412a .card-title { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; } #id_c0b05c4ed8b945d28adea3cd287e412a .card-body { font-family: Arial, Helvetica, sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#27272a" opacity="0.5"/></pattern></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#111111">Product Features</text><rect y="15" width="60" height="5" fill="#2563eb" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Content Audit</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Review existing content</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Identify gaps and outdated information</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Create content migration plan</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Design Phase</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Create wireframes</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Develop visual design concepts</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Build interactive prototypes</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Development</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Set up development environment</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Implement frontend components</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Integrate with backend systems</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Planning</text><use href="#bullet-chevron" x="-1.0" y="20.0" width="10" height="10" style="color: #94a3b8"/><text x="15.0" y="30.0" class="card-body" fill="#4b5563">Stakeholder interviews</text><use href="#bullet-plus" x="-1.0" y="40.0" width="10" height="10" style="color: #94a3b8"/><text x="15.0" y="50.0" class="card-body" fill="#4b5563">Requirements gathering</text><use href="#bullet-dot" x="-1.0" y="60.0" width="10" height="10" style="color: #94a3b8"/><text x="15.0" y="70.0" class="card-body" fill="#4b5563">Project scope definition</text><text x="0.0" y="90.0" class="card-body" fill="#4b5563"></text></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="430" viewBox="0 0 1600 430" id="id_cf80eb22cc2242f3930f1b8d306f5f5a" xmlns:xlink="http://www.w3.org/1999/xlink">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Type","Item Number","Content","Is Parent"],"rows":[["now","1","Review existing content\nIdentify gaps and outdated information\nCreate content migration plan","true"],["next","2","Create wireframes\nDevelop visual design concepts\nBuild interactive prototypes","true"],["later","3","Set up development environment\nImplement frontend components\nIntegrate with backend systems","true"],["done","4","[BULLET_CHEVRON]Stakeholder interviews\n[BULLET_PLUS]Requirements gathering\n[BULLET_DOT]Project scope definition\n","true"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>#id_cf80eb22cc2242f3930f1b8d306f5f5a .planner-title { font-family: Arial, Helvetica, sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -0.05em; } #id_cf80eb22cc2242f3930f1b8d306f5f5a .column-title { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; } #id_cf80eb22cc2242f3930f1b8d306f5f5a .card-title { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; } #id_cf80eb22cc2242f3930f1b8d306f5f5a .card-body { font-family: Arial, Helvetica, sans-serif; font-size: 13px; }</style><symbol id="bullet-dot" viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="currentColor"/></symbol><symbol id="bullet-chevron" viewBox="0 0 10 10"><path d="M3 2 L7 5 L3 8" stroke="currentColor" stroke-width="1.5" fill="none"/></symbol><symbol id="bullet-plus" viewBox="0 0 10 10"><path d="M5 2 L5 8 M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><symbol id="bullet-dash" viewBox="0 0 10 10"><path d="M2 5 L8 5" stroke="currentColor" stroke-width="1.5"/></symbol><pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#27272a" opacity="0.5"/></pattern></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotGrid)"/><g transform="translate(80, 80)"><text class="planner-title" fill="#111111">Product Features</text><rect y="15" width="60" height="5" fill="#2563eb" rx="2"/></g><g transform="translate(80, 180)"><text class="column-title" fill="#FF6B6B">01 // now</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FF6B6B" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Content Audit</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Review existing content</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Identify gaps and outdated information</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Create content migration plan</text></g></g></g></g><g transform="translate(440, 180)"><text class="column-title" fill="#4ECDC4">02 // next</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#4ECDC4" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Design Phase</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Create wireframes</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Develop visual design concepts</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Build interactive prototypes</text></g></g></g></g><g transform="translate(800, 180)"><text class="column-title" fill="#A8E6CF">03 // later</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="140" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#A8E6CF" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Development</text><text x="0.0" y="30.0" class="card-body" fill="#4b5563">Set up development environment</text><text x="0.0" y="50.0" class="card-body" fill="#4b5563">Implement frontend components</text><text x="0.0" y="70.0" class="card-body" fill="#4b5563">Integrate with backend systems</text></g></g></g></g><g transform="translate(1160, 180)"><text class="column-title" fill="#FFD93D">04 // done</text><g transform="translate(0, 30)"><g transform="translate(0, 0)"><rect width="320" height="160" rx="20" fill="#ffffff" stroke="#e2e8f0"/><rect width="4" height="40" x="0" y="30" fill="#FFD93D" rx="2"/><g transform="translate(25, 40)"><text class="card-title" fill="#18181b">Planning</text><use href="#bullet-chevron" x="-1.0" y="20.0" width="10" height="10" style="color: #94a3b8"/><text x="15.0" y="30.0" class="card-body" fill="#4b5563">Stakeholder interviews</text><use href="#bullet-plus" x="-1.0" y="40.0" width="10" height="10" style="color: #94a3b8"/><text x="15.0" y="50.0" class="card-body" fill="#4b5563">Requirements gathering</text><use href="#bullet-dot" x="-1.0" y="60.0" width="10" height="10" style="color: #94a3b8"/><text x="15.0" y="70.0" class="card-body" fill="#4b5563">Project scope definition</text><text x="0.0" y="90.0" class="card-body" fill="#4b5563"></text></g></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_8117a9b616c715a3.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_8117a9b616c715a3.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-cc18d2cce84c7c2e')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-cc18d2cce84c7c2e')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-8117a9b616c715a3')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-8117a9b616c715a3')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-cc18d2cce84c7c2e')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-cc18d2cce84c7c2e')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-cc18d2cce84c7c2e')">PRINT</button>
 </div>
-<div id="modal-svgviewer-8117a9b616c715a3" class="svg-modal-svgviewer-8117a9b616c715a3" onclick="if(event.target === this) svgModalsvgviewer_8117a9b616c715a3.close()">
-    <div class="svg-modal-content-svgviewer-8117a9b616c715a3">
-        <button class="svg-modal-close-svgviewer-8117a9b616c715a3" onclick="svgModalsvgviewer_8117a9b616c715a3.close()">×</button>
-        <div id="modal-body-svgviewer-8117a9b616c715a3" class="svg-modal-body-svgviewer-8117a9b616c715a3"></div>
+<div id="modal-sv-cc18d2cce84c7c2e" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-cc18d2cce84c7c2e')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-cc18d2cce84c7c2e')">×</button>
+        <div id="modal-body-sv-cc18d2cce84c7c2e" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-8117a9b616c715a3" class="svg-modal-svgviewer-8117a9b616c715a3" onclick="if(event.target === this) csvModalsvgviewer_8117a9b616c715a3.close()">
-    <div class="svg-modal-content-svgviewer-8117a9b616c715a3">
-        <button class="svg-modal-close-svgviewer-8117a9b616c715a3" onclick="csvModalsvgviewer_8117a9b616c715a3.close()">×</button>
-        <div class="svg-modal-header-svgviewer-8117a9b616c715a3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-cc18d2cce84c7c2e" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-cc18d2cce84c7c2e')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-cc18d2cce84c7c2e')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-8117a9b616c715a3" class="svg-modal-body-svgviewer-8117a9b616c715a3" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-cc18d2cce84c7c2e" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-8117a9b616c715a3" class="svg-modal-svgviewer-8117a9b616c715a3" onclick="if(event.target === this) docopsSource.close('svgviewer-8117a9b616c715a3')">
-    <div class="svg-modal-content-svgviewer-8117a9b616c715a3">
-        <button class="svg-modal-close-svgviewer-8117a9b616c715a3" onclick="docopsSource.close('svgviewer-8117a9b616c715a3')">×</button>
-        <div class="svg-modal-header-svgviewer-8117a9b616c715a3" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-cc18d2cce84c7c2e" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-cc18d2cce84c7c2e')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-cc18d2cce84c7c2e')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-8117a9b616c715a3" class="svg-modal-body-svgviewer-8117a9b616c715a3" style="display: block; overflow: auto;">
+        <div id="source-content-sv-cc18d2cce84c7c2e" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-<div class="title">Figure 3. Product Features</div></div>
+</div><div class="title">Figure 3. Product Features</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3778,11 +3316,5 @@ mermaid.initialize({
     `
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-container">
-    <a href="placemat.html" class="nav-prev">&larr; Placemat</a>
-          <a href="quadrant.html" class="nav-next">Quadrant &rarr;</a>
-  </div>
-</nav>
 </body>
 </html>

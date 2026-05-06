@@ -1141,7 +1141,59 @@
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1241,6 +1293,33 @@
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1271,6 +1350,7 @@
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1315,6 +1395,22 @@
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1352,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1550,7 +1646,7 @@
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -2017,7 +2113,8 @@
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2054,8 +2151,36 @@
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <a href="timeline.html" class="nav-prev">&larr; Timeline</a>
+          <a href="treechart.html" class="nav-next">Treechart &rarr;</a>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
 <script>
@@ -2422,6 +2547,9 @@ window.onload = function() {
 };
 </script>
 
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/viz-global.js'></script>
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/plantuml.js'></script>
+<script>plantumlLoad();</script>
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
@@ -2522,247 +2650,165 @@ Deploy to staging | pending | low | DevOps | Bob | 2024-02-05
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
+<style>
+.imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
 
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-9892141c0e10069b {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-9892141c0e10069b.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-9892141c0e10069b {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-9892141c0e10069b {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-9892141c0e10069b:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-9892141c0e10069b {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-9892141c0e10069b svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
+.svg-with-controls {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-9892141c0e10069b .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-9892141c0e10069b .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-9892141c0e10069b .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-9892141c0e10069b .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-9892141c0e10069b .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-9892141c0e10069b .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
+.svg-bottom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  display: flex;
+  gap: 6px;
+  background: rgba(15, 20, 30, 0.85);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
+.svg-with-controls:hover .svg-bottom-controls {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.svg-control-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.svg-control-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.svg-modal.docops-svg-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 20, 25, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.svg-modal.docops-svg-modal.active {
+  display: flex;
+}
+
+.svg-modal-content.docops-svg-modal-content {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  background: var(--docops-card-bg, #1e293b);
+  border-radius: 20px;
+  padding: 48px 24px 24px 24px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.svg-modal-close.docops-svg-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.svg-modal-close.docops-svg-modal-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
+}
+
+.svg-modal-body.docops-svg-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.svg-modal-body.docops-svg-modal-body svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
 </style>
 
 <script>
-  // View Modal Control
-  window.svgModalsvgviewer_9892141c0e10069b = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-9892141c0e10069b');
-          const sourceContainer = document.getElementById('svgviewer-9892141c0e10069b');
+(function() {
+  if (window.__docopsEscapeHandlerInstalled) return;
+  window.__docopsEscapeHandlerInstalled = true;
 
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-9892141c0e10069b');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-9892141c0e10069b');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_9892141c0e10069b = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-9892141c0e10069b');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-9892141c0e10069b');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-9892141c0e10069b');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-9892141c0e10069b');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_9892141c0e10069b.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-9892141c0e10069b');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_9892141c0e10069b.close();
-          }
-      }
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.svg-modal.active').forEach(function(modal) {
+      modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
   });
+})();
 </script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-9892141c0e10069b" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=todo&payload=H4sIAC4bqGkA_22QwU7DMAyG73kKv0BfAIkDGhw4IMY2tCNKW5OaJnGUuJuKeHjcVqCCeon_xP7s_BYSjzdwxrqQIBywxUIuwj7zBzZivB15kNvextpGU1WVOdnSwxccxcpQVOwzcSYZVe6soOM8mgMWtLnpoOGQUEg4w3UZMSHTq0fBVnXAloag4ocxu4zaB4qMHsEN1OI_pCPXabiff2qWAB0HTNYhBG76IWme4lvK7DKWsgFd0HMCTSaOhS4Ii1MtSRhbim7NzMUBo5hzntbUcBS9wbv6svWEzaPX7K-v3VJrHicDU4-Zts1Mh21mPfH48AychAJ9WiGOfwjPVz2fbO51y9GZ14IZdMmypDdav9x9Azid5HbzAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=todo&filename=ghi.svg" data-original-content="title: Website Redesign Project
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-4873be267b968f6f" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=todo&payload=H4sIAJAT-2kA_22QwU7DMAyG73kKv0BfAIkDGhw4IMY2tCNKW5OaJnGUuJuKeHjcVqCCeon_xP7s_BYSjzdwxrqQIBywxUIuwj7zBzZivB15kNvextpGU1WVOdnSwxccxcpQVOwzcSYZVe6soOM8mgMWtLnpoOGQUEg4w3UZMSHTq0fBVnXAloag4ocxu4zaB4qMHsEN1OI_pCPXabiff2qWAB0HTNYhBG76IWme4lvK7DKWsgFd0HMCTSaOhS4Ii1MtSRhbim7NzMUBo5hzntbUcBS9wbv6svWEzaPX7K-v3VJrHicDU4-Zts1Mh21mPfH48AychAJ9WiGOfwjPVz2fbO51y9GZ14IZdMmypDdav9x9Azid5HbzAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=todo&filename=ghi.svg" data-original-content="title: Website Redesign Project
 layout=kanban
 ---
 Task | Status | Priority | Category
@@ -2774,59 +2820,49 @@ Write content for about page | pending | medium | Content
 Implement contact form | pending | medium | Development
 SEO optimization | pending | low | Marketing
 User testing | pending | medium | QA" data-kind="todo">
-<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Research competitor websites","COMPLETED","MEDIUM","Research","",""],["Create style guide","COMPLETED","HIGH","Design","",""],["Design homepage mockup","IN_PROGRESS","HIGH","Design","",""],["Develop responsive layout","PENDING","HIGH","Development","",""],["Write content for about page","PENDING","MEDIUM","Content","",""],["Implement contact form","PENDING","MEDIUM","Development","",""],["SEO optimization","PENDING","LOW","Marketing","",""],["User testing","PENDING","MEDIUM","QA","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#ffffff"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Website Redesign Project</text><rect x="15" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(5)</text><rect x="23" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Develop respons...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Development</text><rect x="23" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Write content f...</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Content</text><rect x="23" y="385" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Implement conta...</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="430" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Development</text><rect x="23" y="515" width="184" height="110" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="537" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="537" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">SEO optimization</text><!-- Priority Badge --><rect x="152" y="523" width="45" height="18" fill="#42a5f5" rx="9"/><text x="175" y="534" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><text x="35" y="560" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Marketing</text><rect x="23" y="645" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="667" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="667" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">User testing</text><!-- Priority Badge --><rect x="152" y="653" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="664" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="690" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 QA</text><rect x="230" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="238" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Design homepage...</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="250" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Design</text><rect x="445" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="453" y="125" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Research compet...</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ffa726" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="465" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Research</text><rect x="453" y="255" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="277" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Create style guide</text><!-- Priority Badge --><rect x="582" y="263" width="45" height="18" fill="#ff7043" rx="9"/><text x="605" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="465" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Design</text><rect x="660" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="875" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 2</text><text x="1105" y="145" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 1</text><text x="1105" y="165" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 5</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Research competitor websites","COMPLETED","MEDIUM","Research","",""],["Create style guide","COMPLETED","HIGH","Design","",""],["Design homepage mockup","IN_PROGRESS","HIGH","Design","",""],["Develop responsive layout","PENDING","HIGH","Development","",""],["Write content for about page","PENDING","MEDIUM","Content","",""],["Implement contact form","PENDING","MEDIUM","Development","",""],["SEO optimization","PENDING","LOW","Marketing","",""],["User testing","PENDING","MEDIUM","QA","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#ffffff"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Website Redesign Project</text><rect x="15" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(5)</text><rect x="23" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Develop respons...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Development</text><rect x="23" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Write content f...</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Content</text><rect x="23" y="385" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Implement conta...</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="430" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Development</text><rect x="23" y="515" width="184" height="110" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="537" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="537" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">SEO optimization</text><!-- Priority Badge --><rect x="152" y="523" width="45" height="18" fill="#42a5f5" rx="9"/><text x="175" y="534" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><text x="35" y="560" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Marketing</text><rect x="23" y="645" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="667" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="667" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">User testing</text><!-- Priority Badge --><rect x="152" y="653" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="664" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="690" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 QA</text><rect x="230" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="238" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Design homepage...</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="250" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Design</text><rect x="445" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="453" y="125" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Research compet...</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ffa726" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="465" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Research</text><rect x="453" y="255" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="277" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Create style guide</text><!-- Priority Badge --><rect x="582" y="263" width="45" height="18" fill="#ff7043" rx="9"/><text x="605" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="465" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Design</text><rect x="660" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="875" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 2</text><text x="1105" y="145" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 1</text><text x="1105" y="165" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 5</text></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_9892141c0e10069b.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_9892141c0e10069b.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-4873be267b968f6f')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-4873be267b968f6f')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-9892141c0e10069b')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-9892141c0e10069b')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-4873be267b968f6f')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-4873be267b968f6f')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-4873be267b968f6f')">PRINT</button>
 </div>
-<div id="modal-svgviewer-9892141c0e10069b" class="svg-modal-svgviewer-9892141c0e10069b" onclick="if(event.target === this) svgModalsvgviewer_9892141c0e10069b.close()">
-    <div class="svg-modal-content-svgviewer-9892141c0e10069b">
-        <button class="svg-modal-close-svgviewer-9892141c0e10069b" onclick="svgModalsvgviewer_9892141c0e10069b.close()">×</button>
-        <div id="modal-body-svgviewer-9892141c0e10069b" class="svg-modal-body-svgviewer-9892141c0e10069b"></div>
+<div id="modal-sv-4873be267b968f6f" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-4873be267b968f6f')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-4873be267b968f6f')">×</button>
+        <div id="modal-body-sv-4873be267b968f6f" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-9892141c0e10069b" class="svg-modal-svgviewer-9892141c0e10069b" onclick="if(event.target === this) csvModalsvgviewer_9892141c0e10069b.close()">
-    <div class="svg-modal-content-svgviewer-9892141c0e10069b">
-        <button class="svg-modal-close-svgviewer-9892141c0e10069b" onclick="csvModalsvgviewer_9892141c0e10069b.close()">×</button>
-        <div class="svg-modal-header-svgviewer-9892141c0e10069b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-4873be267b968f6f" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-4873be267b968f6f')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-4873be267b968f6f')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-9892141c0e10069b" class="svg-modal-body-svgviewer-9892141c0e10069b" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-4873be267b968f6f" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-9892141c0e10069b" class="svg-modal-svgviewer-9892141c0e10069b" onclick="if(event.target === this) docopsSource.close('svgviewer-9892141c0e10069b')">
-    <div class="svg-modal-content-svgviewer-9892141c0e10069b">
-        <button class="svg-modal-close-svgviewer-9892141c0e10069b" onclick="docopsSource.close('svgviewer-9892141c0e10069b')">×</button>
-        <div class="svg-modal-header-svgviewer-9892141c0e10069b" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-4873be267b968f6f" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-4873be267b968f6f')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-4873be267b968f6f')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-9892141c0e10069b" class="svg-modal-body-svgviewer-9892141c0e10069b" style="display: block; overflow: auto;">
+        <div id="source-content-sv-4873be267b968f6f" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2856,247 +2892,8 @@ Security audit | pending | critical | Security | Bob | 2024-01-30
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-5a217275d3bd3b20 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-5a217275d3bd3b20.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-5a217275d3bd3b20 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-5a217275d3bd3b20 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-5a217275d3bd3b20:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-5a217275d3bd3b20 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-5a217275d3bd3b20 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-5a217275d3bd3b20 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-5a217275d3bd3b20 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-5a217275d3bd3b20 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-5a217275d3bd3b20 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-5a217275d3bd3b20 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-5a217275d3bd3b20 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_5a217275d3bd3b20 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-5a217275d3bd3b20');
-          const sourceContainer = document.getElementById('svgviewer-5a217275d3bd3b20');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-5a217275d3bd3b20');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-5a217275d3bd3b20');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_5a217275d3bd3b20 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-5a217275d3bd3b20');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-5a217275d3bd3b20');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-5a217275d3bd3b20');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-5a217275d3bd3b20');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_5a217275d3bd3b20.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-5a217275d3bd3b20');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_5a217275d3bd3b20.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-5a217275d3bd3b20" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=todo&payload=H4sIAC4bqGkA_32S3UrDQBCF7_cp5gUCbVT8AS-soeCFKLTipWyyYzp0s7PsTloLPryzitriz01yMtn5OOckQuLxAhrcoOc4YBBYoh1gEROpnrFNzni741Eu1za0Npi84u1VztQHxHwpacT3UTNiY-VzUlWVWdq8hldYiJUxq7hPxIlkp_JaT_acivxEqVQEFIaZ0wt47ilAO_b6gsJTTNwnzIXTKYQ661XObLfG4ArGU1cY9aQ-ribTanpmHqJTGIwZE-j6M3mEhxs9E3WFQgGvqF_pbZ44yAdnxu0epZ4YNWRbmxEG6pMV4gBZHUQpTniIHgXdN-rb0bVN7PcdnZor5yDanLecHGgalAM3Azoah39j1bW55bYk0fXIIdMG4ZleMP-o6Yv2Z7rpuXnULrWiQAL67SQf-PG81etS5x_Pjd0ceDkxDUbPOxAuBbuxe6_nFVrPGmCvFf2_7mL-pZSjyRsZD_8uggIAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=todo&filename=ghi.svg" data-original-content="title: Development Team Sprint Board
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-48b447761d826b07" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=todo&payload=H4sIAJAT-2kA_32S3UrDQBCF7_cp5gUCbVT8AS-soeCFKLTipWyyYzp0s7PsTloLPryzitriz01yMtn5OOckQuLxAhrcoOc4YBBYoh1gEROpnrFNzni741Eu1za0Npi84u1VztQHxHwpacT3UTNiY-VzUlWVWdq8hldYiJUxq7hPxIlkp_JaT_acivxEqVQEFIaZ0wt47ilAO_b6gsJTTNwnzIXTKYQ661XObLfG4ArGU1cY9aQ-ribTanpmHqJTGIwZE-j6M3mEhxs9E3WFQgGvqF_pbZ44yAdnxu0epZ4YNWRbmxEG6pMV4gBZHUQpTniIHgXdN-rb0bVN7PcdnZor5yDanLecHGgalAM3Azoah39j1bW55bYk0fXIIdMG4ZleMP-o6Yv2Z7rpuXnULrWiQAL67SQf-PG81etS5x_Pjd0ceDkxDUbPOxAuBbuxe6_nFVrPGmCvFf2_7mL-pZSjyRsZD_8uggIAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=todo&filename=ghi.svg" data-original-content="title: Development Team Sprint Board
 layout=kanban
 showAssignees=true
 showDueDates=true
@@ -3109,59 +2906,49 @@ Add password reset | pending | medium | Backend | Alice | 2024-01-22
 Mobile responsive fixes | in_progress | medium | Frontend | Bob | 2024-01-19
 Write unit tests | pending | low | Testing | Dave | 2024-01-25
 Deploy to production | blocked | high | DevOps | Carol | 2024-01-30" data-kind="todo">
-<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Fix login bug","IN_PROGRESS","CRITICAL","Backend","",""],["Update user profile UI","PENDING","HIGH","Frontend","",""],["Database migration script","COMPLETED","HIGH","Backend","",""],["Add password reset","PENDING","MEDIUM","Backend","",""],["Mobile responsive fixes","IN_PROGRESS","MEDIUM","Frontend","",""],["Write unit tests","PENDING","LOW","Testing","",""],["Deploy to production","BLOCKED","HIGH","DevOps","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#ffffff"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Development Team Sprint Board</text><rect x="15" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(3)</text><rect x="23" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update user pro...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Frontend</text><rect x="23" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Add password reset</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="23" y="385" width="184" height="110" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Write unit tests</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#42a5f5" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><text x="35" y="430" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Testing</text><rect x="230" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="238" y="125" width="184" height="110" fill="#ffffff" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Fix login bug</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ef5350" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="250" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="238" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="277" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Mobile responsi...</text><!-- Priority Badge --><rect x="367" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="390" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="250" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Frontend</text><rect x="445" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="453" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Database migrat...</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="465" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="660" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="668" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="680" y="147" fill="#ef5350" font-size="16" font-family="Arial, sans-serif">🚫</text><!-- Task Title with proper wrapping --><text x="703" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Deploy to produ...</text><!-- Priority Badge --><rect x="797" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="820" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="680" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 DevOps</text><rect x="875" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 2</text><text x="1105" y="145" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 3</text><text x="1105" y="165" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 1</text><text x="1105" y="185" fill="#ef5350" font-size="12" font-family="Arial, sans-serif">🚫 Blocked: 1</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Fix login bug","IN_PROGRESS","CRITICAL","Backend","",""],["Update user profile UI","PENDING","HIGH","Frontend","",""],["Database migration script","COMPLETED","HIGH","Backend","",""],["Add password reset","PENDING","MEDIUM","Backend","",""],["Mobile responsive fixes","IN_PROGRESS","MEDIUM","Frontend","",""],["Write unit tests","PENDING","LOW","Testing","",""],["Deploy to production","BLOCKED","HIGH","DevOps","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#ffffff"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#2d3748" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Development Team Sprint Board</text><rect x="15" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(3)</text><rect x="23" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update user pro...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Frontend</text><rect x="23" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Add password reset</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="23" y="385" width="184" height="110" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Write unit tests</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#42a5f5" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">LOW</text><text x="35" y="430" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Testing</text><rect x="230" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="238" y="125" width="184" height="110" fill="#ffffff" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Fix login bug</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ef5350" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="250" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="238" y="255" width="184" height="110" fill="#ffffff" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="277" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="277" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Mobile responsi...</text><!-- Priority Badge --><rect x="367" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="390" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="250" y="300" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Frontend</text><rect x="445" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="453" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Database migrat...</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="465" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 Backend</text><rect x="660" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="668" y="125" width="184" height="110" fill="#ffffff" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="680" y="147" fill="#ef5350" font-size="16" font-family="Arial, sans-serif">🚫</text><!-- Task Title with proper wrapping --><text x="703" y="147" fill="#2d3748" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Deploy to produ...</text><!-- Priority Badge --><rect x="797" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="820" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="680" y="170" fill="#718096" font-size="11" font-family="Arial, sans-serif">📁 DevOps</text><rect x="875" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#f7fafc" stroke="#e2e8f0" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#718096" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#2d3748" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 2</text><text x="1105" y="145" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 3</text><text x="1105" y="165" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 1</text><text x="1105" y="185" fill="#ef5350" font-size="12" font-family="Arial, sans-serif">🚫 Blocked: 1</text></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_5a217275d3bd3b20.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_5a217275d3bd3b20.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-48b447761d826b07')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-48b447761d826b07')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-5a217275d3bd3b20')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-5a217275d3bd3b20')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-48b447761d826b07')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-48b447761d826b07')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-48b447761d826b07')">PRINT</button>
 </div>
-<div id="modal-svgviewer-5a217275d3bd3b20" class="svg-modal-svgviewer-5a217275d3bd3b20" onclick="if(event.target === this) svgModalsvgviewer_5a217275d3bd3b20.close()">
-    <div class="svg-modal-content-svgviewer-5a217275d3bd3b20">
-        <button class="svg-modal-close-svgviewer-5a217275d3bd3b20" onclick="svgModalsvgviewer_5a217275d3bd3b20.close()">×</button>
-        <div id="modal-body-svgviewer-5a217275d3bd3b20" class="svg-modal-body-svgviewer-5a217275d3bd3b20"></div>
+<div id="modal-sv-48b447761d826b07" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-48b447761d826b07')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-48b447761d826b07')">×</button>
+        <div id="modal-body-sv-48b447761d826b07" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-5a217275d3bd3b20" class="svg-modal-svgviewer-5a217275d3bd3b20" onclick="if(event.target === this) csvModalsvgviewer_5a217275d3bd3b20.close()">
-    <div class="svg-modal-content-svgviewer-5a217275d3bd3b20">
-        <button class="svg-modal-close-svgviewer-5a217275d3bd3b20" onclick="csvModalsvgviewer_5a217275d3bd3b20.close()">×</button>
-        <div class="svg-modal-header-svgviewer-5a217275d3bd3b20" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-48b447761d826b07" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-48b447761d826b07')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-48b447761d826b07')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-5a217275d3bd3b20" class="svg-modal-body-svgviewer-5a217275d3bd3b20" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-48b447761d826b07" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-5a217275d3bd3b20" class="svg-modal-svgviewer-5a217275d3bd3b20" onclick="if(event.target === this) docopsSource.close('svgviewer-5a217275d3bd3b20')">
-    <div class="svg-modal-content-svgviewer-5a217275d3bd3b20">
-        <button class="svg-modal-close-svgviewer-5a217275d3bd3b20" onclick="docopsSource.close('svgviewer-5a217275d3bd3b20')">×</button>
-        <div class="svg-modal-header-svgviewer-5a217275d3bd3b20" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-48b447761d826b07" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-48b447761d826b07')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-48b447761d826b07')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-5a217275d3bd3b20" class="svg-modal-body-svgviewer-5a217275d3bd3b20" style="display: block; overflow: auto;">
+        <div id="source-content-sv-48b447761d826b07" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3185,247 +2972,8 @@ Submit expense reports | completed | low | 2024-01-10
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-fc3e4c5e809f2595 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-fc3e4c5e809f2595.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-fc3e4c5e809f2595 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-fc3e4c5e809f2595 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-fc3e4c5e809f2595:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-fc3e4c5e809f2595 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-fc3e4c5e809f2595 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-fc3e4c5e809f2595 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-fc3e4c5e809f2595 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-fc3e4c5e809f2595 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-fc3e4c5e809f2595 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-fc3e4c5e809f2595 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-fc3e4c5e809f2595 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_fc3e4c5e809f2595 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-fc3e4c5e809f2595');
-          const sourceContainer = document.getElementById('svgviewer-fc3e4c5e809f2595');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-fc3e4c5e809f2595');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-fc3e4c5e809f2595');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_fc3e4c5e809f2595 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-fc3e4c5e809f2595');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-fc3e4c5e809f2595');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-fc3e4c5e809f2595');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-fc3e4c5e809f2595');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_fc3e4c5e809f2595.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-fc3e4c5e809f2595');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_fc3e4c5e809f2595.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-fc3e4c5e809f2595" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=todo&payload=H4sIAC4bqGkA_1WQQU7EMAxF9zmFL9ALILFh1gOIwhp5Uk9rNY0jxx1UicPjoIKmq3xF__t929gSPcAzj5NBP_HV4B3rXEPCTVZ7nDFfMIeu60L7h2_oDW2tLl6VRdk2lyc0GkW3cJbMJgp1q0YLFNKr6II5krs4fxaVUam2-ORIf17cg8aSa3jCOK8FBjS8YG2JKEtJZDQ07SyOmFyekbNRbmPDG92YvqBSXH_LJBnb9EJ54Dy6WmjgdWnFd0v4KI4gj-iNFApanOiY2bvdc04TxRmwlOQlWt8_0nGrf9p-CZ_nFWuRPIAJYCK1I-tur34tRdR-AIjfNsiUAQAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=todo&filename=ghi.svg" data-original-content="title: Night Shift Tasks
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-99ff25c59129e243" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=todo&payload=H4sIAJAT-2kA_1WQQU7EMAxF9zmFL9ALILFh1gOIwhp5Uk9rNY0jxx1UicPjoIKmq3xF__t929gSPcAzj5NBP_HV4B3rXEPCTVZ7nDFfMIeu60L7h2_oDW2tLl6VRdk2lyc0GkW3cJbMJgp1q0YLFNKr6II5krs4fxaVUam2-ORIf17cg8aSa3jCOK8FBjS8YG2JKEtJZDQ07SyOmFyekbNRbmPDG92YvqBSXH_LJBnb9EJ54Dy6WmjgdWnFd0v4KI4gj-iNFApanOiY2bvdc04TxRmwlOQlWt8_0nGrf9p-CZ_nFWuRPIAJYCK1I-tur34tRdR-AIjfNsiUAQAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=todo&filename=ghi.svg" data-original-content="title: Night Shift Tasks
 layout=kanban
 ---
 Task | Status | Priority | Category
@@ -3435,59 +2983,49 @@ Review security logs | pending | medium | Security
 Update server patches | pending | high | Maintenance
 Check application logs | in_progress | medium | Monitoring
 Respond to alerts | pending | critical | Support" data-kind="todo">
-<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-04</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Monitor system performance","IN_PROGRESS","HIGH","Operations","",""],["Backup database","COMPLETED","CRITICAL","Maintenance","",""],["Review security logs","PENDING","MEDIUM","Security","",""],["Update server patches","PENDING","HIGH","Maintenance","",""],["Check application logs","IN_PROGRESS","MEDIUM","Monitoring","",""],["Respond to alerts","PENDING","CRITICAL","Support","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#1a1a1a"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#e0e0e0" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Night Shift Tasks</text><rect x="15" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(3)</text><rect x="23" y="125" width="184" height="110" fill="#2d3748" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Review security...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Security</text><rect x="23" y="255" width="184" height="110" fill="#2d3748" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update server p...</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="300" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Maintenance</text><rect x="23" y="385" width="184" height="110" fill="#2d3748" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Respond to alerts</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#ef5350" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="35" y="430" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Support</text><rect x="230" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="238" y="125" width="184" height="110" fill="#2d3748" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Monitor system ...</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="250" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Operations</text><rect x="238" y="255" width="184" height="110" fill="#2d3748" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="277" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="277" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Check applicati...</text><!-- Priority Badge --><rect x="367" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="390" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="250" y="300" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Monitoring</text><rect x="445" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="453" y="125" width="184" height="110" fill="#2d3748" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Backup database</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ef5350" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="465" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Maintenance</text><rect x="660" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="875" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 2</text><text x="1105" y="145" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 1</text><text x="1105" y="165" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 3</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1305" height="800" viewBox="0 0 1305 800">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Task","Status","Priority","Category","Tags","Description"],"rows":[["Monitor system performance","IN_PROGRESS","HIGH","Operations","",""],["Backup database","COMPLETED","CRITICAL","Maintenance","",""],["Review security logs","PENDING","MEDIUM","Security","",""],["Update server patches","PENDING","HIGH","Maintenance","",""],["Check application logs","IN_PROGRESS","MEDIUM","Monitoring","",""],["Respond to alerts","PENDING","CRITICAL","Support","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="priorityHigh" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" /></linearGradient><linearGradient id="priorityMedium" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ffa726;stop-opacity:1" /><stop offset="100%" style="stop-color:#ffb74d;stop-opacity:1" /></linearGradient><linearGradient id="priorityLow" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#42a5f5;stop-opacity:1" /><stop offset="100%" style="stop-color:#64b5f6;stop-opacity:1" /></linearGradient><filter id="glass" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2"/><feOffset dx="0" dy="2" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.1"/><feComposite in2="shadow" operator="in"/></filter><style>.glass { filter: url(#glass); backdrop-filter: blur(10px); opacity: 0.9; }</style></defs><rect width="1305" height="800" fill="#1a1a1a"/><!-- Title --><text x="652" y="40" text-anchor="middle" fill="#e0e0e0" font-size="24" font-weight="bold" font-family="Arial, sans-serif">Night Shift Tasks</text><rect x="15" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="115" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Pending</text><text x="115" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(3)</text><rect x="23" y="125" width="184" height="110" fill="#2d3748" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="147" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Review security...</text><!-- Priority Badge --><rect x="152" y="133" width="45" height="18" fill="#ffa726" rx="9"/><text x="175" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="35" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Security</text><rect x="23" y="255" width="184" height="110" fill="#2d3748" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="277" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="277" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Update server p...</text><!-- Priority Badge --><rect x="152" y="263" width="45" height="18" fill="#ff7043" rx="9"/><text x="175" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="35" y="300" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Maintenance</text><rect x="23" y="385" width="184" height="110" fill="#2d3748" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="35" y="407" fill="#ffa726" font-size="16" font-family="Arial, sans-serif">⏳</text><!-- Task Title with proper wrapping --><text x="58" y="407" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Respond to alerts</text><!-- Priority Badge --><rect x="152" y="393" width="45" height="18" fill="#ef5350" rx="9"/><text x="175" y="404" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="35" y="430" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Support</text><rect x="230" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="330" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">In Progress</text><text x="330" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(2)</text><rect x="238" y="125" width="184" height="110" fill="#2d3748" stroke="#ff7043" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="147" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Monitor system ...</text><!-- Priority Badge --><rect x="367" y="133" width="45" height="18" fill="#ff7043" rx="9"/><text x="390" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">HIGH</text><text x="250" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Operations</text><rect x="238" y="255" width="184" height="110" fill="#2d3748" stroke="#ffa726" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="250" y="277" fill="#42a5f5" font-size="16" font-family="Arial, sans-serif">🔄</text><!-- Task Title with proper wrapping --><text x="273" y="277" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Check applicati...</text><!-- Priority Badge --><rect x="367" y="263" width="45" height="18" fill="#ffa726" rx="9"/><text x="390" y="274" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">MEDI</text><text x="250" y="300" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Monitoring</text><rect x="445" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="545" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Completed</text><text x="545" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(1)</text><rect x="453" y="125" width="184" height="110" fill="#2d3748" stroke="#ef5350" stroke-width="2" rx="8" class="glass"/><!-- Status Icon --><text x="465" y="147" fill="#66bb6a" font-size="16" font-family="Arial, sans-serif">✅</text><!-- Task Title with proper wrapping --><text x="488" y="147" fill="#e0e0e0" font-size="13" font-weight="bold" font-family="Arial, sans-serif">Backup database</text><!-- Priority Badge --><rect x="582" y="133" width="45" height="18" fill="#ef5350" rx="9"/><text x="605" y="144" fill="white" font-size="9" text-anchor="middle" font-family="Arial, sans-serif">CRIT</text><text x="465" y="170" fill="#a0a0a0" font-size="11" font-family="Arial, sans-serif">📁 Maintenance</text><rect x="660" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="760" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Blocked</text><text x="760" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="875" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="975" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Cancelled</text><text x="975" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><rect x="1090" y="70" width="200" height="715" fill="#2d2d2d" stroke="#404040" stroke-width="1" rx="8" class="glass"/><!-- Column Title with proper text wrapping --><text x="1190" y="95" text-anchor="middle" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">On Hold</text><text x="1190" y="110" text-anchor="middle" fill="#a0a0a0" font-size="12" font-family="Arial, sans-serif">(0)</text><text x="1105" y="100" fill="#e0e0e0" font-size="14" font-weight="bold" font-family="Arial, sans-serif">Statistics</text><text x="1105" y="125" fill="#42a5f5" font-size="12" font-family="Arial, sans-serif">🔄 In Progress: 2</text><text x="1105" y="145" fill="#66bb6a" font-size="12" font-family="Arial, sans-serif">✅ Completed: 1</text><text x="1105" y="165" fill="#ffa726" font-size="12" font-family="Arial, sans-serif">⏳ Pending: 3</text></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_fc3e4c5e809f2595.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_fc3e4c5e809f2595.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-99ff25c59129e243')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-99ff25c59129e243')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-fc3e4c5e809f2595')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-fc3e4c5e809f2595')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-99ff25c59129e243')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-99ff25c59129e243')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-99ff25c59129e243')">PRINT</button>
 </div>
-<div id="modal-svgviewer-fc3e4c5e809f2595" class="svg-modal-svgviewer-fc3e4c5e809f2595" onclick="if(event.target === this) svgModalsvgviewer_fc3e4c5e809f2595.close()">
-    <div class="svg-modal-content-svgviewer-fc3e4c5e809f2595">
-        <button class="svg-modal-close-svgviewer-fc3e4c5e809f2595" onclick="svgModalsvgviewer_fc3e4c5e809f2595.close()">×</button>
-        <div id="modal-body-svgviewer-fc3e4c5e809f2595" class="svg-modal-body-svgviewer-fc3e4c5e809f2595"></div>
+<div id="modal-sv-99ff25c59129e243" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-99ff25c59129e243')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-99ff25c59129e243')">×</button>
+        <div id="modal-body-sv-99ff25c59129e243" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-fc3e4c5e809f2595" class="svg-modal-svgviewer-fc3e4c5e809f2595" onclick="if(event.target === this) csvModalsvgviewer_fc3e4c5e809f2595.close()">
-    <div class="svg-modal-content-svgviewer-fc3e4c5e809f2595">
-        <button class="svg-modal-close-svgviewer-fc3e4c5e809f2595" onclick="csvModalsvgviewer_fc3e4c5e809f2595.close()">×</button>
-        <div class="svg-modal-header-svgviewer-fc3e4c5e809f2595" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-99ff25c59129e243" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-99ff25c59129e243')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-99ff25c59129e243')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-fc3e4c5e809f2595" class="svg-modal-body-svgviewer-fc3e4c5e809f2595" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-99ff25c59129e243" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-fc3e4c5e809f2595" class="svg-modal-svgviewer-fc3e4c5e809f2595" onclick="if(event.target === this) docopsSource.close('svgviewer-fc3e4c5e809f2595')">
-    <div class="svg-modal-content-svgviewer-fc3e4c5e809f2595">
-        <button class="svg-modal-close-svgviewer-fc3e4c5e809f2595" onclick="docopsSource.close('svgviewer-fc3e4c5e809f2595')">×</button>
-        <div class="svg-modal-header-svgviewer-fc3e4c5e809f2595" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-99ff25c59129e243" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-99ff25c59129e243')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-99ff25c59129e243')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-fc3e4c5e809f2595" class="svg-modal-body-svgviewer-fc3e4c5e809f2595" style="display: block; overflow: auto;">
+        <div id="source-content-sv-99ff25c59129e243" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3964,11 +3502,5 @@ mermaid.initialize({
     `
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-container">
-    <a href="timeline.html" class="nav-prev">&larr; Timeline</a>
-          <a href="treechart.html" class="nav-next">Treechart &rarr;</a>
-  </div>
-</nav>
 </body>
 </html>

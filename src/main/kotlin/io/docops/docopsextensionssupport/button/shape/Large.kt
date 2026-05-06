@@ -26,6 +26,7 @@ import io.docops.docopsextensionssupport.qrcode.buttonWaveTheme
 import io.docops.docopsextensionssupport.qrcode.organicWaveTheme
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.util.BackgroundHelper
 
 /**
@@ -126,7 +127,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
             }
         }
 
-        sb.append("""<g transform="translate($x,$y)" class="modern-card-button" onclick="window.open('${button.link}', '$win')">""")
+        sb.append("""<g transform="translate($x,$y)" class="modern-card-button" onclick="window.open('${button.link.escapeXml()}', '$win')">""")
 
         // Main card background - High contrast border/glow for dark, subtle shadow for light
         val filterAttr = if (!isPdf) "filter=\"url(#cardShadow_$id)\"" else ""

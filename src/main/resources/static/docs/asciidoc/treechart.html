@@ -1141,7 +1141,59 @@
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1241,6 +1293,33 @@
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1271,6 +1350,7 @@
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1315,6 +1395,22 @@
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1352,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1550,7 +1646,7 @@
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -2017,7 +2113,8 @@
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2054,8 +2151,36 @@
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <a href="todo.html" class="nav-prev">&larr; Todo</a>
+          <a href="tutorial.html" class="nav-next">Tutorial &rarr;</a>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
 <script>
@@ -2422,6 +2547,9 @@ window.onload = function() {
 };
 </script>
 
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/viz-global.js'></script>
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/plantuml.js'></script>
+<script>plantumlLoad();</script>
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
@@ -2520,247 +2648,165 @@ CEO
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
+<style>
+.imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
 
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-60f3fa80c21afffc {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-60f3fa80c21afffc.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-60f3fa80c21afffc {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-60f3fa80c21afffc {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-60f3fa80c21afffc:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-60f3fa80c21afffc {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-60f3fa80c21afffc svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
+.svg-with-controls {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-60f3fa80c21afffc .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-60f3fa80c21afffc .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-60f3fa80c21afffc .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-60f3fa80c21afffc .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-60f3fa80c21afffc .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-60f3fa80c21afffc .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
+.svg-bottom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  display: flex;
+  gap: 6px;
+  background: rgba(15, 20, 30, 0.85);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
+.svg-with-controls:hover .svg-bottom-controls {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.svg-control-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.svg-control-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.svg-modal.docops-svg-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 20, 25, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.svg-modal.docops-svg-modal.active {
+  display: flex;
+}
+
+.svg-modal-content.docops-svg-modal-content {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  background: var(--docops-card-bg, #1e293b);
+  border-radius: 20px;
+  padding: 48px 24px 24px 24px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.svg-modal-close.docops-svg-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.svg-modal-close.docops-svg-modal-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
+}
+
+.svg-modal-body.docops-svg-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.svg-modal-body.docops-svg-modal-body svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
 </style>
 
 <script>
-  // View Modal Control
-  window.svgModalsvgviewer_60f3fa80c21afffc = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-60f3fa80c21afffc');
-          const sourceContainer = document.getElementById('svgviewer-60f3fa80c21afffc');
+(function() {
+  if (window.__docopsEscapeHandlerInstalled) return;
+  window.__docopsEscapeHandlerInstalled = true;
 
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-60f3fa80c21afffc');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-60f3fa80c21afffc');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_60f3fa80c21afffc = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-60f3fa80c21afffc');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-60f3fa80c21afffc');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-60f3fa80c21afffc');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-60f3fa80c21afffc');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_60f3fa80c21afffc.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-60f3fa80c21afffc');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_60f3fa80c21afffc.close();
-          }
-      }
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.svg-modal.active').forEach(function(modal) {
+      modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
   });
+})();
 </script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-60f3fa80c21afffc" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAGj-wWkA_3VQQQrCQAy87yv2AwVP4qWHsupBKCL1A7GG3WDNljQq-npbipaWdi4JM2RmiJJWmB7FA9MHlCJbF0DUvOiqId2sViYg-aDpul014B3TiwBfTZIkxu2OxrZw53522LEnRhRib3Ng8Ch_rUOBTFHsFp9YxXoizrOHx8LJKZuNaOlfiymfMVTvRvvW-6H1nhi4xFm7rCzjgxVYR3R_QlCNTfPBNAe5oS49YlCLGjsfasYBLrIiq3WCoFG-kJrDpKsBAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Organization Chart
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-9ba09aa90b67d2c4" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAJAT-2kA_3VQQQrCQAy87yv2AwVP4qWHsupBKCL1A7GG3WDNljQq-npbipaWdi4JM2RmiJJWmB7FA9MHlCJbF0DUvOiqId2sViYg-aDpul014B3TiwBfTZIkxu2OxrZw53522LEnRhRib3Ng8Ch_rUOBTFHsFp9YxXoizrOHx8LJKZuNaOlfiymfMVTvRvvW-6H1nhi4xFm7rCzjgxVYR3R_QlCNTfPBNAe5oS49YlCLGjsfasYBLrIiq3WCoFG-kJrDpKsBAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Organization Chart
 width=800
 height=600
 theme=brand
@@ -2782,59 +2828,49 @@ CEO
         Marketing Manager
             Marketing Specialist
             Content Creator" data-kind="treechart">
-<svg width='1270' height='1000' viewBox='0 0 1270 1000' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["CEO"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #F2B45B; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#071925' /><circle cx='635' cy='500' r='635' fill='#F2B45B' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 209.0,620.0 209.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 318.0,620.0 318.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 427.0,620.0 427.0,675.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 536.0,620.0 536.0,675.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 645.0,620.0 645.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 754.0,620.0 754.0,675.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 863.0,620.0 863.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 972.0,620.0 972.0,675.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 1081.0,620.0 1081.0,675.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7FB0CD' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#7FB0CD' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7FB0CD'>CEO</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#335D79' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#335D79' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#335D79'>CTO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#9BC9DF' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#9BC9DF' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9BC9DF'>Engineering</text><text x='318.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='209.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='209.0' cy='720.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>Senior</text><text x='209.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='318.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='318.0' cy='720.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='427.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='427.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>Junior</text><text x='427.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>QA Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='536.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='536.0' cy='720.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>QA Engineer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='645.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='645.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>QA Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#9BC9DF' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#9BC9DF' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9BC9DF'>CFO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>Finance</text><text x='754.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='754.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='754.0' cy='720.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Accountant</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='863.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='863.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>Financial</text><text x='863.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>CMO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Marketing</text><text x='972.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='972.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='972.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>Marketing</text><text x='972.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Specialist</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='1081.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#FFCF8A' stroke-width='2' /><circle cx='1081.0' cy='720.0' r='40' fill='none' stroke='#FFCF8A' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#FFCF8A'>Content</text><text x='1081.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Creator</text></g><g transform="translate(40, 60)"><text font-family="'Archivo', -apple-system, sans-serif" font-size="28" fill="#ffffff" font-weight="700">ORGANIZATION CHART</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='1270' height='1000' viewBox='0 0 1270 1000' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["CEO"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #F2B45B; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#071925' /><circle cx='635' cy='500' r='635' fill='#F2B45B' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 209.0,620.0 209.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 318.0,620.0 318.0,675.0' /><path class='link' d='M318.0,565.0 C318.0,620.0 427.0,620.0 427.0,675.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 536.0,620.0 536.0,675.0' /><path class='link' d='M536.0,565.0 C536.0,620.0 645.0,620.0 645.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 754.0,620.0 754.0,675.0' /><path class='link' d='M754.0,565.0 C754.0,620.0 863.0,620.0 863.0,675.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 972.0,620.0 972.0,675.0' /><path class='link' d='M972.0,565.0 C972.0,620.0 1081.0,620.0 1081.0,675.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#7FB0CD' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#7FB0CD' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7FB0CD'>CEO</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#335D79' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#335D79' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#335D79'>CTO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#9BC9DF' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#9BC9DF' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9BC9DF'>Engineering</text><text x='318.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='209.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='209.0' cy='720.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>Senior</text><text x='209.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='318.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='318.0' cy='720.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Developer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='427.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='427.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>Junior</text><text x='427.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Developer</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>QA Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='536.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='536.0' cy='720.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>QA Engineer</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='645.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='645.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>QA Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#9BC9DF' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#9BC9DF' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9BC9DF'>CFO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>Finance</text><text x='754.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='754.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='754.0' cy='720.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='720.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Accountant</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='863.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='863.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>Financial</text><text x='863.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Analyst</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#4D7A98' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>CMO</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#1E3A4D' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='513.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Marketing</text><text x='972.0' y='527.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Manager</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='972.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#F2B45B' stroke-width='2' /><circle cx='972.0' cy='720.0' r='40' fill='none' stroke='#F2B45B' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#F2B45B'>Marketing</text><text x='972.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Specialist</text></g><g class='node-group' style='animation-delay: 0.30000000000000004s;'><circle cx='1081.0' cy='720.0' r='45' fill='rgba(15, 23, 42, 0.8)' stroke='#FFCF8A' stroke-width='2' /><circle cx='1081.0' cy='720.0' r='40' fill='none' stroke='#FFCF8A' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='713.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#FFCF8A'>Content</text><text x='1081.0' y='727.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#94a3b8'>Creator</text></g><g transform="translate(40, 60)"><text font-family="'Archivo', -apple-system, sans-serif" font-size="28" fill="#ffffff" font-weight="700">ORGANIZATION CHART</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_60f3fa80c21afffc.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_60f3fa80c21afffc.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-9ba09aa90b67d2c4')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-9ba09aa90b67d2c4')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-60f3fa80c21afffc')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-60f3fa80c21afffc')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-9ba09aa90b67d2c4')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-9ba09aa90b67d2c4')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-9ba09aa90b67d2c4')">PRINT</button>
 </div>
-<div id="modal-svgviewer-60f3fa80c21afffc" class="svg-modal-svgviewer-60f3fa80c21afffc" onclick="if(event.target === this) svgModalsvgviewer_60f3fa80c21afffc.close()">
-    <div class="svg-modal-content-svgviewer-60f3fa80c21afffc">
-        <button class="svg-modal-close-svgviewer-60f3fa80c21afffc" onclick="svgModalsvgviewer_60f3fa80c21afffc.close()">×</button>
-        <div id="modal-body-svgviewer-60f3fa80c21afffc" class="svg-modal-body-svgviewer-60f3fa80c21afffc"></div>
+<div id="modal-sv-9ba09aa90b67d2c4" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-9ba09aa90b67d2c4')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-9ba09aa90b67d2c4')">×</button>
+        <div id="modal-body-sv-9ba09aa90b67d2c4" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-60f3fa80c21afffc" class="svg-modal-svgviewer-60f3fa80c21afffc" onclick="if(event.target === this) csvModalsvgviewer_60f3fa80c21afffc.close()">
-    <div class="svg-modal-content-svgviewer-60f3fa80c21afffc">
-        <button class="svg-modal-close-svgviewer-60f3fa80c21afffc" onclick="csvModalsvgviewer_60f3fa80c21afffc.close()">×</button>
-        <div class="svg-modal-header-svgviewer-60f3fa80c21afffc" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-9ba09aa90b67d2c4" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-9ba09aa90b67d2c4')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-9ba09aa90b67d2c4')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-60f3fa80c21afffc" class="svg-modal-body-svgviewer-60f3fa80c21afffc" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-9ba09aa90b67d2c4" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-60f3fa80c21afffc" class="svg-modal-svgviewer-60f3fa80c21afffc" onclick="if(event.target === this) docopsSource.close('svgviewer-60f3fa80c21afffc')">
-    <div class="svg-modal-content-svgviewer-60f3fa80c21afffc">
-        <button class="svg-modal-close-svgviewer-60f3fa80c21afffc" onclick="docopsSource.close('svgviewer-60f3fa80c21afffc')">×</button>
-        <div class="svg-modal-header-svgviewer-60f3fa80c21afffc" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-9ba09aa90b67d2c4" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-9ba09aa90b67d2c4')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-9ba09aa90b67d2c4')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-60f3fa80c21afffc" class="svg-modal-body-svgviewer-60f3fa80c21afffc" style="display: block; overflow: auto;">
+        <div id="source-content-sv-9ba09aa90b67d2c4" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2879,247 +2915,8 @@ Start Project
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-080475a33e0b6876 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-080475a33e0b6876.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-080475a33e0b6876 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-080475a33e0b6876 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-080475a33e0b6876:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-080475a33e0b6876 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-080475a33e0b6876 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-080475a33e0b6876 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-080475a33e0b6876 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-080475a33e0b6876 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-080475a33e0b6876 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-080475a33e0b6876 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-080475a33e0b6876 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_080475a33e0b6876 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-080475a33e0b6876');
-          const sourceContainer = document.getElementById('svgviewer-080475a33e0b6876');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-080475a33e0b6876');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-080475a33e0b6876');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_080475a33e0b6876 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-080475a33e0b6876');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-080475a33e0b6876');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-080475a33e0b6876');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-080475a33e0b6876');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_080475a33e0b6876.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-080475a33e0b6876');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_080475a33e0b6876.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-080475a33e0b6876" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAGj-wWkA_3WRy07DMBBF9_4K_0BFV4hNFkERKLuqD4mtca7iAdcO9qSofD0TC6VEgVnZ91zPy0zsUTWwlCkGfUyA-qSOXfWw3SoH6h1X93KMiRDYsLgqJ5evKDev2OGMChckZFabzUYd2CTWuxTfYFlpiT0-RkriC5x1HYy_ZsqFTPFsJEdamGbWRDtOypo2yNQHvXMmY7bXyTpiKTsm_DhmdmrvTi-_xfY8-JKwzDT7npIMhtCJ9QIfh8kxw0dj3_9jjWHzKt3oA3gcinyUnVDobz0E4pXYSrk-lSbWD7JsprYWA5tgseANBh-vixZk9b3gv5D8RzfaUuRGvwHulL-__QEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Decision Tree
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-74a43ecf107d62ea" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAJAT-2kA_3WRy07DMBBF9_4K_0BFV4hNFkERKLuqD4mtca7iAdcO9qSofD0TC6VEgVnZ91zPy0zsUTWwlCkGfUyA-qSOXfWw3SoH6h1X93KMiRDYsLgqJ5evKDev2OGMChckZFabzUYd2CTWuxTfYFlpiT0-RkriC5x1HYy_ZsqFTPFsJEdamGbWRDtOypo2yNQHvXMmY7bXyTpiKTsm_DhmdmrvTi-_xfY8-JKwzDT7npIMhtCJ9QIfh8kxw0dj3_9jjWHzKt3oA3gcinyUnVDobz0E4pXYSrk-lSbWD7JsprYWA5tgseANBh-vixZk9b3gv5D8RzfaUuRGvwHulL-__QEAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Decision Tree
 width=800
 height=600
 orientation=horizontal
@@ -3143,59 +2940,49 @@ Start Project
     Deployment
         Staging Deployment
         Production Deployment" data-kind="treechart">
-<svg width='800' height='1660' viewBox='0 0 800 1660' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Start Project"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #007A47; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#FDFEFF' /><circle cx='400' cy='830' r='400' fill='#007A47' opacity='0.05' filter='blur(120px)' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,363.33333333333337 255.0,363.33333333333337' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,232.30769230769232 455.0,232.30769230769232' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,344.61538461538464 455.0,344.61538461538464' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,606.6666666666667 255.0,606.6666666666667' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,456.9230769230769 455.0,456.9230769230769' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,569.2307692307693 455.0,569.2307692307693' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,850.0 255.0,850.0' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,681.5384615384615 455.0,681.5384615384615' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,793.8461538461538 455.0,793.8461538461538' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,906.1538461538462 455.0,906.1538461538462' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1093.3333333333335 255.0,1093.3333333333335' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1018.4615384615385 455.0,1018.4615384615385' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1130.7692307692307 455.0,1130.7692307692307' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1243.076923076923 455.0,1243.076923076923' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1336.6666666666667 255.0,1336.6666666666667' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1355.3846153846155 455.0,1355.3846153846155' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1467.6923076923076 455.0,1467.6923076923076' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='100.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1A6D9F' stroke-width='2' /><circle cx='100.0' cy='850.0' r='40' fill='none' stroke='#1A6D9F' stroke-width='0.5' stroke-opacity='0.3' /><text x='100.0' y='850.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1A6D9F'>Start Project</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='363.33333333333337' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#007A47' stroke-width='2' /><circle cx='300.0' cy='363.33333333333337' r='40' fill='none' stroke='#007A47' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='356.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#007A47'>Requirements</text><text x='300.0' y='370.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Analysis</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='232.30769230769232' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#8C4069' stroke-width='2' /><circle cx='500.0' cy='232.30769230769232' r='40' fill='none' stroke='#8C4069' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='225.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#8C4069'>Gather</text><text x='500.0' y='239.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='344.61538461538464' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E69F00' stroke-width='2' /><circle cx='500.0' cy='344.61538461538464' r='40' fill='none' stroke='#E69F00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='337.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E69F00'>Document</text><text x='500.0' y='351.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='606.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#8C4069' stroke-width='2' /><circle cx='300.0' cy='606.6666666666667' r='40' fill='none' stroke='#8C4069' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='606.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#8C4069'>Design Phase</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='456.9230769230769' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E69F00' stroke-width='2' /><circle cx='500.0' cy='456.9230769230769' r='40' fill='none' stroke='#E69F00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='449.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E69F00'>Architecture</text><text x='500.0' y='463.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Design</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='569.2307692307693' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#56B4E9' stroke-width='2' /><circle cx='500.0' cy='569.2307692307693' r='40' fill='none' stroke='#56B4E9' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='569.2307692307693' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#56B4E9'>UI/UX Design</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E69F00' stroke-width='2' /><circle cx='300.0' cy='850.0' r='40' fill='none' stroke='#E69F00' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='843.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E69F00'></text><text x='300.0' y='857.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Implementation</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='681.5384615384615' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#56B4E9' stroke-width='2' /><circle cx='500.0' cy='681.5384615384615' r='40' fill='none' stroke='#56B4E9' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='674.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#56B4E9'>Frontend</text><text x='500.0' y='688.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='793.8461538461538' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#009E73' stroke-width='2' /><circle cx='500.0' cy='793.8461538461538' r='40' fill='none' stroke='#009E73' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='786.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#009E73'>Backend</text><text x='500.0' y='800.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='906.1538461538462' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#D55E00' stroke-width='2' /><circle cx='500.0' cy='906.1538461538462' r='40' fill='none' stroke='#D55E00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='899.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#D55E00'>Database</text><text x='500.0' y='913.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Setup</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1093.3333333333335' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#56B4E9' stroke-width='2' /><circle cx='300.0' cy='1093.3333333333335' r='40' fill='none' stroke='#56B4E9' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1093.3333333333335' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#56B4E9'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1018.4615384615385' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#009E73' stroke-width='2' /><circle cx='500.0' cy='1018.4615384615385' r='40' fill='none' stroke='#009E73' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1018.4615384615385' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#009E73'>Unit Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1130.7692307692307' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#D55E00' stroke-width='2' /><circle cx='500.0' cy='1130.7692307692307' r='40' fill='none' stroke='#D55E00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1123.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#D55E00'>Integration</text><text x='500.0' y='1137.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1243.076923076923' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#0072B2' stroke-width='2' /><circle cx='500.0' cy='1243.076923076923' r='40' fill='none' stroke='#0072B2' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1229.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#0072B2'>User</text><text x='500.0' y='1243.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Acceptance</text><text x='500.0' y='1257.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1336.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#009E73' stroke-width='2' /><circle cx='300.0' cy='1336.6666666666667' r='40' fill='none' stroke='#009E73' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1336.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#009E73'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1355.3846153846155' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#D55E00' stroke-width='2' /><circle cx='500.0' cy='1355.3846153846155' r='40' fill='none' stroke='#D55E00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1348.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#D55E00'>Staging</text><text x='500.0' y='1362.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1467.6923076923076' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#0072B2' stroke-width='2' /><circle cx='500.0' cy='1467.6923076923076' r='40' fill='none' stroke='#0072B2' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1460.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#0072B2'>Production</text><text x='500.0' y='1474.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g transform="translate(40, 60)"><text font-family="'Archivo', -apple-system, sans-serif" font-size="28" fill="#0f172a" font-weight="700">DECISION TREE</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='800' height='1660' viewBox='0 0 800 1660' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Start Project"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #007A47; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#FDFEFF' /><circle cx='400' cy='830' r='400' fill='#007A47' opacity='0.05' filter='blur(120px)' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,363.33333333333337 255.0,363.33333333333337' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,232.30769230769232 455.0,232.30769230769232' /><path class='link' d='M345.0,363.33333333333337 C400.0,363.33333333333337 400.0,344.61538461538464 455.0,344.61538461538464' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,606.6666666666667 255.0,606.6666666666667' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,456.9230769230769 455.0,456.9230769230769' /><path class='link' d='M345.0,606.6666666666667 C400.0,606.6666666666667 400.0,569.2307692307693 455.0,569.2307692307693' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,850.0 255.0,850.0' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,681.5384615384615 455.0,681.5384615384615' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,793.8461538461538 455.0,793.8461538461538' /><path class='link' d='M345.0,850.0 C400.0,850.0 400.0,906.1538461538462 455.0,906.1538461538462' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1093.3333333333335 255.0,1093.3333333333335' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1018.4615384615385 455.0,1018.4615384615385' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1130.7692307692307 455.0,1130.7692307692307' /><path class='link' d='M345.0,1093.3333333333335 C400.0,1093.3333333333335 400.0,1243.076923076923 455.0,1243.076923076923' /><path class='link' d='M145.0,850.0 C200.0,850.0 200.0,1336.6666666666667 255.0,1336.6666666666667' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1355.3846153846155 455.0,1355.3846153846155' /><path class='link' d='M345.0,1336.6666666666667 C400.0,1336.6666666666667 400.0,1467.6923076923076 455.0,1467.6923076923076' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='100.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1A6D9F' stroke-width='2' /><circle cx='100.0' cy='850.0' r='40' fill='none' stroke='#1A6D9F' stroke-width='0.5' stroke-opacity='0.3' /><text x='100.0' y='850.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1A6D9F'>Start Project</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='363.33333333333337' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#007A47' stroke-width='2' /><circle cx='300.0' cy='363.33333333333337' r='40' fill='none' stroke='#007A47' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='356.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#007A47'>Requirements</text><text x='300.0' y='370.33333333333337' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Analysis</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='232.30769230769232' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#8C4069' stroke-width='2' /><circle cx='500.0' cy='232.30769230769232' r='40' fill='none' stroke='#8C4069' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='225.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#8C4069'>Gather</text><text x='500.0' y='239.30769230769232' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='344.61538461538464' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E69F00' stroke-width='2' /><circle cx='500.0' cy='344.61538461538464' r='40' fill='none' stroke='#E69F00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='337.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E69F00'>Document</text><text x='500.0' y='351.61538461538464' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Requirements</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='606.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#8C4069' stroke-width='2' /><circle cx='300.0' cy='606.6666666666667' r='40' fill='none' stroke='#8C4069' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='606.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#8C4069'>Design Phase</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='456.9230769230769' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E69F00' stroke-width='2' /><circle cx='500.0' cy='456.9230769230769' r='40' fill='none' stroke='#E69F00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='449.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E69F00'>Architecture</text><text x='500.0' y='463.9230769230769' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Design</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='569.2307692307693' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#56B4E9' stroke-width='2' /><circle cx='500.0' cy='569.2307692307693' r='40' fill='none' stroke='#56B4E9' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='569.2307692307693' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#56B4E9'>UI/UX Design</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='850.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E69F00' stroke-width='2' /><circle cx='300.0' cy='850.0' r='40' fill='none' stroke='#E69F00' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='843.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E69F00'></text><text x='300.0' y='857.0' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Implementation</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='681.5384615384615' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#56B4E9' stroke-width='2' /><circle cx='500.0' cy='681.5384615384615' r='40' fill='none' stroke='#56B4E9' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='674.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#56B4E9'>Frontend</text><text x='500.0' y='688.5384615384615' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='793.8461538461538' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#009E73' stroke-width='2' /><circle cx='500.0' cy='793.8461538461538' r='40' fill='none' stroke='#009E73' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='786.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#009E73'>Backend</text><text x='500.0' y='800.8461538461538' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Development</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='906.1538461538462' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#D55E00' stroke-width='2' /><circle cx='500.0' cy='906.1538461538462' r='40' fill='none' stroke='#D55E00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='899.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#D55E00'>Database</text><text x='500.0' y='913.1538461538462' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Setup</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1093.3333333333335' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#56B4E9' stroke-width='2' /><circle cx='300.0' cy='1093.3333333333335' r='40' fill='none' stroke='#56B4E9' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1093.3333333333335' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#56B4E9'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1018.4615384615385' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#009E73' stroke-width='2' /><circle cx='500.0' cy='1018.4615384615385' r='40' fill='none' stroke='#009E73' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1018.4615384615385' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#009E73'>Unit Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1130.7692307692307' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#D55E00' stroke-width='2' /><circle cx='500.0' cy='1130.7692307692307' r='40' fill='none' stroke='#D55E00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1123.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#D55E00'>Integration</text><text x='500.0' y='1137.7692307692307' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1243.076923076923' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#0072B2' stroke-width='2' /><circle cx='500.0' cy='1243.076923076923' r='40' fill='none' stroke='#0072B2' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1229.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#0072B2'>User</text><text x='500.0' y='1243.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Acceptance</text><text x='500.0' y='1257.076923076923' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Testing</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='300.0' cy='1336.6666666666667' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#009E73' stroke-width='2' /><circle cx='300.0' cy='1336.6666666666667' r='40' fill='none' stroke='#009E73' stroke-width='0.5' stroke-opacity='0.3' /><text x='300.0' y='1336.6666666666667' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#009E73'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1355.3846153846155' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#D55E00' stroke-width='2' /><circle cx='500.0' cy='1355.3846153846155' r='40' fill='none' stroke='#D55E00' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1348.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#D55E00'>Staging</text><text x='500.0' y='1362.3846153846155' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='500.0' cy='1467.6923076923076' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#0072B2' stroke-width='2' /><circle cx='500.0' cy='1467.6923076923076' r='40' fill='none' stroke='#0072B2' stroke-width='0.5' stroke-opacity='0.3' /><text x='500.0' y='1460.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#0072B2'>Production</text><text x='500.0' y='1474.6923076923076' text-anchor='middle' dominant-baseline='middle' class='label-sub' fill='#475569'>Deployment</text></g><g transform="translate(40, 60)"><text font-family="'Archivo', -apple-system, sans-serif" font-size="28" fill="#0f172a" font-weight="700">DECISION TREE</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_080475a33e0b6876.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_080475a33e0b6876.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-74a43ecf107d62ea')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-74a43ecf107d62ea')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-080475a33e0b6876')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-080475a33e0b6876')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-74a43ecf107d62ea')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-74a43ecf107d62ea')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-74a43ecf107d62ea')">PRINT</button>
 </div>
-<div id="modal-svgviewer-080475a33e0b6876" class="svg-modal-svgviewer-080475a33e0b6876" onclick="if(event.target === this) svgModalsvgviewer_080475a33e0b6876.close()">
-    <div class="svg-modal-content-svgviewer-080475a33e0b6876">
-        <button class="svg-modal-close-svgviewer-080475a33e0b6876" onclick="svgModalsvgviewer_080475a33e0b6876.close()">×</button>
-        <div id="modal-body-svgviewer-080475a33e0b6876" class="svg-modal-body-svgviewer-080475a33e0b6876"></div>
+<div id="modal-sv-74a43ecf107d62ea" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-74a43ecf107d62ea')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-74a43ecf107d62ea')">×</button>
+        <div id="modal-body-sv-74a43ecf107d62ea" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-080475a33e0b6876" class="svg-modal-svgviewer-080475a33e0b6876" onclick="if(event.target === this) csvModalsvgviewer_080475a33e0b6876.close()">
-    <div class="svg-modal-content-svgviewer-080475a33e0b6876">
-        <button class="svg-modal-close-svgviewer-080475a33e0b6876" onclick="csvModalsvgviewer_080475a33e0b6876.close()">×</button>
-        <div class="svg-modal-header-svgviewer-080475a33e0b6876" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-74a43ecf107d62ea" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-74a43ecf107d62ea')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-74a43ecf107d62ea')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-080475a33e0b6876" class="svg-modal-body-svgviewer-080475a33e0b6876" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-74a43ecf107d62ea" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-080475a33e0b6876" class="svg-modal-svgviewer-080475a33e0b6876" onclick="if(event.target === this) docopsSource.close('svgviewer-080475a33e0b6876')">
-    <div class="svg-modal-content-svgviewer-080475a33e0b6876">
-        <button class="svg-modal-close-svgviewer-080475a33e0b6876" onclick="docopsSource.close('svgviewer-080475a33e0b6876')">×</button>
-        <div class="svg-modal-header-svgviewer-080475a33e0b6876" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-74a43ecf107d62ea" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-74a43ecf107d62ea')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-74a43ecf107d62ea')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-080475a33e0b6876" class="svg-modal-body-svgviewer-080475a33e0b6876" style="display: block; overflow: auto;">
+        <div id="source-content-sv-74a43ecf107d62ea" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3230,247 +3017,8 @@ Application | #3498db
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-a143ad9e5fb164f7 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-a143ad9e5fb164f7.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-a143ad9e5fb164f7 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-a143ad9e5fb164f7 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-a143ad9e5fb164f7:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-a143ad9e5fb164f7 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-a143ad9e5fb164f7 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-a143ad9e5fb164f7 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-a143ad9e5fb164f7 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-a143ad9e5fb164f7 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-a143ad9e5fb164f7 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-a143ad9e5fb164f7 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-a143ad9e5fb164f7 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_a143ad9e5fb164f7 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-a143ad9e5fb164f7');
-          const sourceContainer = document.getElementById('svgviewer-a143ad9e5fb164f7');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-a143ad9e5fb164f7');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-a143ad9e5fb164f7');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_a143ad9e5fb164f7 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-a143ad9e5fb164f7');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-a143ad9e5fb164f7');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-a143ad9e5fb164f7');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-a143ad9e5fb164f7');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_a143ad9e5fb164f7.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-a143ad9e5fb164f7');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_a143ad9e5fb164f7.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-a143ad9e5fb164f7" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAGj-wWkA_02OwU7DMAyG73mKSJwrdWyw9dAD08QBkGDrXqBxrMZasaPUAybx8Gs3lOGT_0-_PltJe6z3CIGll-5kG23hYL7Ja6hnZVmagNQFrVfjqgE_sXapZW-KojBPMfYErZKw_bV380W18s7YcZ6TsCL7Cd8jwHJ2wdPssAX9l_zxJ6f9KWIDieK1sB5f-ZPgcgFzyMUmJuLOrkVuqlfRnjjHDxm0S9hs3y5og1_vcZhUlXuo3GPubWQ8km6Wo8PEqDhk9IJ8IB7OKEOZoCsBAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Technology Stack
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-b51fcdbf7fb7678c" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=treechart&payload=H4sIAJAT-2kA_02OwU7DMAyG73mKSJwrdWyw9dAD08QBkGDrXqBxrMZasaPUAybx8Gs3lOGT_0-_PltJe6z3CIGll-5kG23hYL7Ja6hnZVmagNQFrVfjqgE_sXapZW-KojBPMfYErZKw_bV380W18s7YcZ6TsCL7Cd8jwHJ2wdPssAX9l_zxJ6f9KWIDieK1sB5f-ZPgcgFzyMUmJuLOrkVuqlfRnjjHDxm0S9hs3y5og1_vcZhUlXuo3GPubWQ8km6Wo8PEqDhk9IJ8IB7OKEOZoCsBAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=treechart&filename=ghi.svg" data-original-content="title=Technology Stack
 width=1000
 height=800
 theme=brand
@@ -3488,59 +3036,49 @@ Application | #3498db
         Docker
         Kubernetes
         Jenkins" data-kind="treechart">
-<svg width='1270' height='800' viewBox='0 0 1270 800' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Application"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #E39A3B; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#F6F9FC' /><circle cx='635' cy='400' r='635' fill='#E39A3B' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 209.0,420.0 209.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 427.0,420.0 427.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 645.0,420.0 645.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 863.0,420.0 863.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 1081.0,420.0 1081.0,475.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#3498db' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#3498db' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#3498db'>Application</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#2ecc71' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#2ecc71' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#2ecc71'>Frontend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='209.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#4D7A98' stroke-width='2' /><circle cx='209.0' cy='520.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>React</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7FB0CD' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#7FB0CD' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7FB0CD'>Redux</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='427.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1E3A4D' stroke-width='2' /><circle cx='427.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>TypeScript</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#e74c3c' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#e74c3c' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#e74c3c'>Backend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7FB0CD' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#7FB0CD' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7FB0CD'>Spring Boot</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='645.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1E3A4D' stroke-width='2' /><circle cx='645.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Kotlin</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E39A3B' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#E39A3B' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E39A3B'>PostgreSQL</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#9b59b6' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#9b59b6' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9b59b6'>DevOps</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='863.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1E3A4D' stroke-width='2' /><circle cx='863.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Docker</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E39A3B' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#E39A3B' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E39A3B'>Kubernetes</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='1081.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#C56F3A' stroke-width='2' /><circle cx='1081.0' cy='520.0' r='40' fill='none' stroke='#C56F3A' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#C56F3A'>Jenkins</text></g><g transform="translate(40, 60)"><text font-family="'Archivo', -apple-system, sans-serif" font-size="28" fill="#0f172a" font-weight="700">TECHNOLOGY STACK</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
+<svg width='1270' height='800' viewBox='0 0 1270 800' xmlns='http://www.w3.org/2000/svg'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Label"],"rows":[["Application"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">/* <![CDATA[ */ @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap'); .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; } .link { fill: none; stroke: #E39A3B; stroke-opacity: 0.15; stroke-width: 1.5; } .label-main { font-family: 'Archivo', -apple-system, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; } .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; } @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } } /* ]]> */</style></defs><rect width='100%' height='100%' fill='#F6F9FC' /><circle cx='635' cy='400' r='635' fill='#E39A3B' opacity='0.05' filter='blur(120px)' /><path class='link' d='M645.0,165.0 C645.0,220.0 372.5,220.0 372.5,275.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 209.0,420.0 209.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 318.0,420.0 318.0,475.0' /><path class='link' d='M372.5,365.0 C372.5,420.0 427.0,420.0 427.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 645.0,220.0 645.0,275.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 536.0,420.0 536.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 645.0,420.0 645.0,475.0' /><path class='link' d='M645.0,365.0 C645.0,420.0 754.0,420.0 754.0,475.0' /><path class='link' d='M645.0,165.0 C645.0,220.0 917.5,220.0 917.5,275.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 863.0,420.0 863.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 972.0,420.0 972.0,475.0' /><path class='link' d='M917.5,365.0 C917.5,420.0 1081.0,420.0 1081.0,475.0' /><g class='node-group' style='animation-delay: 0.0s;'><circle cx='645.0' cy='120.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#3498db' stroke-width='2' /><circle cx='645.0' cy='120.0' r='40' fill='none' stroke='#3498db' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='120.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#3498db'>Application</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='372.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#2ecc71' stroke-width='2' /><circle cx='372.5' cy='320.0' r='40' fill='none' stroke='#2ecc71' stroke-width='0.5' stroke-opacity='0.3' /><text x='372.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#2ecc71'>Frontend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='209.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#4D7A98' stroke-width='2' /><circle cx='209.0' cy='520.0' r='40' fill='none' stroke='#4D7A98' stroke-width='0.5' stroke-opacity='0.3' /><text x='209.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#4D7A98'>React</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='318.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7FB0CD' stroke-width='2' /><circle cx='318.0' cy='520.0' r='40' fill='none' stroke='#7FB0CD' stroke-width='0.5' stroke-opacity='0.3' /><text x='318.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7FB0CD'>Redux</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='427.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1E3A4D' stroke-width='2' /><circle cx='427.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='427.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>TypeScript</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='645.0' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#e74c3c' stroke-width='2' /><circle cx='645.0' cy='320.0' r='40' fill='none' stroke='#e74c3c' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#e74c3c'>Backend</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='536.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#7FB0CD' stroke-width='2' /><circle cx='536.0' cy='520.0' r='40' fill='none' stroke='#7FB0CD' stroke-width='0.5' stroke-opacity='0.3' /><text x='536.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#7FB0CD'>Spring Boot</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='645.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1E3A4D' stroke-width='2' /><circle cx='645.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='645.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Kotlin</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='754.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E39A3B' stroke-width='2' /><circle cx='754.0' cy='520.0' r='40' fill='none' stroke='#E39A3B' stroke-width='0.5' stroke-opacity='0.3' /><text x='754.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E39A3B'>PostgreSQL</text></g><g class='node-group' style='animation-delay: 0.1s;'><circle cx='917.5' cy='320.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#9b59b6' stroke-width='2' /><circle cx='917.5' cy='320.0' r='40' fill='none' stroke='#9b59b6' stroke-width='0.5' stroke-opacity='0.3' /><text x='917.5' y='320.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#9b59b6'>DevOps</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='863.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#1E3A4D' stroke-width='2' /><circle cx='863.0' cy='520.0' r='40' fill='none' stroke='#1E3A4D' stroke-width='0.5' stroke-opacity='0.3' /><text x='863.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#1E3A4D'>Docker</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='972.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#E39A3B' stroke-width='2' /><circle cx='972.0' cy='520.0' r='40' fill='none' stroke='#E39A3B' stroke-width='0.5' stroke-opacity='0.3' /><text x='972.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#E39A3B'>Kubernetes</text></g><g class='node-group' style='animation-delay: 0.2s;'><circle cx='1081.0' cy='520.0' r='45' fill='rgba(255, 255, 255, 0.9)' stroke='#C56F3A' stroke-width='2' /><circle cx='1081.0' cy='520.0' r='40' fill='none' stroke='#C56F3A' stroke-width='0.5' stroke-opacity='0.3' /><text x='1081.0' y='520.0' text-anchor='middle' dominant-baseline='middle' class='label-main' fill='#C56F3A'>Jenkins</text></g><g transform="translate(40, 60)"><text font-family="'Archivo', -apple-system, sans-serif" font-size="28" fill="#0f172a" font-weight="700">TECHNOLOGY STACK</text><rect y="15" width="100" height="4" fill="#7000ff" rx="2" /></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_a143ad9e5fb164f7.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_a143ad9e5fb164f7.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-b51fcdbf7fb7678c')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-b51fcdbf7fb7678c')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-a143ad9e5fb164f7')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-a143ad9e5fb164f7')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-b51fcdbf7fb7678c')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-b51fcdbf7fb7678c')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-b51fcdbf7fb7678c')">PRINT</button>
 </div>
-<div id="modal-svgviewer-a143ad9e5fb164f7" class="svg-modal-svgviewer-a143ad9e5fb164f7" onclick="if(event.target === this) svgModalsvgviewer_a143ad9e5fb164f7.close()">
-    <div class="svg-modal-content-svgviewer-a143ad9e5fb164f7">
-        <button class="svg-modal-close-svgviewer-a143ad9e5fb164f7" onclick="svgModalsvgviewer_a143ad9e5fb164f7.close()">×</button>
-        <div id="modal-body-svgviewer-a143ad9e5fb164f7" class="svg-modal-body-svgviewer-a143ad9e5fb164f7"></div>
+<div id="modal-sv-b51fcdbf7fb7678c" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-b51fcdbf7fb7678c')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-b51fcdbf7fb7678c')">×</button>
+        <div id="modal-body-sv-b51fcdbf7fb7678c" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-a143ad9e5fb164f7" class="svg-modal-svgviewer-a143ad9e5fb164f7" onclick="if(event.target === this) csvModalsvgviewer_a143ad9e5fb164f7.close()">
-    <div class="svg-modal-content-svgviewer-a143ad9e5fb164f7">
-        <button class="svg-modal-close-svgviewer-a143ad9e5fb164f7" onclick="csvModalsvgviewer_a143ad9e5fb164f7.close()">×</button>
-        <div class="svg-modal-header-svgviewer-a143ad9e5fb164f7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-b51fcdbf7fb7678c" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-b51fcdbf7fb7678c')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-b51fcdbf7fb7678c')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-a143ad9e5fb164f7" class="svg-modal-body-svgviewer-a143ad9e5fb164f7" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-b51fcdbf7fb7678c" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-a143ad9e5fb164f7" class="svg-modal-svgviewer-a143ad9e5fb164f7" onclick="if(event.target === this) docopsSource.close('svgviewer-a143ad9e5fb164f7')">
-    <div class="svg-modal-content-svgviewer-a143ad9e5fb164f7">
-        <button class="svg-modal-close-svgviewer-a143ad9e5fb164f7" onclick="docopsSource.close('svgviewer-a143ad9e5fb164f7')">×</button>
-        <div class="svg-modal-header-svgviewer-a143ad9e5fb164f7" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-b51fcdbf7fb7678c" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-b51fcdbf7fb7678c')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-b51fcdbf7fb7678c')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-a143ad9e5fb164f7" class="svg-modal-body-svgviewer-a143ad9e5fb164f7" style="display: block; overflow: auto;">
+        <div id="source-content-sv-b51fcdbf7fb7678c" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3955,11 +3493,5 @@ mermaid.initialize({
     `
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-container">
-    <a href="todo.html" class="nav-prev">&larr; Todo</a>
-          <a href="tutorial.html" class="nav-next">Tutorial &rarr;</a>
-  </div>
-</nav>
 </body>
 </html>

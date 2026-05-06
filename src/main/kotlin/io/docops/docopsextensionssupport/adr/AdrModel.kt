@@ -170,94 +170,79 @@ class AdrParser {
             val trimmedLine = line.trim()
 
             when {
-                trimmedLine.startsWith("theme:", true) -> {
-                    theme = trimmedLine.substringAfter(":").trim()
+                trimmedLine.startsWith("theme=", true) -> {
+                    theme = trimmedLine.substringAfter("=").trim()
                     currentSection = null
                 }
-                trimmedLine.startsWith("template:", true) -> {
-                    template = trimmedLine.substringAfter(trimmedLine.substring(0, 9))
+                trimmedLine.startsWith("template=", true) -> {
+                    template = trimmedLine.substringAfter("=").trim()
                     currentSection = null
                 }
-                trimmedLine.startsWith("title:", true) -> {
-                    title = trimmedLine.substringAfter(trimmedLine.substring(0, 6), "").trim()
+                trimmedLine.startsWith("title=", true) -> {
+                    title = trimmedLine.substringAfter("=").trim()
                     currentSection = null
                 }
-                trimmedLine.startsWith("status:", true) -> {
-                    statusStr = trimmedLine.substringAfter(trimmedLine.substring(0, 7), "").trim()
+                trimmedLine.startsWith("status=", true) -> {
+                    statusStr = trimmedLine.substringAfter("=").trim()
                     currentSection = null
                 }
-                trimmedLine.startsWith("date:", true) -> {
-                    date = trimmedLine.substringAfter(trimmedLine.substring(0, 5), "").trim()
+                trimmedLine.startsWith("date=", true) -> {
+                    date = trimmedLine.substringAfter("=").trim()
                     currentSection = null
                 }
-                trimmedLine.startsWith("context:", true) -> {
+                trimmedLine.startsWith("context=", true) -> {
                     currentSection = "context"
-                    // Extract any text that appears after "context:" on the same line
-                    val contextText = trimmedLine.substringAfter(trimmedLine.substring(0, trimmedLine.indexOf(":") + 1), "").trim()
+                    val contextText = trimmedLine.substringAfter("=").trim()
                     if (contextText.isNotEmpty()) {
                         contextLines.add(contextText)
-                        // Extract wiki links from the context text
                         extractWikiLinks(contextText, links)
                     }
                 }
                 trimmedLine.equals("context", true) -> {
-                    // Handle the case where the line is just "context" without a colon
                     currentSection = "context"
                 }
-                trimmedLine.startsWith("decision:", true) -> {
+                trimmedLine.startsWith("decision=", true) -> {
                     currentSection = "decision"
-                    // Extract any text that appears after "decision:" on the same line
-                    val decisionText = trimmedLine.substringAfter(trimmedLine.substring(0, trimmedLine.indexOf(":") + 1), "").trim()
+                    val decisionText = trimmedLine.substringAfter("=").trim()
                     if (decisionText.isNotEmpty()) {
                         decisionLines.add(decisionText)
-                        // Extract wiki links from the decision text
                         extractWikiLinks(decisionText, links)
                     }
                 }
                 trimmedLine.equals("decision", true) -> {
-                    // Handle the case where the line is just "decision" without a colon
                     currentSection = "decision"
                 }
-                trimmedLine.startsWith("consequences:", true) -> {
+                trimmedLine.startsWith("consequences=", true) -> {
                     currentSection = "consequences"
-                    // Extract any text that appears after "consequences:" on the same line
-                    val consequencesText = trimmedLine.substringAfter(trimmedLine.substring(0, trimmedLine.indexOf(":") + 1), "").trim()
+                    val consequencesText = trimmedLine.substringAfter("=").trim()
                     if (consequencesText.isNotEmpty()) {
                         consequencesLines.add(consequencesText)
-                        // Extract wiki links from the consequences text
                         extractWikiLinks(consequencesText, links)
                     }
                 }
                 trimmedLine.equals("consequences", true) -> {
-                    // Handle the case where the line is just "consequences" without a colon
                     currentSection = "consequences"
                 }
-                trimmedLine.startsWith("participants:", true) -> {
+                trimmedLine.startsWith("participants=", true) -> {
                     currentSection = "participants"
-                    // Extract any text that appears after "participants:" on the same line
-                    val participantsText = trimmedLine.substringAfter(trimmedLine.substring(0, 13), "").trim()
+                    val participantsText = trimmedLine.substringAfter("=").trim()
                     if (participantsText.isNotEmpty()) {
                         participantsLines.add(participantsText)
-                        // Extract wiki links from the participants text
                         extractWikiLinks(participantsText, links)
                     }
                 }
                 trimmedLine.equals("participants", true) -> {
-                    // Handle the case where the line is just "participants" without a colon
                     currentSection = "participants"
                 }
-                trimmedLine.startsWith("references:", true) -> {
+                trimmedLine.startsWith("references=", true) -> {
                     currentSection = "references"
-                    // Extract any text that appears after "references:" on the same line
-                    val referencesText = trimmedLine.substringAfter(trimmedLine.substring(0, 11), "").trim()
+                    val referencesText = trimmedLine.substringAfter("=").trim()
                     if (referencesText.isNotEmpty()) {
                         referencesLines.add(referencesText)
-                        // Extract wiki links from the references text
                         extractWikiLinks(referencesText, links)
                     }
                 }
                 trimmedLine.equals("references", true) -> {
-                    // Handle the case where the line is just "references" without a colon
                     currentSection = "references"
                 }
                 else -> {
@@ -308,7 +293,7 @@ class AdrParser {
         }
 
         // Parse status
-        val status = AdrStatus.fromString(statusStr) ?: throw kotlin.IllegalArgumentException("Invalid status: $statusStr")
+        val status = AdrStatus.fromString(statusStr) ?: throw IllegalArgumentException("Invalid status: $statusStr")
 
         // Extract references from referencesLines
         val references = mutableListOf<WikiLink>()

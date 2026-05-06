@@ -1141,7 +1141,59 @@
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1241,6 +1293,33 @@
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1271,6 +1350,7 @@
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1315,6 +1395,22 @@
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1352,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1550,7 +1646,7 @@
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -2017,7 +2113,8 @@
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2054,8 +2151,36 @@
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+  <div class="nav-container">
+    <a href="buttons.html" class="nav-prev">&larr; Buttons</a>
+          <a href="combination.html" class="nav-next">Combination Charts &rarr;</a>
+  </div>
+</nav>
+</body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
 <script>
@@ -2422,6 +2547,9 @@ window.onload = function() {
 };
 </script>
 
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/viz-global.js'></script>
+<script type="text/javascript" src='https://plantuml.github.io/plantuml/js-plantuml/plantuml.js'></script>
+<script>plantumlLoad();</script>
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
 </head>
@@ -2431,7 +2559,7 @@ window.onload = function() {
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_showcase">1. Showcase</a></li>
+<li><a href="#top">1. Showcase</a></li>
 <li><a href="#_introduction">2. Introduction</a>
 <ul class="sectlevel2">
 <li><a href="#_key_features">2.1. Key Features</a></li>
@@ -2455,7 +2583,7 @@ window.onload = function() {
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_showcase">1. Showcase</h2>
+<h2 id="top">1. Showcase</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="calloutshowcase.html">Callout Showcase</a></p>
@@ -2518,247 +2646,165 @@ Maintenance | Monitor performance and fix issues | Stable system with ongoing im
 ----</code></pre>
 </div>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
+<style>
+.imageblock .title {
+  text-align: center;
+  font-style: italic;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  color: #666;
+  font-size: 0.9em;
+}
 
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-1c972468b1557cb5 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-1c972468b1557cb5.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-1c972468b1557cb5 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-1c972468b1557cb5 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-1c972468b1557cb5:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-1c972468b1557cb5 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-1c972468b1557cb5 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
+.svg-with-controls {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-1c972468b1557cb5 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-1c972468b1557cb5 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-1c972468b1557cb5 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-1c972468b1557cb5 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-1c972468b1557cb5 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-1c972468b1557cb5 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
+.svg-bottom-controls {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  display: flex;
+  gap: 6px;
+  background: rgba(15, 20, 30, 0.85);
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
 
+.svg-with-controls:hover .svg-bottom-controls {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.svg-control-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.svg-control-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+.svg-modal.docops-svg-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 20, 25, 0.95);
+  backdrop-filter: blur(8px);
+  z-index: 2147483647;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.svg-modal.docops-svg-modal.active {
+  display: flex;
+}
+
+.svg-modal-content.docops-svg-modal-content {
+  width: 95vw;
+  max-width: 1400px;
+  height: 90vh;
+  background: var(--docops-card-bg, #1e293b);
+  border-radius: 20px;
+  padding: 48px 24px 24px 24px;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.svg-modal-close.docops-svg-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.svg-modal-close.docops-svg-modal-close:hover {
+  background: rgba(255,255,255,0.2);
+  transform: rotate(90deg);
+}
+
+.svg-modal-body.docops-svg-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+.svg-modal-body.docops-svg-modal-body svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
 </style>
 
 <script>
-  // View Modal Control
-  window.svgModalsvgviewer_1c972468b1557cb5 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-1c972468b1557cb5');
-          const sourceContainer = document.getElementById('svgviewer-1c972468b1557cb5');
+(function() {
+  if (window.__docopsEscapeHandlerInstalled) return;
+  window.__docopsEscapeHandlerInstalled = true;
 
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-1c972468b1557cb5');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-1c972468b1557cb5');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_1c972468b1557cb5 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-1c972468b1557cb5');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-1c972468b1557cb5');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-1c972468b1557cb5');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
   document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-1c972468b1557cb5');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_1c972468b1557cb5.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-1c972468b1557cb5');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_1c972468b1557cb5.close();
-          }
-      }
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.svg-modal.active').forEach(function(modal) {
+      modal.classList.remove('active');
+    });
+    document.body.style.overflow = '';
   });
+})();
 </script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-1c972468b1557cb5" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAPDTuWkA_12SQY7bMAxF9z4FLxDMCWaRJkURoAPMZCZot4pMx0RkUZUopwFy-JJy2kG6MQiZ-nz_U0IS8BneeZCLywhbnDFwmjAKvGb2WEon14TP5VoEJyfku9Vq1b2OriDcYO2FOGqxx1KDaLGbUuYZTaHb469KudVFf31zMmKGWvQTEfsCLvawKEN-7N2iOArYP5737Gtj0zlx5jAjYOxXplgAXQ6k0hRB50C642-x0MkQNxmd4N95LvuRBL1UtW0ch93T4Sf0rdsIPtCPkbwLUBJ6GrQ0rwv0RZGG7Ca0zoNGMbHKLJd1OsUzxRNcOJ_LyMkgPnNtGYXmCAZFUgAV9Z5zb5eE_x94gx8qZP8896izZYQaSUCwtLB20as3pUiOshk_KdpkF4omYBrdh7bawQ1eMQ-cJ3hbNydtGzodk7josWkujV_qSdNPnGXxPLtAfUPSY9u2jV5X4clibQHYZfBKYo5T4Ovd8B5D41NvStfX5dVgnClzvPd8J92mSyncfT_k1NQzH6vqb3ZPmy0kShgoYvfiKArGBn-DF9ZgWENYXLZTgx_oN1AptS3sXdwx_HsJLU-OJzbb9Pl8rfNrsVYqIxxRRJMa9N0enT9DYN3rH6hG9vU_AwAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=callout&filename=ghi.svg" data-original-content="title= Software Development Process
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-1b5b4ab1626904c3" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAJAT-2kA_12SQY7bMAxF9z4FLxDMCWaRJkURoAPMZCZot4pMx0RkUZUopwFy-JJy2kG6MQiZ-nz_U0IS8BneeZCLywhbnDFwmjAKvGb2WEon14TP5VoEJyfku9Vq1b2OriDcYO2FOGqxx1KDaLGbUuYZTaHb469KudVFf31zMmKGWvQTEfsCLvawKEN-7N2iOArYP5737Gtj0zlx5jAjYOxXplgAXQ6k0hRB50C642-x0MkQNxmd4N95LvuRBL1UtW0ch93T4Sf0rdsIPtCPkbwLUBJ6GrQ0rwv0RZGG7Ca0zoNGMbHKLJd1OsUzxRNcOJ_LyMkgPnNtGYXmCAZFUgAV9Z5zb5eE_x94gx8qZP8896izZYQaSUCwtLB20as3pUiOshk_KdpkF4omYBrdh7bawQ1eMQ-cJ3hbNydtGzodk7josWkujV_qSdNPnGXxPLtAfUPSY9u2jV5X4clibQHYZfBKYo5T4Ovd8B5D41NvStfX5dVgnClzvPd8J92mSyncfT_k1NQzH6vqb3ZPmy0kShgoYvfiKArGBn-DF9ZgWENYXLZTgx_oN1AptS3sXdwx_HsJLU-OJzbb9Pl8rfNrsVYqIxxRRJMa9N0enT9DYN3rH6hG9vU_AwAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=callout&filename=ghi.svg" data-original-content="title= Software Development Process
 type=systematic
 ---
 Phase | Action | Result | Improvement
@@ -2768,59 +2814,49 @@ Development | Implement features according to specifications | Working code with
 Testing | Perform QA and user acceptance testing | Bug reports and validation results | Automate more test cases
 Deployment | Release to production environment | Live application | Implement more robust CI/CD pipeline
 Maintenance | Monitor performance and fix issues | Stable system with ongoing improvements | Establish better feedback loops" data-kind="callout">
-<svg id="ID_a1810e524c3b40dd85b95bcd6a13c726" width="800" height="840" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 840">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-17</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Step Number","Phase","Action","Result","Improvement"],"rows":[["Software Development Process","1","Requirements","Gather user needs and system requirements","Detailed requirements document","Involve end-users earlier in the process"],["","2","Design","Create system architecture and UI/UX designs","Technical specifications and wireframes","Use more design thinking workshops"],["","3","Development","Implement features according to specifications","Working code with unit tests","Increase pair programming sessions"],["","4","Testing","Perform QA and user acceptance testing","Bug reports and validation results","Automate more test cases"],["","5","Deployment","Release to production environment","Live application","Implement more robust CI/CD pipeline"],["","6","Maintenance","Monitor performance and fix issues","Stable system with ongoing improvements","Establish better feedback loops"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap'); .title_a1810e524c3b40dd85b95bcd6a13c726 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 26px; fill: #0F2230; letter-spacing: -0.5px; } .phase_a1810e524c3b40dd85b95bcd6a13c726 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 17px; fill: #0F2230; } .action_a1810e524c3b40dd85b95bcd6a13c726 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 300; font-size: 14px; fill: #335D79; } .result_a1810e524c3b40dd85b95bcd6a13c726 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 13px; fill: #E39A3B; } .step-num_a1810e524c3b40dd85b95bcd6a13c726 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 12px; fill: #E39A3B; }</style><linearGradient id="bgGrad_a1810e524c3b40dd85b95bcd6a13c726" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#F6F9FC" /><stop offset="100%" stop-color="#c4c7c9" /></linearGradient><linearGradient id="spineGrad_a1810e524c3b40dd85b95bcd6a13c726" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E39A3B" /><stop offset="100%" stop-color="rgba(51, 93, 121, 0.14)" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_a1810e524c3b40dd85b95bcd6a13c726)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#0F2230" stroke-width="1"><path d="M40 0 L40 840 M760 0 L760 840" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_a1810e524c3b40dd85b95bcd6a13c726">Software Development Process</text><rect x="50" y="85" width="40" height="4" fill="#335D79" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="660" fill="url(#spineGrad_a1810e524c3b40dd85b95bcd6a13c726)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_a1810e524c3b40dd85b95bcd6a13c726">1</text><text x="55" y="15" class="phase_a1810e524c3b40dd85b95bcd6a13c726">Requirements</text><text x="55" y="38" class="action_a1810e524c3b40dd85b95bcd6a13c726">Gather user needs and system requirements</text><g transform="translate(55, 52)"><rect width="287.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_a1810e524c3b40dd85b95bcd6a13c726">Detailed requirements document</text></g><rect x="426.0" y="10" width="324.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="588.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Involve end-users earlier in the process</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_a1810e524c3b40dd85b95bcd6a13c726">2</text><text x="55" y="15" class="phase_a1810e524c3b40dd85b95bcd6a13c726">Design</text><text x="55" y="38" class="action_a1810e524c3b40dd85b95bcd6a13c726">Create system architecture and UI/UX designs</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_a1810e524c3b40dd85b95bcd6a13c726">Technical specifications and wireframes</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Use more design thinking workshops</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_a1810e524c3b40dd85b95bcd6a13c726">3</text><text x="55" y="15" class="phase_a1810e524c3b40dd85b95bcd6a13c726">Development</text><text x="55" y="38" class="action_a1810e524c3b40dd85b95bcd6a13c726">Implement features according to specifications</text><g transform="translate(55, 52)"><rect width="270.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_a1810e524c3b40dd85b95bcd6a13c726">Working code with unit tests</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Increase pair programming sessions</text></g><g transform="translate(50, 470)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_a1810e524c3b40dd85b95bcd6a13c726">4</text><text x="55" y="15" class="phase_a1810e524c3b40dd85b95bcd6a13c726">Testing</text><text x="55" y="38" class="action_a1810e524c3b40dd85b95bcd6a13c726">Perform QA and user acceptance testing</text><g transform="translate(55, 52)"><rect width="321.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_a1810e524c3b40dd85b95bcd6a13c726">Bug reports and validation results</text></g><rect x="546.0" y="10" width="204.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="648.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Automate more test cases</text></g><g transform="translate(50, 580)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_a1810e524c3b40dd85b95bcd6a13c726">5</text><text x="55" y="15" class="phase_a1810e524c3b40dd85b95bcd6a13c726">Deployment</text><text x="55" y="38" class="action_a1810e524c3b40dd85b95bcd6a13c726">Release to production environment</text><g transform="translate(55, 52)"><rect width="168.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_a1810e524c3b40dd85b95bcd6a13c726">Live application</text></g><rect x="456.0" y="10" width="294.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="603.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Implement more robust CI/CD pipeline</text></g><g transform="translate(50, 690)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_a1810e524c3b40dd85b95bcd6a13c726">6</text><text x="55" y="15" class="phase_a1810e524c3b40dd85b95bcd6a13c726">Maintenance</text><text x="55" y="38" class="action_a1810e524c3b40dd85b95bcd6a13c726">Monitor performance and fix issues</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_a1810e524c3b40dd85b95bcd6a13c726">Stable system with ongoing improvements</text></g><rect x="493.5" y="10" width="256.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="621.75" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Establish better feedback loops</text></g></svg>
+<svg id="ID_6fc48344863442f2889640c84bbb5c8c" width="800" height="840" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 840">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Step Number","Phase","Action","Result","Improvement"],"rows":[["Software Development Process","1","Requirements","Gather user needs and system requirements","Detailed requirements document","Involve end-users earlier in the process"],["","2","Design","Create system architecture and UI/UX designs","Technical specifications and wireframes","Use more design thinking workshops"],["","3","Development","Implement features according to specifications","Working code with unit tests","Increase pair programming sessions"],["","4","Testing","Perform QA and user acceptance testing","Bug reports and validation results","Automate more test cases"],["","5","Deployment","Release to production environment","Live application","Implement more robust CI/CD pipeline"],["","6","Maintenance","Monitor performance and fix issues","Stable system with ongoing improvements","Establish better feedback loops"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap'); .title_6fc48344863442f2889640c84bbb5c8c { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 26px; fill: #0F2230; letter-spacing: -0.5px; } .phase_6fc48344863442f2889640c84bbb5c8c { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 17px; fill: #0F2230; } .action_6fc48344863442f2889640c84bbb5c8c { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 300; font-size: 14px; fill: #335D79; } .result_6fc48344863442f2889640c84bbb5c8c { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 13px; fill: #E39A3B; } .step-num_6fc48344863442f2889640c84bbb5c8c { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 12px; fill: #E39A3B; }</style><linearGradient id="bgGrad_6fc48344863442f2889640c84bbb5c8c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#F6F9FC" /><stop offset="100%" stop-color="#c4c7c9" /></linearGradient><linearGradient id="spineGrad_6fc48344863442f2889640c84bbb5c8c" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E39A3B" /><stop offset="100%" stop-color="rgba(51, 93, 121, 0.14)" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_6fc48344863442f2889640c84bbb5c8c)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#0F2230" stroke-width="1"><path d="M40 0 L40 840 M760 0 L760 840" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_6fc48344863442f2889640c84bbb5c8c">Software Development Process</text><rect x="50" y="85" width="40" height="4" fill="#335D79" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="660" fill="url(#spineGrad_6fc48344863442f2889640c84bbb5c8c)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6fc48344863442f2889640c84bbb5c8c">1</text><text x="55" y="15" class="phase_6fc48344863442f2889640c84bbb5c8c">Requirements</text><text x="55" y="38" class="action_6fc48344863442f2889640c84bbb5c8c">Gather user needs and system requirements</text><g transform="translate(55, 52)"><rect width="287.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_6fc48344863442f2889640c84bbb5c8c">Detailed requirements document</text></g><rect x="426.0" y="10" width="324.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="588.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Involve end-users earlier in the process</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6fc48344863442f2889640c84bbb5c8c">2</text><text x="55" y="15" class="phase_6fc48344863442f2889640c84bbb5c8c">Design</text><text x="55" y="38" class="action_6fc48344863442f2889640c84bbb5c8c">Create system architecture and UI/UX designs</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_6fc48344863442f2889640c84bbb5c8c">Technical specifications and wireframes</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Use more design thinking workshops</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6fc48344863442f2889640c84bbb5c8c">3</text><text x="55" y="15" class="phase_6fc48344863442f2889640c84bbb5c8c">Development</text><text x="55" y="38" class="action_6fc48344863442f2889640c84bbb5c8c">Implement features according to specifications</text><g transform="translate(55, 52)"><rect width="270.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_6fc48344863442f2889640c84bbb5c8c">Working code with unit tests</text></g><rect x="471.0" y="10" width="279.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="610.5" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Increase pair programming sessions</text></g><g transform="translate(50, 470)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6fc48344863442f2889640c84bbb5c8c">4</text><text x="55" y="15" class="phase_6fc48344863442f2889640c84bbb5c8c">Testing</text><text x="55" y="38" class="action_6fc48344863442f2889640c84bbb5c8c">Perform QA and user acceptance testing</text><g transform="translate(55, 52)"><rect width="321.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_6fc48344863442f2889640c84bbb5c8c">Bug reports and validation results</text></g><rect x="546.0" y="10" width="204.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="648.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Automate more test cases</text></g><g transform="translate(50, 580)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6fc48344863442f2889640c84bbb5c8c">5</text><text x="55" y="15" class="phase_6fc48344863442f2889640c84bbb5c8c">Deployment</text><text x="55" y="38" class="action_6fc48344863442f2889640c84bbb5c8c">Release to production environment</text><g transform="translate(55, 52)"><rect width="168.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_6fc48344863442f2889640c84bbb5c8c">Live application</text></g><rect x="456.0" y="10" width="294.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="603.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Implement more robust CI/CD pipeline</text></g><g transform="translate(50, 690)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_6fc48344863442f2889640c84bbb5c8c">6</text><text x="55" y="15" class="phase_6fc48344863442f2889640c84bbb5c8c">Maintenance</text><text x="55" y="38" class="action_6fc48344863442f2889640c84bbb5c8c">Monitor performance and fix issues</text><g transform="translate(55, 52)"><rect width="363.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_6fc48344863442f2889640c84bbb5c8c">Stable system with ongoing improvements</text></g><rect x="493.5" y="10" width="256.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="621.75" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Establish better feedback loops</text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_1c972468b1557cb5.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_1c972468b1557cb5.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-1b5b4ab1626904c3')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-1b5b4ab1626904c3')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-1c972468b1557cb5')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-1c972468b1557cb5')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-1b5b4ab1626904c3')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-1b5b4ab1626904c3')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-1b5b4ab1626904c3')">PRINT</button>
 </div>
-<div id="modal-svgviewer-1c972468b1557cb5" class="svg-modal-svgviewer-1c972468b1557cb5" onclick="if(event.target === this) svgModalsvgviewer_1c972468b1557cb5.close()">
-    <div class="svg-modal-content-svgviewer-1c972468b1557cb5">
-        <button class="svg-modal-close-svgviewer-1c972468b1557cb5" onclick="svgModalsvgviewer_1c972468b1557cb5.close()">×</button>
-        <div id="modal-body-svgviewer-1c972468b1557cb5" class="svg-modal-body-svgviewer-1c972468b1557cb5"></div>
+<div id="modal-sv-1b5b4ab1626904c3" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-1b5b4ab1626904c3')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-1b5b4ab1626904c3')">×</button>
+        <div id="modal-body-sv-1b5b4ab1626904c3" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-1c972468b1557cb5" class="svg-modal-svgviewer-1c972468b1557cb5" onclick="if(event.target === this) csvModalsvgviewer_1c972468b1557cb5.close()">
-    <div class="svg-modal-content-svgviewer-1c972468b1557cb5">
-        <button class="svg-modal-close-svgviewer-1c972468b1557cb5" onclick="csvModalsvgviewer_1c972468b1557cb5.close()">×</button>
-        <div class="svg-modal-header-svgviewer-1c972468b1557cb5" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-1b5b4ab1626904c3" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-1b5b4ab1626904c3')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-1b5b4ab1626904c3')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-1c972468b1557cb5" class="svg-modal-body-svgviewer-1c972468b1557cb5" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-1b5b4ab1626904c3" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-1c972468b1557cb5" class="svg-modal-svgviewer-1c972468b1557cb5" onclick="if(event.target === this) docopsSource.close('svgviewer-1c972468b1557cb5')">
-    <div class="svg-modal-content-svgviewer-1c972468b1557cb5">
-        <button class="svg-modal-close-svgviewer-1c972468b1557cb5" onclick="docopsSource.close('svgviewer-1c972468b1557cb5')">×</button>
-        <div class="svg-modal-header-svgviewer-1c972468b1557cb5" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-1b5b4ab1626904c3" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-1b5b4ab1626904c3')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-1b5b4ab1626904c3')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-1c972468b1557cb5" class="svg-modal-body-svgviewer-1c972468b1557cb5" style="display: block; overflow: auto;">
+        <div id="source-content-sv-1b5b4ab1626904c3" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -2832,247 +2868,8 @@ imageblock .title {
 <div class="paragraph">
 <p>Highlight key performance indicators with visual emphasis:</p>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-eedcd11e399f13c0 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-eedcd11e399f13c0.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-eedcd11e399f13c0 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-eedcd11e399f13c0 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-eedcd11e399f13c0:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-eedcd11e399f13c0 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-eedcd11e399f13c0 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-eedcd11e399f13c0 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-eedcd11e399f13c0 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-eedcd11e399f13c0 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-eedcd11e399f13c0 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-eedcd11e399f13c0 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-eedcd11e399f13c0 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_eedcd11e399f13c0 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-eedcd11e399f13c0');
-          const sourceContainer = document.getElementById('svgviewer-eedcd11e399f13c0');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-eedcd11e399f13c0');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-eedcd11e399f13c0');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_eedcd11e399f13c0 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-eedcd11e399f13c0');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-eedcd11e399f13c0');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-eedcd11e399f13c0');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-eedcd11e399f13c0');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_eedcd11e399f13c0.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-eedcd11e399f13c0');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_eedcd11e399f13c0.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-eedcd11e399f13c0" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAPDTuWkA_zWNsW7CQBBE-_2KLaCLkbkYSAoXASSUwgFsif7kTMiJ8x26W0Mc8fHYSHT73oxmxYhFznvFKlUZL9toHGLkHcKPD412NUi6M_IGEkwdKUkSKh433_igbQsqcYFr0fNITbKCNsFf5bfH6duYvnDlVRvFNwhxcLM5PZlLCJwY7_rgPevLu4qr2odha6Ho44Kgj-A1tOXK_D9eTGcvWZpSpS0ir7raDvZV8bfuIhU6nCDGHbncfg5-ov7uIz_tGeMAAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=callout&filename=ghi.svg" data-original-content="title= Q2 2024 Business Performance
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-957fd4adbb92e57b" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAJAT-2kA_zWNsW7CQBBE-_2KLaCLkbkYSAoXASSUwgFsif7kTMiJ8x26W0Mc8fHYSHT73oxmxYhFznvFKlUZL9toHGLkHcKPD412NUi6M_IGEkwdKUkSKh433_igbQsqcYFr0fNITbKCNsFf5bfH6duYvnDlVRvFNwhxcLM5PZlLCJwY7_rgPevLu4qr2odha6Ho44Kgj-A1tOXK_D9eTGcvWZpSpS0ir7raDvZV8bfuIhU6nCDGHbncfg5-ov7uIz_tGeMAAAA=&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=callout&filename=ghi.svg" data-original-content="title= Q2 2024 Business Performance
 type=metrics
 ---
 Metric | Value
@@ -3084,59 +2881,49 @@ NPS Score | 72
 Average Deal Size | $15,400
 Sales Cycle | 32 days
 Marketing ROI | 3.2x" data-kind="callout">
-<svg id="ID_229e447dedd74d6fba82dafe41be3b2b" width="800" height="900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-17</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Step Number","Phase","Action","Result","Improvement"],"rows":[["Q2 2024 Business Performance","0","","","",""],["","Metric","Revenue","$2.4M","",""],["","Metric","Growth","18%","",""],["","Metric","New Customers","156","",""],["","Metric","Customer Retention","94%","",""],["","Metric","NPS Score","72","",""],["","Metric","Average Deal Size","$15,400","",""],["","Metric","Sales Cycle","32 days","",""],["","Metric","Marketing ROI","3.2x","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap'); .title_229e447dedd74d6fba82dafe41be3b2b { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 26px; fill: #0F2230; letter-spacing: -0.5px; } .metric-key_229e447dedd74d6fba82dafe41be3b2b { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 15px; fill: #335D79; text-transform: uppercase; letter-spacing: 1px; } .metric-val_229e447dedd74d6fba82dafe41be3b2b { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 18px; fill: #0F2230; }</style><linearGradient id="bgGrad_229e447dedd74d6fba82dafe41be3b2b" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F6F9FC" /><stop offset="100%" stop-color="#c4c7c9" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_229e447dedd74d6fba82dafe41be3b2b)" rx="24"/><g opacity="0.05" stroke="#0F2230" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_229e447dedd74d6fba82dafe41be3b2b">Q2 2024 Business Performance</text><rect x="50" y="85" width="40" height="4" fill="#E39A3B" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">Revenue</text><g transform="translate(20, 30)"><rect width="87.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">$2.4M</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">Growth</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">18%</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">New Customers</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">156</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">Customer Retention</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">94%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">NPS Score</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">72</text></g></g><g transform="translate(50, 590)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">Average Deal Size</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">$15,400</text></g></g><g transform="translate(50, 680)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">Sales Cycle</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">32 days</text></g></g><g transform="translate(50, 770)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_229e447dedd74d6fba82dafe41be3b2b">Marketing ROI</text><g transform="translate(20, 30)"><rect width="78.0" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_229e447dedd74d6fba82dafe41be3b2b">3.2x</text></g></g></svg>
+<svg id="ID_fd26adc559b34ddb8d3acc8bf54c6400" width="800" height="900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Step Number","Phase","Action","Result","Improvement"],"rows":[["Q2 2024 Business Performance","0","","","",""],["","Metric","Revenue","$2.4M","",""],["","Metric","Growth","18%","",""],["","Metric","New Customers","156","",""],["","Metric","Customer Retention","94%","",""],["","Metric","NPS Score","72","",""],["","Metric","Average Deal Size","$15,400","",""],["","Metric","Sales Cycle","32 days","",""],["","Metric","Marketing ROI","3.2x","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap'); .title_fd26adc559b34ddb8d3acc8bf54c6400 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 26px; fill: #0F2230; letter-spacing: -0.5px; } .metric-key_fd26adc559b34ddb8d3acc8bf54c6400 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 15px; fill: #335D79; text-transform: uppercase; letter-spacing: 1px; } .metric-val_fd26adc559b34ddb8d3acc8bf54c6400 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 18px; fill: #0F2230; }</style><linearGradient id="bgGrad_fd26adc559b34ddb8d3acc8bf54c6400" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F6F9FC" /><stop offset="100%" stop-color="#c4c7c9" /></linearGradient></defs><rect width="100%" height="100%" fill="url(#bgGrad_fd26adc559b34ddb8d3acc8bf54c6400)" rx="24"/><g opacity="0.05" stroke="#0F2230" stroke-width="1"><path d="M0 110 L800 110" /></g><text x="50" y="70" class="title_fd26adc559b34ddb8d3acc8bf54c6400">Q2 2024 Business Performance</text><rect x="50" y="85" width="40" height="4" fill="#E39A3B" rx="2"/><g transform="translate(50, 140)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">Revenue</text><g transform="translate(20, 30)"><rect width="87.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">$2.4M</text></g></g><g transform="translate(50, 230)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">Growth</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">18%</text></g></g><g transform="translate(50, 320)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">New Customers</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">156</text></g></g><g transform="translate(50, 410)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">Customer Retention</text><g transform="translate(20, 30)"><rect width="68.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">94%</text></g></g><g transform="translate(50, 500)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">NPS Score</text><g transform="translate(20, 30)"><rect width="59.0" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">72</text></g></g><g transform="translate(50, 590)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">Average Deal Size</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">$15,400</text></g></g><g transform="translate(50, 680)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">Sales Cycle</text><g transform="translate(20, 30)"><rect width="106.5" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">32 days</text></g></g><g transform="translate(50, 770)"><!-- Decorative indicator --><rect width="4" height="60" fill="#E39A3B" rx="2" opacity="0.6"/><!-- Metric Info --><text x="20" y="20" class="metric-key_fd26adc559b34ddb8d3acc8bf54c6400">Marketing ROI</text><g transform="translate(20, 30)"><rect width="78.0" height="34" rx="17" fill="#E39A3B" fill-opacity="0.08" stroke="#E39A3B" stroke-opacity="0.2"/><text x="20" y="23" class="metric-val_fd26adc559b34ddb8d3acc8bf54c6400">3.2x</text></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_eedcd11e399f13c0.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_eedcd11e399f13c0.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-957fd4adbb92e57b')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-957fd4adbb92e57b')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-eedcd11e399f13c0')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-eedcd11e399f13c0')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-957fd4adbb92e57b')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-957fd4adbb92e57b')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-957fd4adbb92e57b')">PRINT</button>
 </div>
-<div id="modal-svgviewer-eedcd11e399f13c0" class="svg-modal-svgviewer-eedcd11e399f13c0" onclick="if(event.target === this) svgModalsvgviewer_eedcd11e399f13c0.close()">
-    <div class="svg-modal-content-svgviewer-eedcd11e399f13c0">
-        <button class="svg-modal-close-svgviewer-eedcd11e399f13c0" onclick="svgModalsvgviewer_eedcd11e399f13c0.close()">×</button>
-        <div id="modal-body-svgviewer-eedcd11e399f13c0" class="svg-modal-body-svgviewer-eedcd11e399f13c0"></div>
+<div id="modal-sv-957fd4adbb92e57b" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-957fd4adbb92e57b')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-957fd4adbb92e57b')">×</button>
+        <div id="modal-body-sv-957fd4adbb92e57b" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-eedcd11e399f13c0" class="svg-modal-svgviewer-eedcd11e399f13c0" onclick="if(event.target === this) csvModalsvgviewer_eedcd11e399f13c0.close()">
-    <div class="svg-modal-content-svgviewer-eedcd11e399f13c0">
-        <button class="svg-modal-close-svgviewer-eedcd11e399f13c0" onclick="csvModalsvgviewer_eedcd11e399f13c0.close()">×</button>
-        <div class="svg-modal-header-svgviewer-eedcd11e399f13c0" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-957fd4adbb92e57b" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-957fd4adbb92e57b')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-957fd4adbb92e57b')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-eedcd11e399f13c0" class="svg-modal-body-svgviewer-eedcd11e399f13c0" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-957fd4adbb92e57b" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-eedcd11e399f13c0" class="svg-modal-svgviewer-eedcd11e399f13c0" onclick="if(event.target === this) docopsSource.close('svgviewer-eedcd11e399f13c0')">
-    <div class="svg-modal-content-svgviewer-eedcd11e399f13c0">
-        <button class="svg-modal-close-svgviewer-eedcd11e399f13c0" onclick="docopsSource.close('svgviewer-eedcd11e399f13c0')">×</button>
-        <div class="svg-modal-header-svgviewer-eedcd11e399f13c0" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-957fd4adbb92e57b" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-957fd4adbb92e57b')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-957fd4adbb92e57b')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-eedcd11e399f13c0" class="svg-modal-body-svgviewer-eedcd11e399f13c0" style="display: block; overflow: auto;">
+        <div id="source-content-sv-957fd4adbb92e57b" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3148,247 +2935,8 @@ imageblock .title {
 <div class="paragraph">
 <p>Show sequential events with cards alternating above/below timeline:</p>
 </div>
-<div class="imageblock center"><style>
-  .svg-with-controls {
-    position: relative;
-    display: inline-block;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .svg-bottom-controls {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%) translateY(150%);
-    display: flex;
-    gap: 6px;
-    background: rgba(15, 20, 30, 0.85);
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  .svg-with-controls:hover .svg-bottom-controls {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .svg-control-btn {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .svg-control-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-1px);
-  }
-
-  /* Shared Modal Styles */
-  .svg-modal-svgviewer-495cac30dedc1092 {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(15, 20, 25, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 2147483647; /* Highest possible z-index */
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      box-sizing: border-box;
-  }
-  .svg-modal-svgviewer-495cac30dedc1092.active {
-      display: flex;
-  }
-  .svg-modal-content-svgviewer-495cac30dedc1092 {
-      width: 95vw;
-      max-width: 1400px;
-      height: 90vh;
-      background: var(--docops-card-bg, #1e293b);
-      border-radius: 20px;
-      padding: 48px 24px 24px 24px;
-      position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .svg-modal-close-svgviewer-495cac30dedc1092 {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
-  }
-  .svg-modal-close-svgviewer-495cac30dedc1092:hover {
-      background: rgba(255,255,255,0.2);
-      transform: rotate(90deg);
-  }
-  .svg-modal-body-svgviewer-495cac30dedc1092 {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      padding: 10px;
-  }
-  .svg-modal-body-svgviewer-495cac30dedc1092 svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-  }
-
-  /* CSV Modal Specific Overrides */
-  #csv-modal-svgviewer-495cac30dedc1092 .csv-content {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-495cac30dedc1092 .csv-table {
-     width: 100%;
-      border-collapse: collapse;
-      color: #e2e8f0 !important;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-495cac30dedc1092 .csv-table th {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.1) !important;
-      color: #fff !important;
-      position: sticky;
-      top: 0;
-  }
-  #csv-modal-svgviewer-495cac30dedc1092 .csv-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      color: #cbd5e1 !important;
-  }
-  #csv-modal-svgviewer-495cac30dedc1092 .csv-table tr {
-      background: transparent !important;
-  }
-  #csv-modal-svgviewer-495cac30dedc1092 .csv-table tr:hover {
-      background: rgba(255,255,255,0.05) !important;
-  }
-
-</style>
-
-<script>
-  // View Modal Control
-  window.svgModalsvgviewer_495cac30dedc1092 = {
-      open: function() {
-          const modal = document.getElementById('modal-svgviewer-495cac30dedc1092');
-          const sourceContainer = document.getElementById('svgviewer-495cac30dedc1092');
-
-          if (!modal || !sourceContainer) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          const sourceSvg = sourceContainer.querySelector('svg');
-          const targetContainer = document.getElementById('modal-body-svgviewer-495cac30dedc1092');
-
-          if (sourceSvg && targetContainer) {
-              targetContainer.innerHTML = '';
-              const clone = sourceSvg.cloneNode(true);
-
-              clone.removeAttribute('width');
-              clone.removeAttribute('height');
-              clone.style.width = '100%';
-              clone.style.height = '100%';
-
-              targetContainer.appendChild(clone);
-              modal.classList.add('active');
-              document.body.style.overflow = 'hidden';
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('modal-svgviewer-495cac30dedc1092');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Data Modal Control
-  window.csvModalsvgviewer_495cac30dedc1092 = {
-      open: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-495cac30dedc1092');
-          if (!modal) return;
-
-          if (modal.parentNode !== document.body) {
-              document.body.appendChild(modal);
-          }
-
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-
-          if (window.svgViewer && window.svgViewer.loadCsvData) {
-              window.svgViewer.loadCsvData('svgviewer-495cac30dedc1092');
-          }
-      },
-      close: function() {
-          const modal = document.getElementById('csv-modal-svgviewer-495cac30dedc1092');
-          if (modal) {
-              modal.classList.remove('active');
-              document.body.style.overflow = '';
-          }
-      }
-  };
-
-  // Register escape key handler for both
-  document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-          const viewModal = document.getElementById('modal-svgviewer-495cac30dedc1092');
-          if (viewModal && viewModal.classList.contains('active')) {
-              window.svgModalsvgviewer_495cac30dedc1092.close();
-          }
-          const csvModal = document.getElementById('csv-modal-svgviewer-495cac30dedc1092');
-          if (csvModal && csvModal.classList.contains('active')) {
-              window.csvModalsvgviewer_495cac30dedc1092.close();
-          }
-      }
-  });
-</script>
-
-<div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="svgviewer-495cac30dedc1092" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAPDTuWkA_21TwYrcMAy95yt02WOgUHroYQ_t0kIpS4fu0rtqKxl3bcvY8gwp8_GVncw0dAtzMCPp6T29F3Hi6f7Bc7Xw6OaM4jjCIfMvMgLfSTKXpE93okGWRPdlKUJB28wwjuNwOGIhuMAH0wcvOlKqF318CSnziQJFGQ4eY3Rxbo2lkP4smJqz1sDFKWORXI3UTIDRgqXJRW0JN0JaR6F5UYAHVmA6UizKadeSdAecnRwhu_IC2Pe07TrzyIpsSdB5avCJoqVoFgiYkvIaDpkSbkAXeCKBmsD0q1A8ucyxIzVyQkWalH94N-VoF2WKcyvvxzqrwNEJ51YTZl904iOJUAbLpra-dT1PYDhObq4rn-HgPMvOnMv2ViWR42iyUzPQg0rx-mg9DfwHemd7lxYyozluPFx0QdutK7mmK2I7EFbh0CeuGpVLuO7aww-fq_f_p6SrbF3DcOb84hlt0Vt1e5qnZzxRo_dUjVGDJgVaQN2NZSINhIX37-7a3r_DtyhpZjiEGjcWYGu_plHaJz1jouzYluGbigruN94CuYYpU-Gajcr0njeE5qcLyfeUNo0KNRY95prVt2_udGURnb1q2iZWOrpx4hwwmub_J8zeKY8b4M5PxdA2nPv_q__D18hnjeNM8LzJVxB9dras2JuVQhhAgSKdt0i-it5zazGY8Kenblrb1W_zKsKb10cVUsbNpHLkVNYvbx_FPyFXdXYcBAAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=callout&filename=ghi.svg" data-original-content="title=Cloud Migration Project Retrospective
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-97e98d1be5209962" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=callout&payload=H4sIAJAT-2kA_21TwYrcMAy95yt02WOgUHroYQ_t0kIpS4fu0rtqKxl3bcvY8gwp8_GVncw0dAtzMCPp6T29F3Hi6f7Bc7Xw6OaM4jjCIfMvMgLfSTKXpE93okGWRPdlKUJB28wwjuNwOGIhuMAH0wcvOlKqF318CSnziQJFGQ4eY3Rxbo2lkP4smJqz1sDFKWORXI3UTIDRgqXJRW0JN0JaR6F5UYAHVmA6UizKadeSdAecnRwhu_IC2Pe07TrzyIpsSdB5avCJoqVoFgiYkvIaDpkSbkAXeCKBmsD0q1A8ucyxIzVyQkWalH94N-VoF2WKcyvvxzqrwNEJ51YTZl904iOJUAbLpra-dT1PYDhObq4rn-HgPMvOnMv2ViWR42iyUzPQg0rx-mg9DfwHemd7lxYyozluPFx0QdutK7mmK2I7EFbh0CeuGpVLuO7aww-fq_f_p6SrbF3DcOb84hlt0Vt1e5qnZzxRo_dUjVGDJgVaQN2NZSINhIX37-7a3r_DtyhpZjiEGjcWYGu_plHaJz1jouzYluGbigruN94CuYYpU-Gajcr0njeE5qcLyfeUNo0KNRY95prVt2_udGURnb1q2iZWOrpx4hwwmub_J8zeKY8b4M5PxdA2nPv_q__D18hnjeNM8LzJVxB9dras2JuVQhhAgSKdt0i-it5zazGY8Kenblrb1W_zKsKb10cVUsbNpHLkVNYvbx_FPyFXdXYcBAAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=callout&filename=ghi.svg" data-original-content="title=Cloud Migration Project Retrospective
 type=systematic
 ---
 Phase | Action | Result | Improvement
@@ -3398,59 +2946,49 @@ Pilot Migration | Migrated non-critical applications | Validated approach with m
 Full Migration | Migrated production workloads in planned waves | Successfully transferred 95% of workloads | Improved communication during cutover periods
 Optimization | Refined resource allocation and implemented auto-scaling | 30% cost reduction and improved performance | Earlier implementation of cost management tools
 Knowledge Transfer | Trained operations team on new cloud infrastructure | Team capable of managing cloud environment | More hands-on workshops and documentation" data-kind="callout">
-<svg id="ID_4436175c41f74b4cb96a9be33d3cd157" width="800" height="840" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 840">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-03-17</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Step Number","Phase","Action","Result","Improvement"],"rows":[["Cloud Migration Project Retrospective","1","Planning","Assessed current infrastructure and defined migration strategy","Comprehensive migration plan with risk assessment","More detailed dependency mapping"],["","2","Preparation","Set up cloud environment and testing infrastructure","Ready staging environment with monitoring tools","Better documentation of configuration"],["","3","Pilot Migration","Migrated non-critical applications","Validated approach with minimal disruption","More automated testing of migrated applications"],["","4","Full Migration","Migrated production workloads in planned waves","Successfully transferred 95% of workloads","Improved communication during cutover periods"],["","5","Optimization","Refined resource allocation and implemented auto-scaling","30% cost reduction and improved performance","Earlier implementation of cost management tools"],["","6","Knowledge Transfer","Trained operations team on new cloud infrastructure","Team capable of managing cloud environment","More hands-on workshops and documentation"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap'); .title_4436175c41f74b4cb96a9be33d3cd157 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 26px; fill: #0F2230; letter-spacing: -0.5px; } .phase_4436175c41f74b4cb96a9be33d3cd157 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 17px; fill: #0F2230; } .action_4436175c41f74b4cb96a9be33d3cd157 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 300; font-size: 14px; fill: #335D79; } .result_4436175c41f74b4cb96a9be33d3cd157 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 13px; fill: #E39A3B; } .step-num_4436175c41f74b4cb96a9be33d3cd157 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 12px; fill: #E39A3B; }</style><linearGradient id="bgGrad_4436175c41f74b4cb96a9be33d3cd157" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#F6F9FC" /><stop offset="100%" stop-color="#c4c7c9" /></linearGradient><linearGradient id="spineGrad_4436175c41f74b4cb96a9be33d3cd157" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E39A3B" /><stop offset="100%" stop-color="rgba(51, 93, 121, 0.14)" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_4436175c41f74b4cb96a9be33d3cd157)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#0F2230" stroke-width="1"><path d="M40 0 L40 840 M760 0 L760 840" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_4436175c41f74b4cb96a9be33d3cd157">Cloud Migration Project Retrospective</text><rect x="50" y="85" width="40" height="4" fill="#335D79" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="660" fill="url(#spineGrad_4436175c41f74b4cb96a9be33d3cd157)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_4436175c41f74b4cb96a9be33d3cd157">1</text><text x="55" y="15" class="phase_4436175c41f74b4cb96a9be33d3cd157">Planning</text><text x="55" y="38" class="action_4436175c41f74b4cb96a9be33d3cd157">Assessed current infrastructure and defined migration strategy</text><g transform="translate(55, 52)"><rect width="448.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_4436175c41f74b4cb96a9be33d3cd157">Comprehensive migration plan with risk assessment</text></g><rect x="486.0" y="10" width="264.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="618.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">More detailed dependency mapping</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_4436175c41f74b4cb96a9be33d3cd157">2</text><text x="55" y="15" class="phase_4436175c41f74b4cb96a9be33d3cd157">Preparation</text><text x="55" y="38" class="action_4436175c41f74b4cb96a9be33d3cd157">Set up cloud environment and testing infrastructure</text><g transform="translate(55, 52)"><rect width="431.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_4436175c41f74b4cb96a9be33d3cd157">Ready staging environment with monitoring tools</text></g><rect x="448.5" y="10" width="301.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="599.25" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Better documentation of configuration</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_4436175c41f74b4cb96a9be33d3cd157">3</text><text x="55" y="15" class="phase_4436175c41f74b4cb96a9be33d3cd157">Pilot Migration</text><text x="55" y="38" class="action_4436175c41f74b4cb96a9be33d3cd157">Migrated non-critical applications</text><g transform="translate(55, 52)"><rect width="389.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_4436175c41f74b4cb96a9be33d3cd157">Validated approach with minimal disruption</text></g><rect x="373.5" y="10" width="376.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="561.75" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">More automated testing of migrated applications</text></g><g transform="translate(50, 470)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_4436175c41f74b4cb96a9be33d3cd157">4</text><text x="55" y="15" class="phase_4436175c41f74b4cb96a9be33d3cd157">Full Migration</text><text x="55" y="38" class="action_4436175c41f74b4cb96a9be33d3cd157">Migrated production workloads in planned waves</text><g transform="translate(55, 52)"><rect width="380.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_4436175c41f74b4cb96a9be33d3cd157">Successfully transferred 95% of workloads</text></g><rect x="388.5" y="10" width="361.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="569.25" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Improved communication during cutover periods</text></g><g transform="translate(50, 580)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_4436175c41f74b4cb96a9be33d3cd157">5</text><text x="55" y="15" class="phase_4436175c41f74b4cb96a9be33d3cd157">Optimization</text><text x="55" y="38" class="action_4436175c41f74b4cb96a9be33d3cd157">Refined resource allocation and implemented auto-scaling</text><g transform="translate(55, 52)"><rect width="397.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_4436175c41f74b4cb96a9be33d3cd157">30% cost reduction and improved performance</text></g><rect x="373.5" y="10" width="376.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="561.75" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Earlier implementation of cost management tools</text></g><g transform="translate(50, 690)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_4436175c41f74b4cb96a9be33d3cd157">6</text><text x="55" y="15" class="phase_4436175c41f74b4cb96a9be33d3cd157">Knowledge Transfer</text><text x="55" y="38" class="action_4436175c41f74b4cb96a9be33d3cd157">Trained operations team on new cloud infrastructure</text><g transform="translate(55, 52)"><rect width="389.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_4436175c41f74b4cb96a9be33d3cd157">Team capable of managing cloud environment</text></g><rect x="418.5" y="10" width="331.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="584.25" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">More hands-on workshops and documentation</text></g></svg>
+<svg id="ID_48140119082342d89a55a908a578a039" width="800" height="840" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 840">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-06</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Step Number","Phase","Action","Result","Improvement"],"rows":[["Cloud Migration Project Retrospective","1","Planning","Assessed current infrastructure and defined migration strategy","Comprehensive migration plan with risk assessment","More detailed dependency mapping"],["","2","Preparation","Set up cloud environment and testing infrastructure","Ready staging environment with monitoring tools","Better documentation of configuration"],["","3","Pilot Migration","Migrated non-critical applications","Validated approach with minimal disruption","More automated testing of migrated applications"],["","4","Full Migration","Migrated production workloads in planned waves","Successfully transferred 95% of workloads","Improved communication during cutover periods"],["","5","Optimization","Refined resource allocation and implemented auto-scaling","30% cost reduction and improved performance","Earlier implementation of cost management tools"],["","6","Knowledge Transfer","Trained operations team on new cloud infrastructure","Team capable of managing cloud environment","More hands-on workshops and documentation"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&amp;display=swap'); .title_48140119082342d89a55a908a578a039 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 26px; fill: #0F2230; letter-spacing: -0.5px; } .phase_48140119082342d89a55a908a578a039 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 17px; fill: #0F2230; } .action_48140119082342d89a55a908a578a039 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 300; font-size: 14px; fill: #335D79; } .result_48140119082342d89a55a908a578a039 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 13px; fill: #E39A3B; } .step-num_48140119082342d89a55a908a578a039 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 12px; fill: #E39A3B; }</style><linearGradient id="bgGrad_48140119082342d89a55a908a578a039" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#F6F9FC" /><stop offset="100%" stop-color="#c4c7c9" /></linearGradient><linearGradient id="spineGrad_48140119082342d89a55a908a578a039" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E39A3B" /><stop offset="100%" stop-color="rgba(51, 93, 121, 0.14)" /></linearGradient></defs><!-- Background --><rect width="100%" height="100%" fill="url(#bgGrad_48140119082342d89a55a908a578a039)" rx="24"/><!-- Decorative Grid --><g opacity="0.05" stroke="#0F2230" stroke-width="1"><path d="M40 0 L40 840 M760 0 L760 840" stroke-dasharray="4 4"/></g><!-- Header --><text x="50" y="70" class="title_48140119082342d89a55a908a578a039">Cloud Migration Project Retrospective</text><rect x="50" y="85" width="40" height="4" fill="#335D79" rx="2"/><!-- Vertical Spine --><rect x="68" y="130" width="2" height="660" fill="url(#spineGrad_48140119082342d89a55a908a578a039)" opacity="0.3"/><!-- Steps --><g transform="translate(50, 140)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_48140119082342d89a55a908a578a039">1</text><text x="55" y="15" class="phase_48140119082342d89a55a908a578a039">Planning</text><text x="55" y="38" class="action_48140119082342d89a55a908a578a039">Assessed current infrastructure and defined migration strategy</text><g transform="translate(55, 52)"><rect width="448.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_48140119082342d89a55a908a578a039">Comprehensive migration plan with risk assessment</text></g><rect x="486.0" y="10" width="264.0" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="618.0" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">More detailed dependency mapping</text></g><g transform="translate(50, 250)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_48140119082342d89a55a908a578a039">2</text><text x="55" y="15" class="phase_48140119082342d89a55a908a578a039">Preparation</text><text x="55" y="38" class="action_48140119082342d89a55a908a578a039">Set up cloud environment and testing infrastructure</text><g transform="translate(55, 52)"><rect width="431.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_48140119082342d89a55a908a578a039">Ready staging environment with monitoring tools</text></g><rect x="448.5" y="10" width="301.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="599.25" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Better documentation of configuration</text></g><g transform="translate(50, 360)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_48140119082342d89a55a908a578a039">3</text><text x="55" y="15" class="phase_48140119082342d89a55a908a578a039">Pilot Migration</text><text x="55" y="38" class="action_48140119082342d89a55a908a578a039">Migrated non-critical applications</text><g transform="translate(55, 52)"><rect width="389.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_48140119082342d89a55a908a578a039">Validated approach with minimal disruption</text></g><rect x="373.5" y="10" width="376.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="561.75" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">More automated testing of migrated applications</text></g><g transform="translate(50, 470)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_48140119082342d89a55a908a578a039">4</text><text x="55" y="15" class="phase_48140119082342d89a55a908a578a039">Full Migration</text><text x="55" y="38" class="action_48140119082342d89a55a908a578a039">Migrated production workloads in planned waves</text><g transform="translate(55, 52)"><rect width="380.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_48140119082342d89a55a908a578a039">Successfully transferred 95% of workloads</text></g><rect x="388.5" y="10" width="361.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="569.25" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Improved communication during cutover periods</text></g><g transform="translate(50, 580)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_48140119082342d89a55a908a578a039">5</text><text x="55" y="15" class="phase_48140119082342d89a55a908a578a039">Optimization</text><text x="55" y="38" class="action_48140119082342d89a55a908a578a039">Refined resource allocation and implemented auto-scaling</text><g transform="translate(55, 52)"><rect width="397.5" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_48140119082342d89a55a908a578a039">30% cost reduction and improved performance</text></g><rect x="373.5" y="10" width="376.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="561.75" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">Earlier implementation of cost management tools</text></g><g transform="translate(50, 690)"><circle cx="18" cy="18" r="18" fill="#F6F9FC" stroke="#E39A3B" stroke-width="2"/><text x="18" y="23" text-anchor="middle" class="step-num_48140119082342d89a55a908a578a039">6</text><text x="55" y="15" class="phase_48140119082342d89a55a908a578a039">Knowledge Transfer</text><text x="55" y="38" class="action_48140119082342d89a55a908a578a039">Trained operations team on new cloud infrastructure</text><g transform="translate(55, 52)"><rect width="389.0" height="28" rx="14" fill="#E39A3B" fill-opacity="0.1"/><text x="16" y="19" class="result_48140119082342d89a55a908a578a039">Team capable of managing cloud environment</text></g><rect x="418.5" y="10" width="331.5" height="22" rx="11" fill="#E39A3B" fill-opacity="0.1"/><text x="584.25" y="25" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-size="10" font-weight="600" fill="#E39A3B" style="text-transform:uppercase; letter-spacing: 0.5px;">More hands-on workshops and documentation</text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgModalsvgviewer_495cac30dedc1092.open()">VIEW</button>
-<button class="svg-control-btn" onclick="csvModalsvgviewer_495cac30dedc1092.open()">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-97e98d1be5209962')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-97e98d1be5209962')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('svgviewer-495cac30dedc1092')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('svgviewer-495cac30dedc1092')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-97e98d1be5209962')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-97e98d1be5209962')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-97e98d1be5209962')">PRINT</button>
 </div>
-<div id="modal-svgviewer-495cac30dedc1092" class="svg-modal-svgviewer-495cac30dedc1092" onclick="if(event.target === this) svgModalsvgviewer_495cac30dedc1092.close()">
-    <div class="svg-modal-content-svgviewer-495cac30dedc1092">
-        <button class="svg-modal-close-svgviewer-495cac30dedc1092" onclick="svgModalsvgviewer_495cac30dedc1092.close()">×</button>
-        <div id="modal-body-svgviewer-495cac30dedc1092" class="svg-modal-body-svgviewer-495cac30dedc1092"></div>
+<div id="modal-sv-97e98d1be5209962" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-97e98d1be5209962')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-97e98d1be5209962')">×</button>
+        <div id="modal-body-sv-97e98d1be5209962" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-svgviewer-495cac30dedc1092" class="svg-modal-svgviewer-495cac30dedc1092" onclick="if(event.target === this) csvModalsvgviewer_495cac30dedc1092.close()">
-    <div class="svg-modal-content-svgviewer-495cac30dedc1092">
-        <button class="svg-modal-close-svgviewer-495cac30dedc1092" onclick="csvModalsvgviewer_495cac30dedc1092.close()">×</button>
-        <div class="svg-modal-header-svgviewer-495cac30dedc1092" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="csv-modal-sv-97e98d1be5209962" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-97e98d1be5209962')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-97e98d1be5209962')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-svgviewer-495cac30dedc1092" class="svg-modal-body-svgviewer-495cac30dedc1092" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-97e98d1be5209962" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-svgviewer-495cac30dedc1092" class="svg-modal-svgviewer-495cac30dedc1092" onclick="if(event.target === this) docopsSource.close('svgviewer-495cac30dedc1092')">
-    <div class="svg-modal-content-svgviewer-495cac30dedc1092">
-        <button class="svg-modal-close-svgviewer-495cac30dedc1092" onclick="docopsSource.close('svgviewer-495cac30dedc1092')">×</button>
-        <div class="svg-modal-header-svgviewer-495cac30dedc1092" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+<div id="source-modal-sv-97e98d1be5209962" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-97e98d1be5209962')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-97e98d1be5209962')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-svgviewer-495cac30dedc1092" class="svg-modal-body-svgviewer-495cac30dedc1092" style="display: block; overflow: auto;">
+        <div id="source-content-sv-97e98d1be5209962" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
 </div>
 
 </div>
-</div>
-<style>
-imageblock .title {
-  text-align: center;
-  font-style: italic;
-  margin-top: 0.5em;  /* Changed from margin-bottom */
-  margin-bottom: 1em;
-  color: #666;
-  font-size: 0.9em;
-}
-</style>
-</div>
+</div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>
@@ -3810,11 +3348,5 @@ mermaid.initialize({
     `
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-container">
-    <a href="buttons.html" class="nav-prev">&larr; Buttons</a>
-          <a href="combination.html" class="nav-next">Combination Charts &rarr;</a>
-  </div>
-</nav>
 </body>
 </html>
