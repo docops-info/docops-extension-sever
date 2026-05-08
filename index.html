@@ -32,8 +32,10 @@
             --bg-color: var(--canvas);
             --sidebar-bg: var(--surface-1);
             --border-color: var(--border-base);
-            --panel-width-left: 280px;
-            --panel-width-right: 400px;
+            
+            /* Proportional Layout (Chapter 5) */
+            --panel-width-left: clamp(240px, 18vw, 300px);
+            --panel-width-right: clamp(320px, 28vw, 480px);
 
             /* Atmosphere */
             --grid-ink: rgba(255, 255, 255, 0.05);
@@ -260,9 +262,11 @@
         }
 
         .node-list-item.selected {
-            background: var(--brand-cyan);
-            color: #fff;
+            background: rgba(0, 183, 214, 0.12);
+            color: var(--brand-cyan);
             font-weight: 600;
+            border-left: 4px solid var(--brand-cyan);
+            padding-left: 16px;
         }
 
         .category-group {
@@ -490,6 +494,10 @@
             border-color: var(--brand-cyan);
         }
 
+        #btn-reset:active, #btn-export:active, .btn-icon:active, .filter-pill:active {
+            transform: scale(0.95);
+        }
+
         .sample-notice {
             position: fixed;
             bottom: 24px;
@@ -635,12 +643,13 @@
     };
 
     const CATEGORY_COLORS = [
-        "#00B7D6", // brand-cyan
-        "#C9A227", // brand-gold
-        "#2A3447", // brand-slate
-        "#8A96AD", // brand-steel
-        "#0B1220", // brand-ink
-        "#16A34A"  // semantic-success
+        "#00B7D6", // Cyan
+        "#6366F1", // Indigo
+        "#EC4899", // Pink
+        "#10B981", // Emerald
+        "#F59E0B", // Amber
+        "#F43F5E", // Rose
+        "#8B5CF6"  // Violet
     ];
 
     let graphData = null;
@@ -740,9 +749,12 @@
             pill.style.borderColor = getCategoryColor(cat);
             if (activeCategories.has(cat)) {
                 pill.style.backgroundColor = getCategoryColor(cat);
+                pill.style.color = '#fff';
+                pill.style.boxShadow = `0 4px 10px ${getCategoryColor(cat)}40`;
             } else {
                 pill.style.backgroundColor = 'transparent';
-                pill.style.color = '#666';
+                pill.style.color = 'var(--text-3)';
+                pill.style.boxShadow = 'none';
             }
             pill.onclick = () => {
                 if (activeCategories.has(cat)) {
