@@ -29,7 +29,7 @@ import kotlin.uuid.Uuid
 class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val useDark: Boolean = false) {
     private val json = Json { ignoreUnknownKeys = true }
 
-    private var theme = ThemeFactory.getThemeByName("aurora",useDark)
+    private var theme = ThemeFactory.getThemeByName("corporate",useDark)
     /**
      * Creates an SVG for metrics cards from JSON or table-like data
      */
@@ -122,45 +122,37 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
     private fun generateMetricsCardSvg(metricsCardData: MetricsCardData, width: Int, height: Int, useDark: Boolean): String {
         // Calculate dynamic width based on number of metrics
         val metricsCount = metricsCardData.metrics.size
-        val cardWidth = 200
-        val cardMargin = 30
+        val cardWidth = 196
+        val cardMargin = 28
 
-        val horizontalPadding = 80
+        val horizontalPadding = 56
         val totalCardWidth = metricsCount * (cardWidth + cardMargin) - cardMargin
 
-        val finalWidth = (totalCardWidth + horizontalPadding).coerceAtLeast(width)
+        val idealWidth = totalCardWidth + horizontalPadding
+        val finalWidth = if (width == 800) idealWidth else width.coerceAtLeast(idealWidth)
+        val finalHeight = if (height == 400) 336 else height
 
         return buildString {
             val id = Uuid.random().toHexString()
 
             append("""
-                    <svg id="ID_$id" width="$finalWidth" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $height" preserveAspectRatio='xMidYMid meet'>
+                    <svg id="ID_$id" width="$finalWidth" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $finalHeight" preserveAspectRatio='xMidYMid meet'>
                         <defs>
                             <style>
                                 ${theme.fontImport}
                                 .metric-value_$id { font-family: ${theme.fontFamily}; font-weight: 700; fill: ${theme.primaryText}; }
                                 .metric-label_$id { font-family: ${theme.fontFamily}; font-weight: 400; fill: ${theme.secondaryText}; letter-spacing: 0.05em; text-transform: uppercase; }
                                 .metric-sub_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.accentColor}; }
-                                .title-text_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: ${26/theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; }
+                                .title-text_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: ${32/theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; }
                             </style>
                     
-                            <pattern id="grid_$id" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-                                <path d="M 30 0 L 0 0 0 30" fill="none" stroke="${theme.primaryText}" stroke-width="0.3" opacity="0.1"/>
+                            <pattern id="grid_$id" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+                                <path d="M 28 0 L 0 0 0 28" fill="none" stroke="${theme.primaryText}" stroke-width="0.3" opacity="0.1"/>
                             </pattern>
-
-                            <filter id="glow_$id">
-                                <feGaussianBlur stdDeviation="3" result="blur" />
-                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                            </filter>
                         
                             <filter id="shadow_$id" x="-20%" y="-20%" width="140%" height="140%">
-                                <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="black" flood-opacity="0.3"/>
+                                <feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="${theme.primaryText}" flood-opacity="0.3"/>
                             </filter>
-
-                            <linearGradient id="cardGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="${theme.glassEffect}" />
-                                <stop offset="100%" stop-color="${theme.surfaceImpact}" />
-                            </linearGradient>
                         </defs>
 
                         <!-- Background Layering: Preservation of depth -->
@@ -168,9 +160,9 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
                         <rect width="100%" height="100%" fill="url(#grid_$id)"/>
                 
                         <!-- Title Section -->
-                        <g transform="translate(40, 60)">
+                        <g transform="translate(28, 56)">
                             <text x="0" y="0" class="title-text_$id">${metricsCardData.title.escapeXml()}</text>
-                            <rect x="0" y="18" width="40" height="5" fill="${theme.accentColor}" rx="2" filter="url(#glow_$id)"/>
+                            <rect x="0" y="18" width="60" height="8" fill="${theme.accentColor}" rx="2"/>
                         </g>
 
                         <g class="metrics">
@@ -178,11 +170,11 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
 
             val totalWidth = metricsCount * (cardWidth + cardMargin) - cardMargin
             val startX = (finalWidth - totalWidth) / 2
-            val accentColors = listOf(theme.accentColor, "#2DD4BF", "#F43F5E", "#3B82F6", "#EAB308")
+            val accentColors = theme.chartPaletteHex
 
             metricsCardData.metrics.forEachIndexed { index, metric ->
                 val x = startX + index * (cardWidth + cardMargin)
-                val y = (height - 180) / 2 + 20
+                val y = 112
                 val accentColor = accentColors[index % accentColors.size]
 
                 // Adjust max length based on the font's width multiplier
@@ -194,23 +186,23 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
                 append("""
                                 <g class="metric-card" transform="translate($x, $y)">
                                     <!-- Card Background -->
-                                    <rect width="$cardWidth" height="180" rx="${theme.cornerRadius}" 
-                                          fill="url(#cardGrad_$id)" stroke="${theme.primaryText}" stroke-opacity="0.1" stroke-width="1"
+                                    <rect width="$cardWidth" height="196" rx="${theme.cornerRadius}" 
+                                          fill="${theme.glassEffect}" stroke="${theme.primaryText}" stroke-opacity="0.1" stroke-width="1"
                                           filter="url(#shadow_$id)"/>
                         
                                     <!-- Cyber Accent Tab -->
                                     <path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="$accentColor" opacity="0.9"/>
 
                                     <!-- Metric Value -->
-                                    <text x="${cardWidth/2}" y="85" text-anchor="middle" 
+                                    <text x="20" y="85" text-anchor="start" 
                                           font-size="${42/theme.fontWidthMultiplier}" class="metric-value_$id">${metric.value.escapeXml()}</text>
 
                                     <!-- Metric Label (Wrapped) -->
-                                    <text x="${cardWidth/2}" y="110" text-anchor="middle" font-size="${13 / theme.fontWidthMultiplier}" class="metric-label_$id">
+                                    <text x="20" y="110" text-anchor="start" font-size="${13 / theme.fontWidthMultiplier}" class="metric-label_$id">
                             """.trimIndent())
 
                 wrappedLabel.forEachIndexed { i, line ->
-                    append("""<tspan x="${cardWidth/2}" dy="${if (i == 0) 0 else 14}">${line.escapeXml()}</tspan>""")
+                    append("""<tspan x="20" dy="${if (i == 0) 0 else 14}">${line.escapeXml()}</tspan>""")
                 }
 
                 append("</text>")
@@ -220,7 +212,7 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
                     val sublabelY = if (wrappedLabel.size > 1) 155 else 145
                     append("""
                                     <!-- Metric Sublabel -->
-                                    <text x="${cardWidth/2}" y="$sublabelY" text-anchor="middle" 
+                                    <text x="20" y="$sublabelY" text-anchor="start" 
                                           class="metric-sub_$id">> ${metric.sublabel.escapeXml()}</text>
                                 """.trimIndent())
                 }

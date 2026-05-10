@@ -77,6 +77,7 @@ object ThemeFactory {
             "modern" -> if (useDark) ModernDarkTheme() else ModernLightTheme()
             "cyber" -> if (useDark) CyberDarkTheme() else CyberLightTheme()
             "pro" -> if (useDark) ProDarkTheme() else ClassicLightTheme()
+            "corporate" -> CorporateTheme()
             "food" -> FoodTheme()
             "spring" -> SpringTheme()
             "summer" -> SummerTheme()
@@ -542,21 +543,21 @@ class SignalLightTheme : DocOpsTheme {
     override val name = "SignalLightTheme"
 
     // Canvas aligned to ModernLight recommendation
-    override val canvas = "#f1f5f9"
-    override val primaryText = "#0f172a"
+    override val canvas = "#F6F8FB"
+    override val primaryText = "#0B1220"
     override val secondaryText = "#2A3447" // Slate-ish supporting text
     override val accentColor = "#00B7D6"   // Signal Cyan (reserved, strong)
 
     override val glassEffect = "rgba(255, 255, 255, 0.75)"
     override val surfaceImpact = "rgba(11, 18, 32, 0.06)"
 
-    // Keep typography consistent with existing modern themes in this project
-    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    // Aligned with global_styles.css
+    override val fontFamily = "'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif"
     override val fontImport =
-        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.15f
+        "@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap');"
+    override val fontWidthMultiplier = 1.0f
     override val fontLineHeight = 1.25f
-    override val cornerRadius = 12
+    override val cornerRadius = 16
 
     // Signal Palette 6 (purpose-built for multi-series line charts)
     override val chartPalette = listOf(
@@ -570,6 +571,33 @@ class SignalLightTheme : DocOpsTheme {
 }
 
 /**
+ * Corporate Theme — Clean, high-contrast, professional
+ * Focus: trust, clarity, and conservative precision.
+ */
+class CorporateTheme : DocOpsTheme {
+    override val name = "CorporateTheme"
+    override val canvas = "#FFFFFF"
+    override val primaryText = "#0F172A" // Slate 900
+    override val secondaryText = "#475569" // Slate 600
+    override val accentColor = "#1D4ED8"   // Corporate Blue (Blue 700)
+    override val glassEffect = "rgba(255, 255, 255, 0.95)"
+    override val surfaceImpact = "rgba(15, 23, 42, 0.04)"
+    override val fontFamily = "'Inter', system-ui, -apple-system, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap');"
+    override val fontWidthMultiplier = 1.05f
+    override val fontLineHeight = 1.2f
+    override val cornerRadius = 8
+    override val chartPalette = listOf(
+        SVGColor("#1D4ED8", "Corporate Blue"),
+        SVGColor("#475569", "Slate"),
+        SVGColor("#059669", "Emerald"),
+        SVGColor("#0284C7", "Sky Blue"),
+        SVGColor("#6366F1", "Indigo"),
+        SVGColor("#1E293B", "Midnight")
+    )
+}
+
+/**
  * DocOps Signal — Chart-first Dark Theme
  *
  * Tuned for: Aurora canvas + Signal 6-series palette
@@ -579,20 +607,20 @@ class SignalDarkTheme : DocOpsTheme {
     override val name = "SignalDarkTheme"
 
     // Canvas aligned to Aurora recommendation
-    override val canvas = "#142B37"
-    override val primaryText = "#EAF3F8"
+    override val canvas = "#070B14"
+    override val primaryText = "#F1F5FF"
     override val secondaryText = "#B7C2D9"
-    override val accentColor = "#00B7D6" // Signal Cyan
+    override val accentColor = "#28D9F5" // Signal Cyan
 
     override val glassEffect = "rgba(20, 43, 55, 0.72)"
-    override val surfaceImpact = "rgba(0, 183, 214, 0.14)"
+    override val surfaceImpact = "rgba(241, 245, 255, 0.06)"
 
-    override val fontFamily = "'Archivo', -apple-system, sans-serif"
+    override val fontFamily = "'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif"
     override val fontImport =
-        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
-    override val fontWidthMultiplier = 1.15f
+        "@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap');"
+    override val fontWidthMultiplier = 1.0f
     override val fontLineHeight = 1.25f
-    override val cornerRadius = 12
+    override val cornerRadius = 16
 
     override val chartPalette = listOf(
         SVGColor("#00B7D6", "Signal Cyan"),
