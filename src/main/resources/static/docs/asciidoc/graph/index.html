@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DocOps Knowledge Graph</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/16.3.0/lib/marked.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
 
         :root {
             /* DocOps Signal Palette */
@@ -32,7 +36,7 @@
             --bg-color: var(--canvas);
             --sidebar-bg: var(--surface-1);
             --border-color: var(--border-base);
-            
+
             /* Proportional Layout (Chapter 5) */
             --panel-width-left: clamp(240px, 18vw, 300px);
             --panel-width-right: clamp(240px, 20vw, 380px);
@@ -87,6 +91,38 @@
 
         .search-container {
             flex: 0 0 var(--panel-width-left);
+            min-width: 0;
+        }
+
+        .category-select-wrapper {
+            flex: 1;
+            min-width: 0;
+            max-width: 240px;
+        }
+
+        #category-select {
+            width: 100%;
+            padding: 9px 12px;
+            border-radius: 8px;
+            background: var(--surface-2);
+            border: 1px solid var(--border-color);
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A96AD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+            transition: all 0.2s ease;
+        }
+
+        #category-select:focus {
+            outline: none;
+            border-color: var(--brand-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 183, 214, 0.1);
         }
 
         #search-box {
@@ -107,42 +143,12 @@
             box-shadow: 0 0 0 4px rgba(0, 183, 214, 0.15);
         }
 
-        .filters-container {
-            flex-grow: 1;
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .filters-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter-pill {
-            padding: 6px 16px;
-            border-radius: 20px;
-            background: var(--surface-2);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            user-select: none;
-            border: 1px solid transparent;
-            transition: all 0.2s ease;
-            color: var(--text-2);
-        }
-
-        .filter-pill.active {
-            background: var(--brand-cyan);
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(0, 183, 214, 0.25);
-        }
 
         .controls-container {
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-shrink: 0;
         }
 
         .btn-icon {
@@ -183,16 +189,46 @@
             flex-grow: 1;
             background-color: var(--canvas);
             background-image:
-                radial-gradient(1200px 800px at 12% -10%, var(--halo-cyan), transparent 55%),
-                radial-gradient(900px 700px at 100% 10%, var(--halo-gold), transparent 50%),
-                linear-gradient(to right, var(--grid-ink) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--grid-ink) 1px, transparent 1px);
+                    radial-gradient(1200px 800px at 12% -10%, var(--halo-cyan), transparent 55%),
+                    radial-gradient(900px 700px at 100% 10%, var(--halo-gold), transparent 50%),
+                    linear-gradient(to right, var(--grid-ink) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--grid-ink) 1px, transparent 1px);
             background-size:
-                auto,
-                auto,
-                28px 28px,
-                28px 28px;
+                    auto,
+                    auto,
+                    28px 28px,
+                    28px 28px;
             position: relative;
+        }
+
+        #tree-svg {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .tree-link {
+            fill: none;
+            stroke: var(--border-base);
+            stroke-width: 1.5px;
+            stroke-opacity: 0.4;
+        }
+
+        .tree-node circle {
+            stroke: var(--canvas);
+            stroke-width: 1.5px;
+            cursor: pointer;
+            transition: r 0.3s cubic-bezier(0.16, 1, 0.3, 1), stroke-width 0.2s ease;
+            filter: drop-shadow(0 2px 4px rgba(11, 18, 32, 0.1));
+        }
+
+        .tree-node text {
+            font-family: "IBM Plex Sans", sans-serif;
+            font-size: 12px;
+            fill: var(--text-2);
+            paint-order: stroke;
+            stroke: var(--canvas);
+            stroke-width: 3px;
         }
 
         #legend {
@@ -556,10 +592,14 @@
         <div class="search-container">
             <input type="text" id="search-box" placeholder="Search nodes...">
         </div>
-        <div class="filters-container" id="category-filters">
-            <!-- Category pills will be injected here -->
+        <div class="category-select-wrapper">
+            <select id="category-select">
+                <option value="all">All Categories</option>
+                <!-- Categories will be injected here -->
+            </select>
         </div>
         <div class="controls-container">
+            <button class="btn-icon" id="view-toggle" title="Toggle Graph/Tree View (V)">⑃</button>
             <button class="btn-icon" id="theme-toggle" title="Toggle Light/Dark Mode (T)">◑</button>
             <button class="btn-icon" id="toggle-legend" title="Toggle Legend (L)">▤</button>
             <button class="btn-icon" id="toggle-sidebar" title="Toggle Sidebar (B)">☰</button>
@@ -574,6 +614,7 @@
         </aside>
         <section id="graph-container">
             <svg id="graph-svg"></svg>
+            <svg id="tree-svg"></svg>
             <div id="loading" class="loading-overlay">Loading graph data...</div>
             <div id="legend">
                 <div class="legend-title">Legend</div>
@@ -618,17 +659,21 @@
     document.getElementById('theme-toggle').addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
+
         if (newTheme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
         } else {
             document.documentElement.removeAttribute('data-theme');
         }
         localStorage.setItem('theme', newTheme);
-        
+
         // Update graph highlighting to use new theme colors
         if (graphData) {
-            updateHighlights(nodeGroup.selectAll(".node"), linkGroup.selectAll("line"));
+            if (currentView === 'graph') {
+                updateHighlights(nodeGroup.selectAll(".node"), linkGroup.selectAll("line"));
+            } else {
+                updateTreeView();
+            }
         }
     });
 
@@ -658,6 +703,8 @@
     let selectedNode = null;
     let searchQuery = "";
     let lunrIndex = null;
+    let currentView = 'graph';
+    const collapsedNodes = new Set();
 
     const svg = d3.select("#graph-svg");
     const g = svg.append("g");
@@ -740,35 +787,147 @@
     }
 
     function updateFilters() {
-        const container = document.getElementById('category-filters');
-        container.innerHTML = '';
+        const select = document.getElementById('category-select');
+        // Keep only the "All Categories" option
+        while (select.options.length > 1) {
+            select.remove(1);
+        }
+
         categories.forEach(cat => {
-            const pill = document.createElement('div');
-            pill.className = `filter-pill ${activeCategories.has(cat) ? 'active' : ''}`;
-            pill.textContent = cat;
-            pill.style.borderColor = getCategoryColor(cat);
-            if (activeCategories.has(cat)) {
-                pill.style.backgroundColor = getCategoryColor(cat);
-                pill.style.color = '#fff';
-                pill.style.boxShadow = `0 4px 10px ${getCategoryColor(cat)}40`;
-            } else {
-                pill.style.backgroundColor = 'transparent';
-                pill.style.color = 'var(--text-3)';
-                pill.style.boxShadow = 'none';
-            }
-            pill.onclick = () => {
-                if (activeCategories.has(cat)) {
-                    activeCategories.delete(cat);
-                } else {
-                    activeCategories.add(cat);
-                }
-                updateFilters();
-                updateLegend();
-                updateSidebar();
-                updateGraph();
-            };
-            container.appendChild(pill);
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = cat;
+            select.appendChild(opt);
         });
+    }
+
+    function updateTreeView() {
+        const container = d3.select("#graph-container");
+        const width = container.node().clientWidth;
+        const height = container.node().clientHeight;
+
+        d3.select("#graph-svg").style("display", currentView === 'graph' ? 'block' : 'none');
+        d3.select("#tree-svg").style("display", currentView === 'tree' ? 'block' : 'none');
+
+        simulation.stop();
+        if (currentView !== 'tree') return;
+
+        const svg = d3.select("#tree-svg");
+        svg.selectAll("*").remove();
+        const g = svg.append("g");
+
+        // Hierarchy: Root -> Categories -> Nodes
+        const matchingIds = getSearchResults(searchQuery);
+        const visibleNodes = graphData.nodes.filter(n =>
+            activeCategories.has(n.category) &&
+            (matchingIds === null || matchingIds.has(n.id) || n.id === selectedNode)
+        );
+
+        if (visibleNodes.length === 0) {
+            g.append("text")
+                .attr("x", width / 2)
+                .attr("y", height / 2)
+                .attr("text-anchor", "middle")
+                .style("fill", "var(--text-3)")
+                .text("No matching nodes found");
+            return;
+        }
+
+        const rootData = {
+            name: "DocOps Knowledge",
+            id: "tree-root",
+            children: Array.from(d3.group(visibleNodes, d => d.category)).map(([cat, nodes]) => ({
+                name: cat,
+                id: "tree-cat-" + cat,
+                isCategory: true,
+                children: nodes.map(n => ({ ...n, name: n.label }))
+            }))
+        };
+
+        const hierarchy = d3.hierarchy(rootData);
+
+        // Apply collapse state
+        hierarchy.descendants().forEach(d => {
+            if (d.children) {
+                const nodeId = d.data.id || d.data.name;
+                const hasSearchMatch = searchQuery && d.descendants().some(child => child.data.id && matchingIds && matchingIds.has(child.data.id));
+
+                if (collapsedNodes.has(nodeId) && !hasSearchMatch) {
+                    d._children = d.children;
+                    d.children = null;
+                }
+            }
+        });
+
+        const treeLayout = d3.tree().size([height - 100, width - 240]);
+        treeLayout(hierarchy);
+
+        const link = g.selectAll(".tree-link")
+            .data(hierarchy.links())
+            .enter().append("path")
+            .attr("class", "tree-link")
+            .attr("d", d3.linkHorizontal()
+                .x(d => d.y + 120)
+                .y(d => d.x + 50));
+
+        const node = g.selectAll(".tree-node")
+            .data(hierarchy.descendants())
+            .enter().append("g")
+            .attr("class", "tree-node")
+            .attr("transform", d => `translate(${d.y + 120},${d.x + 50})`)
+            .on("click", (event, d) => {
+                if (d.children || d._children) {
+                    const nodeId = d.data.id || d.data.name;
+                    if (collapsedNodes.has(nodeId)) {
+                        collapsedNodes.delete(nodeId);
+                    } else {
+                        collapsedNodes.add(nodeId);
+                    }
+                    updateTreeView();
+                } else if (d.data.id) {
+                    selectNode(d.data.id);
+                }
+            });
+
+        // Hit area for easier clicking
+        node.append("circle")
+            .attr("r", d => ((d.data.isCategory || !d.parent) ? 12 : 8) + 8)
+            .attr("fill", "transparent")
+            .style("cursor", "pointer");
+
+        node.append("circle")
+            .attr("r", d => (d.data.isCategory || !d.parent) ? 12 : 8)
+            .attr("fill", d => d.data.isCategory ? getCategoryColor(d.data.name) : (d.data.category ? getCategoryColor(d.data.category) : "var(--brand-steel)"))
+            .style("stroke", d => {
+                if (d.data.id === selectedNode) return "var(--accent)";
+                if (d._children) return "var(--brand-cyan)";
+                return "var(--canvas)";
+            })
+            .style("stroke-width", d => (d.data.id === selectedNode || d._children) ? "3px" : "1.5px");
+
+        node.append("text")
+            .attr("dy", ".31em")
+            .attr("x", d => (d.children || d._children) ? -16 : 16)
+            .style("text-anchor", d => (d.children || d._children) ? "end" : "start")
+            .text(d => d.data.name)
+            .style("font-weight", d => d.data.isCategory ? "700" : "400")
+            .style("fill", d => d.data.id === selectedNode ? "var(--brand-cyan)" : "var(--text-2)");
+
+        // Zoom logic for tree
+        const currentTransform = d3.zoomTransform(svg.node());
+        const zoom = d3.zoom()
+            .scaleExtent([0.1, 3])
+            .on("zoom", (event) => g.attr("transform", event.transform));
+
+        svg.call(zoom);
+
+        if (currentTransform.k === 1 && currentTransform.x === 0 && currentTransform.y === 0) {
+            // Initial fit
+            const initialScale = 0.8;
+            svg.call(zoom.transform, d3.zoomIdentity.translate(40, 20).scale(initialScale));
+        } else {
+            g.attr("transform", currentTransform);
+        }
     }
 
     function updateLegend() {
@@ -778,14 +937,14 @@
             const item = document.createElement('div');
             item.className = 'legend-item';
             item.style.opacity = activeCategories.has(cat) ? 1 : 0.4;
-            
+
             const color = document.createElement('div');
             color.className = 'legend-color';
             color.style.backgroundColor = getCategoryColor(cat);
-            
+
             const label = document.createElement('span');
             label.textContent = cat;
-            
+
             item.appendChild(color);
             item.appendChild(label);
             container.appendChild(item);
@@ -843,6 +1002,9 @@
     }
 
     function updateGraph() {
+        d3.select("#graph-svg").style("display", currentView === 'graph' ? 'block' : 'none');
+        d3.select("#tree-svg").style("display", currentView === 'tree' ? 'block' : 'none');
+
         const visibleNodeIds = new Set(graphData.nodes
             .filter(n => activeCategories.has(n.category))
             .map(n => n.id));
@@ -881,12 +1043,18 @@
                 .on("end", dragended))
             .on("click", (event, d) => selectNode(d.id));
 
+        // Hit area for easier clicking
         nodeEnter.append("circle")
-            .attr("r", d => 12 + Math.sqrt(degree.get(d.id) || 0) * 1.5)
+            .attr("r", d => 16 + Math.sqrt(degree.get(d.id) || 0) * 1.5 + 8)
+            .attr("fill", "transparent")
+            .style("cursor", "pointer");
+
+        nodeEnter.append("circle")
+            .attr("r", d => 16 + Math.sqrt(degree.get(d.id) || 0) * 1.5)
             .attr("fill", d => getCategoryColor(d.category));
 
         nodeEnter.append("text")
-            .attr("dy", d => 12 + Math.sqrt(degree.get(d.id) || 0) * 1.5 + 12)
+            .attr("dy", d => 16 + Math.sqrt(degree.get(d.id) || 0) * 1.5 + 16)
             .text(d => d.label);
 
         const mergedNode = nodeEnter.merge(node);
@@ -976,10 +1144,22 @@
             selectedNode = null;
         } else {
             selectedNode = nodeId;
+            // Auto-expand tree category for selected node
+            if (selectedNode) {
+                const node = graphData.nodes.find(n => n.id === selectedNode);
+                if (node) {
+                    collapsedNodes.delete("tree-root");
+                    collapsedNodes.delete("tree-cat-" + node.category);
+                }
+            }
         }
 
         updateSidebar();
-        updateHighlights(nodeGroup.selectAll(".node"), linkGroup.selectAll("line"));
+        if (currentView === 'graph') {
+            updateHighlights(nodeGroup.selectAll(".node"), linkGroup.selectAll("line"));
+        } else {
+            updateTreeView();
+        }
         renderDetailPanel();
 
         if (selectedNode) {
@@ -1126,8 +1306,37 @@
     document.getElementById('search-box').addEventListener('input', (e) => {
         searchQuery = e.target.value;
         updateSidebar();
-        updateHighlights(nodeGroup.selectAll(".node"), linkGroup.selectAll("line"));
+        if (currentView === 'graph') {
+            updateHighlights(nodeGroup.selectAll(".node"), linkGroup.selectAll("line"));
+        } else {
+            updateTreeView();
+        }
     });
+
+    document.getElementById('category-select').addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (val === 'all') {
+            activeCategories = new Set(categories);
+        } else {
+            activeCategories = new Set([val]);
+        }
+        updateLegend();
+        updateSidebar();
+        if (currentView === 'graph') updateGraph();
+        else updateTreeView();
+    });
+
+    document.getElementById('view-toggle').onclick = () => {
+        currentView = currentView === 'graph' ? 'tree' : 'graph';
+        document.getElementById('view-toggle').textContent = currentView === 'graph' ? '⑃' : '☍';
+        document.getElementById('view-toggle').title = `Switch to ${currentView === 'graph' ? 'Tree' : 'Graph'} View (V)`;
+
+        if (currentView === 'graph') {
+            updateGraph();
+        } else {
+            updateTreeView();
+        }
+    };
 
     // Settings / Controls
     document.getElementById('btn-settings').onclick = (e) => {
@@ -1234,6 +1443,9 @@
                 break;
             case 'b':
                 document.getElementById('toggle-sidebar').click();
+                break;
+            case 'v':
+                document.getElementById('view-toggle').click();
                 break;
             case 's':
                 document.getElementById('btn-settings').click();

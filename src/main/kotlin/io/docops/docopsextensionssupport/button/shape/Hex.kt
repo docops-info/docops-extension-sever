@@ -252,25 +252,27 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                      $img 
                     </g>
             
-                    <!-- Main Label -->
-                        <text x="149" y="$startTextY" text-anchor="middle" 
-                              fill="$primaryTextColor" 
-                              class="hex-label" 
-                              font-size="$fontSize"
-                              style="fill: $primaryTextColor !important;">$spans</text>
+                                            <!-- Main Label -->
+                            <text x="149" y="$startTextY" text-anchor="middle" 
+                                  fill="$primaryTextColor" 
+                                  class="hex-label" 
+                                  font-size="$fontSize"
+                                  style="fill: $primaryTextColor !important;">$spans</text>
             
-                        <!-- Sharp Accent Line: Uses secondary accent color -->
-                        <line x1="110" y1="${endY + 5}" x2="190" y2="${endY + 5}" 
-                              stroke="$secondaryTextColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.8"/>
-            
-                        <!-- Type Text: Uses secondary accent color -->
-                        <text x="149" y="${endY + 28}" text-anchor="middle" 
-                              fill="$secondaryTextColor" 
-                              font-family="${docOpsTheme.fontFamily}" 
-                              font-size="14" 
-                              font-weight="800"
-                              style="letter-spacing: 2px; fill: $secondaryTextColor !important; opacity: 0.9;">$typeText</text>
-                    </g>
+                            <!-- Sharp Accent Line: Uses secondary accent color -->
+                            ${if (button.enabled) """
+                            <line x1 ="110" y1 = "${endY+5}" x2 = "190" y2 = "${endY+5}"
+                            stroke = "$secondaryTextColor" stroke -width = "2" stroke -linecap = "round" stroke -opacity = "0.8" / >
+                            """.trimIndent() else ""}
+                                
+                                                <!-- Type Text: Uses secondary accent color -->
+                                                <text x="149" y="${endY + 28}" text-anchor="middle" 
+                                                      fill="$secondaryTextColor" 
+                                                      font-family="${docOpsTheme.fontFamily}" 
+                                                      font-size="14" 
+                                                      font-weight="800"
+                                                      style="letter-spacing: 2px; fill: $secondaryTextColor !important; opacity: 0.9;">$typeText</text>
+                                        </g>
             </g>
             """.trimIndent()
     }
