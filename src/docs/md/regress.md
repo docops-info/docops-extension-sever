@@ -629,3 +629,10 @@ Underscores
 ```
 
 [![IMAGE ALT TEXT HERE](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/YouTube_logo_2015.svg/1200px-YouTube_logo_2015.svg.png)](https://www.youtube.com/watch?v=ciawICBvQoE)
+
+```plantuml
+@startuml
+Sally -> Bob
+Bob -> Sally
+@enduml
+```
