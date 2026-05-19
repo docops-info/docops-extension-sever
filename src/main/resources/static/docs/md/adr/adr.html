@@ -10,92 +10,169 @@
                 <title>Architecture Decision Records</title>
                 
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Bento:wght@700;900&family=Outfit:wght@300;400&family=JetBrains+Mono&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
+body {
+    background-color: #0d0d12; /* Matches the end of your radial gradient */
+    margin: 0;
+    padding: 2rem 0; /* Adds some breathing room at the top and bottom */
+}
 
 .markdown-body {
-    --primary: #38BDF8;
-    --primary-glow: rgba(56, 189, 248, 0.15);
-    --bg: #0A0E27; /* design-tricks.md: Recommended dark bg */
-    --card-bg: #161B33; /* Rule #6: increased brightness from bg */
+    /* Custom Variables - High Contrast & Sharp Accents */
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
     
-    background-color: var(--bg);
-    color: #E2E8F0;
-    font-family: 'Outfit', sans-serif;
+    --accent-primary: #7e57ff;
+    --accent-secondary: #00f2fe;
+    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    
+    background: var(--bg-gradient);
+    color: #e0e0e0;
+    font-family: var(--font-body);
     line-height: 1.7;
-    max-width: 850px;
-    margin: 64px auto;
-    padding: 48px;
-    border-radius: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 3rem;
+    max-width: 980px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Headlines with Tracking Rules */
-.markdown-body h1 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 48px;
-    font-weight: 900;
-    letter-spacing: -0.03em; /* Rule #2: Text over 70px */
-    line-height: 0.95;
-    background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 40px;
+/* Staggered Reveal for Content */
+.markdown-body > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemSlideIn 0.5s ease forwards;
 }
 
-.markdown-body h2 {
-    font-size: 32px;
-    letter-spacing: -0.01em;
-    color: var(--primary);
-    margin-top: 48px;
+.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
+.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
+.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
+.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
+
+@keyframes pageReveal {
+    to { opacity: 1; }
 }
 
-/* Motion: High-impact reveal (ui.md) */
-@keyframes reveal {
-    from { opacity: 0; transform: translateY(20px); }
+@keyframes itemSlideIn {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.markdown-body > * {
-    animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+/* Typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    font-family: var(--font-heading);
+    color: #fff;
+    margin-top: 2.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
 }
 
-/* Rounded Corners (Rule #4) */
+.markdown-body h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: none;
+    margin-bottom: 2rem;
+}
+
+.markdown-body h2 {
+    font-size: 2rem;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    border-bottom: none;
+}
+
+/* Code Blocks - IDE Aesthetic */
 .markdown-body pre {
-    background: var(--card-bg);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 24px;
-    border-radius: 20px; /* Outer */
+    background: #000000 !important;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.markdown-body pre::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 2px; height: 100%;
+    background: var(--accent-primary);
 }
 
 .markdown-body code {
-    font-family: 'JetBrains Mono', monospace;
-    background: rgba(56, 189, 248, 0.1);
-    color: var(--primary);
-    padding: 4px 8px;
-    border-radius: 8px; /* Inner: 20px - 12px gap */
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(126, 87, 255, 0.15);
+    color: #b392ff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
 }
 
-/* Tables (ui.md style) */
+.markdown-body pre code {
+    background: transparent;
+    color: #d1d1d1;
+    padding: 0;
+}
+
+/* Links & Accents */
+.markdown-body a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-secondary);
+    transition: all 0.2s ease;
+}
+
+.markdown-body a:hover {
+    color: #fff;
+    border-bottom-style: solid;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--accent-secondary);
+    font-style: italic;
+    color: #aaa;
+}
+
+/* Custom Table Design */
 .markdown-body table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    margin: 32px 0;
-    background: var(--card-bg);
-    border-radius: 16px;
+    margin: 2rem 0;
+    border: 1px solid #333;
+    border-radius: 8px;
     overflow: hidden;
 }
 
 .markdown-body th {
-    background: rgba(255,255,255,0.05);
-    padding: 16px;
-    text-align: left;
-    font-weight: 600;
+    background: #1a1a2e;
+    color: var(--accent-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 1rem;
 }
 
 .markdown-body td {
-    padding: 16px;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 1rem;
+    border-top: 1px solid #222;
+}
+
+/* Horizontal Rule */
+.markdown-body hr {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #444, transparent);
+    border: none;
+    margin: 4rem 0;
 }
 
                 </style>
@@ -899,7 +976,7 @@
 <li><strong>Audit Trail</strong> - Provides traceability for compliance and review</li>
 </ul>
 <h2 id="default-look">Default Look</h2>
-<div id="docops-adr-1779185269534-831" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=adr&payload=H4sIAAAAAAAA_3VSS2_bMAy-51fwmAIL0BXtMQcX2YAV7ZYhG3ZmZNomotckKo_9-lF2sqYYehBgWeT3IoXF0hJ-ZoJPFrOwyYTJDNCFBJvp83PxRjh4tCynWRaUkpfQGENRqJ21KIpwd3t3v7h9WHx8mJnghY6ynC3gW0mAMVo2WBHAE7UZUtiWLHBmMhhxy4rNlAFNCjmDK1Y4WgIFR5BTpKxov2gEAAmQS4whCXTF2kVlu6AdWAZIZGmP3hAk9Dv2vTb_GOhS010bUq6qxaCyjc19Cgdtmaj3wRb3Ljka0gQusOhb6NgKpcoI0JLhrDTLqfvA1kL5L2jMEDSl8418z56uGliz7JNGDCyTvlpNR1YIFbkOWfpEm-_Po94t5jfNTjN05AUQ8smbIQXPf6ZRODIDes6uOtoRxckw-7FS5esYM_0upDHmauGLiynsX-1GSrokboy5Wr-eo5Y3bctTyIrZJbWcipGSqPI5VF96tO5rDbVuGx0VUVgDUg1vM1IpHfclTcorWYjC7mxFQdZB1CUrlwnV87EOVmGqr3-zfE1AtxYgorIZjuhF1_kJPcHG1YDnjXKykJGbD_AUBg-rQDBf0Z5sUI36t9GNpvEtq6D5OoVWzcELeuzHghfeETzqJunr6rG5-QvoKndiaAMAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Use Elasticsearch for Search Functionality
+<div id="docops-adr-1779185807981-635" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=adr&payload=H4sIAAAAAAAA_3VSS2_bMAy-51fwmAIL0BXtMQcX2YAV7ZYhG3ZmZNomotckKo_9-lF2sqYYehBgWeT3IoXF0hJ-ZoJPFrOwyYTJDNCFBJvp83PxRjh4tCynWRaUkpfQGENRqJ21KIpwd3t3v7h9WHx8mJnghY6ynC3gW0mAMVo2WBHAE7UZUtiWLHBmMhhxy4rNlAFNCjmDK1Y4WgIFR5BTpKxov2gEAAmQS4whCXTF2kVlu6AdWAZIZGmP3hAk9Dv2vTb_GOhS010bUq6qxaCyjc19Cgdtmaj3wRb3Ljka0gQusOhb6NgKpcoI0JLhrDTLqfvA1kL5L2jMEDSl8418z56uGliz7JNGDCyTvlpNR1YIFbkOWfpEm-_Po94t5jfNTjN05AUQ8smbIQXPf6ZRODIDes6uOtoRxckw-7FS5esYM_0upDHmauGLiynsX-1GSrokboy5Wr-eo5Y3bctTyIrZJbWcipGSqPI5VF96tO5rDbVuGx0VUVgDUg1vM1IpHfclTcorWYjC7mxFQdZB1CUrlwnV87EOVmGqr3-zfE1AtxYgorIZjuhF1_kJPcHG1YDnjXKykJGbD_AUBg-rQDBf0Z5sUI36t9GNpvEtq6D5OoVWzcELeuzHghfeETzqJunr6rG5-QvoKndiaAMAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Use Elasticsearch for Search Functionality
 status= Accepted
 date= 2024-05-15
 context=
@@ -919,12 +996,12 @@ consequences=
 participants= Jane Smith (Architect), John Doe (Developer), Alice Johnson (Product Manager), Mike Brown (DBA)" data-kind="adr">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" id="id_2d5012386b6845cd9f8790bdfb79af2d" width="700" height="700" viewBox="0 0 700 700" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Use Elasticsearch for Search Functionality"],["Status","Accepted"],["Date","2024-05-15"],["Context","- Our application needs robust search capabilities across multiple data types\n- We need to support full-text search with relevance ranking\n- The search functionality must scale with growing data volumes\n- We need to support faceted search and filtering"],["Decision","- We will use Elasticsearch as our search engine\n- We will integrate it with our existing PostgreSQL database\n- We will implement a synchronization mechanism to keep data in sync"],["Consequences","- Improved search performance and capabilities\n- Additional infrastructure to maintain\n- Need for expertise in Elasticsearch configuration and optimization\n- Potential complexity in keeping data synchronized"],["Participants","Jane Smith (Architect),John Doe (Developer),Alice Johnson (Product Manager),Mike Brown (DBA)"],["References",""],["Links",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #id_2d5012386b6845cd9f8790bdfb79af2d .card { fill: #1f2937; stroke: #374151; stroke-width: 1; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); } #id_2d5012386b6845cd9f8790bdfb79af2d .title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 20px; fill: #f9fafb; } #id_2d5012386b6845cd9f8790bdfb79af2d .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 500; font-size: 16px; fill: #9ca3af; } #id_2d5012386b6845cd9f8790bdfb79af2d .status { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_2d5012386b6845cd9f8790bdfb79af2d .content { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 14px; fill: #e5e7eb; } #id_2d5012386b6845cd9f8790bdfb79af2d .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 16px; fill: #f3f4f6; } #id_2d5012386b6845cd9f8790bdfb79af2d .participant-title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 12px; fill: #f3f4f6; } #id_2d5012386b6845cd9f8790bdfb79af2d .participant-name { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 12px; fill: #d1d5db; text-anchor: middle; } #id_2d5012386b6845cd9f8790bdfb79af2d .participant-name-with-email { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 500; font-size: 12px; fill: #60a5fa; text-anchor: middle; border-bottom: 1px dotted #60a5fa; } #id_2d5012386b6845cd9f8790bdfb79af2d .participant-name-with-email:hover { fill: #93c5fd; font-weight: 600; } #id_2d5012386b6845cd9f8790bdfb79af2d .participant-container { cursor: pointer; } #id_2d5012386b6845cd9f8790bdfb79af2d .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 6px rgba(96, 165, 250, 0.6)); transition: filter 0.3s ease; } #id_2d5012386b6845cd9f8790bdfb79af2d .participant-container:hover .participant-name { fill: #60a5fa; transition: fill 0.3s ease; } #id_2d5012386b6845cd9f8790bdfb79af2d .group-chat-link { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 12px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_2d5012386b6845cd9f8790bdfb79af2d .reference-link { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 14px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_2d5012386b6845cd9f8790bdfb79af2d .reference-link:hover { fill: #93c5fd; font-weight: 500; } #id_2d5012386b6845cd9f8790bdfb79af2d a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs><rect width="100%" height="100%" fill="#0f172a"/> <rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Use Elasticsearch for Search Functionality</text><text x="35" y="70" class="subtitle">Date: 2024-05-15</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our application needs robust search capabilities across multiple data types</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">We need to support full-text search with relevance ranking</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">The search functionality must scale with growing data volumes</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">We need to support faceted search and filtering</text><rect x="20" y="240" width="660" height="100" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will use Elasticsearch as our search engine</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content">We will integrate it with our existing PostgreSQL database</text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content">We will implement a synchronization mechanism to keep data in sync</text><rect x="20" y="360" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="385" class="section-title">Consequences</text><circle cx="40" cy="405" r="3" fill="#333333" /><text x="50" y="410" class="content">Improved search performance and capabilities</text><circle cx="40" cy="425" r="3" fill="#333333" /><text x="50" y="430" class="content">Additional infrastructure to maintain</text><circle cx="40" cy="445" r="3" fill="#333333" /><text x="50" y="450" class="content">Need for expertise in Elasticsearch configuration and optimization</text><circle cx="40" cy="465" r="3" fill="#333333" /><text x="50" y="470" class="content">Potential complexity in keeping data synchronized</text><rect x="20" y="500" width="660" height="180" class="card" rx="10" ry="10"/><text x="35" y="525" class="section-title">Participants</text><g><circle cx="140" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="555" text-anchor="middle" font-size="16">👤</text><text x="140" y="580" class="participant-name">Jane Smith</text><text x="140" y="595" class="participant-name">(Architect)</text></g><g><circle cx="350" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="350" y="555" text-anchor="middle" font-size="16">👤</text><text x="350" y="580" class="participant-name">John Doe (Developer)</text></g><g><circle cx="560" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="560" y="555" text-anchor="middle" font-size="16">👤</text><text x="560" y="580" class="participant-name">Alice Johnson</text><text x="560" y="595" class="participant-name">(Product Manager)</text></g><g><circle cx="140" cy="620" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="625" text-anchor="middle" font-size="16">👤</text><text x="140" y="650" class="participant-name">Mike Brown (DBA)</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" id="id_9bc3fea8a44b42ec9e34058284de0766" width="700" height="700" viewBox="0 0 700 700" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Use Elasticsearch for Search Functionality"],["Status","Accepted"],["Date","2024-05-15"],["Context","- Our application needs robust search capabilities across multiple data types\n- We need to support full-text search with relevance ranking\n- The search functionality must scale with growing data volumes\n- We need to support faceted search and filtering"],["Decision","- We will use Elasticsearch as our search engine\n- We will integrate it with our existing PostgreSQL database\n- We will implement a synchronization mechanism to keep data in sync"],["Consequences","- Improved search performance and capabilities\n- Additional infrastructure to maintain\n- Need for expertise in Elasticsearch configuration and optimization\n- Potential complexity in keeping data synchronized"],["Participants","Jane Smith (Architect),John Doe (Developer),Alice Johnson (Product Manager),Mike Brown (DBA)"],["References",""],["Links",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #id_9bc3fea8a44b42ec9e34058284de0766 .card { fill: #1f2937; stroke: #374151; stroke-width: 1; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3)); } #id_9bc3fea8a44b42ec9e34058284de0766 .title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 20px; fill: #f9fafb; } #id_9bc3fea8a44b42ec9e34058284de0766 .subtitle { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 500; font-size: 16px; fill: #9ca3af; } #id_9bc3fea8a44b42ec9e34058284de0766 .status { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 500; font-size: 14px; fill: #ffffff; } #id_9bc3fea8a44b42ec9e34058284de0766 .content { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 14px; fill: #e5e7eb; } #id_9bc3fea8a44b42ec9e34058284de0766 .section-title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 16px; fill: #f3f4f6; } #id_9bc3fea8a44b42ec9e34058284de0766 .participant-title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 600; font-size: 12px; fill: #f3f4f6; } #id_9bc3fea8a44b42ec9e34058284de0766 .participant-name { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 12px; fill: #d1d5db; text-anchor: middle; } #id_9bc3fea8a44b42ec9e34058284de0766 .participant-name-with-email { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 500; font-size: 12px; fill: #60a5fa; text-anchor: middle; border-bottom: 1px dotted #60a5fa; } #id_9bc3fea8a44b42ec9e34058284de0766 .participant-name-with-email:hover { fill: #93c5fd; font-weight: 600; } #id_9bc3fea8a44b42ec9e34058284de0766 .participant-container { cursor: pointer; } #id_9bc3fea8a44b42ec9e34058284de0766 .participant-container:hover .participant-icon { filter: drop-shadow(0px 0px 6px rgba(96, 165, 250, 0.6)); transition: filter 0.3s ease; } #id_9bc3fea8a44b42ec9e34058284de0766 .participant-container:hover .participant-name { fill: #60a5fa; transition: fill 0.3s ease; } #id_9bc3fea8a44b42ec9e34058284de0766 .group-chat-link { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 12px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_9bc3fea8a44b42ec9e34058284de0766 .reference-link { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; font-size: 14px; fill: #60a5fa; text-decoration: underline; cursor: pointer; } #id_9bc3fea8a44b42ec9e34058284de0766 .reference-link:hover { fill: #93c5fd; font-weight: 500; } #id_9bc3fea8a44b42ec9e34058284de0766 a { cursor: pointer; }</style><!-- Font Awesome style user icon --><symbol id="user-icon" viewBox="0 0 448 512"><path stroke="#34C759" stroke-width="1" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></symbol></defs><rect width="100%" height="100%" fill="#0f172a"/> <rect x="20" y="20" width="660" height="60" class="card" rx="10" ry="10"/><text x="35" y="50" class="title">Use Elasticsearch for Search Functionality</text><text x="35" y="70" class="subtitle">Date: 2024-05-15</text><rect x="235" y="55" width="80" height="20" rx="10" ry="10" fill="#34C759" /><text x="275" y="70" class="status" text-anchor="middle">Accepted</text><rect x="20" y="100" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="125" class="section-title">Context</text><circle cx="40" cy="145" r="3" fill="#333333" /><text x="50" y="150" class="content">Our application needs robust search capabilities across multiple data types</text><circle cx="40" cy="165" r="3" fill="#333333" /><text x="50" y="170" class="content">We need to support full-text search with relevance ranking</text><circle cx="40" cy="185" r="3" fill="#333333" /><text x="50" y="190" class="content">The search functionality must scale with growing data volumes</text><circle cx="40" cy="205" r="3" fill="#333333" /><text x="50" y="210" class="content">We need to support faceted search and filtering</text><rect x="20" y="240" width="660" height="100" class="card" rx="10" ry="10"/><text x="35" y="265" class="section-title">Decision</text><circle cx="40" cy="285" r="3" fill="#333333" /><text x="50" y="290" class="content">We will use Elasticsearch as our search engine</text><circle cx="40" cy="305" r="3" fill="#333333" /><text x="50" y="310" class="content">We will integrate it with our existing PostgreSQL database</text><circle cx="40" cy="325" r="3" fill="#333333" /><text x="50" y="330" class="content">We will implement a synchronization mechanism to keep data in sync</text><rect x="20" y="360" width="660" height="120" class="card" rx="10" ry="10"/><text x="35" y="385" class="section-title">Consequences</text><circle cx="40" cy="405" r="3" fill="#333333" /><text x="50" y="410" class="content">Improved search performance and capabilities</text><circle cx="40" cy="425" r="3" fill="#333333" /><text x="50" y="430" class="content">Additional infrastructure to maintain</text><circle cx="40" cy="445" r="3" fill="#333333" /><text x="50" y="450" class="content">Need for expertise in Elasticsearch configuration and optimization</text><circle cx="40" cy="465" r="3" fill="#333333" /><text x="50" y="470" class="content">Potential complexity in keeping data synchronized</text><rect x="20" y="500" width="660" height="180" class="card" rx="10" ry="10"/><text x="35" y="525" class="section-title">Participants</text><g><circle cx="140" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="555" text-anchor="middle" font-size="16">👤</text><text x="140" y="580" class="participant-name">Jane Smith</text><text x="140" y="595" class="participant-name">(Architect)</text></g><g><circle cx="350" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="350" y="555" text-anchor="middle" font-size="16">👤</text><text x="350" y="580" class="participant-name">John Doe (Developer)</text></g><g><circle cx="560" cy="550" r="15" fill="#6c757d" class="participant-icon" /><text x="560" y="555" text-anchor="middle" font-size="16">👤</text><text x="560" y="580" class="participant-name">Alice Johnson</text><text x="560" y="595" class="participant-name">(Product Manager)</text></g><g><circle cx="140" cy="620" r="15" fill="#6c757d" class="participant-icon" /><text x="140" y="625" text-anchor="middle" font-size="16">👤</text><text x="140" y="650" class="participant-name">Mike Brown (DBA)</text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-adr-1779185269534-831').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-adr-1779185807981-635').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -941,7 +1018,7 @@ participants= Jane Smith (Architect), John Doe (Developer), Alice Johnson (Produ
 </div>
 </div>
 <h2 id="modern-brutalist-look">Modern Brutalist Look</h2>
-<div id="docops-adr-1779185269542-472" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=adr&payload=H4sIAAAAAAAA_32UwU4bMRCG73mKkXreJEUQRKVIDQogWigUKnFAOUzWsxsXr73Ys9kg8Qg9tb33GXruS_UROnbINlCph6zWHs83M__vDVNVG2Qaz33DaHTgHms2NIaJcjXDicd68fEMCudhcnkKZ_hAvhcYuQlyJs-pZlI9FRGwM9zZzYb72eu9Xu4s04rHvQwuGg9XR9efYn6ABS4J5pS7ikAetaEVtJoXUKF9ALKqdtpykLxzN9dGDhlNsgGWSAE7KIjzBUhBhMK7CqrGsBbMs9ypLgrykvc8XXXbKT8ssKZ4_IY6vCfV5ARuST5LpbQtAa2CxqrtLVckRg9AUa6Ddna8BrXaGMB_xHPNWkCTBPx7skJpWX5AKxE_kpNW3TApeY75XYteJcWQtQij-WGLoqOQVRwMofSoGhSyljeWxiCwvFC5ndAEgkntjHFwTV6GTXV4QV3THTIxZE6xNNB9QzanME7-eBG9KHSuO0U7eSLtSXo5elrVXhQVA2hJxtVSjlby1BG2tj-QKTLl8iaWjAQRSzIvHce1jGMIvY2BvJF-u3aZsJJzH6J9cc9SKzY6s7Gtclaz87KUEWr0LO3WKG2NZT2Jt-9Ky_gIj8meiZf-mXKWNUq071P0La0w6tEXAyTyavd4d3S0J2-_f3z_IqB3GCptCW6clH2EYx-vv1Q_I1Sy_rwO91sJv0QN9w5Go4OE-vZTUFNcagXvdQweiu8RM-1kexSdJd6_09VL0PRgf384SqCvvwTkKd315BbA7e2CuQ5vBoMyGnxv-s6Xg87ti-SjyDx9siC5Pps9y2zbto_p0mwYUnogpoXB5jJteP_DkC1FDIqe9Ldm2DSWzSlwVnvMxSsKHfJQtuFys_2CWcodauYJ84TscN13kJWNVpT-jzbM8-4bOYmx2ewPmyejrRAFAAA%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="template=brutalist
+<div id="docops-adr-1779185808009-28" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=adr&payload=H4sIAAAAAAAA_32UwU4bMRCG73mKkXreJEUQRKVIDQogWigUKnFAOUzWsxsXr73Ys9kg8Qg9tb33GXruS_UROnbINlCph6zWHs83M__vDVNVG2Qaz33DaHTgHms2NIaJcjXDicd68fEMCudhcnkKZ_hAvhcYuQlyJs-pZlI9FRGwM9zZzYb72eu9Xu4s04rHvQwuGg9XR9efYn6ABS4J5pS7ikAetaEVtJoXUKF9ALKqdtpykLxzN9dGDhlNsgGWSAE7KIjzBUhBhMK7CqrGsBbMs9ypLgrykvc8XXXbKT8ssKZ4_IY6vCfV5ARuST5LpbQtAa2CxqrtLVckRg9AUa6Ddna8BrXaGMB_xHPNWkCTBPx7skJpWX5AKxE_kpNW3TApeY75XYteJcWQtQij-WGLoqOQVRwMofSoGhSyljeWxiCwvFC5ndAEgkntjHFwTV6GTXV4QV3THTIxZE6xNNB9QzanME7-eBG9KHSuO0U7eSLtSXo5elrVXhQVA2hJxtVSjlby1BG2tj-QKTLl8iaWjAQRSzIvHce1jGMIvY2BvJF-u3aZsJJzH6J9cc9SKzY6s7Gtclaz87KUEWr0LO3WKG2NZT2Jt-9Ky_gIj8meiZf-mXKWNUq071P0La0w6tEXAyTyavd4d3S0J2-_f3z_IqB3GCptCW6clH2EYx-vv1Q_I1Sy_rwO91sJv0QN9w5Go4OE-vZTUFNcagXvdQweiu8RM-1kexSdJd6_09VL0PRgf384SqCvvwTkKd315BbA7e2CuQ5vBoMyGnxv-s6Xg87ti-SjyDx9siC5Pps9y2zbto_p0mwYUnogpoXB5jJteP_DkC1FDIqe9Ldm2DSWzSlwVnvMxSsKHfJQtuFys_2CWcodauYJ84TscN13kJWNVpT-jzbM8-4bOYmx2ewPmyejrRAFAAA%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="template=brutalist
 title= Adopt GraphQL for API Layer
 status= Accepted
 date= 2024-07-15
@@ -971,12 +1048,12 @@ references=
 [[https://github.com/example/graphql-migration-guide Our GraphQL Migration Guide]]" data-kind="adr">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" id="cb_adr_0803910df851417ca243e8958d9a9584" width="850" height="1000" viewBox="0 0 850 1000" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Adopt GraphQL for API Layer"],["Status","Accepted"],["Date","2024-07-15"],["Context","- Our REST APIs have become complex with many endpoints\n- Mobile clients need to fetch data from multiple endpoints\n- Different clients need different data shapes\n- We need to reduce over-fetching and under-fetching of data"],["Decision","- We will adopt GraphQL for our API layer\n- We will maintain existing REST endpoints for backward compatibility\n- We will implement a gradual migration strategy\n- We will use Apollo Server for the GraphQL implementation"],["Consequences","- More efficient data fetching for clients\n- Improved developer experience with self-documenting API\n- Potential learning curve for the team\n- Need for new tooling and monitoring"],["Participants","Alex Rivera,Jasmine Wong,David Kim"],["References","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"],["Links","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="hexagons_0803910df851417ca243e8958d9a9584" width="50" height="43.4" patternUnits="userSpaceOnUse" patternTransform="scale(2)"><path d="M25 0 L50 14.4 L50 43.4 L25 57.8 L0 43.4 L0 14.4 Z" fill="none" stroke="#1e293b" stroke-width="1" /></pattern><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #cb_adr_0803910df851417ca243e8958d9a9584 .canvas { fill: #0f172a; } #cb_adr_0803910df851417ca243e8958d9a9584 .bg-pattern { fill: url(#hexagons_0803910df851417ca243e8958d9a9584); } #cb_adr_0803910df851417ca243e8958d9a9584 .glass-panel { fill: rgba(15, 23, 42, 0.8); stroke: #10b981; stroke-width: 1.5; } #cb_adr_0803910df851417ca243e8958d9a9584 .impact-panel { fill: rgba(56, 189, 248, 0.1); stroke: #22d3ee; stroke-width: 1; stroke-dasharray: 4; } #cb_adr_0803910df851417ca243e8958d9a9584 .accent-line { stroke: #10b981; stroke-width: 4; stroke-linecap: square; filter: drop-shadow(0 0 5px #10b981); } #cb_adr_0803910df851417ca243e8958d9a9584 .adr-title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 800; font-size: 18px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -1px; } #cb_adr_0803910df851417ca243e8958d9a9584 .sec-header { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; fill: #10b981; text-transform: uppercase; letter-spacing: 2px; }       #cb_adr_0803910df851417ca243e8958d9a9584 .mono-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #94a3b8; } #cb_adr_0803910df851417ca243e8958d9a9584 .status-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; fill: #fff; } #cb_adr_0803910df851417ca243e8958d9a9584 .participant-node { cursor: pointer; } #cb_adr_0803910df851417ca243e8958d9a9584 .participant-node:hover .node-circle { stroke-width: 3; stroke: #818cf8; filter: drop-shadow(0 0 8px #6366f1); } #cb_adr_0803910df851417ca243e8958d9a9584 .participant-node:hover .node-name { fill: #ffffff; } #cb_adr_0803910df851417ca243e8958d9a9584 .chat-btn { transition: all 0.3s ease; cursor: pointer; } #cb_adr_0803910df851417ca243e8958d9a9584 .chat-btn:hover { filter: brightness(1.2); } @keyframes slideIn_0803910df851417ca243e8958d9a9584 { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } #cb_adr_0803910df851417ca243e8958d9a9584 .entry { animation: slideIn_0803910df851417ca243e8958d9a9584 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }</style></defs><rect width="100%" height="100%" class="canvas" /><rect width="100%" height="100%" class="bg-pattern" opacity="0.4" /><!-- Header Section --><g class="entry" style="animation-delay: 0s;"><line x1="40" y1="60" x2="40" y2="145" class="accent-line" /><text x="60" y="90" class="adr-title">Adopt GraphQL for API Layer</text><!-- Info Row --><text x="60" y="125" class="mono-text">DATE: 2024-07-15 // REF: ADR-0803</text><!-- Status Badge --><g transform="translate(690, 95)"><rect width="120" height="26" rx="13" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1"/><text x="60" y="18" text-anchor="middle" class="status-label" style="fill: #10b981">● ACCEPTED</text></g></g><!-- 01 & 02: Dynamic Side-by-Side Panels --><g class="entry" style="animation-delay: 0.1s;"><rect x="40" y="180.0" width="370" height="220" class="glass-panel" rx="8" /><text x="60" y="215.0" class="sec-header">01_CONTEXT</text><text x="60" y="250" class="mono-text" style="fill:#ffffff">- Our REST APIs have become complex with</text><text x="60" y="270" class="mono-text" style="fill:#ffffff">many endpoints</text><text x="60" y="290" class="mono-text" style="fill:#ffffff">- Mobile clients need to fetch data from</text><text x="60" y="310" class="mono-text" style="fill:#ffffff">multiple endpoints</text><text x="60" y="330" class="mono-text" style="fill:#ffffff">- Different clients need different data</text><text x="60" y="350" class="mono-text" style="fill:#ffffff">shapes</text><text x="60" y="370" class="mono-text" style="fill:#ffffff">- We need to reduce over-fetching and</text><text x="60" y="390" class="mono-text" style="fill:#ffffff">under-fetching of data</text><rect x="430" y="180.0" width="370" height="220" class="glass-panel" rx="8" /><text x="450" y="215.0" class="sec-header">02_DECISION</text><text x="450" y="250" class="mono-text" style="fill:#ffffff">- We will adopt GraphQL for our API layer</text><text x="450" y="270" class="mono-text" style="fill:#ffffff">- We will maintain existing REST endpoints</text><text x="450" y="290" class="mono-text" style="fill:#ffffff">for backward compatibility</text><text x="450" y="310" class="mono-text" style="fill:#ffffff">- We will implement a gradual migration</text><text x="450" y="330" class="mono-text" style="fill:#ffffff">strategy</text><text x="450" y="350" class="mono-text" style="fill:#ffffff">- We will use Apollo Server for the</text><text x="450" y="370" class="mono-text" style="fill:#ffffff">GraphQL implementation</text></g><!-- 03: Dynamic Full-Width Consequences --><g class="entry" style="animation-delay: 0.2s;"><rect x="40" y="420.0" width="760" height="140" class="impact-panel" rx="8" /><text x="60" y="455.0" class="sec-header" style="fill:#f472b6">03_CONSEQUENCES</text><text x="60" y="490" class="mono-text" >- More efficient data fetching for clients</text><text x="60" y="510" class="mono-text" >- Improved developer experience with self-documenting API</text><text x="60" y="530" class="mono-text" >- Potential learning curve for the team</text><text x="60" y="550" class="mono-text" >- Need for new tooling and monitoring</text></g><!-- 04: Participants Section with Multi-row support --><g transform="translate(0, 600.0)"><g class="entry" style="animation-delay: 0.3s;"><text x="40" y="10" class="sec-header">04_PARTICIPANTS</text><g class="chat-btn" transform="translate(620, -15)"><rect width="180" height="34" rx="4" fill="#6366f1" /><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com,jasmine.wong@example.com,david.kim@example.com&amp;topicName=Adopt+GraphQL+for+API+Layer" target="_blank"><text x="90" y="22" text-anchor="middle" class="status-label">START GROUP CHAT</text></a></g><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(60, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">🔌</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#ffffff">Alex Rivera</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">API Architect</text></g></a><a href="https://teams.microsoft.com/l/chat/0/0?users=jasmine.wong@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(300, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">📱</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#ffffff">Jasmine Wong</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">Frontend Lead</text></g></a><a href="https://teams.microsoft.com/l/chat/0/0?users=david.kim@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(540, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">💻</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#ffffff">David Kim</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">Backend Developer</text></g></a></g></g><!-- 05: References - Sequential positioning --><g transform="translate(0, 810.0)"><g class="entry" style="animation-delay: 0.4s;"><rect x="40" y="0" width="760" height="150" rx="4" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-opacity="0.2" /><text x="60" y="25" class="sec-header" font-size="10">05_REFERENCES</text><text x="60" y="50" class="mono-text" style="fill:#818cf8"><a href="https://graphql.org/" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">GraphQL Official Documentation</tspan></a></text><text x="60" y="75" class="mono-text" style="fill:#818cf8"><a href="https://www.apollographql.com/docs/" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">Apollo GraphQL Documentation</tspan></a></text><text x="60" y="100" class="mono-text" style="fill:#818cf8"><a href="https://engineering.example.com/graphql-best-practices" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">GraphQL Best Practices</tspan></a></text><text x="60" y="125" class="mono-text" style="fill:#818cf8"><a href="https://github.com/example/graphql-migration-guide" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">Our GraphQL Migration Guide</tspan></a></text></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" id="cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866" width="850" height="1000" viewBox="0 0 850 1000" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Section","Content"],"rows":[["Title","Adopt GraphQL for API Layer"],["Status","Accepted"],["Date","2024-07-15"],["Context","- Our REST APIs have become complex with many endpoints\n- Mobile clients need to fetch data from multiple endpoints\n- Different clients need different data shapes\n- We need to reduce over-fetching and under-fetching of data"],["Decision","- We will adopt GraphQL for our API layer\n- We will maintain existing REST endpoints for backward compatibility\n- We will implement a gradual migration strategy\n- We will use Apollo Server for the GraphQL implementation"],["Consequences","- More efficient data fetching for clients\n- Improved developer experience with self-documenting API\n- Potential learning curve for the team\n- Need for new tooling and monitoring"],["Participants","Alex Rivera,Jasmine Wong,David Kim"],["References","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"],["Links","https://graphql.org/,https://www.apollographql.com/docs/,https://engineering.example.com/graphql-best-practices,https://github.com/example/graphql-migration-guide"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="hexagons_97ed7b4fa4eb45c8a65afbeb84cb3866" width="50" height="43.4" patternUnits="userSpaceOnUse" patternTransform="scale(2)"><path d="M25 0 L50 14.4 L50 43.4 L25 57.8 L0 43.4 L0 14.4 Z" fill="none" stroke="#1e293b" stroke-width="1" /></pattern><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap'); #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .canvas { fill: #0f172a; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .bg-pattern { fill: url(#hexagons_97ed7b4fa4eb45c8a65afbeb84cb3866); } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .glass-panel { fill: rgba(15, 23, 42, 0.8); stroke: #10b981; stroke-width: 1.5; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .impact-panel { fill: rgba(56, 189, 248, 0.1); stroke: #22d3ee; stroke-width: 1; stroke-dasharray: 4; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .accent-line { stroke: #10b981; stroke-width: 4; stroke-linecap: square; filter: drop-shadow(0 0 5px #10b981); } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .adr-title { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 800; font-size: 18px; fill: #f8fafc; text-transform: uppercase; letter-spacing: -1px; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .sec-header { font-family: 'Archivo', -apple-system, sans-serif; font-size: 14px; fill: #10b981; text-transform: uppercase; letter-spacing: 2px; }       #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .mono-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: #94a3b8; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .status-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; fill: #fff; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .participant-node { cursor: pointer; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .participant-node:hover .node-circle { stroke-width: 3; stroke: #818cf8; filter: drop-shadow(0 0 8px #6366f1); } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .participant-node:hover .node-name { fill: #ffffff; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .chat-btn { transition: all 0.3s ease; cursor: pointer; } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .chat-btn:hover { filter: brightness(1.2); } @keyframes slideIn_97ed7b4fa4eb45c8a65afbeb84cb3866 { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } #cb_adr_97ed7b4fa4eb45c8a65afbeb84cb3866 .entry { animation: slideIn_97ed7b4fa4eb45c8a65afbeb84cb3866 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }</style></defs><rect width="100%" height="100%" class="canvas" /><rect width="100%" height="100%" class="bg-pattern" opacity="0.4" /><!-- Header Section --><g class="entry" style="animation-delay: 0s;"><line x1="40" y1="60" x2="40" y2="145" class="accent-line" /><text x="60" y="90" class="adr-title">Adopt GraphQL for API Layer</text><!-- Info Row --><text x="60" y="125" class="mono-text">DATE: 2024-07-15 // REF: ADR-97ED</text><!-- Status Badge --><g transform="translate(690, 95)"><rect width="120" height="26" rx="13" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1"/><text x="60" y="18" text-anchor="middle" class="status-label" style="fill: #10b981">● ACCEPTED</text></g></g><!-- 01 & 02: Dynamic Side-by-Side Panels --><g class="entry" style="animation-delay: 0.1s;"><rect x="40" y="180.0" width="370" height="220" class="glass-panel" rx="8" /><text x="60" y="215.0" class="sec-header">01_CONTEXT</text><text x="60" y="250" class="mono-text" style="fill:#ffffff">- Our REST APIs have become complex with</text><text x="60" y="270" class="mono-text" style="fill:#ffffff">many endpoints</text><text x="60" y="290" class="mono-text" style="fill:#ffffff">- Mobile clients need to fetch data from</text><text x="60" y="310" class="mono-text" style="fill:#ffffff">multiple endpoints</text><text x="60" y="330" class="mono-text" style="fill:#ffffff">- Different clients need different data</text><text x="60" y="350" class="mono-text" style="fill:#ffffff">shapes</text><text x="60" y="370" class="mono-text" style="fill:#ffffff">- We need to reduce over-fetching and</text><text x="60" y="390" class="mono-text" style="fill:#ffffff">under-fetching of data</text><rect x="430" y="180.0" width="370" height="220" class="glass-panel" rx="8" /><text x="450" y="215.0" class="sec-header">02_DECISION</text><text x="450" y="250" class="mono-text" style="fill:#ffffff">- We will adopt GraphQL for our API layer</text><text x="450" y="270" class="mono-text" style="fill:#ffffff">- We will maintain existing REST endpoints</text><text x="450" y="290" class="mono-text" style="fill:#ffffff">for backward compatibility</text><text x="450" y="310" class="mono-text" style="fill:#ffffff">- We will implement a gradual migration</text><text x="450" y="330" class="mono-text" style="fill:#ffffff">strategy</text><text x="450" y="350" class="mono-text" style="fill:#ffffff">- We will use Apollo Server for the</text><text x="450" y="370" class="mono-text" style="fill:#ffffff">GraphQL implementation</text></g><!-- 03: Dynamic Full-Width Consequences --><g class="entry" style="animation-delay: 0.2s;"><rect x="40" y="420.0" width="760" height="140" class="impact-panel" rx="8" /><text x="60" y="455.0" class="sec-header" style="fill:#f472b6">03_CONSEQUENCES</text><text x="60" y="490" class="mono-text" >- More efficient data fetching for clients</text><text x="60" y="510" class="mono-text" >- Improved developer experience with self-documenting API</text><text x="60" y="530" class="mono-text" >- Potential learning curve for the team</text><text x="60" y="550" class="mono-text" >- Need for new tooling and monitoring</text></g><!-- 04: Participants Section with Multi-row support --><g transform="translate(0, 600.0)"><g class="entry" style="animation-delay: 0.3s;"><text x="40" y="10" class="sec-header">04_PARTICIPANTS</text><g class="chat-btn" transform="translate(620, -15)"><rect width="180" height="34" rx="4" fill="#6366f1" /><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com,jasmine.wong@example.com,david.kim@example.com&amp;topicName=Adopt+GraphQL+for+API+Layer" target="_blank"><text x="90" y="22" text-anchor="middle" class="status-label">START GROUP CHAT</text></a></g><a href="https://teams.microsoft.com/l/chat/0/0?users=alex.rivera@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(60, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">🔌</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#ffffff">Alex Rivera</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">API Architect</text></g></a><a href="https://teams.microsoft.com/l/chat/0/0?users=jasmine.wong@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(300, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">📱</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#ffffff">Jasmine Wong</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">Frontend Lead</text></g></a><a href="https://teams.microsoft.com/l/chat/0/0?users=david.kim@example.com" target="_blank" style="text-decoration: none;"><g class="participant-node" transform="translate(540, 30)"><circle cx="30" cy="30" r="30" fill="#1e293b" stroke="#6366f1" stroke-width="2" class="node-circle" /><text x="30" y="38" text-anchor="middle" font-size="24">💻</text><text x="30" y="85" text-anchor="middle" class="mono-text node-name" style="fill:#ffffff">David Kim</text><text x="30" y="100" text-anchor="middle" class="mono-text" font-size="10">Backend Developer</text></g></a></g></g><!-- 05: References - Sequential positioning --><g transform="translate(0, 810.0)"><g class="entry" style="animation-delay: 0.4s;"><rect x="40" y="0" width="760" height="150" rx="4" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-opacity="0.2" /><text x="60" y="25" class="sec-header" font-size="10">05_REFERENCES</text><text x="60" y="50" class="mono-text" style="fill:#818cf8"><a href="https://graphql.org/" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">GraphQL Official Documentation</tspan></a></text><text x="60" y="75" class="mono-text" style="fill:#818cf8"><a href="https://www.apollographql.com/docs/" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">Apollo GraphQL Documentation</tspan></a></text><text x="60" y="100" class="mono-text" style="fill:#818cf8"><a href="https://engineering.example.com/graphql-best-practices" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">GraphQL Best Practices</tspan></a></text><text x="60" y="125" class="mono-text" style="fill:#818cf8"><a href="https://github.com/example/graphql-migration-guide" target="_blank"><tspan style="fill:#818cf8; text-decoration:underline;">Our GraphQL Migration Guide</tspan></a></text></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-adr-1779185269542-472').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-adr-1779185808009-28').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
