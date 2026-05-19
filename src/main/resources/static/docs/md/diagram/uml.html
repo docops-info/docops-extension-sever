@@ -1,0 +1,2063 @@
+            <!DOCTYPE html>
+            <html lang="en" data-theme="dark">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta property="og:title" content="UML Diagrams" />
+                <meta property="og:description" content="DocOps generator - UML Diagrams" />
+                <meta property="og:image" content="https://roach.gy/extension/images/docops.svg" />
+                <meta property="og:url" content="https://roach.gy" />
+                <title>UML Diagrams</title>
+                
+                                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
+body {
+    background-color: #0d0d12; /* Matches the end of your radial gradient */
+    margin: 0;
+    padding: 2rem 0; /* Adds some breathing room at the top and bottom */
+}
+
+.markdown-body {
+    /* Custom Variables - High Contrast & Sharp Accents */
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --accent-primary: #7e57ff;
+    --accent-secondary: #00f2fe;
+    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    
+    background: var(--bg-gradient);
+    color: #e0e0e0;
+    font-family: var(--font-body);
+    line-height: 1.7;
+    padding: 3rem;
+    max-width: 980px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered Reveal for Content */
+.markdown-body > * {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: itemSlideIn 0.5s ease forwards;
+}
+
+.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
+.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
+.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
+.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
+
+@keyframes pageReveal {
+    to { opacity: 1; }
+}
+
+@keyframes itemSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+    font-family: var(--font-heading);
+    color: #fff;
+    margin-top: 2.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.markdown-body h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    border-bottom: none;
+    margin-bottom: 2rem;
+}
+
+.markdown-body h2 {
+    font-size: 2rem;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 1rem;
+    border-bottom: none;
+}
+
+/* Code Blocks - IDE Aesthetic */
+.markdown-body pre {
+    background: #000000 !important;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.markdown-body pre::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 2px; height: 100%;
+    background: var(--accent-primary);
+}
+
+.markdown-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: rgba(126, 87, 255, 0.15);
+    color: #b392ff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.markdown-body pre code {
+    background: transparent;
+    color: #d1d1d1;
+    padding: 0;
+}
+
+/* Links & Accents */
+.markdown-body a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-secondary);
+    transition: all 0.2s ease;
+}
+
+.markdown-body a:hover {
+    color: #fff;
+    border-bottom-style: solid;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+    margin: 2rem 0;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 4px solid var(--accent-secondary);
+    font-style: italic;
+    color: #aaa;
+}
+
+/* Custom Table Design */
+.markdown-body table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.markdown-body th {
+    background: #1a1a2e;
+    color: var(--accent-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 1rem;
+}
+
+.markdown-body td {
+    padding: 1rem;
+    border-top: 1px solid #222;
+}
+
+/* Horizontal Rule */
+.markdown-body hr {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #444, transparent);
+    border: none;
+    margin: 4rem 0;
+}
+
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    cursor: default !important;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+
+.markdown-body img {
+    border-style: none;
+    max-width: 100%;
+    box-sizing: content-box;
+}
+
+/* Constrain SVGs and their interactive containers */
+.markdown-body svg,
+.svg-viewer-container,
+.svg-with-controls {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure the DocOps specific media cards respect the boundary */
+.docops-media-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 970px;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-data-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+    border-top: 1px solid var(--accent-primary);
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.docops-data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+.docops-data-actions {
+    display: flex;
+    gap: 12px;
+}
+.docops-action-btn {
+    background: rgba(126, 87, 255, 0.1);
+    border: 1px solid rgba(126, 87, 255, 0.3);
+    color: var(--accent-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docops-action-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    border-color: var(--accent-primary);
+}
+
+.docops-data-header span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+}
+
+/* ui.md: Distinctive Table Design */
+.docops-data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.docops-data-table th {
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-primary);
+    font-weight: 500;
+}
+
+/* ui.md: Motion - Staggered Row Entry */
+.docops-data-table tr {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: rowSlideIn 0.4s ease forwards;
+}
+
+@keyframes rowSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.docops-data-table td {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.docops-data-table tr:hover td {
+    background: rgba(126, 87, 255, 0.1);
+    color: #fff;
+}
+
+.docops-container {
+    display: inline-block;
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: center;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+    /* New variables for the control bar */
+    --control-bar-bg: rgba(245, 245, 245, 0.8);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #7e57ff;
+    --btn-border: rgba(126, 87, 255, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+        /* Dark mode overrides */
+        --control-bar-bg: rgba(0, 0, 0, 0.4);
+        --control-bar-border: rgba(255, 255, 255, 0.1);
+        --btn-text: #b392ff;
+        --btn-border: rgba(126, 87, 255, 0.4);
+    }
+}
+/* Support the manual override from the converter */
+[data-theme="dark"] {
+    --svg-bg: #2b2b2b;
+    --svg-border: #444;
+    --text-color: #aaa;
+    --modal-bg: #1e1e1e;
+    --control-bar-bg: rgba(0, 0, 0, 0.4);
+    --control-bar-border: rgba(255, 255, 255, 0.1);
+    --btn-text: #b392ff;
+}
+
+[data-theme="light"] {
+    --control-bar-bg: rgba(240, 240, 240, 0.9);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #6a3de8;
+    --btn-border: rgba(106, 61, 232, 0.4);
+}
+
+
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 1200px;
+    min-width: 600px;
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                          @media (prefers-color-scheme: dark) {
+                              body {
+                                  background-color: #0d1117;
+                              }
+                          }
+                          
+                           /* Fix for DocOps visuals sizing - prevents them from being too large */
+                          .svg-container svg {
+                              width: auto !important;
+                              height: auto !important;
+                              max-width: 100% !important;
+                              min-width: 0 !important;
+                              margin: 0 auto;
+                              display: block;
+                          }
+                          
+                          /* Consistent Modal Styles matching AsciiDoc implementation */
+                          .svg-modal-overlay {
+                              display: none;
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(15, 20, 25, 0.95);
+                              backdrop-filter: blur(8px);
+                              z-index: 2147483647;
+                              align-items: center;
+                              justify-content: center;
+                              padding: 40px;
+                              box-sizing: border-box;
+                          }
+                          .svg-modal-overlay.active {
+                              display: flex;
+                          }
+                          .svg-modal-content {
+                              width: 95vw;
+                              max-width: 1400px;
+                              height: 90vh;
+                              background: var(--docops-card-bg, #1e293b);
+                              border-radius: 20px;
+                              padding: 48px 24px 24px 24px;
+                              position: relative;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              display: flex;
+                              flex-direction: column;
+                              overflow: hidden;
+                              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                              animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                          }
+                          .svg-modal-close {
+                              position: absolute;
+                              top: 12px;
+                              right: 12px;
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border: none;
+                              width: 36px;
+                              height: 36px;
+                              border-radius: 50%;
+                              font-size: 24px;
+                              cursor: pointer;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              transition: all 0.2s ease;
+                              z-index: 10;
+                          }
+                          .svg-modal-close:hover {
+                              background: rgba(255,255,255,0.2);
+                              transform: rotate(90deg);
+                          }
+                          .svg-modal-body {
+                              flex: 1;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 100%;
+                              height: 100%;
+                              overflow: auto;
+                              padding: 10px;
+                          }
+                          .svg-modal-body svg {
+                              max-width: 100%;
+                              max-height: 100%;
+                              width: auto;
+                              height: auto;
+                              object-fit: contain;
+                          }
+                          @keyframes scaleInModal {
+                              from { opacity: 0; transform: scale(0.9); }
+                              to { opacity: 1; transform: scale(1); }
+                          }
+                          
+                          /* CSV Modal Styles */
+                          #globalCsvModal .csv-table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              color: #e2e8f0;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 13px;
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table th {
+                              text-align: left;
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              position: sticky;
+                              top: 0;
+                          }
+                          #globalCsvModal .csv-table td {
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              color: #cbd5e1;
+                          }
+                          #globalCsvModal .csv-table tr {
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table tr:hover {
+                              background: rgba(255,255,255,0.05);
+                          }
+                          
+                          /* Sliding Controls Styles (Consistent with Asciidoctor) */
+                          .svg-with-controls {
+                              position: relative;
+                              display: inline-block;
+                              border-radius: 8px;
+                              overflow: hidden;
+                          }
+                          .svg-bottom-controls {
+                              position: absolute;
+                              bottom: 12px;
+                              left: 50%;
+                              transform: translateX(-50%) translateY(150%);
+                              display: flex;
+                              gap: 6px;
+                              background: rgba(15, 20, 30, 0.85);
+                              padding: 6px 8px;
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              opacity: 0;
+                              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                              z-index: 100;
+                              backdrop-filter: blur(8px);
+                              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                          }
+                          .svg-with-controls:hover .svg-bottom-controls {
+                              opacity: 1;
+                              transform: translateX(-50%) translateY(0);
+                          }
+                          .svg-control-btn {
+                              background: transparent;
+                              border: 1px solid rgba(255,255,255,0.15);
+                              color: #94a3b8;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 10px;
+                              font-weight: 600;
+                              padding: 4px 10px;
+                              border-radius: 4px;
+                              cursor: pointer;
+                              transition: all 0.2s;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                          }
+                          .svg-control-btn:hover {
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border-color: rgba(255,255,255,0.3);
+                              transform: translateY(-1px);
+                          }
+                    </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js"></script>
+                
+            </head>
+            <body>
+                    <article class="markdown-body">
+                        <h1 id="uml-diagrams">UML Diagrams</h1>
+<p>This section provides an overview of UML diagrams and their usage in software development.</p>
+<h2 id="plantuml">Plantuml</h2>
+<p>PlantUML is a popular tool for creating UML diagrams using simple text-based descriptions. It supports various diagram types such as class diagrams, sequence diagrams, and activity diagrams.</p>
+<h3 id="class-diagram">Class Diagram</h3>
+<div class="docops-media-card">
+<script type="text/plain" class="docops-source-raw">
+@startuml
+&#39; iOS PlantUML Theme — Dark (mirrored semantics)
+!$ACCENT  = &quot;#4DA3FF&quot;
+!$SUCCESS = &quot;#30D158&quot;
+!$WARNING = &quot;#FFD60A&quot;
+!$DANGER  = &quot;#FF453A&quot;
+<p>skinparam backgroundColor #0A0E27
+skinparam shadowing true
+skinparam roundcorner 20
+skinparam dpi 160
+skinparam defaultFontName Helvetica
+skinparam titleFontColor #fcfcfc
+skinparam actorStyle awesome</p>
+<p>skinparam ArrowColor $ACCENT
+skinparam ArrowThickness 1.5
+skinparam HyperlinkColor $ACCENT</p>
+<p>skinparam note {
+BackgroundColor #2A2415
+BorderColor $WARNING
+FontColor #FFE9A8
+FontName Helvetica
+RoundCorner 14
+}</p>
+<p>skinparam activity {
+FontName Helvetica
+FontColor #EAF2FF
+FontSize 15
+StartColor $SUCCESS
+EndColor $DANGER
+BackgroundColor #121A33
+BorderColor #2D3A5A
+ArrowColor $ACCENT
+DiamondBackgroundColor #182448
+DiamondBorderColor #5A84D6
+DiamondFontColor #EAF2FF
+}</p>
+<p>skinparam sequence {
+ParticipantBackgroundColor #121A33
+ParticipantBorderColor #2D3A5A
+ParticipantFontColor #EAF2FF
+LifeLineBackgroundColor #0F1730
+LifeLineBorderColor #34456E
+ArrowColor $ACCENT
+ArrowFontColor #DCE9FF
+GroupBackgroundColor #121A33
+GroupBorderColor #2D3A5A
+GroupHeaderFontColor #EAF2FF
+}</p>
+<p>skinparam class {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+HeaderBackgroundColor #1A2A52
+HeaderFontColor #F2F7FF
+AttributeFontColor #C8D7F2
+MethodFontColor #C8D7F2
+ArrowColor $ACCENT
+}</p>
+<p>skinparam component {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+ArrowColor $ACCENT
+}</p>
+<p>skinparam usecase {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+ArrowColor $ACCENT
+}</p>
+<p>skinparam state {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+StartColor $SUCCESS
+EndColor $DANGER
+ArrowColor $ACCENT
+}</p>
+<p>skinparam package {
+BackgroundColor #101935
+BorderColor #34456E
+FontColor #EAF2FF
+}</p>
+<p>skinparam actor {
+BackgroundColor  #2C2C2E
+BorderColor      #0A84FF
+FontColor        #FFFFFF
+FontSize         13
+}
+class A {
++int x
++method1()
+}
+@enduml
+</script></p>
+<div class="plantuml svg-container" onclick="openModal(this);">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="161.6667px" preserveAspectRatio="none" style="width:183px;height:161px;background:#0A0E27;" version="1.1" viewBox="0 0 183 161" width="183.3333px" zoomAndPan="magnify"><defs><filter height="300%" id="f5d4l2a4jc3xb" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.3333"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.6667" dy="6.6667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#0A0E27" height="161.6667" style="stroke:none;stroke-width:1.6667;" width="183.3333" x="0" y="0"/><!--class A--><g class="entity" data-qualified-name="A" data-source-line="100" id="ent0002"><rect fill="#121A33" filter="url(#f5d4l2a4jc3xb)" height="126.6667" rx="16.6667" ry="16.6667" style="stroke:#2D3A5A;stroke-width:0.8333;" width="149.6777" x="11.6667" y="11.6667"/><rect fill="#1A2A52" height="53.3333" rx="16.6667" ry="16.6667" style="stroke:#1A2A52;stroke-width:0.8333;" width="149.6777" x="11.6667" y="11.6667"/><rect fill="#1A2A52" height="16.6667" style="stroke:#1A2A52;stroke-width:0.8333;" width="149.6777" x="11.6667" y="48.3333"/><rect fill="none" height="126.6667" rx="16.6667" ry="16.6667" style="stroke:#2D3A5A;stroke-width:0.8333;" width="149.6777" x="11.6667" y="11.6667"/><ellipse cx="73.0182" cy="38.3333" fill="#ADD1B2" rx="18.3333" ry="18.3333" style="stroke:#181818;stroke-width:1.6667;"/><path d="M77.1401,48.5718 Q76.1717,49.0698 75.1064,49.3188 Q74.0412,49.5679 72.8652,49.5679 Q68.6872,49.5679 66.4875,46.8148 Q64.2878,44.0617 64.2878,38.8599 Q64.2878,33.6442 66.4875,30.8911 Q68.6872,28.138 72.8652,28.138 Q74.0412,28.138 75.1203,28.387 Q76.1994,28.6361 77.1401,29.1341 L77.1401,33.6719 Q76.0887,32.7035 75.0995,32.2538 Q74.1104,31.8042 73.0589,31.8042 Q70.8177,31.8042 69.6764,33.5819 Q68.535,35.3597 68.535,38.8599 Q68.535,42.3462 69.6764,44.1239 Q70.8177,45.9017 73.0589,45.9017 Q74.1104,45.9017 75.0995,45.4521 Q76.0887,45.0024 77.1401,44.034 Z " fill="#000000"/><text fill="#C8D7F2" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="15.5632" x="104.4297" y="44.6338">A</text><line style="stroke:#2D3A5A;stroke-width:0.8333;" x1="13.3333" x2="159.6777" y1="65" y2="65"/><g data-visibility-modifier="PUBLIC_FIELD"><ellipse cx="30" cy="85.8333" fill="none" rx="5" ry="5" style="stroke:#038048;stroke-width:1.6667;"/></g><text fill="#C8D7F2" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="42.793" x="45" y="89.6338">int x</text><line style="stroke:#2D3A5A;stroke-width:0.8333;" x1="13.3333" x2="159.6777" y1="101.6667" y2="101.6667"/><g data-visibility-modifier="PUBLIC_METHOD"><ellipse cx="30" cy="122.5" fill="#84BE84" rx="5" ry="5" style="stroke:#038048;stroke-width:1.6667;"/></g><text fill="#C8D7F2" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="106.3444" x="45" y="126.3005">method1()</text></g></g></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+<button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+</div>
+<div class="docops-source-panel" style="display: none;">
+<div class="docops-source-header">
+<span>Original Source</span>
+<button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+</div>
+<div class="docops-source-container"></div>
+</div>
+</div>
+<h3 id="activity-diagram">Activity Diagram</h3>
+<div class="docops-media-card">
+<script type="text/plain" class="docops-source-raw">
+@startuml
+&#39; iOS PlantUML Theme — Dark (mirrored semantics)
+!$ACCENT  = &quot;#4DA3FF&quot;
+!$SUCCESS = &quot;#30D158&quot;
+!$WARNING = &quot;#FFD60A&quot;
+!$DANGER  = &quot;#FF453A&quot;
+<p>skinparam backgroundColor #0A0E27
+skinparam shadowing true
+skinparam roundcorner 20
+skinparam dpi 160
+skinparam defaultFontName Helvetica
+skinparam titleFontColor #fcfcfc
+skinparam actorStyle awesome</p>
+<p>skinparam ArrowColor $ACCENT
+skinparam ArrowThickness 1.5
+skinparam HyperlinkColor $ACCENT</p>
+<p>skinparam note {
+BackgroundColor #2A2415
+BorderColor $WARNING
+FontColor #FFE9A8
+FontName Helvetica
+RoundCorner 14
+}</p>
+<p>skinparam activity {
+FontName Helvetica
+FontColor #EAF2FF
+FontSize 15
+StartColor $SUCCESS
+EndColor $DANGER
+BackgroundColor #121A33
+BorderColor #2D3A5A
+ArrowColor $ACCENT
+DiamondBackgroundColor #182448
+DiamondBorderColor #5A84D6
+DiamondFontColor #EAF2FF
+}</p>
+<p>skinparam sequence {
+ParticipantBackgroundColor #121A33
+ParticipantBorderColor #2D3A5A
+ParticipantFontColor #EAF2FF
+LifeLineBackgroundColor #0F1730
+LifeLineBorderColor #34456E
+ArrowColor $ACCENT
+ArrowFontColor #DCE9FF
+GroupBackgroundColor #121A33
+GroupBorderColor #2D3A5A
+GroupHeaderFontColor #EAF2FF
+}</p>
+<p>skinparam class {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+HeaderBackgroundColor #1A2A52
+HeaderFontColor #F2F7FF
+AttributeFontColor #C8D7F2
+MethodFontColor #C8D7F2
+ArrowColor $ACCENT
+}</p>
+<p>skinparam component {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+ArrowColor $ACCENT
+}</p>
+<p>skinparam usecase {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+ArrowColor $ACCENT
+}</p>
+<p>skinparam state {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+StartColor $SUCCESS
+EndColor $DANGER
+ArrowColor $ACCENT
+}</p>
+<p>skinparam package {
+BackgroundColor #101935
+BorderColor #34456E
+FontColor #EAF2FF
+}</p>
+<p>skinparam actor {
+BackgroundColor  #2C2C2E
+BorderColor      #0A84FF
+FontColor        #FFFFFF
+FontSize         13
+}</p>
+<p>(<em>) -&gt; &quot;parsowanie argumentów&quot;
+if &quot;katalogi istnieją&quot; then
+--&gt;[true] &quot;budowanie&quot;
+else
+--&gt;[false] &quot;sprawdzanie katalogów&quot;
+--&gt; &quot;tworzenie brakujących katalogów&quot;
+-&gt;&quot;budowanie projektu&quot;
+-right-&gt; &quot;kompilacja&quot;
+--&gt; [koniec] (</em>)
+endif
+@enduml
+</script></p>
+<div class="plantuml svg-container" onclick="openModal(this);">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="596.6667px" preserveAspectRatio="none" style="width:1136px;height:596px;background:#0A0E27;" version="1.1" viewBox="0 0 1136 596" width="1136.6667px" zoomAndPan="magnify"><defs><filter height="300%" id="f1r84bv92av91r" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.3333"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.6667" dy="6.6667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#0A0E27" height="596.6667" style="stroke:none;stroke-width:1.6667;" width="1136.6667" x="0" y="0"/><g class="start_entity" data-qualified-name="start" data-source-line="101" id="ent0002"><ellipse cx="26.6667" cy="40.8333" fill="#30D158" filter="url(#f1r84bv92av91r)" rx="16.6667" ry="16.6667" style="stroke:#222222;stroke-width:1.6667;"/></g><rect fill="#121A33" filter="url(#f1r84bv92av91r)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#2D3A5A;stroke-width:0.8333;" width="305.7088" x="77.15" y="11.6667"/><text fill="#EAF2FF" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="272.3755" x="93.8167" y="47.5838">parsowanie argument&#243;w</text><g class="entity" data-qualified-name=".5" id="ent0006"><polygon fill="#182448" filter="url(#f1r84bv92av91r)" points="230,138.3333,250,158.3333,230,178.3333,210,158.3333,230,138.3333" style="stroke:#5A84D6;stroke-width:0.8333;"/></g><rect fill="#121A33" filter="url(#f1r84bv92av91r)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#2D3A5A;stroke-width:0.8333;" width="154.2684" x="116.2" y="266.6667"/><text fill="#EAF2FF" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="120.9351" x="132.8667" y="302.5838">budowanie</text><rect fill="#121A33" filter="url(#f1r84bv92av91r)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#2D3A5A;stroke-width:0.8333;" width="293.2088" x="303.4" y="266.6667"/><text fill="#EAF2FF" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="259.8755" x="320.0667" y="302.5838">sprawdzanie katalog&#243;w</text><rect fill="#121A33" filter="url(#f1r84bv92av91r)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#2D3A5A;stroke-width:0.8333;" width="400.1912" x="249.9" y="393.3333"/><text fill="#EAF2FF" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="366.8579" x="266.5667" y="429.2505">tworzenie brakuj&#261;cych katalog&#243;w</text><rect fill="#121A33" filter="url(#f1r84bv92av91r)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#2D3A5A;stroke-width:0.8333;" width="250.1546" x="683.25" y="393.3333"/><text fill="#EAF2FF" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="216.8213" x="699.9167" y="429.2505">budowanie projektu</text><rect fill="#121A33" filter="url(#f1r84bv92av91r)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#2D3A5A;stroke-width:0.8333;" width="151.4364" x="965.95" y="393.3333"/><text fill="#EAF2FF" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="118.103" x="982.6167" y="429.2505">kompilacja</text><g class="end_entity" data-qualified-name="end" data-source-line="109" id="ent0018"><ellipse cx="1041.6667" cy="558.3333" fill="none" filter="url(#f1r84bv92av91r)" rx="18.3333" ry="18.3333" style="stroke:#FF453A;stroke-width:2.5;"/><ellipse cx="1041.6667" cy="558.3333" fill="#222222" rx="10" ry="10" style="stroke:#FF453A;stroke-width:1.6667;"/></g><!--link start to parsowanie argument?w--><g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="101" id="lnk4"><path d="M44.1333,40.8333 C55.0333,40.8333 55.9167,40.8333 66.8167,40.8333" fill="none" id="start-to-parsowanie argument&#243;w" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="76.8167,40.8333,61.8167,34.1667,68.4833,40.8333,61.8167,47.5,76.8167,40.8333" style="stroke:#4DA3FF;stroke-width:2.5;"/></g><!--link parsowanie argument?w to #5--><g class="link" data-entity-1="ent0003" data-entity-2="ent0006" data-link-type="dependency" data-source-line="102" id="lnk7"><path d="M230,70.7167 C230,91.5833 230,109.4333 230,127.7" fill="none" id="parsowanie argument&#243;w-to-#5" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="230,137.7,236.6667,122.7,230,129.3667,223.3333,122.7,230,137.7" style="stroke:#4DA3FF;stroke-width:2.5;"/><text fill="#DCE9FF" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="125.3524" x="77.7333" y="120.4462">katalogi istniej&#261;</text></g><!--link #5 to budowanie--><g class="link" data-entity-1="ent0006" data-entity-2="ent0008" data-link-type="dependency" data-source-line="103" id="lnk9"><path d="M225.9333,174.8667 C219.9333,196.8333 211.2219,228.721 203.6219,256.5044" fill="none" id="#5-to-budowanie" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="200.9833,266.15,211.3715,253.4406,203.1821,258.112,198.5107,249.9225,200.9833,266.15" style="stroke:#4DA3FF;stroke-width:2.5;"/><text fill="#DCE9FF" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="31.591" x="216.6167" y="227.4504">true</text></g><!--link #5 to sprawdzanie katalog?w--><g class="link" data-entity-1="ent0006" data-entity-2="ent0010" data-link-type="dependency" data-source-line="105" id="lnk11"><path d="M241.8333,167.2167 C271.8167,185.5 343.5625,229.2599 395.2125,260.7599" fill="none" id="#5-to-sprawdzanie katalog&#243;w" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="403.75,265.9667,394.4149,252.4648,396.6354,261.6277,387.4725,263.8481,403.75,265.9667" style="stroke:#4DA3FF;stroke-width:2.5;"/><text fill="#DCE9FF" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="38.7256" x="348.2667" y="227.4504">false</text></g><!--link sprawdzanie katalog?w to tworzenie brakuj?cych katalog?w--><g class="link" data-entity-1="ent0010" data-entity-2="ent0012" data-link-type="dependency" data-source-line="106" id="lnk13"><path d="M450,325.4833 C450,345.5333 450,362.4167 450,382.5333" fill="none" id="sprawdzanie katalog&#243;w-to-tworzenie brakuj&#261;cych katalog&#243;w" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="450,392.5333,456.6667,377.5333,450,384.2,443.3333,377.5333,450,392.5333" style="stroke:#4DA3FF;stroke-width:2.5;"/></g><!--link tworzenie brakuj?cych katalog?w to budowanie projektu--><g class="link" data-entity-1="ent0012" data-entity-2="ent0014" data-link-type="dependency" data-source-line="107" id="lnk15"><path d="M650.8667,422.5 C661.5167,422.5 662.1833,422.5 672.85,422.5" fill="none" id="tworzenie brakuj&#261;cych katalog&#243;w-to-budowanie projektu" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="682.85,422.5,667.85,415.8333,674.5167,422.5,667.85,429.1667,682.85,422.5" style="stroke:#4DA3FF;stroke-width:2.5;"/></g><!--link budowanie projektu to kompilacja--><g class="link" data-entity-1="ent0014" data-entity-2="ent0016" data-link-type="dependency" data-source-line="108" id="lnk17"><path d="M934.1167,422.5 C944.4833,422.5 944.8333,422.5 955.2,422.5" fill="none" id="budowanie projektu-to-kompilacja" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="965.2,422.5,950.2,415.8333,956.8667,422.5,950.2,429.1667,965.2,422.5" style="stroke:#4DA3FF;stroke-width:2.5;"/></g><!--link kompilacja to end--><g class="link" data-entity-1="ent0016" data-entity-2="ent0018" data-link-type="dependency" data-source-line="109" id="lnk19"><path d="M1041.6667,452.2667 C1041.6667,478.7 1041.6667,507.4333 1041.6667,529.5333" fill="none" id="kompilacja-to-end" style="stroke:#4DA3FF;stroke-width:2.5;"/><polygon fill="#4DA3FF" points="1041.6667,539.5333,1048.3333,524.5333,1041.6667,531.2,1035,524.5333,1041.6667,539.5333" style="stroke:#4DA3FF;stroke-width:2.5;"/><text fill="#DCE9FF" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="52.9948" x="1043.3333" y="500.7837">koniec</text></g></g></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+<button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+</div>
+<div class="docops-source-panel" style="display: none;">
+<div class="docops-source-header">
+<span>Original Source</span>
+<button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+</div>
+<div class="docops-source-container"></div>
+</div>
+</div>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<div class="docops-media-card">
+<script type="text/plain" class="docops-source-raw">
+@startuml
+&#39; iOS PlantUML Theme — Dark (mirrored semantics)
+!$ACCENT  = &quot;#4DA3FF&quot;
+!$SUCCESS = &quot;#30D158&quot;
+!$WARNING = &quot;#FFD60A&quot;
+!$DANGER  = &quot;#FF453A&quot;
+<p>skinparam backgroundColor #0A0E27
+skinparam shadowing true
+skinparam roundcorner 20
+skinparam dpi 160
+skinparam defaultFontName Helvetica
+skinparam titleFontColor #fcfcfc
+skinparam actorStyle awesome</p>
+<p>skinparam ArrowColor $ACCENT
+skinparam ArrowThickness 1.5
+skinparam HyperlinkColor $ACCENT</p>
+<p>skinparam note {
+BackgroundColor #2A2415
+BorderColor $WARNING
+FontColor #FFE9A8
+FontName Helvetica
+RoundCorner 14
+}</p>
+<p>skinparam activity {
+FontName Helvetica
+FontColor #EAF2FF
+FontSize 15
+StartColor $SUCCESS
+EndColor $DANGER
+BackgroundColor #121A33
+BorderColor #2D3A5A
+ArrowColor $ACCENT
+DiamondBackgroundColor #182448
+DiamondBorderColor #5A84D6
+DiamondFontColor #EAF2FF
+}</p>
+<p>skinparam sequence {
+ParticipantBackgroundColor #121A33
+ParticipantBorderColor #2D3A5A
+ParticipantFontColor #EAF2FF
+LifeLineBackgroundColor #0F1730
+LifeLineBorderColor #34456E
+ArrowColor $ACCENT
+ArrowFontColor #DCE9FF
+GroupBackgroundColor #121A33
+GroupBorderColor #2D3A5A
+GroupHeaderFontColor #EAF2FF
+}</p>
+<p>skinparam class {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+HeaderBackgroundColor #1A2A52
+HeaderFontColor #F2F7FF
+AttributeFontColor #C8D7F2
+MethodFontColor #C8D7F2
+ArrowColor $ACCENT
+}</p>
+<p>skinparam component {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+ArrowColor $ACCENT
+}</p>
+<p>skinparam usecase {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+ArrowColor $ACCENT
+}</p>
+<p>skinparam state {
+BackgroundColor #121A33
+BorderColor #2D3A5A
+FontColor #EAF2FF
+StartColor $SUCCESS
+EndColor $DANGER
+ArrowColor $ACCENT
+}</p>
+<p>skinparam package {
+BackgroundColor #101935
+BorderColor #34456E
+FontColor #EAF2FF
+}</p>
+<p>skinparam actor {
+BackgroundColor  #2C2C2E
+BorderColor      #0A84FF
+FontColor        #FFFFFF
+FontSize         13
+}
+title Dodawanie hosta
+actor UI #red
+box &quot;Kontroler&quot; #LightBlue
+control Kontroler
+database kontrolerDB
+end box
+box &quot;Monitor&quot; #DarkSalmon
+control Monitor
+database monitorDB
+end box
+autonumber
+UI -&gt; Kontroler: POST /host
+Kontroler -&gt; Kontroler: Walidacja danych
+alt dane poprawne
+Kontroler -&gt; kontrolerDB: dodaj do bazy
+Kontroler -&gt; Monitor: POST /host
+Monitor -&gt; Monitor: Walidacja danych
+alt dane poprane
+Monitor -&gt; monitorDB: Dodaj do bazy
+Monitor --&gt; Kontroler: status 201
+Kontroler --&gt; UI: status 201
+else dane niepoprawne
+Monitor -&gt; Kontroler: status 400
+Kontroler --&gt; UI: status 400
+end
+else danie niepoprawne
+Kontroler --&gt; UI: status 400
+end</p>
+<p>@enduml
+</script></p>
+<div class="plantuml svg-container" onclick="openModal(this);">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="1046.6667px" preserveAspectRatio="none" style="width:930px;height:1046px;background:#0A0E27;" version="1.1" viewBox="0 0 930 1046" width="930px" zoomAndPan="magnify"><title>Dodawanie hosta</title><defs><filter height="300%" id="f1bfz0dzjb21ae" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.3333"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.6667" dy="6.6667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#0A0E27" height="1046.6667" style="stroke:none;stroke-width:1.6667;" width="930" x="0" y="0"/><text fill="#FCFCFC" font-family="Helvetica" font-size="23.3333" font-weight="bold" lengthAdjust="spacing" textLength="191.8848" x="367.0101" y="42.9671">Dodawanie hosta</text><rect fill="#ADD8E6" height="968.3333" rx="16.6667" ry="16.6667" style="stroke:#181818;stroke-width:0.8333;" width="344.13" x="207.57" y="68.3333"/><text fill="#000000" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="97.5" x="330.885" y="85.0171">Kontroler</text><rect fill="#E9967A" height="968.3333" rx="16.6667" ry="16.6667" style="stroke:#181818;stroke-width:0.8333;" width="329.2049" x="555.0334" y="68.3333"/><text fill="#000000" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="79.4198" x="679.9259" y="85.0171">Monitor</text><rect fill="#101935" filter="url(#f1bfz0dzjb21ae)" height="543.3333" rx="16.6667" ry="16.6667" style="stroke:#34456E;stroke-width:2.5;" width="894.2383" x="16.6667" y="336.6667"/><rect fill="#101935" filter="url(#f1bfz0dzjb21ae)" height="271.6667" rx="16.6667" ry="16.6667" style="stroke:#34456E;stroke-width:2.5;" width="860.9049" x="33.3333" y="530"/><path d="M33.3333,690 L894.2383,690 L894.2383,785 A16.6667,16.6667 0 0 1 877.5716,801.6667 L50,801.6667 A16.6667,16.6667 0 0 1 33.3333,785 L33.3333,690" fill="#101935" style="stroke:none;stroke-width:1.6667;"/><path d="M16.6667,813.3333 L910.9049,813.3333 L910.9049,863.3333 A16.6667,16.6667 0 0 1 894.2383,880 L33.3333,880 A16.6667,16.6667 0 0 1 16.6667,863.3333 L16.6667,813.3333" fill="#101935" style="stroke:none;stroke-width:1.6667;"/><g class="participant-lifeline" data-entity-uid="part1" data-qualified-name="UI" id="part1-lifeline"><g><title>UI</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="89.1667" y="196.6667"/><line style="stroke:#34456E;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="95" x2="95" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part2" data-qualified-name="Kontroler" id="part2-lifeline"><g><title>Kontroler</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="259.9089" y="196.6667"/><line style="stroke:#34456E;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="265.9033" x2="265.9033" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part3" data-qualified-name="kontrolerDB" id="part3-lifeline"><g><title>kontrolerDB</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="471.7692" y="196.6667"/><line style="stroke:#34456E;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="476.8384" x2="476.8384" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part4" data-qualified-name="Monitor" id="part4-lifeline"><g><title>Monitor</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="598.9355" y="196.6667"/><line style="stroke:#34456E;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="605.0334" x2="605.0334" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part5" data-qualified-name="monitorDB" id="part5-lifeline"><g><title>monitorDB</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="810.7959" y="196.6667"/><line style="stroke:#34456E;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="817.3535" x2="817.3535" y1="196.6667" y2="908.3333"/></g></g><g class="participant participant-head" data-entity-uid="part1" data-qualified-name="UI" id="part1-head"><text fill="#FFFFFF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="21.6667" x="80" y="191.6838">UI</text><ellipse cx="95.8333" cy="100.8333" fill="#FF0000" filter="url(#f1bfz0dzjb21ae)" rx="26.6667" ry="26.6667" style="stroke:#0A84FF;stroke-width:0.8333;"/><path d="M95.8333,134.1667 C102.5,134.1667 107.5,134.1667 114.1667,127.5 C127.5,127.5 140.8333,140.8333 140.8333,154.1667 L140.8333,160.8333 C140.8333,167.5 134.1667,174.1667 127.5,174.1667 L64.1667,174.1667 C57.5,174.1667 50.8333,167.5 50.8333,160.8333 L50.8333,154.1667 C50.8333,140.8333 64.1667,127.5 77.5,127.5 C84.1667,134.1667 89.1667,134.1667 95.8333,134.1667" fill="#FF0000" filter="url(#f1bfz0dzjb21ae)" style="stroke:#0A84FF;stroke-width:0.8333;"/></g><g class="participant participant-tail" data-entity-uid="part1" data-qualified-name="UI" id="part1-tail"><text fill="#FFFFFF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="21.6667" x="80" y="923.3504">UI</text><ellipse cx="95.8333" cy="955.8333" fill="#FF0000" filter="url(#f1bfz0dzjb21ae)" rx="26.6667" ry="26.6667" style="stroke:#0A84FF;stroke-width:0.8333;"/><path d="M95.8333,989.1667 C102.5,989.1667 107.5,989.1667 114.1667,982.5 C127.5,982.5 140.8333,995.8333 140.8333,1009.1667 L140.8333,1015.8333 C140.8333,1022.5 134.1667,1029.1667 127.5,1029.1667 L64.1667,1029.1667 C57.5,1029.1667 50.8333,1022.5 50.8333,1015.8333 L50.8333,1009.1667 C50.8333,995.8333 64.1667,982.5 77.5,982.5 C84.1667,989.1667 89.1667,989.1667 95.8333,989.1667" fill="#FF0000" filter="url(#f1bfz0dzjb21ae)" style="stroke:#0A84FF;stroke-width:0.8333;"/></g><g class="participant participant-head" data-entity-uid="part2" data-qualified-name="Kontroler" id="part2-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="94.6777" x="214.2367" y="191.3005">Kontroler</text><ellipse cx="266.5755" cy="146.6667" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="259.9089,126.6667,269.9089,118.3333,266.5755,126.6667,269.9089,135,259.9089,126.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-tail" data-entity-uid="part2" data-qualified-name="Kontroler" id="part2-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="94.6777" x="214.2367" y="924.6338">Kontroler</text><ellipse cx="266.5755" cy="956.6667" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="259.9089,936.6667,269.9089,928.3333,266.5755,936.6667,269.9089,945,259.9089,936.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-head" data-entity-uid="part3" data-qualified-name="kontrolerDB" id="part3-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="123.195" x="411.8384" y="191.3005">kontrolerDB</text><path d="M448.4359,113.3333 C448.4359,96.6667 478.4359,96.6667 478.4359,96.6667 C478.4359,96.6667 508.4359,96.6667 508.4359,113.3333 L508.4359,156.6667 C508.4359,173.3333 478.4359,173.3333 478.4359,173.3333 C478.4359,173.3333 448.4359,173.3333 448.4359,156.6667 L448.4359,113.3333" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M448.4359,113.3333 C448.4359,130 478.4359,130 478.4359,130 C478.4359,130 508.4359,130 508.4359,113.3333" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="participant participant-tail" data-entity-uid="part3" data-qualified-name="kontrolerDB" id="part3-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="123.195" x="411.8384" y="924.6338">kontrolerDB</text><path d="M448.4359,946.6667 C448.4359,930 478.4359,930 478.4359,930 C478.4359,930 508.4359,930 508.4359,946.6667 L508.4359,990 C508.4359,1006.6667 478.4359,1006.6667 478.4359,1006.6667 C478.4359,1006.6667 448.4359,1006.6667 448.4359,990 L448.4359,946.6667" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M448.4359,946.6667 C448.4359,963.3333 478.4359,963.3333 478.4359,963.3333 C478.4359,963.3333 508.4359,963.3333 508.4359,946.6667" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="participant participant-head" data-entity-uid="part4" data-qualified-name="Monitor" id="part4-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="77.8044" x="561.7" y="191.3005">Monitor</text><ellipse cx="605.6022" cy="146.6667" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="598.9355,126.6667,608.9355,118.3333,605.6022,126.6667,608.9355,135,598.9355,126.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-tail" data-entity-uid="part4" data-qualified-name="Monitor" id="part4-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="77.8044" x="561.7" y="924.6338">Monitor</text><ellipse cx="605.6022" cy="956.6667" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="598.9355,936.6667,608.9355,928.3333,605.6022,936.6667,608.9355,945,598.9355,936.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-head" data-entity-uid="part5" data-qualified-name="monitorDB" id="part5-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="110.2181" x="757.3535" y="191.3005">monitorDB</text><path d="M787.4626,113.3333 C787.4626,96.6667 817.4626,96.6667 817.4626,96.6667 C817.4626,96.6667 847.4626,96.6667 847.4626,113.3333 L847.4626,156.6667 C847.4626,173.3333 817.4626,173.3333 817.4626,173.3333 C817.4626,173.3333 787.4626,173.3333 787.4626,156.6667 L787.4626,113.3333" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M787.4626,113.3333 C787.4626,130 817.4626,130 817.4626,130 C817.4626,130 847.4626,130 847.4626,113.3333" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="participant participant-tail" data-entity-uid="part5" data-qualified-name="monitorDB" id="part5-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="110.2181" x="757.3535" y="924.6338">monitorDB</text><path d="M787.4626,946.6667 C787.4626,930 817.4626,930 817.4626,930 C817.4626,930 847.4626,930 847.4626,946.6667 L847.4626,990 C847.4626,1006.6667 817.4626,1006.6667 817.4626,1006.6667 C817.4626,1006.6667 787.4626,1006.6667 787.4626,990 L787.4626,946.6667" fill="#E2E2F0" filter="url(#f1bfz0dzjb21ae)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M787.4626,946.6667 C787.4626,963.3333 817.4626,963.3333 817.4626,963.3333 C817.4626,963.3333 847.4626,963.3333 847.4626,946.6667" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="message" data-entity-1="part1" data-entity-2="part2" id="msg1"><polygon fill="#4DA3FF" points="246.5755,238.3333,263.2422,245,246.5755,251.6667,253.2422,245" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="95.8333" x2="256.5755" y1="245" y2="245"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="107.5" y="236.6838">1</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="111.9832" x="126.2166" y="236.6838">POST /host</text></g><g class="message" data-entity-1="part2" data-entity-2="part2" id="msg2"><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="266.5755" x2="336.5755" y1="290" y2="290"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="336.5755" x2="336.5755" y1="290" y2="311.6667"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="268.2422" x2="336.5755" y1="311.6667" y2="311.6667"/><polygon fill="#4DA3FF" points="284.9089,305,268.2422,311.6667,284.9089,318.3333,278.2422,311.6667" style="stroke:#4DA3FF;stroke-width:1.6667;"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="278.2422" y="281.6838">2</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="169.8104" x="296.9588" y="281.6838">Walidacja danych</text></g><path d="M33.3333,336.6667 L116.9515,336.6667 L116.9515,345 L100.2848,361.6667 L16.6667,361.6667 L16.6667,353.3333 A16.6667,16.6667 0 0 1 33.3333,336.6667" fill="#121A33" style="stroke:#2D3A5A;stroke-width:2.5;"/><rect fill="none" height="543.3333" rx="16.6667" ry="16.6667" style="stroke:#34456E;stroke-width:2.5;" width="894.2383" x="16.6667" y="336.6667"/><text fill="#EAF2FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="25.2848" x="41.6667" y="355.0171">alt</text><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="146.6756" x="141.9515" y="354.117">[dane poprawne]</text><g class="message" data-entity-1="part2" data-entity-2="part3" id="msg3"><polygon fill="#4DA3FF" points="458.4359,386.6667,475.1025,393.3333,458.4359,400,465.1025,393.3333" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="266.5755" x2="468.4359" y1="393.3333" y2="393.3333"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="278.2422" y="385.0171">3</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="134.9194" x="296.9588" y="385.0171">dodaj do bazy</text></g><g class="message" data-entity-1="part2" data-entity-2="part4" id="msg4"><polygon fill="#4DA3FF" points="585.6022,431.6667,602.2689,438.3333,585.6022,445,592.2689,438.3333" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="266.5755" x2="595.6022" y1="438.3333" y2="438.3333"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="278.2422" y="430.0171">4</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="111.9832" x="296.9588" y="430.0171">POST /host</text></g><g class="message" data-entity-1="part4" data-entity-2="part4" id="msg5"><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="605.6022" x2="675.6022" y1="483.3333" y2="483.3333"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="675.6022" x2="675.6022" y1="483.3333" y2="505"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="607.2689" x2="675.6022" y1="505" y2="505"/><polygon fill="#4DA3FF" points="623.9355,498.3333,607.2689,505,623.9355,511.6667,617.2689,505" style="stroke:#4DA3FF;stroke-width:1.6667;"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="617.2689" y="475.0171">5</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="169.8104" x="635.9855" y="475.0171">Walidacja danych</text></g><path d="M50,530 L133.6182,530 L133.6182,538.3333 L116.9515,555 L33.3333,555 L33.3333,546.6667 A16.6667,16.6667 0 0 1 50,530" fill="#121A33" style="stroke:#2D3A5A;stroke-width:2.5;"/><rect fill="none" height="271.6667" rx="16.6667" ry="16.6667" style="stroke:#34456E;stroke-width:2.5;" width="860.9049" x="33.3333" y="530"/><text fill="#EAF2FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="25.2848" x="58.3333" y="548.3504">alt</text><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="132.4154" x="158.6182" y="547.4504">[dane poprane]</text><g class="message" data-entity-1="part4" data-entity-2="part5" id="msg6"><polygon fill="#4DA3FF" points="797.4626,580,814.1292,586.6667,797.4626,593.3333,804.1292,586.6667" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="605.6022" x2="807.4626" y1="586.6667" y2="586.6667"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="617.2689" y="578.3504">6</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="138.5164" x="635.9855" y="578.3504">Dodaj do bazy</text></g><g class="message" data-entity-1="part4" data-entity-2="part2" id="msg7"><polygon fill="#4DA3FF" points="284.9089,625,268.2422,631.6667,284.9089,638.3333,278.2422,631.6667" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="274.9089" x2="603.9355" y1="631.6667" y2="631.6667"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="294.9089" y="623.3504">7</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="313.6255" y="623.3504">status 201</text></g><g class="message" data-entity-1="part2" data-entity-2="part1" id="msg8"><polygon fill="#4DA3FF" points="114.1667,670,97.5,676.6667,114.1667,683.3333,107.5,676.6667" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="104.1667" x2="264.9089" y1="676.6667" y2="676.6667"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="124.1667" y="668.3504">8</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="142.8833" y="668.3504">status 201</text></g><line style="stroke:#34456E;stroke-width:1.6667;stroke-dasharray:3.3333,3.3333;" x1="33.3333" x2="894.2383" y1="691.6667" y2="691.6667"/><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="173.1641" x="41.6667" y="705.7837">[dane niepoprawne]</text><g class="message" data-entity-1="part4" data-entity-2="part2" id="msg9"><polygon fill="#4DA3FF" points="284.9089,736.6667,268.2422,743.3333,284.9089,750,278.2422,743.3333" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;" x1="274.9089" x2="603.9355" y1="743.3333" y2="743.3333"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="294.9089" y="735.0171">9</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="313.6255" y="735.0171">status 400</text></g><g class="message" data-entity-1="part2" data-entity-2="part1" id="msg10"><polygon fill="#4DA3FF" points="114.1667,781.6667,97.5,788.3333,114.1667,795,107.5,788.3333" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="104.1667" x2="264.9089" y1="788.3333" y2="788.3333"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="24.0999" x="124.1667" y="780.0171">10</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="154.9333" y="780.0171">status 400</text></g><line style="stroke:#34456E;stroke-width:1.6667;stroke-dasharray:3.3333,3.3333;" x1="16.6667" x2="910.9049" y1="815" y2="815"/><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="178.2576" x="25" y="829.117">[danie niepoprawne]</text><g class="message" data-entity-1="part2" data-entity-2="part1" id="msg11"><polygon fill="#4DA3FF" points="114.1667,860,97.5,866.6667,114.1667,873.3333,107.5,866.6667" style="stroke:#4DA3FF;stroke-width:1.6667;"/><line style="stroke:#4DA3FF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="104.1667" x2="264.9089" y1="866.6667" y2="866.6667"/><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="24.0999" x="124.1667" y="858.3504">11</text><text fill="#DCE9FF" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="154.9333" y="858.3504">status 400</text></g></g></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+<button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+</div>
+<div class="docops-source-panel" style="display: none;">
+<div class="docops-source-header">
+<span>Original Source</span>
+<button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+</div>
+<div class="docops-source-container"></div>
+</div>
+</div>
+<h2 id="mermaid">Mermaid</h2>
+<p>Mermaid is another tool for creating UML diagrams and flowcharts. It uses a simple syntax and can be integrated with Markdown files. Mermaid supports sequence diagrams, flowcharts, and class diagrams.</p>
+<h3 id="class-diagram-1">Class Diagram</h3>
+<div class="docops-media-card" data-original-content="---
+title: Animal example
+---
+classDiagram
+    note &quot;From Duck till Zebra&quot;
+    Animal <|-- Duck
+    note for Duck &quot;can fly<br>can swim<br>can dive<br>can help in debugging&quot;
+    Animal <|-- Fish
+    Animal <|-- Zebra
+    Animal : +int age
+    Animal : +String gender
+    Animal: +isMammal()
+    Animal: +mate()
+    class Duck{
+        +String beakColor
+        +swim()
+        +quack()
+    }
+    class Fish{
+        -int sizeInFeet
+        -canEat()
+    }
+    class Zebra{
+        +bool is_wild
+        +run()
+    }">
+  <div class='mermaid svg-container' onclick='openModal(this);'>
+---
+title: Animal example
+---
+classDiagram
+    note "From Duck till Zebra"
+    Animal <|-- Duck
+    note for Duck "can fly<br>can swim<br>can dive<br>can help in debugging"
+    Animal <|-- Fish
+    Animal <|-- Zebra
+    Animal : +int age
+    Animal : +String gender
+    Animal: +isMammal()
+    Animal: +mate()
+    class Duck{
+        +String beakColor
+        +swim()
+        +quack()
+    }
+    class Fish{
+        -int sizeInFeet
+        -canEat()
+    }
+    class Zebra{
+        +bool is_wild
+        +run()
+    }
+  </div>
+  <div class="docops-control-bar">
+    <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+    <button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+    <button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+    <button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+  </div>
+  <div class="docops-source-panel" style="display: none;">
+    <div class="docops-source-header">
+      <span>Original Source</span>
+      <button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+    </div>
+    <div class="docops-source-container"></div>
+  </div>
+</div>
+<h3 id="state-diagram">State Diagram</h3>
+<div class="docops-media-card" data-original-content="---
+title: Simple sample
+---
+stateDiagram-v2
+    [*] --> Still
+    Still --> [*]
+    Still --> Moving
+    Moving --> Still
+    Moving --> Crash
+    Crash --> [*]">
+  <div class='mermaid svg-container' onclick='openModal(this);'>
+---
+title: Simple sample
+---
+stateDiagram-v2
+    [*] --> Still
+    Still --> [*]
+    Still --> Moving
+    Moving --> Still
+    Moving --> Crash
+    Crash --> [*]
+  </div>
+  <div class="docops-control-bar">
+    <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+    <button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+    <button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+    <button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+  </div>
+  <div class="docops-source-panel" style="display: none;">
+    <div class="docops-source-header">
+      <span>Original Source</span>
+      <button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+    </div>
+    <div class="docops-source-container"></div>
+  </div>
+</div>
+<h3 id="sequence-diagram-1">Sequence Diagram</h3>
+<div class="docops-media-card" data-original-content="sequenceDiagram
+    participant A
+    participant B
+    A->>B: Hello
+    B->>A: Hi">
+  <div class='mermaid svg-container' onclick='openModal(this);'>
+sequenceDiagram
+    participant A
+    participant B
+    A->>B: Hello
+    B->>A: Hi
+  </div>
+  <div class="docops-control-bar">
+    <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+    <button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+    <button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+    <button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+  </div>
+  <div class="docops-source-panel" style="display: none;">
+    <div class="docops-source-header">
+      <span>Original Source</span>
+      <button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+    </div>
+    <div class="docops-source-container"></div>
+  </div>
+</div>
+<h3 id="mindmap">Mindmap</h3>
+<div class="docops-media-card" data-original-content="mindmap
+  root((mindmap))
+    Origins
+      Long history
+      ::icon(fa fa-book)
+      Popularisation
+        British popular psychology author Tony Buzan
+    Research
+      On effectiveness<br/>and features
+      On Automatic creation
+        Uses
+            Creative techniques
+            Strategic planning
+            Argument mapping
+    Tools
+      Pen and paper
+      Mermaid">
+  <div class='mermaid svg-container' onclick='openModal(this);'>
+mindmap
+  root((mindmap))
+    Origins
+      Long history
+      ::icon(fa fa-book)
+      Popularisation
+        British popular psychology author Tony Buzan
+    Research
+      On effectiveness<br/>and features
+      On Automatic creation
+        Uses
+            Creative techniques
+            Strategic planning
+            Argument mapping
+    Tools
+      Pen and paper
+      Mermaid
+  </div>
+  <div class="docops-control-bar">
+    <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+    <button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+    <button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+    <button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+  </div>
+  <div class="docops-source-panel" style="display: none;">
+    <div class="docops-source-header">
+      <span>Original Source</span>
+      <button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+    </div>
+    <div class="docops-source-container"></div>
+  </div>
+</div>
+<h3 id="architecture">Architecture</h3>
+<div class="docops-media-card" data-original-content="architecture-beta
+    group api(logos:aws-lambda)[API]
+    service db(logos:aws-aurora)[Database] in api
+    service disk1(logos:aws-glacier)[Storage] in api
+    service disk2(logos:aws-s3)[Storage] in api
+    service server(logos:aws-ec2)[Server] in api
+    db:L -- R:server
+    disk1:T -- B:server
+    disk2:T -- B:db">
+  <div class='mermaid svg-container' onclick='openModal(this);'>
+architecture-beta
+    group api(logos:aws-lambda)[API]
+    service db(logos:aws-aurora)[Database] in api
+    service disk1(logos:aws-glacier)[Storage] in api
+    service disk2(logos:aws-s3)[Storage] in api
+    service server(logos:aws-ec2)[Server] in api
+    db:L -- R:server
+    disk1:T -- B:server
+    disk2:T -- B:db
+  </div>
+  <div class="docops-control-bar">
+    <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+    <button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+    <button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+    <button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+  </div>
+  <div class="docops-source-panel" style="display: none;">
+    <div class="docops-source-header">
+      <span>Original Source</span>
+      <button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+    </div>
+    <div class="docops-source-container"></div>
+  </div>
+</div>
+<h3 id="event-modeling">Event Modeling</h3>
+<div class="docops-media-card" data-original-content="eventmodeling
+tf 01 ui CartUI
+tf 02 cmd AddItem
+tf 03 evt ItemAdded
+rf 04 evt External.InventoryChanged
+tf 05 pcr InventoryProcessor
+tf 06 cmd ChangeInventory
+tf 07 evt Cart.InventoryChanged">
+  <div class='mermaid svg-container' onclick='openModal(this);'>
+eventmodeling
+tf 01 ui CartUI
+tf 02 cmd AddItem
+tf 03 evt ItemAdded
+rf 04 evt External.InventoryChanged
+tf 05 pcr InventoryProcessor
+tf 06 cmd ChangeInventory
+tf 07 evt Cart.InventoryChanged
+  </div>
+  <div class="docops-control-bar">
+    <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+    <button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+    <button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+    <button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+  </div>
+  <div class="docops-source-panel" style="display: none;">
+    <div class="docops-source-header">
+      <span>Original Source</span>
+      <button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+    </div>
+    <div class="docops-source-container"></div>
+  </div>
+</div>
+
+                    </article>
+                    
+                    <!-- Global Shared Modal for Markdown View -->
+                    <div class="svg-modal-overlay" id="globalSvgModal" onclick="if(event.target === this) closeGlobalModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalModal()">×</button>
+                            <div id="globalModalBody" class="svg-modal-body"></div>
+                        </div>
+                    </div>
+
+                    <!-- Global Shared Modal for Data View -->
+                        <div class="svg-modal-overlay" id="globalCsvModal" onclick="if(event.target === this) closeGlobalCsvModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalCsvModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+                                </div>
+                                <div id="globalCsvModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Global Shared Modal for Source View -->
+                        <div class="svg-modal-overlay" id="globalSourceModal" onclick="if(event.target === this) closeGlobalSourceModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalSourceModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+                                </div>
+                                <div id="globalSourceModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                    <script>
+                            // Unified Modal Logic for Markdown
+                            function openModal(container) {
+                                const modal = document.getElementById('globalSvgModal');
+                                const targetContainer = document.getElementById('globalModalBody');
+                            
+                                // Find SVG in the container passed from the button
+                                const sourceSvg = container.querySelector ? container.querySelector('svg') : container; 
+                            
+                                if (sourceSvg && targetContainer) {
+                                    targetContainer.innerHTML = '';
+                                    const clone = sourceSvg.cloneNode(true);
+                                
+                                    // Reset dimensions to allow CSS to control scaling
+                                    clone.removeAttribute('width');
+                                    clone.removeAttribute('height');
+                                    clone.style.width = '100%';
+                                    clone.style.height = '100%';
+                                
+                                    targetContainer.appendChild(clone);
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                }
+                            }
+
+                            function closeGlobalModal() {
+                                const modal = document.getElementById('globalSvgModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                        
+                            function closeGlobalCsvModal() {
+                                const modal = document.getElementById('globalCsvModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                            
+                            function closeGlobalSourceModal() {
+                                const modal = document.getElementById('globalSourceModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+
+                            // Close modals with Escape key
+                            document.addEventListener('keydown', function(event) {
+                                if (event.key === 'Escape') {
+                                    closeGlobalModal();
+                                    closeGlobalCsvModal();
+                                    closeGlobalSourceModal();
+                                }
+                            });
+                        
+                            const docopsData = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const svg = container.querySelector('.svg-container svg') || container.querySelector('svg');
+                                
+                                    if (!svg) return;
+                                
+                                    let csvData = null;
+                                
+                                    // Method 1: Standard metadata with type
+                                    let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                                    if (csvMetadata) {
+                                        try {
+                                            csvData = JSON.parse(csvMetadata.textContent.trim());
+                                        } catch(e) { console.error("Error parsing CSV JSON", e); }
+                                    }
+
+                                    // Method 2: Custom csv-data element
+                                    if (!csvData) {
+                                        csvMetadata = svg.querySelector('metadata csv-data');
+                                        if (csvMetadata) {
+                                            try {
+                                                csvData = JSON.parse(csvMetadata.textContent.trim());
+                                            } catch(e) {}
+                                        }
+                                    }
+
+                                    // Method 3: Data attribute
+                                    if (!csvData) {
+                                        const csvDataAttr = svg.getAttribute('data-csv');
+                                        if (csvDataAttr) {
+                                            try {
+                                                csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                                            } catch(e) {}
+                                        }
+                                    }
+                                
+                                    if (csvData) {
+                                        const modal = document.getElementById('globalCsvModal');
+                                        const body = document.getElementById('globalCsvModalBody');
+                                    
+                                        let html = '<table class="csv-table">';
+                                         if (csvData.headers) {
+                                            html += '<thead><tr>';
+                                            csvData.headers.forEach(h => html += '<th>' + h + '</th>');
+                                            html += '</tr></thead>';
+                                        }
+                                        if (csvData.rows) {
+                                            html += '<tbody>';
+                                            csvData.rows.forEach(row => {
+                                                html += '<tr>';
+                                                row.forEach(cell => html += '<td>' + cell + '</td>');
+                                                html += '</tr>';
+                                            });
+                                            html += '</tbody>';
+                                        }
+                                        html += '</table>';
+                                    
+                                        body.innerHTML = html;
+                                        modal.classList.add('active');
+                                        document.body.style.overflow = 'hidden';
+                                    } else {
+                                        console.log("No CSV data found in SVG");
+                                    }
+                                }
+                            };
+                            
+                            const docopsSource = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const originalContent = container.getAttribute('data-original-content');
+                                    const kind = container.getAttribute('data-kind') || 'source';
+                                    
+                                    if (!originalContent || !originalContent.trim()) {
+                                        console.log("No source content available");
+                                        return;
+                                    }
+                                    
+                                    // Decode HTML entities
+                                    const decoded = originalContent
+                                        .replace(/&quot;/g, '"')
+                                        .replace(/&amp;/g, '&')
+                                        .replace(/&lt;/g, '<')
+                                        .replace(/&gt;/g, '>');
+                                    
+                                    const modal = document.getElementById('globalSourceModal');
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    
+                                    const escapedHtml = decoded
+                                        .replace(/&/g, '&amp;')
+                                        .replace(/</g, '&lt;')
+                                        .replace(/>/g, '&gt;');
+                                    
+                                    body.innerHTML = `
+                                        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem; padding: 0 1rem;">
+                                            <button class="docops-action-btn" onclick="docopsSource.copyFromModal()">
+                                                <span style="margin-right: 6px;">📋</span> COPY
+                                            </button>
+                                        </div>
+                                        <pre style="
+                                            background: rgba(0, 0, 0, 0.4);
+                                            border: 1px solid rgba(255, 255, 255, 0.1);
+                                            border-radius: 12px;
+                                            padding: 2rem;
+                                            overflow: auto;
+                                            margin: 0 1rem 1rem 1rem;
+                                            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+                                        "><code style="
+                                            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                                            font-size: 0.85rem;
+                                            line-height: 1.7;
+                                            color: #e2e8f0;
+                                            display: block;
+                                            white-space: pre-wrap;
+                                            word-wrap: break-word;
+                                        ">${escapedHtml}</code></pre>
+                                    `;
+                                    
+                                    // Store decoded content for copying
+                                    body.dataset.sourceContent = decoded;
+                                    
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                },
+                                
+                                copyFromModal: function() {
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    const content = body.dataset.sourceContent;
+                                    
+                                    if (content) {
+                                        navigator.clipboard.writeText(content).then(() => {
+                                            const btn = document.querySelector('#globalSourceModal .docops-action-btn');
+                                            if (btn) {
+                                                const originalHtml = btn.innerHTML;
+                                                btn.innerHTML = '<span style="margin-right: 6px;">✓</span> COPIED!';
+                                                btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                                                setTimeout(() => {
+                                                    btn.innerHTML = originalHtml;
+                                                    btn.style.background = '';
+                                                }, 2000);
+                                            }
+                                        }).catch(err => {
+                                            console.error('Copy failed:', err);
+                                        });
+                                    }
+                                }
+                            };
+                        
+                        window.docopsCopy = {
+                            url: (btn) => {
+                                    const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                },
+                            svg: (btn) => {
+                                const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                                navigator.clipboard.writeText(svg).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                            png: (btn) => {
+                                const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                                const svgData = new XMLSerializer().serializeToString(svgElement);
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                const img = new Image();
+                            
+                                img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(blob => {
+                                        const item = new ClipboardItem({ "image/png": blob });
+                                        navigator.clipboard.write([item]);
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                };
+                                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            },
+                            print: (btn) => {
+                                const card = btn.closest('.docops-media-card');
+                                const svgElement = card.querySelector('svg');
+                                if (!svgElement) return;
+
+                                const svgClone = svgElement.cloneNode(true);
+                                // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+                                const allElements = svgClone.querySelectorAll('*');
+                                allElements.forEach(el => {
+                                    el.style.opacity = '1';
+                                    el.style.animation = 'none';
+                                    el.style.transition = 'none';
+                                    el.style.visibility = 'visible';
+                                });
+                                svgClone.style.opacity = '1';
+                                svgClone.style.animation = 'none';
+                                svgClone.style.transition = 'none';
+                                // Remove SVG animation elements
+                                svgClone.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+
+                                const svgData = new XMLSerializer().serializeToString(svgClone);
+                                const printWindow = window.open('', '_blank');
+                                printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+                                printWindow.document.write(svgData);
+                                printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script></body></html>');
+                                printWindow.document.close();
+                            }
+                        };
+                    
+                    </script>
+                    <script>
+                        mermaid.initialize({ 
+                            startOnLoad: true,
+                            theme: 'base',
+                            themeVariables: {
+    'primaryColor': '#121A33',
+    'primaryTextColor': '#EAF2FF',
+    'primaryBorderColor': '#2D3A5A',
+    'lineColor': '#4DA3FF',
+    'secondaryColor': '#1A2A52',
+    'tertiaryColor': '#0A0E27',
+    'mainBkg': '#0A0E27',
+    'fontFamily': 'Helvetica, sans-serif',
+    'fontSize': '15px',
+    'clusterBkg': '#101935',
+    'clusterBorder': '#34456E',
+    'nodeBorder': '#2D3A5A',
+    'edgeLabelBackground': '#0A0E27',
+    'rectRadius': '20',
+    'clusterRadius': '20'
+}
+                        });
+                        mermaid.registerIconPacks([
+                          {
+                            name: 'logos',
+                            loader: () =>
+                              fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((res) => res.json()),
+                          },
+                        ]);
+                    </script>
+                    <script>
+                    (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                    const docopsDataX = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+
+                    </script>
+                
+                </body>
+                </html>
