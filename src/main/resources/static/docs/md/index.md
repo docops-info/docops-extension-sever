@@ -215,6 +215,12 @@ Document architecture, tests, and hierarchies.
       "description": "Proportional boxes",
       "activeName": "treemap",
       "type": "technical"
+    },{
+      "label": "UML",
+      "link": "diagram/uml.html",
+      "description": "UML diagram for plantuml and mermaid",
+      "activeName": "uml",
+      "type": "technical"
     }
   ],
   "buttonType": "CIRCLE",

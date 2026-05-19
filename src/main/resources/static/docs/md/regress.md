@@ -632,7 +632,100 @@ Underscores
 
 ```plantuml
 @startuml
-Sally -> Bob
-Bob -> Sally
+title Publish(er) Jobs Workers (Successful Block Copy)
+
+'participant "WebUI" as W
+participant "Orchestra" as O
+participant "Storage" as S
+'participant "Transform" as T
+participant "Publisher" as P
+
+activate O
+P -> P: Startup (celeryd -Q queue_name)
+activate P
+
+P -> O: << get next publish job from queue >>
+O --> P: << next publish job is ... >>
+
+note right: <b>concurrency_value</b> jobs can be threated\nsimultaneously (multithreading)
+P -> P: Launch new block copy
+P -> S: << read media from medias path >>
+activate S
+S --> P: << read block 1/N from media >>
+P --> P: << write block 1/N to local web path >>
+P --> O: << update job status & statistics ... >>
+S --> P: << read block 2/N from media >>
+P --> P: << write block 2/N to local web path >>
+S --> P: << read block N/N from media >>
+P --> P: << write block N/N to local web path >>
+S --> P: << end of file >>
+deactivate S
+P --> O: << update job status & statistics ... >>
+P -> O: POST /publish/callback\n  {"job_id": "<uuid_of_job>", "publish_uri": "...", "status": "SUCCESS"}
+activate O
+O -> O: Set media status=PUBLISHED + publish_uris[job_id]=publish_uri into MongoDB
+O --> P: <b>OK 200</b> {"status": 200, value="Your work is much appreciated, thanks !"}
+
+deactivate P
+deactivate O
+
 @enduml
+```
+
+```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "SF Pro Text, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+    "fontSize": "16px",
+    "primaryColor": "#EEF4FF",
+    "primaryTextColor": "#0F172A",
+    "primaryBorderColor": "#A8C7FF",
+    "lineColor": "#007AFF",
+    "secondaryColor": "#F8FAFF",
+    "secondaryTextColor": "#1E293B",
+    "tertiaryColor": "#FFF7E6",
+    "tertiaryTextColor": "#3B2F00",
+    "actorBkg": "#FFFFFF",
+    "actorBorder": "#D7DFEA",
+    "actorTextColor": "#0F172A",
+    "actorLineColor": "#C9D6EA",
+    "signalColor": "#007AFF",
+    "signalTextColor": "#0F172A",
+    "labelBoxBkgColor": "#FFFFFF",
+    "labelBoxBorderColor": "#D7DFEA",
+    "labelTextColor": "#0F172A",
+    "loopTextColor": "#0F172A",
+    "noteBkgColor": "#FFFBEA",
+    "noteBorderColor": "#F4D35E",
+    "noteTextColor": "#3B2F00",
+    "activationBorderColor": "#85B4FF",
+    "activationBkgColor": "#EAF2FF",
+    "sequenceNumberColor": "#FFFFFF"
+  },
+  "sequence": {
+    "diagramMarginX": 48,
+    "diagramMarginY": 28,
+    "actorMargin": 56,
+    "messageMargin": 26,
+    "mirrorActors": false,
+    "showSequenceNumbers": true
+  }
+}}%%
+gitGraph:
+    commit "Ashish"
+    branch newbranch
+    checkout newbranch
+    commit id:"1111"
+    commit tag:"test"
+    checkout main
+    commit type: HIGHLIGHT
+    commit
+    merge newbranch
+    commit
+    branch b2
+    commit
+
+
+
 ```
