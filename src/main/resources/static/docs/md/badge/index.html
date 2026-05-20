@@ -1,5 +1,5 @@
             <!DOCTYPE html>
-            <html lang="en" data-theme="dark">
+            <html lang="en" data-theme="light">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,171 +10,108 @@
                 <title>Badges and Shields</title>
                 
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600&display=swap');
-body {
-    background-color: #0d0d12; /* Matches the end of your radial gradient */
-    margin: 0;
-    padding: 2rem 0; /* Adds some breathing room at the top and bottom */
-}
+                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
 
 .markdown-body {
-    /* Custom Variables - High Contrast & Sharp Accents */
-    --font-heading: 'Syne', sans-serif;
-    --font-body: 'Outfit', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    /* Design-Tricks System */
+    --base-hue: 220;
+    --primary: hsl(var(--base-hue), 90%, 56%);
+    /* Lighter: -15% Sat, +25% Brightness */
+    --primary-light: hsl(var(--base-hue), 75%, 81%);
+    /* Darker: +15% Sat, -25% Brightness */
+    --primary-dark: hsl(var(--base-hue), 100%, 31%);
     
-    --accent-primary: #7e57ff;
-    --accent-secondary: #00f2fe;
-    --bg-gradient: radial-gradient(circle at top left, #1a1a2e 0%, #0d0d12 100%);
+    --bg: #FAFBFC; /* design-tricks.md: Never pure white */
+    --card-bg: #FFFFFF;
+    --text-main: #1A1F26;
+    --text-muted: #64748B;
     
-    background: var(--bg-gradient);
-    color: #e0e0e0;
-    font-family: var(--font-body);
-    line-height: 1.7;
-    padding: 3rem;
-    max-width: 980px;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    animation: pageReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    background-color: var(--bg);
+    color: var(--text-main);
+    font-family: 'Instrument Sans', sans-serif;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 48px; /* 8pt grid: 6 * 8 */
+    border-radius: 24px;
 }
 
-/* Staggered Reveal for Content */
-.markdown-body > * {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: itemSlideIn 0.5s ease forwards;
-}
-
-.markdown-body > *:nth-child(1) { animation-delay: 0.1s; }
-.markdown-body > *:nth-child(2) { animation-delay: 0.2s; }
-.markdown-body > *:nth-child(3) { animation-delay: 0.3s; }
-.markdown-body > *:nth-child(n+4) { animation-delay: 0.4s; }
-
-@keyframes pageReveal {
-    to { opacity: 1; }
-}
-
-@keyframes itemSlideIn {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Typography */
+/* Typography Rules from design-tricks.md */
 .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-    font-family: var(--font-heading);
-    color: #fff;
-    margin-top: 2.5rem;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-main);
+    margin-top: 32px; /* 8pt grid */
+    margin-bottom: 16px;
 }
 
-.markdown-body h1 {
-    font-size: 3.5rem;
+.markdown-body h1 { 
+    font-size: 48px; 
+    letter-spacing: -0.01em; /* Rule #2 */
     font-weight: 800;
-    background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    border-bottom: none;
-    margin-bottom: 2rem;
 }
 
-.markdown-body h2 {
-    font-size: 2rem;
-    border-left: 4px solid var(--accent-primary);
-    padding-left: 1rem;
-    border-bottom: none;
+.markdown-body h2 { 
+    font-size: 32px; 
+    font-weight: 700;
 }
 
-/* Code Blocks - IDE Aesthetic */
-.markdown-body pre {
-    background: #000000 !important;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
+/* 8pt Grid Spacing */
+.markdown-body p, .markdown-body ul, .markdown-body pre {
+    margin-bottom: 24px;
 }
 
-.markdown-body pre::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 2px; height: 100%;
-    background: var(--accent-primary);
-}
-
-.markdown-body code {
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    background: rgba(126, 87, 255, 0.15);
-    color: #b392ff;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-}
-
-.markdown-body pre code {
-    background: transparent;
-    color: #d1d1d1;
-    padding: 0;
-}
-
-/* Links & Accents */
+/* "3x more obvious" Primary Elements */
 .markdown-body a {
-    color: var(--accent-secondary);
+    color: var(--primary);
     text-decoration: none;
-    border-bottom: 1px dashed var(--accent-secondary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--primary-light);
     transition: all 0.2s ease;
 }
 
 .markdown-body a:hover {
-    color: #fff;
-    border-bottom-style: solid;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border-radius: 4px;
 }
 
-/* Blockquotes */
+/* Card Depth without Shadows (Rule #6) */
 .markdown-body blockquote {
-    margin: 2rem 0;
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 4px solid var(--accent-secondary);
+    background: #F1F5F9; /* Adjusted brightness/saturation from bg */
+    border-left: 4px solid var(--primary);
+    padding: 16px 24px;
+    margin: 32px 0;
+    border-radius: 0 12px 12px 0;
     font-style: italic;
-    color: #aaa;
 }
 
-/* Custom Table Design */
-.markdown-body table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 2rem 0;
-    border: 1px solid #333;
-    border-radius: 8px;
-    overflow: hidden;
+/* Code Blocks */
+.markdown-body pre {
+    background: #1E293B;
+    color: #F8FAFC;
+    padding: 24px;
+    border-radius: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    overflow-x: auto;
 }
 
-.markdown-body th {
-    background: #1a1a2e;
-    color: var(--accent-secondary);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    padding: 1rem;
+/* Ensure nested <code> doesn't override <pre> contrast */
+.markdown-body pre code {
+    color: inherit;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.55;
+    white-space: pre; /* keep the ASCII block crisp */
 }
 
-.markdown-body td {
-    padding: 1rem;
-    border-top: 1px solid #222;
+/* If the renderer wraps tokens in spans, keep them readable too */
+.markdown-body pre code span {
+    color: inherit;
 }
-
-/* Horizontal Rule */
-.markdown-body hr {
-    height: 1px;
-    background: linear-gradient(to right, transparent, #444, transparent);
-    border: none;
-    margin: 4rem 0;
-}
-
                 </style>
                 <style>
                 .svg-container {
@@ -773,7 +710,7 @@ body {
                 <style>
                           @media (prefers-color-scheme: dark) {
                               body {
-                                  background-color: #0d1117;
+                                  background-color: #f5f5f5;
                               }
                           }
                           
@@ -999,7 +936,7 @@ body {
 </div>
 <h2 id="default-style">Default Style</h2>
 <p>The classic badge style perfect for project metrics and status indicators.</p>
-<div id="docops-badge-1779185807982-335" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_zXMOw6AIBAE0J5r0BM-skitsbPyBCqSGA2bIMZmDy8WVlO8menxSSfO4SIl9EjEN682MMQBlIyaTWXO1bSwR8UYVyXdn2zAfFykhfkMpAvtQlwagACsw1TyvtwF676xteC8tU37P79D7UWbeQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="Downloads|1.2M||#e91e63|#6610f2
+<div id="docops-badge-1779236522394-670" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_zXMOw6AIBAE0J5r0BM-skitsbPyBCqSGA2bIMZmDy8WVlO8menxSSfO4SIl9EjEN682MMQBlIyaTWXO1bSwR8UYVyXdn2zAfFykhfkMpAvtQlwagACsw1TyvtwF676xteC8tU37P79D7UWbeQAAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="Downloads|1.2M||#e91e63|#6610f2
 Stars|12.5k||#ffc107|#ffc107
 Forks|2.3k||#607d8b|#0366d6
 Contributors|45||#795548|#6610f2" data-kind="badge">
@@ -1019,7 +956,7 @@ Contributors|45||#795548|#6610f2" data-kind="badge">
 </div>
 <h2 id="minimal-style">Minimal Style</h2>
 <p>Clean, lightweight badges with subtle styling.</p>
-<div id="docops-badge-1779185808006-742" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi19fX08_R19OEqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIAD1LgNzWQAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=MINIMAL
+<div id="docops-badge-1779236522458-780" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi19fX08_R19OEqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIAD1LgNzWQAAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=MINIMAL
 theme=auto
 spacing=10
 ---
@@ -1040,7 +977,7 @@ Made With|Kotlin||#06133b|#6fc441|&lt;kotlin&gt;|#fcfcfc" data-kind="badge">
 </div>
 <h2 id="brutalist-style">Brutalist Style</h2>
 <p>Bold, high-contrast badges with sharp edges for maximum impact.</p>
-<div id="docops-badge-1779185808013-880" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1dQoKDXH08QwO4SrJSM1NtU0sLcnnKi5ITM7MS7c1NODS1dXl8k1MSVUIzyzJqPHOL8nJzKupUTYwMzQ2TqpRNktLNjExrLHJBkvY1SinJYMgAAHMwGVbAAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=BRUTALIST
+<div id="docops-badge-1779236522485-189" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1dQoKDXH08QwO4SrJSM1NtU0sLcnnKi5ITM7MS7c1NODS1dXl8k1MSVUIzyzJqPHOL8nJzKupUTYwMzQ2TqpRNktLNjExrLHJBkvY1SinJYMgAAHMwGVbAAAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=BRUTALIST
 theme=auto
 spacing=10
 ---
@@ -1061,7 +998,7 @@ Made With|Kotlin||#06133b|#6fc441|&lt;kotlin&gt;|#fcfcfc" data-kind="badge">
 </div>
 <h2 id="glassmorphic-style">Glassmorphic Style</h2>
 <p>Modern, frosted-glass effect with translucent backgrounds.</p>
-<div id="docops-badge-1779185808019-157" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_x3JsQrCMBAA0P2-QugcMKZ0Mv6AuLg4x_TaHKa5kJyIch8vyhufvCv6NYfeN241UQRJuKEPT2HoNUQqq7cHmKlhFOLiEzf6cJGQoWK78ss7MMbAJcy4u5EkPbNkKqrDfrLO3XWYljiOVo-Pf5x0WOLPF4m25z98AAAA&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=glassmorphic
+<div id="docops-badge-1779236522494-265" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_x3JsQrCMBAA0P2-QugcMKZ0Mv6AuLg4x_TaHKa5kJyIch8vyhufvCv6NYfeN241UQRJuKEPT2HoNUQqq7cHmKlhFOLiEzf6cJGQoWK78ss7MMbAJcy4u5EkPbNkKqrDfrLO3XWYljiOVo-Pf5x0WOLPF4m25z98AAAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=glassmorphic
 theme=auto
 spacing=12
 direction=horizontal
@@ -1084,7 +1021,7 @@ Made With|Kotlin||#06133b|#6fc441|&lt;kotlin&gt;|#fcfcfc" data-kind="badge">
 </div>
 <h2 id="neon-style">Neon Style</h2>
 <p>Eye-catching badges with glowing neon effects.</p>
-<div id="docops-badge-1779185808026-693" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1zUvNz-MqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIACZR8ejVgAAAA%3D%3D&scale=1.0&type=svg&useDark=true&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=neon
+<div id="docops-badge-1779236522500-453" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=badge&payload=H4sIAAAAAAAA_yupLEi1zUvNz-MqyUjNTbVNLC3J5youSEzOzEu3NTTg0tXV5fJNTElVCM8syajxzi_JycyrqVE2MDM0Nk6qUTZLSzYxMayxyQZL2NUopyWDIACZR8ejVgAAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=neon
 theme=auto
 spacing=10
 ---
@@ -1486,19 +1423,19 @@ Made With|Kotlin||#06133b|#6fc441|&lt;kotlin&gt;|#fcfcfc" data-kind="badge">
                             startOnLoad: true,
                             theme: 'base',
                             themeVariables: {
-    'primaryColor': '#121A33',
-    'primaryTextColor': '#EAF2FF',
-    'primaryBorderColor': '#2D3A5A',
-    'lineColor': '#4DA3FF',
-    'secondaryColor': '#1A2A52',
-    'tertiaryColor': '#0A0E27',
-    'mainBkg': '#0A0E27',
+    'primaryColor': '#FFFFFF',
+    'primaryTextColor': '#0F172A',
+    'primaryBorderColor': '#D7DFEA',
+    'lineColor': '#007AFF',
+    'secondaryColor': '#EEF4FF',
+    'tertiaryColor': '#F3F6FB',
+    'mainBkg': '#F3F6FB',
     'fontFamily': 'Helvetica, sans-serif',
     'fontSize': '15px',
-    'clusterBkg': '#101935',
-    'clusterBorder': '#34456E',
-    'nodeBorder': '#2D3A5A',
-    'edgeLabelBackground': '#0A0E27',
+    'clusterBkg': '#F8FAFF',
+    'clusterBorder': '#C9D6EA',
+    'nodeBorder': '#D7DFEA',
+    'edgeLabelBackground': '#F3F6FB',
     'rectRadius': '20',
     'clusterRadius': '20'
 }
