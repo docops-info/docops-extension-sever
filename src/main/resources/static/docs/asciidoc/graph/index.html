@@ -36,7 +36,7 @@
             --bg-color: var(--canvas);
             --sidebar-bg: var(--surface-1);
             --border-color: var(--border-base);
-
+            
             /* Proportional Layout (Chapter 5) */
             --panel-width-left: clamp(240px, 18vw, 300px);
             --panel-width-right: clamp(240px, 20vw, 380px);
@@ -189,15 +189,15 @@
             flex-grow: 1;
             background-color: var(--canvas);
             background-image:
-                    radial-gradient(1200px 800px at 12% -10%, var(--halo-cyan), transparent 55%),
-                    radial-gradient(900px 700px at 100% 10%, var(--halo-gold), transparent 50%),
-                    linear-gradient(to right, var(--grid-ink) 1px, transparent 1px),
-                    linear-gradient(to bottom, var(--grid-ink) 1px, transparent 1px);
+                radial-gradient(1200px 800px at 12% -10%, var(--halo-cyan), transparent 55%),
+                radial-gradient(900px 700px at 100% 10%, var(--halo-gold), transparent 50%),
+                linear-gradient(to right, var(--grid-ink) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-ink) 1px, transparent 1px);
             background-size:
-                    auto,
-                    auto,
-                    28px 28px,
-                    28px 28px;
+                auto,
+                auto,
+                28px 28px,
+                28px 28px;
             position: relative;
         }
 
@@ -659,14 +659,14 @@
     document.getElementById('theme-toggle').addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
+        
         if (newTheme === 'light') {
             document.documentElement.setAttribute('data-theme', 'light');
         } else {
             document.documentElement.removeAttribute('data-theme');
         }
         localStorage.setItem('theme', newTheme);
-
+        
         // Update graph highlighting to use new theme colors
         if (graphData) {
             if (currentView === 'graph') {
@@ -792,7 +792,7 @@
         while (select.options.length > 1) {
             select.remove(1);
         }
-
+        
         categories.forEach(cat => {
             const opt = document.createElement('option');
             opt.value = cat;
@@ -808,7 +808,7 @@
 
         d3.select("#graph-svg").style("display", currentView === 'graph' ? 'block' : 'none');
         d3.select("#tree-svg").style("display", currentView === 'tree' ? 'block' : 'none');
-
+        
         simulation.stop();
         if (currentView !== 'tree') return;
 
@@ -818,8 +818,8 @@
 
         // Hierarchy: Root -> Categories -> Nodes
         const matchingIds = getSearchResults(searchQuery);
-        const visibleNodes = graphData.nodes.filter(n =>
-            activeCategories.has(n.category) &&
+        const visibleNodes = graphData.nodes.filter(n => 
+            activeCategories.has(n.category) && 
             (matchingIds === null || matchingIds.has(n.id) || n.id === selectedNode)
         );
 
@@ -845,13 +845,13 @@
         };
 
         const hierarchy = d3.hierarchy(rootData);
-
+        
         // Apply collapse state
         hierarchy.descendants().forEach(d => {
             if (d.children) {
                 const nodeId = d.data.id || d.data.name;
                 const hasSearchMatch = searchQuery && d.descendants().some(child => child.data.id && matchingIds && matchingIds.has(child.data.id));
-
+                
                 if (collapsedNodes.has(nodeId) && !hasSearchMatch) {
                     d._children = d.children;
                     d.children = null;
@@ -873,21 +873,21 @@
         const node = g.selectAll(".tree-node")
             .data(hierarchy.descendants())
             .enter().append("g")
-            .attr("class", "tree-node")
-            .attr("transform", d => `translate(${d.y + 120},${d.x + 50})`)
-            .on("click", (event, d) => {
-                if (d.children || d._children) {
-                    const nodeId = d.data.id || d.data.name;
-                    if (collapsedNodes.has(nodeId)) {
-                        collapsedNodes.delete(nodeId);
-                    } else {
-                        collapsedNodes.add(nodeId);
+                .attr("class", "tree-node")
+                .attr("transform", d => `translate(${d.y + 120},${d.x + 50})`)
+                .on("click", (event, d) => {
+                    if (d.children || d._children) {
+                        const nodeId = d.data.id || d.data.name;
+                        if (collapsedNodes.has(nodeId)) {
+                            collapsedNodes.delete(nodeId);
+                        } else {
+                            collapsedNodes.add(nodeId);
+                        }
+                        updateTreeView();
+                    } else if (d.data.id) {
+                        selectNode(d.data.id);
                     }
-                    updateTreeView();
-                } else if (d.data.id) {
-                    selectNode(d.data.id);
-                }
-            });
+                });
 
         // Hit area for easier clicking
         node.append("circle")
@@ -918,9 +918,9 @@
         const zoom = d3.zoom()
             .scaleExtent([0.1, 3])
             .on("zoom", (event) => g.attr("transform", event.transform));
-
+        
         svg.call(zoom);
-
+        
         if (currentTransform.k === 1 && currentTransform.x === 0 && currentTransform.y === 0) {
             // Initial fit
             const initialScale = 0.8;
@@ -937,14 +937,14 @@
             const item = document.createElement('div');
             item.className = 'legend-item';
             item.style.opacity = activeCategories.has(cat) ? 1 : 0.4;
-
+            
             const color = document.createElement('div');
             color.className = 'legend-color';
             color.style.backgroundColor = getCategoryColor(cat);
-
+            
             const label = document.createElement('span');
             label.textContent = cat;
-
+            
             item.appendChild(color);
             item.appendChild(label);
             container.appendChild(item);
@@ -1330,7 +1330,7 @@
         currentView = currentView === 'graph' ? 'tree' : 'graph';
         document.getElementById('view-toggle').textContent = currentView === 'graph' ? '⑃' : '☍';
         document.getElementById('view-toggle').title = `Switch to ${currentView === 'graph' ? 'Tree' : 'Graph'} View (V)`;
-
+        
         if (currentView === 'graph') {
             updateGraph();
         } else {

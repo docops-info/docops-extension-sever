@@ -25,6 +25,14 @@
       "content": "Buttons create organized navigation grids that turn link lists into scannable visual menus.\n\n## Key Features\n- **Variety**: Supports 9 shapes including `REGULAR`, `PILL`, `LARGE`, `RECTANGLE`, `SLIM`, `HEX`, `CIRCLE`, `ROUND`, and `OVAL`. [Source: buttons.adoc]\n- **Auto-Coding**: Assign colors automatically by type for visual grouping. [Source: buttons.adoc]\n- **Signal Philosophy**: Prioritizes clarity and restraint. [Source: buttons.adoc]\n- **Rich Content**: Supports descriptions and embedded images/icons. [Source: buttons.adoc]\n\n## DocOps Signal Guidelines\n- **Cyan is Action**: Reserve accent color for primary actions or the current destination. [Source: buttons.adoc]\n- **Gold is Governance**: Use gold for review, audit, or attention items. [Source: buttons.adoc]\n- **Neutrality**: Prefer neutral surfaces; if everything is loud, nothing is legible. [Source: buttons.adoc]\n\n## Configuration Options\n- `buttonType`: Defines the shape of the buttons.\n- `columns`: Number of columns in the grid (2-4 recommended).\n- `scale`: Size multiplier (default 1.0).\n- `sortBy.sort`: Order by `LABEL`, `TYPE`, `DATE`, etc.\n\n## Best Practices\n- Keep labels short (1-3 words max). [Source: buttons.adoc]\n- Use 2-3 columns to prevent buttons from being too small on mobile.\n- Limit grid size to 6-12 buttons to prevent decision fatigue. [Source: buttons.adoc]\n- Match button shape to context (Core shapes for navigation, Specialty for diagrams).\n\n## Backlinks\n- [[navigation-and-organization]]\n- [[visualizations]]"
     },
     {
+      "id": "architecture",
+      "label": "Architecture",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "The DocOps Extension Server is a Spring Boot-based microservice that extends AsciiDoctor's capabilities by providing on-demand SVG generation for various visualization types.",
+      "content": "The DocOps Extension Server is a Spring Boot-based microservice that extends AsciiDoctor's capabilities by providing on-demand SVG generation for various visualization types.\n\n## Layered Architecture\nThe system follows a layered architecture pattern designed for extensibility and performance:\n- **Web Layer**: Primary interface for programmatic and interactive access via REST API endpoints (e.g., `/api/docops/svg`).\n- **Handler Layer**: Implements a strategy pattern where each visualization type has a dedicated, pluggable handler.\n- **Visualization Makers**: Contains the core business logic for generating SVG markup for specific visualization types.\n- **Support Services**: Provides cross-cutting utilities for SVG metadata, payload decompression, and performance monitoring.\n- **Spring Boot Infrastructure**: The foundational layer providing dependency injection, event publishing, and metrics.\n\n## Data Flow\nThe typical request processing pipeline follows these steps:\n1. **AsciiDoctor Integration**: Custom block processors compress and Base64-encode visualization data.\n2. **HTTP Transport**: Payloads are sent to the server via GET requests.\n3. **Payload Processing**: The server decompresses and decodes the incoming data.\n4. **Handler Routing**: The `DocOpsRouter` routes the request to the appropriate handler based on the `kind` parameter.\n5. **Visualization Generation**: The handler uses a specific \"Maker\" to generate SVG markup.\n6. **Response Delivery**: The generated SVG is returned to AsciiDoctor for embedding.\n\n## Key Technologies\n- **Kotlin**: Primary development language.\n- **Spring Boot 3.x**: Core application framework.\n- **SVG**: Target format for all visualizations.\n- **Micrometer**: Used for metrics collection and performance monitoring.\n\n[Source: arch.adoc]\n\n## Backlinks\n- [[docops-extension-server]]\n- [[technical-and-architecture]]\n- [[index]]"
+    },
+    {
       "id": "combination",
       "label": "Combination Charts",
       "category": "Charts & Metrics",
@@ -38,7 +46,7 @@
       "category": "Core Concepts",
       "tags": [],
       "description": "Overview of the visualization ecosystem provided by the DocOps Extension Server.",
-      "content": "Overview of the visualization ecosystem provided by the DocOps Extension Server.\n\n## Description\nDocOps provides 24 distinct visualization types, categorized to address different documentation needs ranging from technical architecture to project planning and data metrics. [Source: index.adoc]\n\n## Functional Categories\n- [[charts-and-metrics]]\n- [[navigation-and-organization]]\n- [[process-and-planning]]\n- [[technical-and-architecture]]\n- [[metadata-and-status]]\n\n## Backlinks\n- [[index]]\n- [[docops-extension-server]]\n- [[index-adoc-summary]]"
+      "content": "Overview of the visualization ecosystem provided by the DocOps Extension Server.\n\n## Description\nDocOps provides over 24 distinct visualization types, categorized to address different documentation needs ranging from technical architecture to project planning and data metrics. [Source: index.adoc]\n\n## Functional Categories\n- [[charts-and-metrics]]\n- [[navigation-and-organization]]\n- [[process-and-planning]]\n- [[technical-and-architecture]]\n- [[metadata-and-status]]\n\n## Resources\n- [[tutorial]]: Step-by-step guide for installation and usage of visualizations.\n- [[frontend-integration]]: REST API patterns for integrating visualizations into Vue, React, Angular, and HTMX.\n- [[markdown-support]]: Guide for embedding visualizations in Markdown files.\n\n## Backlinks\n- [[index]]\n- [[docops-extension-server]]\n- [[tutorial]]\n- [[frontend-integration]]"
     },
     {
       "id": "wordcloud",
@@ -89,6 +97,22 @@
       "content": "The VCard Maker creates professional contact cards with automatic QR code generation for team directories and bios.\n\n## Key Features\n- **Format Support**: Fully compatible with the standard vCard 3.0 format. [Source: vcard.adoc]\n- **Design Templates**: Includes 6 design templates such as `modern_card`, `neo_brutalist`, and `tech_pattern_background`. [Source: vcard.adoc]\n- **QR Codes**: Automatically generates QR codes encoding the full vCard data for easy mobile saving. [Source: vcard.adoc]\n- **Scannable Layout**: Clean presentation of name, role, organization, and contact methods. [Source: vcard.adoc]\n\n## Configuration Options\n- `design`: Selects the template style.\n- `theme`: \"light\" (default) or \"dark\".\n- `scale`: Size multiplier.\n- **vCard Fields**: Supports standard fields like `FN`, `ORG`, `TITLE`, `TEL`, `EMAIL`, and `URL`. [Source: vcard.adoc]\n\n## Best Practices\n- Use `FN` (Full Name) and `N` (Structured Name) together for best parsing and display results. [Source: vcard.adoc]\n- Keep titles concise (e.g., \"Principal Engineer\") for better fit on the card.\n- Store vCards in external data files to allow for easy reuse across different documents. [Source: vcard.adoc]\n- Include at least one primary contact method (Email or Phone).\n\n## Backlinks\n- [[metadata-and-status]]\n- [[visualizations]]"
     },
     {
+      "id": "mermaid-support",
+      "label": "Mermaid Support",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "The DocOps Extension Server provides built-in support for **Mermaid** diagrams, allowing developers to embed complex charts and diagrams using a simple markdown-like syntax.",
+      "content": "The DocOps Extension Server provides built-in support for **Mermaid** diagrams, allowing developers to embed complex charts and diagrams using a simple markdown-like syntax.\n\n## Supported Diagram Types\nDocOps supports a wide range of Mermaid diagram types, including:\n- **Flowcharts**: Directed graphs with various node shapes and subgraphs.\n- **Sequence Diagrams**: Interaction diagrams showing how processes operate with one another and in what order.\n- **Gantt Charts**: Project management charts showing tasks over time.\n- **Class Diagrams**: Structural diagrams for object-oriented modeling.\n- **Git Graphs**: Visual representations of git commits and branches.\n- **Quadrant Charts**: 2D charts for data categorization.\n\n## Usage in AsciiDoctor\nUse the `[docops,mermaid]` block to wrap Mermaid syntax:\n```asciidoc\n[docops,mermaid]\n----\ngraph TD;\n    A-->B;\n    A-->C;\n    B-->D;\n    C-->D;\n----\n```\n\n## Comparisons\nWhile Mermaid is excellent for general-purpose diagrams, DocOps also provides specialized visualization kinds like [[quadrant]] which offer more structured data input and specific styling options compared to the generic Mermaid `quadrantChart`.\n\n[Source: mermaid.adoc]\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]\n- [[index]]"
+    },
+    {
+      "id": "recipe",
+      "label": "Recipe",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "The `recipe` visualization type is designed for creating structured, attractive cooking recipes with ingredients, steps, and notes.",
+      "content": "The `recipe` visualization type is designed for creating structured, attractive cooking recipes with ingredients, steps, and notes.\n\n## Key Features\n- **Structured Sections**: Includes fields for title, yield, prep time, cook time, tags, summary, ingredients, steps, and notes.\n- **Theme Support**: Provides specialized styling for recipe presentation, including light and dark modes.\n- **Multiformat Support**: Ideal for cookbooks, meal planning, and food blogs.\n\n## Syntax and Supported Fields\n```asciidoc\n[docops,recipe]\n----\nRecipe Title\nyield= 4 servings\nprep= 15 minutes\ncook= 30 minutes\ntags= vegetarian, quick\nsummary= A short description.\ningredients=\n- Item 1\n- Item 2\nsteps=\n1. Action 1\n2. Action 2\nnotes=\n- A helpful tip.\n----\n```\n\n## Best Practices\n- **Conciseness**: Keep titles and steps short and action-oriented.\n- **Scanning**: Use bullet lists for ingredients to make them easier to scan.\n- **Categorization**: Use tags for discovery (e.g., quick, dessert, seasonal).\n\n[Source: recipe.adoc]\n\n## Backlinks\n- [[visualizations]]\n- [[index]]"
+    },
+    {
       "id": "showcase-for-visuals",
       "label": "Showcase for Visuals",
       "category": "Core Concepts",
@@ -97,12 +121,20 @@
       "content": "A demonstration page showcasing the various visualization types available in the DocOps Extension Server.\n\n## Description\nThe showcase provides live examples of the 24 visualization types. It is used to help users choose the right visualization for their documentation needs. [Source: index.adoc]\n\n## Backlinks\n- [[index-adoc-summary]]\n- [[visualizations]]"
     },
     {
+      "id": "lint-report-2026-05-19",
+      "label": "Wiki Health Check Report - 2026-05-19",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "- Total Pages: 44",
+      "content": "# Wiki Health Check Report - 2026-05-19\n\n## Summary Statistics\n- Total Pages: 44\n- Errors: 2\n- Warnings: 34\n- Info: 0\n\n## \ud83d\udd34 Errors\n- \ud83d\udd34 `index.md`: Missing frontmatter fields: source_count\n- \ud83d\udd34 `steps.md`: Missing frontmatter fields: source_count\n\n## \ud83d\udfe1 Warnings\n- \ud83d\udfe1 `metricscard.md`: Status is still 'draft'\n- \ud83d\udfe1 `placemat.md`: Status is still 'draft'\n- \ud83d\udfe1 `buttons.md`: Status is still 'draft'\n- \ud83d\udfe1 `combination.md`: Status is still 'draft'\n- \ud83d\udfe1 `wordcloud.md`: Status is still 'draft'\n- \ud83d\udfe1 `scorecard.md`: Status is still 'draft'\n- \ud83d\udfe1 `barchart.md`: Status is still 'draft'\n- \ud83d\udfe1 `process-and-planning.md`: Status is still 'draft'\n- \ud83d\udfe1 `vcard.md`: Status is still 'draft'\n- \ud83d\udfe1 `showcase-for-visuals.md`: Status is still 'draft'\n- \ud83d\udfe1 `todo.md`: Status is still 'draft'\n- \ud83d\udfe1 `callout.md`: Status is still 'draft'\n- \ud83d\udfe1 `connectors.md`: Status is still 'draft'\n- \ud83d\udfe1 `timeline.md`: Status is still 'draft'\n- \ud83d\udfe1 `piechart.md`: Status is still 'draft'\n- \ud83d\udfe1 `domain.md`: Status is still 'draft'\n- \ud83d\udfe1 `index.md`: Status is still 'draft'\n- \ud83d\udfe1 `charts-and-metrics.md`: Status is still 'draft'\n- \ud83d\udfe1 `releasestrategy.md`: Status is still 'draft'\n- \ud83d\udfe1 `gherkin.md`: Status is still 'draft'\n- \ud83d\udfe1 `docops-extension-server.md`: Status is still 'draft'\n- \ud83d\udfe1 `planner.md`: Status is still 'draft'\n- \ud83d\udfe1 `treechart.md`: Status is still 'draft'\n- \ud83d\udfe1 `gaugechart.md`: Status is still 'draft'\n- \ud83d\udfe1 `linechart.md`: Status is still 'draft'\n- \ud83d\udfe1 `adr.md`: Status is still 'draft'\n- \ud83d\udfe1 `quadrant.md`: Status is still 'draft'\n- \ud83d\udfe1 `realtime-editor.md`: Status is still 'draft'\n- \ud83d\udfe1 `treemap.md`: Status is still 'draft'\n- \ud83d\udfe1 `asciidoctor-support.md`: Status is still 'draft'\n- \ud83d\udfe1 `shield.md`: Status is still 'draft'\n- \ud83d\udfe1 `steps.md`: No source attribution found [Source: ...]\n- \ud83d\udfe1 `steps.md`: Orphan page (no inbound links)\n- \ud83d\udfe1 `index.md`: Missing one-paragraph summary after frontmatter"
+    },
+    {
       "id": "technical-and-architecture",
       "label": "Technical and Architecture",
       "category": "Categories",
       "tags": [],
       "description": "Visualization category focused on system design, testing, and structural hierarchies.",
-      "content": "Visualization category focused on system design, testing, and structural hierarchies.\n\n## Description\nThis category includes 5 types for documenting architecture, tests, and text-based hierarchies. [Source: index.adoc]\n\n## Visualization Types\n- **[[wordcloud]]**: Text hierarchies and keyword analysis.\n- **[[domain]]**: Architecture maps and system landscapes.\n- **[[gherkin]]**: BDD test scenario visualization.\n- **[[treechart]]**: Hierarchical diagrams and org charts.\n- **[[treemap]]**: Proportional resource distribution.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+      "content": "Visualization category focused on system design, testing, and structural hierarchies.\n\n## Description\nThis category includes visualizations for documenting architecture, diagrams, tests, and text-based hierarchies. [Source: index.adoc]\n\n## Technical Documentation\n- **[[architecture]]**: System design and generation pipeline overview.\n- **[[mermaid-support]]**: Support for Mermaid diagrams and charts.\n\n## Visualization Types\n- **[[wordcloud]]**: Text hierarchies and keyword analysis.\n- **[[domain]]**: Architecture maps and system landscapes.\n- **[[gherkin]]**: BDD test scenario visualization.\n- **[[treechart]]**: Hierarchical diagrams and org charts.\n- **[[treemap]]**: Proportional resource distribution.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[architecture]]"
     },
     {
       "id": "todo",
@@ -118,7 +150,7 @@
       "category": "Categories",
       "tags": [],
       "description": "Visualization category focused on structuring documentation and providing chronological or navigational context.",
-      "content": "Visualization category focused on structuring documentation and providing chronological or navigational context.\n\n## Description\nThis category includes 3 types used for structural organization, timelines, and navigation grids. [Source: index.adoc]\n\n## Visualization Types\n- **[[scorecard]]**: Before/after comparisons and release summaries.\n- **[[timeline]]**: Chronological narratives and project roadmaps.\n- **[[buttons]]**: Navigation grids and resource directories.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+      "content": "Visualization category focused on structuring documentation and providing chronological or navigational context.\n\n## Description\nThis category includes visualizations used for structural organization, timelines, roadmaps, and navigation grids. [Source: index.adoc]\n\n## Visualization Types\n- **[[scorecard]]**: Before/after comparisons and release summaries.\n- **[[timeline]]**: Chronological narratives and project history.\n- **[[roadmap]]**: Interactive product roadmaps and feature priorities.\n- **[[buttons]]**: Navigation grids and resource directories.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[roadmap]]"
     },
     {
       "id": "callout",
@@ -158,7 +190,7 @@
       "category": "Core",
       "tags": [],
       "description": "Chronological record of knowledge base updates.",
-      "content": "# Wiki Log\n\nChronological record of knowledge base updates.\n\n## [2026-04-25] ingest | Initial ingest of src/docs/asciidoc/index.adoc\n## [2026-04-25] ingest | Ingested Charts & Metrics details (6 pages)\n## [2026-04-25] ingest | Ingested Navigation & Organization details (3 pages)\n## [2026-04-25] ingest | Ingested Process & Planning details (5 pages)\n## [2026-04-25] ingest | Ingested Technical & Architecture details (5 pages)\n## [2026-04-25] ingest | Ingested Metadata & Status details (5 pages)\n## [2026-04-25] lint | Full health check performed; report generated in wiki/lint-report-2026-04-25.md\n## [2026-04-27] update | Fixed Python dependency issue by implementing automated venv management in publish_wiki.sh"
+      "content": "# Wiki Log\n\nChronological record of knowledge base updates.\n\n## [2026-04-25] ingest | Initial ingest of src/docs/asciidoc/index.adoc\n## [2026-04-25] ingest | Ingested Charts & Metrics details (6 pages)\n## [2026-04-25] ingest | Ingested Navigation & Organization details (3 pages)\n## [2026-04-25] ingest | Ingested Process & Planning details (5 pages)\n## [2026-04-25] ingest | Ingested Technical & Architecture details (5 pages)\n## [2026-04-25] ingest | Ingested Metadata & Status details (5 pages)\n## [2026-04-25] lint | Full health check performed; report generated in wiki/lint-report-2026-04-25.md\n## [2026-04-27] update | Fixed Python dependency issue by implementing automated venv management in publish_wiki.sh\n## [2026-05-19] ingest | Ingested arch.adoc, tutorial.adoc, frontend.adoc, roadmap.adoc, recipe.adoc, mermaid.adoc, and markdown index.md"
     },
     {
       "id": "domain",
@@ -169,12 +201,28 @@
       "content": "Domain visualizations map business or technical architectures into clean, hierarchical diagrams.\n\n## Key Features\n- **Hierarchical Layout**: Organizes content into main nodes, common capabilities, and specialized groups. [Source: domain.adoc]\n- **Wiki-Style Links**: Transform nodes into clickable links to documentation or repositories. [Source: domain.adoc]\n- **Emoji Support**: Integrated visual icons for quick identification of verticals. [Source: domain.adoc]\n- **Auto-Layout**: Smart positioning prevents node and path overlaps. [Source: domain.adoc]\n\n## Configuration Options\n- `main`: Declares the root node of the domain. [Source: domain.adoc]\n- `type`: `COMMON` for shared foundations or custom names for specialized verticals.\n- `useNeural=true`: Alternative neural network visual style.\n- `useDark=true`: Enables dark theme.\n\n## Best Practices\n- Start by declaring the `main` node first. [Source: domain.adoc]\n- Group infrastructure and shared services in `COMMON` rows.\n- Limit to 2-3 rows per group to maintain readability. [Source: domain.adoc]\n- Use emojis sparingly (e.g., one per vertical) for visual distinction.\n- Keep node names short (1-2 words) and link to detailed documentation.\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]"
     },
     {
+      "id": "tutorial",
+      "label": "Tutorial",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "The DocOps Extension Server provides a powerful way to enhance AsciiDoctor documents with interactive visualizations, charts, and diagrams.",
+      "content": "The DocOps Extension Server provides a powerful way to enhance AsciiDoctor documents with interactive visualizations, charts, and diagrams.\n\n## Getting Started\n\n### Installation\n- **Maven**: Add `io.docops:docops-extension-server` as a dependency.\n- **Gradle**: Use `implementation 'io.docops:docops-extension-server:2024.00'`.\n\n### Integration with AsciiDoctorJ\nRegister the DocOps extensions using `ExtensionRegistry.registerExtension(asciidoctor)`.\n\n## Basic Usage\nUse the `[docops,kind=\"visualization_type\"]` block syntax:\n```asciidoc\n[docops,kind=\"adr\"]\n----\ntitle: My Decision\nstatus: Accepted\n...\n----\n```\n\n### Common Parameters\n- `kind`: Visualization type (required).\n- `title`: Title for the visualization.\n- `useDark`: Enable dark mode (true/false).\n- `scale`: Scaling factor for the output.\n- `controls`: Show interactive controls (true/false).\n\n## Key Visualization Types\nThe tutorial provides detailed examples and parameters for:\n- **ADR**: Architecture Decision Records.\n- **Charts**: Bar, Line, and Pie charts.\n- **Badges & Shields**: Customizable status indicators.\n- **Buttons**: Navigation grids (HEX, RECT, ROUND).\n- **Flow Connectors**: Process maps.\n- **Placemat & Planner**: Categorized content organization.\n- **Roadmap**: Now/Next/Later category planning.\n- **Release Strategy**: Milestone timelines.\n- **Scorecard**: Comparison matrices.\n- **Timeline**: Chronological project history.\n\n## Advanced Features\n- **Interactive Controls**: Zoom, Copy (SVG/PNG), and Fullscreen.\n- **Dark Mode Support**: Automatic or forced adaptation.\n- **Custom Styling**: Theme support for colors and scaling.\n\n[Source: tutorial.adoc]\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[docops-extension-server]]"
+    },
+    {
+      "id": "roadmap",
+      "label": "Roadmap",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "The `roadmap` visualization type is used to create interactive product roadmaps, communicating strategy, development timelines, and feature priorities to stakeholders.",
+      "content": "The `roadmap` visualization type is used to create interactive product roadmaps, communicating strategy, development timelines, and feature priorities to stakeholders.\n\n## Core Concepts\nA roadmap is organized by time periods (typically quarters) and contains feature cards with metadata:\n- **Header**: Title and subtitle.\n- **Timeline**: Horizontal quarters (e.g., Q1 2024, Q2 2024).\n- **Feature Cards**: Individual cards with Title, Category, Status, Release Date, and Description.\n- **Legend**: Visual guide for category colors and status indicators.\n\n## AsciiDoctor Syntax\n```asciidoc\n[docops,roadmap]\n----\ntitle=Product Roadmap 2024\nquarters=Q1 2024,Q2 2024,Q3 2024,Q4 2024\ndata=|\n---\nTitle | Category | Quarter | Status | Release Date | Description\nFeature 1 | core | Q1 2024 | completed | 2024-01-15 | Description...\n----\n```\n\n## Features and Customization\n- **High-Density Layout**: Automatically arranges features in multiple columns if there are more than 4 features per quarter.\n- **Status Variations**: Supports `completed`, `current`, `planned`, `future`, `on_hold`, and `cancelled`.\n- **Metadata**: Cards can include `Priority`, `Effort`, `Assignee`, and `Dependencies`.\n- **Styling**: Customizable `width`, `height`, `scale`, and `theme` (light/dark).\n\n## Difference from Release Strategy\nWhile [[releasestrategy]] focuses on milestone timelines and release plans, the `roadmap` kind is designed for high-level feature planning across multiple quarters with detailed card metadata.\n\n[Source: roadmap.adoc]\n\n## Backlinks\n- [[process-and-planning]]\n- [[visualizations]]\n- [[index]]"
+    },
+    {
       "id": "index",
       "label": "Wiki Index",
       "category": "Core",
       "tags": [],
       "description": "Central index of all knowledge base pages.",
-      "content": "# DocOps Extension Server Wiki Index\n\nCentral index of all knowledge base pages.\n\n## Core Concepts\n- [[docops-extension-server]]: Primary server for documentation extensions.\n- [[visualizations]]: Overview of all visualization types.\n- [[asciidoctor-support]]: Integration with AsciiDoctor.\n- [[realtime-editor]]: Live editing tool for DocOps visualizations.\n- [[showcase-for-visuals]]: Demonstration of visualization types.\n\n## Visualization Categories\n- [[charts-and-metrics]]: Data-driven visualizations like bar and pie charts.\n  - [[barchart]]: Category comparisons and rankings.\n  - [[piechart]]: Proportional data and market share.\n  - [[linechart]]: Trends over time and multi-series tracking.\n  - [[combination]]: Mixed chart types with dual Y-axes.\n  - [[gaugechart]]: Single metric status and speedometers.\n  - [[metricscard]]: KPI snapshots and executive summaries.\n- [[navigation-and-organization]]: Structural elements like timelines and scorecards.\n  - [[scorecard]]: Before/after comparisons and release summaries.\n  - [[timeline]]: Chronological narratives and project roadmaps.\n  - [[buttons]]: Navigation grids and resource directories.\n- [[process-and-planning]]: Workflow and priority mapping tools.\n  - [[callout]]: Highlighted processes and key metrics.\n  - [[planner]]: Kanban roadmaps and sprint planning.\n  - [[connectors]]: Sequential workflow arrows.\n  - [[releasestrategy]]: Milestone timelines and release plans.\n  - [[quadrant]]: 2D priority mapping and risk assessment.\n- [[technical-and-architecture]]: System design and hierarchy visualizations.\n  - [[wordcloud]]: Text hierarchies and keyword analysis.\n  - [[domain]]: Architecture maps and system landscapes.\n  - [[gherkin]]: BDD test scenario visualization.\n  - [[treechart]]: Hierarchical diagrams and org charts.\n  - [[treemap]]: Proportional resource distribution.\n- [[metadata-and-status]]: Tracking decisions, tasks, and indicators.\n  - [[shield]]: Status indicators, badges, and metadata tags.\n  - [[placemat]]: Color-coded label grids for component inventories.\n  - [[todo]]: Task tracking with Kanban, list, and grid layouts.\n  - [[vcard]]: Professional contact cards with QR code generation.\n  - [[adr]]: Architectural Decision Records with context and consequences.\n\n## Source Summaries\n- [[index-adoc-summary]]: Summary of the main AsciiDoctor index page."
+      "content": "# DocOps Extension Server Wiki Index\n\nCentral index of all knowledge base pages.\n\n## Core Concepts\n- [[docops-extension-server]]: Primary server for documentation extensions.\n- [[architecture]]: System design and generation pipeline overview.\n- [[tutorial]]: Comprehensive guide for installation and usage.\n- [[visualizations]]: Overview of all visualization types.\n- [[asciidoctor-support]]: Integration with AsciiDoctor.\n- [[markdown-support]]: Integration with Markdown files.\n- [[frontend-integration]]: REST API patterns for Vue, React, Angular, and HTMX.\n- [[realtime-editor]]: Live editing tool for DocOps visualizations.\n- [[showcase-for-visuals]]: Demonstration of visualization types.\n\n## Visualization Categories\n- [[charts-and-metrics]]: Data-driven visualizations like bar and pie charts.\n  - [[barchart]]: Category comparisons and rankings.\n  - [[piechart]]: Proportional data and market share.\n  - [[linechart]]: Trends over time and multi-series tracking.\n  - [[combination]]: Mixed chart types with dual Y-axes.\n  - [[gaugechart]]: Single metric status and speedometers.\n  - [[metricscard]]: KPI snapshots and executive summaries.\n- [[navigation-and-organization]]: Structural elements like timelines and scorecards.\n  - [[scorecard]]: Before/after comparisons and release summaries.\n  - [[timeline]]: Chronological narratives and project roadmaps.\n  - [[roadmap]]: Interactive product roadmaps and feature priorities.\n  - [[buttons]]: Navigation grids and resource directories.\n- [[process-and-planning]]: Workflow and priority mapping tools.\n  - [[callout]]: Highlighted processes and key metrics.\n  - [[planner]]: Kanban roadmaps and sprint planning.\n  - [[connectors]]: Sequential workflow arrows.\n  - [[releasestrategy]]: Milestone timelines and release plans.\n  - [[quadrant]]: 2D priority mapping and risk assessment.\n- [[technical-and-architecture]]: System design and hierarchy visualizations.\n  - [[architecture]]: System design and generation pipeline overview.\n  - [[mermaid-support]]: Support for Mermaid diagrams and charts.\n  - [[wordcloud]]: Text hierarchies and keyword analysis.\n  - [[domain]]: Architecture maps and system landscapes.\n  - [[gherkin]]: BDD test scenario visualization.\n  - [[treechart]]: Hierarchical diagrams and org charts.\n  - [[treemap]]: Proportional resource distribution.\n- [[metadata-and-status]]: Tracking decisions, tasks, and indicators.\n  - [[shield]]: Status indicators, badges, and metadata tags.\n  - [[placemat]]: Color-coded label grids for component inventories.\n  - [[todo]]: Task tracking with Kanban, list, and grid layouts.\n  - [[vcard]]: Professional contact cards with QR code generation.\n  - [[adr]]: Architectural Decision Records with context and consequences.\n  - [[recipe]]: Structured cooking recipes with ingredients and steps.\n\n## Source Summaries\n- [[index-adoc-summary]]: Summary of the main AsciiDoctor index page."
     },
     {
       "id": "steps",
@@ -245,12 +293,28 @@
       "content": "Tree charts provide hierarchical diagrams for organizational structures, taxonomies, and decision trees.\n\n## Key Features\n- **Layout Orientations**: Supports both vertical (top-down) and horizontal (left-right) layouts. [Source: treechart.adoc]\n- **Indentation Syntax**: Simple indentation-based data format for easy authoring. [Source: treechart.adoc]\n- **Interactive Nodes**: Collapsible nodes for managing large, complex hierarchies. [Source: treechart.adoc]\n- **Glass Effect**: Modern visual style with translucent node backgrounds. [Source: treechart.adoc]\n\n## Configuration Options\n- `orientation`: \"vertical\" or \"horizontal\".\n- `collapsible`: Enable or disable interactive node expansion.\n- `colors`: Define a custom palette of hex colors.\n- `width` / `height`: Canvas dimensions.\n\n## Best Practices\n- Keep tree depth to 4-5 levels for better readability. [Source: treechart.adoc]\n- Use horizontal orientation for \"wide\" trees with many branches at each level.\n- Set `collapsible=false` for PDF exports to ensure all content is visible.\n- Color-code nodes by category (e.g., Department or Skill) for visual distinction.\n\n## Backlinks\n- [[technical-and-architecture]]\n- [[visualizations]]"
     },
     {
+      "id": "frontend-integration",
+      "label": "Frontend Integration",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "The DocOps Extension Server provides a REST API that enables programmatic generation of visualizations for integration with modern frontend frameworks.",
+      "content": "The DocOps Extension Server provides a REST API that enables programmatic generation of visualizations for integration with modern frontend frameworks.\n\n## REST API Endpoint\n`GET /api/docops/svg`\n\n### Parameters\n- `kind`: Visualization type (required).\n- `payload`: URL-encoded (and optionally compressed) data payload (required).\n- `scale`: Scaling factor (default: 1.0).\n- `title`: Visualization title.\n- `useDark`: Enable dark theme (boolean).\n- `useGlass`: Enable glass effect (boolean).\n\n## Payload Encoding\nPayloads must be **URL-encoded** before transmission. For large datasets, client-side compression (e.g., using `pako` for gzip) is recommended.\n\n## Framework Examples\n\n### Vue.js\nImplement a component that uses `encodeURIComponent` on the data and sets the resulting URL as an image source or fetches it as text to inject into the DOM via `v-html`.\n\n### React\nUse a component with `useEffect` to fetch SVG content from the API. The `dangerouslySetInnerHTML` prop can be used to render the returned SVG string.\n\n### Angular\nCreate a dedicated service to handle `HttpParams` and `HttpClient` calls, returning the SVG as a `SafeHtml` string.\n\n### HTMX\nLeverage hypermedia controls to fetch visualizations. Use `hx-get` on a container and trigger it on load or form submission to fetch the SVG from the DocOps endpoint.\n\n## Best Practices\n- **Debouncing**: Use debounced encoding for interactive forms to limit API calls.\n- **Caching**: Cache responses for repeated requests with the same configuration.\n- **Security**: Validate payloads before sending to the API and use proper CSP headers when displaying SVGs.\n\n[Source: frontend.adoc]\n\n## Backlinks\n- [[docops-extension-server]]\n- [[architecture]]\n- [[index]]"
+    },
+    {
       "id": "gaugechart",
       "label": "Gauge Charts",
       "category": "Charts & Metrics",
       "tags": [],
       "description": "Gauge charts turn single metrics into visual speedometers, providing instant status feedback.",
       "content": "Gauge charts turn single metrics into visual speedometers, providing instant status feedback.\n\n## Key Features\n- **Variety**: Supports 7 types including `SEMI_CIRCLE`, `DIGITAL`, `LINEAR`, and `MULTI_GAUGE`. [Source: gaugechart.adoc]\n- **Status Zones**: Automatic color-coding for Normal (Green), Caution (Yellow), and Critical (Red) ranges. [Source: gaugechart.adoc]\n- **Grid Layouts**: `MULTI_GAUGE` allows monitoring multiple metrics in a compact grid. [Source: gaugechart.adoc]\n\n## Gauge Types\n- `SEMI_CIRCLE`: Classic performance indicators (CPU, memory).\n- `DIGITAL`: Prominent single metrics requiring attention.\n- `LINEAR`: Horizontal progress bars with target lines.\n- `MULTI_GAUGE`: Grids of 3-9 gauges for fleet monitoring.\n\n## Configuration Options\n- `showRanges=true`: Displays color zones (default).\n- `showTarget=true`: Adds goal lines (for `LINEAR` type).\n- `columns`: Defines grid width for multi-gauge displays.\n\n## Best Practices\n- Reserve `DIGITAL` for \"hero metrics\" that demand immediate focus.\n- Use `MULTI_GAUGE` for comparing 3-9 related metrics side-by-side. [Source: gaugechart.adoc]\n- Set realistic min/max bounds based on actual operating limits.\n- Keep units consistent across all gauges in a grid.\n\n## Backlinks\n- [[charts-and-metrics]]\n- [[visualizations]]"
+    },
+    {
+      "id": "markdown-support",
+      "label": "Markdown Support",
+      "category": "uncategorised",
+      "tags": [],
+      "description": "DocOps Extensions can be embedded directly within Markdown files, enabling seamless integration of visualizations, diagrams, and interactive components into standard Markdown documentation.",
+      "content": "DocOps Extensions can be embedded directly within Markdown files, enabling seamless integration of visualizations, diagrams, and interactive components into standard Markdown documentation.\n\n## Embedding Syntax\nMarkdown support uses a specific block syntax to define DocOps visualizations:\n```markdown\n[docops:kind]\n{\n  \"key\": \"value\",\n  ...\n}\n[/docops]\n```\n\n## Integration Benefits\n- **Portability**: Use the same powerful DocOps visualizations in both AsciiDoc and Markdown environments.\n- **Interactivity**: Embedded components retain their interactive features, such as hover effects and zoom controls.\n- **Consistency**: Maintain a unified visual language across different documentation formats.\n\n## Common Use Cases\n- **Charts & Metrics**: Embedding bar, pie, and line charts into project READMEs.\n- **Navigation**: Using [[buttons]] to create navigation grids in Markdown-based sites.\n- **Technical Documentation**: Integrating [[architecture]] maps and [[mermaid-support]] diagrams into developer guides.\n\n[Source: src/docs/md/index.md]\n\n## Backlinks\n- [[docops-extension-server]]\n- [[index]]"
     },
     {
       "id": "linechart",
@@ -313,8 +377,8 @@
       "label": "Metadata and Status",
       "category": "Categories",
       "tags": [],
-      "description": "Visualization category focused on tracking decisions, tasks, and team information.",
-      "content": "Visualization category focused on tracking decisions, tasks, and team information.\n\n## Description\nThis category includes 5 types for status indicators, label grids, task lists, and contact information. [Source: index.adoc]\n\n## Visualization Types\n- **[[shield]]**: Status indicators, badges, and metadata tags.\n- **[[placemat]]**: Color-coded label grids for component inventories.\n- **[[todo]]**: Task tracking with Kanban, list, and grid layouts.\n- **[[vcard]]**: Professional contact cards with QR code generation.\n- **[[adr]]**: Architectural Decision Records with context and consequences.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[index-adoc-summary]]"
+      "description": "Visualization category focused on tracking decisions, tasks, team information, and structured data.",
+      "content": "Visualization category focused on tracking decisions, tasks, team information, and structured data.\n\n## Description\nThis category includes visualizations for status indicators, label grids, task lists, contact information, and structured recipes. [Source: index.adoc]\n\n## Visualization Types\n- **[[shield]]**: Status indicators, badges, and metadata tags.\n- **[[placemat]]**: Color-coded label grids for component inventories.\n- **[[todo]]**: Task tracking with Kanban, list, and grid layouts.\n- **[[vcard]]**: Professional contact cards with QR code generation.\n- **[[adr]]**: Architectural Decision Records with context and consequences.\n- **[[recipe]]**: Structured cooking recipes with ingredients and steps.\n\n## Backlinks\n- [[index]]\n- [[visualizations]]\n- [[recipe]]"
     }
   ],
   "edges": [
@@ -343,6 +407,18 @@
       "target": "visualizations"
     },
     {
+      "source": "architecture",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "architecture",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "architecture",
+      "target": "index"
+    },
+    {
       "source": "combination",
       "target": "charts-and-metrics"
     },
@@ -372,15 +448,23 @@
     },
     {
       "source": "visualizations",
+      "target": "tutorial"
+    },
+    {
+      "source": "visualizations",
+      "target": "frontend-integration"
+    },
+    {
+      "source": "visualizations",
+      "target": "markdown-support"
+    },
+    {
+      "source": "visualizations",
       "target": "index"
     },
     {
       "source": "visualizations",
       "target": "docops-extension-server"
-    },
-    {
-      "source": "visualizations",
-      "target": "index-adoc-summary"
     },
     {
       "source": "wordcloud",
@@ -483,6 +567,30 @@
       "target": "visualizations"
     },
     {
+      "source": "mermaid-support",
+      "target": "quadrant"
+    },
+    {
+      "source": "mermaid-support",
+      "target": "technical-and-architecture"
+    },
+    {
+      "source": "mermaid-support",
+      "target": "visualizations"
+    },
+    {
+      "source": "mermaid-support",
+      "target": "index"
+    },
+    {
+      "source": "recipe",
+      "target": "visualizations"
+    },
+    {
+      "source": "recipe",
+      "target": "index"
+    },
+    {
       "source": "showcase-for-visuals",
       "target": "index-adoc-summary"
     },
@@ -493,6 +601,14 @@
     {
       "source": "showcase-for-visuals",
       "target": "index"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "architecture"
+    },
+    {
+      "source": "technical-and-architecture",
+      "target": "mermaid-support"
     },
     {
       "source": "technical-and-architecture",
@@ -523,10 +639,6 @@
       "target": "visualizations"
     },
     {
-      "source": "technical-and-architecture",
-      "target": "index-adoc-summary"
-    },
-    {
       "source": "todo",
       "target": "metadata-and-status"
     },
@@ -544,6 +656,10 @@
     },
     {
       "source": "navigation-and-organization",
+      "target": "roadmap"
+    },
+    {
+      "source": "navigation-and-organization",
       "target": "buttons"
     },
     {
@@ -553,10 +669,6 @@
     {
       "source": "navigation-and-organization",
       "target": "visualizations"
-    },
-    {
-      "source": "navigation-and-organization",
-      "target": "index-adoc-summary"
     },
     {
       "source": "callout",
@@ -599,8 +711,44 @@
       "target": "visualizations"
     },
     {
+      "source": "tutorial",
+      "target": "index"
+    },
+    {
+      "source": "tutorial",
+      "target": "visualizations"
+    },
+    {
+      "source": "tutorial",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "roadmap",
+      "target": "releasestrategy"
+    },
+    {
+      "source": "roadmap",
+      "target": "process-and-planning"
+    },
+    {
+      "source": "roadmap",
+      "target": "visualizations"
+    },
+    {
+      "source": "roadmap",
+      "target": "index"
+    },
+    {
       "source": "index",
       "target": "docops-extension-server"
+    },
+    {
+      "source": "index",
+      "target": "architecture"
+    },
+    {
+      "source": "index",
+      "target": "tutorial"
     },
     {
       "source": "index",
@@ -612,6 +760,14 @@
     },
     {
       "source": "index",
+      "target": "markdown-support"
+    },
+    {
+      "source": "index",
+      "target": "frontend-integration"
+    },
+    {
+      "source": "index",
       "target": "realtime-editor"
     },
     {
@@ -660,6 +816,10 @@
     },
     {
       "source": "index",
+      "target": "roadmap"
+    },
+    {
+      "source": "index",
       "target": "buttons"
     },
     {
@@ -689,6 +849,10 @@
     {
       "source": "index",
       "target": "technical-and-architecture"
+    },
+    {
+      "source": "index",
+      "target": "mermaid-support"
     },
     {
       "source": "index",
@@ -733,6 +897,10 @@
     {
       "source": "index",
       "target": "adr"
+    },
+    {
+      "source": "index",
+      "target": "recipe"
     },
     {
       "source": "index",
@@ -815,12 +983,44 @@
       "target": "visualizations"
     },
     {
+      "source": "frontend-integration",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "frontend-integration",
+      "target": "architecture"
+    },
+    {
+      "source": "frontend-integration",
+      "target": "index"
+    },
+    {
       "source": "gaugechart",
       "target": "charts-and-metrics"
     },
     {
       "source": "gaugechart",
       "target": "visualizations"
+    },
+    {
+      "source": "markdown-support",
+      "target": "buttons"
+    },
+    {
+      "source": "markdown-support",
+      "target": "architecture"
+    },
+    {
+      "source": "markdown-support",
+      "target": "mermaid-support"
+    },
+    {
+      "source": "markdown-support",
+      "target": "docops-extension-server"
+    },
+    {
+      "source": "markdown-support",
+      "target": "index"
     },
     {
       "source": "linechart",
@@ -904,15 +1104,15 @@
     },
     {
       "source": "metadata-and-status",
+      "target": "recipe"
+    },
+    {
+      "source": "metadata-and-status",
       "target": "index"
     },
     {
       "source": "metadata-and-status",
       "target": "visualizations"
-    },
-    {
-      "source": "metadata-and-status",
-      "target": "index-adoc-summary"
     }
   ]
 }
