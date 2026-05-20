@@ -630,48 +630,13 @@ Underscores
 
 [![IMAGE ALT TEXT HERE](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/YouTube_logo_2015.svg/1200px-YouTube_logo_2015.svg.png)](https://www.youtube.com/watch?v=ciawICBvQoE)
 
-```plantuml
-@startuml
-title Publish(er) Jobs Workers (Successful Block Copy)
 
-'participant "WebUI" as W
-participant "Orchestra" as O
-participant "Storage" as S
-'participant "Transform" as T
-participant "Publisher" as P
 
-activate O
-P -> P: Startup (celeryd -Q queue_name)
-activate P
 
-P -> O: << get next publish job from queue >>
-O --> P: << next publish job is ... >>
 
-note right: <b>concurrency_value</b> jobs can be threated\nsimultaneously (multithreading)
-P -> P: Launch new block copy
-P -> S: << read media from medias path >>
-activate S
-S --> P: << read block 1/N from media >>
-P --> P: << write block 1/N to local web path >>
-P --> O: << update job status & statistics ... >>
-S --> P: << read block 2/N from media >>
-P --> P: << write block 2/N to local web path >>
-S --> P: << read block N/N from media >>
-P --> P: << write block N/N to local web path >>
-S --> P: << end of file >>
-deactivate S
-P --> O: << update job status & statistics ... >>
-P -> O: POST /publish/callback\n  {"job_id": "<uuid_of_job>", "publish_uri": "...", "status": "SUCCESS"}
-activate O
-O -> O: Set media status=PUBLISHED + publish_uris[job_id]=publish_uri into MongoDB
-O --> P: <b>OK 200</b> {"status": 200, value="Your work is much appreciated, thanks !"}
 
-deactivate P
-deactivate O
-
-@enduml
-```
-
+[tabs]
+[tab:Mermaid]
 ```mermaid
 %%{init: {
   "theme": "base",
@@ -729,3 +694,49 @@ gitGraph:
 
 
 ```
+[/tab]
+[tab:Plantuml]
+```plantuml
+@startuml
+title Publish(er) Jobs Workers (Successful Block Copy)
+
+'participant "WebUI" as W
+participant "Orchestra" as O
+participant "Storage" as S
+'participant "Transform" as T
+participant "Publisher" as P
+
+activate O
+P -> P: Startup (celeryd -Q queue_name)
+activate P
+
+P -> O: << get next publish job from queue >>
+O --> P: << next publish job is ... >>
+
+note right: <b>concurrency_value</b> jobs can be threated\nsimultaneously (multithreading)
+P -> P: Launch new block copy
+P -> S: << read media from medias path >>
+activate S
+S --> P: << read block 1/N from media >>
+P --> P: << write block 1/N to local web path >>
+P --> O: << update job status & statistics ... >>
+S --> P: << read block 2/N from media >>
+P --> P: << write block 2/N to local web path >>
+S --> P: << read block N/N from media >>
+P --> P: << write block N/N to local web path >>
+S --> P: << end of file >>
+deactivate S
+P --> O: << update job status & statistics ... >>
+P -> O: POST /publish/callback\n  {"job_id": "<uuid_of_job>", "publish_uri": "...", "status": "SUCCESS"}
+activate O
+O -> O: Set media status=PUBLISHED + publish_uris[job_id]=publish_uri into MongoDB
+O --> P: <b>OK 200</b> {"status": 200, value="Your work is much appreciated, thanks !"}
+
+deactivate P
+deactivate O
+
+@enduml
+```
+[/tab]
+[/tabs]
+

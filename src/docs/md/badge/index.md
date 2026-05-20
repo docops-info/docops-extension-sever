@@ -28,21 +28,21 @@ DocOps badges and shields are visual indicators that provide quick insights into
   <p style="margin: 8px 0 0 0; color: #047857;">Choose from Default, Minimal, Brutalist, Glassmorphic, and Neon styles to match your design aesthetic.</p>
 </div>
 
-## Default Style
+## Styles
 
+
+[tabs]
+[tab:Default]
 The classic badge style perfect for project metrics and status indicators.
-
 [docops:badge]
 Downloads|1.2M||#e91e63|#6610f2
 Stars|12.5k||#ffc107|#ffc107
 Forks|2.3k||#607d8b|#0366d6
 Contributors|45||#795548|#6610f2
 [/docops]
-
-## Minimal Style
-
+[/tab]
+[tab:Minimal Style]
 Clean, lightweight badges with subtle styling.
-
 [docops:badge]
 type=MINIMAL
 theme=auto
@@ -50,9 +50,8 @@ spacing=10
 ---
 Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
 [/docops]
-
-## Brutalist Style
-
+[/tab]
+[tab:Brutalist Style]
 Bold, high-contrast badges with sharp edges for maximum impact.
 
 [docops:badge]
@@ -62,9 +61,8 @@ spacing=10
 ---
 Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
 [/docops]
-
-## Glassmorphic Style
-
+[/tab]
+[tab:Glassmorphic Style]
 Modern, frosted-glass effect with translucent backgrounds.
 
 [docops:badge]
@@ -76,9 +74,8 @@ perRow=3
 ---
 Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
 [/docops]
-
-## Neon Style
-
+[/tab]
+[tab:Neon Style]
 Eye-catching badges with glowing neon effects.
 
 [docops:badge]
@@ -88,6 +85,8 @@ spacing=10
 ---
 Made With|Kotlin||#06133b|#6fc441|<kotlin>|#fcfcfc
 [/docops]
+[/tab]
+[/tabs]
 
 ---
 

@@ -10,108 +10,427 @@
                 <title>DocOps Recipes</title>
                 
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&family=Instrument+Sans:wght@400;500&family=JetBrains+Mono&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* DocOps Design System — Signal (v1) : Markdown Light
+   Goals: calm, audit-friendly, high-contrast, “ink as authority”, cyan as action. */
 
 .markdown-body {
-    /* Design-Tricks System */
-    --base-hue: 220;
-    --primary: hsl(var(--base-hue), 90%, 56%);
-    /* Lighter: -15% Sat, +25% Brightness */
-    --primary-light: hsl(var(--base-hue), 75%, 81%);
-    /* Darker: +15% Sat, -25% Brightness */
-    --primary-dark: hsl(var(--base-hue), 100%, 31%);
-    
-    --bg: #FAFBFC; /* design-tricks.md: Never pure white */
-    --card-bg: #FFFFFF;
-    --text-main: #1A1F26;
-    --text-muted: #64748B;
-    
-    background-color: var(--bg);
-    color: var(--text-main);
-    font-family: 'Instrument Sans', sans-serif;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 48px; /* 8pt grid: 6 * 8 */
-    border-radius: 24px;
+  /* -----------------------------
+     1) Core tokens (DocOps Signal)
+     ----------------------------- */
+  --ds-brand-ink: #0b1220;
+  --ds-brand-cloud: #f6f8fb;
+  --ds-brand-slate: #2a3447;
+  --ds-brand-steel: #8a96ad;
+  --ds-brand-cyan: #00b7d6;
+  --ds-brand-gold: #c9a227;
+
+  --ds-semantic-success: #16a34a;
+  --ds-semantic-warning: #d97706;
+  --ds-semantic-error: #dc2626;
+  --ds-semantic-info: #2563eb;
+
+  --ds-canvas: var(--ds-brand-cloud);
+  --ds-surface-1: #ffffff;
+  --ds-surface-2: #eef2f7;
+  --ds-border: rgba(11, 18, 32, 0.12);
+
+  --ds-text-primary: var(--ds-brand-ink);
+  --ds-text-secondary: var(--ds-brand-slate);
+  --ds-text-tertiary: var(--ds-brand-steel);
+
+  --ds-accent: var(--ds-brand-cyan);
+
+  --ds-radius-sm: 8px;
+  --ds-radius-md: 12px;
+  --ds-radius-lg: 16px;
+  --ds-radius-pill: 999px;
+
+  --ds-shadow-sm: 0 6px 18px rgba(11, 18, 32, 0.08);
+  --ds-shadow-md: 0 16px 40px rgba(11, 18, 32, 0.12);
+  --ds-focus-glow: 0 0 0 4px rgba(0, 183, 214, 0.22);
+
+  --ds-dur-fast: 120ms;
+  --ds-dur-base: 220ms;
+  --ds-dur-slow: 420ms;
+  --ds-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-ease-snappy: cubic-bezier(0.2, 0.9, 0.2, 1);
+
+  /* -----------------------------
+     2) Markdown-specific roles
+     ----------------------------- */
+  --md-max-width: 920px;
+  --md-pad-x: 48px;
+  --md-pad-y: 48px;
+
+  --md-prose: var(--ds-text-secondary);
+  --md-heading: var(--ds-text-primary);
+  --md-muted: var(--ds-text-tertiary);
+
+  --md-link: var(--ds-accent);
+  --md-link-underline: rgba(0, 183, 214, 0.28);
+  --md-link-hover-bg: rgba(0, 183, 214, 0.10);
+
+  --md-inline-code-bg: rgba(11, 18, 32, 0.06);
+  --md-inline-code-border: rgba(11, 18, 32, 0.12);
+
+  --md-code-bg: var(--ds-brand-ink);
+  --md-code-fg: #f1f5ff;
+  --md-code-border: rgba(11, 18, 32, 0.20);
+
+  --md-table-stripe: rgba(11, 18, 32, 0.03);
+
+  /* Atmosphere: “calm corporate depth” (subtle, not noisy) */
+  background:
+    radial-gradient(900px 420px at 12% 0%, rgba(0, 183, 214, 0.08), transparent 55%),
+    radial-gradient(760px 360px at 92% 18%, rgba(201, 162, 39, 0.08), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.70)),
+    var(--ds-canvas);
+
+  color: var(--md-prose);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+
+  max-width: var(--md-max-width);
+  margin: 40px auto;
+  padding: var(--md-pad-y) var(--md-pad-x);
+
+  border-radius: 24px;
+  border: 1px solid var(--ds-border);
+  box-shadow: var(--ds-shadow-sm);
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Let long IDs/URLs behave */
+  overflow-wrap: anywhere;
 }
 
-/* Typography Rules from design-tricks.md */
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--text-main);
-    margin-top: 32px; /* 8pt grid */
-    margin-bottom: 16px;
+/* Responsive padding (keeps 8px rhythm while respecting smaller screens) */
+@media (max-width: 768px) {
+  .markdown-body {
+    --md-pad-x: 20px;
+    --md-pad-y: 28px;
+    margin: 16px;
+    border-radius: 18px;
+  }
 }
 
-.markdown-body h1 { 
-    font-size: 48px; 
-    letter-spacing: -0.01em; /* Rule #2 */
-    font-weight: 800;
+/* -----------------------------
+   3) Page-load motion (restrained)
+   ----------------------------- */
+@keyframes docops-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.markdown-body h2 { 
-    font-size: 32px; 
-    font-weight: 700;
+.markdown-body {
+  animation: docops-reveal var(--ds-dur-slow) var(--ds-ease-standard) both;
 }
 
-/* 8pt Grid Spacing */
-.markdown-body p, .markdown-body ul, .markdown-body pre {
-    margin-bottom: 24px;
+@media (prefers-reduced-motion: reduce) {
+  .markdown-body { animation: none; }
+  .markdown-body * { scroll-behavior: auto; transition: none !important; }
 }
 
-/* "3x more obvious" Primary Elements */
+/* -----------------------------
+   4) Typography (DocOps scale)
+   ----------------------------- */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--md-heading);
+  font-weight: 600; /* Headline/Display mapping */
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  scroll-margin-top: 96px;
+}
+
+.markdown-body h1 {
+  font-size: 40px;        /* Display (desktop) */
+  line-height: 48px;
+  letter-spacing: -0.6px;
+  margin-top: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.markdown-body h2 {
+  font-size: 28px;        /* Headline (desktop) */
+  line-height: 34px;
+  letter-spacing: -0.3px;
+  padding-top: 8px;
+}
+
+.markdown-body h3 {
+  font-size: 22px;        /* Title (desktop) */
+  line-height: 28px;
+  letter-spacing: -0.2px;
+}
+
+.markdown-body h4 {
+  font-size: 16px;        /* Body as “section label” */
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.markdown-body p {
+  margin: 0 0 16px 0;
+}
+
+.markdown-body strong {
+  color: var(--ds-text-primary);
+  font-weight: 600;
+}
+
+.markdown-body small {
+  color: var(--md-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* -----------------------------
+   5) Links + focus visibility
+   ----------------------------- */
 .markdown-body a {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 2px solid var(--primary-light);
-    transition: all 0.2s ease;
+  color: var(--md-link);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid var(--md-link-underline);
+  transition: background-color var(--ds-dur-fast) var(--ds-ease-standard),
+              border-color var(--ds-dur-fast) var(--ds-ease-standard),
+              color var(--ds-dur-fast) var(--ds-ease-standard);
+  padding: 0 2px;
+  border-radius: 6px;
 }
 
 .markdown-body a:hover {
-    background: var(--primary-light);
-    color: var(--primary-dark);
-    border-radius: 4px;
+  background: var(--md-link-hover-bg);
+  border-bottom-color: rgba(0, 183, 214, 0.55);
 }
 
-/* Card Depth without Shadows (Rule #6) */
-.markdown-body blockquote {
-    background: #F1F5F9; /* Adjusted brightness/saturation from bg */
-    border-left: 4px solid var(--primary);
-    padding: 16px 24px;
-    margin: 32px 0;
-    border-radius: 0 12px 12px 0;
-    font-style: italic;
+.markdown-body a:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  box-shadow: var(--ds-focus-glow);
+  border-bottom-color: transparent;
 }
 
-/* Code Blocks */
+/* Selection should feel “system-level” */
+.markdown-body ::selection {
+  background: rgba(0, 183, 214, 0.18);
+}
+
+/* -----------------------------
+   6) Lists, rules, and spacing
+   ----------------------------- */
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+.markdown-body li {
+  margin: 6px 0;
+}
+
+.markdown-body hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ds-border), transparent);
+  margin: 24px 0;
+}
+
+/* -----------------------------
+   7) Inline code + code blocks
+   ----------------------------- */
+.markdown-body code {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+}
+
+.markdown-body :not(pre) > code {
+  background: var(--md-inline-code-bg);
+  border: 1px solid var(--md-inline-code-border);
+  color: var(--ds-text-primary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: break-spaces;
+}
+
 .markdown-body pre {
-    background: #1E293B;
-    color: #F8FAFC;
-    padding: 24px;
-    border-radius: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    overflow-x: auto;
+  background: var(--md-code-bg);
+  color: var(--md-code-fg);
+  border: 1px solid var(--md-code-border);
+  box-shadow: var(--ds-shadow-sm);
+  padding: 16px;
+  border-radius: var(--ds-radius-lg);
+  overflow: auto;
+  margin: 0 0 24px 0;
+  line-height: 1.55;
 }
 
-/* Ensure nested <code> doesn't override <pre> contrast */
 .markdown-body pre code {
-    color: inherit;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: 1.55;
-    white-space: pre; /* keep the ASCII block crisp */
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  font-size: 13px;
+  white-space: pre;
 }
 
-/* If the renderer wraps tokens in spans, keep them readable too */
-.markdown-body pre code span {
-    color: inherit;
+/* -----------------------------
+   8) Quotes / callouts
+   ----------------------------- */
+.markdown-body blockquote {
+  margin: 24px 0;
+  padding: 16px 16px 16px 18px;
+
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
+              var(--ds-surface-2);
+
+  border: 1px solid var(--ds-border);
+  border-left: 4px solid var(--ds-brand-gold); /* Gold = governance/attention (not error) */
+  border-radius: var(--ds-radius-lg);
+  box-shadow: none;
+
+  color: var(--ds-text-secondary);
 }
+
+.markdown-body blockquote > :first-child { margin-top: 0; }
+.markdown-body blockquote > :last-child { margin-bottom: 0; }
+
+/* -----------------------------
+   9) Tables (audit-friendly)
+   ----------------------------- */
+.markdown-body table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 0 24px 0;
+
+  background: rgba(255, 255, 255, 0.70);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+}
+
+.markdown-body thead th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  background: linear-gradient(180deg, rgba(238, 242, 247, 0.95), rgba(238, 242, 247, 0.78));
+  border-bottom: 1px solid var(--ds-border);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.markdown-body tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(11, 18, 32, 0.08);
+  color: var(--ds-text-secondary);
+  vertical-align: top;
+}
+
+.markdown-body tbody tr:nth-child(even) td {
+  background: var(--md-table-stripe);
+}
+
+.markdown-body tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Numeric density: make tables/KPIs scanable if author uses <code> or numbers */
+.markdown-body td code,
+.markdown-body th code {
+  font-size: 0.92em;
+}
+
+/* -----------------------------
+   10) Media, kbd, mark
+   ----------------------------- */
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border);
+  background: var(--ds-surface-1);
+}
+
+.markdown-body kbd {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ds-text-primary);
+
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(11, 18, 32, 0.18);
+  border-bottom-color: rgba(11, 18, 32, 0.28);
+  border-radius: 10px;
+
+  padding: 2px 8px;
+  box-shadow: 0 1px 0 rgba(11, 18, 32, 0.08);
+}
+
+.markdown-body mark {
+  background: rgba(201, 162, 39, 0.22); /* audit gold, soft */
+  color: var(--ds-text-primary);
+  padding: 0 3px;
+  border-radius: 6px;
+}
+
+/* -----------------------------
+   11) GitHub-ish conveniences (without cloning GitHub)
+   ----------------------------- */
+.markdown-body .task-list-item {
+  list-style: none;
+}
+
+.markdown-body .task-list-item input[type="checkbox"] {
+  transform: translateY(1px);
+  accent-color: var(--ds-accent);
+}
+
+/* Make anchor icons / autolinks not ugly if present */
+.markdown-body a.anchor {
+  border-bottom: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* -----------------------------
+   12) Print: keep it “audit export” ready
+   ----------------------------- */
+@media print {
+  .markdown-body {
+    background: #ffffff;
+    box-shadow: none;
+    border: 0;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  .markdown-body a {
+    color: var(--ds-text-primary);
+    border-bottom-color: rgba(11, 18, 32, 0.22);
+  }
+
+  .markdown-body pre {
+    box-shadow: none;
+  }
+}
+
                 </style>
                 <style>
                 .svg-container {
@@ -708,6 +1027,281 @@
 }
                 </style>
                 <style>
+                /*! Asciidoctor Tabs | Editorial Light Theme */
+:root {
+  /* Typography */
+  --tabs-font-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
+  --tabs-font-ui: "IBM Plex Sans", "Avenir Next", "Segoe UI", sans-serif;
+  --tabs-font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+
+  /* Editorial palette (paper + ink + vermilion accent) */
+  --tabs-paper: #f8f5ef;
+  --tabs-paper-elev: #fffdf8;
+  --tabs-ink: #1f2328;
+  --tabs-ink-muted: #616a76;
+  --tabs-rule: #d6cec0;
+  --tabs-rule-strong: #b5aa97;
+
+  --tabs-accent: #d9482b;       /* dominant */
+  --tabs-accent-soft: #f3c8b7;  /* subtle fill */
+  --tabs-accent-ink: #fffaf5;
+
+  --tabs-radius-lg: 14px;
+  --tabs-radius-md: 10px;
+  --tabs-gap: 8px;
+  --tabs-shadow: 0 10px 24px rgba(45, 39, 30, 0.11);
+
+  --tabs-focus: #1f7a8c;
+}
+
+/* container */
+.tabs {
+  margin: 1.75rem 0;
+  border: 1px solid var(--tabs-rule);
+  border-radius: var(--tabs-radius-lg);
+  box-shadow: var(--tabs-shadow);
+  overflow: hidden;
+  background:
+          radial-gradient(circle at 10% -40%, rgba(217, 72, 43, 0.07), transparent 52%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35)),
+          var(--tabs-paper);
+  color: var(--tabs-ink);
+  animation: tabsEditorialEnter 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* tab rail */
+.tablist > ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+  gap: var(--tabs-gap);
+  border-bottom: 1px solid var(--tabs-rule);
+  background:
+          repeating-linear-gradient(
+                  90deg,
+                  rgba(40, 38, 34, 0.03) 0 1px,
+                  transparent 1px 18px
+          ),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.28)),
+          var(--tabs-paper-elev);
+}
+
+.tablist.ulist,
+.tablist.ulist > ul li {
+  margin: 0;
+}
+
+.tablist.ulist > ul li + li {
+  margin-left: 0;
+}
+
+/* tabs */
+.tablist > ul li {
+  align-items: center;
+  display: inline-flex;
+  position: relative;
+  cursor: pointer;
+
+  font-family: var(--tabs-font-ui);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.012em;
+
+  color: var(--tabs-ink-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.5rem 0.95rem;
+
+  transition:
+          color 180ms ease,
+          background-color 180ms ease,
+          border-color 180ms ease,
+          transform 180ms ease,
+          box-shadow 180ms ease,
+          opacity 180ms ease;
+}
+
+.tablist > ul li:hover {
+  color: var(--tabs-ink);
+  border-color: var(--tabs-rule);
+  background: rgba(255, 255, 255, 0.72);
+  transform: translateY(-1px);
+}
+
+.tablist > ul li:focus-visible {
+  outline: 2px solid var(--tabs-focus);
+  outline-offset: 2px;
+}
+
+/* underline indicator */
+.tabs .tablist li::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: -7px;
+  height: 2px;
+  border-radius: 99px;
+  background: transparent;
+  transform: scaleX(0.3);
+  opacity: 0;
+  transition: transform 220ms ease, opacity 220ms ease, background-color 220ms ease;
+}
+
+/* active tab */
+.tabs.is-loading .tablist li:first-child,
+.tabs:not(.is-loading) .tablist li.is-selected {
+  background: var(--tabs-accent);
+  color: var(--tabs-accent-ink);
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(217, 72, 43, 0.28);
+  transform: translateY(-1px);
+}
+
+.tabs.is-loading .tablist li:first-child::after,
+.tabs:not(.is-loading) .tablist li.is-selected::after {
+  background: var(--tabs-accent);
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* reduce inactive visual weight */
+.tabs:not(.is-loading) .tablist li:not(.is-selected) {
+  opacity: 0.86;
+}
+
+/* loading/hidden panel behavior */
+.tabs.is-loading .tabpanel + .tabpanel,
+.tabs:not(.is-loading) .tabpanel.is-hidden {
+  display: none;
+}
+
+/* panel */
+.tabpanel {
+  padding: 1.2rem 1.3rem;
+  color: var(--tabs-ink);
+  background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.32)),
+          var(--tabs-paper-elev);
+  border: 0;
+  animation: tabPanelReveal 280ms ease;
+}
+
+.tabpanel > :first-child {
+  margin-top: 0;
+}
+
+/* subtle editorial heading treatment in panel */
+.tabpanel h2,
+.tabpanel h3,
+.tabpanel h4 {
+  font-family: var(--tabs-font-head);
+  letter-spacing: -0.01em;
+}
+
+/* keep standalone Asciidoctor spacing tidy */
+#content .tabpanel > :last-child,
+#content .tabpanel > :last-child > :last-child,
+#content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
+  margin-bottom: 0;
+}
+
+/* table support */
+.tablecontainer {
+  overflow-x: auto;
+  border: 1px solid var(--tabs-rule);
+  border-radius: var(--tabs-radius-md);
+  background: #fffdf9;
+}
+
+#content .tablecontainer {
+  margin-bottom: 1.25em;
+}
+
+#content .tablecontainer > table.tableblock {
+  margin-bottom: 0;
+}
+
+/* tasteful motion */
+@keyframes tabsEditorialEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: saturate(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: saturate(1);
+  }
+}
+
+@keyframes tabPanelReveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .tabs,
+  .tabpanel,
+  .tablist > ul li,
+  .tabs .tablist li::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* dark fallback for user preference (keeps editorial identity) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabs-paper: #151618;
+    --tabs-paper-elev: #1a1c20;
+    --tabs-ink: #ece8de;
+    --tabs-ink-muted: #a6adba;
+    --tabs-rule: #2d323a;
+    --tabs-rule-strong: #4c5561;
+
+    --tabs-accent: #e05b3f;
+    --tabs-accent-soft: #5b2e24;
+    --tabs-accent-ink: #fff6f0;
+
+    --tabs-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+    --tabs-focus: #49b5c8;
+  }
+
+  .tabs {
+    background:
+            radial-gradient(circle at 10% -35%, rgba(224, 91, 63, 0.16), transparent 55%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+            var(--tabs-paper);
+  }
+
+  .tablist > ul li:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .tabpanel {
+    background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+            var(--tabs-paper-elev);
+  }
+
+  .tablecontainer {
+    background: #171a1e;
+  }
+}
+                </style>
+                <style>
                           @media (prefers-color-scheme: dark) {
                               body {
                                   background-color: #f5f5f5;
@@ -922,7 +1516,7 @@
 <li><strong>Training Materials</strong> - Standardize recipe formatting for teams</li>
 </ul>
 <h2 id="default-look">Default Look</h2>
-<div id="docops-recipe-1779236522385-892" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAAAAAAAA_1WSPVIDMQyFe5_iHSDxkADlFhlqKgpqZ63dmHjtHVlOyJE4BxdDWUOAxjPW08-nZ8uBJuqGnL2RIJE6PFXmC55dGrO5BIq-wwMK8SmksZiZae6wecQUUhUqps_52GF7dwuIG0uH_tplhYFrkBVONJI4Di6ZUqfJ8aUzOxXdyC4JXPLoc8w81NgqcQ5ywHSF-KneRyqrJfXseEKZQ0_FGqVi8oGSlM6ssQWHmVqlwqyxQU4hp0XqYz5Rweg4hn7RZF_m74lzPnviJdpXDeY-60K6Vjy24joXvb2T_wOkyouLAskQV4QMoOesKBurSpXPD8iBGsMC34ajJgnx5oA1W4ud9_9QlvQigbHnQEO8WHPfsv4a8u1Rs_AX2ZoHBQjTpH3arCvGbyEcE4SSzrHmUVP1gak5u1jP6q7VbZCyPurV2Z1_q0Wa74h0onjb2qr8mvlYcKYYW4M3V_RH0NIImTFEJ3sm5-0X-58xrnMCAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="theme=food
+<div id="docops-recipe-1779243328394-990" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAAAAAAAA_1WSPVIDMQyFe5_iHSDxkADlFhlqKgpqZ63dmHjtHVlOyJE4BxdDWUOAxjPW08-nZ8uBJuqGnL2RIJE6PFXmC55dGrO5BIq-wwMK8SmksZiZae6wecQUUhUqps_52GF7dwuIG0uH_tplhYFrkBVONJI4Di6ZUqfJ8aUzOxXdyC4JXPLoc8w81NgqcQ5ywHSF-KneRyqrJfXseEKZQ0_FGqVi8oGSlM6ssQWHmVqlwqyxQU4hp0XqYz5Rweg4hn7RZF_m74lzPnviJdpXDeY-60K6Vjy24joXvb2T_wOkyouLAskQV4QMoOesKBurSpXPD8iBGsMC34ajJgnx5oA1W4ud9_9QlvQigbHnQEO8WHPfsv4a8u1Rs_AX2ZoHBQjTpH3arCvGbyEcE4SSzrHmUVP1gak5u1jP6q7VbZCyPurV2Z1_q0Wa74h0onjb2qr8mvlYcKYYW4M3V_RH0NIImTFEJ3sm5-0X-58xrnMCAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="theme=food
 title= Curry Mango
 yield= 4 servings
 prep= 15 minutes
@@ -949,12 +1543,12 @@ notes=
 - Works well with jasmine rice or flatbread." data-kind="recipe">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="960" viewBox="0 0 680 960" id="recipe_e1649608b22e48abb9ae161976d5a5a9">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Curry Mango","4 servings","15 minutes","20 minutes","food","curry; fruit; vegetarian","A fragrant and colorful curry with mango, vegetables, and warm spices.","2 ripe mangoes | 1 onion | 2 cloves garlic | 1 tbsp curry powder | 1 cup coconut milk | 2 cups mixed vegetables | Salt to taste","Sauté the onion and garlic until fragrant. | Add curry powder and stir briefly. | Add vegetables, mango, and coconut milk. | Simmer until the vegetables are tender. | Serve warm with rice.","Adjust spice level to taste. | Works well with jasmine rice or flatbread."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><title>Curry Mango — Recipe Card</title><desc>A styled recipe card with warm tones and decorative borders</desc><defs><pattern id="recipe_e1649608b22e48abb9ae161976d5a5a9_linen" width="8" height="8" patternUnits="userSpaceOnUse"><line x1="0" y1="8" x2="8" y2="0" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.18"/><line x1="-2" y1="2" x2="2" y2="-2" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.1"/></pattern><pattern id="recipe_e1649608b22e48abb9ae161976d5a5a9_dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#B05C28" fill-opacity="0.12"/></pattern><pattern id="recipe_e1649608b22e48abb9ae161976d5a5a9_sp_dot" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="1.2" fill="#B05C28" fill-opacity="0.13"/></pattern><pattern id="recipe_e1649608b22e48abb9ae161976d5a5a9_sp_stripe" width="10" height="10" patternUnits="userSpaceOnUse"><line x1="0" y1="10" x2="10" y2="0" stroke="#A8D4A0" stroke-width="0.5" stroke-opacity="0.2"/></pattern><pattern id="recipe_e1649608b22e48abb9ae161976d5a5a9_su_wave" width="20" height="10" patternUnits="userSpaceOnUse"><path d="M0 5 Q5 0 10 5 Q15 10 20 5" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.12"/></pattern><pattern id="recipe_e1649608b22e48abb9ae161976d5a5a9_su_check" width="16" height="16" patternUnits="userSpaceOnUse"><line x1="8" y1="0" x2="8" y2="16" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/><line x1="0" y1="8" x2="16" y2="8" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/></pattern><style><![CDATA[ #recipe_e1649608b22e48abb9ae161976d5a5a9 { --primary: #3D1A08; --secondary: #7A3010; --accent: #B05C28; --canvas: #FBF5EC; } #recipe_e1649608b22e48abb9ae161976d5a5a9 .recipe-title { font-family: Georgia, serif; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; } #recipe_e1649608b22e48abb9ae161976d5a5a9 .recipe-subtitle { font-family: Georgia, serif; font-size: 12px; font-weight: 400; letter-spacing: 2px; opacity: 0.85; } #recipe_e1649608b22e48abb9ae161976d5a5a9 .meta-label { font-family: Georgia, serif; font-size: 9.5px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; } #recipe_e1649608b22e48abb9ae161976d5a5a9 .meta-value { font-family: Georgia, serif; font-size: 17px; font-weight: 600; } #recipe_e1649608b22e48abb9ae161976d5a5a9 .section-title { font-family: Georgia, serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 3.5px; } #recipe_e1649608b22e48abb9ae161976d5a5a9 .body-text { font-family: Georgia, serif; font-size: 14px; line-height: 1.6; } #recipe_e1649608b22e48abb9ae161976d5a5a9 .summary-text { font-family: Georgia, serif; font-size: 14px; font-style: italic; } ]]></style></defs><g transform="scale(1.0)"><!-- Background --><rect width="680" height="960" fill="#FBF5EC"/><rect width="680" height="960" fill="url(#recipe_e1649608b22e48abb9ae161976d5a5a9_linen)"/><!-- Decorative Borders --><rect x="14" y="14" width="652" height="932" rx="6" fill="none" stroke="#B05C28" stroke-width="1.5" stroke-opacity="0.35"/><rect x="20" y="20" width="640" height="920" rx="4" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.25"/><g fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.55"><!-- Top Left --><path d="M14 50 L14 14 L50 14"/><circle cx="14" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Top Right --><path d="M666 50 L666 14 L630 14"/><circle cx="666" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Left --><path d="M14 910 L14 946 L50 946"/><circle cx="14" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Right --><path d="M666 910 L666 946 L630 946"/><circle cx="666" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/></g><g><rect x="30" y="30" width="620" height="148" rx="5" fill="#7A3010" fill-opacity="0.92"/><rect x="30" y="30" width="620" height="148" rx="5" fill="url(#recipe_e1649608b22e48abb9ae161976d5a5a9_dots)"/><text x="340" y="80" text-anchor="middle" class="recipe-subtitle" fill="#FDEBD0" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text><text x="340" y="125" text-anchor="middle" class="recipe-title" fill="#FFF8EE" letter-spacing="-0.5">Curry Mango</text><text x="340" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDDDB8" letter-spacing="2" opacity="0.85">curry · fruit · vegetarian</text><!-- Decorative divider under header --><g transform="translate(0, 188)"><line x1="80" y1="0" x2="300" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><circle cx="340" cy="0" r="4" fill="var(--accent)" fill-opacity="0.5"/><line x1="380" y1="0" x2="600" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><path d="M320 0 Q330 -5 340 -4 Q350 -5 360 0" fill="none" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/></g></g><g><rect x="44" y="202" width="592" height="72" rx="4" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/><g transform="translate(44, 202)"><!-- Yield --><text x="100" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">YIELD</text><text x="100" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">4 servings</text><line x1="200" y1="12" x2="200" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Prep --><text x="300" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">PREP TIME</text><text x="300" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">15 minutes</text><line x1="400" y1="12" x2="400" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Cook --><text x="500" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">COOK TIME</text><text x="500" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">20 minutes</text></g><text x="340" y="296" text-anchor="middle" class="summary-text" fill="var(--secondary)" fill-opacity="0.85">A fragrant and colorful curry with mango, vegetables, and warm spices.</text><line x1="44" y1="327" x2="636" y2="327" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/></g><g transform="translate(44, 348)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#4A8A38" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#4A8A38">INGREDIENTS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#4A8A38" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="34" cy="61" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="66" class="body-text" fill="var(--primary)">2 ripe mangoes</text><circle cx="34" cy="85" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="90" class="body-text" fill="var(--primary)">1 onion</text><circle cx="34" cy="109" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="114" class="body-text" fill="var(--primary)">2 cloves garlic</text><circle cx="34" cy="133" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="138" class="body-text" fill="var(--primary)">1 tbsp curry powder</text><circle cx="34" cy="157" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="162" class="body-text" fill="var(--primary)">1 cup coconut milk</text><circle cx="34" cy="181" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="186" class="body-text" fill="var(--primary)">2 cups mixed vegetables</text><circle cx="34" cy="205" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="210" class="body-text" fill="var(--primary)">Salt to taste</text><g transform="translate(306, 0)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#B05C28" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#B05C28">STEPS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#B05C28" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="36" cy="61" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="66" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">1</text><text x="54" y="66" class="body-text" fill="var(--primary)">Sauté the onion and garlic until</text><text x="54" y="90" class="body-text" fill="var(--primary)">fragrant.</text><circle cx="36" cy="109" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="114" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">2</text><text x="54" y="114" class="body-text" fill="var(--primary)">Add curry powder and stir briefly.</text><circle cx="36" cy="133" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="138" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">3</text><text x="54" y="138" class="body-text" fill="var(--primary)">Add vegetables, mango, and coconut</text><text x="54" y="162" class="body-text" fill="var(--primary)">milk.</text><circle cx="36" cy="181" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="186" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">4</text><text x="54" y="186" class="body-text" fill="var(--primary)">Simmer until the vegetables are</text><text x="54" y="210" class="body-text" fill="var(--primary)">tender.</text><circle cx="36" cy="229" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="234" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">5</text><text x="54" y="234" class="body-text" fill="var(--primary)">Serve warm with rice.</text></g></g><g transform="translate(44, 718)"><rect width="592" height="126" rx="5" fill="#B05C28" fill-opacity="0.05" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="6 4"/><text x="28" y="28" class="section-title" fill="var(--secondary)">COOK'S NOTES</text><line x1="28" y1="35" x2="150" y2="35" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><text x="28" y="60" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Adjust spice level to taste.</text><text x="28" y="96" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Works well with jasmine rice or flatbread.</text></g><g transform="translate(44, 864)"><rect x="0" y="0" width="74" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="37" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">curry</text><rect x="84" y="0" width="74" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="121" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">fruit</text><rect x="168" y="0" width="114" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="225" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">vegetarian</text></g><g transform="translate(0, 910)"><line x1="44" y1="14" x2="280" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/><g transform="translate(318, 6)" fill="#B05C28" fill-opacity="0.45"><path d="M0 8 Q6 0 12 8 Q18 0 24 8" fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><circle cx="12" cy="8" r="2"/></g><line x1="400" y1="14" x2="636" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/></g><g transform="translate(340, 930)"><text text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="var(--secondary)" letter-spacing="2" fill-opacity="0.6">RECIPE DOSSIER</text></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="960" viewBox="0 0 680 960" id="recipe_0aac027f41734f789fb5be3e312c8332">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Curry Mango","4 servings","15 minutes","20 minutes","food","curry; fruit; vegetarian","A fragrant and colorful curry with mango, vegetables, and warm spices.","2 ripe mangoes | 1 onion | 2 cloves garlic | 1 tbsp curry powder | 1 cup coconut milk | 2 cups mixed vegetables | Salt to taste","Sauté the onion and garlic until fragrant. | Add curry powder and stir briefly. | Add vegetables, mango, and coconut milk. | Simmer until the vegetables are tender. | Serve warm with rice.","Adjust spice level to taste. | Works well with jasmine rice or flatbread."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><title>Curry Mango — Recipe Card</title><desc>A styled recipe card with warm tones and decorative borders</desc><defs><pattern id="recipe_0aac027f41734f789fb5be3e312c8332_linen" width="8" height="8" patternUnits="userSpaceOnUse"><line x1="0" y1="8" x2="8" y2="0" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.18"/><line x1="-2" y1="2" x2="2" y2="-2" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.1"/></pattern><pattern id="recipe_0aac027f41734f789fb5be3e312c8332_dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#B05C28" fill-opacity="0.12"/></pattern><pattern id="recipe_0aac027f41734f789fb5be3e312c8332_sp_dot" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="1.2" fill="#B05C28" fill-opacity="0.13"/></pattern><pattern id="recipe_0aac027f41734f789fb5be3e312c8332_sp_stripe" width="10" height="10" patternUnits="userSpaceOnUse"><line x1="0" y1="10" x2="10" y2="0" stroke="#A8D4A0" stroke-width="0.5" stroke-opacity="0.2"/></pattern><pattern id="recipe_0aac027f41734f789fb5be3e312c8332_su_wave" width="20" height="10" patternUnits="userSpaceOnUse"><path d="M0 5 Q5 0 10 5 Q15 10 20 5" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.12"/></pattern><pattern id="recipe_0aac027f41734f789fb5be3e312c8332_su_check" width="16" height="16" patternUnits="userSpaceOnUse"><line x1="8" y1="0" x2="8" y2="16" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/><line x1="0" y1="8" x2="16" y2="8" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/></pattern><style><![CDATA[ #recipe_0aac027f41734f789fb5be3e312c8332 { --primary: #3D1A08; --secondary: #7A3010; --accent: #B05C28; --canvas: #FBF5EC; } #recipe_0aac027f41734f789fb5be3e312c8332 .recipe-title { font-family: Georgia, serif; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; } #recipe_0aac027f41734f789fb5be3e312c8332 .recipe-subtitle { font-family: Georgia, serif; font-size: 12px; font-weight: 400; letter-spacing: 2px; opacity: 0.85; } #recipe_0aac027f41734f789fb5be3e312c8332 .meta-label { font-family: Georgia, serif; font-size: 9.5px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; } #recipe_0aac027f41734f789fb5be3e312c8332 .meta-value { font-family: Georgia, serif; font-size: 17px; font-weight: 600; } #recipe_0aac027f41734f789fb5be3e312c8332 .section-title { font-family: Georgia, serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 3.5px; } #recipe_0aac027f41734f789fb5be3e312c8332 .body-text { font-family: Georgia, serif; font-size: 14px; line-height: 1.6; } #recipe_0aac027f41734f789fb5be3e312c8332 .summary-text { font-family: Georgia, serif; font-size: 14px; font-style: italic; } ]]></style></defs><g transform="scale(1.0)"><!-- Background --><rect width="680" height="960" fill="#FBF5EC"/><rect width="680" height="960" fill="url(#recipe_0aac027f41734f789fb5be3e312c8332_linen)"/><!-- Decorative Borders --><rect x="14" y="14" width="652" height="932" rx="6" fill="none" stroke="#B05C28" stroke-width="1.5" stroke-opacity="0.35"/><rect x="20" y="20" width="640" height="920" rx="4" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.25"/><g fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.55"><!-- Top Left --><path d="M14 50 L14 14 L50 14"/><circle cx="14" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Top Right --><path d="M666 50 L666 14 L630 14"/><circle cx="666" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Left --><path d="M14 910 L14 946 L50 946"/><circle cx="14" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Right --><path d="M666 910 L666 946 L630 946"/><circle cx="666" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/></g><g><rect x="30" y="30" width="620" height="148" rx="5" fill="#7A3010" fill-opacity="0.92"/><rect x="30" y="30" width="620" height="148" rx="5" fill="url(#recipe_0aac027f41734f789fb5be3e312c8332_dots)"/><text x="340" y="80" text-anchor="middle" class="recipe-subtitle" fill="#FDEBD0" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text><text x="340" y="125" text-anchor="middle" class="recipe-title" fill="#FFF8EE" letter-spacing="-0.5">Curry Mango</text><text x="340" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDDDB8" letter-spacing="2" opacity="0.85">curry · fruit · vegetarian</text><!-- Decorative divider under header --><g transform="translate(0, 188)"><line x1="80" y1="0" x2="300" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><circle cx="340" cy="0" r="4" fill="var(--accent)" fill-opacity="0.5"/><line x1="380" y1="0" x2="600" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><path d="M320 0 Q330 -5 340 -4 Q350 -5 360 0" fill="none" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/></g></g><g><rect x="44" y="202" width="592" height="72" rx="4" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/><g transform="translate(44, 202)"><!-- Yield --><text x="100" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">YIELD</text><text x="100" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">4 servings</text><line x1="200" y1="12" x2="200" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Prep --><text x="300" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">PREP TIME</text><text x="300" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">15 minutes</text><line x1="400" y1="12" x2="400" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Cook --><text x="500" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">COOK TIME</text><text x="500" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">20 minutes</text></g><text x="340" y="296" text-anchor="middle" class="summary-text" fill="var(--secondary)" fill-opacity="0.85">A fragrant and colorful curry with mango, vegetables, and warm spices.</text><line x1="44" y1="327" x2="636" y2="327" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/></g><g transform="translate(44, 348)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#4A8A38" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#4A8A38">INGREDIENTS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#4A8A38" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="34" cy="61" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="66" class="body-text" fill="var(--primary)">2 ripe mangoes</text><circle cx="34" cy="85" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="90" class="body-text" fill="var(--primary)">1 onion</text><circle cx="34" cy="109" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="114" class="body-text" fill="var(--primary)">2 cloves garlic</text><circle cx="34" cy="133" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="138" class="body-text" fill="var(--primary)">1 tbsp curry powder</text><circle cx="34" cy="157" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="162" class="body-text" fill="var(--primary)">1 cup coconut milk</text><circle cx="34" cy="181" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="186" class="body-text" fill="var(--primary)">2 cups mixed vegetables</text><circle cx="34" cy="205" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="210" class="body-text" fill="var(--primary)">Salt to taste</text><g transform="translate(306, 0)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#B05C28" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#B05C28">STEPS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#B05C28" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="36" cy="61" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="66" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">1</text><text x="54" y="66" class="body-text" fill="var(--primary)">Sauté the onion and garlic until</text><text x="54" y="90" class="body-text" fill="var(--primary)">fragrant.</text><circle cx="36" cy="109" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="114" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">2</text><text x="54" y="114" class="body-text" fill="var(--primary)">Add curry powder and stir briefly.</text><circle cx="36" cy="133" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="138" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">3</text><text x="54" y="138" class="body-text" fill="var(--primary)">Add vegetables, mango, and coconut</text><text x="54" y="162" class="body-text" fill="var(--primary)">milk.</text><circle cx="36" cy="181" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="186" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">4</text><text x="54" y="186" class="body-text" fill="var(--primary)">Simmer until the vegetables are</text><text x="54" y="210" class="body-text" fill="var(--primary)">tender.</text><circle cx="36" cy="229" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="234" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">5</text><text x="54" y="234" class="body-text" fill="var(--primary)">Serve warm with rice.</text></g></g><g transform="translate(44, 718)"><rect width="592" height="126" rx="5" fill="#B05C28" fill-opacity="0.05" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="6 4"/><text x="28" y="28" class="section-title" fill="var(--secondary)">COOK'S NOTES</text><line x1="28" y1="35" x2="150" y2="35" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><text x="28" y="60" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Adjust spice level to taste.</text><text x="28" y="96" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Works well with jasmine rice or flatbread.</text></g><g transform="translate(44, 864)"><rect x="0" y="0" width="74" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="37" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">curry</text><rect x="84" y="0" width="74" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="121" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">fruit</text><rect x="168" y="0" width="114" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="225" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">vegetarian</text></g><g transform="translate(0, 910)"><line x1="44" y1="14" x2="280" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/><g transform="translate(318, 6)" fill="#B05C28" fill-opacity="0.45"><path d="M0 8 Q6 0 12 8 Q18 0 24 8" fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><circle cx="12" cy="8" r="2"/></g><line x1="400" y1="14" x2="636" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/></g><g transform="translate(340, 930)"><text text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="var(--secondary)" letter-spacing="2" fill-opacity="0.6">RECIPE DOSSIER</text></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-recipe-1779236522385-892').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-recipe-1779243328394-990').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -971,7 +1565,7 @@ notes=
 </div>
 </div>
 <h2 id="warm-comfort-food-look">Warm Comfort Food Look</h2>
-<div id="docops-recipe-1779236522462-973" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAAAAAAAA_12SzW7bMBCE73yKeQBXSJzkqEN6yLlo0NwpcWSylkmCXDvQ22dJu6iRi0Duz-w3XInnieOSkjMSZOWI3ykJPnig2GllxWcQj3e7Ch3eQvVmC1zdiCdUlkuIh2pyYR6xf8ApxLOwmjml44jn_wGxhzqi2ksq2w7lXCXMO7gQI4up59PJlm00r_C0RTZNVA_xVjDZ1cZZMVrCbyiN7vKNTjzhmPWUFh3SUReVGIziFbrAKHU0P7BHTmIlKVG7zLaUJO38iPpJyi3dAi8Ph3upXpNiSLF3ylQzUlj18nO18xGZObNAEsRWoQH0m3Xo44Bf5AobHWafcof97iJEbeSFETlQ3Q5mP-A92SNSQQmxsrfd8SAsiKSjG8zTgLey9YpOiHOUsKKmRRjpdi0TYZ3rJdeHeR7wegvccXRI3d1NQdsdy2BeFIa2qnIraGsnfJJBXSIm3W972ya3FCqaZ5kq_uqSMXFJhf_-lEHL_qgXHVW7GTV-fQ9qre6uL7K5mzjb88311a7CrYXWbSrWUNT4FxGTFzi8AgAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="theme=food
+<div id="docops-recipe-1779243328469-125" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAAAAAAAA_12SzW7bMBCE73yKeQBXSJzkqEN6yLlo0NwpcWSylkmCXDvQ22dJu6iRi0Duz-w3XInnieOSkjMSZOWI3ykJPnig2GllxWcQj3e7Ch3eQvVmC1zdiCdUlkuIh2pyYR6xf8ApxLOwmjml44jn_wGxhzqi2ksq2w7lXCXMO7gQI4up59PJlm00r_C0RTZNVA_xVjDZ1cZZMVrCbyiN7vKNTjzhmPWUFh3SUReVGIziFbrAKHU0P7BHTmIlKVG7zLaUJO38iPpJyi3dAi8Ph3upXpNiSLF3ylQzUlj18nO18xGZObNAEsRWoQH0m3Xo44Bf5AobHWafcof97iJEbeSFETlQ3Q5mP-A92SNSQQmxsrfd8SAsiKSjG8zTgLey9YpOiHOUsKKmRRjpdi0TYZ3rJdeHeR7wegvccXRI3d1NQdsdy2BeFIa2qnIraGsnfJJBXSIm3W972ya3FCqaZ5kq_uqSMXFJhf_-lEHL_qgXHVW7GTV-fQ9qre6uL7K5mzjb88311a7CrYXWbSrWUNT4FxGTFzi8AgAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="theme=food
 title= Root Vegetables with Salted Fish
 yield= 3 servings
 prep= 20 minutes
@@ -998,12 +1592,12 @@ notes=
 - Use less salt in the rest of the dish because the fish is already seasoned." data-kind="recipe">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="960" viewBox="0 0 680 960" id="recipe_12a13a4457104f30b18177623963a477">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Root Vegetables with Salted Fish","3 servings","20 minutes","40 minutes","food","savory; rustic; dinner","A hearty dish that balances earthy root vegetables with the depth of salted fish.","2 potatoes | 2 carrots | 1 sweet potato | 150g salted fish | 1 onion | 2 tbsp oil | Black pepper to taste","Peel and chop the root vegetables into even pieces. | Soak or rinse the salted fish if needed. | Fry the onion until softened, then add the fish. | Add the vegetables and cook until tender. | Season and serve hot.","Add fresh herbs just before serving. | Use less salt in the rest of the dish because the fish is already seasoned."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><title>Root Vegetables with Salted Fish — Recipe Card</title><desc>A styled recipe card with warm tones and decorative borders</desc><defs><pattern id="recipe_12a13a4457104f30b18177623963a477_linen" width="8" height="8" patternUnits="userSpaceOnUse"><line x1="0" y1="8" x2="8" y2="0" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.18"/><line x1="-2" y1="2" x2="2" y2="-2" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.1"/></pattern><pattern id="recipe_12a13a4457104f30b18177623963a477_dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#B05C28" fill-opacity="0.12"/></pattern><pattern id="recipe_12a13a4457104f30b18177623963a477_sp_dot" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="1.2" fill="#B05C28" fill-opacity="0.13"/></pattern><pattern id="recipe_12a13a4457104f30b18177623963a477_sp_stripe" width="10" height="10" patternUnits="userSpaceOnUse"><line x1="0" y1="10" x2="10" y2="0" stroke="#A8D4A0" stroke-width="0.5" stroke-opacity="0.2"/></pattern><pattern id="recipe_12a13a4457104f30b18177623963a477_su_wave" width="20" height="10" patternUnits="userSpaceOnUse"><path d="M0 5 Q5 0 10 5 Q15 10 20 5" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.12"/></pattern><pattern id="recipe_12a13a4457104f30b18177623963a477_su_check" width="16" height="16" patternUnits="userSpaceOnUse"><line x1="8" y1="0" x2="8" y2="16" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/><line x1="0" y1="8" x2="16" y2="8" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/></pattern><style><![CDATA[ #recipe_12a13a4457104f30b18177623963a477 { --primary: #3D1A08; --secondary: #7A3010; --accent: #B05C28; --canvas: #FBF5EC; } #recipe_12a13a4457104f30b18177623963a477 .recipe-title { font-family: Georgia, serif; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; } #recipe_12a13a4457104f30b18177623963a477 .recipe-subtitle { font-family: Georgia, serif; font-size: 12px; font-weight: 400; letter-spacing: 2px; opacity: 0.85; } #recipe_12a13a4457104f30b18177623963a477 .meta-label { font-family: Georgia, serif; font-size: 9.5px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; } #recipe_12a13a4457104f30b18177623963a477 .meta-value { font-family: Georgia, serif; font-size: 17px; font-weight: 600; } #recipe_12a13a4457104f30b18177623963a477 .section-title { font-family: Georgia, serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 3.5px; } #recipe_12a13a4457104f30b18177623963a477 .body-text { font-family: Georgia, serif; font-size: 14px; line-height: 1.6; } #recipe_12a13a4457104f30b18177623963a477 .summary-text { font-family: Georgia, serif; font-size: 14px; font-style: italic; } ]]></style></defs><g transform="scale(1.0)"><!-- Background --><rect width="680" height="960" fill="#FBF5EC"/><rect width="680" height="960" fill="url(#recipe_12a13a4457104f30b18177623963a477_linen)"/><!-- Decorative Borders --><rect x="14" y="14" width="652" height="932" rx="6" fill="none" stroke="#B05C28" stroke-width="1.5" stroke-opacity="0.35"/><rect x="20" y="20" width="640" height="920" rx="4" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.25"/><g fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.55"><!-- Top Left --><path d="M14 50 L14 14 L50 14"/><circle cx="14" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Top Right --><path d="M666 50 L666 14 L630 14"/><circle cx="666" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Left --><path d="M14 910 L14 946 L50 946"/><circle cx="14" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Right --><path d="M666 910 L666 946 L630 946"/><circle cx="666" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/></g><g><rect x="30" y="30" width="620" height="148" rx="5" fill="#7A3010" fill-opacity="0.92"/><rect x="30" y="30" width="620" height="148" rx="5" fill="url(#recipe_12a13a4457104f30b18177623963a477_dots)"/><text x="340" y="80" text-anchor="middle" class="recipe-subtitle" fill="#FDEBD0" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text><text x="340" y="125" text-anchor="middle" class="recipe-title" fill="#FFF8EE" letter-spacing="-0.5">Root Vegetables with Salted Fish</text><text x="340" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDDDB8" letter-spacing="2" opacity="0.85">savory · rustic · dinner</text><!-- Decorative divider under header --><g transform="translate(0, 188)"><line x1="80" y1="0" x2="300" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><circle cx="340" cy="0" r="4" fill="var(--accent)" fill-opacity="0.5"/><line x1="380" y1="0" x2="600" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><path d="M320 0 Q330 -5 340 -4 Q350 -5 360 0" fill="none" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/></g></g><g><rect x="44" y="202" width="592" height="72" rx="4" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/><g transform="translate(44, 202)"><!-- Yield --><text x="100" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">YIELD</text><text x="100" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">3 servings</text><line x1="200" y1="12" x2="200" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Prep --><text x="300" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">PREP TIME</text><text x="300" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">20 minutes</text><line x1="400" y1="12" x2="400" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Cook --><text x="500" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">COOK TIME</text><text x="500" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">40 minutes</text></g><text x="340" y="296" text-anchor="middle" class="summary-text" fill="var(--secondary)" fill-opacity="0.85">A hearty dish that balances earthy root vegetables with the depth of salted fish.</text><line x1="44" y1="327" x2="636" y2="327" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/></g><g transform="translate(44, 348)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#4A8A38" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#4A8A38">INGREDIENTS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#4A8A38" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="34" cy="61" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="66" class="body-text" fill="var(--primary)">2 potatoes</text><circle cx="34" cy="85" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="90" class="body-text" fill="var(--primary)">2 carrots</text><circle cx="34" cy="109" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="114" class="body-text" fill="var(--primary)">1 sweet potato</text><circle cx="34" cy="133" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="138" class="body-text" fill="var(--primary)">150g salted fish</text><circle cx="34" cy="157" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="162" class="body-text" fill="var(--primary)">1 onion</text><circle cx="34" cy="181" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="186" class="body-text" fill="var(--primary)">2 tbsp oil</text><circle cx="34" cy="205" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="210" class="body-text" fill="var(--primary)">Black pepper to taste</text><g transform="translate(306, 0)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#B05C28" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#B05C28">STEPS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#B05C28" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="36" cy="61" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="66" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">1</text><text x="54" y="66" class="body-text" fill="var(--primary)">Peel and chop the root vegetables</text><text x="54" y="90" class="body-text" fill="var(--primary)">into even pieces.</text><circle cx="36" cy="109" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="114" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">2</text><text x="54" y="114" class="body-text" fill="var(--primary)">Soak or rinse the salted fish if</text><text x="54" y="138" class="body-text" fill="var(--primary)">needed.</text><circle cx="36" cy="157" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="162" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">3</text><text x="54" y="162" class="body-text" fill="var(--primary)">Fry the onion until softened, then</text><text x="54" y="186" class="body-text" fill="var(--primary)">add the fish.</text><circle cx="36" cy="205" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="210" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">4</text><text x="54" y="210" class="body-text" fill="var(--primary)">Add the vegetables and cook until</text><text x="54" y="234" class="body-text" fill="var(--primary)">tender.</text><circle cx="36" cy="253" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="258" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">5</text><text x="54" y="258" class="body-text" fill="var(--primary)">Season and serve hot.</text></g></g><g transform="translate(44, 718)"><rect width="592" height="126" rx="5" fill="#B05C28" fill-opacity="0.05" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="6 4"/><text x="28" y="28" class="section-title" fill="var(--secondary)">COOK'S NOTES</text><line x1="28" y1="35" x2="150" y2="35" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><text x="28" y="60" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Add fresh herbs just before serving.</text><text x="28" y="96" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Use less salt in the rest of the dish because the fish is already seasoned.</text></g><g transform="translate(44, 864)"><rect x="0" y="0" width="82" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="41" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">savory</text><rect x="92" y="0" width="82" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="133" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">rustic</text><rect x="184" y="0" width="82" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="225" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">dinner</text></g><g transform="translate(0, 910)"><line x1="44" y1="14" x2="280" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/><g transform="translate(318, 6)" fill="#B05C28" fill-opacity="0.45"><path d="M0 8 Q6 0 12 8 Q18 0 24 8" fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><circle cx="12" cy="8" r="2"/></g><line x1="400" y1="14" x2="636" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/></g><g transform="translate(340, 930)"><text text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="var(--secondary)" letter-spacing="2" fill-opacity="0.6">RECIPE DOSSIER</text></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="960" viewBox="0 0 680 960" id="recipe_f34e72dc19334ba181e1ce55c041f19a">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Root Vegetables with Salted Fish","3 servings","20 minutes","40 minutes","food","savory; rustic; dinner","A hearty dish that balances earthy root vegetables with the depth of salted fish.","2 potatoes | 2 carrots | 1 sweet potato | 150g salted fish | 1 onion | 2 tbsp oil | Black pepper to taste","Peel and chop the root vegetables into even pieces. | Soak or rinse the salted fish if needed. | Fry the onion until softened, then add the fish. | Add the vegetables and cook until tender. | Season and serve hot.","Add fresh herbs just before serving. | Use less salt in the rest of the dish because the fish is already seasoned."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><title>Root Vegetables with Salted Fish — Recipe Card</title><desc>A styled recipe card with warm tones and decorative borders</desc><defs><pattern id="recipe_f34e72dc19334ba181e1ce55c041f19a_linen" width="8" height="8" patternUnits="userSpaceOnUse"><line x1="0" y1="8" x2="8" y2="0" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.18"/><line x1="-2" y1="2" x2="2" y2="-2" stroke="#B05C28" stroke-width="0.4" stroke-opacity="0.1"/></pattern><pattern id="recipe_f34e72dc19334ba181e1ce55c041f19a_dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#B05C28" fill-opacity="0.12"/></pattern><pattern id="recipe_f34e72dc19334ba181e1ce55c041f19a_sp_dot" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="1.2" fill="#B05C28" fill-opacity="0.13"/></pattern><pattern id="recipe_f34e72dc19334ba181e1ce55c041f19a_sp_stripe" width="10" height="10" patternUnits="userSpaceOnUse"><line x1="0" y1="10" x2="10" y2="0" stroke="#A8D4A0" stroke-width="0.5" stroke-opacity="0.2"/></pattern><pattern id="recipe_f34e72dc19334ba181e1ce55c041f19a_su_wave" width="20" height="10" patternUnits="userSpaceOnUse"><path d="M0 5 Q5 0 10 5 Q15 10 20 5" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.12"/></pattern><pattern id="recipe_f34e72dc19334ba181e1ce55c041f19a_su_check" width="16" height="16" patternUnits="userSpaceOnUse"><line x1="8" y1="0" x2="8" y2="16" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/><line x1="0" y1="8" x2="16" y2="8" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.08"/></pattern><style><![CDATA[ #recipe_f34e72dc19334ba181e1ce55c041f19a { --primary: #3D1A08; --secondary: #7A3010; --accent: #B05C28; --canvas: #FBF5EC; } #recipe_f34e72dc19334ba181e1ce55c041f19a .recipe-title { font-family: Georgia, serif; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; } #recipe_f34e72dc19334ba181e1ce55c041f19a .recipe-subtitle { font-family: Georgia, serif; font-size: 12px; font-weight: 400; letter-spacing: 2px; opacity: 0.85; } #recipe_f34e72dc19334ba181e1ce55c041f19a .meta-label { font-family: Georgia, serif; font-size: 9.5px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; } #recipe_f34e72dc19334ba181e1ce55c041f19a .meta-value { font-family: Georgia, serif; font-size: 17px; font-weight: 600; } #recipe_f34e72dc19334ba181e1ce55c041f19a .section-title { font-family: Georgia, serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 3.5px; } #recipe_f34e72dc19334ba181e1ce55c041f19a .body-text { font-family: Georgia, serif; font-size: 14px; line-height: 1.6; } #recipe_f34e72dc19334ba181e1ce55c041f19a .summary-text { font-family: Georgia, serif; font-size: 14px; font-style: italic; } ]]></style></defs><g transform="scale(1.0)"><!-- Background --><rect width="680" height="960" fill="#FBF5EC"/><rect width="680" height="960" fill="url(#recipe_f34e72dc19334ba181e1ce55c041f19a_linen)"/><!-- Decorative Borders --><rect x="14" y="14" width="652" height="932" rx="6" fill="none" stroke="#B05C28" stroke-width="1.5" stroke-opacity="0.35"/><rect x="20" y="20" width="640" height="920" rx="4" fill="none" stroke="#B05C28" stroke-width="0.5" stroke-opacity="0.25"/><g fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.55"><!-- Top Left --><path d="M14 50 L14 14 L50 14"/><circle cx="14" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Top Right --><path d="M666 50 L666 14 L630 14"/><circle cx="666" cy="14" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Left --><path d="M14 910 L14 946 L50 946"/><circle cx="14" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/><!-- Bottom Right --><path d="M666 910 L666 946 L630 946"/><circle cx="666" cy="946" r="3.5" fill="#B05C28" fill-opacity="0.4" stroke="none"/></g><g><rect x="30" y="30" width="620" height="148" rx="5" fill="#7A3010" fill-opacity="0.92"/><rect x="30" y="30" width="620" height="148" rx="5" fill="url(#recipe_f34e72dc19334ba181e1ce55c041f19a_dots)"/><text x="340" y="80" text-anchor="middle" class="recipe-subtitle" fill="#FDEBD0" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text><text x="340" y="125" text-anchor="middle" class="recipe-title" fill="#FFF8EE" letter-spacing="-0.5">Root Vegetables with Salted Fish</text><text x="340" y="156" text-anchor="middle" font-family="Georgia, serif" font-size="12" fill="#FDDDB8" letter-spacing="2" opacity="0.85">savory · rustic · dinner</text><!-- Decorative divider under header --><g transform="translate(0, 188)"><line x1="80" y1="0" x2="300" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><circle cx="340" cy="0" r="4" fill="var(--accent)" fill-opacity="0.5"/><line x1="380" y1="0" x2="600" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><path d="M320 0 Q330 -5 340 -4 Q350 -5 360 0" fill="none" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/></g></g><g><rect x="44" y="202" width="592" height="72" rx="4" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/><g transform="translate(44, 202)"><!-- Yield --><text x="100" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">YIELD</text><text x="100" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">3 servings</text><line x1="200" y1="12" x2="200" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Prep --><text x="300" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">PREP TIME</text><text x="300" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">20 minutes</text><line x1="400" y1="12" x2="400" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Cook --><text x="500" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">COOK TIME</text><text x="500" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">40 minutes</text></g><text x="340" y="296" text-anchor="middle" class="summary-text" fill="var(--secondary)" fill-opacity="0.85">A hearty dish that balances earthy root vegetables with the depth of salted fish.</text><line x1="44" y1="327" x2="636" y2="327" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/></g><g transform="translate(44, 348)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#4A8A38" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#4A8A38">INGREDIENTS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#4A8A38" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="34" cy="61" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="66" class="body-text" fill="var(--primary)">2 potatoes</text><circle cx="34" cy="85" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="90" class="body-text" fill="var(--primary)">2 carrots</text><circle cx="34" cy="109" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="114" class="body-text" fill="var(--primary)">1 sweet potato</text><circle cx="34" cy="133" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="138" class="body-text" fill="var(--primary)">150g salted fish</text><circle cx="34" cy="157" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="162" class="body-text" fill="var(--primary)">1 onion</text><circle cx="34" cy="181" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="186" class="body-text" fill="var(--primary)">2 tbsp oil</text><circle cx="34" cy="205" r="2.5" fill="#B05C28" fill-opacity="0.7"/><text x="48" y="210" class="body-text" fill="var(--primary)">Black pepper to taste</text><g transform="translate(306, 0)"><rect x="0" y="0" width="286" height="340" rx="5" fill="#FBF5EC" fill-opacity="0.4" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="340" rx="3" fill="#B05C28" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#B05C28">STEPS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#B05C28" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="36" cy="61" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="66" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">1</text><text x="54" y="66" class="body-text" fill="var(--primary)">Peel and chop the root vegetables</text><text x="54" y="90" class="body-text" fill="var(--primary)">into even pieces.</text><circle cx="36" cy="109" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="114" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">2</text><text x="54" y="114" class="body-text" fill="var(--primary)">Soak or rinse the salted fish if</text><text x="54" y="138" class="body-text" fill="var(--primary)">needed.</text><circle cx="36" cy="157" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="162" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">3</text><text x="54" y="162" class="body-text" fill="var(--primary)">Fry the onion until softened, then</text><text x="54" y="186" class="body-text" fill="var(--primary)">add the fish.</text><circle cx="36" cy="205" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="210" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">4</text><text x="54" y="210" class="body-text" fill="var(--primary)">Add the vegetables and cook until</text><text x="54" y="234" class="body-text" fill="var(--primary)">tender.</text><circle cx="36" cy="253" r="11" fill="#B05C28" fill-opacity="0.85"/><text x="36" y="258" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">5</text><text x="54" y="258" class="body-text" fill="var(--primary)">Season and serve hot.</text></g></g><g transform="translate(44, 718)"><rect width="592" height="126" rx="5" fill="#B05C28" fill-opacity="0.05" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="6 4"/><text x="28" y="28" class="section-title" fill="var(--secondary)">COOK'S NOTES</text><line x1="28" y1="35" x2="150" y2="35" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><text x="28" y="60" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Add fresh herbs just before serving.</text><text x="28" y="96" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Use less salt in the rest of the dish because the fish is already seasoned.</text></g><g transform="translate(44, 864)"><rect x="0" y="0" width="82" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="41" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">savory</text><rect x="92" y="0" width="82" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="133" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">rustic</text><rect x="184" y="0" width="82" height="32" rx="16" fill="#B05C28" fill-opacity="0.35" stroke="#B05C28" stroke-width="0.8" stroke-opacity="0.4"/><text x="225" y="21" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="var(--primary)" font-weight="700">dinner</text></g><g transform="translate(0, 910)"><line x1="44" y1="14" x2="280" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/><g transform="translate(318, 6)" fill="#B05C28" fill-opacity="0.45"><path d="M0 8 Q6 0 12 8 Q18 0 24 8" fill="none" stroke="#B05C28" stroke-width="1" stroke-opacity="0.5"/><circle cx="12" cy="8" r="2"/></g><line x1="400" y1="14" x2="636" y2="14" stroke="#B05C28" stroke-width="0.6" stroke-opacity="0.35"/></g><g transform="translate(340, 930)"><text text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="var(--secondary)" letter-spacing="2" fill-opacity="0.6">RECIPE DOSSIER</text></g></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-recipe-1779236522462-973').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-recipe-1779243328469-125').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1444,6 +2038,134 @@ ingredients=
         }
     }
 })();
+                    ;(function () { /*! Asciidoctor Tabs | Copyright (c) 2018-present Dan Allen | MIT License */
+  'use strict'
+
+  var config = (document.currentScript || {}).dataset || {}
+  var forEach = Array.prototype.forEach
+
+  init(document.querySelectorAll('.tabs'))
+
+  function init (tabsBlocks) {
+    if (!tabsBlocks.length) return
+    forEach.call(tabsBlocks, function (tabs) {
+      var syncIds = tabs.classList.contains('is-sync') ? {} : undefined
+      var tablist = tabs.querySelector('.tablist ul')
+      tablist.setAttribute('role', 'tablist')
+      var start
+      forEach.call(tablist.querySelectorAll('li'), function (tab, idx) {
+        tab.tabIndex = -1
+        tab.setAttribute('role', tab.classList.add('tab') || 'tab')
+        var id, anchor, syncId
+        if (!(id = tab.id) && (anchor = tab.querySelector('a[id]'))) {
+          id = tab.id = anchor.parentNode.removeChild(anchor).id
+        }
+        var panel = id && tabs.querySelector('.tabpanel[aria-labelledby~="' + id + '"]')
+        if (!panel) return idx ? undefined : toggleSelected(tab, true) // invalid state
+        syncIds && (((syncId = tab.textContent.trim()) in syncIds) ? (syncId = undefined) : true) &&
+          (syncIds[(tab.dataset.syncId = syncId)] = tab)
+        idx || (syncIds && (start = { tab: tab, panel: panel })) ? toggleHidden(panel, true) : toggleSelected(tab, true)
+        tab.setAttribute('aria-controls', panel.id)
+        panel.setAttribute('role', 'tabpanel')
+        var onClick = syncId === undefined ? activateTab : activateTabSync
+        tab.addEventListener('click', onClick.bind({ tabs: tabs, tab: tab, panel: panel }))
+      })
+      if (!tabs.closest('.tabpanel')) {
+        forEach.call(tabs.querySelectorAll('.tabpanel table.tableblock'), function (table) {
+          var container = Object.assign(document.createElement('div'), { className: 'tablecontainer' })
+          table.parentNode.insertBefore(container, table).appendChild(table)
+        })
+      }
+      if (start) {
+        var syncGroupId
+        for (var i = 0, lst = tabs.classList, len = lst.length, className; i !== len; i++) {
+          if (!(className = lst.item(i)).startsWith('data-sync-group-id=')) continue
+          tabs.dataset.syncGroupId = syncGroupId = lst.remove(className) || className.slice(19).replace(/\u00a0/g, ' ')
+          break
+        }
+        if (syncGroupId === undefined) tabs.dataset.syncGroupId = syncGroupId = Object.keys(syncIds).sort().join('|')
+        var preferredSyncId = 'syncStorageKey' in config &&
+          window[(config.syncStorageScope || 'local') + 'Storage'].getItem(config.syncStorageKey + '-' + syncGroupId)
+        var tab = preferredSyncId && syncIds[preferredSyncId]
+        tab && Object.assign(start, { tab: tab, panel: document.getElementById(tab.getAttribute('aria-controls')) })
+        toggleSelected(start.tab, true) || toggleHidden(start.panel, false)
+      }
+    })
+    onHashChange()
+    toggleClassOnEach(tabsBlocks, 'is-loading', 'remove')
+    window.setTimeout(toggleClassOnEach.bind(null, tabsBlocks, 'is-loaded', 'add'), 0)
+    window.addEventListener('hashchange', onHashChange)
+  }
+
+  function activateTab (e) {
+    var tab = this.tab
+    var tabs = this.tabs || (this.tabs = tab.closest('.tabs'))
+    var panel = this.panel || (this.panel = document.getElementById(tab.getAttribute('aria-controls')))
+    querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (el) {
+      toggleSelected(el, el === tab)
+    })
+    querySelectorWithSiblings(tabs, '.tabpanel', 'tabpanel').forEach(function (el) {
+      toggleHidden(el, el !== panel)
+    })
+    if (!this.isSync && 'syncStorageKey' in config && 'syncGroupId' in tabs.dataset) {
+      var storageKey = config.syncStorageKey + '-' + tabs.dataset.syncGroupId
+      window[(config.syncStorageScope || 'local') + 'Storage'].setItem(storageKey, tab.dataset.syncId)
+    }
+    if (!e) return
+    var loc = window.location
+    var hashIdx = loc.hash ? loc.href.indexOf('#') : -1
+    if (~hashIdx) window.history.replaceState(null, '', loc.href.slice(0, hashIdx))
+    e.preventDefault()
+  }
+
+  function activateTabSync (e) {
+    activateTab.call(this, e)
+    var thisTabs = this.tabs
+    var thisTab = this.tab
+    var initialY = thisTabs.getBoundingClientRect().y
+    forEach.call(document.querySelectorAll('.tabs'), function (tabs) {
+      if (tabs === thisTabs || tabs.dataset.syncGroupId !== thisTabs.dataset.syncGroupId) return
+      querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (tab) {
+        if (tab.dataset.syncId === thisTab.dataset.syncId) activateTab.call({ tabs: tabs, tab: tab, isSync: true })
+      })
+    })
+    var shiftedBy = thisTabs.getBoundingClientRect().y - initialY
+    if (shiftedBy && (shiftedBy = Math.round(shiftedBy))) window.scrollBy({ top: shiftedBy, behavior: 'instant' })
+  }
+
+  function querySelectorWithSiblings (scope, selector, siblingClass) {
+    var el = scope.querySelector(selector)
+    if (!el) return []
+    var result = [el]
+    while ((el = el.nextElementSibling) && el.classList.contains(siblingClass)) result.push(el)
+    return result
+  }
+
+  function toggleClassOnEach (elements, className, method) {
+    forEach.call(elements, function (el) {
+      el.classList[method](className)
+    })
+  }
+
+  function toggleHidden (el, state) {
+    el.classList[(el.hidden = state) ? 'add' : 'remove']('is-hidden')
+  }
+
+  function toggleSelected (el, state) {
+    el.setAttribute('aria-selected', '' + state)
+    el.classList[state ? 'add' : 'remove']('is-selected')
+    el.tabIndex = state ? 0 : -1
+  }
+
+  function onHashChange () {
+    var id = window.location.hash.slice(1)
+    if (!id) return
+    var tab = document.getElementById(~id.indexOf('%') ? decodeURIComponent(id) : id)
+    if (!(tab && tab.classList.contains('tab'))) return
+    'syncId' in tab.dataset ? activateTabSync.call({ tab: tab }) : activateTab.call({ tab: tab })
+  }
+})()
+
                     const docopsDataX = {
     toggle(btn) {
         const card = btn.closest('.docops-media-card');
@@ -1556,6 +2278,63 @@ ingredients=
 
 };
 
+                    </script>
+                    <script>
+                    (function() {
+                        function reRenderMermaidInPanel(panel) {
+                            if (panel.classList.contains('is-hidden') || panel.hasAttribute('hidden')) {
+                                return;
+                            }
+                            const mermaidDivs = panel.querySelectorAll('.mermaid');
+                            mermaidDivs.forEach((div) => {
+                                const svg = div.querySelector('svg');
+                                if (svg) {
+                                    const rect = svg.getBoundingClientRect();
+                                    const vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/);
+                                    const vbWidth = vb.length === 4 ? parseFloat(vb[2]) : null;
+                                    const isShrunk = rect.width <= 16 || (vbWidth !== null && Math.abs(rect.width - vbWidth) < 1 && rect.width < panel.offsetWidth - 10);
+                                    if (isShrunk && panel.offsetWidth > 16) {
+                                        const card = div.closest('.docops-media-card');
+                                        if (card) {
+                                            const originalContent = card.getAttribute('data-original-content');
+                                            if (originalContent) {
+                                                const decoded = originalContent
+                                                    .replace(/&quot;/g, '"')
+                                                    .replace(/&amp;/g, '&')
+                                                    .replace(/&lt;/g, '<')
+                                                    .replace(/&gt;/g, '>')
+                                                    .replace(/&#39;/g, "'");
+                                                div.innerHTML = decoded;
+                                                div.removeAttribute('data-processed');
+                                                mermaid.run({ nodes: [div] });
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        const observer = new MutationObserver((mutations) => {
+                            mutations.forEach((mutation) => {
+                                if (mutation.type === 'attributes' && (mutation.attributeName === 'class' || mutation.attributeName === 'hidden')) {
+                                    const panel = mutation.target;
+                                    if (panel.classList.contains('tabpanel') && !panel.classList.contains('is-hidden') && !panel.hasAttribute('hidden')) {
+                                        setTimeout(() => reRenderMermaidInPanel(panel), 100);
+                                    }
+                                }
+                            });
+                        });
+
+                        document.querySelectorAll('.tabpanel').forEach((panel) => {
+                            observer.observe(panel, { attributes: true });
+                        });
+                        
+                        window.addEventListener('load', () => {
+                            setTimeout(() => {
+                                document.querySelectorAll('.tabpanel:not(.is-hidden):not([hidden])').forEach(reRenderMermaidInPanel);
+                            }, 500);
+                        });
+                    })();
                     </script>
                 
                 </body>

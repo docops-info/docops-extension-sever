@@ -6,8 +6,8 @@ This section provides an overview of UML diagrams and their usage in software de
 
 PlantUML is a popular tool for creating UML diagrams using simple text-based descriptions. It supports various diagram types such as class diagrams, sequence diagrams, and activity diagrams.
 
-### Class Diagram
-
+[tabs]
+[tab:Class Diagram]
 ```plantuml
 @startuml
 class A {
@@ -16,9 +16,8 @@ class A {
 }
 @enduml
 ```
-
-### Activity Diagram
-
+[/tab]
+[tab:Activity Diagram]
 ```plantuml
 @startuml
 
@@ -34,9 +33,8 @@ else
 endif
 @enduml
 ```
-
-### Sequence Diagram
-
+[/tab]
+[tab:Sequence Diagram]
 ```plantuml
 @startuml
 title Dodawanie hosta
@@ -70,12 +68,16 @@ end
 
 @enduml
 ```
+[/tab]
+[/tabs]
+
+
 ## Mermaid
 
 Mermaid is another tool for creating UML diagrams and flowcharts. It uses a simple syntax and can be integrated with Markdown files. Mermaid supports sequence diagrams, flowcharts, and class diagrams.
 
-### Class Diagram
-
+[tabs]
+[tab:Class Diagram]
 ```mermaid
 ---
 title: Animal example
@@ -104,9 +106,8 @@ classDiagram
         +run()
     }
 ```
-
-### State Diagram
-
+[/tab]
+[tab:State Diagram]
 ```mermaid
 ---
 title: Simple sample
@@ -121,9 +122,8 @@ stateDiagram-v2
     Crash --> [*]
 
 ```
-
-### Sequence Diagram
-
+[/tab]
+[tab:Sequence Diagram]
 ```mermaid
 sequenceDiagram
     participant A
@@ -131,10 +131,8 @@ sequenceDiagram
     A->>B: Hello
     B->>A: Hi
 ```
-
-
-### Mindmap
-
+[/tab]
+[tab:Mindmap]
 ```mermaid
 mindmap
   root((mindmap))
@@ -155,9 +153,8 @@ mindmap
       Mermaid
 
 ```
-
-### Architecture
-
+[/tab]
+[tab:Architecture]
 ```mermaid
 
 architecture-beta
@@ -173,9 +170,8 @@ architecture-beta
     disk2:T -- B:db
 
 ```
-
-### Event Modeling
-
+[/tab]
+[tab:Event Modeling]
 ```mermaid
 eventmodeling
 
@@ -189,3 +185,6 @@ tf 06 cmd ChangeInventory
 tf 07 evt Cart.InventoryChanged
 
 ```
+[/tab]
+[/tabs]
+
