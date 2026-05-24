@@ -209,7 +209,8 @@ The Plantuml theme is an attempt to create a visually appealing and consistent l
 
 [plantuml, clazz, format=svg,role="popup-diagram"]
 ----
-!include themes/docops.puml
+@startuml
+scale 0.5
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
@@ -367,13 +368,15 @@ Board "1"  *-- "0..18" Potion
 Potion <|-- ShipRevealPotion
 Potion <|-- LifeSaverPotion
 Potion <|-- TrapRevealPotion
+@enduml
 ----
 
 == Sequence Diagram
 
 [plantuml, seq100, format=svg,role="popup-diagram"]
 ----
-!include themes/docops.puml
+@startuml
+scale 0.5
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
@@ -383,11 +386,11 @@ participant "Sign.java" as controler <<(C,#ADD1B2) Contrôleur formulaire>>
 participant "Secure.java" as secure <<(C,#ADD1B2) authentification>>
 participant "Security.java" as security <<(C,#ADD1B2) sécurité>>
 
-box "Application Web" iOS_Green
+box "Application Web"
 	participant form
 end box
 
-box "Serveur Play" iOS_Blue
+box "Serveur Play"
 	participant controler
 	participant secure
 	participant security
@@ -415,7 +418,7 @@ alt result
 else !result
 	form --> user : display error
 end
-
+@enduml
 ----
 
 == Activity Diagram
@@ -423,12 +426,12 @@ end
 [plantuml, act100, format=svg,role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
+skinparam linetype polyline
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
 
-
+scale 0.5
 title Servlet Container
 
 (*) --> "ClickServlet.handleRequest()"
@@ -489,37 +492,28 @@ endif
 [plantuml, use100, format=svg,role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
-!if %variable_exists("$DARK") && ($DARK == "true")
-  !$DARK = "true"
-!endif
+scale 0.5
 
-scale 1.2
-
-
+skinparam actorStyle awesome
 skinparam actor {
     BorderColor Black
-    BackgroundColor<<author>> iOS_Orange
-    BackgroundColor<<assignee>> iOS_Blue
+    BackgroundColor<<author>> #FF9500
+    BackgroundColor<<assignee>> #007AFF
 }
-
-
-
-
 
 actor "Manager" <<author>> as pm
 actor "Developer" <<assignee>> as Developer
 
-file "ToDo" <<ticket>> as todo iOS_Red
-rectangle "The Next Thing" <<project>> as tnt iOS_Green
+file "ToDo" <<ticket>> as todo #FF3B30
+rectangle "The Next Thing" <<project>> as tnt
 
-rectangle Description <<property>> iOS_Blue
-rectangle Status <<property>> iOS_Blue
-rectangle Notes <<property>> iOS_Blue
-rectangle Files <<property>> iOS_Blue
-rectangle "Linked Tickets" <<property>> as Links iOS_Blue
-rectangle Dates <<property>> iOS_Blue
-rectangle "ID Number" <<property>> as Id iOS_Orange
+rectangle Description <<property>>
+rectangle Status <<property>>
+rectangle Notes <<property>>
+rectangle Files <<property>>
+rectangle "Linked Tickets" <<property>> as Links
+rectangle Dates <<property>>
+rectangle "ID Number" <<property>> as Id
 
 
 todo --> pm
@@ -534,9 +528,6 @@ todo --> Links
 todo --> Dates
 todo --> Id
 
-
-
-
 @enduml
 ----
 
@@ -545,10 +536,16 @@ todo --> Id
 [plantuml, use101, format=svg,role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
+
+skinparam actorStyle awesome
+skinparam actor {
+    BorderColor Black
+    BackgroundColor #FF9500
+}
+scale 0.5
 
 actor "Developer" <<User>> as ADEV
 actor "Expert" <<User>> as AEXPR
@@ -592,16 +589,21 @@ ASUBSCR -up-> UC8
 
 == Component
 
-[plantuml,comp100,formst=svg,role="popup-diagram"]
+[tabs]
+======
+Simple Version::
++
+====
+[plantuml,comp100,format=svg,role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
+
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
 
+scale 0.5
 
-scale 1.2
 package "ArduCopter - Simple Version" {
   [EnginesControl] -down-> Engines
   [EnginesControl] - [MainCopterProcess]
@@ -634,13 +636,46 @@ package "Intell 2800 - Simple Version" {
 USB -up- MiniUSB
 @enduml
 ----
+====
+Component1::
++
+====
+[plantuml.comp101,format=svg]
+----
+@startuml
+!pragma layout smetana
+skinparam linetype ortho
+	skinparam componentStyle uml2
+
+	title HelpMeNow
+
+	package "HelpMeNow" {
+
+		[Consultar Chamados] --0)- [Interface]
+		[Manter Chamados] --(0- [SGBD]
+
+		[Logon] --(0- [SGBD]
+		[Consultar Chamados] -(0- [SGBD]
+
+		[Logon] -0)-- [Interface]
+		[Manter Chamados] --0)-- [Interface]
+
+
+	}
+@enduml
+----
+====
+======
+
 
 == State Diagram
 
 [plantuml,state100,format=svg, role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
+scale 0.5
+!pragma layout smetana
+skinparam linetype ortho
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
@@ -713,7 +748,9 @@ REVOKED : <b>task state metadata</b>
 [plantuml,state101, format=svg, role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
+!pragma layout smetana
+skinparam linetype ortho
+scale 0.5
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
@@ -740,11 +777,12 @@ Deploy -down-> Operation
 [plantuml,c4100, format=svg, role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
+scale 0.5
+
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include <C4/C4_Context>
 
 LAYOUT_WITH_LEGEND()
 
@@ -765,7 +803,7 @@ Rel(online_store, shipping_service, "Sends order details to")
 [plantuml,c4101, format=svg, role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
+scale 0.5
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
@@ -785,7 +823,9 @@ Rel(webapp, email, "Sends email via")
 [plantuml,c4102, format=svg, role="popup-diagram"]
 ----
 @startuml
-!include themes/docops.puml
+!pragma layout smetana
+skinparam linetype ortho
+scale 0.5
 !if %variable_exists("$DARK") && ($DARK == "true")
   !$DARK = "true"
 !endif
@@ -822,6 +862,3 @@ Rel(orderService, paymentGateway, "Processes payments through", $tags="sync")
 @enduml
 
 ----
-
-== Download Theme
-Our theme is link:themes/docops.puml[here]
