@@ -971,7 +971,7 @@
             nav.className = 'slideshow-nav';
             slides.forEach((_, i) => {
                 const dot = document.createElement('div');
-                dot.className = `nav-dot $\{i === 0 ? 'active' : ''}`;
+                dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
                 dot.onclick = (e) => {
                     e.stopPropagation();
                     goToSlide(i);
@@ -981,7 +981,7 @@
             ss.appendChild(nav);
 
             function updateCounter() {
-                counter.textContent = `$\{String(currentIndex + 1).padStart(2, '0')} / $\{String(slides.length).padStart(2, '0')}`;
+                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
             }
 
             function resetProgress() {
@@ -1082,7 +1082,7 @@
             const modalTitle = modal.querySelector('.showcase-modal-title');
             const modalCode = modal.querySelector('.showcase-content-code');
 
-            if (modalTitle) modalTitle.textContent = `$\{kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalTitle) modalTitle.textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
             if (modalCode) {
                 const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
                 modalCode.textContent = decodedContent;
@@ -1448,7 +1448,7 @@
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message $\{type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message ${type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1527,7 +1527,7 @@
             }
 
             // Generate a unique table ID if not provided or make existing ID unique
-            const uniqueTableId = tableId ? `${tableId}-$\{Date.now()}-$\{Math.random().toString(36).substr(2, 9)}` : `csv-table-$\{Date.now()}-$\{Math.random().toString(36).substr(2, 9)}`;
+            const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
             const table = document.createElement('table');
             table.className = 'csv-table';
@@ -1686,7 +1686,7 @@
         setCookie(name, value, days) {
             const expires = new Date();
             expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=$\{expires.toUTCString()};path=/;SameSite=Lax`;
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
         }
 
         getCookie(name) {
@@ -2116,14 +2116,14 @@
 
             container.innerHTML = `
             <div class="source-modal-header">
-                <span class="source-modal-title">$\{kind.toUpperCase()} Source</span>
+                <span class="source-modal-title">${kind.toUpperCase()} Source</span>
                 <div class="source-modal-actions">
-                    <button class="source-action-btn" onclick="docopsSource.copySource('$\{card.id}')">
+                    <button class="source-action-btn" onclick="docopsSource.copySource('${card.id}')">
                         <span class="btn-icon">📋</span> COPY
                     </button>
                 </div>
             </div>
-            <pre class="source-code-pre"><code class="source-code">$\{this.escapeHtml(decoded)}</code></pre>
+            <pre class="source-code-pre"><code class="source-code">${this.escapeHtml(decoded)}</code></pre>
         `;
 
             container.dataset.rendered = 'true';
@@ -2869,7 +2869,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_default_example">2. Default Example</h2>
+<h2 id="_examples">2. Examples</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Simple architecture component categorization:</p>
@@ -2878,43 +2878,18 @@ window.onload = function() {
 <div class="content">
 <div class="ulist tablist">
 <ul>
-<li id="_tabs_1_source" class="tab">
-<p>Source</p>
+<li id="_tabs_1_default_diagram" class="tab">
+<p>Default Diagram</p>
 </li>
-<li id="_tabs_1_diagram" class="tab">
-<p>Diagram</p>
+<li id="_tabs_1_technology_stack" class="tab">
+<p>Technology Stack</p>
+</li>
+<li id="_tabs_1_dark_mode" class="tab">
+<p>Dark Mode</p>
 </li>
 </ul>
 </div>
-<div id="_tabs_1_source--panel" class="tabpanel" aria-labelledby="_tabs_1_source">
-<div class="exampleblock">
-<div class="content">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,placemat,controls=true]
-----
-{
-  "title": "System Architecture Overview",
-  "placeMats": [
-    {"name": "Frontend", "legend": "UI"},
-    {"name": "Backend", "legend": "API"},
-    {"name": "Database", "legend": "DATA"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "UI", "color": "#4361ee"},
-      {"legend": "API", "color": "#3a0ca3"},
-      {"legend": "DATA", "color": "#7209b7"}
-    ]
-  }
-}
-----</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="_tabs_1_diagram--panel" class="tabpanel" aria-labelledby="_tabs_1_diagram">
+<div id="_tabs_1_default_diagram--panel" class="tabpanel" aria-labelledby="_tabs_1_default_diagram">
 <div class="exampleblock">
 <div class="content">
 <style>
@@ -3075,7 +3050,7 @@ window.onload = function() {
 })();
 </script>
 <div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="sv-a8ad2d04893bac71" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=placemat&payload=H4sIAB5yEmoA_23OvQrCMBQF4L1PEa5rh2rFolulCA6ioE7icBuvNdgfSWNFSt_dJCIS7RKSm-8kp_UYAyVUTjBjsH3WigoWS34Riri6S2LrhmQj6AG-obccOa1Q1Zof9ICxFkosbHohq1JReQKfQU6Z2enpfgmd_yPnyK9_MN70yAQVpliTS5N4F0On6dGW4lV5Fpm-aG36C98NzXtOH99E8kqa42AcToZEn59dayo5OMSAY9iPbSlHR6Ngmka2qK6q187rXlcognxxAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=placemat&filename=ghi.svg" data-original-content="{
+<div class="svg-with-controls docops-media-card" id="sv-1646833eee2e2849" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=placemat&payload=H4sIACUiFGoA_23OvQrCMBQF4L1PEa5rh2rFolulCA6ioE7icBuvNdgfSWNFSt_dJCIS7RKSm-8kp_UYAyVUTjBjsH3WigoWS34Riri6S2LrhmQj6AG-obccOa1Q1Zof9ICxFkosbHohq1JReQKfQU6Z2enpfgmd_yPnyK9_MN70yAQVpliTS5N4F0On6dGW4lV5Fpm-aG36C98NzXtOH99E8kqa42AcToZEn59dayo5OMSAY9iPbSlHR6Ngmka2qK6q187rXlcognxxAQAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=placemat&filename=ghi.svg" data-original-content="{
   &quot;title&quot;: &quot;System Architecture Overview&quot;,
   &quot;placeMats&quot;: [
     {&quot;name&quot;: &quot;Frontend&quot;, &quot;legend&quot;: &quot;UI&quot;},
@@ -3090,42 +3065,197 @@ window.onload = function() {
     ]
   }
 }" data-kind="placemat">
-<svg xmlns="http://www.w3.org/2000/svg" width="800.0" height="510.0" viewBox="0 0 800.0 510.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_2fce1c63-d51e-4361-896f-def681a04621">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Name","Legend","Style"],"rows":[["Frontend","UI","font-size: 1em;"],["Backend","API","font-size: 1em;"],["Database","DATA","font-size: 1em;"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="blueprint_2fce1c63-d51e-4361-896f-def681a04621" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="none" stroke="#2563eb" stroke-width="0.5" stroke-opacity="0.1" /><circle cx="0" cy="0" r="1" fill="#2563eb" fill-opacity="0.2" /></pattern><style>#diag_2fce1c63-d51e-4361-896f-def681a04621 .placemat-root { font-family: Arial, Helvetica, sans-serif; } /* Animation applied ONLY to the inner tech-card group */ #diag_2fce1c63-d51e-4361-896f-def681a04621 .tech-card { animation: reveal_2fce1c63-d51e-4361-896f-def681a04621 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; transition: transform 0.2s ease-out; transform-box: fill-box; transform-origin: center; } @keyframes reveal_2fce1c63-d51e-4361-896f-def681a04621 { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } #diag_2fce1c63-d51e-4361-896f-def681a04621 .tech-card:hover { transform: translate(4px, -4px); }</style></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#blueprint_2fce1c63-d51e-4361-896f-def681a04621)"/><g class="placemat-root"><g transform="translate(40,60)"><text font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="36" fill="#111111" style="letter-spacing: -0.05em;">SYSTEM ARCHITECTURE OVERVIEW</text><rect x="0" y="12" width="120" height="4" fill="#2563eb" rx="2" /></g><g transform="translate(0,120)"><g transform="translate(40,0)"><g class="tech-card" style="animation-delay: 0.0s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">UI</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Frontend</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,0)"><g class="tech-card" style="animation-delay: 0.1s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">API</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Backend</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,130)"><g class="tech-card" style="animation-delay: 0.2s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DATA</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Database</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g></g><g transform="translate(0, 420.0)" class="placemat-root"><text x="400.0" y="-15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" fill="#111111" style="text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5;">Legend</text><line x1="360.0" y1="-5" x2="440.0" y2="-5" stroke="#2563eb" stroke-width="1" opacity="0.2" /><g transform="translate(170.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#4361ee" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">UI</text></g><g transform="translate(330.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#3a0ca3" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">API</text></g><g transform="translate(490.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#7209b7" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">DATA</text></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="800.0" height="510.0" viewBox="0 0 800.0 510.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-25</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Name","Legend","Style"],"rows":[["Frontend","UI","font-size: 1em;"],["Backend","API","font-size: 1em;"],["Database","DATA","font-size: 1em;"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="blueprint_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="none" stroke="#2563eb" stroke-width="0.5" stroke-opacity="0.1" /><circle cx="0" cy="0" r="1" fill="#2563eb" fill-opacity="0.2" /></pattern><style>#diag_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e .placemat-root { font-family: Arial, Helvetica, sans-serif; } /* Animation applied ONLY to the inner tech-card group */ #diag_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e .tech-card { animation: reveal_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; transition: transform 0.2s ease-out; transform-box: fill-box; transform-origin: center; } @keyframes reveal_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } #diag_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e .tech-card:hover { transform: translate(4px, -4px); }</style></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#blueprint_cd723bd5-5dd7-4e3a-b84c-aa2c86d4172e)"/><g class="placemat-root"><g transform="translate(40,60)"><text font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="36" fill="#111111" style="letter-spacing: -0.05em;">SYSTEM ARCHITECTURE OVERVIEW</text><rect x="0" y="12" width="120" height="4" fill="#2563eb" rx="2" /></g><g transform="translate(0,120)"><g transform="translate(40,0)"><g class="tech-card" style="animation-delay: 0.0s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">UI</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Frontend</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,0)"><g class="tech-card" style="animation-delay: 0.1s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">API</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Backend</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,130)"><g class="tech-card" style="animation-delay: 0.2s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DATA</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Database</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g></g><g transform="translate(0, 420.0)" class="placemat-root"><text x="400.0" y="-15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" fill="#111111" style="text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5;">Legend</text><line x1="360.0" y1="-5" x2="440.0" y2="-5" stroke="#2563eb" stroke-width="1" opacity="0.2" /><g transform="translate(170.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#4361ee" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">UI</text></g><g transform="translate(330.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#3a0ca3" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">API</text></g><g transform="translate(490.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#7209b7" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">DATA</text></g></g></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgViewer.openModal('sv-a8ad2d04893bac71')">VIEW</button>
-<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-a8ad2d04893bac71')">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-1646833eee2e2849')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-1646833eee2e2849')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-a8ad2d04893bac71')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-a8ad2d04893bac71')">PNG</button>
-<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-a8ad2d04893bac71')">PRINT</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-1646833eee2e2849')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-1646833eee2e2849')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-1646833eee2e2849')">PRINT</button>
 </div>
-<div id="modal-sv-a8ad2d04893bac71" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-a8ad2d04893bac71')">
+<div id="modal-sv-1646833eee2e2849" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-1646833eee2e2849')">
     <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-a8ad2d04893bac71')">×</button>
-        <div id="modal-body-sv-a8ad2d04893bac71" class="svg-modal-body docops-svg-modal-body"></div>
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-1646833eee2e2849')">×</button>
+        <div id="modal-body-sv-1646833eee2e2849" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-sv-a8ad2d04893bac71" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-a8ad2d04893bac71')">
+<div id="csv-modal-sv-1646833eee2e2849" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-1646833eee2e2849')">
     <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-a8ad2d04893bac71')">×</button>
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-1646833eee2e2849')">×</button>
         <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-sv-a8ad2d04893bac71" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-1646833eee2e2849" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-sv-a8ad2d04893bac71" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-a8ad2d04893bac71')">
+<div id="source-modal-sv-1646833eee2e2849" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-1646833eee2e2849')">
     <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-a8ad2d04893bac71')">×</button>
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-1646833eee2e2849')">×</button>
         <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-sv-a8ad2d04893bac71" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+        <div id="source-content-sv-1646833eee2e2849" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div></div>
+</div>
+</div>
+</div>
+<div id="_tabs_1_technology_stack--panel" class="tabpanel" aria-labelledby="_tabs_1_technology_stack">
+<div class="exampleblock">
+<div class="content">
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-4f00f0d81b5dd81c" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=placemat&payload=H4sIACUiFGoA_42SXU_CMBSG7_kVTb1dDII48Y45NVHxgyVyYbzoyqGZlJ6l7YyR7L_bjQDZGElvluX0eU7a95xNjxBqMyuB3hA6xQVoReaQkhh-QGK-BmVJYhlf0aBCc8k4TJk1Dv90BUI2VLF1bc-AcUsDQiUIUIuqdK9R2eq_DFrwRwHn38aXnihRSKZ98Rf3jqPukXtEJ333m2swvnSS60wJEiFaT2OKSmAcNemYWZYyA8f4GxorNCTvz77GDBaZ8YVjdNdsJemG_ZqbY_apSN0-gIV29xP8I6hVpjzhyTxpgrcSi67Z_xUavMgHRCGBbE-7BMd_1WvMUS0z4U42dYsDud3pqmnHngWVKFFXxbNLzsfL_u4STWO3Ck1heHUB0C3sx9UwhqzP2fCEsU21wYeD_jgNu_l9KAd8GQ5G16M6FZeL-5a98h-41xOCEAQAAA==&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=placemat&filename=ghi.svg" data-original-content="{
+  &quot;title&quot;: &quot;Modern Web Development Stack&quot;,
+  &quot;placeMats&quot;: [
+    {&quot;name&quot;: &quot;React&quot;, &quot;legend&quot;: &quot;Frontend&quot;},
+    {&quot;name&quot;: &quot;Vue.js&quot;, &quot;legend&quot;: &quot;Frontend&quot;},
+    {&quot;name&quot;: &quot;Angular&quot;, &quot;legend&quot;: &quot;Frontend&quot;},
+    {&quot;name&quot;: &quot;Node.js&quot;, &quot;legend&quot;: &quot;Backend&quot;},
+    {&quot;name&quot;: &quot;Express&quot;, &quot;legend&quot;: &quot;Backend&quot;},
+    {&quot;name&quot;: &quot;Spring Boot&quot;, &quot;legend&quot;: &quot;Backend&quot;},
+    {&quot;name&quot;: &quot;MongoDB&quot;, &quot;legend&quot;: &quot;Database&quot;},
+    {&quot;name&quot;: &quot;PostgreSQL&quot;, &quot;legend&quot;: &quot;Database&quot;},
+    {&quot;name&quot;: &quot;Redis&quot;, &quot;legend&quot;: &quot;Database&quot;},
+    {&quot;name&quot;: &quot;Docker&quot;, &quot;legend&quot;: &quot;DevOps&quot;},
+    {&quot;name&quot;: &quot;Kubernetes&quot;, &quot;legend&quot;: &quot;DevOps&quot;},
+    {&quot;name&quot;: &quot;Jenkins&quot;, &quot;legend&quot;: &quot;DevOps&quot;},
+    {&quot;name&quot;: &quot;AWS&quot;, &quot;legend&quot;: &quot;Cloud&quot;},
+    {&quot;name&quot;: &quot;Azure&quot;, &quot;legend&quot;: &quot;Cloud&quot;},
+    {&quot;name&quot;: &quot;Google Cloud&quot;, &quot;legend&quot;: &quot;Cloud&quot;}
+  ],
+  &quot;config&quot;: {
+    &quot;legend&quot;: [
+      {&quot;legend&quot;: &quot;Frontend&quot;, &quot;color&quot;: &quot;#4cc9f0&quot;},
+      {&quot;legend&quot;: &quot;Backend&quot;, &quot;color&quot;: &quot;#4361ee&quot;},
+      {&quot;legend&quot;: &quot;Database&quot;, &quot;color&quot;: &quot;#3a0ca3&quot;},
+      {&quot;legend&quot;: &quot;DevOps&quot;, &quot;color&quot;: &quot;#7209b7&quot;},
+      {&quot;legend&quot;: &quot;Cloud&quot;, &quot;color&quot;: &quot;#f72585&quot;}
+    ]
+  }
+}" data-kind="placemat">
+<svg xmlns="http://www.w3.org/2000/svg" width="800.0" height="1290.0" viewBox="0 0 800.0 1290.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-25</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Name","Legend","Style"],"rows":[["React","Frontend","font-size: 1em;"],["Vue.js","Frontend","font-size: 1em;"],["Angular","Frontend","font-size: 1em;"],["Node.js","Backend","font-size: 1em;"],["Express","Backend","font-size: 1em;"],["Spring Boot","Backend","font-size: 1em;"],["MongoDB","Database","font-size: 1em;"],["PostgreSQL","Database","font-size: 1em;"],["Redis","Database","font-size: 1em;"],["Docker","DevOps","font-size: 1em;"],["Kubernetes","DevOps","font-size: 1em;"],["Jenkins","DevOps","font-size: 1em;"],["AWS","Cloud","font-size: 1em;"],["Azure","Cloud","font-size: 1em;"],["Google Cloud","Cloud","font-size: 1em;"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="blueprint_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="none" stroke="#2563eb" stroke-width="0.5" stroke-opacity="0.1" /><circle cx="0" cy="0" r="1" fill="#2563eb" fill-opacity="0.2" /></pattern><style>#diag_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda .placemat-root { font-family: Arial, Helvetica, sans-serif; } /* Animation applied ONLY to the inner tech-card group */ #diag_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda .tech-card { animation: reveal_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; transition: transform 0.2s ease-out; transform-box: fill-box; transform-origin: center; } @keyframes reveal_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } #diag_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda .tech-card:hover { transform: translate(4px, -4px); }</style></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#blueprint_f1a99ea8-e6e5-4bf1-bf92-bb2e624c6bda)"/><g class="placemat-root"><g transform="translate(40,60)"><text font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="36" fill="#111111" style="letter-spacing: -0.05em;">MODERN WEB DEVELOPMENT STACK</text><rect x="0" y="12" width="120" height="4" fill="#2563eb" rx="2" /></g><g transform="translate(0,120)"><g transform="translate(40,0)"><g class="tech-card" style="animation-delay: 0.0s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4cc9f0" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Frontend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">React</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4cc9f0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,0)"><g class="tech-card" style="animation-delay: 0.1s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4cc9f0" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Frontend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Vue.js</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4cc9f0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,130)"><g class="tech-card" style="animation-delay: 0.2s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4cc9f0" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Frontend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Angular</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4cc9f0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,130)"><g class="tech-card" style="animation-delay: 0.30000000000000004s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Backend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Node.js</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,260)"><g class="tech-card" style="animation-delay: 0.4s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Backend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Express</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,260)"><g class="tech-card" style="animation-delay: 0.5s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Backend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Spring Boot</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,390)"><g class="tech-card" style="animation-delay: 0.6000000000000001s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Database</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">MongoDB</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,390)"><g class="tech-card" style="animation-delay: 0.7000000000000001s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Database</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">PostgreSQL</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,520)"><g class="tech-card" style="animation-delay: 0.8s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Database</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Redis</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,520)"><g class="tech-card" style="animation-delay: 0.9s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DevOps</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Docker</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,650)"><g class="tech-card" style="animation-delay: 1.0s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DevOps</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Kubernetes</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,650)"><g class="tech-card" style="animation-delay: 1.1s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DevOps</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Jenkins</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,780)"><g class="tech-card" style="animation-delay: 1.2000000000000002s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#f72585" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Cloud</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">AWS</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#f72585" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,780)"><g class="tech-card" style="animation-delay: 1.3s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#f72585" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Cloud</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Azure</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#f72585" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,910)"><g class="tech-card" style="animation-delay: 1.4000000000000001s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#f72585" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Cloud</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Google Cloud</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#f72585" stroke-width="1.5" opacity="0.5" /></g></g></g><g transform="translate(0, 1200.0)" class="placemat-root"><text x="400.0" y="-15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" fill="#111111" style="text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5;">Legend</text><line x1="360.0" y1="-5" x2="440.0" y2="-5" stroke="#2563eb" stroke-width="1" opacity="0.2" /><g transform="translate(10.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#4cc9f0" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">FRONTEND</text></g><g transform="translate(170.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#4361ee" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">BACKEND</text></g><g transform="translate(330.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#3a0ca3" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">DATABASE</text></g><g transform="translate(490.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#7209b7" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">DEVOPS</text></g><g transform="translate(650.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#f72585" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">CLOUD</text></g></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-4f00f0d81b5dd81c')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-4f00f0d81b5dd81c')">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-4f00f0d81b5dd81c')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-4f00f0d81b5dd81c')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-4f00f0d81b5dd81c')">PRINT</button>
+</div>
+<div id="modal-sv-4f00f0d81b5dd81c" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-4f00f0d81b5dd81c')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-4f00f0d81b5dd81c')">×</button>
+        <div id="modal-body-sv-4f00f0d81b5dd81c" class="svg-modal-body docops-svg-modal-body"></div>
+    </div>
+</div>
+
+<div id="csv-modal-sv-4f00f0d81b5dd81c" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-4f00f0d81b5dd81c')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-4f00f0d81b5dd81c')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-sv-4f00f0d81b5dd81c" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-sv-4f00f0d81b5dd81c" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-4f00f0d81b5dd81c')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-4f00f0d81b5dd81c')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-sv-4f00f0d81b5dd81c" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+            <div class="source-modal-body"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div></div>
+</div>
+</div>
+</div>
+<div id="_tabs_1_dark_mode--panel" class="tabpanel" aria-labelledby="_tabs_1_dark_mode">
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Multi-category grid for web development tools:</p>
+</div>
+<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
+<div class="svg-with-controls docops-media-card" id="sv-23a58a78af61ef00" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=placemat&payload=H4sIACUiFGoA_42RMW_CMBCFd36F5a4ZQEVB7VaVdGMCqUPV4XDOkdXjjBxDG0X573VSQRKSqCwe3t1353uvnAkhvfGE8lnINXgQW2WQFYp367402W8Z1T3aEIUWDZRjIxwJFG7A50H9CIIQpWQ4tHNeLREqbyzLSEjCDDm9FGUVjSKEwIaze4Dk50jWgbeuEC8MVOQm73NXdcC-IfiTQ5FwZhjRDVZOoxubIoktjp7WFOthE9jOgRne9x-VnIFOMNzW0SfINQaPigOyv3G01asAfjaBKsvaZKFcNrPa9r906-k3mUQ1FEKohYd5nMYwv_yk393NpyUW-ycAGCeunvQI1MtVrMeJvksto3W6iONxpu9P55bV436pGm-CO-GtZtUv6qC37yoDAAA=&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=placemat&filename=ghi.svg" data-original-content="{
+  &quot;title&quot;: &quot;Data Science Workflow&quot;,
+  &quot;fill&quot;: false,
+  &quot;placeMats&quot;: [
+    {&quot;name&quot;: &quot;Data Collection&quot;, &quot;legend&quot;: &quot;Data&quot;},
+    {&quot;name&quot;: &quot;Data Cleaning&quot;, &quot;legend&quot;: &quot;Data&quot;},
+    {&quot;name&quot;: &quot;Exploratory Analysis&quot;, &quot;legend&quot;: &quot;Analysis&quot;},
+    {&quot;name&quot;: &quot;Feature Engineering&quot;, &quot;legend&quot;: &quot;Analysis&quot;},
+    {&quot;name&quot;: &quot;Model Selection&quot;, &quot;legend&quot;: &quot;Modeling&quot;},
+    {&quot;name&quot;: &quot;Model Training&quot;, &quot;legend&quot;: &quot;Modeling&quot;},
+    {&quot;name&quot;: &quot;Model Evaluation&quot;, &quot;legend&quot;: &quot;Evaluation&quot;},
+    {&quot;name&quot;: &quot;Model Deployment&quot;, &quot;legend&quot;: &quot;Deployment&quot;}
+  ],
+  &quot;config&quot;: {
+    &quot;legend&quot;: [
+      {&quot;legend&quot;: &quot;Data&quot;, &quot;color&quot;: &quot;#06d6a0&quot;},
+      {&quot;legend&quot;: &quot;Analysis&quot;, &quot;color&quot;: &quot;#1b9aaa&quot;},
+      {&quot;legend&quot;: &quot;Modeling&quot;, &quot;color&quot;: &quot;#ef476f&quot;},
+      {&quot;legend&quot;: &quot;Evaluation&quot;, &quot;color&quot;: &quot;#ffd166&quot;},
+      {&quot;legend&quot;: &quot;Deployment&quot;, &quot;color&quot;: &quot;#073b4c&quot;}
+    ]
+  }
+}" data-kind="placemat">
+<svg xmlns="http://www.w3.org/2000/svg" width="800.0" height="770.0" viewBox="0 0 800.0 770.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_36908a88-1186-4dc5-9114-e87bb570689c">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-25</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Name","Legend","Style"],"rows":[["Data Collection","Data","font-size: 1em;"],["Data Cleaning","Data","font-size: 1em;"],["Exploratory Analysis","Analysis","font-size: 1em;"],["Feature Engineering","Analysis","font-size: 1em;"],["Model Selection","Modeling","font-size: 1em;"],["Model Training","Modeling","font-size: 1em;"],["Model Evaluation","Evaluation","font-size: 1em;"],["Model Deployment","Deployment","font-size: 1em;"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');<pattern id="blueprint_36908a88-1186-4dc5-9114-e87bb570689c" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="none" stroke="#38bdf8" stroke-width="0.5" stroke-opacity="0.1" /><circle cx="0" cy="0" r="1" fill="#38bdf8" fill-opacity="0.2" /></pattern><style>#diag_36908a88-1186-4dc5-9114-e87bb570689c .placemat-root { font-family: 'Archivo', -apple-system, sans-serif; } /* Animation applied ONLY to the inner tech-card group */ #diag_36908a88-1186-4dc5-9114-e87bb570689c .tech-card { animation: reveal_36908a88-1186-4dc5-9114-e87bb570689c 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; transition: transform 0.2s ease-out; transform-box: fill-box; transform-origin: center; } @keyframes reveal_36908a88-1186-4dc5-9114-e87bb570689c { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } #diag_36908a88-1186-4dc5-9114-e87bb570689c .tech-card:hover { transform: translate(4px, -4px); }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#blueprint_36908a88-1186-4dc5-9114-e87bb570689c)"/><g class="placemat-root"><g transform="translate(40,60)"><text font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="36" fill="#f8fafc" style="letter-spacing: -0.05em;">DATA SCIENCE WORKFLOW</text><rect x="0" y="12" width="120" height="4" fill="#38bdf8" rx="2" /></g><g transform="translate(0,120)"><g transform="translate(40,0)"><g class="tech-card" style="animation-delay: 0.0s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#06d6a0" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Data</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Data Collection</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#06d6a0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,0)"><g class="tech-card" style="animation-delay: 0.1s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#06d6a0" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Data</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Data Cleaning</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#06d6a0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,130)"><g class="tech-card" style="animation-delay: 0.2s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#1b9aaa" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Analysis</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Exploratory Analysis</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#1b9aaa" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,130)"><g class="tech-card" style="animation-delay: 0.30000000000000004s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#1b9aaa" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Analysis</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Feature Engineering</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#1b9aaa" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,260)"><g class="tech-card" style="animation-delay: 0.4s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#ef476f" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Modeling</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Selection</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#ef476f" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,260)"><g class="tech-card" style="animation-delay: 0.5s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#ef476f" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Modeling</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Training</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#ef476f" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,390)"><g class="tech-card" style="animation-delay: 0.6000000000000001s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#ffd166" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Evaluation</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Evaluation</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#ffd166" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,390)"><g class="tech-card" style="animation-delay: 0.7000000000000001s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#073b4c" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Deployment</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Deployment</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#073b4c" stroke-width="1.5" opacity="0.5" /></g></g></g><g transform="translate(0, 680.0)" class="placemat-root"><text x="400.0" y="-15" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="12" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5;">Legend</text><line x1="360.0" y1="-5" x2="440.0" y2="-5" stroke="#38bdf8" stroke-width="1" opacity="0.2" /><g transform="translate(10.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#06d6a0" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">DATA</text></g><g transform="translate(170.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#1b9aaa" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">ANALYSIS</text></g><g transform="translate(330.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#ef476f" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">MODELING</text></g><g transform="translate(490.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#ffd166" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">EVALUATION</text></g><g transform="translate(650.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#073b4c" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">DEPLOYMENT</text></g></g></g></svg>
+<div class="svg-bottom-controls">
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-23a58a78af61ef00')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-23a58a78af61ef00')">DATA</button>
+<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
+<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-23a58a78af61ef00')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-23a58a78af61ef00')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-23a58a78af61ef00')">PRINT</button>
+</div>
+<div id="modal-sv-23a58a78af61ef00" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-23a58a78af61ef00')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-23a58a78af61ef00')">×</button>
+        <div id="modal-body-sv-23a58a78af61ef00" class="svg-modal-body docops-svg-modal-body"></div>
+    </div>
+</div>
+
+<div id="csv-modal-sv-23a58a78af61ef00" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-23a58a78af61ef00')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-23a58a78af61ef00')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+        </div>
+        <div id="csv-content-sv-23a58a78af61ef00" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
+        </div>
+    </div>
+</div>
+
+<div id="source-modal-sv-23a58a78af61ef00" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-23a58a78af61ef00')">
+    <div class="svg-modal-content docops-svg-modal-content">
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-23a58a78af61ef00')">×</button>
+        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+        </div>
+        <div id="source-content-sv-23a58a78af61ef00" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>
@@ -3144,150 +3274,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_focused_examples">3. Focused Examples</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_technology_stack">3.1. Technology Stack</h3>
-<div id="_tabs_2" class="openblock tabs is-loading">
-<div class="content">
-<div class="ulist tablist">
-<ul>
-<li id="_tabs_2_source" class="tab">
-<p>Source</p>
-</li>
-<li id="_tabs_2_diagram" class="tab">
-<p>Diagram</p>
-</li>
-</ul>
-</div>
-<div id="_tabs_2_source--panel" class="tabpanel" aria-labelledby="_tabs_2_source">
-<div class="exampleblock">
-<div class="content">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,placemat]
-----
-{
-  "title": "Modern Web Development Stack",
-  "placeMats": [
-    {"name": "React", "legend": "Frontend"},
-    {"name": "Vue.js", "legend": "Frontend"},
-    {"name": "Angular", "legend": "Frontend"},
-    {"name": "Node.js", "legend": "Backend"},
-    {"name": "Express", "legend": "Backend"},
-    {"name": "Spring Boot", "legend": "Backend"},
-    {"name": "MongoDB", "legend": "Database"},
-    {"name": "PostgreSQL", "legend": "Database"},
-    {"name": "Redis", "legend": "Database"},
-    {"name": "Docker", "legend": "DevOps"},
-    {"name": "Kubernetes", "legend": "DevOps"},
-    {"name": "Jenkins", "legend": "DevOps"},
-    {"name": "AWS", "legend": "Cloud"},
-    {"name": "Azure", "legend": "Cloud"},
-    {"name": "Google Cloud", "legend": "Cloud"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Frontend", "color": "#4cc9f0"},
-      {"legend": "Backend", "color": "#4361ee"},
-      {"legend": "Database", "color": "#3a0ca3"},
-      {"legend": "DevOps", "color": "#7209b7"},
-      {"legend": "Cloud", "color": "#f72585"}
-    ]
-  }
-}
-----</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="_tabs_2_diagram--panel" class="tabpanel" aria-labelledby="_tabs_2_diagram">
-<div class="exampleblock">
-<div class="content">
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="800.0" height="1290.0" viewBox="0 0 800.0 1290.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_366356ef-9e8e-407f-b148-1f271eb7bedb">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Name","Legend","Style"],"rows":[["React","Frontend","font-size: 1em;"],["Vue.js","Frontend","font-size: 1em;"],["Angular","Frontend","font-size: 1em;"],["Node.js","Backend","font-size: 1em;"],["Express","Backend","font-size: 1em;"],["Spring Boot","Backend","font-size: 1em;"],["MongoDB","Database","font-size: 1em;"],["PostgreSQL","Database","font-size: 1em;"],["Redis","Database","font-size: 1em;"],["Docker","DevOps","font-size: 1em;"],["Kubernetes","DevOps","font-size: 1em;"],["Jenkins","DevOps","font-size: 1em;"],["AWS","Cloud","font-size: 1em;"],["Azure","Cloud","font-size: 1em;"],["Google Cloud","Cloud","font-size: 1em;"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="blueprint_366356ef-9e8e-407f-b148-1f271eb7bedb" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="none" stroke="#2563eb" stroke-width="0.5" stroke-opacity="0.1" /><circle cx="0" cy="0" r="1" fill="#2563eb" fill-opacity="0.2" /></pattern><style>#diag_366356ef-9e8e-407f-b148-1f271eb7bedb .placemat-root { font-family: Arial, Helvetica, sans-serif; } /* Animation applied ONLY to the inner tech-card group */ #diag_366356ef-9e8e-407f-b148-1f271eb7bedb .tech-card { animation: reveal_366356ef-9e8e-407f-b148-1f271eb7bedb 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; transition: transform 0.2s ease-out; transform-box: fill-box; transform-origin: center; } @keyframes reveal_366356ef-9e8e-407f-b148-1f271eb7bedb { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } #diag_366356ef-9e8e-407f-b148-1f271eb7bedb .tech-card:hover { transform: translate(4px, -4px); }</style></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#blueprint_366356ef-9e8e-407f-b148-1f271eb7bedb)"/><g class="placemat-root"><g transform="translate(40,60)"><text font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="36" fill="#111111" style="letter-spacing: -0.05em;">MODERN WEB DEVELOPMENT STACK</text><rect x="0" y="12" width="120" height="4" fill="#2563eb" rx="2" /></g><g transform="translate(0,120)"><g transform="translate(40,0)"><g class="tech-card" style="animation-delay: 0.0s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4cc9f0" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Frontend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">React</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4cc9f0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,0)"><g class="tech-card" style="animation-delay: 0.1s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4cc9f0" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Frontend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Vue.js</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4cc9f0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,130)"><g class="tech-card" style="animation-delay: 0.2s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4cc9f0" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Frontend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Angular</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4cc9f0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,130)"><g class="tech-card" style="animation-delay: 0.30000000000000004s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Backend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Node.js</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,260)"><g class="tech-card" style="animation-delay: 0.4s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Backend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Express</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,260)"><g class="tech-card" style="animation-delay: 0.5s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#4361ee" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Backend</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Spring Boot</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#4361ee" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,390)"><g class="tech-card" style="animation-delay: 0.6000000000000001s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Database</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">MongoDB</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,390)"><g class="tech-card" style="animation-delay: 0.7000000000000001s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Database</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">PostgreSQL</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,520)"><g class="tech-card" style="animation-delay: 0.8s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#3a0ca3" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Database</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Redis</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#3a0ca3" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,520)"><g class="tech-card" style="animation-delay: 0.9s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DevOps</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Docker</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,650)"><g class="tech-card" style="animation-delay: 1.0s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DevOps</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Kubernetes</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,650)"><g class="tech-card" style="animation-delay: 1.1s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#7209b7" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">DevOps</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Jenkins</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#7209b7" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,780)"><g class="tech-card" style="animation-delay: 1.2000000000000002s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#f72585" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Cloud</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">AWS</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#f72585" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,780)"><g class="tech-card" style="animation-delay: 1.3s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#f72585" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Cloud</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Azure</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#f72585" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,910)"><g class="tech-card" style="animation-delay: 1.4000000000000001s;"><rect width="300" height="110" fill="#ffffff" fill-opacity="0.8" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#f72585" /><text x="8" y="14" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Cloud</text><text x="20" y="55" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="18" fill="#111111">Google Cloud</text><text x="20" y="80" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#4338ca" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#f72585" stroke-width="1.5" opacity="0.5" /></g></g></g><g transform="translate(0, 1200.0)" class="placemat-root"><text x="400.0" y="-15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="12" fill="#111111" style="text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5;">Legend</text><line x1="360.0" y1="-5" x2="440.0" y2="-5" stroke="#2563eb" stroke-width="1" opacity="0.2" /><g transform="translate(10.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#4cc9f0" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">FRONTEND</text></g><g transform="translate(170.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#4361ee" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">BACKEND</text></g><g transform="translate(330.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#3a0ca3" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">DATABASE</text></g><g transform="translate(490.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#7209b7" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">DEVOPS</text></g><g transform="translate(650.0, 10)"><rect width="140" height="30" fill="#ffffff" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#f72585" /><text x="15" y="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="11" fill="#111111" style="letter-spacing: 0.05em;">CLOUD</text></g></g></g></svg></div></div></div></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Multi-category grid for web development tools:</p>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_outlined_boxes_dark_mode">3.2. Outlined Boxes (Dark Mode)</h3>
-<div class="paragraph">
-<p>Data science workflow with outline style:</p>
-</div>
-<div id="_tabs_3" class="openblock tabs is-loading">
-<div class="content">
-<div class="ulist tablist">
-<ul>
-<li id="_tabs_3_source" class="tab">
-<p>Source</p>
-</li>
-<li id="_tabs_3_diagram" class="tab">
-<p>Diagram</p>
-</li>
-</ul>
-</div>
-<div id="_tabs_3_source--panel" class="tabpanel" aria-labelledby="_tabs_3_source">
-<div class="exampleblock">
-<div class="content">
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,placemat,useDark=true]
-----
-{
-  "title": "Data Science Workflow",
-  "fill": false,
-  "placeMats": [
-    {"name": "Data Collection", "legend": "Data"},
-    {"name": "Data Cleaning", "legend": "Data"},
-    {"name": "Exploratory Analysis", "legend": "Analysis"},
-    {"name": "Feature Engineering", "legend": "Analysis"},
-    {"name": "Model Selection", "legend": "Modeling"},
-    {"name": "Model Training", "legend": "Modeling"},
-    {"name": "Model Evaluation", "legend": "Evaluation"},
-    {"name": "Model Deployment", "legend": "Deployment"}
-  ],
-  "config": {
-    "legend": [
-      {"legend": "Data", "color": "#06d6a0"},
-      {"legend": "Analysis", "color": "#1b9aaa"},
-      {"legend": "Modeling", "color": "#ef476f"},
-      {"legend": "Evaluation", "color": "#ffd166"},
-      {"legend": "Deployment", "color": "#073b4c"}
-    ]
-  }
-}
-----</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="_tabs_3_diagram--panel" class="tabpanel" aria-labelledby="_tabs_3_diagram">
-<div class="exampleblock">
-<div class="content">
-<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="800.0" height="770.0" viewBox="0 0 800.0 770.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_c999d793-44aa-4e02-8d4e-3b73cf548eb7">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Name","Legend","Style"],"rows":[["Data Collection","Data","font-size: 1em;"],["Data Cleaning","Data","font-size: 1em;"],["Exploratory Analysis","Analysis","font-size: 1em;"],["Feature Engineering","Analysis","font-size: 1em;"],["Model Selection","Modeling","font-size: 1em;"],["Model Training","Modeling","font-size: 1em;"],["Model Evaluation","Evaluation","font-size: 1em;"],["Model Deployment","Deployment","font-size: 1em;"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');<pattern id="blueprint_c999d793-44aa-4e02-8d4e-3b73cf548eb7" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="none" stroke="#38bdf8" stroke-width="0.5" stroke-opacity="0.1" /><circle cx="0" cy="0" r="1" fill="#38bdf8" fill-opacity="0.2" /></pattern><style>#diag_c999d793-44aa-4e02-8d4e-3b73cf548eb7 .placemat-root { font-family: 'Archivo', -apple-system, sans-serif; } /* Animation applied ONLY to the inner tech-card group */ #diag_c999d793-44aa-4e02-8d4e-3b73cf548eb7 .tech-card { animation: reveal_c999d793-44aa-4e02-8d4e-3b73cf548eb7 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; transition: transform 0.2s ease-out; transform-box: fill-box; transform-origin: center; } @keyframes reveal_c999d793-44aa-4e02-8d4e-3b73cf548eb7 { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } #diag_c999d793-44aa-4e02-8d4e-3b73cf548eb7 .tech-card:hover { transform: translate(4px, -4px); }</style></defs><rect width="100%" height="100%" fill="#0f172a"/><rect width="100%" height="100%" fill="url(#blueprint_c999d793-44aa-4e02-8d4e-3b73cf548eb7)"/><g class="placemat-root"><g transform="translate(40,60)"><text font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="36" fill="#f8fafc" style="letter-spacing: -0.05em;">DATA SCIENCE WORKFLOW</text><rect x="0" y="12" width="120" height="4" fill="#38bdf8" rx="2" /></g><g transform="translate(0,120)"><g transform="translate(40,0)"><g class="tech-card" style="animation-delay: 0.0s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#06d6a0" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Data</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Data Collection</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#06d6a0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,0)"><g class="tech-card" style="animation-delay: 0.1s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#06d6a0" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Data</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Data Cleaning</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#06d6a0" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,130)"><g class="tech-card" style="animation-delay: 0.2s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#1b9aaa" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Analysis</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Exploratory Analysis</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#1b9aaa" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,130)"><g class="tech-card" style="animation-delay: 0.30000000000000004s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#1b9aaa" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Analysis</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Feature Engineering</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#1b9aaa" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(40,260)"><g class="tech-card" style="animation-delay: 0.4s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#ef476f" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Modeling</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Selection</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#ef476f" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(380,260)"><g class="tech-card" style="animation-delay: 0.5s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#ef476f" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Modeling</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Training</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#ef476f" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(80,390)"><g class="tech-card" style="animation-delay: 0.6000000000000001s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#ffd166" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Evaluation</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Evaluation</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#ffd166" stroke-width="1.5" opacity="0.5" /></g></g><g transform="translate(420,390)"><g class="tech-card" style="animation-delay: 0.7000000000000001s;"><rect width="300" height="110" fill="#0f172a" fill-opacity="0.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.3" /><rect x="0" y="0" width="100" height="20" fill="#073b4c" /><text x="8" y="14" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">Deployment</text><text x="20" y="55" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="18" fill="#f8fafc">Model Deployment</text><text x="20" y="80" font-family="'Archivo', -apple-system, sans-serif" font-size="13" fill="#22d3ee" opacity="0.8">System Component</text><path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="#073b4c" stroke-width="1.5" opacity="0.5" /></g></g></g><g transform="translate(0, 680.0)" class="placemat-root"><text x="400.0" y="-15" text-anchor="middle" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="12" fill="#f8fafc" style="text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.5;">Legend</text><line x1="360.0" y1="-5" x2="440.0" y2="-5" stroke="#38bdf8" stroke-width="1" opacity="0.2" /><g transform="translate(10.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#06d6a0" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">DATA</text></g><g transform="translate(170.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#1b9aaa" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">ANALYSIS</text></g><g transform="translate(330.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#ef476f" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">MODELING</text></g><g transform="translate(490.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#ffd166" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">EVALUATION</text></g><g transform="translate(650.0, 10)"><rect width="140" height="30" fill="#0f172a" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.2" /><rect width="6" height="30" fill="#073b4c" /><text x="15" y="20" font-family="'Archivo', -apple-system, sans-serif" font-weight="700" font-size="11" fill="#f8fafc" style="letter-spacing: 0.05em;">DEPLOYMENT</text></g></g></g></svg></div></div></div></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="paragraph back-to-top">
-<p><a href="#top">🔝</a></p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_common_use_cases">4. Common Use Cases</h2>
+<h2 id="_common_use_cases">3. Common Use Cases</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -3314,10 +3301,10 @@ window.onload = function() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_format_options">5. Format Options</h2>
+<h2 id="_format_options">4. Format Options</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_basic_structure">5.1. Basic Structure</h3>
+<h3 id="_basic_structure">4.1. Basic Structure</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,placemat]
@@ -3338,7 +3325,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_filled_vs_outlined">5.2. Filled vs. Outlined</h3>
+<h3 id="_filled_vs_outlined">4.2. Filled vs. Outlined</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">// Filled boxes (default)
@@ -3408,7 +3395,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_json_structure">6. JSON Structure</h2>
+<h2 id="_json_structure">5. JSON Structure</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Each placemat item maps to a legend category:</p>
@@ -3448,7 +3435,7 @@ window.onload = function() {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_best_practices">7. Best Practices</h2>
+<h2 id="_best_practices">6. Best Practices</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
