@@ -81,13 +81,14 @@ include::charts/data/pie1.txt[]
 [.back-to-top]
 <<top, 🔝>>
 
-== Donut Chart with Legend
+== Donut Chart
 
-Modern style with detailed legend cards:
-
-[source,asciidoc]
-....
-[docops,pieslice]
+[tabs]
+======
+Donut Chart with Legend::
++
+====
+[docops,pieslice,useDark=false, controls=true]
 ----
 title=Market Share by Region
 visualVersion=2
@@ -102,40 +103,18 @@ Asia Pacific | 22
 Latin America | 10
 Middle East & Africa | 5
 ----
-....
-
-
-[docops,pieslice,useDark=false]
-----
-title=Market Share by Region
-visualVersion=2
-legend=true
-donut=true
-percentages=true
-theme=ayu
----
-North America | 35
-Europe | 28
-Asia Pacific | 22
-Latin America | 10
-Middle East & Africa | 5
-----
-
-[.back-to-top]
-<<top, 🔝>>
-
-== Dark Mode Donut
-
-Optimized for dark-themed documentation:
-
-[source,asciidoc]
-....
-[docops,pieslice, useDark=true]
+====
+Dark Mode::
++
+====
+visualVersion = 1 + Legend on right side
+[docops,pieslice, useDark=true, controls=true]
 ----
 title=Budget Allocation
 legend=true
 donut=true
 percentages=true
+visualVersion=1
 ---
 Engineering | 40
 Marketing | 25
@@ -143,7 +122,9 @@ Sales | 20
 Operations | 10
 Admin | 5
 ----
-....
+====
+======
+
 
 [.back-to-top]
 <<top, 🔝>>
