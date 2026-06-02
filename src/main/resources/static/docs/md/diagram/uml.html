@@ -431,6 +431,37 @@
   }
 }
 
+/* Redoc wrapper emitted by macro */
+.markdown-body .redocly-wrap {
+  /* break out of centered column */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* optional vertical spacing */
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+
+  /* give Redoc some breathing room at viewport edges */
+  padding-left: 12px;
+  padding-right: 12px;
+  box-sizing: border-box;
+}
+
+/* Ensure inner Redoc container uses full width */
+.markdown-body .redocly-wrap > [id^="redoc-container-"] {
+  width: 100%;
+  max-width: none;
+}
+
+/* Optional: slightly reduce side nav width pressure on small screens */
+@media (max-width: 1100px) {
+  .markdown-body .redocly-wrap {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
                 </style>
                 <style>
                 .svg-container {
@@ -1027,65 +1058,72 @@
 }
                 </style>
                 <style>
-                /*! Asciidoctor Tabs | Editorial Light Theme */
+                /*! Asciidoctor Tabs | Accent Theme
+ *  Drop-in replacement — swap your existing tabs CSS with this file.
+ *  Accent color is a single CSS variable; change --tabs-accent to any hue.
+ */
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
-  /* Typography */
-  --tabs-font-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
-  --tabs-font-ui: "IBM Plex Sans", "Avenir Next", "Segoe UI", sans-serif;
-  --tabs-font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+  --tabs-accent:        #4f46e5;   /* indigo — change to any hex */
+  --tabs-accent-hover:  #4338ca;
+  --tabs-accent-rail:   #f5f3ff;
+  --tabs-accent-text:   #ffffff;
+  --tabs-accent-muted:  #4338ca;   /* inactive tab label */
+  --tabs-accent-soft:   rgba(99, 102, 241, 0.12);
 
-  /* Editorial palette (paper + ink + vermilion accent) */
-  --tabs-paper: #f8f5ef;
-  --tabs-paper-elev: #fffdf8;
-  --tabs-ink: #1f2328;
-  --tabs-ink-muted: #616a76;
-  --tabs-rule: #d6cec0;
-  --tabs-rule-strong: #b5aa97;
+  --tabs-bg:            #ffffff;
+  --tabs-rail-border:   #4f46e5;
+  --tabs-border:        #4f46e5;
+  --tabs-text:          #111827;
+  --tabs-text-muted:    #6b7280;
+  --tabs-panel-bg:      #ffffff;
 
-  --tabs-accent: #d9482b;       /* dominant */
-  --tabs-accent-soft: #f3c8b7;  /* subtle fill */
-  --tabs-accent-ink: #fffaf5;
-
-  --tabs-radius-lg: 14px;
-  --tabs-radius-md: 10px;
-  --tabs-gap: 8px;
-  --tabs-shadow: 0 10px 24px rgba(45, 39, 30, 0.11);
-
-  --tabs-focus: #1f7a8c;
+  --tabs-radius-outer:  12px;
+  --tabs-radius-btn:    8px;
+  --tabs-gap:           6px;
+  --tabs-focus:         #6366f1;
 }
 
-/* container */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabs-accent:        #6366f1;
+    --tabs-accent-hover:  #818cf8;
+    --tabs-accent-rail:   #1e1b4b;
+    --tabs-accent-text:   #ffffff;
+    --tabs-accent-muted:  #a5b4fc;
+    --tabs-accent-soft:   rgba(99, 102, 241, 0.18);
+
+    --tabs-bg:            #0f0f10;
+    --tabs-rail-border:   #4338ca;
+    --tabs-border:        #4338ca;
+    --tabs-text:          #f3f4f6;
+    --tabs-text-muted:    #9ca3af;
+    --tabs-panel-bg:      #111113;
+  }
+}
+
+/* ── Container ───────────────────────────────────────────────────────── */
 .tabs {
   margin: 1.75rem 0;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-lg);
-  box-shadow: var(--tabs-shadow);
+  border: 1px solid var(--tabs-border);
+  border-radius: var(--tabs-radius-outer);
   overflow: hidden;
-  background:
-          radial-gradient(circle at 10% -40%, rgba(217, 72, 43, 0.07), transparent 52%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35)),
-          var(--tabs-paper);
-  color: var(--tabs-ink);
-  animation: tabsEditorialEnter 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--tabs-bg);
+  color: var(--tabs-text);
+  animation: tabsAccentEnter 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* tab rail */
+/* ── Tab rail ────────────────────────────────────────────────────────── */
 .tablist > ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   margin: 0;
-  padding: 10px;
+  padding: 8px;
   gap: var(--tabs-gap);
-  border-bottom: 1px solid var(--tabs-rule);
-  background:
-          repeating-linear-gradient(
-                  90deg,
-                  rgba(40, 38, 34, 0.03) 0 1px,
-                  transparent 1px 18px
-          ),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.28)),
-          var(--tabs-paper-elev);
+  border-bottom: 1px solid var(--tabs-rail-border);
+  background: var(--tabs-accent-rail);
 }
 
 .tablist.ulist,
@@ -1097,38 +1135,31 @@
   margin-left: 0;
 }
 
-/* tabs */
+/* ── Tab buttons ─────────────────────────────────────────────────────── */
 .tablist > ul li {
-  align-items: center;
   display: inline-flex;
+  align-items: center;
   position: relative;
   cursor: pointer;
 
-  font-family: var(--tabs-font-ui);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.012em;
+  font-size: 0.8125rem;   /* 13px */
+  font-weight: 500;
+  line-height: 1.2;
 
-  color: var(--tabs-ink-muted);
+  color: var(--tabs-accent-muted);
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding: 0.5rem 0.95rem;
+  border: none;
+  border-radius: var(--tabs-radius-btn);
+  padding: 0.4rem 1rem;
 
   transition:
-          color 180ms ease,
-          background-color 180ms ease,
-          border-color 180ms ease,
-          transform 180ms ease,
-          box-shadow 180ms ease,
-          opacity 180ms ease;
+          color 130ms ease,
+          background-color 130ms ease;
 }
 
 .tablist > ul li:hover {
-  color: var(--tabs-ink);
-  border-color: var(--tabs-rule);
-  background: rgba(255, 255, 255, 0.72);
-  transform: translateY(-1px);
+  color: var(--tabs-text);
+  background: var(--tabs-accent-soft);
 }
 
 .tablist > ul li:focus-visible {
@@ -1136,85 +1167,53 @@
   outline-offset: 2px;
 }
 
-/* underline indicator */
-.tabs .tablist li::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: -7px;
-  height: 2px;
-  border-radius: 99px;
-  background: transparent;
-  transform: scaleX(0.3);
-  opacity: 0;
-  transition: transform 220ms ease, opacity 220ms ease, background-color 220ms ease;
-}
-
-/* active tab */
+/* ── Active tab ──────────────────────────────────────────────────────── */
 .tabs.is-loading .tablist li:first-child,
 .tabs:not(.is-loading) .tablist li.is-selected {
   background: var(--tabs-accent);
-  color: var(--tabs-accent-ink);
-  border-color: transparent;
-  box-shadow: 0 6px 16px rgba(217, 72, 43, 0.28);
-  transform: translateY(-1px);
+  color: var(--tabs-accent-text);
 }
 
-.tabs.is-loading .tablist li:first-child::after,
-.tabs:not(.is-loading) .tablist li.is-selected::after {
-  background: var(--tabs-accent);
-  transform: scaleX(1);
-  opacity: 1;
+/* no underline indicator needed for this style */
+.tabs .tablist li::after {
+  display: none;
 }
 
 /* reduce inactive visual weight */
 .tabs:not(.is-loading) .tablist li:not(.is-selected) {
-  opacity: 0.86;
+  opacity: 0.9;
 }
 
-/* loading/hidden panel behavior */
+/* ── Panel visibility ────────────────────────────────────────────────── */
 .tabs.is-loading .tabpanel + .tabpanel,
 .tabs:not(.is-loading) .tabpanel.is-hidden {
   display: none;
 }
 
-/* panel */
+/* ── Panel ───────────────────────────────────────────────────────────── */
 .tabpanel {
-  padding: 1.2rem 1.3rem;
-  color: var(--tabs-ink);
-  background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.32)),
-          var(--tabs-paper-elev);
-  border: 0;
-  animation: tabPanelReveal 280ms ease;
+  padding: 1.25rem 1.375rem;
+  color: var(--tabs-text);
+  background: var(--tabs-panel-bg);
+  animation: tabPanelReveal 200ms ease;
 }
 
 .tabpanel > :first-child {
   margin-top: 0;
 }
 
-/* subtle editorial heading treatment in panel */
-.tabpanel h2,
-.tabpanel h3,
-.tabpanel h4 {
-  font-family: var(--tabs-font-head);
-  letter-spacing: -0.01em;
-}
-
-/* keep standalone Asciidoctor spacing tidy */
+/* tidy trailing margin in Asciidoctor context */
 #content .tabpanel > :last-child,
 #content .tabpanel > :last-child > :last-child,
 #content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
   margin-bottom: 0;
 }
 
-/* table support */
+/* ── Table support ───────────────────────────────────────────────────── */
 .tablecontainer {
   overflow-x: auto;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-md);
-  background: #fffdf9;
+  border: 1px solid color-mix(in srgb, var(--tabs-border) 30%, transparent);
+  border-radius: 6px;
 }
 
 #content .tablecontainer {
@@ -1225,79 +1224,23 @@
   margin-bottom: 0;
 }
 
-/* tasteful motion */
-@keyframes tabsEditorialEnter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-    filter: saturate(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: saturate(1);
-  }
+/* ── Motion ──────────────────────────────────────────────────────────── */
+@keyframes tabsAccentEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
 @keyframes tabPanelReveal {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
-/* accessibility */
 @media (prefers-reduced-motion: reduce) {
   .tabs,
   .tabpanel,
-  .tablist > ul li,
-  .tabs .tablist li::after {
+  .tablist > ul li {
     animation: none !important;
     transition: none !important;
-  }
-}
-
-/* dark fallback for user preference (keeps editorial identity) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tabs-paper: #151618;
-    --tabs-paper-elev: #1a1c20;
-    --tabs-ink: #ece8de;
-    --tabs-ink-muted: #a6adba;
-    --tabs-rule: #2d323a;
-    --tabs-rule-strong: #4c5561;
-
-    --tabs-accent: #e05b3f;
-    --tabs-accent-soft: #5b2e24;
-    --tabs-accent-ink: #fff6f0;
-
-    --tabs-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
-    --tabs-focus: #49b5c8;
-  }
-
-  .tabs {
-    background:
-            radial-gradient(circle at 10% -35%, rgba(224, 91, 63, 0.16), transparent 55%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
-            var(--tabs-paper);
-  }
-
-  .tablist > ul li:hover {
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .tabpanel {
-    background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
-            var(--tabs-paper-elev);
-  }
-
-  .tablecontainer {
-    background: #171a1e;
   }
 }
                 </style>
@@ -1476,7 +1419,9 @@
                           }
                     </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js"></script>
-                
+                <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+                <script src ="https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js"></script>        
+
             </head>
             <body>
                     <article class="markdown-body">
@@ -1485,8 +1430,8 @@
 <h2 id="plantuml">Plantuml</h2>
 <p>PlantUML is a popular tool for creating UML diagrams using simple text-based descriptions. It supports various diagram types such as class diagrams, sequence diagrams, and activity diagrams.</p>
 <div class="tabs is-loading">
-<div class="tablist"><ul role="tablist"><li id="tab-class-diagram-1779243328354-153" class="tab" role="tab" aria-controls="panel-class-diagram-1779243328354-153" aria-selected="true" tabindex="0">Class Diagram</li><li id="tab-activity-diagram-1779243328366-520" class="tab" role="tab" aria-controls="panel-activity-diagram-1779243328366-520" aria-selected="false" tabindex="-1">Activity Diagram</li><li id="tab-sequence-diagram-1779243328367-969" class="tab" role="tab" aria-controls="panel-sequence-diagram-1779243328367-969" aria-selected="false" tabindex="-1">Sequence Diagram</li></ul></div>
-<div id="panel-class-diagram-1779243328354-153" class="tabpanel" aria-labelledby="tab-class-diagram-1779243328354-153" role="tabpanel">
+<div class="tablist"><ul role="tablist"><li id="tab-class-diagram-1780401930502-538" class="tab" role="tab" aria-controls="panel-class-diagram-1780401930502-538" aria-selected="true" tabindex="0">Class Diagram</li><li id="tab-activity-diagram-1780401930502-925" class="tab" role="tab" aria-controls="panel-activity-diagram-1780401930502-925" aria-selected="false" tabindex="-1">Activity Diagram</li><li id="tab-sequence-diagram-1780401930502-766" class="tab" role="tab" aria-controls="panel-sequence-diagram-1780401930502-766" aria-selected="false" tabindex="-1">Sequence Diagram</li></ul></div>
+<div id="panel-class-diagram-1780401930502-538" class="tabpanel" aria-labelledby="tab-class-diagram-1780401930502-538" role="tabpanel">
 <div class="docops-media-card">
 <script type="text/plain" class="docops-source-raw">
 @startuml
@@ -1495,24 +1440,28 @@
 !$SUCCESS = &quot;#34C759&quot;
 !$WARNING = &quot;#FF9F0A&quot;
 !$DANGER  = &quot;#FF3B30&quot;
-<p>skinparam backgroundColor #F3F6FB
+
+skinparam backgroundColor #F3F6FB
 skinparam shadowing true
 skinparam roundcorner 20
 skinparam dpi 160
 skinparam defaultFontName Helvetica
 skinparam titleFontColor #1e1e1e
-skinparam actorStyle awesome</p>
-<p>skinparam ArrowColor $ACCENT
+skinparam actorStyle awesome
+
+skinparam ArrowColor $ACCENT
 skinparam ArrowThickness 1.5
-skinparam HyperlinkColor $ACCENT</p>
-<p>skinparam note {
+skinparam HyperlinkColor $ACCENT
+
+skinparam note {
 BackgroundColor #FFF7E8
 BorderColor $WARNING
 FontColor #3B2F00
 FontName Helvetica
 RoundCorner 14
-}</p>
-<p>skinparam activity {
+}
+
+skinparam activity {
 FontName Helvetica
 FontColor #0F172A
 FontSize 15
@@ -1524,8 +1473,9 @@ ArrowColor $ACCENT
 DiamondBackgroundColor #EEF4FF
 DiamondBorderColor #A8C7FF
 DiamondFontColor #0F172A
-}</p>
-<p>skinparam sequence {
+}
+
+skinparam sequence {
 ParticipantBackgroundColor #FFFFFF
 ParticipantBorderColor #D7DFEA
 ParticipantFontColor #0F172A
@@ -1536,8 +1486,9 @@ ArrowFontColor #0F172A
 GroupBackgroundColor #FFFFFF
 GroupBorderColor #D7DFEA
 GroupHeaderFontColor #0F172A
-}</p>
-<p>skinparam class {
+}
+
+skinparam class {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
@@ -1546,44 +1497,50 @@ HeaderFontColor #0F172A
 AttributeFontColor #1E293B
 MethodFontColor #1E293B
 ArrowColor $ACCENT
-}</p>
-<p>skinparam component {
+}
+
+skinparam component {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 ArrowColor $ACCENT
-}</p>
-<p>skinparam usecase {
+}
+
+skinparam usecase {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 ArrowColor $ACCENT
-}</p>
-<p>skinparam state {
+}
+
+skinparam state {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 StartColor $SUCCESS
 EndColor $DANGER
 ArrowColor $ACCENT
-}</p>
-<p>skinparam package {
+}
+
+skinparam package {
 BackgroundColor #F8FAFF
 BorderColor #C9D6EA
 FontColor #0F172A
-}</p>
-<p>skinparam actor {
+}
+
+skinparam actor {
 BackgroundColor  #FFFFFF
 BorderColor      #007AFF
 FontColor        #000000
 FontSize         13
-}</p>
-<p>class A {
+}
+
+class A {
 +int x
 +method1()
 }
 @enduml
-</script></p>
+</script>
 <div class="plantuml svg-container" onclick="openModal(this);">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="CLASS" height="161.6667px" preserveAspectRatio="none" style="width:183px;height:161px;background:#F3F6FB;" version="1.1" viewBox="0 0 183 161" width="183.3333px" zoomAndPan="magnify"><defs><filter height="300%" id="f1g912gnhjx2mr" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.3333"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.6667" dy="6.6667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#F3F6FB" height="161.6667" style="stroke:none;stroke-width:1.6667;" width="183.3333" x="0" y="0"/><!--class A--><g class="entity" data-qualified-name="A" data-source-line="101" id="ent0002"><rect fill="#FFFFFF" filter="url(#f1g912gnhjx2mr)" height="126.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="149.6777" x="11.6667" y="11.6667"/><rect fill="#EEF4FF" height="53.3333" rx="16.6667" ry="16.6667" style="stroke:#EEF4FF;stroke-width:0.8333;" width="149.6777" x="11.6667" y="11.6667"/><rect fill="#EEF4FF" height="16.6667" style="stroke:#EEF4FF;stroke-width:0.8333;" width="149.6777" x="11.6667" y="48.3333"/><rect fill="none" height="126.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="149.6777" x="11.6667" y="11.6667"/><ellipse cx="73.0182" cy="38.3333" fill="#ADD1B2" rx="18.3333" ry="18.3333" style="stroke:#181818;stroke-width:1.6667;"/><path d="M77.1401,48.5718 Q76.1717,49.0698 75.1064,49.3188 Q74.0412,49.5679 72.8652,49.5679 Q68.6872,49.5679 66.4875,46.8148 Q64.2878,44.0617 64.2878,38.8599 Q64.2878,33.6442 66.4875,30.8911 Q68.6872,28.138 72.8652,28.138 Q74.0412,28.138 75.1203,28.387 Q76.1994,28.6361 77.1401,29.1341 L77.1401,33.6719 Q76.0887,32.7035 75.0995,32.2538 Q74.1104,31.8042 73.0589,31.8042 Q70.8177,31.8042 69.6764,33.5819 Q68.535,35.3597 68.535,38.8599 Q68.535,42.3462 69.6764,44.1239 Q70.8177,45.9017 73.0589,45.9017 Q74.1104,45.9017 75.0995,45.4521 Q76.0887,45.0024 77.1401,44.034 Z " fill="#000000"/><text fill="#1E293B" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="15.5632" x="104.4297" y="44.6338">A</text><line style="stroke:#D7DFEA;stroke-width:0.8333;" x1="13.3333" x2="159.6777" y1="65" y2="65"/><g data-visibility-modifier="PUBLIC_FIELD"><ellipse cx="30" cy="85.8333" fill="none" rx="5" ry="5" style="stroke:#038048;stroke-width:1.6667;"/></g><text fill="#1E293B" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="42.793" x="45" y="89.6338">int x</text><line style="stroke:#D7DFEA;stroke-width:0.8333;" x1="13.3333" x2="159.6777" y1="101.6667" y2="101.6667"/><g data-visibility-modifier="PUBLIC_METHOD"><ellipse cx="30" cy="122.5" fill="#84BE84" rx="5" ry="5" style="stroke:#038048;stroke-width:1.6667;"/></g><text fill="#1E293B" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="106.3444" x="45" y="126.3005">method1()</text></g></g></svg>
 </div>
@@ -1602,7 +1559,7 @@ FontSize         13
 </div>
 </div>
 </div>
-<div id="panel-activity-diagram-1779243328366-520" class="tabpanel is-hidden" aria-labelledby="tab-activity-diagram-1779243328366-520" role="tabpanel" hidden="">
+<div id="panel-activity-diagram-1780401930502-925" class="tabpanel is-hidden" aria-labelledby="tab-activity-diagram-1780401930502-925" role="tabpanel" hidden="">
 <div class="docops-media-card">
 <script type="text/plain" class="docops-source-raw">
 @startuml
@@ -1611,24 +1568,28 @@ FontSize         13
 !$SUCCESS = &quot;#34C759&quot;
 !$WARNING = &quot;#FF9F0A&quot;
 !$DANGER  = &quot;#FF3B30&quot;
-<p>skinparam backgroundColor #F3F6FB
+
+skinparam backgroundColor #F3F6FB
 skinparam shadowing true
 skinparam roundcorner 20
 skinparam dpi 160
 skinparam defaultFontName Helvetica
 skinparam titleFontColor #1e1e1e
-skinparam actorStyle awesome</p>
-<p>skinparam ArrowColor $ACCENT
+skinparam actorStyle awesome
+
+skinparam ArrowColor $ACCENT
 skinparam ArrowThickness 1.5
-skinparam HyperlinkColor $ACCENT</p>
-<p>skinparam note {
+skinparam HyperlinkColor $ACCENT
+
+skinparam note {
 BackgroundColor #FFF7E8
 BorderColor $WARNING
 FontColor #3B2F00
 FontName Helvetica
 RoundCorner 14
-}</p>
-<p>skinparam activity {
+}
+
+skinparam activity {
 FontName Helvetica
 FontColor #0F172A
 FontSize 15
@@ -1640,8 +1601,9 @@ ArrowColor $ACCENT
 DiamondBackgroundColor #EEF4FF
 DiamondBorderColor #A8C7FF
 DiamondFontColor #0F172A
-}</p>
-<p>skinparam sequence {
+}
+
+skinparam sequence {
 ParticipantBackgroundColor #FFFFFF
 ParticipantBorderColor #D7DFEA
 ParticipantFontColor #0F172A
@@ -1652,8 +1614,9 @@ ArrowFontColor #0F172A
 GroupBackgroundColor #FFFFFF
 GroupBorderColor #D7DFEA
 GroupHeaderFontColor #0F172A
-}</p>
-<p>skinparam class {
+}
+
+skinparam class {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
@@ -1662,39 +1625,45 @@ HeaderFontColor #0F172A
 AttributeFontColor #1E293B
 MethodFontColor #1E293B
 ArrowColor $ACCENT
-}</p>
-<p>skinparam component {
+}
+
+skinparam component {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 ArrowColor $ACCENT
-}</p>
-<p>skinparam usecase {
+}
+
+skinparam usecase {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 ArrowColor $ACCENT
-}</p>
-<p>skinparam state {
+}
+
+skinparam state {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 StartColor $SUCCESS
 EndColor $DANGER
 ArrowColor $ACCENT
-}</p>
-<p>skinparam package {
+}
+
+skinparam package {
 BackgroundColor #F8FAFF
 BorderColor #C9D6EA
 FontColor #0F172A
-}</p>
-<p>skinparam actor {
+}
+
+skinparam actor {
 BackgroundColor  #FFFFFF
 BorderColor      #007AFF
 FontColor        #000000
 FontSize         13
-}</p>
-<p>(<em>) -&gt; &quot;parsowanie argumentów&quot;
+}
+
+(*) -&gt; &quot;parsowanie argumentów&quot;
 if &quot;katalogi istnieją&quot; then
 --&gt;[true] &quot;budowanie&quot;
 else
@@ -1702,10 +1671,10 @@ else
 --&gt; &quot;tworzenie brakujących katalogów&quot;
 -&gt;&quot;budowanie projektu&quot;
 -right-&gt; &quot;kompilacja&quot;
---&gt; [koniec] (</em>)
+--&gt; [koniec] (*)
 endif
 @enduml
-</script></p>
+</script>
 <div class="plantuml svg-container" onclick="openModal(this);">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="596.6667px" preserveAspectRatio="none" style="width:1136px;height:596px;background:#F3F6FB;" version="1.1" viewBox="0 0 1136 596" width="1136.6667px" zoomAndPan="magnify"><defs><filter height="300%" id="ffttdh1k9isyt" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.3333"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.6667" dy="6.6667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#F3F6FB" height="596.6667" style="stroke:none;stroke-width:1.6667;" width="1136.6667" x="0" y="0"/><g class="start_entity" data-qualified-name="start" data-source-line="102" id="ent0002"><ellipse cx="26.6667" cy="40.8333" fill="#34C759" filter="url(#ffttdh1k9isyt)" rx="16.6667" ry="16.6667" style="stroke:#222222;stroke-width:1.6667;"/></g><rect fill="#FFFFFF" filter="url(#ffttdh1k9isyt)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#D7DFEA;stroke-width:0.8333;" width="305.7088" x="77.15" y="11.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="272.3755" x="93.8167" y="47.5838">parsowanie argument&#243;w</text><g class="entity" data-qualified-name=".5" id="ent0006"><polygon fill="#EEF4FF" filter="url(#ffttdh1k9isyt)" points="230,138.3333,250,158.3333,230,178.3333,210,158.3333,230,138.3333" style="stroke:#A8C7FF;stroke-width:0.8333;"/></g><rect fill="#FFFFFF" filter="url(#ffttdh1k9isyt)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#D7DFEA;stroke-width:0.8333;" width="154.2684" x="116.2" y="266.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="120.9351" x="132.8667" y="302.5838">budowanie</text><rect fill="#FFFFFF" filter="url(#ffttdh1k9isyt)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#D7DFEA;stroke-width:0.8333;" width="293.2088" x="303.4" y="266.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="259.8755" x="320.0667" y="302.5838">sprawdzanie katalog&#243;w</text><rect fill="#FFFFFF" filter="url(#ffttdh1k9isyt)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#D7DFEA;stroke-width:0.8333;" width="400.1912" x="249.9" y="393.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="366.8579" x="266.5667" y="429.2505">tworzenie brakuj&#261;cych katalog&#243;w</text><rect fill="#FFFFFF" filter="url(#ffttdh1k9isyt)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#D7DFEA;stroke-width:0.8333;" width="250.1546" x="683.25" y="393.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="216.8213" x="699.9167" y="429.2505">budowanie projektu</text><rect fill="#FFFFFF" filter="url(#ffttdh1k9isyt)" height="58.3333" rx="20.8333" ry="20.8333" style="stroke:#D7DFEA;stroke-width:0.8333;" width="151.4364" x="965.95" y="393.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="25" lengthAdjust="spacing" textLength="118.103" x="982.6167" y="429.2505">kompilacja</text><g class="end_entity" data-qualified-name="end" data-source-line="110" id="ent0018"><ellipse cx="1041.6667" cy="558.3333" fill="none" filter="url(#ffttdh1k9isyt)" rx="18.3333" ry="18.3333" style="stroke:#FF3B30;stroke-width:2.5;"/><ellipse cx="1041.6667" cy="558.3333" fill="#222222" rx="10" ry="10" style="stroke:#FF3B30;stroke-width:1.6667;"/></g><!--link start to parsowanie argument?w--><g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="102" id="lnk4"><path d="M44.1333,40.8333 C55.0333,40.8333 55.9167,40.8333 66.8167,40.8333" fill="none" id="start-to-parsowanie argument&#243;w" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="76.8167,40.8333,61.8167,34.1667,68.4833,40.8333,61.8167,47.5,76.8167,40.8333" style="stroke:#007AFF;stroke-width:2.5;"/></g><!--link parsowanie argument?w to #5--><g class="link" data-entity-1="ent0003" data-entity-2="ent0006" data-link-type="dependency" data-source-line="103" id="lnk7"><path d="M230,70.7167 C230,91.5833 230,109.4333 230,127.7" fill="none" id="parsowanie argument&#243;w-to-#5" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="230,137.7,236.6667,122.7,230,129.3667,223.3333,122.7,230,137.7" style="stroke:#007AFF;stroke-width:2.5;"/><text fill="#0F172A" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="125.3524" x="77.7333" y="120.4462">katalogi istniej&#261;</text></g><!--link #5 to budowanie--><g class="link" data-entity-1="ent0006" data-entity-2="ent0008" data-link-type="dependency" data-source-line="104" id="lnk9"><path d="M225.9333,174.8667 C219.9333,196.8333 211.2219,228.721 203.6219,256.5044" fill="none" id="#5-to-budowanie" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="200.9833,266.15,211.3715,253.4406,203.1821,258.112,198.5107,249.9225,200.9833,266.15" style="stroke:#007AFF;stroke-width:2.5;"/><text fill="#0F172A" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="31.591" x="216.6167" y="227.4504">true</text></g><!--link #5 to sprawdzanie katalog?w--><g class="link" data-entity-1="ent0006" data-entity-2="ent0010" data-link-type="dependency" data-source-line="106" id="lnk11"><path d="M241.8333,167.2167 C271.8167,185.5 343.5625,229.2599 395.2125,260.7599" fill="none" id="#5-to-sprawdzanie katalog&#243;w" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="403.75,265.9667,394.4149,252.4648,396.6354,261.6277,387.4725,263.8481,403.75,265.9667" style="stroke:#007AFF;stroke-width:2.5;"/><text fill="#0F172A" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="38.7256" x="348.2667" y="227.4504">false</text></g><!--link sprawdzanie katalog?w to tworzenie brakuj?cych katalog?w--><g class="link" data-entity-1="ent0010" data-entity-2="ent0012" data-link-type="dependency" data-source-line="107" id="lnk13"><path d="M450,325.4833 C450,345.5333 450,362.4167 450,382.5333" fill="none" id="sprawdzanie katalog&#243;w-to-tworzenie brakuj&#261;cych katalog&#243;w" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="450,392.5333,456.6667,377.5333,450,384.2,443.3333,377.5333,450,392.5333" style="stroke:#007AFF;stroke-width:2.5;"/></g><!--link tworzenie brakuj?cych katalog?w to budowanie projektu--><g class="link" data-entity-1="ent0012" data-entity-2="ent0014" data-link-type="dependency" data-source-line="108" id="lnk15"><path d="M650.8667,422.5 C661.5167,422.5 662.1833,422.5 672.85,422.5" fill="none" id="tworzenie brakuj&#261;cych katalog&#243;w-to-budowanie projektu" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="682.85,422.5,667.85,415.8333,674.5167,422.5,667.85,429.1667,682.85,422.5" style="stroke:#007AFF;stroke-width:2.5;"/></g><!--link budowanie projektu to kompilacja--><g class="link" data-entity-1="ent0014" data-entity-2="ent0016" data-link-type="dependency" data-source-line="109" id="lnk17"><path d="M934.1167,422.5 C944.4833,422.5 944.8333,422.5 955.2,422.5" fill="none" id="budowanie projektu-to-kompilacja" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="965.2,422.5,950.2,415.8333,956.8667,422.5,950.2,429.1667,965.2,422.5" style="stroke:#007AFF;stroke-width:2.5;"/></g><!--link kompilacja to end--><g class="link" data-entity-1="ent0016" data-entity-2="ent0018" data-link-type="dependency" data-source-line="110" id="lnk19"><path d="M1041.6667,452.2667 C1041.6667,478.7 1041.6667,507.4333 1041.6667,529.5333" fill="none" id="kompilacja-to-end" style="stroke:#007AFF;stroke-width:2.5;"/><polygon fill="#007AFF" points="1041.6667,539.5333,1048.3333,524.5333,1041.6667,531.2,1035,524.5333,1041.6667,539.5333" style="stroke:#007AFF;stroke-width:2.5;"/><text fill="#0F172A" font-family="Helvetica" font-size="18.3333" lengthAdjust="spacing" textLength="52.9948" x="1043.3333" y="500.7837">koniec</text></g></g></svg>
 </div>
@@ -1724,7 +1693,7 @@ endif
 </div>
 </div>
 </div>
-<div id="panel-sequence-diagram-1779243328367-969" class="tabpanel is-hidden" aria-labelledby="tab-sequence-diagram-1779243328367-969" role="tabpanel" hidden="">
+<div id="panel-sequence-diagram-1780401930502-766" class="tabpanel is-hidden" aria-labelledby="tab-sequence-diagram-1780401930502-766" role="tabpanel" hidden="">
 <div class="docops-media-card">
 <script type="text/plain" class="docops-source-raw">
 @startuml
@@ -1733,24 +1702,28 @@ endif
 !$SUCCESS = &quot;#34C759&quot;
 !$WARNING = &quot;#FF9F0A&quot;
 !$DANGER  = &quot;#FF3B30&quot;
-<p>skinparam backgroundColor #F3F6FB
+
+skinparam backgroundColor #F3F6FB
 skinparam shadowing true
 skinparam roundcorner 20
 skinparam dpi 160
 skinparam defaultFontName Helvetica
 skinparam titleFontColor #1e1e1e
-skinparam actorStyle awesome</p>
-<p>skinparam ArrowColor $ACCENT
+skinparam actorStyle awesome
+
+skinparam ArrowColor $ACCENT
 skinparam ArrowThickness 1.5
-skinparam HyperlinkColor $ACCENT</p>
-<p>skinparam note {
+skinparam HyperlinkColor $ACCENT
+
+skinparam note {
 BackgroundColor #FFF7E8
 BorderColor $WARNING
 FontColor #3B2F00
 FontName Helvetica
 RoundCorner 14
-}</p>
-<p>skinparam activity {
+}
+
+skinparam activity {
 FontName Helvetica
 FontColor #0F172A
 FontSize 15
@@ -1762,8 +1735,9 @@ ArrowColor $ACCENT
 DiamondBackgroundColor #EEF4FF
 DiamondBorderColor #A8C7FF
 DiamondFontColor #0F172A
-}</p>
-<p>skinparam sequence {
+}
+
+skinparam sequence {
 ParticipantBackgroundColor #FFFFFF
 ParticipantBorderColor #D7DFEA
 ParticipantFontColor #0F172A
@@ -1774,8 +1748,9 @@ ArrowFontColor #0F172A
 GroupBackgroundColor #FFFFFF
 GroupBorderColor #D7DFEA
 GroupHeaderFontColor #0F172A
-}</p>
-<p>skinparam class {
+}
+
+skinparam class {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
@@ -1784,47 +1759,53 @@ HeaderFontColor #0F172A
 AttributeFontColor #1E293B
 MethodFontColor #1E293B
 ArrowColor $ACCENT
-}</p>
-<p>skinparam component {
+}
+
+skinparam component {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 ArrowColor $ACCENT
-}</p>
-<p>skinparam usecase {
+}
+
+skinparam usecase {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 ArrowColor $ACCENT
-}</p>
-<p>skinparam state {
+}
+
+skinparam state {
 BackgroundColor #FFFFFF
 BorderColor #D7DFEA
 FontColor #0F172A
 StartColor $SUCCESS
 EndColor $DANGER
 ArrowColor $ACCENT
-}</p>
-<p>skinparam package {
+}
+
+skinparam package {
 BackgroundColor #F8FAFF
 BorderColor #C9D6EA
 FontColor #0F172A
-}</p>
-<p>skinparam actor {
+}
+
+skinparam actor {
 BackgroundColor  #FFFFFF
 BorderColor      #007AFF
 FontColor        #000000
 FontSize         13
-}</p>
-<p>title Dodawanie hosta
+}
+
+title Dodawanie hosta
 actor UI #red
 box &quot;Kontroler&quot; #LightBlue
-control Kontroler
-database kontrolerDB
+	control Kontroler
+	database kontrolerDB
 end box
 box &quot;Monitor&quot; #DarkSalmon
-control Monitor
-database monitorDB
+	control Monitor
+	database monitorDB
 end box
 autonumber
 UI -&gt; Kontroler: POST /host
@@ -1832,20 +1813,21 @@ Kontroler -&gt; Kontroler: Walidacja danych
 alt dane poprawne
 Kontroler -&gt; kontrolerDB: dodaj do bazy
 Kontroler -&gt; Monitor: POST /host
-Monitor -&gt; Monitor: Walidacja danych
-alt dane poprane
-Monitor -&gt; monitorDB: Dodaj do bazy
-Monitor --&gt; Kontroler: status 201
-Kontroler --&gt; UI: status 201
-else dane niepoprawne
-Monitor -&gt; Kontroler: status 400
-Kontroler --&gt; UI: status 400
-end
+	Monitor -&gt; Monitor: Walidacja danych
+	alt dane poprane
+	Monitor -&gt; monitorDB: Dodaj do bazy
+	Monitor --&gt; Kontroler: status 201
+		Kontroler --&gt; UI: status 201
+	else dane niepoprawne
+	Monitor -&gt; Kontroler: status 400
+		Kontroler --&gt; UI: status 400
+	end
 else danie niepoprawne
 Kontroler --&gt; UI: status 400
-end</p>
-<p>@enduml
-</script></p>
+end
+
+@enduml
+</script>
 <div class="plantuml svg-container" onclick="openModal(this);">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="1046.6667px" preserveAspectRatio="none" style="width:930px;height:1046px;background:#F3F6FB;" version="1.1" viewBox="0 0 930 1046" width="930px" zoomAndPan="magnify"><title>Dodawanie hosta</title><defs><filter height="300%" id="fdf35iuytxfwy" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.3333"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.6667" dy="6.6667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#F3F6FB" height="1046.6667" style="stroke:none;stroke-width:1.6667;" width="930" x="0" y="0"/><text fill="#1E1E1E" font-family="Helvetica" font-size="23.3333" font-weight="bold" lengthAdjust="spacing" textLength="191.8848" x="367.0101" y="42.9671">Dodawanie hosta</text><rect fill="#ADD8E6" height="968.3333" rx="16.6667" ry="16.6667" style="stroke:#181818;stroke-width:0.8333;" width="344.13" x="207.57" y="68.3333"/><text fill="#000000" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="97.5" x="330.885" y="85.0171">Kontroler</text><rect fill="#E9967A" height="968.3333" rx="16.6667" ry="16.6667" style="stroke:#181818;stroke-width:0.8333;" width="329.2049" x="555.0334" y="68.3333"/><text fill="#000000" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="79.4198" x="679.9259" y="85.0171">Monitor</text><rect fill="#F8FAFF" filter="url(#fdf35iuytxfwy)" height="543.3333" rx="16.6667" ry="16.6667" style="stroke:#C9D6EA;stroke-width:2.5;" width="894.2383" x="16.6667" y="336.6667"/><rect fill="#F8FAFF" filter="url(#fdf35iuytxfwy)" height="271.6667" rx="16.6667" ry="16.6667" style="stroke:#C9D6EA;stroke-width:2.5;" width="860.9049" x="33.3333" y="530"/><path d="M33.3333,690 L894.2383,690 L894.2383,785 A16.6667,16.6667 0 0 1 877.5716,801.6667 L50,801.6667 A16.6667,16.6667 0 0 1 33.3333,785 L33.3333,690" fill="#F8FAFF" style="stroke:none;stroke-width:1.6667;"/><path d="M16.6667,813.3333 L910.9049,813.3333 L910.9049,863.3333 A16.6667,16.6667 0 0 1 894.2383,880 L33.3333,880 A16.6667,16.6667 0 0 1 16.6667,863.3333 L16.6667,813.3333" fill="#F8FAFF" style="stroke:none;stroke-width:1.6667;"/><g class="participant-lifeline" data-entity-uid="part1" data-qualified-name="UI" id="part1-lifeline"><g><title>UI</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="89.1667" y="196.6667"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="95" x2="95" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part2" data-qualified-name="Kontroler" id="part2-lifeline"><g><title>Kontroler</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="259.9089" y="196.6667"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="265.9033" x2="265.9033" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part3" data-qualified-name="kontrolerDB" id="part3-lifeline"><g><title>kontrolerDB</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="471.7692" y="196.6667"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="476.8384" x2="476.8384" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part4" data-qualified-name="Monitor" id="part4-lifeline"><g><title>Monitor</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="598.9355" y="196.6667"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="605.0334" x2="605.0334" y1="196.6667" y2="908.3333"/></g></g><g class="participant-lifeline" data-entity-uid="part5" data-qualified-name="monitorDB" id="part5-lifeline"><g><title>monitorDB</title><rect fill="#000000" fill-opacity="0.00000" height="711.6667" width="13.3333" x="810.7959" y="196.6667"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="817.3535" x2="817.3535" y1="196.6667" y2="908.3333"/></g></g><g class="participant participant-head" data-entity-uid="part1" data-qualified-name="UI" id="part1-head"><text fill="#000000" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="21.6667" x="80" y="191.6838">UI</text><ellipse cx="95.8333" cy="100.8333" fill="#FF0000" filter="url(#fdf35iuytxfwy)" rx="26.6667" ry="26.6667" style="stroke:#007AFF;stroke-width:0.8333;"/><path d="M95.8333,134.1667 C102.5,134.1667 107.5,134.1667 114.1667,127.5 C127.5,127.5 140.8333,140.8333 140.8333,154.1667 L140.8333,160.8333 C140.8333,167.5 134.1667,174.1667 127.5,174.1667 L64.1667,174.1667 C57.5,174.1667 50.8333,167.5 50.8333,160.8333 L50.8333,154.1667 C50.8333,140.8333 64.1667,127.5 77.5,127.5 C84.1667,134.1667 89.1667,134.1667 95.8333,134.1667" fill="#FF0000" filter="url(#fdf35iuytxfwy)" style="stroke:#007AFF;stroke-width:0.8333;"/></g><g class="participant participant-tail" data-entity-uid="part1" data-qualified-name="UI" id="part1-tail"><text fill="#000000" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="21.6667" x="80" y="923.3504">UI</text><ellipse cx="95.8333" cy="955.8333" fill="#FF0000" filter="url(#fdf35iuytxfwy)" rx="26.6667" ry="26.6667" style="stroke:#007AFF;stroke-width:0.8333;"/><path d="M95.8333,989.1667 C102.5,989.1667 107.5,989.1667 114.1667,982.5 C127.5,982.5 140.8333,995.8333 140.8333,1009.1667 L140.8333,1015.8333 C140.8333,1022.5 134.1667,1029.1667 127.5,1029.1667 L64.1667,1029.1667 C57.5,1029.1667 50.8333,1022.5 50.8333,1015.8333 L50.8333,1009.1667 C50.8333,995.8333 64.1667,982.5 77.5,982.5 C84.1667,989.1667 89.1667,989.1667 95.8333,989.1667" fill="#FF0000" filter="url(#fdf35iuytxfwy)" style="stroke:#007AFF;stroke-width:0.8333;"/></g><g class="participant participant-head" data-entity-uid="part2" data-qualified-name="Kontroler" id="part2-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="94.6777" x="214.2367" y="191.3005">Kontroler</text><ellipse cx="266.5755" cy="146.6667" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="259.9089,126.6667,269.9089,118.3333,266.5755,126.6667,269.9089,135,259.9089,126.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-tail" data-entity-uid="part2" data-qualified-name="Kontroler" id="part2-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="94.6777" x="214.2367" y="924.6338">Kontroler</text><ellipse cx="266.5755" cy="956.6667" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="259.9089,936.6667,269.9089,928.3333,266.5755,936.6667,269.9089,945,259.9089,936.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-head" data-entity-uid="part3" data-qualified-name="kontrolerDB" id="part3-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="123.195" x="411.8384" y="191.3005">kontrolerDB</text><path d="M448.4359,113.3333 C448.4359,96.6667 478.4359,96.6667 478.4359,96.6667 C478.4359,96.6667 508.4359,96.6667 508.4359,113.3333 L508.4359,156.6667 C508.4359,173.3333 478.4359,173.3333 478.4359,173.3333 C478.4359,173.3333 448.4359,173.3333 448.4359,156.6667 L448.4359,113.3333" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M448.4359,113.3333 C448.4359,130 478.4359,130 478.4359,130 C478.4359,130 508.4359,130 508.4359,113.3333" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="participant participant-tail" data-entity-uid="part3" data-qualified-name="kontrolerDB" id="part3-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="123.195" x="411.8384" y="924.6338">kontrolerDB</text><path d="M448.4359,946.6667 C448.4359,930 478.4359,930 478.4359,930 C478.4359,930 508.4359,930 508.4359,946.6667 L508.4359,990 C508.4359,1006.6667 478.4359,1006.6667 478.4359,1006.6667 C478.4359,1006.6667 448.4359,1006.6667 448.4359,990 L448.4359,946.6667" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M448.4359,946.6667 C448.4359,963.3333 478.4359,963.3333 478.4359,963.3333 C478.4359,963.3333 508.4359,963.3333 508.4359,946.6667" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="participant participant-head" data-entity-uid="part4" data-qualified-name="Monitor" id="part4-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="77.8044" x="561.7" y="191.3005">Monitor</text><ellipse cx="605.6022" cy="146.6667" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="598.9355,126.6667,608.9355,118.3333,605.6022,126.6667,608.9355,135,598.9355,126.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-tail" data-entity-uid="part4" data-qualified-name="Monitor" id="part4-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="77.8044" x="561.7" y="924.6338">Monitor</text><ellipse cx="605.6022" cy="956.6667" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" rx="20" ry="20" style="stroke:#181818;stroke-width:0.8333;"/><polygon fill="#181818" points="598.9355,936.6667,608.9355,928.3333,605.6022,936.6667,608.9355,945,598.9355,936.6667" style="stroke:#181818;stroke-width:1.6667;"/></g><g class="participant participant-head" data-entity-uid="part5" data-qualified-name="monitorDB" id="part5-head"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="110.2181" x="757.3535" y="191.3005">monitorDB</text><path d="M787.4626,113.3333 C787.4626,96.6667 817.4626,96.6667 817.4626,96.6667 C817.4626,96.6667 847.4626,96.6667 847.4626,113.3333 L847.4626,156.6667 C847.4626,173.3333 817.4626,173.3333 817.4626,173.3333 C817.4626,173.3333 787.4626,173.3333 787.4626,156.6667 L787.4626,113.3333" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M787.4626,113.3333 C787.4626,130 817.4626,130 817.4626,130 C817.4626,130 847.4626,130 847.4626,113.3333" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="participant participant-tail" data-entity-uid="part5" data-qualified-name="monitorDB" id="part5-tail"><text fill="#000000" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="110.2181" x="757.3535" y="924.6338">monitorDB</text><path d="M787.4626,946.6667 C787.4626,930 817.4626,930 817.4626,930 C817.4626,930 847.4626,930 847.4626,946.6667 L847.4626,990 C847.4626,1006.6667 817.4626,1006.6667 817.4626,1006.6667 C817.4626,1006.6667 787.4626,1006.6667 787.4626,990 L787.4626,946.6667" fill="#E2E2F0" filter="url(#fdf35iuytxfwy)" style="stroke:#181818;stroke-width:0.8333;"/><path d="M787.4626,946.6667 C787.4626,963.3333 817.4626,963.3333 817.4626,963.3333 C817.4626,963.3333 847.4626,963.3333 847.4626,946.6667" fill="none" style="stroke:#181818;stroke-width:0.8333;"/></g><g class="message" data-entity-1="part1" data-entity-2="part2" id="msg1"><polygon fill="#007AFF" points="246.5755,238.3333,263.2422,245,246.5755,251.6667,253.2422,245" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="95.8333" x2="256.5755" y1="245" y2="245"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="107.5" y="236.6838">1</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="111.9832" x="126.2166" y="236.6838">POST /host</text></g><g class="message" data-entity-1="part2" data-entity-2="part2" id="msg2"><line style="stroke:#007AFF;stroke-width:2.5;" x1="266.5755" x2="336.5755" y1="290" y2="290"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="336.5755" x2="336.5755" y1="290" y2="311.6667"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="268.2422" x2="336.5755" y1="311.6667" y2="311.6667"/><polygon fill="#007AFF" points="284.9089,305,268.2422,311.6667,284.9089,318.3333,278.2422,311.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="278.2422" y="281.6838">2</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="169.8104" x="296.9588" y="281.6838">Walidacja danych</text></g><path d="M33.3333,336.6667 L116.9515,336.6667 L116.9515,345 L100.2848,361.6667 L16.6667,361.6667 L16.6667,353.3333 A16.6667,16.6667 0 0 1 33.3333,336.6667" fill="#FFFFFF" style="stroke:#D7DFEA;stroke-width:2.5;"/><rect fill="none" height="543.3333" rx="16.6667" ry="16.6667" style="stroke:#C9D6EA;stroke-width:2.5;" width="894.2383" x="16.6667" y="336.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="25.2848" x="41.6667" y="355.0171">alt</text><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="146.6756" x="141.9515" y="354.117">[dane poprawne]</text><g class="message" data-entity-1="part2" data-entity-2="part3" id="msg3"><polygon fill="#007AFF" points="458.4359,386.6667,475.1025,393.3333,458.4359,400,465.1025,393.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="266.5755" x2="468.4359" y1="393.3333" y2="393.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="278.2422" y="385.0171">3</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="134.9194" x="296.9588" y="385.0171">dodaj do bazy</text></g><g class="message" data-entity-1="part2" data-entity-2="part4" id="msg4"><polygon fill="#007AFF" points="585.6022,431.6667,602.2689,438.3333,585.6022,445,592.2689,438.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="266.5755" x2="595.6022" y1="438.3333" y2="438.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="278.2422" y="430.0171">4</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="111.9832" x="296.9588" y="430.0171">POST /host</text></g><g class="message" data-entity-1="part4" data-entity-2="part4" id="msg5"><line style="stroke:#007AFF;stroke-width:2.5;" x1="605.6022" x2="675.6022" y1="483.3333" y2="483.3333"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="675.6022" x2="675.6022" y1="483.3333" y2="505"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="607.2689" x2="675.6022" y1="505" y2="505"/><polygon fill="#007AFF" points="623.9355,498.3333,607.2689,505,623.9355,511.6667,617.2689,505" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="617.2689" y="475.0171">5</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="169.8104" x="635.9855" y="475.0171">Walidacja danych</text></g><path d="M50,530 L133.6182,530 L133.6182,538.3333 L116.9515,555 L33.3333,555 L33.3333,546.6667 A16.6667,16.6667 0 0 1 50,530" fill="#FFFFFF" style="stroke:#D7DFEA;stroke-width:2.5;"/><rect fill="none" height="271.6667" rx="16.6667" ry="16.6667" style="stroke:#C9D6EA;stroke-width:2.5;" width="860.9049" x="33.3333" y="530"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="25.2848" x="58.3333" y="548.3504">alt</text><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="132.4154" x="158.6182" y="547.4504">[dane poprane]</text><g class="message" data-entity-1="part4" data-entity-2="part5" id="msg6"><polygon fill="#007AFF" points="797.4626,580,814.1292,586.6667,797.4626,593.3333,804.1292,586.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="605.6022" x2="807.4626" y1="586.6667" y2="586.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="617.2689" y="578.3504">6</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="138.5164" x="635.9855" y="578.3504">Dodaj do bazy</text></g><g class="message" data-entity-1="part4" data-entity-2="part2" id="msg7"><polygon fill="#007AFF" points="284.9089,625,268.2422,631.6667,284.9089,638.3333,278.2422,631.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="274.9089" x2="603.9355" y1="631.6667" y2="631.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="294.9089" y="623.3504">7</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="313.6255" y="623.3504">status 201</text></g><g class="message" data-entity-1="part2" data-entity-2="part1" id="msg8"><polygon fill="#007AFF" points="114.1667,670,97.5,676.6667,114.1667,683.3333,107.5,676.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="104.1667" x2="264.9089" y1="676.6667" y2="676.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="124.1667" y="668.3504">8</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="142.8833" y="668.3504">status 201</text></g><line style="stroke:#C9D6EA;stroke-width:1.6667;stroke-dasharray:3.3333,3.3333;" x1="33.3333" x2="894.2383" y1="691.6667" y2="691.6667"/><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="173.1641" x="41.6667" y="705.7837">[dane niepoprawne]</text><g class="message" data-entity-1="part4" data-entity-2="part2" id="msg9"><polygon fill="#007AFF" points="284.9089,736.6667,268.2422,743.3333,284.9089,750,278.2422,743.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="274.9089" x2="603.9355" y1="743.3333" y2="743.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="12.05" x="294.9089" y="735.0171">9</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="313.6255" y="735.0171">status 400</text></g><g class="message" data-entity-1="part2" data-entity-2="part1" id="msg10"><polygon fill="#007AFF" points="114.1667,781.6667,97.5,788.3333,114.1667,795,107.5,788.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="104.1667" x2="264.9089" y1="788.3333" y2="788.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="24.0999" x="124.1667" y="780.0171">10</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="154.9333" y="780.0171">status 400</text></g><line style="stroke:#C9D6EA;stroke-width:1.6667;stroke-dasharray:3.3333,3.3333;" x1="16.6667" x2="910.9049" y1="815" y2="815"/><text fill="#000000" font-family="Helvetica" font-size="18.3333" font-weight="bold" lengthAdjust="spacing" textLength="178.2576" x="25" y="829.117">[danie niepoprawne]</text><g class="message" data-entity-1="part2" data-entity-2="part1" id="msg11"><polygon fill="#007AFF" points="114.1667,860,97.5,866.6667,114.1667,873.3333,107.5,866.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="104.1667" x2="264.9089" y1="866.6667" y2="866.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="24.0999" x="124.1667" y="858.3504">11</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="99.9756" x="154.9333" y="858.3504">status 400</text></g></g></svg>
 </div>
@@ -1868,8 +1850,8 @@ end</p>
 <h2 id="mermaid">Mermaid</h2>
 <p>Mermaid is another tool for creating UML diagrams and flowcharts. It uses a simple syntax and can be integrated with Markdown files. Mermaid supports sequence diagrams, flowcharts, and class diagrams.</p>
 <div class="tabs is-loading">
-<div class="tablist"><ul role="tablist"><li id="tab-class-diagram-1779243328367-250" class="tab" role="tab" aria-controls="panel-class-diagram-1779243328367-250" aria-selected="true" tabindex="0">Class Diagram</li><li id="tab-state-diagram-1779243328367-880" class="tab" role="tab" aria-controls="panel-state-diagram-1779243328367-880" aria-selected="false" tabindex="-1">State Diagram</li><li id="tab-sequence-diagram-1779243328367-868" class="tab" role="tab" aria-controls="panel-sequence-diagram-1779243328367-868" aria-selected="false" tabindex="-1">Sequence Diagram</li><li id="tab-mindmap-1779243328367-242" class="tab" role="tab" aria-controls="panel-mindmap-1779243328367-242" aria-selected="false" tabindex="-1">Mindmap</li><li id="tab-architecture-1779243328367-569" class="tab" role="tab" aria-controls="panel-architecture-1779243328367-569" aria-selected="false" tabindex="-1">Architecture</li><li id="tab-event-modeling-1779243328367-444" class="tab" role="tab" aria-controls="panel-event-modeling-1779243328367-444" aria-selected="false" tabindex="-1">Event Modeling</li></ul></div>
-<div id="panel-class-diagram-1779243328367-250" class="tabpanel" aria-labelledby="tab-class-diagram-1779243328367-250" role="tabpanel">
+<div class="tablist"><ul role="tablist"><li id="tab-class-diagram-1780401930502-473" class="tab" role="tab" aria-controls="panel-class-diagram-1780401930502-473" aria-selected="true" tabindex="0">Class Diagram</li><li id="tab-state-diagram-1780401930502-127" class="tab" role="tab" aria-controls="panel-state-diagram-1780401930502-127" aria-selected="false" tabindex="-1">State Diagram</li><li id="tab-sequence-diagram-1780401930502-172" class="tab" role="tab" aria-controls="panel-sequence-diagram-1780401930502-172" aria-selected="false" tabindex="-1">Sequence Diagram</li><li id="tab-mindmap-1780401930503-354" class="tab" role="tab" aria-controls="panel-mindmap-1780401930503-354" aria-selected="false" tabindex="-1">Mindmap</li><li id="tab-architecture-1780401930503-142" class="tab" role="tab" aria-controls="panel-architecture-1780401930503-142" aria-selected="false" tabindex="-1">Architecture</li><li id="tab-event-modeling-1780401930503-237" class="tab" role="tab" aria-controls="panel-event-modeling-1780401930503-237" aria-selected="false" tabindex="-1">Event Modeling</li></ul></div>
+<div id="panel-class-diagram-1780401930502-473" class="tabpanel" aria-labelledby="tab-class-diagram-1780401930502-473" role="tabpanel">
 <div class="docops-media-card" data-original-content="---
 title: Animal example
 ---
@@ -1939,7 +1921,7 @@ classDiagram
   </div>
 </div>
 </div>
-<div id="panel-state-diagram-1779243328367-880" class="tabpanel is-hidden" aria-labelledby="tab-state-diagram-1779243328367-880" role="tabpanel" hidden="">
+<div id="panel-state-diagram-1780401930502-127" class="tabpanel is-hidden" aria-labelledby="tab-state-diagram-1780401930502-127" role="tabpanel" hidden="">
 <div class="docops-media-card" data-original-content="---
 title: Simple sample
 ---
@@ -1977,7 +1959,7 @@ stateDiagram-v2
   </div>
 </div>
 </div>
-<div id="panel-sequence-diagram-1779243328367-868" class="tabpanel is-hidden" aria-labelledby="tab-sequence-diagram-1779243328367-868" role="tabpanel" hidden="">
+<div id="panel-sequence-diagram-1780401930502-172" class="tabpanel is-hidden" aria-labelledby="tab-sequence-diagram-1780401930502-172" role="tabpanel" hidden="">
 <div class="docops-media-card" data-original-content="sequenceDiagram
     participant A
     participant B
@@ -2005,7 +1987,7 @@ sequenceDiagram
   </div>
 </div>
 </div>
-<div id="panel-mindmap-1779243328367-242" class="tabpanel is-hidden" aria-labelledby="tab-mindmap-1779243328367-242" role="tabpanel" hidden="">
+<div id="panel-mindmap-1780401930503-354" class="tabpanel is-hidden" aria-labelledby="tab-mindmap-1780401930503-354" role="tabpanel" hidden="">
 <div class="docops-media-card" data-original-content="mindmap
   root((mindmap))
     Origins
@@ -2057,7 +2039,7 @@ mindmap
   </div>
 </div>
 </div>
-<div id="panel-architecture-1779243328367-569" class="tabpanel is-hidden" aria-labelledby="tab-architecture-1779243328367-569" role="tabpanel" hidden="">
+<div id="panel-architecture-1780401930503-142" class="tabpanel is-hidden" aria-labelledby="tab-architecture-1780401930503-142" role="tabpanel" hidden="">
 <div class="docops-media-card" data-original-content="architecture-beta
     group api(logos:aws-lambda)[API]
     service db(logos:aws-aurora)[Database] in api
@@ -2093,7 +2075,7 @@ architecture-beta
   </div>
 </div>
 </div>
-<div id="panel-event-modeling-1779243328367-444" class="tabpanel is-hidden" aria-labelledby="tab-event-modeling-1779243328367-444" role="tabpanel" hidden="">
+<div id="panel-event-modeling-1780401930503-237" class="tabpanel is-hidden" aria-labelledby="tab-event-modeling-1780401930503-237" role="tabpanel" hidden="">
 <div class="docops-media-card" data-original-content="eventmodeling
 tf 01 ui CartUI
 tf 02 cmd AddItem

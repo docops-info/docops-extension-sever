@@ -431,6 +431,37 @@
   }
 }
 
+/* Redoc wrapper emitted by macro */
+.markdown-body .redocly-wrap {
+  /* break out of centered column */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* optional vertical spacing */
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+
+  /* give Redoc some breathing room at viewport edges */
+  padding-left: 12px;
+  padding-right: 12px;
+  box-sizing: border-box;
+}
+
+/* Ensure inner Redoc container uses full width */
+.markdown-body .redocly-wrap > [id^="redoc-container-"] {
+  width: 100%;
+  max-width: none;
+}
+
+/* Optional: slightly reduce side nav width pressure on small screens */
+@media (max-width: 1100px) {
+  .markdown-body .redocly-wrap {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
                 </style>
                 <style>
                 .svg-container {
@@ -1027,65 +1058,72 @@
 }
                 </style>
                 <style>
-                /*! Asciidoctor Tabs | Editorial Light Theme */
+                /*! Asciidoctor Tabs | Accent Theme
+ *  Drop-in replacement — swap your existing tabs CSS with this file.
+ *  Accent color is a single CSS variable; change --tabs-accent to any hue.
+ */
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
-  /* Typography */
-  --tabs-font-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
-  --tabs-font-ui: "IBM Plex Sans", "Avenir Next", "Segoe UI", sans-serif;
-  --tabs-font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+  --tabs-accent:        #4f46e5;   /* indigo — change to any hex */
+  --tabs-accent-hover:  #4338ca;
+  --tabs-accent-rail:   #f5f3ff;
+  --tabs-accent-text:   #ffffff;
+  --tabs-accent-muted:  #4338ca;   /* inactive tab label */
+  --tabs-accent-soft:   rgba(99, 102, 241, 0.12);
 
-  /* Editorial palette (paper + ink + vermilion accent) */
-  --tabs-paper: #f8f5ef;
-  --tabs-paper-elev: #fffdf8;
-  --tabs-ink: #1f2328;
-  --tabs-ink-muted: #616a76;
-  --tabs-rule: #d6cec0;
-  --tabs-rule-strong: #b5aa97;
+  --tabs-bg:            #ffffff;
+  --tabs-rail-border:   #4f46e5;
+  --tabs-border:        #4f46e5;
+  --tabs-text:          #111827;
+  --tabs-text-muted:    #6b7280;
+  --tabs-panel-bg:      #ffffff;
 
-  --tabs-accent: #d9482b;       /* dominant */
-  --tabs-accent-soft: #f3c8b7;  /* subtle fill */
-  --tabs-accent-ink: #fffaf5;
-
-  --tabs-radius-lg: 14px;
-  --tabs-radius-md: 10px;
-  --tabs-gap: 8px;
-  --tabs-shadow: 0 10px 24px rgba(45, 39, 30, 0.11);
-
-  --tabs-focus: #1f7a8c;
+  --tabs-radius-outer:  12px;
+  --tabs-radius-btn:    8px;
+  --tabs-gap:           6px;
+  --tabs-focus:         #6366f1;
 }
 
-/* container */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabs-accent:        #6366f1;
+    --tabs-accent-hover:  #818cf8;
+    --tabs-accent-rail:   #1e1b4b;
+    --tabs-accent-text:   #ffffff;
+    --tabs-accent-muted:  #a5b4fc;
+    --tabs-accent-soft:   rgba(99, 102, 241, 0.18);
+
+    --tabs-bg:            #0f0f10;
+    --tabs-rail-border:   #4338ca;
+    --tabs-border:        #4338ca;
+    --tabs-text:          #f3f4f6;
+    --tabs-text-muted:    #9ca3af;
+    --tabs-panel-bg:      #111113;
+  }
+}
+
+/* ── Container ───────────────────────────────────────────────────────── */
 .tabs {
   margin: 1.75rem 0;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-lg);
-  box-shadow: var(--tabs-shadow);
+  border: 1px solid var(--tabs-border);
+  border-radius: var(--tabs-radius-outer);
   overflow: hidden;
-  background:
-          radial-gradient(circle at 10% -40%, rgba(217, 72, 43, 0.07), transparent 52%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35)),
-          var(--tabs-paper);
-  color: var(--tabs-ink);
-  animation: tabsEditorialEnter 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--tabs-bg);
+  color: var(--tabs-text);
+  animation: tabsAccentEnter 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* tab rail */
+/* ── Tab rail ────────────────────────────────────────────────────────── */
 .tablist > ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   margin: 0;
-  padding: 10px;
+  padding: 8px;
   gap: var(--tabs-gap);
-  border-bottom: 1px solid var(--tabs-rule);
-  background:
-          repeating-linear-gradient(
-                  90deg,
-                  rgba(40, 38, 34, 0.03) 0 1px,
-                  transparent 1px 18px
-          ),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.28)),
-          var(--tabs-paper-elev);
+  border-bottom: 1px solid var(--tabs-rail-border);
+  background: var(--tabs-accent-rail);
 }
 
 .tablist.ulist,
@@ -1097,38 +1135,31 @@
   margin-left: 0;
 }
 
-/* tabs */
+/* ── Tab buttons ─────────────────────────────────────────────────────── */
 .tablist > ul li {
-  align-items: center;
   display: inline-flex;
+  align-items: center;
   position: relative;
   cursor: pointer;
 
-  font-family: var(--tabs-font-ui);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.012em;
+  font-size: 0.8125rem;   /* 13px */
+  font-weight: 500;
+  line-height: 1.2;
 
-  color: var(--tabs-ink-muted);
+  color: var(--tabs-accent-muted);
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding: 0.5rem 0.95rem;
+  border: none;
+  border-radius: var(--tabs-radius-btn);
+  padding: 0.4rem 1rem;
 
   transition:
-          color 180ms ease,
-          background-color 180ms ease,
-          border-color 180ms ease,
-          transform 180ms ease,
-          box-shadow 180ms ease,
-          opacity 180ms ease;
+          color 130ms ease,
+          background-color 130ms ease;
 }
 
 .tablist > ul li:hover {
-  color: var(--tabs-ink);
-  border-color: var(--tabs-rule);
-  background: rgba(255, 255, 255, 0.72);
-  transform: translateY(-1px);
+  color: var(--tabs-text);
+  background: var(--tabs-accent-soft);
 }
 
 .tablist > ul li:focus-visible {
@@ -1136,85 +1167,53 @@
   outline-offset: 2px;
 }
 
-/* underline indicator */
-.tabs .tablist li::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: -7px;
-  height: 2px;
-  border-radius: 99px;
-  background: transparent;
-  transform: scaleX(0.3);
-  opacity: 0;
-  transition: transform 220ms ease, opacity 220ms ease, background-color 220ms ease;
-}
-
-/* active tab */
+/* ── Active tab ──────────────────────────────────────────────────────── */
 .tabs.is-loading .tablist li:first-child,
 .tabs:not(.is-loading) .tablist li.is-selected {
   background: var(--tabs-accent);
-  color: var(--tabs-accent-ink);
-  border-color: transparent;
-  box-shadow: 0 6px 16px rgba(217, 72, 43, 0.28);
-  transform: translateY(-1px);
+  color: var(--tabs-accent-text);
 }
 
-.tabs.is-loading .tablist li:first-child::after,
-.tabs:not(.is-loading) .tablist li.is-selected::after {
-  background: var(--tabs-accent);
-  transform: scaleX(1);
-  opacity: 1;
+/* no underline indicator needed for this style */
+.tabs .tablist li::after {
+  display: none;
 }
 
 /* reduce inactive visual weight */
 .tabs:not(.is-loading) .tablist li:not(.is-selected) {
-  opacity: 0.86;
+  opacity: 0.9;
 }
 
-/* loading/hidden panel behavior */
+/* ── Panel visibility ────────────────────────────────────────────────── */
 .tabs.is-loading .tabpanel + .tabpanel,
 .tabs:not(.is-loading) .tabpanel.is-hidden {
   display: none;
 }
 
-/* panel */
+/* ── Panel ───────────────────────────────────────────────────────────── */
 .tabpanel {
-  padding: 1.2rem 1.3rem;
-  color: var(--tabs-ink);
-  background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.32)),
-          var(--tabs-paper-elev);
-  border: 0;
-  animation: tabPanelReveal 280ms ease;
+  padding: 1.25rem 1.375rem;
+  color: var(--tabs-text);
+  background: var(--tabs-panel-bg);
+  animation: tabPanelReveal 200ms ease;
 }
 
 .tabpanel > :first-child {
   margin-top: 0;
 }
 
-/* subtle editorial heading treatment in panel */
-.tabpanel h2,
-.tabpanel h3,
-.tabpanel h4 {
-  font-family: var(--tabs-font-head);
-  letter-spacing: -0.01em;
-}
-
-/* keep standalone Asciidoctor spacing tidy */
+/* tidy trailing margin in Asciidoctor context */
 #content .tabpanel > :last-child,
 #content .tabpanel > :last-child > :last-child,
 #content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
   margin-bottom: 0;
 }
 
-/* table support */
+/* ── Table support ───────────────────────────────────────────────────── */
 .tablecontainer {
   overflow-x: auto;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-md);
-  background: #fffdf9;
+  border: 1px solid color-mix(in srgb, var(--tabs-border) 30%, transparent);
+  border-radius: 6px;
 }
 
 #content .tablecontainer {
@@ -1225,79 +1224,23 @@
   margin-bottom: 0;
 }
 
-/* tasteful motion */
-@keyframes tabsEditorialEnter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-    filter: saturate(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: saturate(1);
-  }
+/* ── Motion ──────────────────────────────────────────────────────────── */
+@keyframes tabsAccentEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
 @keyframes tabPanelReveal {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
-/* accessibility */
 @media (prefers-reduced-motion: reduce) {
   .tabs,
   .tabpanel,
-  .tablist > ul li,
-  .tabs .tablist li::after {
+  .tablist > ul li {
     animation: none !important;
     transition: none !important;
-  }
-}
-
-/* dark fallback for user preference (keeps editorial identity) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tabs-paper: #151618;
-    --tabs-paper-elev: #1a1c20;
-    --tabs-ink: #ece8de;
-    --tabs-ink-muted: #a6adba;
-    --tabs-rule: #2d323a;
-    --tabs-rule-strong: #4c5561;
-
-    --tabs-accent: #e05b3f;
-    --tabs-accent-soft: #5b2e24;
-    --tabs-accent-ink: #fff6f0;
-
-    --tabs-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
-    --tabs-focus: #49b5c8;
-  }
-
-  .tabs {
-    background:
-            radial-gradient(circle at 10% -35%, rgba(224, 91, 63, 0.16), transparent 55%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
-            var(--tabs-paper);
-  }
-
-  .tablist > ul li:hover {
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .tabpanel {
-    background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
-            var(--tabs-paper-elev);
-  }
-
-  .tablecontainer {
-    background: #171a1e;
   }
 }
                 </style>
@@ -1476,7 +1419,9 @@
                           }
                     </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js"></script>
-                
+                <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+                <script src ="https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js"></script>        
+
             </head>
             <body>
                     <article class="markdown-body">
@@ -1520,40 +1465,44 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div id="docops-timeline-1779243328393-824" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=timeline&payload=H4sIAAAAAAAA_2WSQXLbMAxF9z4FTtCmTrrJTrW98EzaOPFM9xQJS5xQBAcg5TirnqVH60kKUXFrT3ai8MH_8EFnMt7D0xdY3izvFhlf8z08Y0AjCGuyj0lg85oxiqcIe-QRGcblp5vFn1-_YRN7Ey06yH7A4CPC6KWY4N9MVn3VbIfENKomIR-Ih6mhFn7gERzZMmDMVQ4ZhxSURxYLN2MtL7EeTIm2P1OtAhVXifz7hd-YjoLcKroDdD772NXCikIwLbG6jHjtWetNyTTo0YJONw06NZ4Rbi8RvlPrA0KT0jmkesFP_2EWirnHjmr58XCo4RhrUaT-2hXpIVL2B29rg4CGAyW5q_nvLs03MSMn9rqZrX52PDvti88zxsO62X1ubJ1y7RltJj6BlJSI8zypG-eFzShgFZMpzEyrIpoDtGyi0wSAUgWbG6MJJ01IwBnpWzLs_kHWt_P1HbLZ7uiIrBbrqzwaES_ZxHyZuKomAhUpZdeh_Dd8mp5RPoGyTJqpGaM9ge3RvsyS_WBYG9GwvgprktHd6NJR_gKeYQb71AIAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="date: Q1 2024
+<div id="docops-timeline-1780401930423-713" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=timeline&payload=H4sIAAAAAAAA_2WSQXLbMAxF9z4FTtCmTrrJTrW98EzaOPFM9xQJS5xQBAcg5TirnqVH60kKUXFrT3ai8MH_8EFnMt7D0xdY3izvFhlf8z08Y0AjCGuyj0lg85oxiqcIe-QRGcblp5vFn1-_YRN7Ey06yH7A4CPC6KWY4N9MVn3VbIfENKomIR-Ih6mhFn7gERzZMmDMVQ4ZhxSURxYLN2MtL7EeTIm2P1OtAhVXifz7hd-YjoLcKroDdD772NXCikIwLbG6jHjtWetNyTTo0YJONw06NZ4Rbi8RvlPrA0KT0jmkesFP_2EWirnHjmr58XCo4RhrUaT-2hXpIVL2B29rg4CGAyW5q_nvLs03MSMn9rqZrX52PDvti88zxsO62X1ubJ1y7RltJj6BlJSI8zypG-eFzShgFZMpzEyrIpoDtGyi0wSAUgWbG6MJJ01IwBnpWzLs_kHWt_P1HbLZ7uiIrBbrqzwaES_ZxHyZuKomAhUpZdeh_Dd8mp5RPoGyTJqpGaM9ge3RvsyS_WBYG9GwvgprktHd6NJR_gKeYQb71AIAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="date: Q1 2024
 text: Release DocOps Extension Server v2.0
 • Enhanced timeline visualization
 • Improved performance
 • New documentation templates
-<p>date: Q2 2024
+
+date: Q2 2024
 text: Launch DocOps Cloud Service
 • Browserbased editing
 • Collaborative documentation
-• Automatic versioning</p>
-<p>date: Q3 2024
+• Automatic versioning
+
+date: Q3 2024
 text: Mobile App Release
 • View documentation onthego
 • Offline access
-• Push notifications for updates</p>
-<p>date: Q4 2024
+• Push notifications for updates
+
+date: Q4 2024
 text: Enterprise Integration Suite
 • LDAP/Active Directory support
 • Advanced access controls
 • Custom branding options
-• Analytics dashboard</p>
-<p>date: Q1 2025
+• Analytics dashboard
+
+date: Q1 2025
 text: AIPowered Documentation Assistant
 • Automated content suggestions
 • Quality and consistency checks
-• Smart search capabilities&quot; data-kind=&quot;timeline&quot;&gt;</p>
+• Smart search capabilities" data-kind="timeline">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<?xml version="1.0" encoding="UTF-8"?><svg width="562.4999999929688" height="224.9999999971875" viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" id="id_65ccf1c38cbd4428a3c9e0fb39259907">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Date","Text"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- orientation: vertical --><defs><pattern id="dotPattern_id_65ccf1c38cbd4428a3c9e0fb39259907" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#94a3b8" /></pattern><linearGradient id="bgGradient_id_65ccf1c38cbd4428a3c9e0fb39259907" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" /></linearGradient><linearGradient id="lineGradient_id_65ccf1c38cbd4428a3c9e0fb39259907" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6" /><stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.6" /></linearGradient><linearGradient id="cardGradient1_id_65ccf1c38cbd4428a3c9e0fb39259907" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#f8fafc;stop-opacity:0.95" /></linearGradient><linearGradient id="cardGradient2_id_65ccf1c38cbd4428a3c9e0fb39259907" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fdf4ff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#fae8ff;stop-opacity:0.95" /></linearGradient><filter id="glow_id_65ccf1c38cbd4428a3c9e0fb39259907"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="cardShadow_id_65ccf1c38cbd4428a3c9e0fb39259907"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-opacity="0.1"/></filter></defs><rect width="100%" height="100%" fill="url(#bgGradient_id_65ccf1c38cbd4428a3c9e0fb39259907)"/><rect width="100%" height="100%" fill="url(#dotPattern_id_65ccf1c38cbd4428a3c9e0fb39259907)" opacity="0.5"/><circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.04"/><circle cx="462.4999999929688" cy="124.9999999971875" r="200" fill="#ec4899" opacity="0.04"/><line x1="500" y1="80" x2="500" y2="320" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="8 4"/></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg width="562.4999999929688" height="224.9999999971875" viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" id="id_9582733c7ac4494ab983c1fe73c7644c">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Date","Text"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- orientation: vertical --><defs><pattern id="dotPattern_id_9582733c7ac4494ab983c1fe73c7644c" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#94a3b8" /></pattern><linearGradient id="bgGradient_id_9582733c7ac4494ab983c1fe73c7644c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" /></linearGradient><linearGradient id="lineGradient_id_9582733c7ac4494ab983c1fe73c7644c" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6" /><stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.6" /></linearGradient><linearGradient id="cardGradient1_id_9582733c7ac4494ab983c1fe73c7644c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#f8fafc;stop-opacity:0.95" /></linearGradient><linearGradient id="cardGradient2_id_9582733c7ac4494ab983c1fe73c7644c" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fdf4ff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#fae8ff;stop-opacity:0.95" /></linearGradient><filter id="glow_id_9582733c7ac4494ab983c1fe73c7644c"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="cardShadow_id_9582733c7ac4494ab983c1fe73c7644c"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-opacity="0.1"/></filter></defs><rect width="100%" height="100%" fill="url(#bgGradient_id_9582733c7ac4494ab983c1fe73c7644c)"/><rect width="100%" height="100%" fill="url(#dotPattern_id_9582733c7ac4494ab983c1fe73c7644c)" opacity="0.5"/><circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.04"/><circle cx="462.4999999929688" cy="124.9999999971875" r="200" fill="#ec4899" opacity="0.04"/><line x1="500" y1="80" x2="500" y2="320" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="8 4"/></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-timeline-1779243328393-824').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-timeline-1780401930423-713').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1571,28 +1520,32 @@ text: AIPowered Documentation Assistant
 </div>
 <hr />
 <h2 id="horizontal-layout">Horizontal Layout</h2>
-<div id="docops-timeline-1779243328470-199" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=timeline&payload=H4sIAAAAAAAA_5WUy27bMBBF9_6K-YDYjpt3gCz6MNqkSWGkQbIIDIGmRtLUFEcgqSju13dIyam7qrObK5Aj3sM7DJsGr76NOspDdXV6eDgaj8ejXAW8hNnp6SGMYXZ2cT4K-Bou4aFCmFtDZRXQ1mjD9AeyNsp70srAAh1xPrqlgE6F1iEUrFuPObAFh8qzPQDDJekDUDYHr0l6UEEaQsWtdJ3AnfrFDjoXe3ggq02bIzw_VyE0_nI6RTvpaE0N5qQm7MppVNOPBl-lI7pswQ3Cm4Qol8v0t__1uGGrQqVs9rOjIsBWQpLL5WS0xSI8Ipbzow8DlnuulfjQ5GuY102lPP0W01hzoGiZbE4vlLfKyIreehCSpWEXzau4CrgAm6BN4DtuoKBS6v0JPJExpOrsiV3uO3ahguET_P20J4lb2ZB92jg5VSwhlbsEzo_OIoGLw9lA4JF0EDNCa-4U7ATAYWFQB-wde9akzAGgZsv1Nga6NbJW8qMFdymeBUVcfW3z1gfpauAeX9i0kdMEfnBQK4OgWgnNOzLyuVLOoM--kF6j9TBoGPSebL6ilJjNDXGAXkASu3wuZseJz_HJwOeOJYw25iP-VQkQlyKy2oCClYzGGjqSKwtO5RRtiueCXe3TmVQ_R3GK8LWRrXH0VE_jum7kZiV-756ZG1ULjRveaIRUQ6r35PBIriRLSgLHpoCthCT_YXF8IiwaybIcesCxYB_qXSTGYLr5eO05-SAe0lCsMHSIFip5ctKxDHdDXjBp3I6bh8Kp8g1M_76ssenHsp-p9ybmoZLB9tliY3UlLXsJg9yT0wNbyu7YOfKxhSjYKqH0B9X5GYV-BQAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=H
+<div id="docops-timeline-1780401930433-763" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=timeline&payload=H4sIAAAAAAAA_5WUy27bMBBF9_6K-YDYjpt3gCz6MNqkSWGkQbIIDIGmRtLUFEcgqSju13dIyam7qrObK5Aj3sM7DJsGr76NOspDdXV6eDgaj8ejXAW8hNnp6SGMYXZ2cT4K-Bou4aFCmFtDZRXQ1mjD9AeyNsp70srAAh1xPrqlgE6F1iEUrFuPObAFh8qzPQDDJekDUDYHr0l6UEEaQsWtdJ3AnfrFDjoXe3ggq02bIzw_VyE0_nI6RTvpaE0N5qQm7MppVNOPBl-lI7pswQ3Cm4Qol8v0t__1uGGrQqVs9rOjIsBWQpLL5WS0xSI8Ipbzow8DlnuulfjQ5GuY102lPP0W01hzoGiZbE4vlLfKyIreehCSpWEXzau4CrgAm6BN4DtuoKBS6v0JPJExpOrsiV3uO3ahguET_P20J4lb2ZB92jg5VSwhlbsEzo_OIoGLw9lA4JF0EDNCa-4U7ATAYWFQB-wde9akzAGgZsv1Nga6NbJW8qMFdymeBUVcfW3z1gfpauAeX9i0kdMEfnBQK4OgWgnNOzLyuVLOoM--kF6j9TBoGPSebL6ilJjNDXGAXkASu3wuZseJz_HJwOeOJYw25iP-VQkQlyKy2oCClYzGGjqSKwtO5RRtiueCXe3TmVQ_R3GK8LWRrXH0VE_jum7kZiV-756ZG1ULjRveaIRUQ6r35PBIriRLSgLHpoCthCT_YXF8IiwaybIcesCxYB_qXSTGYLr5eO05-SAe0lCsMHSIFip5ctKxDHdDXjBp3I6bh8Kp8g1M_76ssenHsp-p9ybmoZLB9tliY3UlLXsJg9yT0wNbyu7YOfKxhSjYKqH0B9X5GYV-BQAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="type=H
 width=600
 ---
 date: 1660 - 1798
 text: The Enlightenment/Neoclassical Period
 Literature focused on reason, logic, and scientific thought. Major writers include [[https://en.wikipedia.org/wiki/Alexander_Pope Alexander Pope]] and [[https://en.wikipedia.org/wiki/Jonathan_Swift Jonathan Swift]].
-<p>date: 1798 - 1832
-text: Romanticism Emphasized emotion, individualism, and the glorification of nature. Key figures include [[https://en.wikipedia.org/wiki/William_Wordsworth William Wordsworth]] and [[https://en.wikipedia.org/wiki/Lord_Byron Lord Byron]].</p>
-<p>date: 1837 - 1901
-text: Victorian Era Literature reflected the social, economic, and cultural changes of the Industrial Revolution. Notable authors include [[https://en.wikipedia.org/wiki/Charles_Dickens Charles Dickens]] and [[https://en.wikipedia.org/wiki/George_Eliot George Eliot]].</p>
-<p>date: 1914 - 1945
-text: Modernism Characterized by a break with traditional forms and a focus on experimentation. Important writers include [[https://en.wikipedia.org/wiki/James_Joyce James Joyce]] and [[https://en.wikipedia.org/wiki/Virginia_Woolf Virginia Woolf]].</p>
-<p>date: 1945 - present
-text: Postmodernism Challenges the distinction between high and low culture and emphasizes fragmentation and skepticism. Key authors include [[https://en.wikipedia.org/wiki/Thomas_Pynchon Thomas Pynchon]] and [[https://en.wikipedia.org/wiki/Toni_Morrison Toni Morrison]].&quot; data-kind=&quot;timeline&quot;&gt;</p>
+
+date: 1798 - 1832
+text: Romanticism Emphasized emotion, individualism, and the glorification of nature. Key figures include [[https://en.wikipedia.org/wiki/William_Wordsworth William Wordsworth]] and [[https://en.wikipedia.org/wiki/Lord_Byron Lord Byron]].
+
+date: 1837 - 1901
+text: Victorian Era Literature reflected the social, economic, and cultural changes of the Industrial Revolution. Notable authors include [[https://en.wikipedia.org/wiki/Charles_Dickens Charles Dickens]] and [[https://en.wikipedia.org/wiki/George_Eliot George Eliot]].
+
+date: 1914 - 1945
+text: Modernism Characterized by a break with traditional forms and a focus on experimentation. Important writers include [[https://en.wikipedia.org/wiki/James_Joyce James Joyce]] and [[https://en.wikipedia.org/wiki/Virginia_Woolf Virginia Woolf]].
+
+date: 1945 - present
+text: Postmodernism Challenges the distinction between high and low culture and emphasizes fragmentation and skepticism. Key authors include [[https://en.wikipedia.org/wiki/Thomas_Pynchon Thomas Pynchon]] and [[https://en.wikipedia.org/wiki/Toni_Morrison Toni Morrison]]." data-kind="timeline">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg width="1000" height="560" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" id="id_01a9555816de4b9cb0d1c358a7433fa3">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Date","Text"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- orientation: horizontal --><defs><pattern id="dotPattern_id_01a9555816de4b9cb0d1c358a7433fa3" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#94a3b8" /></pattern><linearGradient id="bgGradient_id_01a9555816de4b9cb0d1c358a7433fa3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" /></linearGradient><linearGradient id="lineGradient_id_01a9555816de4b9cb0d1c358a7433fa3" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6" /><stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.6" /></linearGradient><linearGradient id="cardGradient1_id_01a9555816de4b9cb0d1c358a7433fa3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#f8fafc;stop-opacity:0.95" /></linearGradient><linearGradient id="cardGradient2_id_01a9555816de4b9cb0d1c358a7433fa3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fdf4ff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#fae8ff;stop-opacity:0.95" /></linearGradient><filter id="glow_id_01a9555816de4b9cb0d1c358a7433fa3"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="cardShadow_id_01a9555816de4b9cb0d1c358a7433fa3"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-opacity="0.1"/></filter></defs><rect width="100%" height="100%" fill="url(#bgGradient_id_01a9555816de4b9cb0d1c358a7433fa3)"/><circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.03"/><circle cx="900" cy="460" r="200" fill="#ec4899" opacity="0.03"/><rect x="80" y="278.5" width="840" height="3.0" fill="url(#lineGradient_id_01a9555816de4b9cb0d1c358a7433fa3)" rx="1.5" opacity="0.7"/></svg>
+<svg width="1000" height="560" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" id="id_9c550b889fba43f480c7828979c89a9f">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Date","Text"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><!-- orientation: horizontal --><defs><pattern id="dotPattern_id_9c550b889fba43f480c7828979c89a9f" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#94a3b8" /></pattern><linearGradient id="bgGradient_id_9c550b889fba43f480c7828979c89a9f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" /><stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" /></linearGradient><linearGradient id="lineGradient_id_9c550b889fba43f480c7828979c89a9f" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse"><stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.6" /><stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:0.8" /><stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.6" /></linearGradient><linearGradient id="cardGradient1_id_9c550b889fba43f480c7828979c89a9f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#f8fafc;stop-opacity:0.95" /></linearGradient><linearGradient id="cardGradient2_id_9c550b889fba43f480c7828979c89a9f" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fdf4ff;stop-opacity:0.95" /><stop offset="100%" style="stop-color:#fae8ff;stop-opacity:0.95" /></linearGradient><filter id="glow_id_9c550b889fba43f480c7828979c89a9f"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="cardShadow_id_9c550b889fba43f480c7828979c89a9f"><feDropShadow dx="0" dy="4" stdDeviation="12" flood-opacity="0.1"/></filter></defs><rect width="100%" height="100%" fill="url(#bgGradient_id_9c550b889fba43f480c7828979c89a9f)"/><circle cx="100" cy="100" r="150" fill="#3b82f6" opacity="0.03"/><circle cx="900" cy="460" r="200" fill="#ec4899" opacity="0.03"/><rect x="80" y="278.5" width="840" height="3.0" fill="url(#lineGradient_id_9c550b889fba43f480c7828979c89a9f)" rx="1.5" opacity="0.7"/></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-timeline-1779243328470-199').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-timeline-1780401930433-763').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>

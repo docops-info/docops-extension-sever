@@ -431,6 +431,37 @@
   }
 }
 
+/* Redoc wrapper emitted by macro */
+.markdown-body .redocly-wrap {
+  /* break out of centered column */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* optional vertical spacing */
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+
+  /* give Redoc some breathing room at viewport edges */
+  padding-left: 12px;
+  padding-right: 12px;
+  box-sizing: border-box;
+}
+
+/* Ensure inner Redoc container uses full width */
+.markdown-body .redocly-wrap > [id^="redoc-container-"] {
+  width: 100%;
+  max-width: none;
+}
+
+/* Optional: slightly reduce side nav width pressure on small screens */
+@media (max-width: 1100px) {
+  .markdown-body .redocly-wrap {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
                 </style>
                 <style>
                 .svg-container {
@@ -1027,65 +1058,72 @@
 }
                 </style>
                 <style>
-                /*! Asciidoctor Tabs | Editorial Light Theme */
+                /*! Asciidoctor Tabs | Accent Theme
+ *  Drop-in replacement — swap your existing tabs CSS with this file.
+ *  Accent color is a single CSS variable; change --tabs-accent to any hue.
+ */
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
-  /* Typography */
-  --tabs-font-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
-  --tabs-font-ui: "IBM Plex Sans", "Avenir Next", "Segoe UI", sans-serif;
-  --tabs-font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+  --tabs-accent:        #4f46e5;   /* indigo — change to any hex */
+  --tabs-accent-hover:  #4338ca;
+  --tabs-accent-rail:   #f5f3ff;
+  --tabs-accent-text:   #ffffff;
+  --tabs-accent-muted:  #4338ca;   /* inactive tab label */
+  --tabs-accent-soft:   rgba(99, 102, 241, 0.12);
 
-  /* Editorial palette (paper + ink + vermilion accent) */
-  --tabs-paper: #f8f5ef;
-  --tabs-paper-elev: #fffdf8;
-  --tabs-ink: #1f2328;
-  --tabs-ink-muted: #616a76;
-  --tabs-rule: #d6cec0;
-  --tabs-rule-strong: #b5aa97;
+  --tabs-bg:            #ffffff;
+  --tabs-rail-border:   #4f46e5;
+  --tabs-border:        #4f46e5;
+  --tabs-text:          #111827;
+  --tabs-text-muted:    #6b7280;
+  --tabs-panel-bg:      #ffffff;
 
-  --tabs-accent: #d9482b;       /* dominant */
-  --tabs-accent-soft: #f3c8b7;  /* subtle fill */
-  --tabs-accent-ink: #fffaf5;
-
-  --tabs-radius-lg: 14px;
-  --tabs-radius-md: 10px;
-  --tabs-gap: 8px;
-  --tabs-shadow: 0 10px 24px rgba(45, 39, 30, 0.11);
-
-  --tabs-focus: #1f7a8c;
+  --tabs-radius-outer:  12px;
+  --tabs-radius-btn:    8px;
+  --tabs-gap:           6px;
+  --tabs-focus:         #6366f1;
 }
 
-/* container */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabs-accent:        #6366f1;
+    --tabs-accent-hover:  #818cf8;
+    --tabs-accent-rail:   #1e1b4b;
+    --tabs-accent-text:   #ffffff;
+    --tabs-accent-muted:  #a5b4fc;
+    --tabs-accent-soft:   rgba(99, 102, 241, 0.18);
+
+    --tabs-bg:            #0f0f10;
+    --tabs-rail-border:   #4338ca;
+    --tabs-border:        #4338ca;
+    --tabs-text:          #f3f4f6;
+    --tabs-text-muted:    #9ca3af;
+    --tabs-panel-bg:      #111113;
+  }
+}
+
+/* ── Container ───────────────────────────────────────────────────────── */
 .tabs {
   margin: 1.75rem 0;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-lg);
-  box-shadow: var(--tabs-shadow);
+  border: 1px solid var(--tabs-border);
+  border-radius: var(--tabs-radius-outer);
   overflow: hidden;
-  background:
-          radial-gradient(circle at 10% -40%, rgba(217, 72, 43, 0.07), transparent 52%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35)),
-          var(--tabs-paper);
-  color: var(--tabs-ink);
-  animation: tabsEditorialEnter 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--tabs-bg);
+  color: var(--tabs-text);
+  animation: tabsAccentEnter 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* tab rail */
+/* ── Tab rail ────────────────────────────────────────────────────────── */
 .tablist > ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   margin: 0;
-  padding: 10px;
+  padding: 8px;
   gap: var(--tabs-gap);
-  border-bottom: 1px solid var(--tabs-rule);
-  background:
-          repeating-linear-gradient(
-                  90deg,
-                  rgba(40, 38, 34, 0.03) 0 1px,
-                  transparent 1px 18px
-          ),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.28)),
-          var(--tabs-paper-elev);
+  border-bottom: 1px solid var(--tabs-rail-border);
+  background: var(--tabs-accent-rail);
 }
 
 .tablist.ulist,
@@ -1097,38 +1135,31 @@
   margin-left: 0;
 }
 
-/* tabs */
+/* ── Tab buttons ─────────────────────────────────────────────────────── */
 .tablist > ul li {
-  align-items: center;
   display: inline-flex;
+  align-items: center;
   position: relative;
   cursor: pointer;
 
-  font-family: var(--tabs-font-ui);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.012em;
+  font-size: 0.8125rem;   /* 13px */
+  font-weight: 500;
+  line-height: 1.2;
 
-  color: var(--tabs-ink-muted);
+  color: var(--tabs-accent-muted);
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding: 0.5rem 0.95rem;
+  border: none;
+  border-radius: var(--tabs-radius-btn);
+  padding: 0.4rem 1rem;
 
   transition:
-          color 180ms ease,
-          background-color 180ms ease,
-          border-color 180ms ease,
-          transform 180ms ease,
-          box-shadow 180ms ease,
-          opacity 180ms ease;
+          color 130ms ease,
+          background-color 130ms ease;
 }
 
 .tablist > ul li:hover {
-  color: var(--tabs-ink);
-  border-color: var(--tabs-rule);
-  background: rgba(255, 255, 255, 0.72);
-  transform: translateY(-1px);
+  color: var(--tabs-text);
+  background: var(--tabs-accent-soft);
 }
 
 .tablist > ul li:focus-visible {
@@ -1136,85 +1167,53 @@
   outline-offset: 2px;
 }
 
-/* underline indicator */
-.tabs .tablist li::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: -7px;
-  height: 2px;
-  border-radius: 99px;
-  background: transparent;
-  transform: scaleX(0.3);
-  opacity: 0;
-  transition: transform 220ms ease, opacity 220ms ease, background-color 220ms ease;
-}
-
-/* active tab */
+/* ── Active tab ──────────────────────────────────────────────────────── */
 .tabs.is-loading .tablist li:first-child,
 .tabs:not(.is-loading) .tablist li.is-selected {
   background: var(--tabs-accent);
-  color: var(--tabs-accent-ink);
-  border-color: transparent;
-  box-shadow: 0 6px 16px rgba(217, 72, 43, 0.28);
-  transform: translateY(-1px);
+  color: var(--tabs-accent-text);
 }
 
-.tabs.is-loading .tablist li:first-child::after,
-.tabs:not(.is-loading) .tablist li.is-selected::after {
-  background: var(--tabs-accent);
-  transform: scaleX(1);
-  opacity: 1;
+/* no underline indicator needed for this style */
+.tabs .tablist li::after {
+  display: none;
 }
 
 /* reduce inactive visual weight */
 .tabs:not(.is-loading) .tablist li:not(.is-selected) {
-  opacity: 0.86;
+  opacity: 0.9;
 }
 
-/* loading/hidden panel behavior */
+/* ── Panel visibility ────────────────────────────────────────────────── */
 .tabs.is-loading .tabpanel + .tabpanel,
 .tabs:not(.is-loading) .tabpanel.is-hidden {
   display: none;
 }
 
-/* panel */
+/* ── Panel ───────────────────────────────────────────────────────────── */
 .tabpanel {
-  padding: 1.2rem 1.3rem;
-  color: var(--tabs-ink);
-  background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.32)),
-          var(--tabs-paper-elev);
-  border: 0;
-  animation: tabPanelReveal 280ms ease;
+  padding: 1.25rem 1.375rem;
+  color: var(--tabs-text);
+  background: var(--tabs-panel-bg);
+  animation: tabPanelReveal 200ms ease;
 }
 
 .tabpanel > :first-child {
   margin-top: 0;
 }
 
-/* subtle editorial heading treatment in panel */
-.tabpanel h2,
-.tabpanel h3,
-.tabpanel h4 {
-  font-family: var(--tabs-font-head);
-  letter-spacing: -0.01em;
-}
-
-/* keep standalone Asciidoctor spacing tidy */
+/* tidy trailing margin in Asciidoctor context */
 #content .tabpanel > :last-child,
 #content .tabpanel > :last-child > :last-child,
 #content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
   margin-bottom: 0;
 }
 
-/* table support */
+/* ── Table support ───────────────────────────────────────────────────── */
 .tablecontainer {
   overflow-x: auto;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-md);
-  background: #fffdf9;
+  border: 1px solid color-mix(in srgb, var(--tabs-border) 30%, transparent);
+  border-radius: 6px;
 }
 
 #content .tablecontainer {
@@ -1225,79 +1224,23 @@
   margin-bottom: 0;
 }
 
-/* tasteful motion */
-@keyframes tabsEditorialEnter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-    filter: saturate(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: saturate(1);
-  }
+/* ── Motion ──────────────────────────────────────────────────────────── */
+@keyframes tabsAccentEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
 @keyframes tabPanelReveal {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
-/* accessibility */
 @media (prefers-reduced-motion: reduce) {
   .tabs,
   .tabpanel,
-  .tablist > ul li,
-  .tabs .tablist li::after {
+  .tablist > ul li {
     animation: none !important;
     transition: none !important;
-  }
-}
-
-/* dark fallback for user preference (keeps editorial identity) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tabs-paper: #151618;
-    --tabs-paper-elev: #1a1c20;
-    --tabs-ink: #ece8de;
-    --tabs-ink-muted: #a6adba;
-    --tabs-rule: #2d323a;
-    --tabs-rule-strong: #4c5561;
-
-    --tabs-accent: #e05b3f;
-    --tabs-accent-soft: #5b2e24;
-    --tabs-accent-ink: #fff6f0;
-
-    --tabs-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
-    --tabs-focus: #49b5c8;
-  }
-
-  .tabs {
-    background:
-            radial-gradient(circle at 10% -35%, rgba(224, 91, 63, 0.16), transparent 55%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
-            var(--tabs-paper);
-  }
-
-  .tablist > ul li:hover {
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .tabpanel {
-    background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
-            var(--tabs-paper-elev);
-  }
-
-  .tablecontainer {
-    background: #171a1e;
   }
 }
                 </style>
@@ -1476,7 +1419,9 @@
                           }
                     </style>
                 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js"></script>
-                
+                <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+                <script src ="https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js"></script>        
+
             </head>
             <body>
                     <article class="markdown-body">
@@ -1520,7 +1465,7 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div id="docops-wordcloud-1779243328393-51" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0VQy2qEMBTd368IdC21UxN14WJQCrMoDLU_EM2JBjQO8TJTSj--UQvdhJzXPTdhxxMq0S6WHzpANLhjWm4zPIt68T1uvNLDGR4rUaQpjXDDyJVQ8T47_7Z4bt13nPCS0ay__rFMKUkSOg9ugvgRZRqPJ2vzMi-pvjzXTcSF3MgcRhlLn1jZ-WGjD6-CLAy9uz4sK8Ld9Vgjn--ZTpteFhQ3ZO08wq78VXTIFbUxgTBh3RQlD6W09pXO18tGHeay16eMPmB1z0s46uXuVoUySKmeoH38CbM9Qu6hDicYQw1WN3hx1cwIfqvJ9iC6zGTdL9QzI4JYAQAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Software Development Concepts
+<div id="docops-wordcloud-1780401930416-922" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0VQy2qEMBTd368IdC21UxN14WJQCrMoDLU_EM2JBjQO8TJTSj--UQvdhJzXPTdhxxMq0S6WHzpANLhjWm4zPIt68T1uvNLDGR4rUaQpjXDDyJVQ8T47_7Z4bt13nPCS0ay__rFMKUkSOg9ugvgRZRqPJ2vzMi-pvjzXTcSF3MgcRhlLn1jZ-WGjD6-CLAy9uz4sK8Ld9Vgjn--ZTpteFhQ3ZO08wq78VXTIFbUxgTBh3RQlD6W09pXO18tGHeay16eMPmB1z0s46uXuVoUySKmeoH38CbM9Qu6hDicYQw1WN3hx1cwIfqvJ9iC6zGTdL9QzI4JYAQAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Software Development Concepts
 width= 800
 height= 600
 minFontSize= 14
@@ -1538,10 +1483,11 @@ Clean Code | 50 | #be2edd
 Design Patterns | 45 | #eb4d4b" data-kind="wordcloud">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_b1fc1fa8708e44359d21c3ef82372338" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Software Development Concepts","1","Agile","90.0","da4480822ef947f090f3b8002c8aec01","false","800","600","14","50","rectangle","1.0"],["","2","CI/CD","85.0","7b9b7eb532a84a06b272de58713d981d","","","","","","",""],["","3","Testing","80.0","234872ba99784442805bf6ed48625088","","","","","","",""],["","4","Microservices","75.0","81a4bc00f5f94c849d6679f247462b48","","","","","","",""],["","5","Containers","70.0","d801ad7c0f48443aaeab48c63992af68","","","","","","",""],["","6","Serverless","65.0","568bdb443554414ab47c3535d133d4c1","","","","","","",""],["","7","API","60.0","0e7af8958851488b905ecba8b3a34192","","","","","","",""],["","8","Refactoring","55.0","b741736764084f08aa0c200a3fefc884","","","","","","",""],["","9","Clean Code","50.0","4a7b2863e87242c8af245ee57a8ce709","","","","","","",""],["","10","Design Patterns","45.0","ee8e06bd13154720851c4b9410c79d2c","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_b1fc1fa8708e44359d21c3ef82372338" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_b1fc1fa8708e44359d21c3ef82372338" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_b1fc1fa8708e44359d21c3ef82372338" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_b1fc1fa8708e44359d21c3ef82372338" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_b1fc1fa8708e44359d21c3ef82372338"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_b1fc1fa8708e44359d21c3ef82372338"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_b1fc1fa8708e44359d21c3ef82372338 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_b1fc1fa8708e44359d21c3ef82372338 .word-text:hover { filter: url(#wordGlow_b1fc1fa8708e44359d21c3ef82372338); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Software Development Concepts</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="50.0" fill="#ff7979" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Agile<title>Agile: weight 90.00</title></text><text class="word-text" x="408.749645109984" y="263.2484589883175" text-anchor="middle" font-size="46.0" fill="#7ed6df" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">CI/CD<title>CI/CD: weight 85.00</title></text><text class="word-text" x="398.66229294817435" y="396.59290922304785" text-anchor="middle" font-size="42.0" fill="#f6e58d" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Testing<title>Testing: weight 80.00</title></text><text class="word-text" x="387.9473778178143" y="455.7130017493791" text-anchor="middle" font-size="38.0" fill="#badc58" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Microservices<title>Microservices: weight 75.00</title></text><text class="word-text" x="397.20053627611924" y="206.84588778368902" text-anchor="middle" font-size="34.0" fill="#ffbe76" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Containers<title>Containers: weight 70.00</title></text><text class="word-text" x="559.9490143534626" y="329.26180324895444" text-anchor="middle" font-size="30.0" fill="#ff9ff3" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Serverless<title>Serverless: weight 65.00</title></text><text class="word-text" x="299.46971876326296" y="318.1819659371697" text-anchor="middle" font-size="26.0" fill="#f9ca24" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">API<title>API: weight 60.00</title></text><text class="word-text" x="269.2563613043264" y="261.6394938933209" text-anchor="middle" font-size="22.0" fill="#686de0" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Refactoring<title>Refactoring: weight 55.00</title></text><text class="word-text" x="535.7569968557236" y="292.45857196000486" text-anchor="middle" font-size="18.0" fill="#be2edd" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Clean Code<title>Clean Code: weight 50.00</title></text><text class="word-text" x="247.80716991214297" y="351.78210459495335" text-anchor="middle" font-size="14.0" fill="#eb4d4b" filter="url(#wordShadow_b1fc1fa8708e44359d21c3ef82372338)">Design Patterns<title>Design Patterns: weight 45.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_8a4c334a55d84fbc93073b55ac985521" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Software Development Concepts","1","Agile","90.0","617dbaf33fd34358832b14a2915f567a","false","800","600","14","50","rectangle","1.0"],["","2","CI/CD","85.0","620a90d97ea6489a97b423d3f9bf12f9","","","","","","",""],["","3","Testing","80.0","3b9d78488e7240bc825ec12073af1352","","","","","","",""],["","4","Microservices","75.0","bca3924a5ac645ed80724816e47003c9","","","","","","",""],["","5","Containers","70.0","9b1878d07697442da633c518ac64aa17","","","","","","",""],["","6","Serverless","65.0","491e3c4521d24d40b225211b07645440","","","","","","",""],["","7","API","60.0","2355e2da1a0d4a76a7af355daf18254b","","","","","","",""],["","8","Refactoring","55.0","743816a38e914088a88112f8eb4daa60","","","","","","",""],["","9","Clean Code","50.0","ca1285d99fff4b22ac3b70623d8a545b","","","","","","",""],["","10","Design Patterns","45.0","d865095a1330483db2e600ad06778658","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_8a4c334a55d84fbc93073b55ac985521" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_8a4c334a55d84fbc93073b55ac985521" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_8a4c334a55d84fbc93073b55ac985521" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_8a4c334a55d84fbc93073b55ac985521" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_8a4c334a55d84fbc93073b55ac985521"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_8a4c334a55d84fbc93073b55ac985521"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_8a4c334a55d84fbc93073b55ac985521 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_8a4c334a55d84fbc93073b55ac985521 .word-text:hover { filter: url(#wordGlow_8a4c334a55d84fbc93073b55ac985521); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 788.0 0 A 12.0 12.0 0 0 1 800.0 12.0 L 800.0 588.0 A 12.0 12.0 0 0 1 788.0 600.0 L 12.0 600.0 A 12.0 12.0 0 0 1 0 588.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Software Development Concepts</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="50.0" fill="#ff7979" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Agile<title>Agile: weight 90.00</title></text><text class="word-text" x="404.2725602393053" y="262.3347503538872" text-anchor="middle" font-size="46.0" fill="#7ed6df" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">CI/CD<title>CI/CD: weight 85.00</title></text><text class="word-text" x="414.1173653265424" y="393.3820351100886" text-anchor="middle" font-size="42.0" fill="#f6e58d" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Testing<title>Testing: weight 80.00</title></text><text class="word-text" x="418.8648808665388" y="451.4912699286733" text-anchor="middle" font-size="38.0" fill="#badc58" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Microservices<title>Microservices: weight 75.00</title></text><text class="word-text" x="410.11273809798723" y="203.63709978810667" text-anchor="middle" font-size="34.0" fill="#ffbe76" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Containers<title>Containers: weight 70.00</title></text><text class="word-text" x="240.71242295616534" y="322.30674224308905" text-anchor="middle" font-size="30.0" fill="#ff9ff3" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Serverless<title>Serverless: weight 65.00</title></text><text class="word-text" x="499.8335729837835" y="320.68054979076294" text-anchor="middle" font-size="26.0" fill="#f9ca24" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">API<title>API: weight 60.00</title></text><text class="word-text" x="259.2523279388248" y="273.6869279066879" text-anchor="middle" font-size="22.0" fill="#686de0" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Refactoring<title>Refactoring: weight 55.00</title></text><text class="word-text" x="274.28752858990873" y="383.93406776357364" text-anchor="middle" font-size="18.0" fill="#be2edd" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Clean Code<title>Clean Code: weight 50.00</title></text><text class="word-text" x="543.3446392498305" y="280.670661087314" text-anchor="middle" font-size="14.0" fill="#eb4d4b" filter="url(#wordShadow_8a4c334a55d84fbc93073b55ac985521)">Design Patterns<title>Design Patterns: weight 45.00</title></text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
+
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
 <span>Embedded Data</span>
@@ -1552,7 +1498,7 @@ Design Patterns | 45 | #eb4d4b" data-kind="wordcloud">
 </div>
 <hr />
 <h2 id="survey-themes-example">Survey Themes Example</h2>
-<div id="docops-wordcloud-1779243328471-593" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0WOz26DMAzG736KSDsjUQokHDhtq7TTqnV7ABMMWCNJFYz2R3v4pbRSL7b8--zPn7DM1KrHdZHgKKoDUd-h_VTvEzla4It7mVql6xwm4nGSVlVFDo79IXg58W863tXg8Ps-lwayLINnXEiFQX2k9qeaIpWHodH7tH6kOITo0NuLZMpN6vTOVHBaz-cQJRFdbzjF0SW80czY8czyc5HyTSKLFuHFC40RhYNfEq6vbj2WOMCr7wLGnv2YYGWuV71GhGNke8O3902xt_AU7OrIy2aXeGnusf8BGYPZQywBAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Customer Feedback Themes
+<div id="docops-wordcloud-1780401930431-75" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=wordcloud&payload=H4sIAAAAAAAA_0WOz26DMAzG736KSDsjUQokHDhtq7TTqnV7ABMMWCNJFYz2R3v4pbRSL7b8--zPn7DM1KrHdZHgKKoDUd-h_VTvEzla4It7mVql6xwm4nGSVlVFDo79IXg58W863tXg8Ps-lwayLINnXEiFQX2k9qeaIpWHodH7tH6kOITo0NuLZMpN6vTOVHBaz-cQJRFdbzjF0SW80czY8czyc5HyTSKLFuHFC40RhYNfEq6vbj2WOMCr7wLGnv2YYGWuV71GhGNke8O3902xt_AU7OrIy2aXeGnusf8BGYPZQywBAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Customer Feedback Themes
 width= 760
 height= 520
 minFontSize= 16
@@ -1568,10 +1514,11 @@ Pricing | 54 | #fb923c
 Documentation | 48 | #f97316" data-kind="wordcloud">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_d26ceea97bd341f097416589e260af80" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-19</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Customer Feedback Themes","1","Ease of Use","92.0","9bc176c605d74b1991e56e9761345c7b","false","760","520","16","48","rectangle","1.0"],["","2","Performance","84.0","7c2edabce2a04b11963f14b03e40acec","","","","","","",""],["","3","Support","76.0","c0cf2e783b294e9fb91c8cf2a35bda62","","","","","","",""],["","4","Reliability","70.0","32c67a8753fa4377a440c11cb02acc4b","","","","","","",""],["","5","Integrations","64.0","64f302080bbd421197bee028516bc32a","","","","","","",""],["","6","Onboarding","58.0","20bf417333d94faf8f4530860cb8bac0","","","","","","",""],["","7","Pricing","54.0","f5b5515891c148f7a5950e3ffad1ebe5","","","","","","",""],["","8","Documentation","48.0","213e475dd9ab47d8a70593f082996964","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_d26ceea97bd341f097416589e260af80" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_d26ceea97bd341f097416589e260af80" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_d26ceea97bd341f097416589e260af80" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_d26ceea97bd341f097416589e260af80" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_d26ceea97bd341f097416589e260af80"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_d26ceea97bd341f097416589e260af80"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_d26ceea97bd341f097416589e260af80 .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_d26ceea97bd341f097416589e260af80 .word-text:hover { filter: url(#wordGlow_d26ceea97bd341f097416589e260af80); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 748.0 0 A 12.0 12.0 0 0 1 760.0 12.0 L 760.0 508.0 A 12.0 12.0 0 0 1 748.0 520.0 L 12.0 520.0 A 12.0 12.0 0 0 1 0 508.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Customer Feedback Themes</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="48.0" fill="#f97316" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Ease of Use<title>Ease of Use: weight 92.00</title></text><text class="word-text" x="413.2441574853838" y="267.40551595518593" text-anchor="middle" font-size="42.0" fill="#fb7185" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Performance<title>Performance: weight 84.00</title></text><text class="word-text" x="398.7040473005514" y="392.5344655345729" text-anchor="middle" font-size="36.0" fill="#fdba74" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Support<title>Support: weight 76.00</title></text><text class="word-text" x="406.67097916703773" y="444.87549037108244" text-anchor="middle" font-size="32.0" fill="#fecaca" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Reliability<title>Reliability: weight 70.00</title></text><text class="word-text" x="414.6731518325686" y="217.07393287492573" text-anchor="middle" font-size="28.0" fill="#fda4af" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Integrations<title>Integrations: weight 64.00</title></text><text class="word-text" x="255.72714356194888" y="387.13978863457834" text-anchor="middle" font-size="23.0" fill="#fed7aa" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Onboarding<title>Onboarding: weight 58.00</title></text><text class="word-text" x="519.0758792051743" y="396.84449827946867" text-anchor="middle" font-size="20.0" fill="#fb923c" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Pricing<title>Pricing: weight 54.00</title></text><text class="word-text" x="405.8944362822205" y="178.28064324591998" text-anchor="middle" font-size="16.0" fill="#f97316" filter="url(#wordShadow_d26ceea97bd341f097416589e260af80)">Documentation<title>Documentation: weight 48.00</title></text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="wordcloud_27b754cf8f7543a5a3f6bc9685f90c0f" width="449.999999994375" height="337.49999999578125" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Word Cloud'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-02</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Word Number","Text","Weight","ID","Base Color","Use Dark","Width","Height","Min Font Size","Max Font Size","Shape","Scale"],"rows":[["Customer Feedback Themes","1","Ease of Use","92.0","19e7edcf0bcd4697a64e14349339a75e","false","760","520","16","48","rectangle","1.0"],["","2","Performance","84.0","f143fca6ff834498818d9fcc3c4126dd","","","","","","",""],["","3","Support","76.0","46de9a2c266f4c3dbaef12a425032581","","","","","","",""],["","4","Reliability","70.0","190772cf5897422890acecca074698ba","","","","","","",""],["","5","Integrations","64.0","ae289a02711e4fbbb7721d462ae575c7","","","","","","",""],["","6","Onboarding","58.0","650e916ec2ff4474b68193e1c27a1422","","","","","","",""],["","7","Pricing","54.0","40a696eb15fa4e9883f53a7b1910914a","","","","","","",""],["","8","Documentation","48.0","b9c2e797e8914ec3ae481c22cf512e10","","","","","","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="backgroundGradient_27b754cf8f7543a5a3f6bc9685f90c0f" x1="0%" y1="0%" x2="100%" y2="100%"><stop class="stop1" offset="0%" stop-color="#ffffff"/><stop class="stop2" offset="50%" stop-color="#F8FAFC"/><stop class="stop3" offset="100%" stop-color="#e2e8f0"/></linearGradient><!-- Glass Border (Light Mode) --><linearGradient id="glassBorder_27b754cf8f7543a5a3f6bc9685f90c0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" /></linearGradient><!-- Link Border (Light Mode) --><linearGradient id="linkBorderLight_27b754cf8f7543a5a3f6bc9685f90c0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" /><stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" /></linearGradient><!-- Apple Glass Effect Gradients (Light Mode) --><linearGradient id="glassOverlay_27b754cf8f7543a5a3f6bc9685f90c0f" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" /><stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" /><stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /></linearGradient><filter id="wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/></filter><filter id="wordGlow_27b754cf8f7543a5a3f6bc9685f90c0f"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>#wordcloud_27b754cf8f7543a5a3f6bc9685f90c0f .word-text { font-family: 'Arial', sans-serif; font-weight: bold; cursor: pointer; transition: all 0.3s ease; } #wordcloud_27b754cf8f7543a5a3f6bc9685f90c0f .word-text:hover { filter: url(#wordGlow_27b754cf8f7543a5a3f6bc9685f90c0f); transform: scale(1.1); }</style></defs><path d="M 0 12.0 A 12.0 12.0 0 0 1 12.0 0 L 748.0 0 A 12.0 12.0 0 0 1 760.0 12.0 L 760.0 508.0 A 12.0 12.0 0 0 1 748.0 520.0 L 12.0 520.0 A 12.0 12.0 0 0 1 0 508.0 Z" fill="#F2F2F7" /><g transform="translate(24.0, 38)"><text fill="#333" font-size="24" font-family="'Outfit', sans-serif" font-weight="800" style="letter-spacing: -0.5px;" class="milestone-text">Customer Feedback Themes</text><rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/></g><g id="words"><text class="word-text" x="400.0" y="330.0" text-anchor="middle" font-size="48.0" fill="#f97316" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Ease of Use<title>Ease of Use: weight 92.00</title></text><text class="word-text" x="403.6487992280196" y="267.5586263981365" text-anchor="middle" font-size="42.0" fill="#fb7185" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Performance<title>Performance: weight 84.00</title></text><text class="word-text" x="411.82278397893805" y="389.23088154505007" text-anchor="middle" font-size="36.0" fill="#fdba74" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Support<title>Support: weight 76.00</title></text><text class="word-text" x="391.6014345430336" y="438.77697266508943" text-anchor="middle" font-size="32.0" fill="#fecaca" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Reliability<title>Reliability: weight 70.00</title></text><text class="word-text" x="382.8042087118985" y="216.94747364157763" text-anchor="middle" font-size="28.0" fill="#fda4af" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Integrations<title>Integrations: weight 64.00</title></text><text class="word-text" x="264.6785445872655" y="382.50166994326963" text-anchor="middle" font-size="23.0" fill="#fed7aa" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Onboarding<title>Onboarding: weight 58.00</title></text><text class="word-text" x="378.6511857903748" y="478.63734807124143" text-anchor="middle" font-size="20.0" fill="#fb923c" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Pricing<title>Pricing: weight 54.00</title></text><text class="word-text" x="396.1391155519413" y="178.45408995784342" text-anchor="middle" font-size="16.0" fill="#f97316" filter="url(#wordShadow_27b754cf8f7543a5a3f6bc9685f90c0f)">Documentation<title>Documentation: weight 48.00</title></text></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
+
 <div class="docops-data-panel" style="display: none;">
 <div class="docops-data-header">
 <span>Embedded Data</span>

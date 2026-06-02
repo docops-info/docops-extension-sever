@@ -1,0 +1,43 @@
+= Test Redocly
+
+++++
+<style>
+  html, body, #content, #header, .sect1 {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  #header > h1:first-child {
+        color: #fcfcfc;
+    }
+  body { background: #1a1a2e; }
+
+/* Redoc left navigation — dark mode */
+[data-role="menu-content"],
+.menu-content {
+  background-color: #21252b !important;
+  border-right: 1px solid #2c313a;
+}
+
+/* Nav item text */
+.menu-content li > label {
+  color: #abb2bf !important;
+}
+
+/* Active item */
+.menu-content li[data-item-id]:hover > label,
+.menu-content li.active > label {
+  color:            #61afef !important;
+  background-color: rgba(97, 175, 239, 0.08) !important;
+}
+
+/* HTTP method badges inside sidebar */
+[data-role="menu-content"] span.http-verb {
+  opacity: 0.85;
+}
+</style>
+++++
+
+== OpenAPI
+
+redocly::https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml[title="Just the title", paths="spec.paths['/api/v2/ping']; delete spec.paths['/api/v1/ping'];"]
