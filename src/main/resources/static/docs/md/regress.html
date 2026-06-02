@@ -1,0 +1,2958 @@
+            <!DOCTYPE html>
+            <html lang="en" data-theme="light">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta property="og:title" content="Headers" />
+                <meta property="og:description" content="DocOps generator - Headers" />
+                <meta property="og:image" content="https://roach.gy/extension/images/docops.svg" />
+                <meta property="og:url" content="https://roach.gy" />
+                <title>Headers</title>
+                
+                                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* DocOps Design System — Signal (v1) : Markdown Light
+   Goals: calm, audit-friendly, high-contrast, “ink as authority”, cyan as action. */
+
+.markdown-body {
+  /* -----------------------------
+     1) Core tokens (DocOps Signal)
+     ----------------------------- */
+  --ds-brand-ink: #0b1220;
+  --ds-brand-cloud: #f6f8fb;
+  --ds-brand-slate: #2a3447;
+  --ds-brand-steel: #8a96ad;
+  --ds-brand-cyan: #00b7d6;
+  --ds-brand-gold: #c9a227;
+
+  --ds-semantic-success: #16a34a;
+  --ds-semantic-warning: #d97706;
+  --ds-semantic-error: #dc2626;
+  --ds-semantic-info: #2563eb;
+
+  --ds-canvas: var(--ds-brand-cloud);
+  --ds-surface-1: #ffffff;
+  --ds-surface-2: #eef2f7;
+  --ds-border: rgba(11, 18, 32, 0.12);
+
+  --ds-text-primary: var(--ds-brand-ink);
+  --ds-text-secondary: var(--ds-brand-slate);
+  --ds-text-tertiary: var(--ds-brand-steel);
+
+  --ds-accent: var(--ds-brand-cyan);
+
+  --ds-radius-sm: 8px;
+  --ds-radius-md: 12px;
+  --ds-radius-lg: 16px;
+  --ds-radius-pill: 999px;
+
+  --ds-shadow-sm: 0 6px 18px rgba(11, 18, 32, 0.08);
+  --ds-shadow-md: 0 16px 40px rgba(11, 18, 32, 0.12);
+  --ds-focus-glow: 0 0 0 4px rgba(0, 183, 214, 0.22);
+
+  --ds-dur-fast: 120ms;
+  --ds-dur-base: 220ms;
+  --ds-dur-slow: 420ms;
+  --ds-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ds-ease-snappy: cubic-bezier(0.2, 0.9, 0.2, 1);
+
+  /* -----------------------------
+     2) Markdown-specific roles
+     ----------------------------- */
+  --md-max-width: 920px;
+  --md-pad-x: 48px;
+  --md-pad-y: 48px;
+
+  --md-prose: var(--ds-text-secondary);
+  --md-heading: var(--ds-text-primary);
+  --md-muted: var(--ds-text-tertiary);
+
+  --md-link: var(--ds-accent);
+  --md-link-underline: rgba(0, 183, 214, 0.28);
+  --md-link-hover-bg: rgba(0, 183, 214, 0.10);
+
+  --md-inline-code-bg: rgba(11, 18, 32, 0.06);
+  --md-inline-code-border: rgba(11, 18, 32, 0.12);
+
+  --md-code-bg: var(--ds-brand-ink);
+  --md-code-fg: #f1f5ff;
+  --md-code-border: rgba(11, 18, 32, 0.20);
+
+  --md-table-stripe: rgba(11, 18, 32, 0.03);
+
+  /* Atmosphere: “calm corporate depth” (subtle, not noisy) */
+  background:
+    radial-gradient(900px 420px at 12% 0%, rgba(0, 183, 214, 0.08), transparent 55%),
+    radial-gradient(760px 360px at 92% 18%, rgba(201, 162, 39, 0.08), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.70)),
+    var(--ds-canvas);
+
+  color: var(--md-prose);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+
+  max-width: var(--md-max-width);
+  margin: 40px auto;
+  padding: var(--md-pad-y) var(--md-pad-x);
+
+  border-radius: 24px;
+  border: 1px solid var(--ds-border);
+  box-shadow: var(--ds-shadow-sm);
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Let long IDs/URLs behave */
+  overflow-wrap: anywhere;
+}
+
+/* Responsive padding (keeps 8px rhythm while respecting smaller screens) */
+@media (max-width: 768px) {
+  .markdown-body {
+    --md-pad-x: 20px;
+    --md-pad-y: 28px;
+    margin: 16px;
+    border-radius: 18px;
+  }
+}
+
+/* -----------------------------
+   3) Page-load motion (restrained)
+   ----------------------------- */
+@keyframes docops-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.markdown-body {
+  animation: docops-reveal var(--ds-dur-slow) var(--ds-ease-standard) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markdown-body { animation: none; }
+  .markdown-body * { scroll-behavior: auto; transition: none !important; }
+}
+
+/* -----------------------------
+   4) Typography (DocOps scale)
+   ----------------------------- */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  color: var(--md-heading);
+  font-weight: 600; /* Headline/Display mapping */
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  scroll-margin-top: 96px;
+}
+
+.markdown-body h1 {
+  font-size: 40px;        /* Display (desktop) */
+  line-height: 48px;
+  letter-spacing: -0.6px;
+  margin-top: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ds-border);
+}
+
+.markdown-body h2 {
+  font-size: 28px;        /* Headline (desktop) */
+  line-height: 34px;
+  letter-spacing: -0.3px;
+  padding-top: 8px;
+}
+
+.markdown-body h3 {
+  font-size: 22px;        /* Title (desktop) */
+  line-height: 28px;
+  letter-spacing: -0.2px;
+}
+
+.markdown-body h4 {
+  font-size: 16px;        /* Body as “section label” */
+  line-height: 24px;
+  letter-spacing: 0;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+}
+
+.markdown-body p {
+  margin: 0 0 16px 0;
+}
+
+.markdown-body strong {
+  color: var(--ds-text-primary);
+  font-weight: 600;
+}
+
+.markdown-body small {
+  color: var(--md-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* -----------------------------
+   5) Links + focus visibility
+   ----------------------------- */
+.markdown-body a {
+  color: var(--md-link);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid var(--md-link-underline);
+  transition: background-color var(--ds-dur-fast) var(--ds-ease-standard),
+              border-color var(--ds-dur-fast) var(--ds-ease-standard),
+              color var(--ds-dur-fast) var(--ds-ease-standard);
+  padding: 0 2px;
+  border-radius: 6px;
+}
+
+.markdown-body a:hover {
+  background: var(--md-link-hover-bg);
+  border-bottom-color: rgba(0, 183, 214, 0.55);
+}
+
+.markdown-body a:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  box-shadow: var(--ds-focus-glow);
+  border-bottom-color: transparent;
+}
+
+/* Selection should feel “system-level” */
+.markdown-body ::selection {
+  background: rgba(0, 183, 214, 0.18);
+}
+
+/* -----------------------------
+   6) Lists, rules, and spacing
+   ----------------------------- */
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+.markdown-body li {
+  margin: 6px 0;
+}
+
+.markdown-body hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ds-border), transparent);
+  margin: 24px 0;
+}
+
+/* -----------------------------
+   7) Inline code + code blocks
+   ----------------------------- */
+.markdown-body code {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+}
+
+.markdown-body :not(pre) > code {
+  background: var(--md-inline-code-bg);
+  border: 1px solid var(--md-inline-code-border);
+  color: var(--ds-text-primary);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: break-spaces;
+}
+
+.markdown-body pre {
+  background: var(--md-code-bg);
+  color: var(--md-code-fg);
+  border: 1px solid var(--md-code-border);
+  box-shadow: var(--ds-shadow-sm);
+  padding: 16px;
+  border-radius: var(--ds-radius-lg);
+  overflow: auto;
+  margin: 0 0 24px 0;
+  line-height: 1.55;
+}
+
+.markdown-body pre code {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  font-size: 13px;
+  white-space: pre;
+}
+
+/* -----------------------------
+   8) Quotes / callouts
+   ----------------------------- */
+.markdown-body blockquote {
+  margin: 24px 0;
+  padding: 16px 16px 16px 18px;
+
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
+              var(--ds-surface-2);
+
+  border: 1px solid var(--ds-border);
+  border-left: 4px solid var(--ds-brand-gold); /* Gold = governance/attention (not error) */
+  border-radius: var(--ds-radius-lg);
+  box-shadow: none;
+
+  color: var(--ds-text-secondary);
+}
+
+.markdown-body blockquote > :first-child { margin-top: 0; }
+.markdown-body blockquote > :last-child { margin-bottom: 0; }
+
+/* -----------------------------
+   9) Tables (audit-friendly)
+   ----------------------------- */
+.markdown-body table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 0 24px 0;
+
+  background: rgba(255, 255, 255, 0.70);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+}
+
+.markdown-body thead th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ds-text-primary);
+  background: linear-gradient(180deg, rgba(238, 242, 247, 0.95), rgba(238, 242, 247, 0.78));
+  border-bottom: 1px solid var(--ds-border);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.markdown-body tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(11, 18, 32, 0.08);
+  color: var(--ds-text-secondary);
+  vertical-align: top;
+}
+
+.markdown-body tbody tr:nth-child(even) td {
+  background: var(--md-table-stripe);
+}
+
+.markdown-body tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Numeric density: make tables/KPIs scanable if author uses <code> or numbers */
+.markdown-body td code,
+.markdown-body th code {
+  font-size: 0.92em;
+}
+
+/* -----------------------------
+   10) Media, kbd, mark
+   ----------------------------- */
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-border);
+  background: var(--ds-surface-1);
+}
+
+.markdown-body kbd {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ds-text-primary);
+
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(11, 18, 32, 0.18);
+  border-bottom-color: rgba(11, 18, 32, 0.28);
+  border-radius: 10px;
+
+  padding: 2px 8px;
+  box-shadow: 0 1px 0 rgba(11, 18, 32, 0.08);
+}
+
+.markdown-body mark {
+  background: rgba(201, 162, 39, 0.22); /* audit gold, soft */
+  color: var(--ds-text-primary);
+  padding: 0 3px;
+  border-radius: 6px;
+}
+
+/* -----------------------------
+   11) GitHub-ish conveniences (without cloning GitHub)
+   ----------------------------- */
+.markdown-body .task-list-item {
+  list-style: none;
+}
+
+.markdown-body .task-list-item input[type="checkbox"] {
+  transform: translateY(1px);
+  accent-color: var(--ds-accent);
+}
+
+/* Make anchor icons / autolinks not ugly if present */
+.markdown-body a.anchor {
+  border-bottom: 0;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* -----------------------------
+   12) Print: keep it “audit export” ready
+   ----------------------------- */
+@media print {
+  .markdown-body {
+    background: #ffffff;
+    box-shadow: none;
+    border: 0;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+  }
+
+  .markdown-body a {
+    color: var(--ds-text-primary);
+    border-bottom-color: rgba(11, 18, 32, 0.22);
+  }
+
+  .markdown-body pre {
+    box-shadow: none;
+  }
+}
+
+/* Redoc wrapper emitted by macro */
+.markdown-body .redocly-wrap {
+  /* break out of centered column */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+
+  /* optional vertical spacing */
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+
+  /* give Redoc some breathing room at viewport edges */
+  padding-left: 12px;
+  padding-right: 12px;
+  box-sizing: border-box;
+}
+
+/* Ensure inner Redoc container uses full width */
+.markdown-body .redocly-wrap > [id^="redoc-container-"] {
+  width: 100%;
+  max-width: none;
+}
+
+/* Optional: slightly reduce side nav width pressure on small screens */
+@media (max-width: 1100px) {
+  .markdown-body .redocly-wrap {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
+                </style>
+                <style>
+                .svg-container {
+    padding: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.01);
+    cursor: default !important;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+
+.markdown-body img {
+    border-style: none;
+    max-width: 100%;
+    box-sizing: content-box;
+}
+
+/* Constrain SVGs and their interactive containers */
+.markdown-body svg,
+.svg-viewer-container,
+.svg-with-controls {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensure the DocOps specific media cards respect the boundary */
+.docops-media-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    width: 100%;
+    max-width: 970px;
+}
+
+.docops-media-card:hover {
+    transform: translateY(-4px);
+}
+
+.docops-data-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+    border-top: 1px solid var(--accent-primary);
+    padding: 2rem;
+    max-height: 400px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.docops-data-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+.docops-data-actions {
+    display: flex;
+    gap: 12px;
+}
+.docops-action-btn {
+    background: rgba(126, 87, 255, 0.1);
+    border: 1px solid rgba(126, 87, 255, 0.3);
+    color: var(--accent-secondary);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docops-action-btn:hover {
+    background: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    border-color: var(--accent-primary);
+}
+
+.docops-data-header span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-secondary);
+    font-size: 0.9rem;
+}
+
+/* ui.md: Distinctive Table Design */
+.docops-data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+}
+
+.docops-data-table th {
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-primary);
+    font-weight: 500;
+}
+
+/* ui.md: Motion - Staggered Row Entry */
+.docops-data-table tr {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: rowSlideIn 0.4s ease forwards;
+}
+
+@keyframes rowSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.docops-data-table td {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.docops-data-table tr:hover td {
+    background: rgba(126, 87, 255, 0.1);
+    color: #fff;
+}
+
+.docops-container {
+    display: inline-block;
+}
+
+.docops-control-bar {
+    display: flex;
+    background: var(--control-bar-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--control-bar-border);
+    padding: 8px;
+    gap: 8px;
+    justify-content: center;
+    max-width: 970px;
+    margin: 0 auto;
+}
+
+@media (prefers-color-scheme: light) {
+    .docops-control-bar {
+        background: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .docops-btn {
+        border-color: rgba(126, 87, 255, 0.6);
+        color: #6a3de8;
+    }
+}
+
+                </style>
+                <style>
+                /* Theme Variables */
+:root {
+    --svg-bg: white;
+    --svg-border: #ddd;
+    --svg-hover-border: #4CAF50;
+    --text-color: #666;
+    --modal-bg: white;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.3);
+    /* New variables for the control bar */
+    --control-bar-bg: rgba(245, 245, 245, 0.8);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #7e57ff;
+    --btn-border: rgba(126, 87, 255, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --svg-bg: #2b2b2b;
+        --svg-border: #444;
+        --svg-hover-border: #4CAF50;
+        --text-color: #aaa;
+        --modal-bg: #1e1e1e;
+        --shadow-light: rgba(0, 0, 0, 0.3);
+        --shadow-medium: rgba(0, 0, 0, 0.4);
+        --shadow-heavy: rgba(0, 0, 0, 0.6);
+        /* Dark mode overrides */
+        --control-bar-bg: rgba(0, 0, 0, 0.4);
+        --control-bar-border: rgba(255, 255, 255, 0.1);
+        --btn-text: #b392ff;
+        --btn-border: rgba(126, 87, 255, 0.4);
+    }
+}
+/* Support the manual override from the converter */
+[data-theme="dark"] {
+    --svg-bg: #2b2b2b;
+    --svg-border: #444;
+    --text-color: #aaa;
+    --modal-bg: #1e1e1e;
+    --control-bar-bg: rgba(0, 0, 0, 0.4);
+    --control-bar-border: rgba(255, 255, 255, 0.1);
+    --btn-text: #b392ff;
+}
+
+[data-theme="light"] {
+    --control-bar-bg: rgba(240, 240, 240, 0.9);
+    --control-bar-border: rgba(0, 0, 0, 0.1);
+    --btn-text: #6a3de8;
+    --btn-border: rgba(106, 61, 232, 0.4);
+}
+
+
+
+.docops-btn {
+    background: transparent;
+    border: 1px solid var(--btn-border);
+    color: var(--btn-text);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.05em;
+}
+
+.docops-btn:hover {
+    background: var(--accent-primary, #7e57ff);
+    color: #fff;
+    border-color: var(--accent-primary, #7e57ff);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+/* Override existing border styles if any */
+.svg-wrapper {
+    border: none !important;
+    background: transparent !important;
+}
+.svg-container:hover {
+    border-color: var(--svg-hover-border);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.svg-container svg {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 1200px;
+    min-width: 600px;
+    display: block;
+}
+
+.click-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(13, 13, 18, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    width: 90vw;
+    height: 85vh;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+#modalSvgContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#modalSvgContainer svg {
+    max-width: 100%;
+    max-height: 100%;
+    filter: drop-shadow(0 0 30px rgba(126, 87, 255, 0.2));
+}
+
+.modal-content svg {
+    display: block;
+    width: 600px;
+    height: 600px;
+    max-width: 80vw;
+    max-height: 80vh;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: var(--accent-primary, #7e57ff);
+}
+
+/* Multiple examples */
+.examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.example-item {
+    text-align: center;
+}
+
+/* Modal Zoom Controls */
+.modal-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 12px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-zoom-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-zoom-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(126, 87, 255, 0.4);
+}
+
+.modal-zoom-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-zoom-level {
+    color: white;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 0;
+}
+                </style>
+                <style>
+                .adm-block {
+    display: block;
+    width: 99%;
+    border-radius: 4px;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 1em;
+    border-left: 4px solid;
+}
+
+.adm-heading {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 8px;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.adm-body {
+    display: block;
+    padding: 0;
+    margin-left: 28px;
+    margin-right: 0;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.adm-heading > span {
+    color: inherit;
+}
+
+.adm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.adm-hidden {
+    display: none !important;
+}
+
+.adm-block.adm-collapsed > .adm-heading, .adm-block.adm-open > .adm-heading {
+    position: relative;
+    cursor: pointer;
+}
+
+.adm-block.adm-collapsed > .adm-heading {
+    margin-bottom: 0;
+}
+
+.adm-block.adm-collapsed .adm-body {
+    display: none !important;
+}
+
+.adm-block.adm-open > .adm-heading:after,
+.adm-block.adm-collapsed > .adm-heading:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    content: '▼';
+    opacity: 0.5;
+}
+
+.adm-block.adm-collapsed > .adm-heading:after {
+    transform: rotate(-90deg);
+}
+
+/* Type-specific styles */
+
+.adm-block.adm-note {
+    border-left-color: #448AFF;
+}
+
+.adm-block.adm-note .adm-heading {
+    color: #448AFF;
+}
+
+.adm-block.adm-tip {
+    border-left-color: #00C853;
+}
+
+.adm-block.adm-tip .adm-heading {
+    color: #00C853;
+}
+
+.adm-block.adm-warning {
+    border-left-color: #FF9800;
+}
+
+.adm-block.adm-warning .adm-heading {
+    color: #FF9800;
+}
+
+.adm-block.adm-important {
+    border-left-color: #9C27B0;
+}
+
+.adm-block.adm-important .adm-heading {
+    color: #9C27B0;
+}
+
+.adm-block.adm-caution,
+.adm-block.adm-danger {
+    border-left-color: #F44336;
+}
+
+.adm-block.adm-caution .adm-heading,
+.adm-block.adm-danger .adm-heading {
+    color: #F44336;
+}
+
+.adm-block.adm-abstract {
+    border-left-color: #48C4FF;
+}
+
+.adm-block.adm-abstract .adm-heading {
+    color: #48C4FF;
+}
+
+.adm-block.adm-bug,
+.adm-block.adm-fail {
+    border-left-color: #F50057;
+}
+
+.adm-block.adm-bug .adm-heading,
+.adm-block.adm-fail .adm-heading {
+    color: #F50057;
+}
+
+.adm-block.adm-example {
+    border-left-color: #7940ff;
+}
+
+.adm-block.adm-example .adm-heading {
+    color: #7940ff;
+}
+
+.adm-block.adm-faq {
+    border-left-color: #5ED116;
+}
+
+.adm-block.adm-faq .adm-heading {
+    color: #5ED116;
+}
+
+.adm-block.adm-info {
+    border-left-color: #00B8D4;
+}
+
+.adm-block.adm-info .adm-heading {
+    color: #00B8D4;
+}
+
+.adm-block.adm-quote {
+    border-left-color: #9E9E9E;
+}
+
+.adm-block.adm-quote .adm-heading {
+    color: #9E9E9E;
+}
+
+.adm-block.adm-success {
+    border-left-color: #1DCD63;
+}
+
+.adm-block.adm-success .adm-heading {
+    color: #1DCD63;
+}
+                </style>
+                <style>
+                /*! Asciidoctor Tabs | Accent Theme
+ *  Drop-in replacement — swap your existing tabs CSS with this file.
+ *  Accent color is a single CSS variable; change --tabs-accent to any hue.
+ */
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --tabs-accent:        #4f46e5;   /* indigo — change to any hex */
+  --tabs-accent-hover:  #4338ca;
+  --tabs-accent-rail:   #f5f3ff;
+  --tabs-accent-text:   #ffffff;
+  --tabs-accent-muted:  #4338ca;   /* inactive tab label */
+  --tabs-accent-soft:   rgba(99, 102, 241, 0.12);
+
+  --tabs-bg:            #ffffff;
+  --tabs-rail-border:   #4f46e5;
+  --tabs-border:        #4f46e5;
+  --tabs-text:          #111827;
+  --tabs-text-muted:    #6b7280;
+  --tabs-panel-bg:      #ffffff;
+
+  --tabs-radius-outer:  12px;
+  --tabs-radius-btn:    8px;
+  --tabs-gap:           6px;
+  --tabs-focus:         #6366f1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabs-accent:        #6366f1;
+    --tabs-accent-hover:  #818cf8;
+    --tabs-accent-rail:   #1e1b4b;
+    --tabs-accent-text:   #ffffff;
+    --tabs-accent-muted:  #a5b4fc;
+    --tabs-accent-soft:   rgba(99, 102, 241, 0.18);
+
+    --tabs-bg:            #0f0f10;
+    --tabs-rail-border:   #4338ca;
+    --tabs-border:        #4338ca;
+    --tabs-text:          #f3f4f6;
+    --tabs-text-muted:    #9ca3af;
+    --tabs-panel-bg:      #111113;
+  }
+}
+
+/* ── Container ───────────────────────────────────────────────────────── */
+.tabs {
+  margin: 1.75rem 0;
+  border: 1px solid var(--tabs-border);
+  border-radius: var(--tabs-radius-outer);
+  overflow: hidden;
+  background: var(--tabs-bg);
+  color: var(--tabs-text);
+  animation: tabsAccentEnter 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ── Tab rail ────────────────────────────────────────────────────────── */
+.tablist > ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  gap: var(--tabs-gap);
+  border-bottom: 1px solid var(--tabs-rail-border);
+  background: var(--tabs-accent-rail);
+}
+
+.tablist.ulist,
+.tablist.ulist > ul li {
+  margin: 0;
+}
+
+.tablist.ulist > ul li + li {
+  margin-left: 0;
+}
+
+/* ── Tab buttons ─────────────────────────────────────────────────────── */
+.tablist > ul li {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+
+  font-size: 0.8125rem;   /* 13px */
+  font-weight: 500;
+  line-height: 1.2;
+
+  color: var(--tabs-accent-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--tabs-radius-btn);
+  padding: 0.4rem 1rem;
+
+  transition:
+          color 130ms ease,
+          background-color 130ms ease;
+}
+
+.tablist > ul li:hover {
+  color: var(--tabs-text);
+  background: var(--tabs-accent-soft);
+}
+
+.tablist > ul li:focus-visible {
+  outline: 2px solid var(--tabs-focus);
+  outline-offset: 2px;
+}
+
+/* ── Active tab ──────────────────────────────────────────────────────── */
+.tabs.is-loading .tablist li:first-child,
+.tabs:not(.is-loading) .tablist li.is-selected {
+  background: var(--tabs-accent);
+  color: var(--tabs-accent-text);
+}
+
+/* no underline indicator needed for this style */
+.tabs .tablist li::after {
+  display: none;
+}
+
+/* reduce inactive visual weight */
+.tabs:not(.is-loading) .tablist li:not(.is-selected) {
+  opacity: 0.9;
+}
+
+/* ── Panel visibility ────────────────────────────────────────────────── */
+.tabs.is-loading .tabpanel + .tabpanel,
+.tabs:not(.is-loading) .tabpanel.is-hidden {
+  display: none;
+}
+
+/* ── Panel ───────────────────────────────────────────────────────────── */
+.tabpanel {
+  padding: 1.25rem 1.375rem;
+  color: var(--tabs-text);
+  background: var(--tabs-panel-bg);
+  animation: tabPanelReveal 200ms ease;
+}
+
+.tabpanel > :first-child {
+  margin-top: 0;
+}
+
+/* tidy trailing margin in Asciidoctor context */
+#content .tabpanel > :last-child,
+#content .tabpanel > :last-child > :last-child,
+#content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── Table support ───────────────────────────────────────────────────── */
+.tablecontainer {
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--tabs-border) 30%, transparent);
+  border-radius: 6px;
+}
+
+#content .tablecontainer {
+  margin-bottom: 1.25em;
+}
+
+#content .tablecontainer > table.tableblock {
+  margin-bottom: 0;
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────── */
+@keyframes tabsAccentEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@keyframes tabPanelReveal {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs,
+  .tabpanel,
+  .tablist > ul li {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+                </style>
+                <style>
+                          @media (prefers-color-scheme: dark) {
+                              body {
+                                  background-color: #f5f5f5;
+                              }
+                          }
+                          
+                           /* Fix for DocOps visuals sizing - prevents them from being too large */
+                          .svg-container svg {
+                              width: auto !important;
+                              height: auto !important;
+                              max-width: 100% !important;
+                              min-width: 0 !important;
+                              margin: 0 auto;
+                              display: block;
+                          }
+                          
+                          /* Consistent Modal Styles matching AsciiDoc implementation */
+                          .svg-modal-overlay {
+                              display: none;
+                              position: fixed;
+                              top: 0;
+                              left: 0;
+                              width: 100vw;
+                              height: 100vh;
+                              background: rgba(15, 20, 25, 0.95);
+                              backdrop-filter: blur(8px);
+                              z-index: 2147483647;
+                              align-items: center;
+                              justify-content: center;
+                              padding: 40px;
+                              box-sizing: border-box;
+                          }
+                          .svg-modal-overlay.active {
+                              display: flex;
+                          }
+                          .svg-modal-content {
+                              width: 95vw;
+                              max-width: 1400px;
+                              height: 90vh;
+                              background: var(--docops-card-bg, #1e293b);
+                              border-radius: 20px;
+                              padding: 48px 24px 24px 24px;
+                              position: relative;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              display: flex;
+                              flex-direction: column;
+                              overflow: hidden;
+                              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                              animation: scaleInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                          }
+                          .svg-modal-close {
+                              position: absolute;
+                              top: 12px;
+                              right: 12px;
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border: none;
+                              width: 36px;
+                              height: 36px;
+                              border-radius: 50%;
+                              font-size: 24px;
+                              cursor: pointer;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              transition: all 0.2s ease;
+                              z-index: 10;
+                          }
+                          .svg-modal-close:hover {
+                              background: rgba(255,255,255,0.2);
+                              transform: rotate(90deg);
+                          }
+                          .svg-modal-body {
+                              flex: 1;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              width: 100%;
+                              height: 100%;
+                              overflow: auto;
+                              padding: 10px;
+                          }
+                          .svg-modal-body svg {
+                              max-width: 100%;
+                              max-height: 100%;
+                              width: auto;
+                              height: auto;
+                              object-fit: contain;
+                          }
+                          @keyframes scaleInModal {
+                              from { opacity: 0; transform: scale(0.9); }
+                              to { opacity: 1; transform: scale(1); }
+                          }
+                          
+                          /* CSV Modal Styles */
+                          #globalCsvModal .csv-table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              color: #e2e8f0;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 13px;
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table th {
+                              text-align: left;
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              position: sticky;
+                              top: 0;
+                          }
+                          #globalCsvModal .csv-table td {
+                              padding: 12px;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              color: #cbd5e1;
+                          }
+                          #globalCsvModal .csv-table tr {
+                              background: transparent;
+                          }
+                          #globalCsvModal .csv-table tr:hover {
+                              background: rgba(255,255,255,0.05);
+                          }
+                          
+                          /* Sliding Controls Styles (Consistent with Asciidoctor) */
+                          .svg-with-controls {
+                              position: relative;
+                              display: inline-block;
+                              border-radius: 8px;
+                              overflow: hidden;
+                          }
+                          .svg-bottom-controls {
+                              position: absolute;
+                              bottom: 12px;
+                              left: 50%;
+                              transform: translateX(-50%) translateY(150%);
+                              display: flex;
+                              gap: 6px;
+                              background: rgba(15, 20, 30, 0.85);
+                              padding: 6px 8px;
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              opacity: 0;
+                              transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                              z-index: 100;
+                              backdrop-filter: blur(8px);
+                              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                          }
+                          .svg-with-controls:hover .svg-bottom-controls {
+                              opacity: 1;
+                              transform: translateX(-50%) translateY(0);
+                          }
+                          .svg-control-btn {
+                              background: transparent;
+                              border: 1px solid rgba(255,255,255,0.15);
+                              color: #94a3b8;
+                              font-family: 'JetBrains Mono', monospace;
+                              font-size: 10px;
+                              font-weight: 600;
+                              padding: 4px 10px;
+                              border-radius: 4px;
+                              cursor: pointer;
+                              transition: all 0.2s;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                          }
+                          .svg-control-btn:hover {
+                              background: rgba(255,255,255,0.1);
+                              color: #fff;
+                              border-color: rgba(255,255,255,0.3);
+                              transform: translateY(-1px);
+                          }
+                    </style>
+                <script src="https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js"></script>
+                <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+                <script src ="https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js"></script>        
+
+            </head>
+            <body>
+                    <article class="markdown-body">
+                        <h1 id="headers">Headers</h1>
+<pre><code># h1 Heading 8-)
+## h2 Heading
+### h3 Heading
+#### h4 Heading
+##### h5 Heading
+###### h6 Heading
+
+Alternatively, for H1 and H2, an underline-ish style:
+
+Alt-H1
+======
+
+Alt-H2
+------
+</code></pre>
+<h1 id="h1-heading-8-">h1 Heading 8-)</h1>
+<h2 id="h2-heading">h2 Heading</h2>
+<h3 id="h3-heading">h3 Heading</h3>
+<h4 id="h4-heading">h4 Heading</h4>
+<h5 id="h5-heading">h5 Heading</h5>
+<h6 id="h6-heading">h6 Heading</h6>
+<p>Alternatively, for H1 and H2, an underline-ish style:</p>
+<h1 id="alt-h1">Alt-H1</h1>
+<h2 id="alt-h2">Alt-H2</h2>
+<hr />
+<h1 id="emphasis">Emphasis</h1>
+<pre><code>Emphasis, aka italics, with *asterisks* or _underscores_.
+
+Strong emphasis, aka bold, with **asterisks** or __underscores__.
+
+Combined emphasis with **asterisks and _underscores_**.
+
+Strikethrough uses two tildes. ~~Scratch this.~~
+
+**This is bold text**
+
+__This is bold text__
+
+*This is italic text*
+
+_This is italic text_
+
+~~Strikethrough~~
+</code></pre>
+<p>Emphasis, aka italics, with <em>asterisks</em> or <em>underscores</em>.</p>
+<p>Strong emphasis, aka bold, with <strong>asterisks</strong> or <strong>underscores</strong>.</p>
+<p>Combined emphasis with <strong>asterisks and <em>underscores</em></strong>.</p>
+<p>Strikethrough uses two tildes. <del>Scratch this.</del></p>
+<p><strong>This is bold text</strong></p>
+<p><strong>This is bold text</strong></p>
+<p><em>This is italic text</em></p>
+<p><em>This is italic text</em></p>
+<p><del>Strikethrough</del></p>
+<hr />
+<h1 id="lists">Lists</h1>
+<pre><code>1. First ordered list item
+2. Another item
+   ⋅⋅* Unordered sub-list.
+1. Actual numbers don't matter, just that it's a number
+   ⋅⋅1. Ordered sub-list
+4. And another item.
+
+⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+
+⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
+⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
+⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
+
+* Unordered list can use asterisks
+- Or minuses
++ Or pluses
+
+1. Make my changes
+    1. Fix bug
+    2. Improve formatting
+        - Make the headings bigger
+2. Push my commits to GitHub
+3. Open a pull request
+    * Describe my changes
+    * Mention all the members of my team
+        * Ask for feedback
+
++ Create a list by starting a line with `+`, `-`, or `*`
++ Sub-lists are made by indenting 2 spaces:
+    - Marker character change forces new list start:
+        * Ac tristique libero volutpat at
+        + Facilisis in pretium nisl aliquet
+        - Nulla volutpat aliquam velit
++ Very easy!
+</code></pre>
+<ol>
+<li>First ordered list item</li>
+<li>Another item
+⋅⋅* Unordered sub-list.</li>
+<li>Actual numbers don't matter, just that it's a number
+⋅⋅1. Ordered sub-list</li>
+<li>And another item.</li>
+</ol>
+<p>⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).</p>
+<p>⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
+⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
+⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)</p>
+<ul>
+<li>Unordered list can use asterisks</li>
+</ul>
+<ul>
+<li>Or minuses</li>
+</ul>
+<ul>
+<li>Or pluses</li>
+</ul>
+<ol>
+<li>Make my changes
+<ol>
+<li>Fix bug</li>
+<li>Improve formatting
+<ul>
+<li>Make the headings bigger</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>Push my commits to GitHub</li>
+<li>Open a pull request
+<ul>
+<li>Describe my changes</li>
+<li>Mention all the members of my team
+<ul>
+<li>Ask for feedback</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>Create a list by starting a line with <code>+</code>, <code>-</code>, or <code>*</code></li>
+<li>Sub-lists are made by indenting 2 spaces:
+<ul>
+<li>Marker character change forces new list start:
+<ul>
+<li>Ac tristique libero volutpat at</li>
+</ul>
+<ul>
+<li>Facilisis in pretium nisl aliquet</li>
+</ul>
+<ul>
+<li>Nulla volutpat aliquam velit</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Very easy!</li>
+</ul>
+<hr />
+<h1 id="task-lists">Task lists</h1>
+<pre><code>- [x] Finish my changes
+- [ ] Push my commits to GitHub
+- [ ] Open a pull request
+- [x] @mentions, #refs, [links](), **formatting**, and &lt;del&gt;tags&lt;/del&gt; supported
+- [x] list syntax required (any unordered or ordered list supported)
+- [x] this is a complete item
+- [ ] this is an incomplete item
+</code></pre>
+<ul>
+<li>[x] Finish my changes</li>
+<li>[ ] Push my commits to GitHub</li>
+<li>[ ] Open a pull request</li>
+<li>[x] @mentions, #refs, <a href="">links</a>, <strong>formatting</strong>, and <del>tags</del> supported</li>
+<li>[x] list syntax required (any unordered or ordered list supported)</li>
+<li>[ ] this is a complete item</li>
+<li>[ ] this is an incomplete item</li>
+</ul>
+<hr />
+<h1 id="ignoring-markdown-formatting">Ignoring Markdown formatting</h1>
+<p>You can tell GitHub to ignore (or escape) Markdown formatting by using \ before the Markdown character.</p>
+<pre><code>Let's rename \*our-new-project\* to \*our-old-project\*.
+</code></pre>
+<p>Let's rename *our-new-project* to *our-old-project*.</p>
+<hr />
+<h1 id="links">Links</h1>
+<pre><code>[I'm an inline-style link](https://www.google.com)
+
+[I'm an inline-style link with title](https://www.google.com &quot;Google's Homepage&quot;)
+
+[I'm a reference-style link][Arbitrary case-insensitive reference text]
+
+[I'm a relative reference to a repository file](../blob/master/LICENSE)
+
+[You can use numbers for reference-style link definitions][1]
+
+Or leave it empty and use the [link text itself].
+
+URLs and URLs in angle brackets will automatically get turned into links.
+http://www.example.com or &lt;http://www.example.com&gt; and sometimes
+example.com (but not on Github, for example).
+
+Some text to show that the reference links can follow later.
+
+[arbitrary case-insensitive reference text]: https://www.mozilla.org
+[1]: http://slashdot.org
+[link text itself]: http://www.reddit.com
+</code></pre>
+<p><a href="https://www.google.com">I'm an inline-style link</a></p>
+<p><a href="https://www.google.com" title="Google's Homepage">I'm an inline-style link with title</a></p>
+<p><a href="https://www.mozilla.org">I'm a reference-style link</a></p>
+<p><a href="../blob/master/LICENSE">I'm a relative reference to a repository file</a></p>
+<p><a href="http://slashdot.org">You can use numbers for reference-style link definitions</a></p>
+<p>Or leave it empty and use the <a href="http://www.reddit.com">link text itself</a>.</p>
+<p>URLs and URLs in angle brackets will automatically get turned into links.
+http://www.example.com or <a href="http://www.example.com">http://www.example.com</a> and sometimes
+example.com (but not on Github, for example).</p>
+<p>Some text to show that the reference links can follow later.</p>
+<hr />
+<h1 id="images">Images</h1>
+<pre><code>Here's our logo (hover to see the title text):
+
+Inline-style:
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png &quot;Logo Title Text 1&quot;)
+
+Reference-style:
+![alt text][logo]
+
+[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png &quot;Logo Title Text 2&quot;
+
+![Minion](https://octodex.github.com/images/minion.png)
+![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg &quot;The Stormtroopocat&quot;)
+
+Like links, Images also have a footnote style syntax
+
+![Alt text][id]
+
+With a reference later in the document defining the URL location:
+
+[id]: https://octodex.github.com/images/dojocat.jpg  &quot;The Dojocat&quot;
+</code></pre>
+<p>Here's our logo (hover to see the title text):</p>
+<p>Inline-style:
+<img src="https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png" alt="alt text" title="Logo Title Text 1" /></p>
+<p>Reference-style:
+<img src="https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png" alt="alt text" title="Logo Title Text 2" /></p>
+<p><img src="https://octodex.github.com/images/minion.png" alt="Minion" />
+<img src="https://octodex.github.com/images/stormtroopocat.jpg" alt="Stormtroopocat" title="The Stormtroopocat" /></p>
+<p>Like links, Images also have a footnote style syntax</p>
+<p><img src="https://octodex.github.com/images/dojocat.jpg" alt="Alt text" title="The Dojocat" /></p>
+<p>With a reference later in the document defining the URL location:</p>
+<hr />
+<h1 id="footnotes"><a href="https://github.com/markdown-it/markdown-it-footnote">Footnotes</a></h1>
+<pre><code>Footnote 1 link[^first].
+
+Footnote 2 link[^second].
+
+Inline footnote^[Text of inline footnote] definition.
+
+Duplicated footnote reference[^second].
+
+[^first]: Footnote **can have markup**
+
+    and multiple paragraphs.
+
+[^second]: Footnote text.
+</code></pre>
+<p>Footnote 1 link<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>.</p>
+<p>Footnote 2 link<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup>.</p>
+<p>Inline footnote^[Text of inline footnote] definition.</p>
+<p>Duplicated footnote reference<sup id="fnref-2-1"><a class="footnote-ref" href="#fn-2">2</a></sup>.</p>
+<hr />
+<h1 id="code-and-syntax-highlighting">Code and Syntax Highlighting</h1>
+<pre><code>Inline `code` has `back-ticks around` it.
+</code></pre>
+<p>Inline <code>code</code> has <code>back-ticks around</code> it.</p>
+<pre><code class="language-c#">using System.IO.Compression;
+
+#pragma warning disable 414, 3021
+
+namespace MyApplication
+{
+    [Obsolete(&quot;...&quot;)]
+    class Program : IInterface
+    {
+        public static List&lt;int&gt; JustDoIt(int count)
+        {
+            Console.WriteLine($&quot;Hello {Name}!&quot;);
+            return new List&lt;int&gt;(new int[] { 1, 2, 3 })
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-css">@font-face {
+  font-family: Chunkfive; src: url('Chunkfive.otf');
+}
+
+body, .usertext {
+  color: #F0F0F0; background: #600;
+  font-family: Chunkfive, sans;
+}
+
+@import url(print.css);
+@media print {
+  a[href^=http]::after {
+    content: attr(href)
+  }
+}
+</code></pre>
+<pre><code class="language-javascript">function $initHighlight(block, cls) {
+  try {
+    if (cls.search(/\bno\-highlight\b/) != -1)
+      return process(block, true, 0x0F) +
+             ` class=&quot;${cls}&quot;`;
+  } catch (e) {
+    /* handle exception */
+  }
+  for (var i = 0 / 2; i &lt; classes.length; i++) {
+    if (checkCondition(classes[i]) === undefined)
+      console.log('undefined');
+  }
+}
+
+export  $initHighlight;
+</code></pre>
+<pre><code class="language-php">require_once 'Zend/Uri/Http.php';
+
+namespace Location\Web;
+
+interface Factory
+{
+    static function _factory();
+}
+
+abstract class URI extends BaseURI implements Factory
+{
+    abstract function test();
+
+    public static $st1 = 1;
+    const ME = &quot;Yo&quot;;
+    var $list = NULL;
+    private $var;
+
+    /**
+     * Returns a URI
+     *
+     * @return URI
+     */
+    static public function _factory($stats = array(), $uri = 'http')
+    {
+        echo __METHOD__;
+        $uri = explode(':', $uri, 0b10);
+        $schemeSpecific = isset($uri[1]) ? $uri[1] : '';
+        $desc = 'Multi
+line description';
+
+        // Security check
+        if (!ctype_alnum($scheme)) {
+            throw new Zend_Uri_Exception('Illegal scheme');
+        }
+
+        $this-&gt;var = 0 - self::$st;
+        $this-&gt;list = list(Array(&quot;1&quot;=&gt; 2, 2=&gt;self::ME, 3 =&gt; \Location\Web\URI::class));
+
+        return [
+            'uri'   =&gt; $uri,
+            'value' =&gt; null,
+        ];
+    }
+}
+
+echo URI::ME . URI::$st1;
+
+__halt_compiler () ; datahere
+datahere
+datahere */
+datahere
+</code></pre>
+<hr />
+<h1 id="tables">Tables</h1>
+<pre><code>Colons can be used to align columns.
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+There must be at least 3 dashes separating each header cell.
+The outer pipes (|) are optional, and you don't need to make the
+raw Markdown line up prettily. You can also use inline Markdown.
+
+Markdown | Less | Pretty
+--- | --- | ---
+*Still* | `renders` | **nicely**
+1 | 2 | 3
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
+| Command | Description |
+| --- | --- |
+| git status | List all new or modified files |
+| git diff | Show file differences that haven't been staged |
+
+| Command | Description |
+| --- | --- |
+| `git status` | List all *new or modified* files |
+| `git diff` | Show file differences that **haven't been** staged |
+
+| Left-aligned | Center-aligned | Right-aligned |
+| :---         |     :---:      |          ---: |
+| git status   | git status     | git status    |
+| git diff     | git diff       | git diff      |
+
+| Name     | Character |
+| ---      | ---       |
+| Backtick | `         |
+| Pipe     | \|        |
+</code></pre>
+<p>Colons can be used to align columns.</p>
+<table>
+<thead>
+<tr><th>Tables</th><th align="center">Are</th><th align="right">Cool</th></tr>
+</thead>
+<tbody>
+<tr><td>col 3 is</td><td align="center">right-aligned</td><td align="right">$1600</td></tr>
+<tr><td>col 2 is</td><td align="center">centered</td><td align="right">$12</td></tr>
+<tr><td>zebra stripes</td><td align="center">are neat</td><td align="right">$1</td></tr>
+</tbody>
+</table>
+<p>There must be at least 3 dashes separating each header cell.
+The outer pipes (|) are optional, and you don't need to make the
+raw Markdown line up prettily. You can also use inline Markdown.</p>
+<table>
+<thead>
+<tr><th>Markdown</th><th>Less</th><th>Pretty</th></tr>
+</thead>
+<tbody>
+<tr><td><em>Still</em></td><td><code>renders</code></td><td><strong>nicely</strong></td></tr>
+<tr><td>1</td><td>2</td><td>3</td></tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr><th>First Header</th><th>Second Header</th></tr>
+</thead>
+<tbody>
+<tr><td>Content Cell</td><td>Content Cell</td></tr>
+<tr><td>Content Cell</td><td>Content Cell</td></tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>git status</td><td>List all new or modified files</td></tr>
+<tr><td>git diff</td><td>Show file differences that haven't been staged</td></tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>git status</code></td><td>List all <em>new or modified</em> files</td></tr>
+<tr><td><code>git diff</code></td><td>Show file differences that <strong>haven't been</strong> staged</td></tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr><th align="left">Left-aligned</th><th align="center">Center-aligned</th><th align="right">Right-aligned</th></tr>
+</thead>
+<tbody>
+<tr><td align="left">git status</td><td align="center">git status</td><td align="right">git status</td></tr>
+<tr><td align="left">git diff</td><td align="center">git diff</td><td align="right">git diff</td></tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr><th>Name</th><th>Character</th></tr>
+</thead>
+<tbody>
+<tr><td>Backtick</td><td>`</td></tr>
+<tr><td>Pipe</td><td>|</td></tr>
+</tbody>
+</table>
+<hr />
+<h1 id="blockquotes">Blockquotes</h1>
+<pre><code>&gt; Blockquotes are very handy in email to emulate reply text.
+&gt; This line is part of the same quote.
+
+Quote break.
+
+&gt; This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote.
+
+&gt; Blockquotes can also be nested...
+&gt;&gt; ...by using additional greater-than signs right next to each other...
+&gt; &gt; &gt; ...or with spaces between arrows.
+</code></pre>
+<blockquote>
+<p>Blockquotes are very handy in email to emulate reply text.
+This line is part of the same quote.</p>
+</blockquote>
+<p>Quote break.</p>
+<blockquote>
+<p>This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can <em>put</em> <strong>Markdown</strong> into a blockquote.</p>
+</blockquote>
+<blockquote>
+<p>Blockquotes can also be nested...</p>
+<blockquote>
+<p>...by using additional greater-than signs right next to each other...</p>
+<blockquote>
+<p>...or with spaces between arrows.</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<hr />
+<h1 id="inline-html">Inline HTML</h1>
+<pre><code>&lt;dl&gt;
+  &lt;dt&gt;Definition list&lt;/dt&gt;
+  &lt;dd&gt;Is something people use sometimes.&lt;/dd&gt;
+
+  &lt;dt&gt;Markdown in HTML&lt;/dt&gt;
+  &lt;dd&gt;Does *not* work **very** well. Use HTML &lt;em&gt;tags&lt;/em&gt;.&lt;/dd&gt;
+&lt;/dl&gt;
+</code></pre>
+<dl>
+  <dt>Definition list</dt>
+  <dd>Is something people use sometimes.</dd>
+  <dt>Markdown in HTML</dt>
+  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
+</dl>
+<hr />
+<h1 id="horizontal-rules">Horizontal Rules</h1>
+<pre><code>Three or more...
+
+---
+
+Hyphens
+
+***
+
+Asterisks
+
+___
+
+Underscores
+</code></pre>
+<p>Three or more...</p>
+<hr />
+<p>Hyphens</p>
+<hr />
+<p>Asterisks</p>
+<hr />
+<p>Underscores</p>
+<hr />
+<h1 id="youtube-videos">YouTube Videos</h1>
+<pre><code>&lt;a href=&quot;http://www.youtube.com/watch?feature=player_embedded&amp;v=YOUTUBE_VIDEO_ID_HERE&quot; target=&quot;_blank&quot;&gt;
+&lt;img src=&quot;http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg&quot; alt=&quot;IMAGE ALT TEXT HERE&quot; width=&quot;240&quot; height=&quot;180&quot; border=&quot;10&quot;&gt;
+&lt;/a&gt;
+</code></pre>
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE" target="_blank">
+<img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10">
+</a>
+<pre><code>[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
+</code></pre>
+<p><a href="https://www.youtube.com/watch?v=ciawICBvQoE"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/YouTube_logo_2015.svg/1200px-YouTube_logo_2015.svg.png" alt="IMAGE ALT TEXT HERE" /></a></p>
+<div class="tabs is-loading">
+<div class="tablist"><ul role="tablist"><li id="tab-mermaid-1780401930394-270" class="tab" role="tab" aria-controls="panel-mermaid-1780401930394-270" aria-selected="true" tabindex="0">Mermaid</li><li id="tab-plantuml-1780401930394-954" class="tab" role="tab" aria-controls="panel-plantuml-1780401930394-954" aria-selected="false" tabindex="-1">Plantuml</li></ul></div>
+<div id="panel-mermaid-1780401930394-270" class="tabpanel" aria-labelledby="tab-mermaid-1780401930394-270" role="tabpanel">
+<div class="docops-media-card" data-original-content="%%{init: {
+  &quot;theme&quot;: &quot;base&quot;,
+  &quot;themeVariables&quot;: {
+    &quot;fontFamily&quot;: &quot;SF Pro Text, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif&quot;,
+    &quot;fontSize&quot;: &quot;16px&quot;,
+    &quot;primaryColor&quot;: &quot;#EEF4FF&quot;,
+    &quot;primaryTextColor&quot;: &quot;#0F172A&quot;,
+    &quot;primaryBorderColor&quot;: &quot;#A8C7FF&quot;,
+    &quot;lineColor&quot;: &quot;#007AFF&quot;,
+    &quot;secondaryColor&quot;: &quot;#F8FAFF&quot;,
+    &quot;secondaryTextColor&quot;: &quot;#1E293B&quot;,
+    &quot;tertiaryColor&quot;: &quot;#FFF7E6&quot;,
+    &quot;tertiaryTextColor&quot;: &quot;#3B2F00&quot;,
+    &quot;actorBkg&quot;: &quot;#FFFFFF&quot;,
+    &quot;actorBorder&quot;: &quot;#D7DFEA&quot;,
+    &quot;actorTextColor&quot;: &quot;#0F172A&quot;,
+    &quot;actorLineColor&quot;: &quot;#C9D6EA&quot;,
+    &quot;signalColor&quot;: &quot;#007AFF&quot;,
+    &quot;signalTextColor&quot;: &quot;#0F172A&quot;,
+    &quot;labelBoxBkgColor&quot;: &quot;#FFFFFF&quot;,
+    &quot;labelBoxBorderColor&quot;: &quot;#D7DFEA&quot;,
+    &quot;labelTextColor&quot;: &quot;#0F172A&quot;,
+    &quot;loopTextColor&quot;: &quot;#0F172A&quot;,
+    &quot;noteBkgColor&quot;: &quot;#FFFBEA&quot;,
+    &quot;noteBorderColor&quot;: &quot;#F4D35E&quot;,
+    &quot;noteTextColor&quot;: &quot;#3B2F00&quot;,
+    &quot;activationBorderColor&quot;: &quot;#85B4FF&quot;,
+    &quot;activationBkgColor&quot;: &quot;#EAF2FF&quot;,
+    &quot;sequenceNumberColor&quot;: &quot;#FFFFFF&quot;
+  },
+  &quot;sequence&quot;: {
+    &quot;diagramMarginX&quot;: 48,
+    &quot;diagramMarginY&quot;: 28,
+    &quot;actorMargin&quot;: 56,
+    &quot;messageMargin&quot;: 26,
+    &quot;mirrorActors&quot;: false,
+    &quot;showSequenceNumbers&quot;: true
+  }
+}}%%
+gitGraph:
+    commit &quot;Ashish&quot;
+    branch newbranch
+    checkout newbranch
+    commit id:&quot;1111&quot;
+    commit tag:&quot;test&quot;
+    checkout main
+    commit type: HIGHLIGHT
+    commit
+    merge newbranch
+    commit
+    branch b2
+    commit">
+  <div class='mermaid svg-container' onclick='openModal(this);'>
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "SF Pro Text, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+    "fontSize": "16px",
+    "primaryColor": "#EEF4FF",
+    "primaryTextColor": "#0F172A",
+    "primaryBorderColor": "#A8C7FF",
+    "lineColor": "#007AFF",
+    "secondaryColor": "#F8FAFF",
+    "secondaryTextColor": "#1E293B",
+    "tertiaryColor": "#FFF7E6",
+    "tertiaryTextColor": "#3B2F00",
+    "actorBkg": "#FFFFFF",
+    "actorBorder": "#D7DFEA",
+    "actorTextColor": "#0F172A",
+    "actorLineColor": "#C9D6EA",
+    "signalColor": "#007AFF",
+    "signalTextColor": "#0F172A",
+    "labelBoxBkgColor": "#FFFFFF",
+    "labelBoxBorderColor": "#D7DFEA",
+    "labelTextColor": "#0F172A",
+    "loopTextColor": "#0F172A",
+    "noteBkgColor": "#FFFBEA",
+    "noteBorderColor": "#F4D35E",
+    "noteTextColor": "#3B2F00",
+    "activationBorderColor": "#85B4FF",
+    "activationBkgColor": "#EAF2FF",
+    "sequenceNumberColor": "#FFFFFF"
+  },
+  "sequence": {
+    "diagramMarginX": 48,
+    "diagramMarginY": 28,
+    "actorMargin": 56,
+    "messageMargin": 26,
+    "mirrorActors": false,
+    "showSequenceNumbers": true
+  }
+}}%%
+gitGraph:
+    commit "Ashish"
+    branch newbranch
+    checkout newbranch
+    commit id:"1111"
+    commit tag:"test"
+    checkout main
+    commit type: HIGHLIGHT
+    commit
+    merge newbranch
+    commit
+    branch b2
+    commit
+  </div>
+  <div class="docops-control-bar">
+    <button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+    <button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+    <button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+    <button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+  </div>
+  <div class="docops-source-panel" style="display: none;">
+    <div class="docops-source-header">
+      <span>Original Source</span>
+      <button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+    </div>
+    <div class="docops-source-container"></div>
+  </div>
+</div>
+</div>
+<div id="panel-plantuml-1780401930394-954" class="tabpanel is-hidden" aria-labelledby="tab-plantuml-1780401930394-954" role="tabpanel" hidden="">
+<div class="docops-media-card">
+<script type="text/plain" class="docops-source-raw">
+@startuml
+&#39; iOS PlantUML Theme — Light
+!$ACCENT  = &quot;#007AFF&quot;
+!$SUCCESS = &quot;#34C759&quot;
+!$WARNING = &quot;#FF9F0A&quot;
+!$DANGER  = &quot;#FF3B30&quot;
+
+skinparam backgroundColor #F3F6FB
+skinparam shadowing true
+skinparam roundcorner 20
+skinparam dpi 160
+skinparam defaultFontName Helvetica
+skinparam titleFontColor #1e1e1e
+skinparam actorStyle awesome
+
+skinparam ArrowColor $ACCENT
+skinparam ArrowThickness 1.5
+skinparam HyperlinkColor $ACCENT
+
+skinparam note {
+BackgroundColor #FFF7E8
+BorderColor $WARNING
+FontColor #3B2F00
+FontName Helvetica
+RoundCorner 14
+}
+
+skinparam activity {
+FontName Helvetica
+FontColor #0F172A
+FontSize 15
+StartColor $SUCCESS
+EndColor $DANGER
+BackgroundColor #FFFFFF
+BorderColor #D7DFEA
+ArrowColor $ACCENT
+DiamondBackgroundColor #EEF4FF
+DiamondBorderColor #A8C7FF
+DiamondFontColor #0F172A
+}
+
+skinparam sequence {
+ParticipantBackgroundColor #FFFFFF
+ParticipantBorderColor #D7DFEA
+ParticipantFontColor #0F172A
+LifeLineBackgroundColor #F8FAFF
+LifeLineBorderColor #C9D6EA
+ArrowColor $ACCENT
+ArrowFontColor #0F172A
+GroupBackgroundColor #FFFFFF
+GroupBorderColor #D7DFEA
+GroupHeaderFontColor #0F172A
+}
+
+skinparam class {
+BackgroundColor #FFFFFF
+BorderColor #D7DFEA
+FontColor #0F172A
+HeaderBackgroundColor #EEF4FF
+HeaderFontColor #0F172A
+AttributeFontColor #1E293B
+MethodFontColor #1E293B
+ArrowColor $ACCENT
+}
+
+skinparam component {
+BackgroundColor #FFFFFF
+BorderColor #D7DFEA
+FontColor #0F172A
+ArrowColor $ACCENT
+}
+
+skinparam usecase {
+BackgroundColor #FFFFFF
+BorderColor #D7DFEA
+FontColor #0F172A
+ArrowColor $ACCENT
+}
+
+skinparam state {
+BackgroundColor #FFFFFF
+BorderColor #D7DFEA
+FontColor #0F172A
+StartColor $SUCCESS
+EndColor $DANGER
+ArrowColor $ACCENT
+}
+
+skinparam package {
+BackgroundColor #F8FAFF
+BorderColor #C9D6EA
+FontColor #0F172A
+}
+
+skinparam actor {
+BackgroundColor  #FFFFFF
+BorderColor      #007AFF
+FontColor        #000000
+FontSize         13
+}
+
+title Publish(er) Jobs Workers (Successful Block Copy)
+
+&#39;participant &quot;WebUI&quot; as W
+participant &quot;Orchestra&quot; as O
+participant &quot;Storage&quot; as S
+&#39;participant &quot;Transform&quot; as T
+participant &quot;Publisher&quot; as P
+
+activate O
+P -&gt; P: Startup (celeryd -Q queue_name)
+activate P
+
+P -&gt; O: &lt;&lt; get next publish job from queue &gt;&gt;
+O --&gt; P: &lt;&lt; next publish job is ... &gt;&gt;
+
+note right: &lt;b&gt;concurrency_value&lt;/b&gt; jobs can be threated\nsimultaneously (multithreading)
+P -&gt; P: Launch new block copy
+P -&gt; S: &lt;&lt; read media from medias path &gt;&gt;
+activate S
+S --&gt; P: &lt;&lt; read block 1/N from media &gt;&gt;
+P --&gt; P: &lt;&lt; write block 1/N to local web path &gt;&gt;
+P --&gt; O: &lt;&lt; update job status &amp; statistics ... &gt;&gt;
+S --&gt; P: &lt;&lt; read block 2/N from media &gt;&gt;
+P --&gt; P: &lt;&lt; write block 2/N to local web path &gt;&gt;
+S --&gt; P: &lt;&lt; read block N/N from media &gt;&gt;
+P --&gt; P: &lt;&lt; write block N/N to local web path &gt;&gt;
+S --&gt; P: &lt;&lt; end of file &gt;&gt;
+deactivate S
+P --&gt; O: &lt;&lt; update job status &amp; statistics ... &gt;&gt;
+P -&gt; O: POST /publish/callback\n  {&quot;job_id&quot;: &quot;&lt;uuid_of_job&gt;&quot;, &quot;publish_uri&quot;: &quot;...&quot;, &quot;status&quot;: &quot;SUCCESS&quot;}
+activate O
+O -&gt; O: Set media status=PUBLISHED + publish_uris[job_id]=publish_uri into MongoDB
+O --&gt; P: &lt;b&gt;OK 200&lt;/b&gt; {&quot;status&quot;: 200, value=&quot;Your work is much appreciated, thanks !&quot;}
+
+deactivate P
+deactivate O
+
+@enduml
+</script>
+<div class="plantuml svg-container" onclick="openModal(this);">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="1171.6667px" preserveAspectRatio="none" style="width:1746px;height:1171px;background:#F3F6FB;" version="1.1" viewBox="0 0 1746 1171" width="1746.6667px" zoomAndPan="magnify"><title>Publish(er) Jobs Workers (Successful Block Copy)</title><defs><filter height="300%" id="fi5nzfba8clxr" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="3.3333"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="6.6667" dy="6.6667" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><rect fill="#F3F6FB" height="1171.6667" style="stroke:none;stroke-width:1.6667;" width="1746.6667" x="0" y="0"/><text fill="#1E1E1E" font-family="Helvetica" font-size="23.3333" font-weight="bold" lengthAdjust="spacing" textLength="562.723" x="584.7807" y="42.9671">Publish(er) Jobs Workers (Successful Block Copy)</text><g><title>Orchestra</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="955" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="65.3849" y="136.6667"/></g><g><title>Orchestra</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="111.6667" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="73.7183" y="965"/></g><g><title>Storage</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="425" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="906.5096" y="428.3333"/></g><g><title>Publisher</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="895" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="1260.7471" y="181.6667"/></g><g class="participant-lifeline" data-entity-uid="part1" data-qualified-name="O" id="part1-lifeline"><g><title>Orchestra</title><rect fill="#000000" fill-opacity="0.00000" height="986.6667" width="13.3333" x="67.0516" y="120"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="73.3333" x2="73.3333" y1="120" y2="1106.6667"/></g></g><g class="participant-lifeline" data-entity-uid="part2" data-qualified-name="S" id="part2-lifeline"><g><title>Storage</title><rect fill="#000000" fill-opacity="0.00000" height="986.6667" width="13.3333" x="908.1763" y="120"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="914.8145" x2="914.8145" y1="120" y2="1106.6667"/></g></g><g class="participant-lifeline" data-entity-uid="part3" data-qualified-name="P" id="part3-lifeline"><g><title>Publisher</title><rect fill="#000000" fill-opacity="0.00000" height="986.6667" width="13.3333" x="1262.4137" y="120"/><line style="stroke:#C9D6EA;stroke-width:0.8333;stroke-dasharray:8.3333,8.3333;" x1="1267.9427" x2="1267.9427" y1="120" y2="1106.6667"/></g></g><g class="participant participant-head" data-entity-uid="part1" data-qualified-name="O" id="part1-head"><rect fill="#FFFFFF" filter="url(#fi5nzfba8clxr)" height="46.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="125.7699" x="8.3333" y="66.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="102.4365" x="20" y="96.3005">Orchestra</text></g><g class="participant participant-tail" data-entity-uid="part1" data-qualified-name="O" id="part1-tail"><rect fill="#FFFFFF" filter="url(#fi5nzfba8clxr)" height="46.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="125.7699" x="8.3333" y="1105"/><text fill="#0F172A" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="102.4365" x="20" y="1134.6338">Orchestra</text></g><g class="participant participant-head" data-entity-uid="part2" data-qualified-name="S" id="part2-head"><rect fill="#FFFFFF" filter="url(#fi5nzfba8clxr)" height="46.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="105.057" x="859.8145" y="66.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="81.7236" x="871.4811" y="96.3005">Storage</text></g><g class="participant participant-tail" data-entity-uid="part2" data-qualified-name="S" id="part2-tail"><rect fill="#FFFFFF" filter="url(#fi5nzfba8clxr)" height="46.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="105.057" x="859.8145" y="1105"/><text fill="#0F172A" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="81.7236" x="871.4811" y="1134.6338">Storage</text></g><g class="participant participant-head" data-entity-uid="part3" data-qualified-name="P" id="part3-head"><rect fill="#FFFFFF" filter="url(#fi5nzfba8clxr)" height="46.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="120.6087" x="1206.276" y="66.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="97.2754" x="1217.9427" y="96.3005">Publisher</text></g><g class="participant participant-tail" data-entity-uid="part3" data-qualified-name="P" id="part3-tail"><rect fill="#FFFFFF" filter="url(#fi5nzfba8clxr)" height="46.6667" rx="16.6667" ry="16.6667" style="stroke:#D7DFEA;stroke-width:0.8333;" width="120.6087" x="1206.276" y="1105"/><text fill="#0F172A" font-family="Helvetica" font-size="23.3333" lengthAdjust="spacing" textLength="97.2754" x="1217.9427" y="1134.6338">Publisher</text></g><g><title>Orchestra</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="955" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="65.3849" y="136.6667"/></g><g><title>Orchestra</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="111.6667" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="73.7183" y="965"/></g><g><title>Storage</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="425" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="906.5096" y="428.3333"/></g><g><title>Publisher</title><rect fill="#F8FAFF" filter="url(#fi5nzfba8clxr)" height="895" style="stroke:#181818;stroke-width:1.6667;" width="16.6667" x="1260.7471" y="181.6667"/></g><g class="message" data-entity-1="part3" data-entity-2="part3" id="msg1"><line style="stroke:#007AFF;stroke-width:2.5;" x1="1269.0804" x2="1347.4137" y1="160" y2="160"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="1347.4137" x2="1347.4137" y1="160" y2="181.6667"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="1279.0804" x2="1347.4137" y1="181.6667" y2="181.6667"/><polygon fill="#007AFF" points="1295.7471,175,1279.0804,181.6667,1295.7471,188.3333,1289.0804,181.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="322.7572" x="1289.0804" y="151.6838">Startup (celeryd -Q queue_name)</text></g><g class="message" data-entity-1="part3" data-entity-2="part1" id="msg2"><polygon fill="#007AFF" points="100.3849,228.3333,83.7183,235,100.3849,241.6667,93.7183,235" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="90.3849" x2="1259.0804" y1="235" y2="235"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="326.4282" x="110.3849" y="226.6838">&#171;get next publish job from queue&#187;</text></g><g class="message" data-entity-1="part1" data-entity-2="part3" id="msg3"><polygon fill="#007AFF" points="1240.7471,291.6667,1257.4137,298.3333,1240.7471,305,1247.4137,298.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="82.0516" x2="1250.7471" y1="298.3333" y2="298.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="220.4118" x="93.7183" y="290.0171">&#171;next publish job is ...&#187;</text></g><path d="M1285,273.3333 L1285,300 A16.6667,16.6667 0 0 0 1301.6667,316.6667 L1701.6667,316.6667 A16.6667,16.6667 0 0 0 1718.3333,300 L1718.3333,273.3333 L1701.6667,256.6667 L1301.6667,256.6667 A16.6667,16.6667 0 0 0 1285,273.3333" fill="#FFF7E8" filter="url(#fi5nzfba8clxr)" style="stroke:#FF9F0A;stroke-width:0.8333;"/><path d="M1701.6667,256.6667 L1701.6667,265 A8.3333,8.3333 0 0 0 1710,273.3333 L1718.3333,273.3333 L1701.6667,256.6667" fill="#FFF7E8" style="stroke:#FF9F0A;stroke-width:0.8333;"/><text fill="#3B2F00" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="197.5073" x="1295" y="281.6838">concurrency_value</text><text fill="#3B2F00" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="196.3436" x="1498.527" y="281.6838">jobs can be threated</text><text fill="#3B2F00" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="299.8527" x="1295" y="303.3504">simultaneously (multithreading)</text><g class="message" data-entity-1="part3" data-entity-2="part3" id="msg5"><line style="stroke:#007AFF;stroke-width:2.5;" x1="1277.4137" x2="1347.4137" y1="361.6667" y2="361.6667"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="1347.4137" x2="1347.4137" y1="361.6667" y2="383.3333"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="1279.0804" x2="1347.4137" y1="383.3333" y2="383.3333"/><polygon fill="#007AFF" points="1295.7471,376.6667,1279.0804,383.3333,1295.7471,390,1289.0804,383.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="225.236" x="1289.0804" y="353.3504">Launch new block copy</text></g><g class="message" data-entity-1="part3" data-entity-2="part2" id="msg6"><polygon fill="#007AFF" points="941.5096,421.6667,924.8429,428.3333,941.5096,435,934.8429,428.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="931.5096" x2="1259.0804" y1="428.3333" y2="428.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="305.9041" x="951.5096" y="420.0171">&#171;read media from medias path&#187;</text></g><g class="message" data-entity-1="part2" data-entity-2="part3" id="msg7"><polygon fill="#007AFF" points="1240.7471,466.6667,1257.4137,473.3333,1240.7471,480,1247.4137,473.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="923.1763" x2="1250.7471" y1="473.3333" y2="473.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="278.186" x="934.8429" y="465.0171">&#171;read block 1/N from media&#187;</text></g><g class="message" data-entity-1="part3" data-entity-2="part3" id="msg8"><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1277.4137" x2="1347.4137" y1="518.3333" y2="518.3333"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1347.4137" x2="1347.4137" y1="518.3333" y2="540"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1279.0804" x2="1347.4137" y1="540" y2="540"/><polygon fill="#007AFF" points="1295.7471,533.3333,1279.0804,540,1295.7471,546.6667,1289.0804,540" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="334.8071" x="1289.0804" y="510.0171">&#171;write block 1/N to local web path&#187;</text></g><g class="message" data-entity-1="part3" data-entity-2="part1" id="msg9"><polygon fill="#007AFF" points="100.3849,578.3333,83.7183,585,100.3849,591.6667,93.7183,585" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="90.3849" x2="1259.0804" y1="585" y2="585"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="322.7677" x="110.3849" y="576.6838">&#171;update job status &amp; statistics ...&#187;</text></g><g class="message" data-entity-1="part2" data-entity-2="part3" id="msg10"><polygon fill="#007AFF" points="1240.7471,623.3333,1257.4137,630,1240.7471,636.6667,1247.4137,630" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="923.1763" x2="1250.7471" y1="630" y2="630"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="278.186" x="934.8429" y="621.6838">&#171;read block 2/N from media&#187;</text></g><g class="message" data-entity-1="part3" data-entity-2="part3" id="msg11"><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1277.4137" x2="1347.4137" y1="675" y2="675"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1347.4137" x2="1347.4137" y1="675" y2="696.6667"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1279.0804" x2="1347.4137" y1="696.6667" y2="696.6667"/><polygon fill="#007AFF" points="1295.7471,690,1279.0804,696.6667,1295.7471,703.3333,1289.0804,696.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="334.8071" x="1289.0804" y="666.6838">&#171;write block 2/N to local web path&#187;</text></g><g class="message" data-entity-1="part2" data-entity-2="part3" id="msg12"><polygon fill="#007AFF" points="1240.7471,735,1257.4137,741.6667,1240.7471,748.3333,1247.4137,741.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="923.1763" x2="1250.7471" y1="741.6667" y2="741.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="281.783" x="934.8429" y="733.3504">&#171;read block N/N from media&#187;</text></g><g class="message" data-entity-1="part3" data-entity-2="part3" id="msg13"><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1277.4137" x2="1347.4137" y1="786.6667" y2="786.6667"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1347.4137" x2="1347.4137" y1="786.6667" y2="808.3333"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="1279.0804" x2="1347.4137" y1="808.3333" y2="808.3333"/><polygon fill="#007AFF" points="1295.7471,801.6667,1279.0804,808.3333,1295.7471,815,1289.0804,808.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="338.4041" x="1289.0804" y="778.3504">&#171;write block N/N to local web path&#187;</text></g><g class="message" data-entity-1="part2" data-entity-2="part3" id="msg14"><polygon fill="#007AFF" points="1240.7471,846.6667,1257.4137,853.3333,1240.7471,860,1247.4137,853.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="914.8429" x2="1250.7471" y1="853.3333" y2="853.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="118.0558" x="926.5096" y="845.0171">&#171;end of file&#187;</text></g><g class="message" data-entity-1="part3" data-entity-2="part1" id="msg15"><polygon fill="#007AFF" points="100.3849,891.6667,83.7183,898.3333,100.3849,905,93.7183,898.3333" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="90.3849" x2="1259.0804" y1="898.3333" y2="898.3333"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="322.7677" x="110.3849" y="890.0171">&#171;update job status &amp; statistics ...&#187;</text></g><g class="message" data-entity-1="part3" data-entity-2="part1" id="msg16"><polygon fill="#007AFF" points="108.7183,958.3333,92.0516,965,108.7183,971.6667,102.0516,965" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="98.7183" x2="1259.0804" y1="965" y2="965"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="223.9876" x="118.7183" y="935.0171">POST /publish/callback</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="647.5456" x="130.7576" y="956.6838">{"job_id": "&lt;uuid_of_job&gt;", "publish_uri": "...", "status": "SUCCESS"}</text></g><g class="message" data-entity-1="part1" data-entity-2="part1" id="msg17"><line style="stroke:#007AFF;stroke-width:2.5;" x1="90.3849" x2="160.3849" y1="1010" y2="1010"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="160.3849" x2="160.3849" y1="1010" y2="1031.6667"/><line style="stroke:#007AFF;stroke-width:2.5;" x1="92.0516" x2="160.3849" y1="1031.6667" y2="1031.6667"/><polygon fill="#007AFF" points="108.7183,1025,92.0516,1031.6667,108.7183,1038.3333,102.0516,1031.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="767.7913" x="102.0516" y="1001.6838">Set media status=PUBLISHED + publish_uris[job_id]=publish_uri into MongoDB</text></g><g class="message" data-entity-1="part1" data-entity-2="part3" id="msg18"><polygon fill="#007AFF" points="1249.0804,1070,1265.7471,1076.6667,1249.0804,1083.3333,1255.7471,1076.6667" style="stroke:#007AFF;stroke-width:1.6667;"/><line style="stroke:#007AFF;stroke-width:2.5;stroke-dasharray:3.3333,3.3333;" x1="82.0516" x2="1259.0804" y1="1076.6667" y2="1076.6667"/><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" font-weight="bold" lengthAdjust="spacing" textLength="74.6696" x="93.7183" y="1068.3504">OK 200</text><text fill="#0F172A" font-family="Helvetica" font-size="21.6667" lengthAdjust="spacing" textLength="613.0884" x="174.4076" y="1068.3504">{"status": 200, value="Your work is much appreciated, thanks !"}</text></g></g></svg>
+</div>
+<div class="docops-control-bar">
+<button class="docops-btn" onclick="openModal(this.closest('.docops-media-card').querySelector('.svg-container'))" title="View Large">VIEW</button>
+<button class="docops-btn" onclick="docopsCopy.svg(this)" title="Copy SVG Source">SVG</button>
+<button class="docops-btn" onclick="docopsCopy.png(this)" title="Copy as PNG">PNG</button>
+<button class="docops-btn" onclick="docopsSource.toggle(this)" title="View Original Source">SOURCE</button>
+</div>
+<div class="docops-source-panel" style="display: none;">
+<div class="docops-source-header">
+<span>Original Source</span>
+<button class="docops-btn-close" onclick="this.closest('.docops-source-panel').style.display='none'">×</button>
+</div>
+<div class="docops-source-container"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>Footnote <strong>can have markup</strong></p>
+<p>and multiple paragraphs.</p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+<li id="fn-2">
+<p>Footnote text.</p>
+<a href="#fnref-2" class="footnote-backref">&#8617;</a>
+<a href="#fnref-2-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+
+                    </article>
+                    
+                    <!-- Global Shared Modal for Markdown View -->
+                    <div class="svg-modal-overlay" id="globalSvgModal" onclick="if(event.target === this) closeGlobalModal()">
+                        <div class="svg-modal-content">
+                            <button class="svg-modal-close" onclick="closeGlobalModal()">×</button>
+                            <div id="globalModalBody" class="svg-modal-body"></div>
+                        </div>
+                    </div>
+
+                    <!-- Global Shared Modal for Data View -->
+                        <div class="svg-modal-overlay" id="globalCsvModal" onclick="if(event.target === this) closeGlobalCsvModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalCsvModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
+                                </div>
+                                <div id="globalCsvModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Global Shared Modal for Source View -->
+                        <div class="svg-modal-overlay" id="globalSourceModal" onclick="if(event.target === this) closeGlobalSourceModal()">
+                            <div class="svg-modal-content">
+                                <button class="svg-modal-close" onclick="closeGlobalSourceModal()">×</button>
+                                <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                                    <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
+                                </div>
+                                <div id="globalSourceModalBody" class="svg-modal-body" style="display: block; overflow: auto;"></div>
+                            </div>
+                        </div>
+
+                    <script>
+                            // Unified Modal Logic for Markdown
+                            function openModal(container) {
+                                const modal = document.getElementById('globalSvgModal');
+                                const targetContainer = document.getElementById('globalModalBody');
+                            
+                                // Find SVG in the container passed from the button
+                                const sourceSvg = container.querySelector ? container.querySelector('svg') : container; 
+                            
+                                if (sourceSvg && targetContainer) {
+                                    targetContainer.innerHTML = '';
+                                    const clone = sourceSvg.cloneNode(true);
+                                
+                                    // Reset dimensions to allow CSS to control scaling
+                                    clone.removeAttribute('width');
+                                    clone.removeAttribute('height');
+                                    clone.style.width = '100%';
+                                    clone.style.height = '100%';
+                                
+                                    targetContainer.appendChild(clone);
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                }
+                            }
+
+                            function closeGlobalModal() {
+                                const modal = document.getElementById('globalSvgModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                        
+                            function closeGlobalCsvModal() {
+                                const modal = document.getElementById('globalCsvModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+                            
+                            function closeGlobalSourceModal() {
+                                const modal = document.getElementById('globalSourceModal');
+                                if (modal) {
+                                    modal.classList.remove('active');
+                                    document.body.style.overflow = '';
+                                }
+                            }
+
+                            // Close modals with Escape key
+                            document.addEventListener('keydown', function(event) {
+                                if (event.key === 'Escape') {
+                                    closeGlobalModal();
+                                    closeGlobalCsvModal();
+                                    closeGlobalSourceModal();
+                                }
+                            });
+                        
+                            const docopsData = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const svg = container.querySelector('.svg-container svg') || container.querySelector('svg');
+                                
+                                    if (!svg) return;
+                                
+                                    let csvData = null;
+                                
+                                    // Method 1: Standard metadata with type
+                                    let csvMetadata = svg.querySelector('metadata[type="text/csv"]');
+                                    if (csvMetadata) {
+                                        try {
+                                            csvData = JSON.parse(csvMetadata.textContent.trim());
+                                        } catch(e) { console.error("Error parsing CSV JSON", e); }
+                                    }
+
+                                    // Method 2: Custom csv-data element
+                                    if (!csvData) {
+                                        csvMetadata = svg.querySelector('metadata csv-data');
+                                        if (csvMetadata) {
+                                            try {
+                                                csvData = JSON.parse(csvMetadata.textContent.trim());
+                                            } catch(e) {}
+                                        }
+                                    }
+
+                                    // Method 3: Data attribute
+                                    if (!csvData) {
+                                        const csvDataAttr = svg.getAttribute('data-csv');
+                                        if (csvDataAttr) {
+                                            try {
+                                                csvData = JSON.parse(decodeURIComponent(csvDataAttr));
+                                            } catch(e) {}
+                                        }
+                                    }
+                                
+                                    if (csvData) {
+                                        const modal = document.getElementById('globalCsvModal');
+                                        const body = document.getElementById('globalCsvModalBody');
+                                    
+                                        let html = '<table class="csv-table">';
+                                         if (csvData.headers) {
+                                            html += '<thead><tr>';
+                                            csvData.headers.forEach(h => html += '<th>' + h + '</th>');
+                                            html += '</tr></thead>';
+                                        }
+                                        if (csvData.rows) {
+                                            html += '<tbody>';
+                                            csvData.rows.forEach(row => {
+                                                html += '<tr>';
+                                                row.forEach(cell => html += '<td>' + cell + '</td>');
+                                                html += '</tr>';
+                                            });
+                                            html += '</tbody>';
+                                        }
+                                        html += '</table>';
+                                    
+                                        body.innerHTML = html;
+                                        modal.classList.add('active');
+                                        document.body.style.overflow = 'hidden';
+                                    } else {
+                                        console.log("No CSV data found in SVG");
+                                    }
+                                }
+                            };
+                            
+                            const docopsSource = {
+                                toggle: function(btn) {
+                                    const container = btn.closest('.docops-media-card');
+                                    const originalContent = container.getAttribute('data-original-content');
+                                    const kind = container.getAttribute('data-kind') || 'source';
+                                    
+                                    if (!originalContent || !originalContent.trim()) {
+                                        console.log("No source content available");
+                                        return;
+                                    }
+                                    
+                                    // Decode HTML entities
+                                    const decoded = originalContent
+                                        .replace(/&quot;/g, '"')
+                                        .replace(/&amp;/g, '&')
+                                        .replace(/&lt;/g, '<')
+                                        .replace(/&gt;/g, '>');
+                                    
+                                    const modal = document.getElementById('globalSourceModal');
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    
+                                    const escapedHtml = decoded
+                                        .replace(/&/g, '&amp;')
+                                        .replace(/</g, '&lt;')
+                                        .replace(/>/g, '&gt;');
+                                    
+                                    body.innerHTML = `
+                                        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem; padding: 0 1rem;">
+                                            <button class="docops-action-btn" onclick="docopsSource.copyFromModal()">
+                                                <span style="margin-right: 6px;">📋</span> COPY
+                                            </button>
+                                        </div>
+                                        <pre style="
+                                            background: rgba(0, 0, 0, 0.4);
+                                            border: 1px solid rgba(255, 255, 255, 0.1);
+                                            border-radius: 12px;
+                                            padding: 2rem;
+                                            overflow: auto;
+                                            margin: 0 1rem 1rem 1rem;
+                                            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+                                        "><code style="
+                                            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                                            font-size: 0.85rem;
+                                            line-height: 1.7;
+                                            color: #e2e8f0;
+                                            display: block;
+                                            white-space: pre-wrap;
+                                            word-wrap: break-word;
+                                        ">${escapedHtml}</code></pre>
+                                    `;
+                                    
+                                    // Store decoded content for copying
+                                    body.dataset.sourceContent = decoded;
+                                    
+                                    modal.classList.add('active');
+                                    document.body.style.overflow = 'hidden';
+                                },
+                                
+                                copyFromModal: function() {
+                                    const body = document.getElementById('globalSourceModalBody');
+                                    const content = body.dataset.sourceContent;
+                                    
+                                    if (content) {
+                                        navigator.clipboard.writeText(content).then(() => {
+                                            const btn = document.querySelector('#globalSourceModal .docops-action-btn');
+                                            if (btn) {
+                                                const originalHtml = btn.innerHTML;
+                                                btn.innerHTML = '<span style="margin-right: 6px;">✓</span> COPIED!';
+                                                btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                                                setTimeout(() => {
+                                                    btn.innerHTML = originalHtml;
+                                                    btn.style.background = '';
+                                                }, 2000);
+                                            }
+                                        }).catch(err => {
+                                            console.error('Copy failed:', err);
+                                        });
+                                    }
+                                }
+                            };
+                        
+                        window.docopsCopy = {
+                            url: (btn) => {
+                                    const url = btn.closest('.docops-media-card').getAttribute('data-url');
+                                    navigator.clipboard.writeText(url).then(() => {
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                },
+                            svg: (btn) => {
+                                const svg = btn.closest('.docops-media-card').querySelector('svg').outerHTML;
+                                navigator.clipboard.writeText(svg).then(() => {
+                                    const originalText = btn.innerText;
+                                    btn.innerText = 'COPIED!';
+                                    setTimeout(() => btn.innerText = originalText, 2000);
+                                });
+                            },
+                            png: (btn) => {
+                                const svgElement = btn.closest('.docops-media-card').querySelector('svg');
+                                const svgData = new XMLSerializer().serializeToString(svgElement);
+                                const canvas = document.createElement('canvas');
+                                const ctx = canvas.getContext('2d');
+                                const img = new Image();
+                            
+                                img.onload = () => {
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    ctx.drawImage(img, 0, 0);
+                                    canvas.toBlob(blob => {
+                                        const item = new ClipboardItem({ "image/png": blob });
+                                        navigator.clipboard.write([item]);
+                                        const originalText = btn.innerText;
+                                        btn.innerText = 'COPIED!';
+                                        setTimeout(() => btn.innerText = originalText, 2000);
+                                    });
+                                };
+                                img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                            },
+                            print: (btn) => {
+                                const card = btn.closest('.docops-media-card');
+                                const svgElement = card.querySelector('svg');
+                                if (!svgElement) return;
+
+                                const svgClone = svgElement.cloneNode(true);
+                                // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+                                const allElements = svgClone.querySelectorAll('*');
+                                allElements.forEach(el => {
+                                    el.style.opacity = '1';
+                                    el.style.animation = 'none';
+                                    el.style.transition = 'none';
+                                    el.style.visibility = 'visible';
+                                });
+                                svgClone.style.opacity = '1';
+                                svgClone.style.animation = 'none';
+                                svgClone.style.transition = 'none';
+                                // Remove SVG animation elements
+                                svgClone.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+
+                                const svgData = new XMLSerializer().serializeToString(svgClone);
+                                const printWindow = window.open('', '_blank');
+                                printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+                                printWindow.document.write(svgData);
+                                printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script></body></html>');
+                                printWindow.document.close();
+                            }
+                        };
+                    
+                    </script>
+                    <script>
+                        mermaid.initialize({ 
+                            startOnLoad: true,
+                            theme: 'base',
+                            themeVariables: {
+    'primaryColor': '#FFFFFF',
+    'primaryTextColor': '#0F172A',
+    'primaryBorderColor': '#D7DFEA',
+    'lineColor': '#007AFF',
+    'secondaryColor': '#EEF4FF',
+    'tertiaryColor': '#F3F6FB',
+    'mainBkg': '#F3F6FB',
+    'fontFamily': 'Helvetica, sans-serif',
+    'fontSize': '15px',
+    'clusterBkg': '#F8FAFF',
+    'clusterBorder': '#C9D6EA',
+    'nodeBorder': '#D7DFEA',
+    'edgeLabelBackground': '#F3F6FB',
+    'rectRadius': '20',
+    'clusterRadius': '20'
+}
+                        });
+                        mermaid.registerIconPacks([
+                          {
+                            name: 'logos',
+                            loader: () =>
+                              fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then((res) => res.json()),
+                          },
+                        ]);
+                    </script>
+                    <script>
+                    (() => {
+    let divs = document.getElementsByClassName("adm-block");
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        if (div.classList.contains("adm-collapsed") || div.classList.contains("adm-open")) {
+            let headings = div.getElementsByClassName("adm-heading");
+            if (headings.length > 0) {
+                headings[0].addEventListener("click", event => {
+                    let el = div;
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    if (el.classList.contains("adm-collapsed")) {
+                        console.debug("Admonition Open", event.srcElement);
+                        el.classList.remove("adm-collapsed");
+                        el.classList.add("adm-open");
+                    } else {
+                        console.debug("Admonition Collapse", event.srcElement);
+                        el.classList.add("adm-collapsed");
+                        el.classList.remove("adm-open");
+                    }
+                });
+            }
+        }
+    }
+})();
+                    ;(function () { /*! Asciidoctor Tabs | Copyright (c) 2018-present Dan Allen | MIT License */
+  'use strict'
+
+  var config = (document.currentScript || {}).dataset || {}
+  var forEach = Array.prototype.forEach
+
+  init(document.querySelectorAll('.tabs'))
+
+  function init (tabsBlocks) {
+    if (!tabsBlocks.length) return
+    forEach.call(tabsBlocks, function (tabs) {
+      var syncIds = tabs.classList.contains('is-sync') ? {} : undefined
+      var tablist = tabs.querySelector('.tablist ul')
+      tablist.setAttribute('role', 'tablist')
+      var start
+      forEach.call(tablist.querySelectorAll('li'), function (tab, idx) {
+        tab.tabIndex = -1
+        tab.setAttribute('role', tab.classList.add('tab') || 'tab')
+        var id, anchor, syncId
+        if (!(id = tab.id) && (anchor = tab.querySelector('a[id]'))) {
+          id = tab.id = anchor.parentNode.removeChild(anchor).id
+        }
+        var panel = id && tabs.querySelector('.tabpanel[aria-labelledby~="' + id + '"]')
+        if (!panel) return idx ? undefined : toggleSelected(tab, true) // invalid state
+        syncIds && (((syncId = tab.textContent.trim()) in syncIds) ? (syncId = undefined) : true) &&
+          (syncIds[(tab.dataset.syncId = syncId)] = tab)
+        idx || (syncIds && (start = { tab: tab, panel: panel })) ? toggleHidden(panel, true) : toggleSelected(tab, true)
+        tab.setAttribute('aria-controls', panel.id)
+        panel.setAttribute('role', 'tabpanel')
+        var onClick = syncId === undefined ? activateTab : activateTabSync
+        tab.addEventListener('click', onClick.bind({ tabs: tabs, tab: tab, panel: panel }))
+      })
+      if (!tabs.closest('.tabpanel')) {
+        forEach.call(tabs.querySelectorAll('.tabpanel table.tableblock'), function (table) {
+          var container = Object.assign(document.createElement('div'), { className: 'tablecontainer' })
+          table.parentNode.insertBefore(container, table).appendChild(table)
+        })
+      }
+      if (start) {
+        var syncGroupId
+        for (var i = 0, lst = tabs.classList, len = lst.length, className; i !== len; i++) {
+          if (!(className = lst.item(i)).startsWith('data-sync-group-id=')) continue
+          tabs.dataset.syncGroupId = syncGroupId = lst.remove(className) || className.slice(19).replace(/\u00a0/g, ' ')
+          break
+        }
+        if (syncGroupId === undefined) tabs.dataset.syncGroupId = syncGroupId = Object.keys(syncIds).sort().join('|')
+        var preferredSyncId = 'syncStorageKey' in config &&
+          window[(config.syncStorageScope || 'local') + 'Storage'].getItem(config.syncStorageKey + '-' + syncGroupId)
+        var tab = preferredSyncId && syncIds[preferredSyncId]
+        tab && Object.assign(start, { tab: tab, panel: document.getElementById(tab.getAttribute('aria-controls')) })
+        toggleSelected(start.tab, true) || toggleHidden(start.panel, false)
+      }
+    })
+    onHashChange()
+    toggleClassOnEach(tabsBlocks, 'is-loading', 'remove')
+    window.setTimeout(toggleClassOnEach.bind(null, tabsBlocks, 'is-loaded', 'add'), 0)
+    window.addEventListener('hashchange', onHashChange)
+  }
+
+  function activateTab (e) {
+    var tab = this.tab
+    var tabs = this.tabs || (this.tabs = tab.closest('.tabs'))
+    var panel = this.panel || (this.panel = document.getElementById(tab.getAttribute('aria-controls')))
+    querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (el) {
+      toggleSelected(el, el === tab)
+    })
+    querySelectorWithSiblings(tabs, '.tabpanel', 'tabpanel').forEach(function (el) {
+      toggleHidden(el, el !== panel)
+    })
+    if (!this.isSync && 'syncStorageKey' in config && 'syncGroupId' in tabs.dataset) {
+      var storageKey = config.syncStorageKey + '-' + tabs.dataset.syncGroupId
+      window[(config.syncStorageScope || 'local') + 'Storage'].setItem(storageKey, tab.dataset.syncId)
+    }
+    if (!e) return
+    var loc = window.location
+    var hashIdx = loc.hash ? loc.href.indexOf('#') : -1
+    if (~hashIdx) window.history.replaceState(null, '', loc.href.slice(0, hashIdx))
+    e.preventDefault()
+  }
+
+  function activateTabSync (e) {
+    activateTab.call(this, e)
+    var thisTabs = this.tabs
+    var thisTab = this.tab
+    var initialY = thisTabs.getBoundingClientRect().y
+    forEach.call(document.querySelectorAll('.tabs'), function (tabs) {
+      if (tabs === thisTabs || tabs.dataset.syncGroupId !== thisTabs.dataset.syncGroupId) return
+      querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (tab) {
+        if (tab.dataset.syncId === thisTab.dataset.syncId) activateTab.call({ tabs: tabs, tab: tab, isSync: true })
+      })
+    })
+    var shiftedBy = thisTabs.getBoundingClientRect().y - initialY
+    if (shiftedBy && (shiftedBy = Math.round(shiftedBy))) window.scrollBy({ top: shiftedBy, behavior: 'instant' })
+  }
+
+  function querySelectorWithSiblings (scope, selector, siblingClass) {
+    var el = scope.querySelector(selector)
+    if (!el) return []
+    var result = [el]
+    while ((el = el.nextElementSibling) && el.classList.contains(siblingClass)) result.push(el)
+    return result
+  }
+
+  function toggleClassOnEach (elements, className, method) {
+    forEach.call(elements, function (el) {
+      el.classList[method](className)
+    })
+  }
+
+  function toggleHidden (el, state) {
+    el.classList[(el.hidden = state) ? 'add' : 'remove']('is-hidden')
+  }
+
+  function toggleSelected (el, state) {
+    el.setAttribute('aria-selected', '' + state)
+    el.classList[state ? 'add' : 'remove']('is-selected')
+    el.tabIndex = state ? 0 : -1
+  }
+
+  function onHashChange () {
+    var id = window.location.hash.slice(1)
+    if (!id) return
+    var tab = document.getElementById(~id.indexOf('%') ? decodeURIComponent(id) : id)
+    if (!(tab && tab.classList.contains('tab'))) return
+    'syncId' in tab.dataset ? activateTabSync.call({ tab: tab }) : activateTab.call({ tab: tab })
+  }
+})()
+
+                    const docopsDataX = {
+    toggle(btn) {
+        const card = btn.closest('.docops-media-card');
+        const panel = card.querySelector('.docops-data-panel');
+        if (panel.style.display === 'none') {
+            this.renderCsvTable(card, panel);
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    },
+    renderCsvTable(card, panel) {
+        const container = panel.querySelector('.docops-data-table-container');
+        const header = panel.querySelector('.docops-data-header');
+        if (container.innerHTML !== '') return;
+
+        const svg = card.querySelector('svg');
+        const metadata = svg.querySelector('metadata[type="text/csv"]');
+
+        if (!metadata || !metadata.textContent.trim()) {
+            container.innerHTML = '<div style="color:#666; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">No embedded CSV metadata found in diagram.</div>';
+            return;
+        }
+
+        try {
+            // Parse the JSON data structure embedded by DocOps
+            const csvData = JSON.parse(metadata.textContent.trim());
+
+            // Add Export Actions to Header
+            header.innerHTML = `
+                <span>Embedded Data</span>
+                <div class="docops-data-actions">
+                    <button class="docops-action-btn" onclick="docopsData.exportTab('\${card.dataset.url}', this)">Copy TAB</button>
+                    <button class="docops-action-btn" onclick="docopsData.exportExcel('\${card.dataset.url}', this)">Excel</button>
+                    <button class="docops-btn-close" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;" onclick="this.closest('.docops-data-panel').style.display='none'">×</button>
+                </div>
+            `;
+
+            if (!csvData.headers || !csvData.rows) {
+                throw new Error("Invalid format");
+            }
+
+            let html = '<table class="docops-data-table"><thead><tr>';
+            // Render Headers
+            csvData.headers.forEach(h => {
+                html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Render Rows
+            // Render Rows with Staggered Animation
+            csvData.rows.forEach((row, index) => {
+                const delay = (index * 0.05).toFixed(2);
+                html += `<tr style="animation-delay: ${delay}s">`;
+                row.forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Data parsing error:", e);
+            container.innerHTML = '<div style="color:#ef4444; padding: 10px; font-family: var(--font-mono); font-size: 0.7rem;">Error parsing embedded data structure.</div>';
+        }
+    },
+    exportTab(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const lines = [data.headers.join('\t')];
+        data.rows.forEach(row => lines.push(row.join('\t')));
+
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            const old = btn.innerText;
+            btn.innerText = 'COPIED!';
+            setTimeout(() => btn.innerText = old, 2000);
+        });
+    },
+
+    exportExcel(url, btn) {
+        const card = btn.closest('.docops-media-card');
+        const metadata = card.querySelector('metadata[type="text/csv"]');
+        const data = JSON.parse(metadata.textContent.trim());
+
+        const escapeXml = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+        const h = data.headers.map(val => `<Cell ss:StyleID="Header"><Data ss:Type="String">${escapeXml(val)}</Data></Cell>`).join("");
+        const body = data.rows.map(r =>
+                `<Row>` + r.map(v => {
+                    const isNum = typeof v === "number" || (!isNaN(v) && v !== "" && !isNaN(parseFloat(v)));
+                    return `<Cell><Data ss:Type="${isNum ? 'Number' : 'String'}">${isNum ? v : escapeXml(v)}</Data></Cell>`;
+                }).join("") + `</Row>`
+        ).join("");
+
+        const xml = "\uFEFF" + `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+                                <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+                                  <Styles><Style ss:ID="Header"><Font ss:Bold="1"/></Style></Styles>
+                                  <Worksheet ss:Name="DocOpsData"><Table><Row>${h}</Row>${body}</Table></Worksheet>
+                                </Workbook>`;
+
+        const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=UTF-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "diagram_data.xls";
+        link.click();
+    }
+
+};
+
+                    </script>
+                    <script>
+                    (function() {
+                        function reRenderMermaidInPanel(panel) {
+                            if (panel.classList.contains('is-hidden') || panel.hasAttribute('hidden')) {
+                                return;
+                            }
+                            const mermaidDivs = panel.querySelectorAll('.mermaid');
+                            mermaidDivs.forEach((div) => {
+                                const svg = div.querySelector('svg');
+                                if (svg) {
+                                    const rect = svg.getBoundingClientRect();
+                                    const vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/);
+                                    const vbWidth = vb.length === 4 ? parseFloat(vb[2]) : null;
+                                    const isShrunk = rect.width <= 16 || (vbWidth !== null && Math.abs(rect.width - vbWidth) < 1 && rect.width < panel.offsetWidth - 10);
+                                    if (isShrunk && panel.offsetWidth > 16) {
+                                        const card = div.closest('.docops-media-card');
+                                        if (card) {
+                                            const originalContent = card.getAttribute('data-original-content');
+                                            if (originalContent) {
+                                                const decoded = originalContent
+                                                    .replace(/&quot;/g, '"')
+                                                    .replace(/&amp;/g, '&')
+                                                    .replace(/&lt;/g, '<')
+                                                    .replace(/&gt;/g, '>')
+                                                    .replace(/&#39;/g, "'");
+                                                div.innerHTML = decoded;
+                                                div.removeAttribute('data-processed');
+                                                mermaid.run({ nodes: [div] });
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        const observer = new MutationObserver((mutations) => {
+                            mutations.forEach((mutation) => {
+                                if (mutation.type === 'attributes' && (mutation.attributeName === 'class' || mutation.attributeName === 'hidden')) {
+                                    const panel = mutation.target;
+                                    if (panel.classList.contains('tabpanel') && !panel.classList.contains('is-hidden') && !panel.hasAttribute('hidden')) {
+                                        setTimeout(() => reRenderMermaidInPanel(panel), 100);
+                                    }
+                                }
+                            });
+                        });
+
+                        document.querySelectorAll('.tabpanel').forEach((panel) => {
+                            observer.observe(panel, { attributes: true });
+                        });
+                        
+                        window.addEventListener('load', () => {
+                            setTimeout(() => {
+                                document.querySelectorAll('.tabpanel:not(.is-hidden):not([hidden])').forEach(reRenderMermaidInPanel);
+                            }, 500);
+                        });
+                    })();
+                    </script>
+                
+                </body>
+                </html>
