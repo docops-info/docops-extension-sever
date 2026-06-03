@@ -37,8 +37,8 @@ DocOps Charts provide a powerful suite of data visualization tools that transfor
 
 ## Bar Charts
 
-### Simple Bar Chart
-
+[tabs]
+[tab:Simple Bar Chart]
 Perfect for comparing values across categories or time periods.
 
 [docops:bar]
@@ -55,9 +55,9 @@ Apr | 244.0
 May | 256.0
 Jun | 223.0
 [/docops]
-
-**Configuration:**
-
+[/tab]
+[tab: Configuration]
+```markdown
 [docops:bar] 
 title=Berry Picking by Month 2024 
 yLabel=Number of Sales 
@@ -72,9 +72,10 @@ Apr | 244.0
 May | 256.0 
 Jun | 223.0 
 [/docops]
+```
+[/tab]
 
-### Cylinder Bar Chart
-
+[tab:Cylinder Bar Chart]
 Add visual interest with 3D cylinder-style bars.
 
 [docops:bar]
@@ -91,13 +92,8 @@ Apr | 244.0
 May | 256.0
 Jun | 223.0
 [/docops]
-
----
-
-## Grouped Bar Charts
-
-### Standard Grouped Bars
-
+[/tab]
+[tab:Grouped Bar Charts]
 Compare multiple data series across categories.
 
 [docops:bargroup]
@@ -116,9 +112,8 @@ Product B | Q2 | 8000.0
 Product B | Q3 | 7000.0
 Product B | Q4 | 9000.0
 [/docops]
-
-### Condensed Layout
-
+[/tab]
+[tab:Condensed Layout]
 Vertical grouping for compact display.
 
 [docops:bargroup]
@@ -137,9 +132,8 @@ Product B | Q2 | 8000.0
 Product B | Q3 | 7000.0
 Product B | Q4 | 9000.0
 [/docops]
-
-### Brutalist Theme
-
+[/tab]
+[tab:Brutalist Theme]
 High-contrast styling for bold impact.
 
 [docops:bargroup]
@@ -159,11 +153,16 @@ Gateway | Tokyo | 88.3
 Gateway | London | 95.0
 Gateway | New York | 91.2
 [/docops]
+[/tab]
+[/tabs]
 
----
 
-## Combination Charts
 
+
+## 
+
+[tabs]
+[tab:Combination Charts]
 Mix different chart types for multi-dimensional analysis. Perfect for showing relationships between different metrics on the same timeline.
 
 [docops:combination]
@@ -199,11 +198,13 @@ Profit Margin | LINE | Q4 2024 | 35.4 | #27ae60 | SECONDARY
 - **Mixed Chart Types** - Bars for absolute values, lines for percentages
 - **Custom Colors** - Define colors per series
 - **Grid Lines** - Optional background grid for readability
-
----
+[tab]
+[/tabs]
 
 ## Line Charts
 
+[tabs]
+[tab:Line Charts]
 Visualize trends and changes over time with smooth or angular lines.
 
 [docops:line useDark=true]
@@ -228,29 +229,15 @@ Q3 2023 | Sep | 220
 - Comparing multiple time series
 - Displaying continuous data
 
----
+[/tab]
+[/tabs]
+
+
 
 ## Pie Charts
 
-### Donut Chart (Recommended)
-
-Modern, clean donut style with better visual hierarchy.
-
-[docops:pieslice]
-legend=false
-theme=istanbul
-donut=true
----
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
-
-[/docops]
-
-### Standard Pie Chart
-
+[tabs]
+[tab:Standard Pie Chart]
 Classic pie chart with optional legend and percentages.
 
 [docops:pieslice]
@@ -268,9 +255,24 @@ Product D | 15
 Product E | 10
 
 [/docops]
+[/tab]
+[tab:Donut Chart]
+Modern, clean donut style with better visual hierarchy.
 
-### Enhanced Donut Chart
+[docops:pieslice]
+legend=false
+theme=istanbul
+donut=true
+---
+Product A | 30
+Product B | 25
+Product C | 20
+Product D | 15
+Product E | 10
 
+[/docops]
+[/tab]
+[tab:Enhanced Donut Chart]
 [docops:pieslice]
 title=Sales Distribution by Product
 width=700
@@ -286,13 +288,12 @@ Product D | 15
 Product E | 10
 
 [/docops]
-
-### Modern Visual Style
-
+[/tab]
+[tab:Modern Visual Style]
 [docops:pieslice]
 title=Sales Distribution by Product
-width=700
-height=600
+width=800
+height=800
 legend=true
 percentages=true
 donut=true
@@ -305,9 +306,8 @@ Product D | 15
 Product E | 10
 
 [/docops]
-
-### Portfolio Split Example
-
+[/tab]
+[tab:Portfolio Split Example]
 [docops:pieslice]
 title=Recommended Portfolio Split
 width=700
@@ -324,6 +324,9 @@ Bullion | 18
 Insurance | 2
 
 [/docops]
+[/tab]
+[/tabs]
+
 
 ### Multi-Pie Display
 
@@ -346,8 +349,8 @@ Electronics | 28
 
 Gauge charts are used to display a single metric or value within a range, often used for performance indicators or progress tracking.
 
-
-### Semi Circle
+[tabs]
+[tab:Semi Circle]
 
 [docops:gauge]
 type=SEMI_CIRCLE
@@ -360,9 +363,8 @@ showRanges=true
 Label | Value | Min | Max | Unit | Color
 CPU Load | 72 | 0 | 100 | % |
 [/docops]
-
-### Full Circle
-
+[/tab]
+[tab:Full Circle]
 [docops:gauge]
 type=FULL_CIRCLE
 title=System Uptime
@@ -373,9 +375,9 @@ showLabel=true
 Label | Value | Min | Max | Unit | Color
 Uptime | 85 | 0 | 100 | days | #10B981
 [/docops]
+[/tab]
 
-### Linear
-
+[tab:Linear]
 [docops:gauge]
 type=LINEAR
 title=Response Time Analysis
@@ -386,9 +388,9 @@ showRanges=true
 Label | Value | Min | Max | Unit | Color | Target
 Response Time | 68 | 0 | 100 | ms | #F59E0B | 80
 [/docops]
+[/tab]
 
-### Solid Fill
-
+[tab:Solid Fill]
 [docops:gauge]
 type=SOLID_FILL
 title=Disk Usage Monitor
@@ -398,10 +400,10 @@ innerRadius=60
 ---
 Label | Value | Min | Max | Unit | Color
 Disk Usage | 92 | 0 | 100 | % | #EF4444
-[/docops]   
+[/docops]
+[/tab]
 
-### Multi Gauge
-
+[tab:Multi Gauge]
 [docops:gauge]
 type=MULTI_GAUGE
 title=Server Fleet Status
@@ -418,9 +420,9 @@ server-04 | 90 | 0 | 100 | % | #EF4444
 server-05 | 70 | 0 | 100 | % | #10B981
 server-06 | 80 | 0 | 100 | % | #F59E0B
 [/docops]
+[/tab]
 
-### Digital
-
+[tab:Digital]
 [docops:gauge]
 type=DIGITAL
 title=Temperature Monitor
@@ -431,9 +433,9 @@ showStatus=true
 Label | Value | Min | Max | Unit | Color | StatusText
 Temperature | 43 | 0 | 100 | °C | #06B6D4 | optimal range
 [/docops]
+[/tab]
 
-### Dashboard Gauge
-
+[tab:Dashboard Gauge]
 [docops:gauge]
 type=DASHBOARD
 title=System Health Dashboard
@@ -449,6 +451,12 @@ SOLID_FILL | Disk | 92 | 0 | 100 | % | #EF4444 |
 DIGITAL | Temp | 43 | 0 | 100 | °C | #06B6D4 | status=optimal
 MULTI_GAUGE | Memory | 75 | 0 | 100 | % | #10B981 |
 [/docops]
+[/tab]
+[/tabs]
+
+
+
+
 
 ## Magic Quadrant Chart
 
