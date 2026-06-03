@@ -1,46 +1,41 @@
 # Redocly 
 
 <style>
-  html, body, #content, #header, .sect1 {
-    margin: 0 !important;
-    padding: 0 !important;
-    max-width: 100% !important;
-  }
-  #header > h1:first-child {
-        color: #fcfcfc;
-    }
-  body { background: #1a1a2e; }
 
-/* Redoc left navigation — dark mode */
+/* Redoc left navigation — light mode */
 [data-role="menu-content"],
 .menu-content {
-  background-color: #21252b !important;
-  border-right: 1px solid #2c313a;
+  background-color: #f5f6f7 !important;
+  border-right: 1px solid #e5e7eb;
 }
 
 /* Nav item text */
 .menu-content li > label {
-  color: #abb2bf !important;
+  color: #3d4151 !important;
 }
 
-/* Active item */
+/* Active / hover */
 .menu-content li[data-item-id]:hover > label,
 .menu-content li.active > label {
-  color:            #61afef !important;
-  background-color: rgba(97, 175, 239, 0.08) !important;
+  color:            #1a56db !important;
+  background-color: rgba(26, 86, 219, 0.07) !important;
 }
 
-/* HTTP method badges inside sidebar */
-[data-role="menu-content"] span.http-verb {
-  opacity: 0.85;
+/* Search box */
+[data-role="menu-content"] input[type="search"] {
+  background: #ffffff;
+  border:     1px solid #d1d5db;
+  color:      #1a1d2e;
 }
 </style>
 
 ## Example 
 
 
-[redocly:https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml title="Bump API" disableSearch=true hideHostname=true requiredPropsFirst=true primaryColor="#32329f"]
+[redocly:https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml title="Payments API" disableSearch=false hideHostname=true requiredPropsFirst=true primaryColor="#32329f"]
+
+## Source
 
 ```markdown
-[redocly:https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml title="Payments API" disableSearch=true hideHostname=true requiredPropsFirst=true primaryColor="#32329f"]
+[redocly:https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml title="Payments API" disableSearch=false hideHostname=true requiredPropsFirst=true primaryColor="#32329f"]
 ```

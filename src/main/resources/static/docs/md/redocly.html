@@ -1427,54 +1427,47 @@
                     <article class="markdown-body">
                         <h1 id="redocly">Redocly</h1>
 <style>
-  html, body, #content, #header, .sect1 {
-    margin: 0 !important;
-    padding: 0 !important;
-    max-width: 100% !important;
-  }
-  #header > h1:first-child {
-        color: #fcfcfc;
-    }
-  body { background: #1a1a2e; }
 
-/* Redoc left navigation — dark mode */
+/* Redoc left navigation — light mode */
 [data-role="menu-content"],
 .menu-content {
-  background-color: #21252b !important;
-  border-right: 1px solid #2c313a;
+  background-color: #f5f6f7 !important;
+  border-right: 1px solid #e5e7eb;
 }
 
 /* Nav item text */
 .menu-content li > label {
-  color: #abb2bf !important;
+  color: #3d4151 !important;
 }
 
-/* Active item */
+/* Active / hover */
 .menu-content li[data-item-id]:hover > label,
 .menu-content li.active > label {
-  color:            #61afef !important;
-  background-color: rgba(97, 175, 239, 0.08) !important;
+  color:            #1a56db !important;
+  background-color: rgba(26, 86, 219, 0.07) !important;
 }
 
-/* HTTP method badges inside sidebar */
-[data-role="menu-content"] span.http-verb {
-  opacity: 0.85;
+/* Search box */
+[data-role="menu-content"] input[type="search"] {
+  background: #ffffff;
+  border:     1px solid #d1d5db;
+  color:      #1a1d2e;
 }
 </style>
 <h2 id="example">Example</h2>
 <div class="redocly-wrap redocly-fullbleed">
-<div id="redoc-container-1780401930379-140"></div>
+<div id="redoc-container-1780482804573-307"></div>
 </div>
 <script>
 (function() {
 const specUrl = 'https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml';
 const pathsScript = '';
 const configOptions = {
-pageTitle: 'Bump API',
-disableSearch: true,
+pageTitle: 'Payments API',
+disableSearch: false,
 hideHostname: true,
 requiredPropsFirst: true,
-theme: { sidebar: { backgroundColor: '#21252b', textColor:       '#abb2bf', activeTextColor: '#61afef', groupItems: { textTransform: 'uppercase', }, }, colors: { primary: { main: '#61afef' }, text: { primary:   '#abb2bf', secondary: '#5c6370', }, background: { main:  '#21252b', light: '#282c34', }, }, logo: { gutter: '16px', }, rightPanel: { backgroundColor: '#282c34', textColor:        '#abb2bf', }, }
+theme: { sidebar: { backgroundColor: '#f5f6f7', textColor:       '#3d4151', activeTextColor: '#1a56db', groupItems: { textTransform: 'uppercase', }, }, colors: { primary: { main: '#1a56db' }, text: { primary:   '#1a1d2e', secondary: '#6b7280', }, background: { main:  '#ffffff', light: '#f9fafb', }, }, logo: { gutter: '16px', }, rightPanel: { backgroundColor: '#1e2a3a',   textColor:        '#e2e8f0', }, }
 };
 
 fetch(specUrl, {
@@ -1502,13 +1495,14 @@ return response.json();
 })
 .then(spec => {
 if (!spec.info) spec.info = {};
-spec.info.title = 'Bump API';
-Redoc.init(spec, configOptions, document.getElementById('redoc-container-1780401930379-140'));
+spec.info.title = 'Payments API';
+Redoc.init(spec, configOptions, document.getElementById('redoc-container-1780482804573-307'));
 })
 .catch(err => console.error('Redocly render failed:', err));
 })();
 </script>
-<pre><code class="language-markdown">[redocly:https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml title=&quot;Payments API&quot; disableSearch=true hideHostname=true requiredPropsFirst=true primaryColor=&quot;#32329f&quot;]
+<h2 id="source">Source</h2>
+<pre><code class="language-markdown">[redocly:https://raw.githubusercontent.com/bump-sh/examples/refs/heads/main/apis/bump.yml title=&quot;Payments API&quot; disableSearch=false hideHostname=true requiredPropsFirst=true primaryColor=&quot;#32329f&quot;]
 </code></pre>
 
                     </article>
