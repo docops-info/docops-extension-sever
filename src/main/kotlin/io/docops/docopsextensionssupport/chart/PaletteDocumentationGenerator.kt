@@ -2,6 +2,8 @@
 package io.docops.docopsextensionssupport.chart
 
 import java.util.Base64
+import java.util.Locale
+import java.util.Locale.getDefault
 
 object PaletteDocGenerator {
     
@@ -30,7 +32,10 @@ object PaletteDocGenerator {
         val palette = ColorPaletteFactory.getPalette(paletteType)
         val sb = StringBuilder()
         
-        sb.appendLine("=== ${paletteType.name.replace("_", " ").lowercase().capitalize()}")
+        sb.appendLine("=== ${
+            paletteType.name.replace("_", " ").lowercase()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
+        }")
         sb.appendLine("*Usage:* `paletteType=\"${paletteType.name}\"`")
         sb.appendLine()
         

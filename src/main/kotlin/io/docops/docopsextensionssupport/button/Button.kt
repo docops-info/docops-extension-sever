@@ -812,8 +812,8 @@ fun Buttons.toCsv(): CsvResponse {
 
     val rows = this.buttons.map { button ->
         listOf(
-            button.label ?: "",
-            button.link ?: "",
+            button.label,
+            button.link,
             button.description ?: "",
             button.type ?: "",
             button.color ?: "",

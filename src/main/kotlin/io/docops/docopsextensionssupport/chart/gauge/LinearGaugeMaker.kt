@@ -55,7 +55,7 @@ class LinearGaugeMaker : AbstractGaugeMaker() {
 
         // Target marker
         if (gaugeChart.display.showTarget && gauge.target != null) {
-            val targetX = barX + (gauge.target!! / gauge.max) * barWidth
+            val targetX = barX + (gauge.target / gauge.max) * barWidth
             sb.append("""
                 <rect x="$targetX" y="${barY - 4}" width="4" height="${barHeight + 8}" fill="#f8fafc" opacity="0.8"/>
                 <text x="${targetX + 4}" y="${barY - 10}" class="gauge-label" style="font-size: 9px;">TARGET</text>

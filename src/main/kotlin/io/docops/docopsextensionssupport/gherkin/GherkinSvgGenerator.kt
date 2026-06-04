@@ -4,6 +4,8 @@ import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import org.springframework.stereotype.Service
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class GherkinMaker(val useDark: Boolean) {
     // Resolve the theme once for the entire generator
@@ -259,7 +261,10 @@ class GherkinMaker(val useDark: Boolean) {
 
                 lines.forEachIndexed { lIdx, line ->
                     val escapedLine = line.escapeXml()
-                    val content = if (lIdx == 0) """<tspan fill="$highlightColor" font-weight="bold">${step.type.name.lowercase().capitalize()}</tspan> $escapedLine""" else escapedLine
+                    val content = if (lIdx == 0) """<tspan fill="$highlightColor" font-weight="bold">${
+                        step.type.name.lowercase()
+                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
+                    }</tspan> $escapedLine""" else escapedLine
                     append("""<text x="25" y="${5 + (lIdx * 22)}" font-family="sans-serif" font-size="14" fill="$textColor">$content</text>""")
                 }
 
@@ -325,7 +330,10 @@ class GherkinMaker(val useDark: Boolean) {
             append("""
                 <text x="${theme.layout.padding + 90}" y="$firstLineBaseline" 
                       font-family="Monaco, monospace" font-size="${theme.typography.stepSize}" 
-                      font-weight="bold" fill="$stepColor">${step.type.name.lowercase().capitalize()}</text>
+                      font-weight="bold" fill="$stepColor">${
+                step.type.name.lowercase()
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
+            }</text>
             """.trimIndent())
             
             // Step text with wrapping

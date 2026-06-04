@@ -83,7 +83,7 @@ fun CombinationChart.toCsv(): CsvResponse {
             val row = mutableListOf<String>()
             row.add(chartSeries.name)
             row.add(chartSeries.type.name) // e.g., "line", "bar", "area"
-            row.add(point.x.toString())
+            row.add(point.x)
             row.add(point.y.toString())
 
             // Add color if the header exists

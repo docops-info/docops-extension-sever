@@ -340,7 +340,7 @@ class RoadmapMaker(val useDark: Boolean) {
 
         // Category name with text wrapping to prevent overflow
         val availableCategoryWidth = cardWidth - 35 - 10 // Leave 10px margin on the right
-        val categoryLines = wrapText(categoryName, availableCategoryWidth.toInt(), 12)
+        val categoryLines = wrapText(categoryName, availableCategoryWidth, 12)
         card.append("""<text x="35" y="30" class="feature-category">""")
         categoryLines.forEachIndexed { index, line ->
             if (index == 0) {

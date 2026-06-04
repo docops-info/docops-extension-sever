@@ -194,7 +194,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             """.trimIndent()
             }
             sb.append(chipHtml)
-            currentX += (textWidth + 8).toInt()
+            currentX += (textWidth + 8)
         }
 
         return sb.toString()
