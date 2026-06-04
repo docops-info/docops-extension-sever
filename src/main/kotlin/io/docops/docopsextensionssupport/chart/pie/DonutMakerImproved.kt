@@ -26,15 +26,18 @@ class DonutMakerImproved {
         val h = pieSlices.determineMaxLegendRows() * 12 + baseHeight + buffer
         height = h.toDouble()
         width = 600.0
+        val fontImport = if (theme.fontImport.trimStart().startsWith("@import")) {
+            "<style>${theme.fontImport}</style>"
+        } else {
+            theme.fontImport
+        }
 
         sb.append("""<?xml version="1.0" encoding="UTF-8"?>
             <svg xmlns="http://www.w3.org/2000/svg" height="${(h * pieSlices.display.scale) / DISPLAY_RATIO_16_9}" width="${(width * pieSlices.display.scale) / DISPLAY_RATIO_16_9}" viewBox='0 0 ${width * pieSlices.display.scale} ${h * pieSlices.display.scale}' id="id_${pieSlices.display.id}">
-            ${theme.fontImport}
+            $fontImport
             <rect width="100%" height="100%" fill="${theme.canvas}" rx="15" ry="15"/>
         """)
-
         sb.append(createEnhancedDefs(pieSlices))
-
         sb.append("<g>")
 
         val titleColor = theme.primaryText
@@ -65,7 +68,6 @@ class DonutMakerImproved {
         return """
             <defs>
             $defGrad
-            
             <!-- Enhanced drop shadow for depth -->
             <filter id="dropShadow" x="-30%" y="-30%" width="160%" height="160%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
@@ -78,7 +80,6 @@ class DonutMakerImproved {
                     <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             </filter>
-            
             <!-- Softer glow for hover -->
             <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
@@ -88,25 +89,17 @@ class DonutMakerImproved {
                     <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             </filter>
-            
-            <!-- Inner shadow for segments -->
-            <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-                <feOffset dx="0" dy="1" result="offsetblur"/>
-                <feFlood flood-color="#000000" flood-opacity="0.15"/>
-                <feComposite in2="offsetblur" operator="in"/>
-                <feMerge>
-                    <feMergeNode/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-            
             <style>
             #id_${pieSlices.display.id} .pie { 
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 filter: url(#dropShadow);
             }
-            #id_${pieSlices.display.id} .pie:hover { 
+            #id_${pieSlices.display.id} .pie-wrap {
+                transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-box: fill-box;
+                transform-origin: center;
+                cursor: pointer;
+            }
+            #id_${pieSlices.display.id} .pie-wrap:hover { 
                 filter: url(#glow) brightness(1.1);
                 transform: scale(1.08);
             }
@@ -117,7 +110,7 @@ class DonutMakerImproved {
             #id_${pieSlices.display.id} .segment-label {
                 transition: opacity 0.3s ease, font-weight 0.3s ease;
             }
-            #id_${pieSlices.display.id} .pie:hover + .segment-label {
+            #id_${pieSlices.display.id} .segment-group:hover .segment-label {
                 font-weight: 900;
                 opacity: 1;
             }
@@ -126,27 +119,28 @@ class DonutMakerImproved {
         """.trimIndent()
     }
 
+
     private fun createDonutCommands(slices: List<DonutSlice>, pieSlices: PieSlices): StringBuilder {
         val viewBox = 300.0
         val commands = getSlicesWithCommandsAndOffsets(slices, 120.0, viewBox, 50.0)
         val sb = StringBuilder()
         val accentColor = theme.accentColor
-
-        // Calculate center based on the total SVG width (usually 600.0)
         val centerX = width / 2.0
 
-        sb.append("""<g transform="translate($centerX, 240)">""") // Centered horizontally
+        sb.append("""<g transform="translate($centerX, 240)">""")
         sb.append("""<svg x="-150" y="-150" width="$viewBox" height="$viewBox" viewBox="0 0 $viewBox $viewBox">""")
         sb.append("""<circle cx="${viewBox / 2}" cy="${viewBox / 2}" r="125" fill="${theme.canvas}" stroke="$accentColor" stroke-opacity="0.1" filter="url(#dropShadow)"/>""")
         sb.append("""<circle cx="${viewBox / 2}" cy="${viewBox / 2}" r="65" fill="${theme.canvas}" stroke="$accentColor" stroke-opacity="0.2"/>""")
 
         commands.forEachIndexed { index, it ->
             sb.append("""
-                <g class="segment-group">
-                    <path d="${it.commands}" fill="${it.color}" transform="rotate(${it.offset})" class="pie" style="transform-origin: center; cursor: pointer;">
-                        <animate attributeName="opacity" from="0" to="1" dur="${0.5 + index * 0.1}s" fill="freeze"/>
-                        <animate attributeName="stroke-width" from="0" to="0" dur="0.3s" fill="freeze"/>
-                    </path>
+                <g class="segment-group" transform="rotate(${it.offset} ${viewBox / 2} ${viewBox / 2})">
+                    <g class="pie-wrap">
+                        <path d="${it.commands}" fill="${it.color}" class="pie">
+                            <animate attributeName="opacity" from="0" to="1" dur="${0.5 + index * 0.1}s" fill="freeze"/>
+                            <animate attributeName="stroke-width" from="0" to="0" dur="0.3s" fill="freeze"/>
+                        </path>
+                    </g>
             """.trimIndent())
 
             val midAngle = it.offset * -1 / 3.6 + it.percent / 2

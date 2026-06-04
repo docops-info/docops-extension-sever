@@ -173,7 +173,7 @@ Fully rounded buttons with smooth, modern aesthetics—ideal for primary actions
 
 Honeycomb-style buttons—perfect for creating interconnected navigation systems.
 
-[docops:buttons]
+[docops:buttons useDark=true]
 {
 "buttons": [
 {
@@ -244,7 +244,7 @@ Honeycomb-style buttons—perfect for creating interconnected navigation systems
 "#45618E",
 "#FF5BAE"
 ],
-"scale": 0.8,
+"scale": 0.7,
 "columns": 3,
 "buttonStyle": {
 "labelStyle": "font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 700; font-style: normal; font-variant: small-caps; text-decoration: none;"
@@ -414,19 +414,22 @@ Perfectly circular buttons featuring embedded brand icons—excellent for social
 
 Feature-rich card-style buttons with extended metadata—perfect for showcasing products or features.
 
-[docops:buttons]
+[docops:buttons useDark=true]
 {
 "buttons": [
 {
 "label": "Google",
 "link": "https://www.google.com",
-"description": "Google is is an American multinational technology company that specializes in Internet-related services and products ",
+"description": "Google is an American multinational technology company that specializes in Internet-related services and products ",
 "type": "advertisement",
 "date": "07/30/1998",
 "author": [
 "Sergey Brin",
 "Larry Page"
-]
+],"embeddedImage": {
+
+"qrEnabled": true
+}
 },
 {
 "label": "Apple",
@@ -444,6 +447,7 @@ Feature-rich card-style buttons with extended metadata—perfect for showcasing 
 "description": "Sharing documentation experience for developers to extend with AsciiDoctor",
 "type": "docs",
 "embeddedImage": {
+"spotlightOn": true,
 "ref": "../images/docops.svg"
 },
 "date": "",
@@ -481,7 +485,7 @@ Feature-rich card-style buttons with extended metadata—perfect for showcasing 
 
 Softly rounded buttons with modern styling—versatile for most use cases.
 
-[docops:buttons]
+[docops:buttons useDark=true]
 {
 "buttons": [
 {

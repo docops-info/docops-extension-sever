@@ -291,20 +291,18 @@ Product E | 10
 [/tab]
 [tab:Modern Visual Style]
 [docops:pieslice]
-title=Sales Distribution by Product
-width=800
-height=800
-legend=true
-percentages=true
-donut=true
+title=Market Share by Region
 visualVersion=2
+legend=true
+donut=true
+percentages=true
+theme=ayu
 ---
-Product A | 30
-Product B | 25
-Product C | 20
-Product D | 15
-Product E | 10
-
+North America | 35
+Europe | 28
+Asia Pacific | 22
+Latin America | 10
+Middle East & Africa | 5
 [/docops]
 [/tab]
 [tab:Portfolio Split Example]
