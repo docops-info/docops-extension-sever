@@ -29,25 +29,85 @@ Basic architectural decision for search functionality:
 
 [tabs]
 ======
-Diagram::
+Proposed::
 +
 ====
 [docops,adr,role=center,controls="true"]
 ----
-theme=brand
+theme=pro
+visualVersion=2
 include::data/adr1.txt[]
 ----
 ====
-Source::
+Accepted::
 +
 ====
-[source,asciidoc]
-....
-[docops,adr,role=center]
+[docops,adr,controls=true]
 ----
-include::data/adr1.txt[]
+theme=pro
+template=classic
+visualVersion=2
+title=Use Event-Driven Integration for Billing Updates
+status=Accepted
+date=2026-06-07
+
+context
+Billing updates currently depend on synchronous calls between services.
+This creates retry ambiguity, higher coupling, and cascading failure risk.
+Current integration requires direct availability.
+Failures are difficult to replay.
+Audit history is incomplete.
+
+decision
+Adopt asynchronous domain events for billing state changes.
+Services publish immutable billing events to the platform event bus.
+Downstream consumers subscribe independently.
+
+consequences
+Lower coupling between bounded contexts.
+Better replay and audit capability.
+Eventual consistency becomes explicit.
+Consumers must handle duplicate delivery.
+
+participants
+Maya Chen | Platform Architecture | maya@example.com | #34C759 | 🧭
+Ravi Singh | Billing Engineering | ravi@example.com | #0A84FF | ⚙️
+Elena Torres | SRE | elena@example.com | #FF9500 | 🛡️
+
+references
+[[https://adr.github.io Architecture Decision Records]]
+[[https://internal.wiki/platform/events Event-driven architecture guidance]]
 ----
-....
+====
+Rejected::
++
+====
+[docops,adr,role=center,controls="true"]
+----
+theme=pro
+visualVersion=2
+include::data/adr4.txt[]
+----
+====
+Superseded::
++
+====
+[docops,adr,role=center,controls="true"]
+----
+theme=pro
+visualVersion=2
+include::data/adr5.txt[]
+----
+====
+Deprecated::
++
+====
+[docops,adr,role=center,controls="true"]
+----
+theme=pro
+visualVersion=2
+include::data/adr6.txt[]
+----
 ====
 ======
 
@@ -62,12 +122,12 @@ include::data/adr1.txt[]
 
 [tabs]
 ======
-Diagram::
+Brutalist Template::
 +
 ====
 [docops,adr,useDark=true,role=center,controls="true"]
 ----
-template:brutalist
+template=brutalist
 theme=aurora
 ---
 include::data/adr2.txt[]
@@ -81,6 +141,7 @@ Source::
 [docops,adr,useDark=true,role=center]
 ----
 theme=aurora
+template=brutalist
 ---
 include::data/adr2.txt[]
 ----
@@ -104,6 +165,7 @@ Diagram::
 [docops,adr,role=center]
 ----
 theme: reo
+visualVersion=2
 ---
 include::data/adr9.txt[]
 ----
@@ -115,6 +177,7 @@ Source::
 ....
 [docops,adr,role=center]
 ----
+visualVersion=2
 title= Adopt GraphQL for API Layer
 status= Accepted
 date= 2024-07-15

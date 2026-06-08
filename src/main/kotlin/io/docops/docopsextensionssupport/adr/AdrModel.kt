@@ -78,7 +78,8 @@ data class Adr(
     val references: List<WikiLink> = emptyList(),
     val links: List<WikiLink> = emptyList(),
     val template: String = "classic",
-    val theme: String = "pro"
+    val theme: String = "pro",
+    val visualVersion: Int = 1
 )
 
 
@@ -166,6 +167,7 @@ class AdrParser {
 
         var template = "classic"
         var theme = "pro"
+        var visualVersion = 1
         for (line in lines) {
             val trimmedLine = line.trim()
 
@@ -176,6 +178,14 @@ class AdrParser {
                 }
                 trimmedLine.startsWith("template=", true) -> {
                     template = trimmedLine.substringAfter("=").trim()
+                    currentSection = null
+                }
+                trimmedLine.startsWith("visualVersion=", true) -> {
+                    visualVersion = trimmedLine.substringAfter("=")
+                        .trim()
+                        .toIntOrNull()
+                        ?.coerceAtLeast(1)
+                        ?: 1
                     currentSection = null
                 }
                 trimmedLine.startsWith("title=", true) -> {
@@ -314,7 +324,8 @@ class AdrParser {
             references = references,
             links = links,
             template = template,
-            theme = theme
+            theme = theme,
+            visualVersion = visualVersion
         )
     }
 }

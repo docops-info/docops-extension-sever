@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.adr
 
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.util.UrlUtil.urlEncode
+import kotlin.math.ceil
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -49,7 +50,7 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean, themeName: String) {
         val consequenceHeight = consequenceLines * lineSpacing + panelPadding
 
         // Calculate rows for participants (3 per row)
-        val partRows = Math.ceil(adr.participants.size.toDouble() / 3).toInt()
+        val partRows = ceil(adr.participants.size.toDouble() / 3).toInt()
         val partPanelHeight = partRows * 130 + 40
 
         // Calculate References height (25px per reference + padding)

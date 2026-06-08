@@ -11,13 +11,21 @@ class AdrHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
         val adr = AdrParser().parseContent(payload)
 
         val isBrutalist = adr.template == "brutalist"
-        val svg = if (!isBrutalist) {
-            val generator = AdrSvgGenerator(useDark, adr.theme)
-            generator.generate(adr, width = 700)
-        } else {
-            val generator = CyberBrutalistAdrSvgGenerator(useDark = useDark, themeName = adr.theme)
-            generator.generate(adr)
+        val svg = when {
+            isBrutalist -> {
+                val generator = CyberBrutalistAdrSvgGenerator(useDark = useDark, themeName = adr.theme)
+                generator.generate(adr)
+            }
+            adr.visualVersion == 2 -> {
+                val generator = DecisionRailAdrSvgGenerator(useDark = useDark, themeName = adr.theme)
+                generator.generate(adr, width = 900)
+            }
+            else -> {
+                val generator = AdrSvgGenerator(useDark, adr.theme)
+                generator.generate(adr, width = 700)
+            }
         }
+
         csvResponse.update(adr.toCsv())
         return svg
     }
