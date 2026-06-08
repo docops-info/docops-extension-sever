@@ -43,6 +43,53 @@ abstract class BaseDocOpsHandler(
         logger.info { "handling $kind took $duration ms" }
     }
 
+    protected fun scaleSvg(svg: String, scale: String): String {
+        val scaleFactor = scale.toDoubleOrNull()
+            ?.takeIf { it > 0.0 }
+            ?: 1.0
+
+        if (scaleFactor == 1.0) {
+            return svg
+        }
+
+        val svgTagRegex = Regex("""<svg\b([^>]*)>""")
+        val match = svgTagRegex.find(svg) ?: return svg
+
+        val originalSvgTag = match.value
+        val attributes = match.groupValues[1]
+
+        val width = extractSvgLength(attributes, "width")
+        val height = extractSvgLength(attributes, "height")
+
+        if (width == null || height == null) {
+            return svg
+        }
+
+        val scaledWidth = formatSvgNumber(width * scaleFactor)
+        val scaledHeight = formatSvgNumber(height * scaleFactor)
+
+        val scaledSvgTag = originalSvgTag
+            .replace(Regex("""width="[^"]*""""), """width="$scaledWidth"""")
+            .replace(Regex("""height="[^"]*""""), """height="$scaledHeight"""")
+
+        return svg.replaceFirst(originalSvgTag, scaledSvgTag)
+    }
+
+    private fun extractSvgLength(attributes: String, attributeName: String): Double? {
+        val regex = Regex("""$attributeName="([0-9.]+)(?:px)?"""")
+        return regex.find(attributes)
+            ?.groupValues
+            ?.getOrNull(1)
+            ?.toDoubleOrNull()
+    }
+
+    private fun formatSvgNumber(value: Double): String {
+        return if (value % 1.0 == 0.0) {
+            value.toInt().toString()
+        } else {
+            "%.2f".format(value).trimEnd('0').trimEnd('.')
+        }
+    }
     // Force subclasses to implement the main method
     abstract override fun handleSVG(payload: String, context: DocOpsContext): String
 }

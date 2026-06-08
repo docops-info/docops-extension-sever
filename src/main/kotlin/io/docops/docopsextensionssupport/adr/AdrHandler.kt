@@ -26,9 +26,13 @@ class AdrHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
             }
         }
 
+        val scaledSvg = scaleSvg(svg, scale)
         csvResponse.update(adr.toCsv())
-        return svg
+        return scaledSvg
     }
+
+
+
 
     override fun handleSVG(
         payload: String,

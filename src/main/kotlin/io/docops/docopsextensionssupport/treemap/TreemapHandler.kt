@@ -5,6 +5,8 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
 import io.docops.docopsextensionssupport.web.update
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.system.measureTimeMillis
+import kotlin.time.measureTimedValue
 
 /**
  * Handler for treemap chart generation following DocOps pattern
@@ -28,12 +30,9 @@ class TreemapHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         payload: String,
         context: DocOpsContext
     ): String {
-        val startTime = System.currentTimeMillis()
-        val result = handleSVGInternal(payload, context.useDark)
-        val duration = System.currentTimeMillis() - startTime
+        val timing = measureTimedValue { handleSVGInternal(payload, context.useDark) }
+        logHandlerExecution("treemap", timing.duration.inWholeMilliseconds)
         
-        logHandlerExecution("treemap", duration)
-        
-        return result
+        return timing.value
     }
 }
