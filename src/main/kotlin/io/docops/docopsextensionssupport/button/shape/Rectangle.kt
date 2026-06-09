@@ -115,6 +115,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         ${if (showTooltip) """<title>${button.label.escapeXml()}</title>""" else ""}
     
         <!-- Card Background -->
+        ${if (isPdf) """<rect x="0" y="4" width="$CARD_WIDTH" height="$CARD_HEIGHT" rx="$CARD_RADIUS" ry="$CARD_RADIUS" fill="black" opacity="0.12"/>""" else ""}
         <rect x="0" y="0" width="$CARD_WIDTH" height="$CARD_HEIGHT" 
               rx="$CARD_RADIUS" ry="$CARD_RADIUS"
               fill="${cardColors.background}"
@@ -262,7 +263,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         return """
         <defs>
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&amp;display=swap');
+                ${fontImport()}
                 .card-button {
                     transition: transform 0.2s ease-in-out;
                     transform-box: fill-box;
@@ -277,8 +278,14 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
                 }
             </style>
             <filter id="cardShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="4" stdDeviation="6" 
-                              flood-color="${if (isDark) "rgba(0,0,0,0.4)" else "rgba(0,0,0,0.08)"}"/>
+                <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+                <feOffset dx="0" dy="4" result="offsetblur"/>
+                <feFlood flood-color="${if (isDark) "black" else "#333333"}" flood-opacity="${if (isDark) "0.4" else "0.08"}"/>
+                <feComposite in2="offsetblur" operator="in"/>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
             </filter>
         </defs>
     """.trimIndent()

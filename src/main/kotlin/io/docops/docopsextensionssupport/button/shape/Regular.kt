@@ -22,7 +22,6 @@ import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
-import io.docops.docopsextensionssupport.util.BackgroundHelper
 
 
 /**
@@ -86,114 +85,125 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
             }
         }
         var startX = 10
-
         var startY = 10
         if (index > 0) {
             startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
         }
 
-        buttonList.forEachIndexed { btnIdx, button ->
-            val accentColor = button.color ?: docOpsTheme.accentColor
-
-            // Signal: neutral surfaces; accent is a cue (border/focus/active), not the fill.
-            val bodyFill = if (buttons.useDark) docOpsTheme.surfaceImpact else "#FFFFFF"
-
-            // Signal: label uses primary text color for authority and readability.
-            val textFillColor = docOpsTheme.primaryText
-
-            val font = docOpsTheme.fontFamily
-            val isPdfMode = isPdf
-
-            val borderWidth = if (button.active) 2.0 else 1.0
-            val buttonOpacity = if (button.enabled) 1.0 else 0.55
-
-            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
-            if (!button.enabled) {
-                href = ""
-            }
-
-            val groupClass = if (isPdfMode) "" else """class="btn-group""""
-            val groupStyle = "" // Signal: keep buttons stable; page-level motion should orchestrate reveals.
-
-            // Strip conflicting fill from user style (we control label color via tokens)
-            val cleanUserStyle =
-                button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
-
-            btns.append(
-                """
-                    <g transform="translate($startX,$startY)">
-                        <g $groupClass $groupStyle $href opacity="$buttonOpacity">
-                            <!-- Shadow Layer (subtle elevation, not decoration) -->
-                            <rect x="2" y="3" width="300" height="40" rx="${docOpsTheme.cornerRadius}" fill="${docOpsTheme.surfaceImpact}" opacity="0.18"/>
-                            
-                            <!-- Main Button Body -->
-                            <rect x="0" y="0" width="300" height="40" rx="${docOpsTheme.cornerRadius}"
-                                  fill="$bodyFill" stroke="$accentColor" stroke-width="$borderWidth" class="btn-main"/>
-                            
-                            <!-- Active/Current: understated inner highlight so it reads even without hover -->
-                            ${
-                    if (button.active) {
-                        """<rect x="2" y="2" width="296" height="36" rx="${docOpsTheme.cornerRadius - 2}"
-                               fill="$accentColor" opacity="${if (buttons.useDark) "0.10" else "0.06"}"/>"""
-                    } else ""
-                }
-
-                            <text x="150" y="26" text-anchor="middle" fill="$textFillColor"
-                                  style="font-family: $font !important;$cleanUserStyle">
-                                ${button.label.escapeXml()}
-                            </text>
-                        </g>
-                    </g>
-                """.trimIndent()
-            )
-
+        buttonList.forEach { button ->
+            btns.append("""<g transform="translate($startX,$startY)">""")
+            btns.append(drawSingleButton(button, win))
+            btns.append("</g>")
             startX += BUTTON_WIDTH + BUTTON_PADDING
         }
         return btns.toString()
     }
 
+    private fun drawSingleButton(button: Button, win: String): String {
+        val accentColor = button.color ?: docOpsTheme.accentColor
+        val bodyFill = if (buttons.useDark) docOpsTheme.surfaceImpact else "#FFFFFF"
+        val textFillColor = docOpsTheme.primaryText
+        val isPdfMode = isPdf
+        val buttonOpacity = if (button.enabled) 1.0 else 0.55
+        
+        // Accessibility and Interaction
+        val groupClass = if (isPdfMode) "" else """class="btn-group""""
+        val role = if (isPdfMode) "" else "role=\"button\""
+        val tabIndex = if (isPdfMode) "" else "tabindex=\"0\""
+        val cursor = if (button.enabled) "pointer" else "not-allowed"
+        val interaction = if (button.enabled && !isPdfMode) {
+            """onclick="window.open('${button.link}', '$win')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.open('${button.link}', '$win')}" style="cursor: $cursor;" """
+        } else {
+            """style="cursor: $cursor;" """
+        }
+
+        val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("(?:fill|font-family|font-size|color)\\s*:\\s*[^;]+;?"), "") ?: ""
+
+        val sb = StringBuilder()
+        sb.append("""<g $groupClass $role $tabIndex $interaction opacity="$buttonOpacity">""")
+        sb.append("""<title>${button.label.escapeXml()}</title>""")
+        
+        // Main Button Body (Option A: Ghost)
+        val filter = if (!isPdfMode) "filter: drop-shadow(0 1px 2px rgba(0,0,0,0.06));" else ""
+        sb.append("""<rect x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" rx="${docOpsTheme.cornerRadius}" fill="$bodyFill" stroke="#E5E7EB" stroke-width="1" class="btn-main" style="$filter"/>""")
+        
+        // Brand Accent Strip
+        sb.append(drawAccentStrip(accentColor))
+        
+        // Active State
+        if (button.active) {
+            sb.append(drawActiveState(accentColor))
+        }
+        
+        // Label
+        val font = docOpsTheme.fontFamily
+        sb.append("""<text x="${BUTTON_WIDTH / 2}" y="25" text-anchor="middle" fill="$textFillColor" style="font-family: $font !important; font-size: 14px; font-weight: 500; $cleanUserStyle">""")
+        sb.append(button.label.escapeXml())
+        sb.append("</text>")
+        
+        sb.append("</g>")
+        return sb.toString()
+    }
+
+    private fun drawAccentStrip(accentColor: String): String {
+        val r = docOpsTheme.cornerRadius.toDouble()
+        val sw = 4.0
+        val height = BUTTON_HEIGHT.toDouble()
+        if (r > 0) {
+            val dy = r - Math.sqrt(Math.max(0.0, r * r - (r - sw) * (r - sw)))
+            val y1 = dy
+            val y2 = height - dy
+            val y3 = height - r
+            return """<path d="M0 $r A$r $r 0 0 1 $sw $y1 V$y2 A$r $r 0 0 1 0 $y3 Z" fill="$accentColor" fill-opacity="0.8"/>"""
+        } else {
+            return """<rect x="0" y="0" width="$sw" height="$height" fill="$accentColor" fill-opacity="0.8"/>"""
+        }
+    }
+
+    private fun drawActiveState(accentColor: String): String {
+        val r = Math.max(0.0, docOpsTheme.cornerRadius - 2.0)
+        val opacity = if (buttons.useDark) "0.15" else "0.12"
+        return """
+            <rect x="2" y="2" width="${BUTTON_WIDTH - 4}" height="${BUTTON_HEIGHT - 4}" rx="$r" fill="$accentColor" opacity="$opacity"/>
+            <rect x="4" y="${BUTTON_HEIGHT - 2}" width="${BUTTON_WIDTH - 8}" height="2" fill="$accentColor"/>
+        """.trimIndent()
+    }
+
 
     protected open fun start() : String {
-        val height= height()
+        val height = height()
         val width = width()
-        return """<svg xmlns="http://www.w3.org/2000/svg" width="${width/ DISPLAY_RATIO_16_9}" height="${height/ DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">"""
+        val svgWidth = String.format("%.1f", width / DISPLAY_RATIO_16_9)
+        val svgHeight = String.format("%.1f", height / DISPLAY_RATIO_16_9)
+        return """<svg xmlns="http://www.w3.org/2000/svg" width="$svgWidth" height="$svgHeight" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">"""
     }
 
     protected fun end() = """</svg>"""
 
     protected open fun defs(): String {
+        val accentColor = docOpsTheme.accentColor
         val customStyle = if (isPdf) "" else """
-            .btn-group { cursor: pointer; }
+            ${fontImport()}
+            .btn-group { cursor: pointer; outline: none; }
             .btn-main { transition: fill 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1); }
-            .btn-group:hover .btn-main { transform: translateY(-1px); }
-            .btn-group:hover { }
+            .btn-group:hover .btn-main, .btn-group:focus-visible .btn-main { transform: translateY(-1px); }
+            .btn-group:focus-visible .btn-main { outline: 2px solid $accentColor; outline-offset: 2px; }
         """.trimIndent()
 
         var style = """
              <style>
             $customStyle
-
-            #${buttons.id} .bar:hover {
-                filter: grayscale(100%) sepia(100%);
-            }
-            #${buttons.id} .shadowed {
-                -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
-                filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
-            }
             </style>
         """.trimIndent()
 
         if (isPdf) {
-            style = """
-
-            """.trimIndent()
+            style = ""
         }
 
         return """
             <defs>
-            
             ${uses()}
-           $style
+            $style
             </defs>
         """.trimIndent()
     }

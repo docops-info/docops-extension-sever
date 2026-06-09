@@ -173,6 +173,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
         }
         var style = """
                  <style>
+                ${fontImport()}
                 .orb-group { cursor: pointer; }
                 
                 .orb-group .moving-group {

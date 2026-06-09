@@ -94,7 +94,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         return """
                 <defs>
                 <style>
-                    ${docOpsTheme.fontImport}
+                    ${fontImport()}
                     /* Typography driven by ThemeFactory */
                     .hex-label {
                         font-family: ${docOpsTheme.fontFamily};

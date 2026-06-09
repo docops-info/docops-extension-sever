@@ -43,10 +43,13 @@ import kotlin.Boolean
 class CardLines(val line: String = "", val size: String = "50px")
 
 /**
- * Represents an embedded image.
+ * Represents an image that can be embedded into a button.
  *
- * @property ref The reference of the image.
- * @property type The type of the image. Default value is "image/png".
+ * @property ref The reference to the image. Should be an absolute URL or a data URI for portability.
+ *               Avoid relative paths (like ../..) as they may break depending on where the SVG is embedded.
+ * @property type The MIME type of the image (default: "image/png").
+ * @property qrEnabled Whether to render a QR code instead of the image.
+ * @property spotlightOn Whether to apply a spotlight effect (background circle and glow) to the image.
  */
 @Serializable
 class EmbeddedImage(val ref: String = "", val type: String = "image/png", val qrEnabled: Boolean = false, val spotlightOn: Boolean = false)

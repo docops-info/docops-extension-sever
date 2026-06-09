@@ -15,8 +15,9 @@ interface DocOpsTheme {
     val glassEffect: String
     val surfaceImpact: String
     
-    // Aesthetic specific (e.g., Syne for Pro, Arial for Classic)
+    // Aesthetic specific (e.g., Lexend for Modern, Arial for Classic fallbacks)
     val fontFamily: String
+        get() = "'Lexend', ui-sans-serif, system-ui, sans-serif"
     val fontImport: String
     val cornerRadius: Int
     val fontWidthMultiplier: Float // 1.0 for Arial, 1.35 for Syne

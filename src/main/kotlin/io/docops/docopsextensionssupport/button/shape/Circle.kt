@@ -170,6 +170,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
 
         val style = """
                 <style>
+                    ${fontImport()}
                     #btn_${buttons.id} .circle-group { cursor: pointer; }
                     
                     /* MOTION: All moving parts share the same base transition logic */

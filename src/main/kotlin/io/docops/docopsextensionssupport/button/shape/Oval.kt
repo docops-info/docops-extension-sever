@@ -183,6 +183,7 @@ class Oval(buttons: Buttons) : Regular(buttons) {
             ${filters()}
             $gradientDefs
             <style>
+            ${fontImport()}
             $style
             </style>
             </defs>

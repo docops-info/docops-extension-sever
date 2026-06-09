@@ -90,6 +90,20 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     protected var vbWidth = 0f
     /** Indicates whether the output is intended for PDF format */
     protected var isPdf = false
+    protected fun fontImport(): String {
+        if (isPdf) return ""
+        val themeImport = docOpsTheme.fontImport.replace("&amp;", "&")
+        val brandedFonts = "@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=JetBrains+Mono:wght@600&family=Syne:wght@800&display=swap');"
+        return if (themeImport.contains("fonts.googleapis.com")) {
+            // Merge theme fonts with branded fonts if they are both Google Fonts
+            // For now, just return both. Browsers handle multiple imports.
+            themeImport + "\n" + brandedFonts
+        } else if (themeImport.isNotEmpty()) {
+            themeImport + "\n" + brandedFonts
+        } else {
+            brandedFonts
+        }
+    }
 
 
     // Resolve the global design system theme
@@ -103,7 +117,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
      * @return A string containing the SVG representation of the button shape
      */
     override fun drawShape(type: String): String {
-        if("PDF".equals(type, true)) {
+        if("PDF".equals(type, true) || "PNG".equals(type, true)) {
             isPdf = true
         }
         return createShape(type)

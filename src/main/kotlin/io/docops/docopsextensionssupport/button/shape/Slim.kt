@@ -195,6 +195,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
 
         var style = """
                  <style>
+                ${fontImport()}
                 $darkModeStyles
             
                 #btn_${buttons.id} .card-group {

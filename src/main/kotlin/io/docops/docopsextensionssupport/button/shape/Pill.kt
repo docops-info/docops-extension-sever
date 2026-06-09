@@ -150,6 +150,7 @@ class Pill(buttons: Buttons) : Regular(buttons) {
             ${filters()}
             $gradientDefs
             <style>
+            ${fontImport()}
             $style
             </style>
             </defs>
