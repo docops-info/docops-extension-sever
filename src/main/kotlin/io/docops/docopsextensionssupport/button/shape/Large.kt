@@ -231,13 +231,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
             sb.append("""<circle cx="0" cy="0" r="45" fill="rgba(255,255,255,0.95)"/>""")
         }
         // Embedded image
-        val imageHref = if (embeddedImage.ref.startsWith("../../")) {
-            // Fix relative path bug from remediation plan
-            "/images/docops.svg" 
-        } else {
-            embeddedImage.ref
-        }
-        sb.append("""<image xlink:href="$imageHref" href="$imageHref" x="-40" y="-40" width="80" height="80" preserveAspectRatio="xMidYMid meet"/>""")
+        sb.append("""<image xlink:href="${embeddedImage.ref}" href="${embeddedImage.ref}" x="-40" y="-40" width="80" height="80" preserveAspectRatio="xMidYMid meet"/>""")
 
         sb.append("</g>")
         return sb.toString()
