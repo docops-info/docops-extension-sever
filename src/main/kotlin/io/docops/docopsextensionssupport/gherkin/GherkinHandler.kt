@@ -123,7 +123,7 @@ class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
             )
             // Update CSV response similar to other handlers
             csvResponse.update(finalSpec.toCsv())
-            val svg = gherkinMaker.makeGherkin(finalSpec)
+            val svg = gherkinMaker.makeGherkin(finalSpec, context.scale)
             svg
         } catch (e: Exception) {
             """

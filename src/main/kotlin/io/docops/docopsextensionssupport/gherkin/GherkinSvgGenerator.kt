@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.gherkin
 
 import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import org.springframework.stereotype.Service
@@ -113,15 +114,19 @@ class GherkinMaker(val useDark: Boolean) {
         val headerHeight = 30
         return headerHeight + (examples.rows.size * rowHeight) + 20 // + padding
     }
-    fun makeGherkin(spec: GherkinSpec): String {
+    fun makeGherkin(spec: GherkinSpec, scale: String = "1.0"): String {
         // Initialize the design system theme based on the incoming spec
         theme = ThemeFactory.getTheme(spec.theme)
 
         val totalHeight = calculateTotalHeight(spec, spec.theme)
         val width = spec.theme.layout.width
+        
+        val fScale = scale.toDoubleOrNull() ?: 1.0
+        val scaledWidth = (width * fScale).toInt()
+        val scaledHeight = (totalHeight * fScale).toInt()
 
         return buildString {
-            append(createSvgHeader(width, totalHeight))
+            append(createSvgHeader(scaledWidth, scaledHeight, width, totalHeight))
             append(createDefinitions())
             append(createBackground(width, totalHeight))
 
@@ -139,36 +144,25 @@ class GherkinMaker(val useDark: Boolean) {
         }
     }
 
-    private fun createSvgHeader(width: Int, height: Int): String {
-        return """<svg width="$width" height="$height" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $height">"""
+    private fun createSvgHeader(scaledWidth: Int, scaledHeight: Int, width: Int, height: Int): String {
+        return """<svg width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $height" preserveAspectRatio="xMidYMid meet">"""
     }
 
     private fun createDefinitions(): String {
         // Use accentColor from theme for gradients
         val accentStart = theme.accentColor
-        // Generate a variation for the gradient end (or use a secondary from theme)
         val accentEnd = theme.secondaryText
 
-        // Shadow color should match the surface impact of the theme
-        val shadowColor = if (useDark) "#000000" else "#cbd5e1"
-        val shadowOpacity = if (useDark) "0.5" else "0.2"
-
-
-        val stopColor = if (useDark) "#000000" else "#cbd5e1"
+        // Authored shadow color derived from theme canvas
+        val shadowColor = if (useDark) "#000000" else SVGColor(theme.canvas).darker() ?: "#cbd5e1"
+        val shadowOpacity = if (useDark) "0.5" else "0.3"
 
         return """
                 <defs>
-                    <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1" fill="${theme.secondaryText}" opacity="0.15"/>
-                    </pattern>
                     <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" style="stop-color:$accentStart;stop-opacity:1" />
                         <stop offset="100%" style="stop-color:$accentEnd;stop-opacity:1" />
                     </linearGradient>
-                    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur stdDeviation="3" result="blur" />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
                     <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="140%">
                         <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="$shadowColor" flood-opacity="$shadowOpacity"/>
                     </filter>
@@ -176,12 +170,9 @@ class GherkinMaker(val useDark: Boolean) {
             """.trimIndent()
     }
 
-
-
     private fun createBackground(width: Int, height: Int): String {
         return """
                 <rect width="$width" height="$height" fill="${theme.canvas}" rx="${theme.cornerRadius}"/>
-                <rect width="$width" height="$height" fill="url(#dotPattern)" rx="${theme.cornerRadius}"/>
             """.trimIndent()
     }
 
@@ -191,8 +182,8 @@ class GherkinMaker(val useDark: Boolean) {
         val lineHeight = 30
         val bgHeight = (lines.size * lineHeight) + 60
 
-        // DESIGN SYSTEM TRANSITION: Use theme instead of local useDark checks
-        val bgColor = theme.glassEffect // or theme.canvas for solid
+        // DESIGN SYSTEM TRANSITION: Industrial/Corporate Aesthetic
+        val bgColor = theme.canvas
         val strokeColor = theme.accentColor
         val textColor = theme.primaryText
         val labelColor = theme.accentColor
@@ -200,8 +191,8 @@ class GherkinMaker(val useDark: Boolean) {
         val sb = StringBuilder()
         sb.append("""
                 <g transform="translate(40, 40)">
-                    <rect width="$width" height="$bgHeight" fill="$bgColor" opacity="0.9" rx="12" stroke="$strokeColor" stroke-width="1"/>
-                    <rect width="6" height="${bgHeight - 40}" x="0" y="20" fill="url(#accentGradient)" rx="3" filter="url(#softGlow)"/>
+                    <rect width="$width" height="$bgHeight" fill="$bgColor" rx="12" stroke="$strokeColor" stroke-width="2"/>
+                    <rect width="6" height="${bgHeight - 40}" x="0" y="20" fill="url(#accentGradient)" rx="3"/>
                     <text x="30" y="35" font-family="Monaco, monospace" font-size="11" font-weight="bold" fill="$labelColor" letter-spacing="2">FEATURE</text>
             """)
 
@@ -217,33 +208,35 @@ class GherkinMaker(val useDark: Boolean) {
         val textColor = theme.primaryText
         val highlightColor = theme.primaryText
         val metaColor = theme.accentColor
-        val bgColor = theme.glassEffect
+        val bgColor = theme.canvas
         val strokeColor = theme.accentColor
 
-        // 1. Wrap Scenario Title
-        val titleLines = wrapText("SCENARIO: ${scenario.title.uppercase()}", width - 150, 10)
-        val titleHeight = titleLines.size * 15
+        // 1. Wrap Scenario Title - Increased font size to 14px
+        val titleFontSize = 14
+        val titleLines = wrapText("SCENARIO: ${scenario.title.uppercase()}", width - 150, titleFontSize)
+        val titleLineHeight = titleFontSize + 4
+        val titleHeight = titleLines.size * titleLineHeight
 
         // 2. Pre-calculate steps with better padding
         val stepData = scenario.steps.map { step ->
             val lines = wrapText(step.text, width - 120, 14)
-            val h = lines.size * 22 // Increased line height slightly
+            val h = lines.size * 22
             Triple(step, lines, h)
         }
 
-        // 3. Dynamic Height Calculation with extra padding (40px bottom buffer)
-        val scenarioHeight = 40 + titleHeight + 20 + stepData.sumOf { it.third + 18 } + 30
+        // 3. Dynamic Height Calculation
+        val scenarioHeight = calculateScenarioHeight(scenario, gherkinTheme)
 
         return buildString {
             append("""<g transform="translate(40, $yOffset)" filter="url(#cardShadow)">""")
-            append("""<rect width="$width" height="$scenarioHeight" fill="$bgColor" rx="12" stroke="$strokeColor" stroke-width="0.5"/>""")
+            append("""<rect width="$width" height="$scenarioHeight" fill="$bgColor" rx="12" stroke="$strokeColor" stroke-width="1.5"/>""")
 
             // Render Wrapped Scenario Title
             titleLines.forEachIndexed { idx, line ->
-                append("""<text x="30" y="${35 + (idx * 15)}" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="$metaColor" letter-spacing="1.5">$line</text>""")
+                append("""<text x="30" y="${35 + (idx * titleLineHeight)}" font-family="Monaco, monospace" font-size="$titleFontSize" font-weight="bold" fill="$metaColor" letter-spacing="1">$line</text>""")
             }
 
-            // Status Badge (stays at the top right)
+            // Status Badge
             val statusColors = getStatusTheme(scenario.status)
             append("""
                     <g transform="translate(${width - 100}, 25)">
@@ -256,8 +249,12 @@ class GherkinMaker(val useDark: Boolean) {
             var currentY = 40 + titleHeight + 20
             stepData.forEachIndexed { idx, (step, lines, h) ->
                 val stepColor = getStepColorVibrant(step.type)
+                val stepIcon = getStepIcon(step.type)
                 append("""<g transform="translate(35, $currentY)">""")
-                append("""<circle cx="0" cy="0" r="4" fill="$stepColor" filter="url(#softGlow)"/>""")
+                
+                // Enhanced Accessibility: Icon in circle
+                append("""<circle cx="0" cy="0" r="10" fill="$stepColor"/>""")
+                append("""<text x="0" y="0" font-family="sans-serif" font-size="10" font-weight="bold" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">$stepIcon</text>""")
 
                 lines.forEachIndexed { lIdx, line ->
                     val escapedLine = line.escapeXml()
@@ -270,7 +267,7 @@ class GherkinMaker(val useDark: Boolean) {
 
                 if (idx < stepData.size - 1) {
                     val connectionHeight = h + 18
-                    append("""<path d="M 0 10 L 0 $connectionHeight" stroke="$strokeColor" stroke-width="1" stroke-dasharray="2 2"/>""")
+                    append("""<path d="M 0 10 L 0 $connectionHeight" stroke="$strokeColor" stroke-width="1.5" stroke-dasharray="3 3"/>""")
                 }
                 append("</g>")
                 currentY += h + 18
@@ -281,7 +278,6 @@ class GherkinMaker(val useDark: Boolean) {
             }
             append("</g>")
         }
-
     }
 
 
@@ -414,18 +410,20 @@ class GherkinMaker(val useDark: Boolean) {
 
     private fun getStepColorVibrant(type: GherkinStepType): String {
         return when (type) {
-            GherkinStepType.GIVEN -> "#22c55e"
-            GherkinStepType.WHEN -> "#3b82f6"
-            GherkinStepType.THEN -> "#8b5cf6"
-            else -> "#64748b"
+            GherkinStepType.GIVEN -> theme.chartPalette.getOrNull(0)?.color ?: "#22c55e"
+            GherkinStepType.WHEN -> theme.chartPalette.getOrNull(2)?.color ?: "#3b82f6"
+            GherkinStepType.THEN -> theme.chartPalette.getOrNull(1)?.color ?: "#8b5cf6"
+            else -> theme.secondaryText
         }
     }
 
     private fun calculateScenarioHeight(scenario: GherkinScenario, theme: GherkinTheme): Int {
         val width = theme.layout.width - 80
-        // 1. Title height
-        val titleLines = wrapText("SCENARIO: ${scenario.title.uppercase()}", width - 150, 10)
-        val titleHeight = titleLines.size * 15
+        // 1. Title height - Increased font size to 14px
+        val titleFontSize = 14
+        val titleLines = wrapText("SCENARIO: ${scenario.title.uppercase()}", width - 150, titleFontSize)
+        val titleLineHeight = titleFontSize + 4
+        val titleHeight = titleLines.size * titleLineHeight
 
         // 2. Steps height
         val stepsHeight = scenario.steps.sumOf { step ->
@@ -462,17 +460,17 @@ class GherkinMaker(val useDark: Boolean) {
         val cellWidth = (width - 60) / examples.headers.size
         val rowHeight = 25
         val textColor = theme.primaryText
-        val headerBg = theme.canvas
+        val headerBg = theme.surfaceImpact
         val borderColor = theme.accentColor
 
         return buildString {
             append("""<g transform="translate(45, $yOffset)">""")
-            append("""<text x="0" y="-10" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="#3b82f6">EXAMPLES:</text>""")
+            append("""<text x="0" y="-10" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="${theme.accentColor}">EXAMPLES:</text>""")
 
             // Headers
             examples.headers.forEachIndexed { i, header ->
                 append("""
-                            <rect x="${i * cellWidth}" y="0" width="$cellWidth" height="$rowHeight" fill="$headerBg" stroke="$borderColor" stroke-width="0.5"/>
+                            <rect x="${i * cellWidth}" y="0" width="$cellWidth" height="$rowHeight" fill="$headerBg" stroke="$borderColor" stroke-width="1"/>
                             <text x="${i * cellWidth + cellWidth / 2}" y="17" font-family="sans-serif" font-size="11" font-weight="bold" fill="$textColor" text-anchor="middle">${header.escapeXml()}</text>
                         """.trimIndent())
             }
@@ -482,7 +480,7 @@ class GherkinMaker(val useDark: Boolean) {
                 val y = (rowIndex + 1) * rowHeight
                 row.forEachIndexed { colIndex, cell ->
                     append("""
-                                <rect x="${colIndex * cellWidth}" y="$y" width="$cellWidth" height="$rowHeight" fill="none" stroke="$borderColor" stroke-width="0.5"/>
+                                <rect x="${colIndex * cellWidth}" y="$y" width="$cellWidth" height="$rowHeight" fill="${theme.canvas}" stroke="$borderColor" stroke-width="0.5"/>
                                 <text x="${colIndex * cellWidth + cellWidth / 2}" y="${y + 17}" font-family="sans-serif" font-size="11" fill="$textColor" text-anchor="middle">${cell.escapeXml()}</text>
                             """.trimIndent())
                 }

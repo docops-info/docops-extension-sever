@@ -13,6 +13,9 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
     private var theme: DocOpsTheme = ThemeFactory.getTheme(placeMatRequest.useDark)
     private val colors = mutableListOf<String>()
 
+    private val fontHumanist = "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    private val fontImportHumanist = "@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&amp;display=swap');"
+
     private var useGrad = true
 
     fun makePlacerMat(): ShapeResponse {
@@ -43,9 +46,10 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         sb.append("<g class=\"placemat-root\">")
 
         // Title Section using theme
+        val fontMain = if (isPdf) "Helvetica" else fontHumanist
         sb.append("""
             <g transform="translate(40,60)">
-                <text font-family="${if(isPdf) "Helvetica" else theme.fontFamily}" font-weight="700" font-size="36" fill="${theme.primaryText}" style="letter-spacing: -0.05em;">${placeMatRequest.title.uppercase()}</text>
+                <text font-family="$fontMain" font-weight="700" font-size="38" fill="${theme.primaryText}" style="letter-spacing: -0.05em;">${placeMatRequest.title.uppercase()}</text>
                 <rect x="0" y="12" width="120" height="4" fill="${theme.accentColor}" rx="2" />
             </g>
         """.trimIndent())
@@ -84,17 +88,17 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
             val cardFill = theme.canvas
             val secondaryText = theme.secondaryText
-            val fontMain = if (isPdf) "Helvetica" else theme.fontFamily
+            val fontMain = if (isPdf) "Helvetica" else fontHumanist
 
             sb.append("""
                     <g transform="translate($x,$y)">
                         <g class="tech-card" style="animation-delay: ${0.1 * i}s;">
                             <rect width="300" height="110" fill="$cardFill" fill-opacity="0.8" stroke="${if(isPdf) accentColor else theme.accentColor}" stroke-width="${if(isPdf) 2 else 1}" stroke-opacity="0.3" />
                             <rect x="0" y="0" width="100" height="20" fill="$accentColor" />
-                            <text x="8" y="14" font-family="$fontMain" font-weight="700" font-size="10" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">${conn.legend}</text>
+                            <text x="8" y="14" font-family="$fontMain" font-weight="700" font-size="9" fill="#FFFFFF" style="text-transform: uppercase; letter-spacing: 0.1em;">${conn.legend}</text>
                 
-                            <text x="20" y="55" font-family="$fontMain" font-weight="700" font-size="18" fill="${theme.primaryText}">${conn.name}</text>
-                            <text x="20" y="80" font-family="$fontMain" font-size="13" fill="$secondaryText" opacity="0.8">System Component</text>
+                            <text x="20" y="55" font-family="$fontMain" font-weight="700" font-size="21" fill="${theme.primaryText}">${conn.name}</text>
+                            <text x="20" y="80" font-family="$fontMain" font-size="12" fill="$secondaryText" opacity="0.8">System Component</text>
                 
                             <path d="M 270 95 L 290 95 L 290 75" fill="none" stroke="$accentColor" stroke-width="1.5" opacity="0.5" />
                         </g>
@@ -125,13 +129,11 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
 
         return """
                     <defs>
-                        ${theme.fontImport}
-                        <pattern id="blueprint_$id" width="60" height="60" patternUnits="userSpaceOnUse">
-                            <rect width="60" height="60" fill="none" stroke="$gridColor" stroke-width="0.5" stroke-opacity="0.1" />
-                            <circle cx="0" cy="0" r="1" fill="$gridColor" fill-opacity="0.2" />
-                        </pattern>
                         <style>
-                            #diag_$id .placemat-root { font-family: ${theme.fontFamily}; }
+                            ${theme.fontImport}
+                            $fontImportHumanist
+                            
+                            #diag_$id .placemat-root { font-family: ${fontHumanist}; }
                         
                             /* Animation applied ONLY to the inner tech-card group */
                             #diag_$id .tech-card { 
@@ -150,6 +152,10 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                                 transform: translate(4px, -4px);
                             }
                         </style>
+                        <pattern id="blueprint_$id" width="60" height="60" patternUnits="userSpaceOnUse">
+                            <rect width="60" height="60" fill="none" stroke="$gridColor" stroke-width="0.5" stroke-opacity="0.1" />
+                            <circle cx="0" cy="0" r="1" fill="$gridColor" fill-opacity="0.2" />
+                        </pattern>
                     </defs>
                 """.trimIndent()
     }
@@ -159,7 +165,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
         val legendItems = placeMatRequest.config.legend
         if (legendItems.isEmpty()) return ""
 
-        val fontMain = if (isPdf) "Helvetica" else theme.fontFamily
+        val fontMain = if (isPdf) "Helvetica" else fontHumanist
         val itemWidth = 140
         val itemHeight = 30
         val spacing = 20
@@ -183,7 +189,7 @@ class PlaceMatMaker(val placeMatRequest: PlaceMatRequest, val type: String= "SVG
                 <g transform="translate($startX, 10)">
                     <rect width="$itemWidth" height="$itemHeight" fill="${theme.canvas}" stroke="${theme.accentColor}" stroke-width="1" stroke-opacity="0.2" />
                     <rect width="6" height="$itemHeight" fill="$color" />
-                    <text x="15" y="20" font-family="$fontMain" font-weight="700" font-size="11" fill="${theme.primaryText}" style="letter-spacing: 0.05em;">${item.legend.uppercase()}</text>
+                    <text x="15" y="20" font-family="$fontMain" font-weight="700" font-size="9" fill="${theme.primaryText}" style="letter-spacing: 0.05em;">${item.legend.uppercase()}</text>
                 </g>
             """.trimIndent())
 
