@@ -14,7 +14,7 @@ class PlannerHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         val parser = PlannerParser()
         val planItems = parser.parse(payload)
         val rmm = ModernPlannerMaker(useDark = useDark)
-        val svg = rmm.makePlannerImage(planItems, title, scale)
+        //val svg = rmm.makePlannerImage(planItems, title, scale)
         /*val svg = if (theme.uppercase() == "MODERN") {
             val rmm = ModernPlannerMaker()
             rmm.makePlannerImage(planItems, title, scale, useDark = useDark)
@@ -23,6 +23,8 @@ class PlannerHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
             rmm.makePlannerImage(planItems, title, scale, useDark = useDark)
         }*/
 
+        val plannerMaker= PlannerMaker()
+        val svg = plannerMaker.makePlannerImage(planItems, title, scale, useDark = useDark)
         csvResponse.update(planItems.toCsv())
         return svg
     }
