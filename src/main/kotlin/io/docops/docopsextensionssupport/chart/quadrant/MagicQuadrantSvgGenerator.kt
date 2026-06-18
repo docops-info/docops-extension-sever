@@ -1,70 +1,48 @@
 package io.docops.docopsextensionssupport.chart.quadrant
 
-
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 import kotlin.math.max
 import kotlin.math.min
-
+import kotlin.math.roundToInt
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class MagicQuadrantSvgGenerator {
 
-    private interface Theme {
-        val background: String
-        val textPrimary: String
-        val textSecondary: String
-        val gridLines: String
-        val leaders: String
-        val challengers: String
-        val visionaries: String
-        val nichePlayers: String
-    }
-
-    private object DarkTheme : Theme {
-        override val background = "#020617"
-        override val textPrimary = "#f8fafc"
-        override val textSecondary = "#94a3b8"
-        override val gridLines = "#1e293b"
-        override val leaders = "#10b981"
-        override val challengers = "#f59e0b"
-        override val visionaries = "#3b82f6"
-        override val nichePlayers = "#f43f5e"
-    }
-
-    private object LightTheme : Theme {
-        override val background = "#f8fafc"
-        override val textPrimary = "#0f172a"
-        override val textSecondary = "#64748b"
-        override val gridLines = "#e2e8f0"
-        override val leaders = "#059669"
-        override val challengers = "#d97706"
-        override val visionaries = "#2563eb"
-        override val nichePlayers = "#dc2626"
-    }
-
-
-    data class QuadrantColors(
-        val background: List<String>,
-        val leaders: String,
-        val challengers: String,
-        val visionaries: String,
-        val nichePlayers: String,
-        val gridLines: String,
-        val text: String,
-        val lightText: String
-    )
-
     private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
 
+    private data class DefIds(val svgId: String) {
+        val bg = "bg_$svgId"
+        val washA = "washA_$svgId"
+        val washB = "washB_$svgId"
+        val grid = "grid_$svgId"
+
+        val qLeaders = "q_leaders_$svgId"
+        val qChallengers = "q_challengers_$svgId"
+        val qVisionaries = "q_visionaries_$svgId"
+        val qNiche = "q_niche_$svgId"
+
+        val bLeaders = "b_leaders_$svgId"
+        val bChallengers = "b_challengers_$svgId"
+        val bVisionaries = "b_visionaries_$svgId"
+        val bNiche = "b_niche_$svgId"
+
+        val boardShadow = "boardShadow_$svgId"
+        val nodeGlow = "nodeGlow_$svgId"
+    }
 
     @OptIn(ExperimentalUuidApi::class)
-    fun generateMagicQuadrant(config: MagicQuadrantConfig, scale: String = "1.0", isPdf: Boolean = false): String {
+    fun generateMagicQuadrant(
+        config: MagicQuadrantConfig,
+        scale: String = "1.0",
+        isPdf: Boolean = false
+    ): String {
         val svgId = "mq_${Uuid.random().toHexString()}"
+        val ids = DefIds(svgId)
         theme = ThemeFactory.getTheme(config)
-        val scaleFactor = scale.toDoubleOrNull() ?: 1.0
 
+        val scaleFactor = scale.toDoubleOrNull() ?: 1.0
         val baseWidth = 700
         val baseHeight = 700
         val width = (baseWidth * scaleFactor).toInt()
@@ -75,402 +53,354 @@ class MagicQuadrantSvgGenerator {
         val chartHeight = baseHeight - 2 * margin - 100
         val chartStartY = 110
 
+        val qw = chartWidth / 2
+        val qh = chartHeight / 2
+        val cx = margin + qw
+        val cy = chartStartY + qh
+
+        val focusCompany = config.companies.maxByOrNull { it.size }
+
         return buildString {
             append("""<?xml version="1.0" encoding="UTF-8"?>""")
             append("""<svg width="$width" height="$height" viewBox="0 0 $baseWidth $baseHeight" xmlns="http://www.w3.org/2000/svg" id="$svgId">""")
 
-            append(generateStyles(svgId,  isPdf))
-            append(appendDefs(svgId))
+            append(generateStyles(svgId, config.useDark, isPdf))
+            append(generateDefs(ids, config.useDark))
 
-            // Background Layers
-            append("""<rect width="100%" height="100%" class="bg-rect" rx="16" ry="16"/>""")
-            append("""<rect width="100%" height="100%" fill="url(#gridPattern_$svgId)" rx="16" ry="16" opacity="0.4"/>""")
+            // Atmosphere
+            append("""<rect width="100%" height="100%" fill="url(#${ids.bg})"/>""")
+            append("""<rect width="100%" height="100%" fill="url(#${ids.grid})"/>""")
+            append("""<rect width="100%" height="100%" fill="url(#${ids.washA})"/>""")
+            append("""<rect width="100%" height="100%" fill="url(#${ids.washB})"/>""")
 
-            // Title
-            append("""<text x="${baseWidth / 2}" y="55" text-anchor="middle" class="title-text">${escapeXml(config.title)}</text>""")
+            // Board
+            append("""<g transform="translate(40,28)"><g class="reveal d1"><rect x="0" y="0" width="620" height="644" rx="18" class="board"/></g></g>""")
 
-            // Quadrant backgrounds
-            val qw = chartWidth / 2
-            val qh = chartHeight / 2
-            val cx = margin + qw
-            val cy = chartStartY + qh
+            // Header
+            append("""<g transform="translate(40,28)"><g class="reveal d1">""")
+            append("""<text x="310" y="40" text-anchor="middle" class="title-text">${escapeXml(config.title)}</text>""")
+            append("""<text x="310" y="60" text-anchor="middle" class="sub-text">${if (config.useDark) "Glass Analyst • Dark" else "Glass Analyst • Light"}</text>""")
+            append("""</g></g>""")
 
-            appendQuadrantBackgrounds(svgId, margin, chartStartY, qw, qh)
+            // Quadrant chart
+            append("""<g transform="translate($margin,$chartStartY)">""")
+            append("""<g class="reveal d2">""")
+            append("""<rect x="0" y="0" width="$qw" height="$qh" fill="url(#${ids.qChallengers})"/>""")
+            append("""<rect x="$qw" y="0" width="$qw" height="$qh" fill="url(#${ids.qLeaders})"/>""")
+            append("""<rect x="0" y="$qh" width="$qw" height="$qh" fill="url(#${ids.qNiche})"/>""")
+            append("""<rect x="$qw" y="$qh" width="$qw" height="$qh" fill="url(#${ids.qVisionaries})"/>""")
+            append("""<line x1="$qw" y1="0" x2="$qw" y2="$chartHeight" class="split-line" stroke-dasharray="6 6"/>""")
+            append("""<line x1="0" y1="$qh" x2="$chartWidth" y2="$qh" class="split-line" stroke-dasharray="6 6"/>""")
+            append("""<rect x="0" y="0" width="$chartWidth" height="$chartHeight" rx="12" fill="none" class="chart-border"/>""")
+            append("</g>")
 
-            // Grid lines
-            append("""<line x1="$cx" y1="$chartStartY" x2="$cx" y2="${chartStartY + chartHeight}" class="grid-line" stroke-dasharray="4,4"/>""")
-            append("""<line x1="$margin" y1="$cy" x2="${margin + chartWidth}" y2="$cy" class="grid-line" stroke-dasharray="4,4"/>""")
+            appendQuadrantChip(this, config.challengersLabel.uppercase(), 12, 12, "#F59F00")
+            appendQuadrantChip(this, config.leadersLabel.uppercase(), chartWidth - estimateChipWidth(config.leadersLabel.uppercase()) - 12, 12, "#12B886")
+            appendQuadrantChip(this, config.nichePlayersLabel.uppercase(), 12, chartHeight - 40, "#F43F5E")
+            appendQuadrantChip(this, config.visionariesLabel.uppercase(), chartWidth - estimateChipWidth(config.visionariesLabel.uppercase()) - 12, chartHeight - 40, "#3B82F6")
 
-            // Quadrant labels
-            appendQuadrantLabels(config, margin, chartStartY, qw, qh, theme, svgId)
+            append("""</g>""")
 
-            // Axis labels - Split display
-            // X-Axis: Start label centered under left half, End label centered under right half
+            // Axis labels
             val xAxisY = baseHeight - 15
+            append("""<g class="reveal d3">""")
             append("""<text x="${margin + qw / 2}" y="$xAxisY" text-anchor="middle" class="axis-label">${escapeXml(config.xAxisLabel.uppercase())}</text>""")
-
             if (config.xAxisLabelEnd.isNotEmpty()) {
                 append("""<text x="${margin + qw + qw / 2}" y="$xAxisY" text-anchor="middle" class="axis-label">${escapeXml(config.xAxisLabelEnd.uppercase())} →</text>""")
             }
 
-            // Y-Axis: Start label centered next to bottom half, End label centered next to top half
             val yAxisX = 20
             val yBottomHalfCenter = chartStartY + qh + qh / 2
             val yTopHalfCenter = chartStartY + qh / 2
-
             append("""<text x="$yAxisX" y="$yBottomHalfCenter" text-anchor="middle" class="axis-label" transform="rotate(-90 $yAxisX $yBottomHalfCenter)">${escapeXml(config.yAxisLabel.uppercase())}</text>""")
-
             if (config.yAxisLabelEnd.isNotEmpty()) {
                 append("""<text x="$yAxisX" y="$yTopHalfCenter" text-anchor="middle" class="axis-label" transform="rotate(-90 $yAxisX $yTopHalfCenter)">${escapeXml(config.yAxisLabelEnd.uppercase())} →</text>""")
             }
-            // Plot companies
-            config.companies.forEach { company ->
-                appendPlotCompany(this, svgId, company, margin, chartStartY, chartWidth, chartHeight, isPdf)
+            append("</g>")
+
+            // Companies
+            config.companies.forEachIndexed { index, company ->
+                val x = margin + (company.x / 100.0 * chartWidth).roundToInt()
+                val y = chartStartY + chartHeight - (company.y / 100.0 * chartHeight).roundToInt()
+                val radius = max(8, min(25, company.size))
+                val isFocus = focusCompany == company
+                val bubbleId = getBubbleId(ids, company.x, company.y)
+                val delayClass = "d${(index % 3) + 2}"
+
+                val nodeOpen = if (company.url.isNotEmpty()) {
+                    """<a href="${escapeXml(company.url)}" target="_blank"><g aria-label="${escapeXml(company.name)}">"""
+                } else {
+                    """<g aria-label="${escapeXml(company.name)}">"""
+                }
+
+                append("""<g transform="translate($x,$y)">""")
+                append("""<g class="reveal $delayClass">""")
+                append(nodeOpen)
+
+                if (isFocus && !isPdf) {
+                    append("""<circle cx="0" cy="0" r="${radius + 6}" class="focus-pulse" fill="none" stroke="var(--focus)" stroke-width="2"/>""")
+                }
+
+                append("""<circle cx="0" cy="0" r="$radius" fill="url(#$bubbleId)" class="node-core" filter="url(#${ids.nodeGlow})"/>""")
+                append("""<circle cx="${-(radius * 0.25).roundToInt()}" cy="${-(radius * 0.30).roundToInt()}" r="${max(2, (radius * 0.22).roundToInt())}" class="node-specular"/>""")
+
+                val labelY = radius + 20
+                append("""<text x="0" y="$labelY" text-anchor="middle" class="company-name">${escapeXml(company.name)}</text>""")
+                if (company.description.isNotEmpty()) {
+                    append("""<title>${escapeXml(company.description)}</title>""")
+                }
+
+                append("</g>")
+                if (company.url.isNotEmpty()) append("</a>")
+                append("</g>")
+                append("</g>")
             }
 
             append("</svg>")
         }
     }
 
+    private fun appendQuadrantChip(sb: StringBuilder, text: String, x: Int, y: Int, color: String) {
+        val width = estimateChipWidth(text)
+        sb.append("""<g class="reveal d3">""")
+        sb.append("""<rect x="$x" y="$y" width="$width" height="28" rx="14" class="chip-bg" stroke="$color" stroke-opacity="0.45"/>""")
+        sb.append("""<text x="${x + width / 2}" y="${y + 18}" text-anchor="middle" class="quad-chip-text" fill="$color">${escapeXml(text)}</text>""")
+        sb.append("</g>")
+    }
 
+    private fun estimateChipWidth(text: String): Int {
+        return max(98, (text.length * 7.2).roundToInt() + 26)
+    }
 
-    private fun appendDefs(sb: StringBuilder, svgId: String, colors: QuadrantColors) {
-        sb.append("<defs>")
+    private fun getBubbleId(ids: DefIds, x: Double, y: Double): String {
+        return when {
+            x >= 50 && y >= 50 -> ids.bLeaders
+            x < 50 && y >= 50 -> ids.bChallengers
+            x >= 50 && y < 50 -> ids.bVisionaries
+            else -> ids.bNiche
+        }
+    }
 
-        // Background gradient
-        sb.append("""
-            <linearGradient id="bgGradient_$svgId" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:${colors.background[0]};stop-opacity:1" />
-                <stop offset="100%" style="stop-color:${colors.background[1]};stop-opacity:1" />
-            </linearGradient>
-        """.trimIndent())
+    private fun generateDefs(ids: DefIds, useDark: Boolean): String {
+        val bg0 = if (useDark) "#0A1026" else "#F4F8FF"
+        val bg1 = if (useDark) "#101A3A" else "#EAF2FF"
+        val bg2 = if (useDark) "#0B1430" else "#E5EEFF"
 
-        // Quadrant gradients
-        sb.append("""
-            <radialGradient id="leadersGradient_$svgId" cx="75%" cy="25%">
-                <stop offset="0%" style="stop-color:${colors.leaders};stop-opacity:0.4" />
-                <stop offset="100%" style="stop-color:${colors.leaders};stop-opacity:0.1" />
-            </radialGradient>
-            <radialGradient id="challengersGradient_$svgId" cx="25%" cy="25%">
-                <stop offset="0%" style="stop-color:${colors.challengers};stop-opacity:0.4" />
-                <stop offset="100%" style="stop-color:${colors.challengers};stop-opacity:0.1" />
-            </radialGradient>
-            <radialGradient id="visionariesGradient_$svgId" cx="75%" cy="75%">
-                <stop offset="0%" style="stop-color:${colors.visionaries};stop-opacity:0.4" />
-                <stop offset="100%" style="stop-color:${colors.visionaries};stop-opacity:0.1" />
-            </radialGradient>
-            <radialGradient id="nicheGradient_$svgId" cx="25%" cy="75%">
-                <stop offset="0%" style="stop-color:${colors.nichePlayers};stop-opacity:0.4" />
-                <stop offset="100%" style="stop-color:${colors.nichePlayers};stop-opacity:0.1" />
-            </radialGradient>
-        """.trimIndent())
+        val washAColor = if (useDark) "#4CB4FF" else "#4CB4FF"
+        val washBColor = if (useDark) "#8E7BFF" else "#8E7BFF"
+        val washAOpacity = if (useDark) "0.22" else "0.18"
+        val washBOpacity = if (useDark) "0.18" else "0.14"
 
-        // Company bubble gradients
-        listOf("leaders", "challengers", "visionaries", "nichePlayers").forEach { type ->
-            val color = when(type) {
-                "leaders" -> colors.leaders
-                "challengers" -> colors.challengers
-                "visionaries" -> colors.visionaries
-                else -> colors.nichePlayers
-            }
-            sb.append("""
-                <radialGradient id="bubble${type}_$svgId">
-                    <stop offset="0%" style="stop-color:$color;stop-opacity:0.8" />
-                    <stop offset="100%" style="stop-color:$color;stop-opacity:1" />
+        val gridStroke = if (useDark) "rgba(191,208,255,0.22)" else "rgba(42,72,122,0.18)"
+
+        val qOpacity = if (useDark) "0.22" else "0.18"
+
+        return """
+            <defs>
+                <linearGradient id="${ids.bg}" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="$bg0"/>
+                    <stop offset="55%" stop-color="$bg1"/>
+                    <stop offset="100%" stop-color="$bg2"/>
+                </linearGradient>
+
+                <radialGradient id="${ids.washA}" cx="18%" cy="20%" r="50%">
+                    <stop offset="0%" stop-color="$washAColor" stop-opacity="$washAOpacity"/>
+                    <stop offset="100%" stop-color="$washAColor" stop-opacity="0"/>
                 </radialGradient>
-            """.trimIndent())
-        }
 
-        // Filters
-        sb.append("""
-            <filter id="glow_$svgId">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-            <filter id="bubbleShadow_$svgId">
-                <feDropShadow dx="2" dy="2" stdDeviation="4" flood-opacity="0.3"/>
-            </filter>
-            <filter id="labelShadow_$svgId">
-                <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/>
-            </filter>
-        """.trimIndent())
+                <radialGradient id="${ids.washB}" cx="88%" cy="18%" r="42%">
+                    <stop offset="0%" stop-color="$washBColor" stop-opacity="$washBOpacity"/>
+                    <stop offset="100%" stop-color="$washBColor" stop-opacity="0"/>
+                </radialGradient>
 
-        sb.append("</defs>")
-    }
+                <pattern id="${ids.grid}" width="32" height="32" patternUnits="userSpaceOnUse">
+                    <path d="M32 0H0V32" fill="none" stroke="$gridStroke" stroke-width="1"/>
+                </pattern>
 
-    private fun appendQuadrantBackground(
-        sb: StringBuilder,
-        svgId: String,
-        margin: Int,
-        chartStartY: Int,
-        quadrantWidth: Int,
-        quadrantHeight: Int,
-        colors: QuadrantColors
-    ) {
-        // Challengers (top-left)
-        sb.append("""<rect x="$margin" y="$chartStartY" width="$quadrantWidth" height="$quadrantHeight" fill="url(#challengersGradient_$svgId)"/>""")
+                <radialGradient id="${ids.qLeaders}" cx="82%" cy="20%" r="85%">
+                    <stop offset="0%" stop-color="#12B886" stop-opacity="$qOpacity"/>
+                    <stop offset="100%" stop-color="#12B886" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="${ids.qChallengers}" cx="18%" cy="20%" r="85%">
+                    <stop offset="0%" stop-color="#F59F00" stop-opacity="$qOpacity"/>
+                    <stop offset="100%" stop-color="#F59F00" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="${ids.qVisionaries}" cx="82%" cy="80%" r="85%">
+                    <stop offset="0%" stop-color="#3B82F6" stop-opacity="$qOpacity"/>
+                    <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="${ids.qNiche}" cx="18%" cy="80%" r="85%">
+                    <stop offset="0%" stop-color="#F43F5E" stop-opacity="$qOpacity"/>
+                    <stop offset="100%" stop-color="#F43F5E" stop-opacity="0"/>
+                </radialGradient>
 
-        // Leaders (top-right)
-        sb.append("""<rect x="${margin + quadrantWidth}" y="$chartStartY" width="$quadrantWidth" height="$quadrantHeight" fill="url(#leadersGradient_$svgId)"/>""")
+                <radialGradient id="${ids.bLeaders}" cx="35%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#4EE7BC"/>
+                    <stop offset="100%" stop-color="#12B886"/>
+                </radialGradient>
+                <radialGradient id="${ids.bChallengers}" cx="35%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#FFD86B"/>
+                    <stop offset="100%" stop-color="#F59F00"/>
+                </radialGradient>
+                <radialGradient id="${ids.bVisionaries}" cx="35%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#8BB7FF"/>
+                    <stop offset="100%" stop-color="#3B82F6"/>
+                </radialGradient>
+                <radialGradient id="${ids.bNiche}" cx="35%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#FF7A92"/>
+                    <stop offset="100%" stop-color="#F43F5E"/>
+                </radialGradient>
 
-        // Niche Players (bottom-left)
-        sb.append("""<rect x="$margin" y="${chartStartY + quadrantHeight}" width="$quadrantWidth" height="$quadrantHeight" fill="url(#nicheGradient_$svgId)"/>""")
+                <filter id="${ids.boardShadow}" x="-40%" y="-40%" width="180%" height="180%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="${if (useDark) 5 else 4}"/>
+                    <feOffset dx="0" dy="${if (useDark) 4 else 3}"/>
+                    <feComponentTransfer>
+                        <feFuncA type="linear" slope="${if (useDark) 0.32 else 0.18}"/>
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
 
-        // Visionaries (bottom-right)
-        sb.append("""<rect x="${margin + quadrantWidth}" y="${chartStartY + quadrantHeight}" width="$quadrantWidth" height="$quadrantHeight" fill="url(#visionariesGradient_$svgId)"/>""")
-    }
-
-    // Changed to an extension function: StringBuilder.appendQuadrantLabels
-    private fun StringBuilder.appendQuadrantLabels(
-        config: MagicQuadrantConfig,
-        margin: Int,
-        chartStartY: Int,
-        quadrantWidth: Int,
-        quadrantHeight: Int,
-        theme: DocOpsTheme,
-        svgId: String
-    ) {
-        val labelBg = theme.glassEffect
-        val labelOpacity = "0.9"
-
-        val qColors = object {
-            val leaders = "#10b981"
-            val challengers = "#f59e0b"
-            val visionaries = "#3b82f6"
-            val nichePlayers = "#f43f5e"
-        }
-
-        // Now 'this' refers to the StringBuilder, and it can call other StringBuilder extensions
-        appendLabel(svgId, margin + quadrantWidth / 2, chartStartY + 30, config.challengersLabel, qColors.challengers, labelBg, labelOpacity, theme.fontFamily)
-        appendLabel(svgId, margin + quadrantWidth + quadrantWidth / 2, chartStartY + 30, config.leadersLabel, qColors.leaders, labelBg, labelOpacity, theme.fontFamily)
-        appendLabel(svgId, margin + quadrantWidth / 2, chartStartY + quadrantHeight * 2 - 20, config.nichePlayersLabel, qColors.nichePlayers, labelBg, labelOpacity, theme.fontFamily)
-        appendLabel(svgId, margin + quadrantWidth + quadrantWidth / 2, chartStartY + quadrantHeight * 2 - 20, config.visionariesLabel, qColors.visionaries, labelBg, labelOpacity, theme.fontFamily)
-    }
-
-    private fun StringBuilder.appendLabel(
-        svgId: String,
-        x: Int,
-        y: Int,
-        text: String,
-        textColor: String,
-        bg: String,
-        opacity: String,
-        fontFamily: String
-    ) {
-        val uppercaseText = text.uppercase()
-        val labelWidth = estimateTextWidth(uppercaseText, 14) + 40
-        append("""<rect x="${x - labelWidth / 2}" y="${y - 15}" width="$labelWidth" height="30" rx="15" fill="$bg" opacity="$opacity" filter="url(#labelShadow_$svgId)"/>""")
-        append("""<text x="$x" y="${y + 5}" text-anchor="middle" font-family="$fontFamily" font-size="14" font-weight="600" fill="$textColor">$uppercaseText</text>""")
-    }
-
-
-
-    // Add helper method to estimate text width for dynamic sizing
-    private fun estimateTextWidth(text: String, fontSize: Int): Int {
-        return (text.length * fontSize * 0.6).toInt()
-    }
-
-    private fun plotCompany(
-        sb: StringBuilder,
-        svgId: String,
-        company: QuadrantCompany,
-        margin: Int,
-        chartStartY: Int,
-        chartWidth: Int,
-        chartHeight: Int,
-        colors: QuadrantColors
-    ) {
-        // Convert 0-100 scale to chart coordinates
-        val x = margin + (company.x / 100.0 * chartWidth).toInt()
-        val y = chartStartY + chartHeight - (company.y / 100.0 * chartHeight).toInt() // Flip Y axis
-
-        // Determine quadrant color and gradient
-        val bubbleGradient = getQuadrantGradient(company.x, company.y, svgId)
-        val radius = max(8, min(25, company.size))
-        var href =""
-        if (company.url.isNotEmpty()) {
-            href = """onclick="window.open('${escapeXml(company.url)}', '_blank')" style="cursor:pointer""""
-        }
-        // Wrap in group for potential linking
-        sb.append("""<g aria-label="${escapeXml(company.name)}" $href>""")
-        // Company bubble with glow effect
-        sb.append("""<circle cx="$x" cy="$y" r="$radius" fill="url(#$bubbleGradient)" filter="url(#glow_$svgId)"/>""")
-        sb.append("""<circle cx="$x" cy="$y" r="${radius - 4}" fill="#ffffff" opacity="0.9">""")
-        sb.append("""<animate attributeName="r" begin="0s" dur="0.5s" values="$radius; ${radius + 4}; $radius" calcMode="linear"/>""")
-        // Optional description as title element for tooltip
-        if (company.description.isNotEmpty()) {
-            sb.append("""<title>${escapeXml(company.description)}</title>""")
-        }
-        sb.append("""</circle>""")
-        // Company name label
-        val textY = y + radius + 20
-        val textColor = colors.text
-        sb.append("""<text x="$x" y="$textY" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="600" fill="$textColor">${escapeXml(company.name)}</text>""")
-
-
-
-        sb.append("""</g>""")
-    }
-
-    private fun generateStyles(id: String, isPdf: Boolean): String {
-        val fontSize = 24 / theme.fontWidthMultiplier
-        return """
-        <style>
-            ${theme.fontImport}
-            #$id .bg-rect { fill: ${theme.canvas}; }
-            #$id .title-text { 
-                fill: ${theme.primaryText}; 
-                font-family: ${theme.fontFamily}; 
-                font-size: ${fontSize}px; 
-                font-weight: 800; 
-                letter-spacing: -0.5px;
-            }
-            #$id .grid-line { stroke: ${theme.accentColor}; stroke-width: 2; opacity: 0.2; }
-            #$id .axis-label { 
-                fill: ${theme.secondaryText}; 
-                font-family: ${theme.fontFamily}; 
-                font-size: 11px; 
-                font-weight: 800; 
-                letter-spacing: 2px;
-            }
-            #$id .quadrant-label { 
-                font-family: ${theme.fontFamily}; 
-                font-size: 11px; 
-                font-weight: bold; 
-            }
-            #$id .company-name { 
-                fill: ${theme.primaryText}; 
-                font-family: ${theme.fontFamily}; 
-                font-size: 12px; 
-                font-weight: 600;
-            }
-            ${if(!isPdf) """
-            @keyframes sonar { 
-                0% { r: 10; opacity: 0.6; } 
-                100% { r: 25; opacity: 0; } 
-            }
-            .sonar-ring { animation: sonar 2.5s infinite; }
-            """ else ""}
-        </style>
+                <filter id="${ids.nodeGlow}" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="${if (useDark) 4 else 3}" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
         """.trimIndent()
     }
 
-    private fun appendDefs(svgId: String): String {
-        val leaders = "#10b981"
-        val challengers = "#f59e0b"
-        val visionaries = "#3b82f6"
-        val nichePlayers = "#f43f5e"
+    private fun generateStyles(svgId: String, useDark: Boolean, isPdf: Boolean): String {
+        val animRise = "mqRise_$svgId"
+        val animPulse = "mqPulse_$svgId"
+
+        val text = if (useDark) "#EAF1FF" else "#10213D"
+        val muted = if (useDark) "#A8B8DA" else "#4E6791"
+        val axis = if (useDark) "rgba(191,208,255,0.46)" else "rgba(42,72,122,0.45)"
+        val glass = if (useDark) "rgba(255,255,255,0.10)" else "rgba(255,255,255,0.58)"
+        val glassStroke = if (useDark) "rgba(219,230,255,0.34)" else "rgba(142,172,221,0.58)"
+        val chipBg = if (useDark) "rgba(255,255,255,0.12)" else "rgba(255,255,255,0.78)"
+        val focus = if (useDark) "#00C2FF" else "#00A9E8"
 
         return """
-        <defs>
-            <pattern id="gridPattern_$svgId" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="${theme.accentColor}" stroke-width="1" opacity="0.3"/>
-            </pattern>
-            <radialGradient id="gradLeaders_$svgId" cx="100%" cy="0%">
-                <stop offset="0%" stop-color="$leaders" stop-opacity="0.15"/>
-                <stop offset="100%" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="gradChallengers_$svgId" cx="0%" cy="0%">
-                <stop offset="0%" stop-color="$challengers" stop-opacity="0.15"/>
-                <stop offset="100%" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="gradVisionaries_$svgId" cx="100%" cy="100%">
-                <stop offset="0%" stop-color="$visionaries" stop-opacity="0.15"/>
-                <stop offset="100%" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="gradNiche_$svgId" cx="0%" cy="100%">
-                <stop offset="0%" stop-color="$nichePlayers" stop-opacity="0.15"/>
-                <stop offset="100%" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="glow_$svgId">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
-                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-            </filter>
-            <filter id="labelShadow_$svgId">
-                <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.2"/>
-            </filter>
-        </defs>
+            <style>
+                ${theme.fontImport}
+                #$svgId {
+                    --text: $text;
+                    --muted: $muted;
+                    --axis: $axis;
+                    --glass: $glass;
+                    --glass-stroke: $glassStroke;
+                    --chip-bg: $chipBg;
+                    --focus: $focus;
+                }
+
+                #$svgId .board {
+                    fill: var(--glass);
+                    stroke: var(--glass-stroke);
+                    filter: url(#boardShadow_$svgId);
+                }
+
+                #$svgId .title-text {
+                    font-family: ${theme.fontFamily};
+                    font-size: ${38 / theme.fontWidthMultiplier}px;
+                    font-weight: 800;
+                    letter-spacing: -0.01em;
+                    fill: var(--text);
+                }
+
+                #$svgId .sub-text {
+                    font-family: ${theme.fontFamily};
+                    font-size: 12px;
+                    font-weight: 500;
+                    fill: var(--muted);
+                }
+
+                #$svgId .axis-label {
+                    font-family: ${theme.fontFamily};
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.12em;
+                    text-transform: uppercase;
+                    fill: var(--muted);
+                }
+
+                #$svgId .split-line {
+                    stroke: var(--axis);
+                    stroke-width: 2;
+                }
+
+                #$svgId .chart-border {
+                    stroke: var(--axis);
+                    stroke-width: 1.2;
+                }
+
+                #$svgId .chip-bg {
+                    fill: var(--chip-bg);
+                }
+
+                #$svgId .quad-chip-text {
+                    font-family: ${theme.fontFamily};
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 0.08em;
+                }
+
+                #$svgId .company-name {
+                    font-family: ${theme.fontFamily};
+                    font-size: 12px;
+                    font-weight: 600;
+                    fill: var(--text);
+                }
+
+                #$svgId .node-core {
+                    filter: url(#nodeGlow_$svgId);
+                }
+
+                #$svgId .node-specular {
+                    fill: #ffffff;
+                    opacity: ${if (useDark) 0.52 else 0.62};
+                }
+
+                #$svgId .reveal {
+                    opacity: 0;
+                    animation: $animRise 420ms cubic-bezier(.2,.8,.2,1) forwards;
+                }
+
+                #$svgId .d1 { animation-delay: 60ms; }
+                #$svgId .d2 { animation-delay: 120ms; }
+                #$svgId .d3 { animation-delay: 180ms; }
+                #$svgId .d4 { animation-delay: 240ms; }
+
+                ${if (!isPdf) """
+                #$svgId .focus-pulse {
+                    animation: $animPulse 2.2s ease-in-out infinite;
+                    transform-origin: center;
+                }
+                """.trimIndent() else ""}
+
+                @keyframes $animRise {
+                    from { opacity: 0; transform: translateY(8px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                ${if (!isPdf) """
+                @keyframes $animPulse {
+                    0%,100% { opacity: ${if (useDark) ".40" else ".36"}; r: 24; }
+                    50% { opacity: ${if (useDark) ".18" else ".14"}; r: 30; }
+                }
+                """.trimIndent() else ""}
+            </style>
         """.trimIndent()
-    }
-
-    private fun appendPlotCompany(sb: StringBuilder, svgId: String, company: QuadrantCompany, margin: Int, startY: Int, w: Int, h: Int, isPdf: Boolean) {
-        val x = margin + (company.x / 100.0 * w).toInt()
-        val y = startY + h - (company.y / 100.0 * h).toInt()
-        val radius = 10
-        val color = getQuadrantColor(company.x, company.y)
-
-        sb.append("""<g class="company-node">""")
-        if(!isPdf) {
-            sb.append("""<circle cx="$x" cy="$y" r="$radius" class="sonar-ring" fill="none" stroke="$color" stroke-width="1.5"/>""")
-        }
-        sb.append("""<circle cx="$x" cy="$y" r="$radius" fill="$color" filter="url(#glow_$svgId)"/>""")
-        sb.append("""<circle cx="$x" cy="$y" r="3" fill="#ffffff" opacity="0.4"/>""")
-        sb.append("""<text x="$x" y="${y + 25}" text-anchor="middle" class="company-name">${escapeXml(company.name)}</text>""")
-        sb.append("""</g>""")
-    }
-
-    private fun getQuadrantColor(x: Double, y: Double): String {
-        return when {
-            x >= 50 && y >= 50 -> "#10b981" // Leaders
-            x < 50 && y >= 50 -> "#f59e0b"  // Challengers
-            x >= 50 && y < 50 -> "#3b82f6"  // Visionaries
-            else -> "#f43f5e"               // Niche
-        }
-    }
-    private fun getQuadrantGradient(x: Double, y: Double, svgId: String): String {
-        return when {
-            x >= 50 && y >= 50 -> "bubbleleaders_$svgId"
-            x < 50 && y >= 50 -> "bubblechallengers_$svgId"
-            x >= 50 && y < 50 -> "bubblevisionaries_$svgId"
-            else -> "bubblenichePlayers_$svgId"
-        }
-    }
-
-    private fun appendQuadrantBackgrounds(
-        svgId: String,
-        margin: Int,
-        chartStartY: Int,
-        qw: Int,
-        qh: Int
-    ): String {
-        return buildString {
-            // Challengers (top-left)
-            append("""<rect x="$margin" y="$chartStartY" width="$qw" height="$qh" fill="url(#gradChallengers_$svgId)"/>""")
-            // Leaders (top-right)
-            append("""<rect x="${margin + qw}" y="$chartStartY" width="$qw" height="$qh" fill="url(#gradLeaders_$svgId)"/>""")
-            // Niche Players (bottom-left)
-            append("""<rect x="$margin" y="${chartStartY + qh}" width="$qw" height="$qh" fill="url(#gradNiche_$svgId)"/>""")
-            // Visionaries (bottom-right)
-            append("""<rect x="${margin + qw}" y="${chartStartY + qh}" width="$qw" height="$qh" fill="url(#gradVisionaries_$svgId)"/>""")
-        }
-    }
-
-    private fun StringBuilder.appendQuadrantLabels(
-        config: MagicQuadrantConfig,
-        margin: Int,
-        chartStartY: Int,
-        qw: Int,
-        qh: Int,
-        theme: Theme
-    ) {
-        val labelYTop = chartStartY + 25
-        val labelYBottom = chartStartY + qh + qh - 15
-
-        // Challengers
-        append("""<text x="${margin + 10}" y="$labelYTop" fill="${theme.challengers}" class="quadrant-label">${escapeXml(config.challengersLabel.uppercase())}</text>""")
-        // Leaders
-        append("""<text x="${margin + qw + 10}" y="$labelYTop" fill="${theme.leaders}" class="quadrant-label">${escapeXml(config.leadersLabel.uppercase())}</text>""")
-        // Niche
-        append("""<text x="${margin + 10}" y="$labelYBottom" fill="${theme.nichePlayers}" class="quadrant-label">${escapeXml(config.nichePlayersLabel.uppercase())}</text>""")
-        // Visionaries
-        append("""<text x="${margin + qw + 10}" y="$labelYBottom" fill="${theme.visionaries}" class="quadrant-label">${escapeXml(config.visionariesLabel.uppercase())}</text>""")
     }
 
     private fun escapeXml(text: String): String {
-        return text.replace("&", "&amp;")
+        return text
+            .replace("&", "&amp;")
             .replace("<", "&lt;")
             .replace(">", "&gt;")
             .replace("\"", "&quot;")
