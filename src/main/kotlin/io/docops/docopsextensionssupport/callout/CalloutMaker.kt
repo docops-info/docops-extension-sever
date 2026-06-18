@@ -13,21 +13,21 @@ open class CalloutMaker(val useDark: Boolean) {
 
     private val theme = ThemeFactory.getThemeByName("brand", useDark)
 
-    fun createSystematicApproachFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
+    fun createSystematicApproachFromTable(payload: String, width: Int, height: Int, scale: String = "1.0"): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "systematic", useDark)
-        val svg = generateSystematicSvg(calloutData, width, height)
+        val svg = generateSystematicSvg(calloutData, width, height, scale)
         return Pair(svg, calloutData.toCsv())
     }
 
-    fun createMetricsFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
+    fun createMetricsFromTable(payload: String, width: Int, height: Int, scale: String = "1.0"): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "metrics", useDark)
-        val svg = generateMetricsSvg(calloutData, width, height)
+        val svg = generateMetricsSvg(calloutData, width, height, scale)
         return Pair(svg, calloutData.toCsv())
     }
 
-    fun createTimelineFromTable(payload: String, width: Int, height: Int): Pair<String, CsvResponse> {
+    fun createTimelineFromTable(payload: String, width: Int, height: Int, scale: String = "1.0"): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "timeline", useDark)
-        val svg = generateTimelineSvg(calloutData, width, height)
+        val svg = generateTimelineSvg(calloutData, width, height, scale)
         return Pair(svg, calloutData.toCsv())
     }
 
@@ -111,7 +111,7 @@ open class CalloutMaker(val useDark: Boolean) {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    private fun generateSystematicSvg(calloutData: CalloutData, width: Int, height: Int): String {
+    private fun generateSystematicSvg(calloutData: CalloutData, width: Int, height: Int, scale: String): String {
         val stepHeight = 110
         val stepsCount = calloutData.steps.size
         val calculatedHeight = if (stepsCount > 0) {
@@ -120,6 +120,9 @@ open class CalloutMaker(val useDark: Boolean) {
             height
         }
         val finalHeight = calculatedHeight.coerceAtLeast(height)
+        val fScale = scale.toDoubleOrNull() ?: 1.0
+        val scaledWidth = (width * fScale).toInt()
+        val scaledHeight = (finalHeight * fScale).toInt()
 
         var stopColor = theme.surfaceImpact
         if(!useDark) {
@@ -130,13 +133,13 @@ open class CalloutMaker(val useDark: Boolean) {
             //val theme = if (calloutData.useDark) DarkTheme() else LightTheme()
 
             append("""
-                <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
+                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
                     <defs>
                         <style>
                             ${theme.fontImport}
                             .title_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 26px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
                             .phase_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 17px; fill: ${theme.primaryText}; }
-                            .action_$id { font-family: ${theme.fontFamily}; font-weight: 300; font-size: 14px; fill: ${theme.secondaryText}; }
+                            .action_$id { font-family: ${theme.fontFamily}; font-weight: 400; font-size: 14px; fill: ${theme.secondaryText}; }
                             .result_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 13px; fill: ${theme.accentColor}; }
                             .step-num_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 12px; fill: ${theme.accentColor}; }
                         </style>
@@ -203,7 +206,7 @@ open class CalloutMaker(val useDark: Boolean) {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    private fun generateMetricsSvg(calloutData: CalloutData, width: Int, height: Int): String {
+    private fun generateMetricsSvg(calloutData: CalloutData, width: Int, height: Int, scale: String): String {
         val metricHeight = 90
         val metricsCount = calloutData.metrics.size
         val calculatedHeight = if (metricsCount > 0) {
@@ -212,6 +215,9 @@ open class CalloutMaker(val useDark: Boolean) {
             height
         }
         val finalHeight = calculatedHeight.coerceAtLeast(height)
+        val fScale = scale.toDoubleOrNull() ?: 1.0
+        val scaledWidth = (width * fScale).toInt()
+        val scaledHeight = (finalHeight * fScale).toInt()
 
         return buildString {
             val id = Uuid.random().toHexString()
@@ -220,7 +226,7 @@ open class CalloutMaker(val useDark: Boolean) {
                 stopColor = SVGColor(theme.canvas).darker()!!
             }
             append("""
-                <svg id="ID_$id" width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
+                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
                     <defs>
                         <style>
                             ${theme.fontImport}
@@ -271,183 +277,87 @@ open class CalloutMaker(val useDark: Boolean) {
         }
     }
 
-    private fun generateTimelineSvg(calloutData: CalloutData, width: Int, height: Int): String {
-        // Calculate dynamic height based on number of steps
-        // Base height (timeline + header) + extra height for cards
-        val baseHeight = 380 // Header (80) + timeline (300)
+    @OptIn(ExperimentalUuidApi::class)
+    private fun generateTimelineSvg(calloutData: CalloutData, width: Int, height: Int, scale: String): String {
         val stepsCount = calloutData.steps.size
-
         // Timeline needs more height for the cards that appear above and below the timeline
-        // Each step can have a card that takes up to 120px of vertical space
-        val calculatedHeight = if (stepsCount > 0) {
-            baseHeight + (stepsCount * 60)
-        } else {
-            height // Use provided height if no steps
-        }
+        val baseHeight = 450
+        val finalHeight = baseHeight.coerceAtLeast(height)
+        val fScale = scale.toDoubleOrNull() ?: 1.0
+        val scaledWidth = (width * fScale).toInt()
+        val scaledHeight = (finalHeight * fScale).toInt()
+        val id = Uuid.random().toHexString()
 
-        // Use the larger of calculated height or provided height
-        val finalHeight = calculatedHeight.coerceAtLeast(height)
+        // Authored shadow color derived from theme canvas
+        val shadowColor = SVGColor(theme.canvas).darkenColor(theme.canvas, 0.5)
+        val shadowAlpha = if (useDark) 0.5 else 0.2
 
         return buildString {
             append("""
-                <svg width="$width" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
+                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
                     <defs>
-            """.trimIndent())
-
-            // Add glass-specific definitions if useGlass is true
-            if (calloutData.useDark) {
-                append("""
-                        <!-- Glass gradients -->
-                        <linearGradient id="glassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                            <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                        </linearGradient>
-                        <radialGradient id="glassRadial" cx="30%" cy="30%" r="70%">
-                            <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
-                            <stop offset="70%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                        </radialGradient>
-                        <linearGradient id="highlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-                        </linearGradient>
-
-                        <!-- Glass filters -->
-                        <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-                        </filter>
-                        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.3)"/>
-                        </filter>
-                        <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feOffset dx="0" dy="2"/>
-                            <feGaussianBlur stdDeviation="3" result="offset-blur"/>
-                            <feFlood flood-color="rgba(0,0,0,0.3)"/>
-                            <feComposite in2="offset-blur" operator="in"/>
-                            <feComposite in2="SourceGraphic" operator="over"/>
-                        </filter>
-                """.trimIndent())
-            }
-
-            // Always include original gradients and iOS shadow
-            append("""
-                        <!-- Original gradients -->
-                        <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FF9500;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
-                            <stop offset="100%" style="stop-color:#FF2D55;stop-opacity:${if (calloutData.useDark) "0.8" else "1"}" />
-                        </linearGradient>
-                        <filter id="iosShadow">
-                            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
+                        ${theme.fontImport}
+                        <style>
+                            .title_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: 24px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
+                            .phase_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 15px; fill: ${theme.primaryText}; }
+                            .action_$id { font-family: ${theme.fontFamily}; font-weight: 400; font-size: 14px; fill: ${theme.secondaryText}; }
+                            .result_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: 11px; fill: ${theme.accentColor}; text-transform: uppercase; letter-spacing: 0.5px; }
+                        </style>
+                        <filter id="shadow_$id">
+                            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="$shadowColor" flood-opacity="$shadowAlpha"/>
                         </filter>
                     </defs>
 
                     <!-- Background -->
-                    <rect width="$width" height="$finalHeight" fill="${if (calloutData.useDark) "#1d4ed8" else "#F2F2F7"}" rx="0" ry="0"/>
+                    <rect width="100%" height="100%" fill="${theme.canvas}" rx="16"/>
 
                     <!-- Header -->
+                    <text x="40" y="55" class="title_$id">${calloutData.title}</text>
+                    <rect x="40" y="70" width="60" height="4" fill="${theme.accentColor}" rx="2"/>
+
+                    <!-- Timeline Line -->
+                    <line x1="40" y1="250" x2="${width - 40}" y2="250" stroke="${theme.secondaryText}" stroke-width="2" stroke-opacity="0.3"/>
             """.trimIndent())
 
-            // Conditionally apply glass or original styling to header
-            if (calloutData.useDark) {
-                append("""
-                    <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#glassGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
-                    
-                """.trimIndent())
-            } else {
-                append("""
-                    <rect x="16" y="16" width="${width - 32}" height="60" rx="16" fill="url(#headerGrad)" filter="url(#iosShadow)"/>
-                """.trimIndent())
-            }
+            val timelineY = 250
+            val timelineLength = width - 100
+            val startX = 50
 
-            append("""
-                    <text x="${width/2}" y="53" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                          font-size="20" font-weight="600" text-anchor="middle">${calloutData.title}</text>
-            """.trimIndent())
-
-            // Draw timeline
-            val timelineY = 320
-            val timelineLength = width - 64
-            val startX = 32
-            val endX = startX + timelineLength
-
-            // Timeline line with conditional styling
-            if (calloutData.useDark) {
-                append("""
-                    <!-- Timeline Line -->
-                    <line x1="$startX" y1="$timelineY" x2="$endX" y2="$timelineY" 
-                          stroke="rgba(255,255,255,0.4)" stroke-width="4" stroke-linecap="round" filter="url(#blur)"/>
-                """.trimIndent())
-            } else {
-                append("""
-                    <!-- Timeline Line -->
-                    <line x1="$startX" y1="$timelineY" x2="$endX" y2="$timelineY" 
-                          stroke="#E5E5EA" stroke-width="4" stroke-linecap="round"/>
-                """.trimIndent())
-            }
-
-            // Draw steps on timeline
-            val stepCount = calloutData.steps.size
-            if (stepCount > 0) {
-                val stepSpacing = timelineLength / stepCount
-
+            if (stepsCount > 0) {
+                val stepSpacing = if (stepsCount > 1) timelineLength / (stepsCount - 1) else timelineLength
                 calloutData.steps.forEachIndexed { index, step ->
-                    val x = startX + (index * stepSpacing) + (stepSpacing / 2)
-                    val isCompleted = true // Assuming all steps are completed
-                    val circleColor = if (isCompleted) "#FF9500" else "#8E8E93"
-                    val textY = if (index % 2 == 0) timelineY - 40 else timelineY + 60
-                    val lineY1 = if (index % 2 == 0) timelineY - 20 else timelineY
-                    val lineY2 = if (index % 2 == 0) timelineY else timelineY + 40
+                    val x = startX + (index * stepSpacing)
+                    val isTop = index % 2 != 0
+                    val cardY = if (isTop) timelineY - 160 else timelineY + 40
+                    val stemY1 = if (isTop) timelineY - 40 else timelineY
+                    val stemY2 = if (isTop) timelineY else timelineY + 40
 
-                    if (calloutData.useDark) {
-                        append("""
-                            <!-- Step ${index + 1} -->
-                            <line x1="$x" y1="$lineY1" x2="$x" y2="$lineY2" 
-                                  stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-dasharray="${if (isCompleted) "none" else "4,4"}"/>
-                            <circle cx="$x" cy="$timelineY" r="8" fill="url(#glassRadial)" stroke="rgba(255,255,255,0.4)" stroke-width="1" filter="url(#shadow)"/>
-                            <text x="$x" y="$textY" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                  font-size="14" font-weight="600" text-anchor="middle">${step.phase}</text>
-                        """.trimIndent())
-                    } else {
-                        append("""
-                            <!-- Step ${index + 1} -->
-                            <line x1="$x" y1="$lineY1" x2="$x" y2="$lineY2" 
-                                  stroke="#E5E5EA" stroke-width="2" stroke-dasharray="${if (isCompleted) "none" else "4,4"}"/>
-                            <circle cx="$x" cy="$timelineY" r="8" fill="$circleColor" filter="url(#iosShadow)"/>
-                            <text x="$x" y="$textY" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                  font-size="14" font-weight="600" text-anchor="middle">${step.phase}</text>
-                        """.trimIndent())
-                    }
-
-                    // Add card for each step
-                    // Ensure cards for odd-indexed steps don't overlap with the header
-                    val cardY = if (index % 2 == 0) timelineY + 30 else timelineY - 100
-                    if (index % 2 == 1) {
-                        if (calloutData.useDark) {
-                            append("""
-                                <rect x="${x - 100}" y="$cardY" width="200" height="80" rx="16" fill="url(#glassGradient)" 
-                                      stroke="rgba(255,255,255,0.3)" stroke-width="1" filter="url(#shadow)"/>
-                                <!-- Card highlight -->
-                                <rect x="${x - 95}" y="${cardY + 5}" width="190" height="15" rx="7" fill="url(#highlight)"/>
-                                <text x="${x - 90}" y="${cardY + 25}" fill="white" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                      font-size="14" font-weight="600">${step.action}</text>
-                                <text x="${x - 90}" y="${cardY + 50}" fill="rgba(255,255,255,0.8)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                      font-size="12" font-weight="600">${step.result}</text>
-                            """.trimIndent())
-                        } else {
-                            append("""
-                                <rect x="${x - 100}" y="$cardY" width="200" height="80" rx="16" fill="white" 
-                                      stroke="#E5E5EA" stroke-width="1" filter="url(#iosShadow)"/>
-                                <text x="${x - 90}" y="${cardY + 25}" fill="#1C1C1E" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                      font-size="14" font-weight="600">${step.action}</text>
-                                <text x="${x - 90}" y="${cardY + 50}" fill="#FF9500" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro', sans-serif" 
-                                      font-size="12" font-weight="600">${step.result}</text>
-                            """.trimIndent())
-                        }
-                    }
+                    append("""
+                        <!-- Step ${index + 1} -->
+                        <line x1="$x" y1="$stemY1" x2="$x" y2="$stemY2" stroke="${theme.accentColor}" stroke-width="1.5" stroke-dasharray="2,2"/>
+                        
+                        <!-- Status Indicator with Redundant Cue (Industrial Utilitarian) -->
+                        <g transform="translate(${x - 12}, ${timelineY - 12})">
+                            <circle cx="12" cy="12" r="10" fill="${theme.canvas}" stroke="${theme.accentColor}" stroke-width="2"/>
+                            <path d="M8 12l3 3 5-5" stroke="${theme.accentColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </g>
+                        
+                        <!-- Content Card (Editorial Style) -->
+                        <g transform="translate(${x - 90}, $cardY)" filter="url(#shadow_$id)">
+                            <rect width="180" height="110" rx="4" fill="${theme.canvas}" stroke="${theme.surfaceImpact}" stroke-width="1"/>
+                            <rect width="4" height="110" fill="${theme.accentColor}" rx="2"/>
+                            
+                            <text x="15" y="25" class="phase_$id">${step.phase}</text>
+                            <text x="15" y="50" class="action_$id">${step.action}</text>
+                            
+                            <g transform="translate(15, 75)">
+                                <rect width="${(step.result.length * 8.0) + 16}" height="22" rx="4" fill="${theme.accentColor}" fill-opacity="0.1"/>
+                                <text x="8" y="15" class="result_$id">${step.result}</text>
+                            </g>
+                        </g>
+                    """.trimIndent())
                 }
             }
-
             append("</svg>")
         }
     }

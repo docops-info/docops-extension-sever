@@ -12,15 +12,27 @@ import io.docops.docopsextensionssupport.web.update
 class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
     fun extractCalloutType(payload: String): String {
-        var type = "systematic"
+        return extractString(payload, "type", "systematic")
+    }
+
+    private fun extractString(payload: String, key: String, default: String): String {
         for (line in payload.split("\n")) {
             val trimmedLine = line.trim()
-            if (trimmedLine.startsWith("type=")) {
-                type = trimmedLine.substring(5).trim()
-                break
+            if (trimmedLine.startsWith("$key=")) {
+                return trimmedLine.substring(key.length + 1).trim()
             }
         }
-        return type
+        return default
+    }
+
+    private fun extractInt(payload: String, key: String, default: Int): Int {
+        for (line in payload.split("\n")) {
+            val trimmedLine = line.trim()
+            if (trimmedLine.startsWith("$key=")) {
+                return trimmedLine.substring(key.length + 1).trim().toIntOrNull() ?: default
+            }
+        }
+        return default
     }
 
     /**
@@ -31,19 +43,20 @@ class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         outputFormat: String = "SVG",
         width: Int = 800,
         height: Int = 600,
-        useDark: Boolean = false
+        useDark: Boolean = false,
+        scale: String = "1.0"
     ): Pair<String, CsvResponse> {
 
-        return makeSvgPlainText(payload, width, height, useDark)
+        return makeSvgPlainText(payload, width, height, useDark, scale)
     }
 
-    fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int, useDark: Boolean): Pair<String, CsvResponse> {
+    fun makeSvgPlainText(uncompressedPayload: String, width: Int, height: Int, useDark: Boolean, scale: String): Pair<String, CsvResponse> {
         val maker = CalloutMaker(useDark)
         val calloutType = extractCalloutType(uncompressedPayload)
         val svg = when (calloutType) {
-            "metrics" -> maker.createMetricsFromTable(uncompressedPayload, width, height)
-            "timeline" -> maker.createTimelineFromTable(uncompressedPayload, width, height)
-            else -> maker.createSystematicApproachFromTable(uncompressedPayload, width, height)
+            "metrics" -> maker.createMetricsFromTable(uncompressedPayload, width, height, scale)
+            "timeline" -> maker.createTimelineFromTable(uncompressedPayload, width, height, scale)
+            else -> maker.createSystematicApproachFromTable(uncompressedPayload, width, height, scale)
         }
         return svg
     }
@@ -52,7 +65,9 @@ class CalloutHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         payload: String,
         context: DocOpsContext
     ): String {
-        val svgOut =  makeCalloutSvg(payload=payload, outputFormat= context.type, useDark = context.useDark)
+        val width = extractInt(payload, "width", 800)
+        val height = extractInt(payload, "height", 600)
+        val svgOut =  makeCalloutSvg(payload=payload, outputFormat= context.type, width = width, height = height, useDark = context.useDark, scale = context.scale)
         csvResponse.update(svgOut.second)
         return svgOut.first
     }
