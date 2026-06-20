@@ -6,16 +6,9 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import kotlinx.serialization.Serializable
 import kotlin.math.max
+import kotlin.math.min
 
 class CyberTreeMaker(val useDark: Boolean = false) {
-
-    private val neonPalette = listOf(
-        "#00f2ff", // Cyan
-        "#7000ff", // Purple
-        "#39ff14", // Neon Green
-        "#ff007f", // Hot Pink
-        "#f39c12"  // Amber
-    )
 
     private var theme = ThemeFactory.getTheme(useDark)
 
@@ -23,75 +16,171 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         val (config, chartData) = ParsingUtils.parseConfigAndData(payload)
         val treeData = parseTreeChartData(chartData)
         csvResponse.update(treeData.toCsv())
-        val themeName = config["theme"]?: "modern"
+        val themeName = config["theme"] ?: "modern"
         theme = ThemeFactory.getThemeByName(themeName, useDark)
 
         val title = config.getOrDefault("title", "Project Roadmap")
         val orientation = config.getOrDefault("orientation", "vertical")
         val customColors = config["colors"]?.split(",")?.map { it.trim() } ?: theme.chartPaletteHex
 
-
         val depth = calculateDepth(treeData)
         val maxWidth = calculateMaxWidth(treeData)
 
-        val nodeRadius = 45
-        val levelSpacing = 200 // Space between levels
-        val siblingSpacing = 130 // Minimum space between nodes on the same level
+        val nodeRadius = max(28, min(48, 52 - (maxWidth * 2)))
+        val levelSpacing = max(150, min(240, 220 - (depth * 8)))
+        val siblingSpacing = max(100, min(180, 148 - maxWidth))
 
         // Correctly calculate dimensions based on orientation
         val calculatedWidth: Int
         val calculatedHeight: Int
 
         if (orientation == "horizontal") {
-            calculatedWidth = max(config.getOrDefault("width", "800").toInt(), depth * levelSpacing + 200)
-            calculatedHeight = max(config.getOrDefault("height", "600").toInt(), maxWidth * siblingSpacing + 100)
+            calculatedWidth = max(config.getOrDefault("width", "800").toInt(), depth * levelSpacing + 280)
+            calculatedHeight = max(config.getOrDefault("height", "600").toInt(), maxWidth * siblingSpacing + 180)
         } else {
-            calculatedWidth = max(config.getOrDefault("width", "800").toInt(), maxWidth * siblingSpacing + 100)
-            calculatedHeight = max(config.getOrDefault("height", "600").toInt(), depth * levelSpacing + 200)
+            calculatedWidth = max(config.getOrDefault("width", "800").toInt(), maxWidth * siblingSpacing + 180)
+            calculatedHeight = max(config.getOrDefault("height", "600").toInt(), depth * levelSpacing + 280)
         }
 
-        val margin = mapOf("top" to 120, "right" to 80, "bottom" to 80, "left" to 100)
+        val margin = mapOf("top" to 128, "right" to 88, "bottom" to 96, "left" to 108)
         val positions = calculateDynamicPositions(treeData, calculatedWidth, calculatedHeight, margin, orientation, levelSpacing)
 
+        val svgId = "cyber_tree_${System.nanoTime()}"
         val svgBuilder = StringBuilder()
-        svgBuilder.append("<svg width='$calculatedWidth' height='$calculatedHeight' viewBox='0 0 $calculatedWidth $calculatedHeight' xmlns='http://www.w3.org/2000/svg'>")
+        svgBuilder.append("<svg id='$svgId' width='$calculatedWidth' height='$calculatedHeight' viewBox='0 0 $calculatedWidth $calculatedHeight' xmlns='http://www.w3.org/2000/svg'>")
 
-        // Definitions (Styles & Gradients)
-        svgBuilder.append("""
+        // Definitions (Styles, filters, gradients, grid)
+        val titleColor = if (useDark) "#e8f0ff" else "#102542"
+        val mutedText = if (useDark) "#9eb2d4" else "#4d678d"
+        val nodeInnerFill = if (useDark) "rgba(12, 20, 36, 0.86)" else "rgba(255, 255, 255, 0.84)"
+        val dominant = theme.accentColor
+        val bgStart = if (useDark) "#090f1c" else "#f6f9fc"
+        val bgEnd = if (useDark) "#0f1a30" else "#eaf2fb"
+        val gridStroke = if (useDark) "rgba(156,184,236,0.12)" else "rgba(37,74,124,0.10)"
+
+        svgBuilder.append(
+            """
             <defs>
-                <style type="text/css">
+                <linearGradient id='${svgId}_bg' x1='0%' y1='0%' x2='100%' y2='100%'>
+                    <stop offset='0%' stop-color='$bgStart'/>
+                    <stop offset='100%' stop-color='$bgEnd'/>
+                </linearGradient>
+                <radialGradient id='${svgId}_washA' cx='16%' cy='20%' r='56%'>
+                    <stop offset='0%' stop-color='$dominant' stop-opacity='${if (useDark) "0.18" else "0.14"}'/>
+                    <stop offset='100%' stop-color='$dominant' stop-opacity='0'/>
+                </radialGradient>
+                <radialGradient id='${svgId}_washB' cx='88%' cy='82%' r='52%'>
+                    <stop offset='0%' stop-color='${if (useDark) "#00d4ff" else "#2563eb"}' stop-opacity='${if (useDark) "0.14" else "0.10"}'/>
+                    <stop offset='100%' stop-color='${if (useDark) "#00d4ff" else "#2563eb"}' stop-opacity='0'/>
+                </radialGradient>
+                <pattern id='${svgId}_grid' width='28' height='28' patternUnits='userSpaceOnUse'>
+                    <path d='M28 0H0V28' fill='none' stroke='$gridStroke' stroke-width='1'/>
+                </pattern>
+                <filter id='${svgId}_ambientBlur' x='-30%' y='-30%' width='160%' height='160%'>
+                    <feGaussianBlur stdDeviation='56'/>
+                </filter>
+                <filter id='${svgId}_nodeGlow' x='-120%' y='-120%' width='340%' height='340%'>
+                    <feGaussianBlur stdDeviation='3.2' result='b'/>
+                    <feMerge>
+                        <feMergeNode in='b'/>
+                        <feMergeNode in='SourceGraphic'/>
+                    </feMerge>
+                </filter>
+                <style type='text/css'>
                     /* <![CDATA[ */
-                    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&amp;family=Syne:wght@700&amp;display=swap');
-                    .node-group { opacity: 0; animation: cyberReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-                    .link { fill: none; stroke: ${theme.accentColor}; stroke-opacity: 0.15; stroke-width: 1.5; }
-                    .label-main { font-family: ${theme.fontFamily}; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; pointer-events: none; }
-                    .label-sub { font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400; fill: #94a3b8; pointer-events: none; }
-                    @keyframes cyberReveal { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&amp;family=Outfit:wght@400;600&amp;display=swap');
+
+                    #$svgId {
+                        --tree-title: $titleColor;
+                        --tree-muted: $mutedText;
+                        --tree-node-fill: $nodeInnerFill;
+                        --tree-link: $dominant;
+                        --tree-accent: $dominant;
+                    }
+
+                    #$svgId .node-layout {}
+                    #$svgId .node-anim {
+                        opacity: 0;
+                        transform-origin: center;
+                        animation: cyberReveal 760ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                    }
+
+                    #$svgId .link {
+                        fill: none;
+                        stroke: var(--tree-link);
+                        stroke-opacity: ${if (useDark) "0.26" else "0.20"};
+                        stroke-width: 1.6;
+                    }
+
+                    #$svgId .label-main {
+                        font-family: 'Inter', -apple-system, sans-serif;
+                        font-size: 11px;
+                        font-weight: 800;
+                        text-transform: uppercase;
+                        letter-spacing: 0.2px;
+                        pointer-events: none;
+                    }
+
+                    #$svgId .label-sub {
+                        font-family: 'Outfit', sans-serif;
+                        font-size: 9px;
+                        font-weight: 500;
+                        fill: var(--tree-muted);
+                        pointer-events: none;
+                    }
+
+                    #$svgId .title-wrap {
+                        opacity: 0;
+                        animation: titleReveal 640ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                        animation-delay: 90ms;
+                    }
+
+                    @keyframes cyberReveal {
+                        from { transform: translateY(8px) scale(0.92); opacity: 0; }
+                        to { transform: translateY(0) scale(1); opacity: 1; }
+                    }
+
+                    @keyframes titleReveal {
+                        from { transform: translateY(10px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
                     /* ]]> */
                 </style>
             </defs>
-        """.trimIndent())
+            """.trimIndent()
+        )
 
-        // Background
-        val bgFill = theme.canvas
-        val glowColor = theme.accentColor
-        val nodeInnerFill = if (useDark) "rgba(15, 23, 42, 0.8)" else "rgba(255, 255, 255, 0.9)"
-        val titleColor = if (useDark) "#ffffff" else "#0f172a"
+        svgBuilder.append("<rect width='100%' height='100%' fill='url(#${svgId}_bg)'/>")
+        svgBuilder.append("<rect width='100%' height='100%' fill='url(#${svgId}_grid)'/>")
+        svgBuilder.append("<rect width='100%' height='100%' fill='url(#${svgId}_washA)'/>")
+        svgBuilder.append("<rect width='100%' height='100%' fill='url(#${svgId}_washB)'/>")
+        svgBuilder.append("<circle cx='${calculatedWidth / 2}' cy='${calculatedHeight / 2}' r='${(calculatedWidth * 0.44).toInt()}' fill='$dominant' opacity='0.06' filter='url(#${svgId}_ambientBlur)' />")
 
-        svgBuilder.append("<rect width='100%' height='100%' fill='$bgFill' />")
-        svgBuilder.append("<circle cx='${calculatedWidth/2}' cy='${calculatedHeight/2}' r='${calculatedWidth/2}' fill='$glowColor' opacity='0.05' filter='blur(120px)' />")
-
-        // Draw Links first to keep them behind nodes
+        // Draw links first so nodes stay in foreground
         drawLinks(svgBuilder, treeData, positions, nodeRadius, orientation)
-        drawNodes(svgBuilder, treeData, positions, customColors, nodeRadius, 0, useDark = useDark, nodeInnerFill = nodeInnerFill)
+        drawNodes(
+            sb = svgBuilder,
+            node = treeData,
+            pos = positions,
+            colors = customColors,
+            radius = nodeRadius,
+            level = 0,
+            useDark = useDark,
+            nodeInnerFill = nodeInnerFill,
+            svgId = svgId
+        )
 
-        // Title
-        svgBuilder.append("""
-            <g transform="translate(40, 60)">
-                <text font-family="${theme.fontFamily}" font-size="28" fill="$titleColor" font-weight="700">${title.uppercase()}</text>
-                <rect y="15" width="100" height="4" fill="#7000ff" rx="2" />
+        // Title: outer translate group + inner animated group (safe for SVG/CSS transforms)
+        svgBuilder.append(
+            """
+            <g transform='translate(40, 64)'>
+                <g class='title-wrap'>
+                    <text font-family='Inter, -apple-system, sans-serif' font-size='34' fill='var(--tree-title)' font-weight='800'>${escapeXml(title.uppercase())}</text>
+                    <rect y='18' width='124' height='4' fill='var(--tree-accent)' rx='2' />
+                </g>
             </g>
-        """.trimIndent())
+            """.trimIndent()
+        )
 
         svgBuilder.append("</svg>")
         return svgBuilder.toString()
@@ -150,34 +239,38 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         level: Int,
         colorIdx: Int = 0,
         useDark: Boolean,
-        nodeInnerFill: String
+        nodeInnerFill: String,
+        svgId: String
     ) {
         val (x, y) = pos[node]!!
         val accent = node.color ?: colors[colorIdx % colors.size]
-        val lines = wrapText(node.label, 12)
+        val lines = wrapTextByWidth(node.label, maxPixelWidth = radius * 2 - 14, fontSize = 11)
+        val subLabelColor = if (useDark) "#9eb2d4" else "#4d678d"
 
-        sb.append("<g class='node-group' style='animation-delay: ${level * 0.1}s;'>")
-        // Inner Glow - Using nodeInnerFill for theme-aware background
-        sb.append("<circle cx='$x' cy='$y' r='$radius' fill='$nodeInnerFill' stroke='$accent' stroke-width='2' />")
-        sb.append("<circle cx='$x' cy='$y' r='${radius-5}' fill='none' stroke='$accent' stroke-width='0.5' stroke-opacity='0.3' />")
+        // Outer group handles layout translate, inner group handles animation (prevents transform conflicts)
+        sb.append("<g class='node-layout' transform='translate($x,$y)'>")
+        sb.append("<g class='node-anim' style='animation-delay: ${level * 0.1}s;'>")
+        sb.append("<circle cx='0' cy='0' r='$radius' fill='$nodeInnerFill' stroke='$accent' stroke-width='2' filter='url(#${svgId}_nodeGlow)'/>")
+        sb.append("<circle cx='0' cy='0' r='${radius - 5}' fill='none' stroke='$accent' stroke-width='0.7' stroke-opacity='0.35'/>")
 
-        // Multi-line Text logic
         val lineHeight = 14
-        val startY = y - ((lines.size - 1) * lineHeight / 2.0)
-        val subLabelColor = if (useDark) "#94a3b8" else "#475569"
+        val startY = -((lines.size - 1) * lineHeight / 2.0)
 
         lines.forEachIndexed { i, line ->
             val isFirst = i == 0
             val className = if (isFirst) "label-main" else "label-sub"
             val fill = if (isFirst) accent else subLabelColor
-            sb.append("<text x='$x' y='${startY + (i * lineHeight)}' text-anchor='middle' dominant-baseline='middle' class='$className' fill='$fill'>$line</text>")
+            sb.append("<text x='0' y='${startY + (i * lineHeight)}' text-anchor='middle' dominant-baseline='middle' class='$className' fill='$fill'>${escapeXml(line)}</text>")
         }
+
+        sb.append("</g>")
         sb.append("</g>")
 
         node.children.forEachIndexed { i, child ->
-            drawNodes(sb, child, pos, colors, radius, level + 1, colorIdx + i + 1, useDark, nodeInnerFill)
+            drawNodes(sb, child, pos, colors, radius, level + 1, colorIdx + i + 1, useDark, nodeInnerFill, svgId)
         }
     }
+
 
     private fun calculateDepth(node: TreeNode): Int = if (node.children.isEmpty()) 1 else 1 + node.children.maxOf { calculateDepth(it) }
 
@@ -239,7 +332,52 @@ class CyberTreeMaker(val useDark: Boolean = false) {
         return root
     }
 
+    private fun wrapTextByWidth(text: String, maxPixelWidth: Int, fontSize: Int): List<String> {
+        val words = text.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
+        if (words.isEmpty()) return listOf("")
 
+        val lines = mutableListOf<String>()
+        var current = ""
+
+        words.forEach { word ->
+            val candidate = if (current.isEmpty()) word else "$current $word"
+            if (estimateTextWidth(candidate, fontSize) <= maxPixelWidth) {
+                current = candidate
+            } else {
+                if (current.isNotEmpty()) lines.add(current)
+                current = word
+            }
+        }
+        if (current.isNotEmpty()) lines.add(current)
+
+        return lines.map { line ->
+            if (estimateTextWidth(line, fontSize) <= maxPixelWidth) {
+                line
+            } else {
+                ellipsize(line, maxPixelWidth, fontSize)
+            }
+        }.take(3)
+    }
+
+    private fun ellipsize(text: String, maxPixelWidth: Int, fontSize: Int): String {
+        if (estimateTextWidth(text, fontSize) <= maxPixelWidth) return text
+        var out = text
+        while (out.isNotEmpty() && estimateTextWidth("$out…", fontSize) > maxPixelWidth) {
+            out = out.dropLast(1)
+        }
+        return if (out.isEmpty()) "…" else "$out…"
+    }
+
+    private fun estimateTextWidth(text: String, fontSize: Int): Int = (text.length * fontSize * 0.58).toInt()
+
+    private fun escapeXml(text: String): String {
+        return text
+            .replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;")
+    }
 }
 
 @Serializable
