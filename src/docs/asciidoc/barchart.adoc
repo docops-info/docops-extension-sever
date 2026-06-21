@@ -65,13 +65,11 @@ include::charts/data/annual.txt[]
 Cylinder::
 +
 ====
-[docops,bar]
+[docops,bar,controls=true]
 ----
 title=Quarterly Revenue
 yLabel=Revenue ($)
 type=C
-theme=ayu
-paletteType=AYU_LIGHT
 ---
 Q1 | 50000
 Q2 | 65000
@@ -79,7 +77,28 @@ Q3 | 70000
 Q4 | 80000
 ----
 ====
+Horizontal::
++
+====
+[docops,bargroup,controls=true,useDark=false]
+----
+title=Annual Product Sales Report
+yLabel=Sales (USD)
+xLabel=Quarters
+vBar=true
+---
+Product A | Q1 | 5000.0
+Product A | Q2 | 7000.0
+Product A | Q3 | 8000.0
+Product A | Q4 | 6000.0
+Product B | Q1 | 6000.0
+Product B | Q2 | 8000.0
+Product B | Q3 | 7000.0
+Product B | Q4 | 9000.0
+----
+====
 ======
+
 
 == Common Use Cases
 
@@ -121,8 +140,6 @@ xLabel=X-Axis Label
 type=R
 vBar=false
 sorted=true
-theme=ayu
-paletteType=AYU_LIGHT
 ---
 Category 1 | 120.0
 Category 2 | 334.0
