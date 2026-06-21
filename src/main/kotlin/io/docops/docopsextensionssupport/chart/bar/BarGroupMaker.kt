@@ -13,7 +13,15 @@ import kotlin.math.max
 import kotlin.math.ceil
 
 class BarGroupMaker(val useDark: Boolean) {
-
+    private var isModern = false
+    private var width = 800
+    private var height = 680
+    private var xAxisStart = 110
+    private var xAxisEnd = 800
+    private var yAxisStart = 12
+    private var yAxisEnd = 500
+    private var barWidth = 40.0
+    private var barSpacing = 45.0
     private var fontColor = "#fcfcfc"
     private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
 
@@ -29,7 +37,27 @@ class BarGroupMaker(val useDark: Boolean) {
         theme = if (barGroup.display.theme.isNotBlank()) {
             ThemeFactory.getThemeByName(barGroup.display.theme, barGroup.display.useDark)
         } else {
-            ThemeFactory.getTheme(barGroup.display)
+            ThemeFactory.getThemeByName("modern_editorial", barGroup.display.useDark)
+        }
+        isModern = !theme.name.contains("Classic") && !theme.name.contains("Pro")
+        if (isModern) {
+            width = 960
+            height = 700
+            xAxisStart = 120
+            xAxisEnd = 860
+            yAxisStart = 120
+            yAxisEnd = 470
+            barWidth = 28.0
+            barSpacing = 42.0
+        } else {
+            width = barGroup.calcWidth()
+            height = 680
+            xAxisStart = 110
+            xAxisEnd = width - 10
+            yAxisStart = 12
+            yAxisEnd = 500
+            barWidth = 40.0
+            barSpacing = 45.0
         }
         if ("brutalist".equals(barGroup.display.theme, ignoreCase = true)) {
             val brutalistMaker = CyberBrutalistBarGroupMaker(useDark)
@@ -42,26 +70,255 @@ class BarGroupMaker(val useDark: Boolean) {
 
         val sb = StringBuilder()
         sb.append(makeHead(barGroup))
-        sb.append(makeDefs(makeGradient(barDisplay = barGroup.display), barGroup=barGroup, paletteType = paletteType))
-        sb.append(addGrid(barGroup))
-        sb.append(makeTitle(barGroup))
-        sb.append(makeXLabel(barGroup))
-        sb.append(makeYLabel(barGroup))
-        var startX = 110.0
-        val elements = StringBuilder()
-        barGroup.groups.forEach { group ->
-            val added = addGroup(barGroup, group, startX, isPdf, paletteType)
-            startX += group.series.size * 45.0 + 2
-            elements.append(added)
+        if (isModern && !isPdf) {
+            sb.append(makeModernDefs(barGroup, paletteType))
+            sb.append(makeModernBackground())
+            sb.append(makeModernHeader(barGroup))
+            sb.append(addModernPlotArea(barGroup))
+            
+            var currentX = xAxisStart + 110.0 // Starting offset for the first group
+            if (barGroup.groups.size == 1) {
+                currentX = (xAxisStart + xAxisEnd) / 2.0 - (barGroup.groups[0].series.size * barSpacing) / 2.0
+            } else {
+                // Distribute groups across the plot area
+                val availableWidth = xAxisEnd - xAxisStart
+                val groupAreaWidth = availableWidth / barGroup.groups.size
+                currentX = xAxisStart + (groupAreaWidth - (barGroup.groups[0].series.size * barSpacing)) / 2.0
+            }
+
+            barGroup.groups.forEachIndexed { groupIdx, group ->
+                sb.append(addModernGroup(barGroup, group, currentX, groupIdx))
+                currentX += (xAxisEnd - xAxisStart) / barGroup.groups.size.toDouble()
+            }
+            
+            sb.append(addModernLegend(barGroup))
+        } else {
+            sb.append(makeDefs(makeGradient(barDisplay = barGroup.display), barGroup = barGroup, paletteType = paletteType))
+            sb.append(addGrid(barGroup))
+            sb.append(makeTitle(barGroup))
+            sb.append(makeXLabel(barGroup))
+            sb.append(makeYLabel(barGroup))
+            var startX = 110.0
+            val elements = StringBuilder()
+            barGroup.groups.forEach { group ->
+                val added = addGroup(barGroup, group, startX, isPdf, paletteType)
+                startX += group.series.size * 45.0 + 2
+                elements.append(added)
+            }
+
+            sb.append("<g transform='translate(${(width - startX) / 2},0)'>")
+            sb.append(elements.toString())
+            sb.append("</g>")
+            sb.append(addTicks(barGroup))
+            sb.append(addLegend(startX + ((width - startX) / 2), barGroup))
+        }
+        sb.append(end())
+        return Pair(sb.toString(), barGroup.toCsv())
+    }
+
+    private fun makeModernDefs(barGroup: BarGroup, paletteType: ColorPaletteFactory.PaletteType): String {
+        val defs = StringBuilder()
+        val sz = barGroup.maxGroup().series.size
+
+        // Chart Palette - use standard colors if paletteType is not specific
+        val colors = if (barGroup.display.paletteType.isNotBlank()) {
+            (0 until sz).map { ColorPaletteFactory.getColorCyclic(paletteType, it) ?: "#4361ee" }
+        } else {
+            theme.chartPalette
         }
 
-        sb.append("<g transform='translate(${(barGroup.calcWidth() - startX) / 2},0)'>")
-        sb.append(elements.toString())
+        val paletteVars = colors.mapIndexed { i, color ->
+            "--q${i + 1}:$color;"
+        }.joinToString("\n")
+
+        defs.append("""
+        <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="${theme.canvas}"/>
+                <stop offset="100%" stop-color="${if (useDark) "#111a24" else "#f0f2f5"}"/>
+            </linearGradient>
+            <radialGradient id="washA" cx="16%" cy="12%" r="46%">
+                <stop offset="0%" stop-color="${colors.getOrElse(0) { "#39bae6" }}" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="${colors.getOrElse(0) { "#39bae6" }}" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="washB" cx="84%" cy="18%" r="40%">
+                <stop offset="0%" stop-color="${colors.getOrElse(1 % colors.size) { "#ff8f40" }}" stop-opacity="0.16"/>
+                <stop offset="100%" stop-color="${colors.getOrElse(1 % colors.size) { "#ff8f40" }}" stop-opacity="0"/>
+            </radialGradient>
+
+            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+            </filter>
+
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap');
+
+                :root{
+                --ink:${theme.primaryText};
+                --muted:${theme.secondaryText};
+                --line:${theme.accentColor}40;
+                --axis:${theme.accentColor}80;
+                --panel:${if (useDark) "#151e28" else "#ffffff"};
+                --panel-stroke:${theme.accentColor}30;
+
+                $paletteVars
+                }
+
+                text{font-family:'IBM Plex Sans', sans-serif; fill:var(--ink);}
+                .title{font-size:30px;font-weight:700;letter-spacing:-0.01em;}
+                .sub{font-size:12px;font-weight:500;fill:var(--muted);}
+                .axis-label{font-size:13px;font-weight:600;fill:var(--muted);}
+                .tick{font-size:11px;font-weight:500;fill:var(--muted);}
+                .group-label{font-size:14px;font-weight:700;fill:var(--ink);}
+                .value{font-size:11px;font-weight:600;fill:var(--ink);opacity:.9}
+                .legend-text{font-size:12px;font-weight:600;fill:var(--muted);}
+                .grid{stroke:var(--line);stroke-width:1;stroke-dasharray:4 8;}
+                .axis{stroke:var(--axis);stroke-width:1.4;stroke-linecap:round;}
+
+                .bar-wrap .bar-inner{
+                transform-box: fill-box;
+                transform-origin: 50% 100%;
+                animation: rise .7s cubic-bezier(.2,.8,.2,1) both;
+                }
+                .bar-wrap:hover .bar-inner{transform:scaleY(1.03);}
+                
+                @keyframes rise{
+                from{transform:scaleY(0);}
+                to{transform:scaleY(1);}
+                }
+            </style>
+        </defs>
+        """.trimIndent())
+        return defs.toString()
+    }
+
+    private fun makeModernBackground(): String {
+        return """
+        <rect width="$width" height="$height" fill="url(#bg)"/>
+        <rect width="$width" height="$height" fill="url(#washA)"/>
+        <rect width="$width" height="$height" fill="url(#washB)"/>
+        """.trimIndent()
+    }
+
+    private fun makeModernHeader(barGroup: BarGroup): String {
+        return """
+        <g transform="translate(64 52)">
+            <text class="title" x="0" y="0">${barGroup.title}</text>
+            <text class="sub" x="0" y="24">Grouped bars • Theme: ${barGroup.display.theme}</text>
+            <line x1="0" y1="38" x2="${width - 128}" y2="38" stroke="${theme.accentColor}40" stroke-width="1"/>
+        </g>
+        """.trimIndent()
+    }
+
+    private fun addModernPlotArea(barGroup: BarGroup): String {
+        val sb = StringBuilder()
+        val nice = barGroup.ticks()
+        val minV = nice.getNiceMin()
+        val maxV = nice.getNiceMax()
+        val tickSpacing = nice.getTickSpacing()
+        
+        sb.append("<g>")
+        
+        // Grid lines and Y ticks
+        var i = minV
+        while (i <= maxV) {
+            val ratio = (i - minV) / (maxV - minV)
+            val y = yAxisEnd - (ratio * (yAxisEnd - yAxisStart))
+            
+            if (i > minV) {
+                sb.append("""<line class="grid" x1="$xAxisStart" y1="$y" x2="$xAxisEnd" y2="$y"/>""")
+            }
+            
+            sb.append("""<text class="tick" x="${xAxisStart - 12}" y="${y + 4}" text-anchor="end">${barGroup.valueFmt(i)}</text>""")
+            i += tickSpacing
+        }
+
+        // Axes
+        sb.append("""<line class="axis" x1="$xAxisStart" y1="$yAxisStart" x2="$xAxisStart" y2="$yAxisEnd"/>""")
+        sb.append("""<line class="axis" x1="$xAxisStart" y1="$yAxisEnd" x2="$xAxisEnd" y2="$yAxisEnd"/>""")
+
+        // Axis labels
+        if (!barGroup.xLabel.isNullOrBlank()) {
+            sb.append("""<text class="axis-label" x="${(xAxisStart + xAxisEnd) / 2}" y="${yAxisEnd + 44}" text-anchor="middle">${barGroup.xLabel}</text>""")
+        }
+        if (!barGroup.yLabel.isNullOrBlank()) {
+            sb.append("""<text class="axis-label" x="44" y="${(yAxisStart + yAxisEnd) / 2}" text-anchor="middle" transform="rotate(-90 44 ${(yAxisStart + yAxisEnd) / 2})">${barGroup.yLabel}</text>""")
+        }
+        
         sb.append("</g>")
-        sb.append(addTicks(barGroup))
-        sb.append(addLegend(startX + ((barGroup.calcWidth() - startX)/2), barGroup))
-        sb.append(end())
-        return  Pair(sb.toString(), barGroup.toCsv())
+        return sb.toString()
+    }
+
+    private fun addModernGroup(barGroup: BarGroup, group: Group, startX: Double, groupIdx: Int): String {
+        val sb = StringBuilder()
+        val nice = barGroup.ticks()
+        val minV = nice.getNiceMin()
+        val maxV = nice.getNiceMax()
+        
+        sb.append("""<g aria-label="${group.label}">""")
+        
+        group.series.forEachIndexed { index, series ->
+            val ratio = (series.value - minV) / (maxV - minV)
+            val barHeight = ratio * (yAxisEnd - yAxisStart)
+            val barX = startX + (index * barSpacing)
+            val barY = yAxisEnd - barHeight
+            
+            val delayClass = "d${groupIdx * barGroup.maxGroup().series.size + index + 1}"
+            
+            // Add custom delay for this bar if it doesn't exist in style yet
+            // Actually I should probably just use inline style for delay to be safe
+            val delay = (groupIdx * group.series.size + index) * 0.07
+            
+            sb.append("""
+            <g class="bar-wrap" transform="translate($barX $barY)">
+                <g class="bar-inner" style="animation-delay: ${delay}s">
+                    <rect width="$barWidth" height="$barHeight" rx="${theme.cornerRadius}" fill="var(--q${index + 1})" filter="url(#soft)"/>
+                </g>
+                <text class="value" x="${barWidth / 2}" y="-8" text-anchor="middle">${barGroup.valueFmt(series.value)}</text>
+            </g>
+            """.trimIndent())
+        }
+        
+        val groupLabelX = startX + (group.series.size * barSpacing) / 2.0 - (barSpacing - barWidth) / 2.0
+        sb.append("""<text class="group-label" x="$groupLabelX" y="${yAxisEnd + 75}" text-anchor="middle">${group.label}</text>""")
+        
+        sb.append("</g>")
+        return sb.toString()
+    }
+
+    private fun addModernLegend(barGroup: BarGroup): String {
+        val sb = StringBuilder()
+        val distinctLabels = barGroup.legendLabel().distinct()
+        if (distinctLabels.isEmpty()) return ""
+
+        val itemsPerRow = 4
+        val rows = ceil(distinctLabels.size / itemsPerRow.toDouble()).toInt().coerceAtLeast(1)
+        val legendWidth = 480.0
+        val legendHeight = 38.0 + (rows * 22.0)
+        val legendX = (width - legendWidth) / 2.0
+        val legendY = height - legendHeight - 20.0
+
+        sb.append("""
+        <g transform="translate($legendX $legendY)">
+            <rect x="0" y="0" width="$legendWidth" height="$legendHeight" rx="12" fill="var(--panel)" stroke="var(--panel-stroke)"/>
+            <text x="14" y="22" class="legend-text" style="font-weight:700;">Categories</text>
+        """)
+
+        val itemWidth = (legendWidth - 28) / itemsPerRow
+        distinctLabels.forEachIndexed { index, label ->
+            val col = index % itemsPerRow
+            val row = index / itemsPerRow
+            val itemX = 14.0 + (col * itemWidth)
+            val itemY = 34.0 + (row * 22.0)
+            
+            sb.append("""
+            <rect x="$itemX" y="$itemY" width="12" height="12" rx="3" fill="var(--q${index + 1})"/>
+            <text class="legend-text" x="${itemX + 18}" y="${itemY + 10}">$label</text>
+            """)
+        }
+
+        sb.append("</g>")
+        return sb.toString()
     }
 
     private fun addLegend(d: Double, group: BarGroup): String {
@@ -321,11 +578,9 @@ class BarGroupMaker(val useDark: Boolean) {
     }
     private fun end() = "</svg>"
     private fun makeHead(barGroup: BarGroup): String {
-        // Increased from 650 to 680 to accommodate all elements
-        val svgHeight = 680
         return """
         <?xml version="1.0" encoding="UTF-8"?>
-        <svg id="id_${barGroup.id}" width="${(barGroup.calcWidth() * barGroup.display.scale)/ DISPLAY_RATIO_16_9}" height="${(svgHeight * barGroup.display.scale)/DISPLAY_RATIO_16_9}" viewBox="0 0 ${barGroup.calcWidth()} $svgHeight" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: Bar Group Chart'>
+        <svg id="id_${barGroup.id}" width="${(width * barGroup.display.scale) / DISPLAY_RATIO_16_9}" height="${(height * barGroup.display.scale) / DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" aria-label='Docops: Bar Group Chart'>
         ${theme.fontImport}
     """.trimIndent()
     }

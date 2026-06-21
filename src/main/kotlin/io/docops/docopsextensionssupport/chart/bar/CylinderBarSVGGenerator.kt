@@ -1,8 +1,11 @@
 package io.docops.docopsextensionssupport.chart.bar
 
 
+import io.docops.docopsextensionssupport.chart.NiceScale
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.uuid.ExperimentalUuidApi
 
 
@@ -14,14 +17,14 @@ class CylinderBarMaker {
         theme = if (bar.display.theme.isNotBlank()) {
             ThemeFactory.getThemeByName(bar.display.theme, bar.display.useDark)
         } else {
-            ThemeFactory.getTheme(bar.display)
+            ThemeFactory.getThemeByName("modern_editorial", bar.display.useDark)
         }
-        val width = 800.0
-        val height = 600.0
-        val leftMargin = 80.0
-        val rightMargin = 50.0
+        val width = 1100.0
+        val height = 620.0
+        val leftMargin = 100.0
+        val rightMargin = 60.0
         val topMargin = 100.0
-        val bottomMargin = 100.0
+        val bottomMargin = 110.0
 
         val chartWidth = width - leftMargin - rightMargin
         val chartHeight = height - topMargin - bottomMargin
@@ -32,11 +35,14 @@ class CylinderBarMaker {
             bar.series
         }
 
-        val maxValue = series.maxOfOrNull { it.value } ?: 1.0
+        val nice = NiceScale(0.0, series.maxOfOrNull { it.value } ?: 1.0)
+        val maxValue = nice.getNiceMax()
+        val tickSpacing = nice.getTickSpacing()
+
         val barWidth = if (series.isNotEmpty()) {
-            (chartWidth / series.size) * 0.6
+            (chartWidth / series.size) * 0.65
         } else {
-            50.0
+            64.0
         }
         val spacing = if (series.isNotEmpty()) {
             chartWidth / series.size
@@ -50,27 +56,31 @@ class CylinderBarMaker {
         val sb = StringBuilder()
 
         // Start SVG
-        sb.append("""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $height" width="${width / DISPLAY_RATIO_16_9}" height="${height / DISPLAY_RATIO_16_9}" id="id_${bar.display.id}">""")
+        sb.append("""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $height" width="$width" height="$height" id="id_${bar.display.id}" role="img" aria-labelledby="title_${bar.display.id}">""")
+        sb.append("\n")
+        sb.append("""<title id="title_${bar.display.id}">${bar.title}</title>""")
         sb.append("\n")
 
         // Add defs for gradients, filters, and effects
-        sb.append(generateDefs(series, bar.display))
-        sb.append(theme.fontImport)
-
+        sb.append(generateDefs(series, bar.display, bar))
+        
         // Background
-        val textColor = theme.primaryText
-        sb.append("""<rect width="$width" height="$height" fill="${theme.canvas}"/>""")
+        sb.append("""<rect width="$width" height="$height" fill="url(#bgWash${if(bar.display.useDark) "Dark" else ""})"/>""")
         sb.append("\n")
 
-        // Title
-        sb.append("""<text x="${width / 2}" y="50" text-anchor="middle" font-family="${theme.fontFamily}" font-size="24" font-weight="bold" fill="$textColor">${bar.title}</text>""")
+        sb.append("""<g class="font ${if(series.size > 12) "dense" else ""}">""")
         sb.append("\n")
+
+        // Title & Subtitle
+        sb.append("""<g transform="translate(${width/2} 45)" text-anchor="middle">""")
+        sb.append("""<text class="title" x="0" y="0">${bar.title}</text>""")
+        sb.append("</g>\n")
 
 
         // Y-axis label
         bar.yLabel?.let {
             if (it.isNotEmpty()) {
-                sb.append("""<text x="20" y="${height / 2}" font-family="${theme.fontFamily}" text-anchor="middle" font-size="14" fill="$textColor" transform="rotate(-90 20 ${height / 2})">${bar.yLabel}</text>""")
+                sb.append("""<text class="axis-label" x="22" y="${height / 2}" text-anchor="middle" transform="rotate(-90 22 ${height / 2})">${bar.yLabel}</text>""")
                 sb.append("\n")
             }
         }
@@ -78,7 +88,7 @@ class CylinderBarMaker {
         // X-axis label
         bar.xLabel?.let {
             if (it.isNotEmpty()) {
-                sb.append("""<text x="${width / 2}" y="${height - 20}" font-family="${theme.fontFamily}" text-anchor="middle" font-size="14" fill="$textColor">${bar.xLabel}</text>""")
+                sb.append("""<text class="axis-label" x="${width / 2}" y="${height - 22}" text-anchor="middle">${bar.xLabel}</text>""")
                 sb.append("\n")
             }
         }
@@ -88,24 +98,24 @@ class CylinderBarMaker {
         val yAxisBottom = height - bottomMargin
         val yAxisTop = topMargin
 
-        sb.append("""<line x1="$yAxisX" y1="$yAxisTop" x2="$yAxisX" y2="$yAxisBottom" stroke="$textColor" stroke-width="2"/>""")
-        sb.append("\n")
-
         // Y-axis grid and labels
-        val numYTicks = 5
-        for (i in 0..numYTicks) {
-            val y = yAxisBottom - (chartHeight * i / numYTicks)
-            val value = (maxValue * i / numYTicks)
-            val gridColor = theme.accentColor
-
-            sb.append("""<line x1="$yAxisX" y1="$y" x2="${width - rightMargin}" y2="$y" stroke="$gridColor" stroke-width="1" opacity="0.3"/>""")
+        var i = 0.0
+        while (i <= maxValue) {
+            val y = yAxisBottom - (chartHeight * (i / maxValue))
+            
+            if (i > 0) {
+                sb.append("""<line class="grid" x1="$yAxisX" y1="$y" x2="${width - rightMargin}" y2="$y"/>""")
+                sb.append("\n")
+            }
+            sb.append("""<text class="tick" x="${yAxisX - 12}" y="${y + 4}" text-anchor="end">${bar.valueFmt(i)}</text>""")
             sb.append("\n")
-            sb.append("""<text x="${yAxisX - 10}" y="${y + 5}" font-family="${theme.fontFamily}" text-anchor="end" font-size="12" fill="$textColor">${bar.valueFmt(value)}</text>""")
-            sb.append("\n")
+            i += tickSpacing
         }
 
-        // Draw X-axis
-        sb.append("""<line x1="$yAxisX" y1="$yAxisBottom" x2="${width - rightMargin}" y2="$yAxisBottom" stroke="$textColor" stroke-width="2"/>""")
+        // Axes
+        sb.append("""<line class="axis" x1="$yAxisX" y1="$yAxisTop" x2="$yAxisX" y2="$yAxisBottom"/>""")
+        sb.append("\n")
+        sb.append("""<line class="axis" x1="$yAxisX" y1="$yAxisBottom" x2="${width - rightMargin}" y2="$yAxisBottom"/>""")
         sb.append("\n")
 
         // Draw cylindrical bars
@@ -116,9 +126,11 @@ class CylinderBarMaker {
 
             // Use modern color palette if no custom color is specified
             val color = seriesItem.itemDisplay?.baseColor ?: theme.chartPalette[index % theme.chartPalette.size].color
-            val gradientId = "cylinderGradient${index}_${bar.display.id}"
+            val gradientId = "g${index + 1}_${bar.display.id}"
 
             sb.append(generateCylinderBar(
+                index = index,
+                seriesCount = series.size,
                 x = x,
                 y = y,
                 width = barWidth,
@@ -130,48 +142,90 @@ class CylinderBarMaker {
                 label = seriesItem.label,
                 value = bar.valueFmt(seriesItem.value),
                 yAxisBottom = yAxisBottom,
-                textColor = textColor,
+                textColor = theme.primaryText,
                 useDark = bar.display.useDark,
                 id = bar.display.id, isPDf, fontFamily = theme.fontFamily
             ))
         }
 
+        sb.append("</g>")
         sb.append("</svg>")
         return sb.toString()
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    private fun generateDefs(series: List<Series>, display: BarDisplay): String {
+    private fun generateDefs(series: List<Series>, display: BarDisplay, bar: Bar): String {
         val sb = StringBuilder()
         sb.append("<defs>\n")
 
-        // Generate gradients for each bar using modern colors
-        series.forEachIndexed { index, seriesItem ->
-            // Use modern color palette if no custom color is specified
-            val color = seriesItem.itemDisplay?.baseColor ?: theme.chartPalette[index % theme.chartPalette.size].color
-            val gradientId = "cylinderGradient${index}_${display.id}"
+        sb.append(theme.fontImport)
+        sb.append("\n")
 
-            sb.append(generateRadialGradient(gradientId, color))
+        val useDark = display.useDark
+        sb.append("""
+        <style><![CDATA[
+          :root {
+            --bg: ${theme.canvas};
+            --surface: ${if (useDark) "#0f1d2d" else "#ffffff"};
+            --text-primary: ${theme.primaryText};
+            --text-secondary: ${theme.secondaryText};
+            --grid: ${theme.accentColor}40;
+            --axis: ${theme.accentColor}80;
+            --accent: ${theme.accentColor};
+          }
+
+          .font { font-family: ${theme.fontFamily}; }
+          .title { fill: var(--text-primary); font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+          .subtitle { fill: var(--text-secondary); font-size: 13px; font-weight: 500; }
+          .tick { fill: var(--text-secondary); font-size: 12px; }
+          .axis-label { fill: var(--text-secondary); font-size: 13px; font-weight: 600; }
+          .x-label { fill: var(--text-secondary); font-size: 11px; font-weight: 600; }
+          .value { font-size: 12px; font-weight: 700; }
+
+          .grid { stroke: var(--grid); stroke-width: 1; stroke-dasharray: 4 7; }
+          .axis { stroke: var(--axis); stroke-width: 1.6; stroke-linecap: round; }
+
+          .dense .x-label { font-size: 10px; }
+          .dense .tick { font-size: 11px; }
+
+          .bar-wrap:hover .rim { stroke-opacity: 0.7; }
+        ]]></style>
+        """.trimIndent())
+        sb.append("\n")
+
+        if(useDark) {
+            sb.append("""
+            <linearGradient id="bgWashDark" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#0b1727"/>
+                <stop offset="100%" stop-color="#091321"/>
+            </linearGradient>
+            """.trimIndent())
+        } else {
+            sb.append("""
+            <linearGradient id="bgWash" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#eef2f8"/>
+                <stop offset="100%" stop-color="#f9fbff"/>
+            </linearGradient>
+            """.trimIndent())
         }
+        sb.append("\n")
 
-        // Highlight gradient for glass effect
         sb.append("""
             <linearGradient id="highlight" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0" />
-                <stop offset="20%" style="stop-color:#ffffff;stop-opacity:0.6" />
-                <stop offset="40%" style="stop-color:#ffffff;stop-opacity:0" />
-                <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+                <stop offset="20%" stop-color="#ffffff" stop-opacity="0.5" />
+                <stop offset="45%" stop-color="#ffffff" stop-opacity="0" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
             </linearGradient>
         """.trimIndent())
         sb.append("\n")
 
-        // Shadow filter
         sb.append("""
-            <filter id="cylinderShadow_${display.id}">
+            <filter id="cylinderShadow_${display.id}" x="-25%" y="-25%" width="170%" height="190%">
                 <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-                <feOffset dx="2" dy="2" result="offsetblur"/>
+                <feOffset dx="0" dy="2" result="off"/>
                 <feComponentTransfer>
-                    <feFuncA type="linear" slope="0.3"/>
+                    <feFuncA type="linear" slope="0.25"/>
                 </feComponentTransfer>
                 <feMerge>
                     <feMergeNode/>
@@ -181,6 +235,15 @@ class CylinderBarMaker {
         """.trimIndent())
         sb.append("\n")
 
+        // Generate gradients for each bar using modern colors
+        series.forEachIndexed { index, seriesItem ->
+            // Use modern color palette if no custom color is specified
+            val color = seriesItem.itemDisplay?.baseColor ?: theme.chartPalette[index % theme.chartPalette.size].color
+            val gradientId = "g${index + 1}_${display.id}"
+
+            sb.append(generateRadialGradient(gradientId, color))
+        }
+
         sb.append("</defs>\n")
         return sb.toString()
     }
@@ -189,10 +252,10 @@ class CylinderBarMaker {
         val (lightColor, midColor, darkColor) = generateColorShades(baseColor)
 
         return """
-            <radialGradient id="$id" cx="30%" cy="30%">
-                <stop offset="0%" style="stop-color:$lightColor;stop-opacity:1" />
-                <stop offset="50%" style="stop-color:$midColor;stop-opacity:0.8" />
-                <stop offset="100%" style="stop-color:$darkColor;stop-opacity:0.9" />
+            <radialGradient id="$id" cx="30%" cy="28%">
+                <stop offset="0%" stop-color="$lightColor" />
+                <stop offset="55%" stop-color="$midColor" />
+                <stop offset="100%" stop-color="$darkColor" />
             </radialGradient>
         """.trimIndent() + "\n"
     }
@@ -222,6 +285,8 @@ class CylinderBarMaker {
     }
 
     private fun generateCylinderBar(
+        index: Int,
+        seriesCount: Int,
         x: Double,
         y: Double,
         width: Double,
@@ -239,67 +304,69 @@ class CylinderBarMaker {
         fontFamily: String
     ): String {
         val sb = StringBuilder()
-        val cx = x + width / 2
-        val highlightWidth = width * 0.3
-        val highlightX = x + width * 0.15
+        val cx = width / 2
+        val highlightWidth = width * 0.25
+        val highlightX = width * 0.18
+        
+        val stagger = index * 120
+        val duration = 900
+        val valueBegin = 760 + stagger
 
-        sb.append("<g filter=\"url(#cylinderShadow_$id)\">\n")
+        sb.append("""<g class="bar-wrap" transform="translate($x 0)">""")
+        sb.append("\n")
+        sb.append("""<g filter="url(#cylinderShadow_$id)">""")
+        sb.append("\n")
 
         // Cylinder body (main rectangle with gradient)
-        // Animate both y and height for upward growth effect
-        sb.append("""<rect x="$x" y="$y" width="$width" height="$height" fill="url(#${gradientId})" rx="2">""")
-        sb.append("""<animate attributeName="y" from="$yAxisBottom" to="$y" dur="1s" fill="freeze"/>""")
-        sb.append("""<animate attributeName="height" from="0" to="$height" dur="1s" fill="freeze"/>""")
+        sb.append("""<rect x="0" y="$y" width="$width" height="$height" fill="url(#${gradientId})" rx="2">""")
+        sb.append("""<animate attributeName="y" from="$yAxisBottom" to="$y" begin="${stagger}ms" dur="${duration}ms" fill="freeze"/>""")
+        sb.append("""<animate attributeName="height" from="0" to="$height" begin="${stagger}ms" dur="${duration}ms" fill="freeze"/>""")
         sb.append("""</rect>""")
         sb.append("\n")
 
-        // Highlight stripe for glass effect (also animate)
-        sb.append("""<rect x="$highlightX" y="${y + 5}" width="$highlightWidth" height="${height - 10}" fill="url(#highlight)" opacity="0.7">""")
-        sb.append("""<animate attributeName="y" from="${yAxisBottom + 5}" to="${y + 5}" dur="1s" fill="freeze"/>""")
-        sb.append("""<animate attributeName="height" from="0" to="${height - 10}" dur="1s" fill="freeze"/>""")
+        // Highlight stripe for glass effect
+        sb.append("""<rect class="highlight-stripe" x="$highlightX" y="${y + 7}" width="$highlightWidth" height="${maxOf(0.0, height - 14)}" fill="url(#highlight)" opacity="0.6">""")
+        sb.append("""<animate attributeName="y" from="${yAxisBottom + 7}" to="${y + 7}" begin="${stagger}ms" dur="${duration}ms" fill="freeze"/>""")
+        sb.append("""<animate attributeName="height" from="0" to="${maxOf(0.0, height - 14)}" begin="${stagger}ms" dur="${duration}ms" fill="freeze"/>""")
         sb.append("""</rect>""")
         sb.append("\n")
 
-        // Bottom ellipse (base of cylinder) - stays at bottom, no animation needed
+        // Bottom ellipse (base of cylinder)
         val (_, _, darkColor) = generateColorShades(color)
-        sb.append("""<ellipse cx="$cx" cy="$yAxisBottom" rx="$cylinderRadius" ry="$ellipseRy" fill="$darkColor" opacity="0.8"/>""")
+        sb.append("""<ellipse class="base" cx="$cx" cy="$yAxisBottom" rx="$cylinderRadius" ry="$ellipseRy" fill="$darkColor" opacity="0.75"/>""")
         sb.append("\n")
 
-        // Top ellipse (visible top of cylinder) - animate y position
+        // Top ellipse (visible top of cylinder)
         val (lightColor, _, _) = generateColorShades(color)
-        sb.append("""<ellipse cx="$cx" cy="$y" rx="$cylinderRadius" ry="$ellipseRy" fill="$lightColor" opacity="0.9">""")
-        sb.append("""<animate attributeName="cy" from="$yAxisBottom" to="$y" dur="1s" fill="freeze"/>""")
+        sb.append("""<ellipse class="top" cx="$cx" cy="$y" rx="$cylinderRadius" ry="$ellipseRy" fill="$lightColor" opacity="0.95">""")
+        sb.append("""<animate attributeName="cy" from="$yAxisBottom" to="$y" begin="${stagger}ms" dur="${duration}ms" fill="freeze"/>""")
         sb.append("""</ellipse>""")
         sb.append("\n")
 
-        // Top ellipse highlight overlay - also animate
-        sb.append("""<ellipse cx="$cx" cy="${y - 2}" rx="$cylinderRadius" ry="$ellipseRy" fill="$lightColor" opacity="0.5">""")
-        sb.append("""<animate attributeName="cy" from="${yAxisBottom - 2}" to="${y - 2}" dur="1s" fill="freeze"/>""")
-        sb.append("""</ellipse>""")
-        sb.append("\n")
-
-        // Rim highlight on top ellipse - also animate
-        sb.append("""<ellipse cx="$cx" cy="$y" rx="${cylinderRadius * 0.85}" ry="${ellipseRy * 0.8}" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.4">""")
-        sb.append("""<animate attributeName="cy" from="$yAxisBottom" to="$y" dur="1s" fill="freeze"/>""")
+        // Rim highlight on top ellipse
+        sb.append("""<ellipse class="rim" cx="$cx" cy="$y" rx="${cylinderRadius * 0.85}" ry="${ellipseRy * 0.85}" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-opacity="0.55">""")
+        sb.append("""<animate attributeName="cy" from="$yAxisBottom" to="$y" begin="${stagger}ms" dur="${duration}ms" fill="freeze"/>""")
         sb.append("""</ellipse>""")
         sb.append("\n")
 
         sb.append("</g>\n")
 
         // Label below the bar
-        sb.append("""<text x="$cx" y="${yAxisBottom + 20}" font-family="$fontFamily" text-anchor="middle" font-size="12" font-weight="bold" fill="$textColor">$label</text>""")
+        val rotate = seriesCount > 8
+        val rotation = if(rotate) "transform=\"rotate(-32 $cx ${yAxisBottom + 26})\"" else ""
+        sb.append("""<text class="x-label" x="$cx" y="${yAxisBottom + 26}" text-anchor="middle" $rotation>$label</text>""")
         sb.append("\n")
 
-        var opacity = 0.0
-        if (isPDf) {
-            opacity = 1.0
-        }
+        val opacity = if (isPDf) 1.0 else 0.0
         // Value above the bar
-        val valueColor = textColor
-        sb.append("""<text x="$cx" y="${y - 20}" font-family="$fontFamily" text-anchor="middle" font-size="14" font-weight="bold" fill="$valueColor" opacity="$opacity">${value}""")
-        sb.append("""<animate attributeName="opacity" from="0" to="1" begin="0.8s" dur="0.5s" fill="freeze"/>""")
+        sb.append("""<text class="value" x="$cx" y="${y - 20}" fill="var(--text-primary)" text-anchor="middle" opacity="$opacity">$value""")
+        if(!isPDf) {
+            sb.append("""<animate attributeName="opacity" from="0" to="1" begin="${valueBegin}ms" dur="260ms" fill="freeze"/>""")
+        }
         sb.append("""</text>""")
         sb.append("\n")
+        
+        sb.append("</g>\n")
         return sb.toString()
     }
 }

@@ -51,7 +51,8 @@ object ThemeFactory {
      */
     fun getThemeByName(themeName: String, useDark: Boolean = false): DocOpsTheme {
         return when (themeName.lowercase()) {
-            "ayu", "ayutheme" -> if(useDark) AyuDarkTheme() else AyuLightTheme()
+            "ayu", "ayutheme", "ayulight", "ayulighttheme", "ayu_light" -> if(useDark) AyuDarkTheme() else AyuLightTheme()
+            "ayudark", "ayudarktheme", "ayu_dark" -> AyuDarkTheme()
             "signal", "signaltheme" -> if (useDark) SignalDarkTheme() else SignalLightTheme()
             "brand", "brandtheme" -> if (useDark) BrandDarkTheme() else BrandLightTheme()
             "tallinn", "tallinntheme" -> if(useDark)ProDarkTheme() else TallinnTheme()
@@ -82,7 +83,9 @@ object ThemeFactory {
             "spring" -> SpringTheme()
             "summer" -> SummerTheme()
             "guyana", "goldenarrowhead", "goldenarrowheadtheme" -> GoldenArrowheadTheme()
-            else -> if (useDark) ProDarkTheme() else ClassicLightTheme()
+            "classic" -> if (useDark) ProDarkTheme() else ClassicLightTheme()
+            "modern_editorial", "modern_editorial_theme", "redesign" -> if(useDark) ModernEditorialDarkTheme() else ModernEditorialTheme()
+            else -> if(useDark) ModernEditorialDarkTheme() else ModernEditorialTheme()
         }
     }
 }
@@ -642,10 +645,15 @@ class AyuLightTheme: DocOpsTheme {
     override val surfaceImpact: String = "#55b4d4"
     override val fontFamily = "'Lexend', ui-sans-serif, system-ui, sans-serif"
     override val fontImport =
-        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+        "@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&amp;display=swap');"
     override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f
     override val cornerRadius = 12
+    override val chartPalette = listOf(
+        SVGColor("#f07171"), SVGColor("#fa8532"), SVGColor("#a37acc"),
+        SVGColor("#86b300"), SVGColor("#4cbf99"), SVGColor("#22a4e6"),
+        SVGColor("#55b4d4"), SVGColor("#e59645")
+    )
 }
 
 class AyuDarkTheme: DocOpsTheme {
@@ -658,20 +666,51 @@ class AyuDarkTheme: DocOpsTheme {
     override val surfaceImpact: String = "#39bae6"
     override val fontFamily = "'Lexend', ui-sans-serif, system-ui, sans-serif"
     override val fontImport =
-        "@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&amp;display=swap');"
+        "@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&amp;display=swap');"
     override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f
     override val cornerRadius = 12
+    override val chartPalette = listOf(
+        SVGColor("#f29668"), SVGColor("#e6c08a"), SVGColor("#aad94c"),
+        SVGColor("#95e6cb"), SVGColor("#39bae6"), SVGColor("#ffb454"),
+        SVGColor("#d2a6ff"), SVGColor("#f07171")
+    )
 }
-/*
-#f07171,
-#f2a191,
-#fa8532,
-#eba400,
-#e59645,
-#a37acc,
-#86b300,
-#4cbf99,
-#22a4e6,
-#55b4d4
- */
+
+class ModernEditorialTheme : DocOpsTheme {
+    override val name = "ModernEditorialTheme"
+    override val canvas = "#f4f7fb"
+    override val primaryText = "#1b2735"
+    override val secondaryText = "#607086"
+    override val accentColor = "#f59e0b"
+    override val glassEffect = "rgba(255, 255, 255, 0.8)"
+    override val surfaceImpact = "#6f84a0"
+    override val fontFamily = "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap');"
+    override val fontWidthMultiplier = 1.1f
+    override val fontLineHeight = 1.25f
+    override val cornerRadius = 10
+    override val chartPalette = listOf(
+        SVGColor("#3d6ea8"), SVGColor("#4879b1"), SVGColor("#5584b8"),
+        SVGColor("#6290bf"), SVGColor("#6e9bc6"), SVGColor("#79a6cc")
+    )
+}
+
+class ModernEditorialDarkTheme : DocOpsTheme {
+    override val name = "ModernEditorialDarkTheme"
+    override val canvas = "#0d1117"
+    override val primaryText = "#c9d1d9"
+    override val secondaryText = "#8b949e"
+    override val accentColor = "#f59e0b"
+    override val glassEffect = "rgba(22, 27, 34, 0.8)"
+    override val surfaceImpact = "#30363d"
+    override val fontFamily = "'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap');"
+    override val fontWidthMultiplier = 1.1f
+    override val fontLineHeight = 1.25f
+    override val cornerRadius = 10
+    override val chartPalette = listOf(
+        SVGColor("#58a6ff"), SVGColor("#388bfd"), SVGColor("#1f6feb"),
+        SVGColor("#1158c7"), SVGColor("#0d419d"), SVGColor("#092b71")
+    )
+}

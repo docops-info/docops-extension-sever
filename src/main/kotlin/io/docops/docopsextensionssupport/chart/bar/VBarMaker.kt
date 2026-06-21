@@ -1,6 +1,7 @@
 package io.docops.docopsextensionssupport.chart.bar
 
 import io.docops.docopsextensionssupport.chart.ChartColors
+import io.docops.docopsextensionssupport.chart.NiceScale
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.support.determineTextColor
@@ -11,29 +12,50 @@ import java.io.File
 import kotlin.math.min
 
 class VBarMaker {
+    private var isModern = false
     private var fontColor = ""
     private var height = 500  // Increased height to accommodate labels
     private var width = 900   // Increased width to provide more space
-    private val xAxisStart = 100  // Increased to provide more space for y-axis labels
-    private val yAxisStart = 80
-    private val xAxisEnd = 800  // Adjusted to maintain proportions
-    private val yAxisEnd = 380  // Increased to provide more space for x-axis labels
-    private val barWidth = 60
-    private val barSpacing = 100 // Center-to-center spacing between bars
-    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
+    private var xAxisStart = 100  // Increased to provide more space for y-axis labels
+    private var yAxisStart = 80
+    private var xAxisEnd = 800  // Adjusted to maintain proportions
+    private var yAxisEnd = 380  // Increased to provide more space for x-axis labels
+    private var barWidth = 60
+    private var barSpacing = 100 // Center-to-center spacing between bars
+    private var theme: DocOpsTheme = ThemeFactory.getThemeByName("modern_editorial", false)
 
     fun makeVerticalBar(bar: Bar, isPDf: Boolean): String {
         theme = if (bar.display.theme.isNotBlank()) {
             ThemeFactory.getThemeByName(bar.display.theme, bar.display.useDark)
         } else {
-            ThemeFactory.getTheme(bar.display)
+            ThemeFactory.getThemeByName("modern_editorial", bar.display.useDark)
+        }
+        isModern = !theme.name.contains("Classic") && !theme.name.contains("Pro")
+        if (isModern) {
+            width = 960
+            height = 560
+            xAxisStart = 120
+            xAxisEnd = 860
+            yAxisStart = 150
+            yAxisEnd = 450
+        } else {
+            width = 900
+            height = 500
+            xAxisStart = 100
+            xAxisEnd = 800
+            yAxisStart = 80
+            yAxisEnd = 380
         }
         bar.sorted()
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
         sb.append(head(bar))
         sb.append(addDefs(bar))
-        sb.append(makeBackground(bar))
+        if(isModern) {
+            sb.append(makeModernBackground(bar))
+        } else {
+            sb.append(makeBackground(bar))
+        }
         sb.append(addGrid(bar))
         sb.append(addAxes(bar))
         sb.append(addAxisLabels(bar))
@@ -44,11 +66,56 @@ class VBarMaker {
         return sb.toString()
     }
 
+    private fun makeModernBackground(bar: Bar): String {
+        return """
+            <!-- Atmosphere -->
+            <rect width="100%" height="100%" fill="var(--bg)"/>
+            <circle cx="140" cy="80" r="220" fill="url(#bgGlow)"/>
+            <rect x="36" y="36" width="${width - 72}" height="${height - 72}" rx="18" fill="var(--surface)"/>
+        """.trimIndent()
+    }
+
+    private fun addModernBars(bar: Bar): String {
+        val sb = StringBuilder()
+        val maxValue = bar.series.maxOf { it.value }
+        val niceScale = NiceScale(0.0, maxValue)
+        val niceMax = niceScale.getNiceMax()
+
+        val availableWidth = xAxisEnd - xAxisStart
+        val barSpacing = availableWidth / bar.series.size
+        val barWidth = barSpacing * 0.7
+
+        bar.series.forEachIndexed { index, series ->
+            val barHeight = (series.value / niceMax) * (yAxisEnd - yAxisStart)
+            val barX = xAxisStart + (index * barSpacing) + (barSpacing - barWidth) / 2
+            val isPeak = series.value == maxValue
+            val fillColor = if (isPeak) "var(--accent)" else "var(--bar-${(index % theme.chartPalette.size) + 1})"
+
+            sb.append("""
+                <g class="bar-wrap" tabindex="0" aria-label="${series.label?.escapeXml() ?: ""}: ${bar.valueFmt(series.value)}">
+                    <g transform="translate($barX $yAxisEnd)">
+                        <g class="bar-inner anim-${index + 1}">
+                            <rect x="0" y="-$barHeight" width="$barWidth" height="$barHeight" rx="${theme.cornerRadius}" fill="$fillColor"/>
+                        </g>
+                    </g>
+                    <text class="x-label" x="${barX + barWidth / 2}" y="${yAxisEnd + 24}" text-anchor="middle">${series.label?.escapeXml() ?: ""}</text>
+                    <text class="value-label val-${index + 1}" x="${barX + barWidth / 2}" y="${yAxisEnd - barHeight - 12}" text-anchor="middle">${bar.valueFmt(series.value)}</text>
+                </g>
+            """.trimIndent())
+        }
+        return sb.toString()
+    }
+
     private fun addBars(bar: Bar, isPDf: Boolean): String {
+        if (isModern && !isPDf) {
+            return addModernBars(bar)
+        }
         val sb = StringBuilder()
 
         // Calculate the maximum value for scaling
         val maxValue = bar.series.maxOf { it.value }
+        val niceScale = NiceScale(0.0, maxValue)
+        val niceMax = niceScale.getNiceMax()
 
         // Define text colors based on theme
         val labelColor = theme.secondaryText
@@ -70,7 +137,7 @@ class VBarMaker {
 
         // Create each bar with its own gradient
         bar.series.forEachIndexed { index, series ->
-            val barHeight = (series.value / maxValue) * (yAxisEnd - yAxisStart)
+            val barHeight = (series.value / niceMax) * (yAxisEnd - yAxisStart)
             val barX = xAxisStart + centerOffset + (index * adjustedBarSpacing)
             val barY = yAxisEnd - barHeight
             val gradientId = "id_${bar.display.id}_$index"
@@ -162,27 +229,43 @@ class VBarMaker {
 
     private fun addGrid(bar: Bar): String {
         val sb = StringBuilder()
-
         // Define grid line color based on theme
         val gridLineColor = theme.accentColor
 
+        val maxValue = bar.series.maxOf { it.value }
+        val niceScale = NiceScale(0.0, maxValue)
+        val tickSpacing = niceScale.getTickSpacing()
+        val niceMax = niceScale.getNiceMax()
+
         // Calculate y-axis tick positions
         val yAxisHeight = yAxisEnd - yAxisStart
-        val tickCount = 5
-        val tickSpacing = yAxisHeight / (tickCount - 1)
 
-        // Add horizontal grid lines
-        for (i in 0 until tickCount) {
-            val yPos = yAxisEnd - (i * tickSpacing)
-            sb.append("""
+        var currentVal = 0.0
+        while (currentVal <= niceMax) {
+            val yPos = yAxisEnd - (currentVal / niceMax * yAxisHeight)
+            if (isModern) {
+                sb.append("""<line class="grid" x1="$xAxisStart" y1="$yPos" x2="$xAxisEnd" y2="$yPos"/>""")
+            } else {
+                sb.append(
+                    """
                     <line x1="$xAxisStart" y1="$yPos" x2="$xAxisEnd" y2="$yPos" stroke="$gridLineColor" stroke-width="1" stroke-dasharray="5,5" stroke-opacity="0.2"/>
-                """.trimIndent())
+                """.trimIndent()
+                )
+            }
+            currentVal += tickSpacing
         }
 
         return sb.toString()
     }
 
     private fun addAxes(bar: Bar): String {
+        if (isModern) {
+            return """
+                <!-- Axes -->
+                <line class="axis" x1="$xAxisStart" y1="$yAxisStart" x2="$xAxisStart" y2="$yAxisEnd"/>
+                <line class="axis" x1="$xAxisStart" y1="$yAxisEnd" x2="$xAxisEnd" y2="$yAxisEnd"/>
+            """.trimIndent()
+        }
         val axisColor = theme.accentColor
         return """
                 <!-- Y-axis -->
@@ -199,26 +282,46 @@ class VBarMaker {
         // Define text color based on theme
         val textColor = theme.secondaryText
 
+        val maxValue = bar.series.maxOf { it.value }
+        val niceScale = NiceScale(0.0, maxValue)
+        val tickSpacing = niceScale.getTickSpacing()
+        val niceMax = niceScale.getNiceMax()
+
         // Calculate y-axis tick positions
         val yAxisHeight = yAxisEnd - yAxisStart
-        val tickCount = 5
-        val tickSpacing = yAxisHeight / (tickCount - 1)
 
         // Y-axis labels
-        for (i in 0 until tickCount) {
-            val yPos = yAxisEnd - (i * tickSpacing)
-            val value = (i * 25) // 0, 25, 50, 75, 100
-            sb.append("""
-                    <text x="${xAxisStart - 15}" y="${yPos + 4}" font-family="${theme.fontFamily}" font-size="12" text-anchor="end" fill="$textColor">$value</text>
+        var currentVal = 0.0
+        while (currentVal <= niceMax) {
+            val yPos = yAxisEnd - (currentVal / niceMax * yAxisHeight)
+            val label = bar.valueFmt(currentVal)
+            if (isModern) {
+                sb.append("""<text class="tick-text" x="${xAxisStart - 12}" y="${yPos + 4}" text-anchor="end">$label</text>""")
+            } else {
+                sb.append(
+                    """
+                    <text x="${xAxisStart - 15}" y="${yPos + 4}" font-family="${theme.fontFamily}" font-size="12" text-anchor="end" fill="$textColor">$label</text>
                     <line x1="${xAxisStart - 5}" y1="$yPos" x2="$xAxisStart" y2="$yPos" stroke="$textColor" stroke-width="1" stroke-opacity="0.6"/>
-                """.trimIndent())
+                """.trimIndent()
+                )
+            }
+            currentVal += tickSpacing
         }
 
         // Add Y-axis label
         if (bar.yLabel != null && bar.yLabel.isNotEmpty()) {
-            sb.append("""
+            if (isModern) {
+                sb.append("""<text class="y-label" x="48" y="${(yAxisStart + yAxisEnd) / 2}" text-anchor="middle" transform="rotate(-90 48 ${(yAxisStart + yAxisEnd) / 2})">${bar.yLabel.escapeXml()}</text>""")
+            } else {
+                sb.append(
+                    """
                     <text x="30" y="${(yAxisStart + yAxisEnd) / 2}" font-family="${theme.fontFamily}" font-size="14" font-weight="bold" text-anchor="middle" fill="$textColor" transform="rotate(-90, 30, ${(yAxisStart + yAxisEnd) / 2})">${bar.yLabel.escapeXml()}</text>
-                """.trimIndent())
+                """.trimIndent()
+                )
+            }
+        }
+        if (isModern) {
+            sb.append("""<text class="x-label" x="${(xAxisStart + xAxisEnd) / 2}" y="${yAxisEnd + 42}" text-anchor="middle">${bar.xLabel?.escapeXml() ?: ""}</text>""")
         }
 
         return sb.toString()
@@ -229,10 +332,14 @@ class VBarMaker {
     }
 
     private fun head(bar: Bar): String {
+        val svgWidth = if (isModern) width.toString() else (width / DISPLAY_RATIO_16_9).toString()
+        val svgHeight = if (isModern) height.toString() else (height / DISPLAY_RATIO_16_9).toString()
         return """
                 <?xml version="1.0" encoding="UTF-8"?>
-                <svg width="${width/DISPLAY_RATIO_16_9}" height="${height/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" id="id_${bar.display.id}">
-                ${theme.fontImport}
+                <svg width="$svgWidth" height="$svgHeight" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc" id="id_${bar.display.id}">
+                <title id="title">${bar.title.escapeXml()}</title>
+                <desc id="desc">Animated bar chart with refined layout and cohesive palette.</desc>
+                ${if (!isModern) theme.fontImport else ""}
             """.trimIndent()
     }
 
@@ -241,10 +348,18 @@ class VBarMaker {
     }
 
     private fun addTitle(bar: Bar): String {
+        if (isModern) {
+            val subtitle = if (!bar.yLabel.isNullOrEmpty()) bar.yLabel else ""
+            return """
+                <!-- Header -->
+                <text class="title" x="78" y="94">${bar.title.escapeXml()}</text>
+                ${if (subtitle.isNotEmpty()) """<text class="subtitle" x="78" y="118">${subtitle.escapeXml()}</text>""" else ""}
+            """.trimIndent()
+        }
         val titleColor = theme.primaryText
         return """
                 <!-- Title -->
-                <text x="${width/2}" y="40" font-family="${theme.fontFamily}" font-size="24" font-weight="bold" text-anchor="middle" fill="$titleColor">${bar.title.escapeXml()}</text>
+                <text x="${width / 2}" y="40" font-family="${theme.fontFamily}" font-size="24" font-weight="bold" text-anchor="middle" fill="$titleColor">${bar.title.escapeXml()}</text>
             """.trimIndent()
     }
 
@@ -321,9 +436,56 @@ class VBarMaker {
             """.trimIndent()
             )
         }
+
+        val modernStyle = if (isModern) {
+            """
+            @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap');
+            :root {
+            --bg: ${theme.canvas};
+            --surface: ${if (bar.display.useDark) "#161b22" else "#ffffff"};
+            --text: ${theme.primaryText};
+            --text-soft: ${theme.secondaryText};
+            --grid: ${theme.surfaceImpact};
+            --axis: ${theme.secondaryText};
+            --accent: ${theme.accentColor};
+            ${theme.chartPalette.mapIndexed { i, c -> "--bar-${i + 1}: ${c.color};" }.joinToString("\n            ")}
+            --bar-radius: ${theme.cornerRadius};
+            }
+            text { font-family: ${theme.fontFamily}; }
+            .title { font-size: 30px; font-weight: 700; fill: var(--text); }
+            .subtitle { font-size: 14px; font-weight: 500; fill: var(--text-soft); }
+            .grid { stroke: var(--grid); stroke-width: 1; stroke-opacity: 0.12; stroke-dasharray: 4 8; }
+            .axis { stroke: var(--axis); stroke-width: 1.4; stroke-opacity: 0.35; }
+            .tick-text { font-size: 12px; font-weight: 500; fill: var(--text-soft); }
+            .x-label { font-size: 13px; font-weight: 500; fill: var(--text-soft); }
+            .y-label { font-size: 14px; font-weight: 600; fill: var(--text-soft); }
+            .value-label { font-size: 12px; font-weight: 600; fill: var(--text); opacity: 0.48; transition: opacity 180ms ease, transform 180ms ease; pointer-events: none; }
+            .bar-wrap:focus .value-label, .bar-wrap:hover .value-label { opacity: 1; transform: translateY(-2px); }
+            .bar-inner { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 220ms ease, filter 220ms ease; }
+            .bar-wrap:focus .bar-inner, .bar-wrap:hover .bar-inner { transform: scale(1.03); filter: saturate(1.08); }
+            @keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+            @keyframes revealValue { from { opacity: 0; transform: translateY(6px); } to { opacity: 0.48; transform: translateY(0); } }
+            ${bar.series.mapIndexed { i, _ -> ".anim-${i + 1} { animation: growBar 700ms cubic-bezier(.2,.8,.2,1) ${80 + i * 90}ms both; }" }.joinToString("\n            ")}
+            ${bar.series.mapIndexed { i, _ -> ".val-${i + 1} { animation: revealValue 360ms ease ${720 + i * 90}ms both; }" }.joinToString("\n            ")}
+            """.trimIndent()
+        } else {
+            """
+                   #id_${bar.display.id} .glass-bar { transition: all 0.3s ease; }
+                   #id_${bar.display.id} .glass-bar:hover { filter: url(#glow); transform: scale(1.02); cursor: pointer; }
+                   #id_${bar.display.id} text { font-family: ${theme.fontFamily}; }
+            """.trimIndent()
+        }
+
         return """
             <defs>
-                $barDefs
+                ${if (isModern) """
+                <linearGradient id="bgGlow" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="${if (bar.display.useDark) "#1f2937" else "#dbe8f8"}" stop-opacity="0.65"/>
+                    <stop offset="100%" stop-color="${theme.canvas}" stop-opacity="0"/>
+                </linearGradient>
+                """ else barDefs}
+                
+                ${if (!isModern) """
                 <!-- Glass effect gradients -->
                 <linearGradient id="glassOverlay" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style="stop-color:rgba(255,255,255,0.4);stop-opacity:1" />
@@ -379,19 +541,10 @@ class VBarMaker {
                         <feMergeNode in="SourceGraphic"/>
                     </feMerge>
                 </filter>
-
+                """ else ""}
+                
                 <style>
-                   #id_${bar.display.id} .glass-bar {
-                            transition: all 0.3s ease;
-                        }
-                        #id_${bar.display.id} .glass-bar:hover {
-                            filter: url(#glow);
-                            transform: scale(1.02);
-                            cursor: pointer;
-                        }
-                        #id_${bar.display.id} text {
-                            font-family: ${theme.fontFamily};
-                        }
+                $modernStyle
                 </style>
             </defs>
         """.trimIndent()

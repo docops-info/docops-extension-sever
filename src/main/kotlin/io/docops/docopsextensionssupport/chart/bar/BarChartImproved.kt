@@ -89,7 +89,7 @@ class BarChartImproved(val useDark: Boolean) {
         val vBar = config["vBar"]?.toBoolean() ?: false
         val sorted = config["sorted"]?.toBoolean() ?: false
         val scale = config["scale"]?.toFloatOrNull() ?: 1.0f
-        val theme = config["theme"] ?: "classic"
+        val theme = config["theme"] ?: config["paletteType"] ?: "modern_editorial"
         val type = config["type"] ?: "R"
 
         // Parse series data
@@ -149,7 +149,7 @@ class BarChartImproved(val useDark: Boolean) {
         val baseColor = config["baseColor"] ?: "#D988B9"
         val vBar = config["vBar"]?.toBoolean() ?: false
         val condensed = config["condensed"]?.toBoolean() ?: false
-        val theme = config["theme"] ?: "classic"
+        val theme = config["theme"] ?: config["paletteType"] ?: "modern_editorial"
         val scale = config["scale"]?.toDoubleOrNull() ?: 1.0
         val paletteType = config["paletteType"] ?: "CORPORATE"
 

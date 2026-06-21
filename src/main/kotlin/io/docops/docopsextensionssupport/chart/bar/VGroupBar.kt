@@ -11,35 +11,64 @@ import io.docops.docopsextensionssupport.svgsupport.textWidth
 class VGroupBar {
     private var height  = 600
     private var fontDisplayColor = "#111111"
-    private val width = 900 // Increased from 800 to provide more space for labels
+    private var width = 960 // Standard modern width
+    private var isModern = true
     
     private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
+    
+    private var paletteType = ColorPaletteFactory.PaletteType.TABLEAU
     
 
     fun makeVerticalBar(barGroup: BarGroup, isPdf: Boolean): String {
         theme = if (barGroup.display.theme.isNotBlank()) {
             ThemeFactory.getThemeByName(barGroup.display.theme, barGroup.display.useDark)
         } else {
-            ThemeFactory.getTheme(barGroup.display)
+            ThemeFactory.getThemeByName("modern_editorial", barGroup.display.useDark)
+        }
+        isModern = !theme.name.contains("Classic") && !theme.name.contains("Pro")
+        
+        if(!isModern) {
+            width = 900
         }
 
         // Get the palette type for this bar group
-        val paletteType = getPaletteType(barGroup.display)
+        paletteType = getPaletteType(barGroup.display)
 
 
         val sb = StringBuilder()
         sb.append(head(barGroup))
-        sb.append(makeDefs(makeGradient(barGroup.display), barGroup, paletteType))
-        sb.append(makeBackground(barGroup))
-        sb.append(makeTitle(barGroup))
-        sb.append(makeLineSeparator(barGroup))
-        sb.append(makeColumnHeader(barGroup))
-        var startY = 90 // Increased from 80 to align with the new line separator position
-        barGroup.groups.forEach { t ->
-            startY = makeGroup(startY, t, barGroup, sb, isPdf, paletteType)
+        if(isModern && !isPdf) {
+            sb.append(makeModernDefs(barGroup, paletteType))
+            sb.append(makeModernBackground())
+            sb.append(makeModernHeader(barGroup))
+            
+            val groupSb = StringBuilder()
+            var startY = 130
+            barGroup.groups.forEach { t ->
+                startY = makeModernGroup(startY, t, barGroup, groupSb, paletteType)
+            }
+            val finalGroupY = startY - 20
+            sb.append(makeModernLineSeparator(barGroup, finalGroupY))
+            sb.append(makeModernColumnHeader(barGroup))
+            sb.append(groupSb)
+            sb.append(addModernLegend(startY.toDouble(), barGroup))
+        } else {
+            sb.append(makeDefs(makeGradient(barGroup.display), barGroup, paletteType))
+            sb.append(makeBackground(barGroup))
+            sb.append(makeTitle(barGroup))
+            
+            val groupSb = StringBuilder()
+            var startY = 90 // Increased from 80 to align with the new line separator position
+            barGroup.groups.forEach { t ->
+                startY = makeGroup(startY, t, barGroup, groupSb, isPdf, paletteType)
+            }
+            val finalGroupY = startY - 24
+            sb.append(makeLineSeparator(barGroup, finalGroupY))
+            sb.append(makeColumnHeader(barGroup))
+            sb.append(groupSb)
+            val lastBar = startY
+            sb.append(addLegend(lastBar.toDouble(), barGroup))
         }
-        val lastBar = startY
-        sb.append(addLegend(lastBar.toDouble(), barGroup))
         sb.append(tail())
         return sb.toString()
     }
@@ -58,16 +87,18 @@ class VGroupBar {
             </text>
         """.trimIndent())
 
+        val uniqueLabels = barGroup.uniqueLabels()
         // Create bars with modern styling
-        group.series.forEachIndexed { idx, it ->
+        group.series.forEach { it ->
             val per = barGroup.scaleUp(it.value)
             val valueColor = theme.primaryText
+            val labelIdx = uniqueLabels.indexOf(it.label)
 
             // Use ColorPaletteFactory for colors
             var fill = if(isPdf) {
-                ColorPaletteFactory.getColorCyclic(paletteType, idx) ?: "#4361ee"
+                ColorPaletteFactory.getColorCyclic(paletteType, labelIdx) ?: "#4361ee"
             } else {
-                "url(#defColor_$idx)"
+                "url(#defColor_$labelIdx)"
             }
             sb.append("""
             <g class="bar-group">
@@ -95,15 +126,212 @@ class VGroupBar {
     private fun head(barGroup: BarGroup): String {
         height = barGroup.calcHeight()
         val numOfBars = barGroup.groups.sumOf{it.series.size}
-        val heightAdjustment = (numOfBars * 24) + (numOfBars * 5)  + (barGroup.groups.size*24) + 80
+        val heightAdjustment = if(isModern) {
+            (numOfBars * 30) + (barGroup.groups.size * 40) + 260
+        } else {
+            (numOfBars * 24) + (numOfBars * 5)  + (barGroup.groups.size*24) + 80
+        }
         height = heightAdjustment
         val finalHeight = height * barGroup.display.scale
 
         return """
             <?xml version="1.0" encoding="UTF-8"?>
-            <svg width="${width/ DISPLAY_RATIO_16_9}" height="${finalHeight/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $heightAdjustment" xmlns="http://www.w3.org/2000/svg" id="id_${barGroup.id}">
+            <svg width="${width/ DISPLAY_RATIO_16_9}" height="${finalHeight/DISPLAY_RATIO_16_9}" viewBox="0 0 $width $heightAdjustment" xmlns="http://www.w3.org/2000/svg" id="id_${barGroup.id}" role="img" aria-labelledby="title_${barGroup.id} desc_${barGroup.id}">
+            <title id="title_${barGroup.id}">${barGroup.title.escapeXml()}</title>
+            <desc id="desc_${barGroup.id}">Grouped horizontal bar chart for ${barGroup.title.escapeXml()}</desc>
             ${theme.fontImport}
         """.trimIndent()
+    }
+
+    private fun makeModernDefs(barGroup: BarGroup, paletteType: ColorPaletteFactory.PaletteType): String {
+        val defGrad = StringBuilder()
+        val uniqueLabels = barGroup.uniqueLabels()
+        
+        uniqueLabels.forEachIndexed { idx, _ ->
+            val baseColor = ColorPaletteFactory.getColorCyclic(paletteType, idx) ?: "#4361ee"
+            val svgColor = SVGColor(baseColor)
+            val lighterColor = svgColor.brightenColor(baseColor, 0.15)
+            val darkerColor = svgColor.darkenColor(baseColor, 0.2)
+
+            defGrad.append("""
+                <linearGradient id="defColor_$idx" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="$lighterColor"/>
+                    <stop offset="100%" stop-color="$darkerColor"/>
+                </linearGradient>
+            """.trimIndent())
+        }
+
+        val useDark = theme.name.contains("Dark")
+        val washColor1 = ColorPaletteFactory.getColorCyclic(paletteType, 0) ?: "#3d6ea8"
+        val washColor2 = ColorPaletteFactory.getColorCyclic(paletteType, 1) ?: "#4879b1"
+
+        return """<defs>
+                $defGrad
+                <linearGradient id="bgAtmos" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="${theme.canvas}"/>
+                    <stop offset="100%" stop-color="${if (useDark) "#0f172a" else "#f8fafc"}"/>
+                </linearGradient>
+                <radialGradient id="bgWashA" cx="20%" cy="20%" r="50%">
+                    <stop offset="0%" stop-color="$washColor1" stop-opacity="0.12"/>
+                    <stop offset="100%" stop-color="$washColor1" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="bgWashB" cx="80%" cy="30%" r="40%">
+                    <stop offset="0%" stop-color="$washColor2" stop-opacity="0.1"/>
+                    <stop offset="100%" stop-color="$washColor2" stop-opacity="0"/>
+                </radialGradient>
+
+                <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                </filter>
+
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <style>
+                    #id_${barGroup.id} .bar {
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        transform-box: fill-box;
+                        transform-origin: left;
+                    }
+                    #id_${barGroup.id} .bar-group:hover .bar {
+                        transform: scaleX(1.02);
+                        filter: url(#glow);
+                        cursor: pointer;
+                    }
+                    #id_${barGroup.id} .legend-item {
+                        transition: transform 0.3s ease;
+                        cursor: pointer;
+                    }
+                    #id_${barGroup.id} .legend-item:hover {
+                        transform: translateX(5px);
+                    }
+                    #id_${barGroup.id} text {
+                        font-family: ${theme.fontFamily};
+                    }
+                </style>
+           </defs>"""
+    }
+
+    private fun makeModernBackground(): String {
+        return """
+            <rect width="100%" height="100%" fill="url(#bgAtmos)" rx="15" ry="15"/>
+            <rect width="100%" height="100%" fill="url(#bgWashA)" rx="15" ry="15" style="mix-blend-mode: multiply;"/>
+            <rect width="100%" height="100%" fill="url(#bgWashB)" rx="15" ry="15" style="mix-blend-mode: multiply;"/>
+        """.trimIndent()
+    }
+
+    private fun makeModernHeader(barGroup: BarGroup): String {
+        val titleColor = theme.primaryText
+        val subColor = theme.secondaryText
+        return """
+        <g transform="translate(40, 40)">
+            <text class="title" x="0" y="0" style="fill: $titleColor; font-size: 28px; font-weight: 800; letter-spacing: -0.02em;">${barGroup.title.escapeXml()}</text>
+            <text x="0" y="24" style="fill: $subColor; font-size: 13px; font-weight: 500;">Grouped horizontal visualization • ${barGroup.groups.size} categories</text>
+            <line x1="0" y1="40" x2="${width - 80}" y2="40" stroke="${theme.accentColor}" stroke-width="1" stroke-opacity="0.2"/>
+        </g>
+        """.trimIndent()
+    }
+
+    private fun makeModernLineSeparator(barGroup: BarGroup, y2: Int): String {
+        return """
+            <line x1="220" x2="220" y1="120" y2="$y2" stroke="${theme.accentColor}" stroke-width="1.5" stroke-opacity="0.4" stroke-linecap="round"/>
+        """.trimIndent()
+    }
+
+    private fun makeModernColumnHeader(barGroup: BarGroup): String {
+        val textColor = theme.secondaryText
+        return """
+        <g transform="translate(0, 110)">
+            <text x="210" y="0" text-anchor="end" style="fill: $textColor; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">${barGroup.xLabel?.escapeXml()}</text>
+            <text x="230" y="0" text-anchor="start" style="fill: $textColor; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">${barGroup.yLabel?.escapeXml()}</text>
+        </g>
+        """.trimIndent()
+    }
+
+    private fun makeModernGroup(startY: Int, group: Group, barGroup: BarGroup, builder: StringBuilder, paletteType: ColorPaletteFactory.PaletteType): Int {
+        val sb = StringBuilder()
+        sb.append("""<g aria-label="${group.label.escapeXml()}" transform="translate(223, $startY)">""")
+        
+        val groupLabelY = (group.series.size * 30) / 2
+        sb.append("""
+            <text x="-15" y="$groupLabelY" text-anchor="end" dominant-baseline="middle"
+                  style="fill: ${theme.primaryText}; font-size: 14px; font-weight: 700;">${group.label.escapeXml()}
+            </text>
+        """.trimIndent())
+
+        var currentY = 0
+        val uniqueLabels = barGroup.uniqueLabels()
+        val totalBarsInPreviousGroups = barGroup.groups.takeWhile { it != group }.sumOf { it.series.size }
+
+        group.series.forEachIndexed { idx, it ->
+            val per = barGroup.scaleUp(it.value)
+            val labelIdx = uniqueLabels.indexOf(it.label)
+            val fill = "url(#defColor_$labelIdx)"
+            val delay = (totalBarsInPreviousGroups + idx) * 0.05
+            
+            sb.append("""
+            <g class="bar-group" transform="translate(0, $currentY)">
+                <rect class="bar" y="0" x="0" height="24" width="$per" rx="4" ry="4" 
+                      fill="$fill" filter="url(#dropShadow)">
+                    <animate attributeName="width" from="0" to="$per" dur="0.8s" begin="${delay}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.2 1"/>
+                </rect>
+                <text x="${per + 8}" y="16" dominant-baseline="middle"
+                      style="font-size: 12px; font-weight: 700; fill: ${theme.primaryText};">
+                    ${barGroup.valueFmt(it.value)}
+                </text>
+                <text x="8" y="16" dominant-baseline="middle"
+                      style="font-size: 11px; font-weight: 500; fill: #ffffff; fill-opacity: 0.9;">
+                    ${it.label?.escapeXml() ?: ""}
+                </text>
+            </g>
+            """.trimIndent())
+            currentY += 30
+        }
+        sb.append("</g>")
+        builder.append(sb.toString())
+        return startY + currentY + 20
+    }
+
+    private fun addModernLegend(d: Double, barGroup: BarGroup): String {
+        val distinct = barGroup.legendLabel().distinct()
+        if (distinct.isEmpty()) return ""
+
+        val legendWidth = min(800, width - 80)
+        val itemsPerRow = 5
+        val rows = (distinct.size + itemsPerRow - 1) / itemsPerRow
+        val legendHeight = 40 + (rows * 24)
+        val legendX = (width - legendWidth) / 2
+        val legendY = d + 20
+
+        val sb = StringBuilder()
+        sb.append("""
+        <g transform="translate($legendX, $legendY)">
+            <rect width="$legendWidth" height="$legendHeight" rx="12" fill="${theme.canvas}" fill-opacity="0.4" stroke="${theme.accentColor}" stroke-width="1" stroke-opacity="0.2"/>
+            <text x="20" y="25" style="fill: ${theme.secondaryText}; font-size: 12px; font-weight: 700; text-transform: uppercase;">Legend</text>
+        """)
+
+        val itemWidth = (legendWidth - 40) / itemsPerRow
+        distinct.forEachIndexed { index, item ->
+            val row = index / itemsPerRow
+            val col = index % itemsPerRow
+            val itemX = 20 + (col * itemWidth)
+            val itemY = 40 + (row * 24)
+            val fill = "url(#defColor_$index)"
+
+            sb.append("""
+            <g class="legend-item" transform="translate($itemX, $itemY)">
+                <rect width="12" height="12" rx="3" fill="$fill"/>
+                <text x="20" y="10" dominant-baseline="middle" style="fill: ${theme.primaryText}; font-size: 11px; font-weight: 500;">${item.escapeXml()}</text>
+            </g>
+            """.trimIndent())
+        }
+        sb.append("</g>")
+        return sb.toString()
     }
     private fun tail(): String {
         return "</svg>"
@@ -132,10 +360,10 @@ class VGroupBar {
         </g>
         """.trimIndent()
     }
-    private fun makeLineSeparator(barGroup: BarGroup) : String{
+    private fun makeLineSeparator(barGroup: BarGroup, y2: Int) : String{
         val axisColor = theme.accentColor
         return """
-            <line x1="200" x2="200" y1="85" y2="$height" stroke="$axisColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.3"/>
+            <line x1="200" x2="200" y1="85" y2="$y2" stroke="$axisColor" stroke-width="2" stroke-linecap="round" stroke-opacity="0.3"/>
         """.trimIndent()
     }
 
@@ -233,7 +461,7 @@ class VGroupBar {
         val defGrad = StringBuilder()
 
         // Create gradients using the specified palette type
-        barGroup.groups.flatMap { it.series }.forEachIndexed { idx, _ ->
+        barGroup.uniqueLabels().forEachIndexed { idx, _ ->
             val baseColor = ColorPaletteFactory.getColorCyclic(paletteType, idx) ?: "#4361ee"
             val svgColor = SVGColor(baseColor)
             val lighterColor = svgColor.brightenColor(baseColor, 0.15)

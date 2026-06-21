@@ -35,7 +35,7 @@ class BarGroupDisplay @OptIn(ExperimentalUuidApi::class) constructor(
     val condensed: Boolean = false,
     override var useDark: Boolean = false,
     override val visualVersion: Int = 1,
-    val theme: String = "classic",
+    val theme: String = "modern_editorial",
     val scale: Double = 1.0,
     val paletteType: String = "" // Empty string means use defaults, otherwise specify palette name
 ) : VisualDisplay
@@ -128,9 +128,8 @@ fun BarGroup.valueFmt(value: Double): String {
 }
 
 fun BarGroup.ticks(): NiceScale {
-    val min = this.groups.minOf { it.series.minOf { it.value } }
     val max = this.groups.maxOf { it.series.maxOf { it.value } }
-    val nice = NiceScale(min, max)
+    val nice = NiceScale(0.0, max)
     return nice
 }
 
