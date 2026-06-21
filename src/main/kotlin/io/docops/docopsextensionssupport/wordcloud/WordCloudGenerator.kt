@@ -6,6 +6,7 @@ import io.docops.docopsextensionssupport.util.BackgroundHelper
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
+import kotlin.math.ln
 import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.sin
@@ -47,77 +48,138 @@ class WordCloudMaker {
     }
 
     private fun makeDefs(wordCloud: WordCloud): String {
+        val id = wordCloud.id
+        val isDark = wordCloud.display.useDark
+        val primary = if (isDark) "#00eaff" else "#2b6df8"
+        val accent = if (isDark) "#ff8a3d" else "#e76f3c"
+        val wordFont = if (isDark) "#d8f7ff" else "#122131"
+
         val sb = StringBuilder()
         sb.append("<defs>")
 
-        // Add background gradient from helper
-        sb.append(BackgroundHelper.getBackgroundGradient(wordCloud.display.useDark, wordCloud.id))
+        sb.append(
+            """
+            <radialGradient id="bgRadialLight_$id" cx="20%" cy="18%" r="95%">
+                <stop offset="0%" stop-color="#f9fcff"/>
+                <stop offset="48%" stop-color="#f2f6fb"/>
+                <stop offset="100%" stop-color="#e9eff6"/>
+            </radialGradient>
+            <radialGradient id="meshALight_$id" cx="24%" cy="18%" r="58%">
+                <stop offset="0%" stop-color="#2b6df8" stop-opacity=".14"/>
+                <stop offset="60%" stop-color="#2b6df8" stop-opacity=".04"/>
+                <stop offset="100%" stop-color="#2b6df8" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="meshBLight_$id" cx="76%" cy="72%" r="52%">
+                <stop offset="0%" stop-color="#e76f3c" stop-opacity=".13"/>
+                <stop offset="75%" stop-color="#e76f3c" stop-opacity=".03"/>
+                <stop offset="100%" stop-color="#e76f3c" stop-opacity="0"/>
+            </radialGradient>
 
-        // Drop shadow for words
-        sb.append("""
-            <filter id="wordShadow_${wordCloud.id}">
-                <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.2)"/>
+            <radialGradient id="bgRadialDark_$id" cx="18%" cy="22%" r="95%">
+                <stop offset="0%" stop-color="#1b2534"/>
+                <stop offset="48%" stop-color="#121a25"/>
+                <stop offset="100%" stop-color="#0c121a"/>
+            </radialGradient>
+            <radialGradient id="meshADark_$id" cx="24%" cy="18%" r="58%">
+                <stop offset="0%" stop-color="#00eaff" stop-opacity=".22"/>
+                <stop offset="60%" stop-color="#00eaff" stop-opacity=".05"/>
+                <stop offset="100%" stop-color="#00eaff" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="meshBDark_$id" cx="72%" cy="72%" r="52%">
+                <stop offset="0%" stop-color="#ff8a3d" stop-opacity=".16"/>
+                <stop offset="75%" stop-color="#ff8a3d" stop-opacity=".04"/>
+                <stop offset="100%" stop-color="#ff8a3d" stop-opacity="0"/>
+            </radialGradient>
+
+            <filter id="noise_$id" x="-20%" y="-20%" width="140%" height="140%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="2" seed="7" result="n"/>
+                <feColorMatrix in="n" type="saturate" values="0"/>
+                <feComponentTransfer>
+                    <feFuncA type="table" tableValues="0 0.04"/>
+                </feComponentTransfer>
             </filter>
-        """.trimIndent())
 
-        // Glow effect for hover
-        sb.append("""
-            <filter id="wordGlow_${wordCloud.id}">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <filter id="wordAtmosGlow_$id" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.9" result="b"/>
                 <feMerge>
-                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="b"/>
                     <feMergeNode in="SourceGraphic"/>
                 </feMerge>
             </filter>
-        """.trimIndent())
 
-        // Styles
-        sb.append("""
+            <filter id="wordShadow_$id">
+                <feDropShadow dx="1.4" dy="1.4" stdDeviation="1.8" flood-color="rgba(0,0,0,0.18)"/>
+            </filter>
+            """.trimIndent()
+        )
+
+        sb.append(
+            """
             <style>
-                #wordcloud_${wordCloud.id} .word-text {
-                    font-family: 'Arial', sans-serif;
-                    font-weight: bold;
+                #wordcloud_$id .word-text {
+                    font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+                    font-weight: 700;
                     cursor: pointer;
-                    transition: all 0.3s ease;
+                    transition: all 0.28s ease;
+                    fill: $wordFont;
                 }
-                #wordcloud_${wordCloud.id} .word-text:hover {
-                    filter: url(#wordGlow_${wordCloud.id});
-                    transform: scale(1.1);
+                #wordcloud_$id .word-text:hover {
+                    filter: url(#wordAtmosGlow_$id);
+                    transform: scale(1.06);
+                }
+                #wordcloud_$id .title-text {
+                    font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+                    font-weight: 800;
+                    letter-spacing: -0.01em;
+                }
+                #wordcloud_$id .accent-line {
+                    fill: $primary;
+                }
+                #wordcloud_$id .accent-line-warm {
+                    fill: $accent;
                 }
             </style>
-        """.trimIndent())
+            """.trimIndent()
+        )
 
         sb.append("</defs>")
         return sb.toString()
     }
 
     private fun makeBackground(wordCloud: WordCloud): String {
-        val sb = StringBuilder()
+        val id = wordCloud.id
+        val isDark = wordCloud.display.useDark
 
-        // Base background
-        sb.append(BackgroundHelper.getBackGroundPath(wordCloud.display.useDark, wordCloud.id, wordCloud.display.width.toFloat(), wordCloud.display.height.toFloat()))
+        val bgMain = if (isDark) "url(#bgRadialDark_$id)" else "url(#bgRadialLight_$id)"
+        val bgA = if (isDark) "url(#meshADark_$id)" else "url(#meshALight_$id)"
+        val bgB = if (isDark) "url(#meshBDark_$id)" else "url(#meshBLight_$id)"
+        val contour = if (isDark) "#6fa2bd" else "#5b7b97"
 
-        return sb.toString()
+        return """
+            <rect width="100%" height="100%" fill="$bgMain"/>
+            <rect width="100%" height="100%" fill="$bgA"/>
+            <rect width="100%" height="100%" fill="$bgB"/>
+            <g opacity=".35">
+                <path d="M90,600 C230,480 420,470 590,540 C730,600 930,610 1110,470" fill="none" stroke="$contour" stroke-opacity=".17" stroke-width="1.2"/>
+                <path d="M60,440 C220,300 390,270 560,330 C730,390 915,405 1140,260" fill="none" stroke="$contour" stroke-opacity=".17" stroke-width="1.2"/>
+                <path d="M160,200 C310,120 470,120 640,170 C830,230 980,210 1120,120" fill="none" stroke="$contour" stroke-opacity=".17" stroke-width="1.2"/>
+                <circle cx="220" cy="150" r="120" fill="none" stroke="$contour" stroke-opacity=".17" stroke-width="1.2"/>
+                <circle cx="960" cy="560" r="170" fill="none" stroke="$contour" stroke-opacity=".17" stroke-width="1.2"/>
+            </g>
+            <rect width="100%" height="100%" filter="url(#noise_$id)"/>
+        """.trimIndent()
     }
 
     private fun makeTitle(wordCloud: WordCloud): String {
         if (wordCloud.title.isEmpty()) return ""
 
-        val titleColor = if (wordCloud.display.useDark) "#f9fafb" else "#333"
-        val titleBgColor = if (wordCloud.display.useDark) "#374151" else "#f0f0f0"
-
-        // Calculate title width based on text length
-        val fontSize = 24
-        val estimatedWidth = wordCloud.title.length * fontSize * 0.6
-        val titleWidth = (estimatedWidth + 40).coerceAtLeast(200.0)  // Add padding, minimum 200
-        val titleX = (800 - titleWidth) / 2  // Center the box
+        val titleColor = if (wordCloud.display.useDark) "#a9c1d4" else "#2c4158"
 
         return """
             <g transform="translate(24.0, 38)">
-                <text fill="$titleColor" font-size="$fontSize" font-family="'Outfit', sans-serif" font-weight="800"
-                      style="letter-spacing: -0.5px;" class="milestone-text">${escapeXml(wordCloud.title)}
-                </text>
-                <rect y="8" width="48" height="4" fill="#38bdf8" rx="2"/>
+                <text fill="$titleColor" font-size="24" class="title-text">${escapeXml(wordCloud.title)}</text>
+                <rect y="8" width="92" height="4" rx="2" class="accent-line"/>
+                <rect x="98" y="8" width="28" height="4" rx="2" class="accent-line-warm" opacity=".9"/>
             </g>
         """.trimIndent()
     }
@@ -135,7 +197,7 @@ class WordCloudMaker {
         // Calculate font sizes
         val maxWeight = sortedWords.maxOf { it.weight }
         val minWeight = sortedWords.minOf { it.weight }
-        val weightRange = maxWeight - minWeight
+        val weightRange = if (maxWeight > minWeight) maxWeight - minWeight else 1.0
 
         val maxFontSize = wordCloud.display.maxFontSize.toDouble()
         val minFontSize = wordCloud.display.minFontSize.toDouble()
@@ -151,8 +213,10 @@ class WordCloudMaker {
             val display = word.itemDisplay ?: wordCloud.display
             val position = positions[index]
 
-            // Calculate font size based on weight
-            val fontSize = if (weightRange > 0) {
+            // Calculate font size based on weight (hybrid log/linear)
+            val fontSize = if (maxWeight > minWeight * 10.0 && minWeight > 0) {
+                minFontSize + (ln(word.weight) - ln(minWeight)) / (ln(maxWeight) - ln(minWeight)) * (maxFontSize - minFontSize)
+            } else if (maxWeight > minWeight) {
                 minFontSize + ((word.weight - minWeight) / weightRange) * (maxFontSize - minFontSize)
             } else {
                 (maxFontSize + minFontSize) / 2
@@ -161,10 +225,12 @@ class WordCloudMaker {
             // Get color from itemDisplay if available
             val color = display.baseColor ?: defaultColors[index % defaultColors.size]
 
+            val rotation = if (position.rotated) "rotate(-90 ${position.x} ${position.y})" else ""
             sb.append("""
                 <text class="word-text" x="${position.x}" y="${position.y}" 
-                      text-anchor="middle" font-size="${round(fontSize)}" 
-                      fill="$color" filter="url(#wordShadow_${wordCloud.id})">
+                      text-anchor="middle" dominant-baseline="central" font-size="${round(fontSize)}" 
+                      fill="$color" filter="url(#wordShadow_${wordCloud.id})"
+                      ${if (position.rotated) "transform=\"$rotation\"" else ""}>
                     ${escapeXml(word.text)}
                     <title>${escapeXml(word.text)}: weight ${formatDecimal(word.weight, 2)}</title>
                 </text>
@@ -199,33 +265,40 @@ class WordCloudMaker {
         val weightRange = if (maxWeight > minWeight) maxWeight - minWeight else 1.0
 
         words.forEach { word ->
-            val fontSize = if (weightRange > 0) {
+            val fontSize = if (maxWeight > minWeight * 10.0 && minWeight > 0) {
+                minFontSize + (ln(word.weight) - ln(minWeight)) / (ln(maxWeight) - ln(minWeight)) * (maxFontSize - minFontSize)
+            } else if (maxWeight > minWeight) {
                 minFontSize + ((word.weight - minWeight) / weightRange) * (maxFontSize - minFontSize)
             } else {
                 (maxFontSize + minFontSize) / 2
             }
 
-            // More accurate word dimensions estimation
-            val wordWidth = word.text.length * fontSize * 0.55
+            // Word dimensions estimation
+            val wordWidth = word.text.length * fontSize * 0.65
             val wordHeight = fontSize * 1.2
+
+            // Vertical rotation: approx 20% chance, but not for the most important words (first 3)
+            val isRotated = words.indexOf(word) > 2 && Random.nextDouble() < 0.2
+            val effectiveWidth = if (isRotated) wordHeight else wordWidth
+            val effectiveHeight = if (isRotated) wordWidth else wordHeight
 
             // Try to place word using spiral algorithm with better spacing
             var isPlaced = false
             var angle = Random.nextDouble() * 2 * PI  // Start at random angle
             var radius = 0.0
-            val radiusStep = 3.0  // Smaller step for tighter packing
-            val angleStep = 0.5   // Larger angle step for better distribution
+            val radiusStep = 5.0  
+            val angleStep = 0.1  
 
             var attempts = 0
-            val maxAttempts = 2000
+            val maxAttempts = 5000
 
             while (!isPlaced && attempts < maxAttempts) {
                 val x = centerX + radius * cos(angle)
                 val y = centerY + radius * sin(angle)
 
                 // Check if position is valid (within bounds with padding)
-                if (x - wordWidth / 2 > 60 && x + wordWidth / 2 < 740 &&
-                    y - wordHeight / 2 > 90 && y + wordHeight / 2 < 570) {
+                if (x - effectiveWidth / 2 > 40 && x + effectiveWidth / 2 < 760 &&
+                    y - effectiveHeight / 2 > 70 && y + effectiveHeight / 2 < 580) {
 
                     // Check for overlaps with better spacing
                     val overlaps = placedWords.any { placedWord ->
@@ -234,15 +307,15 @@ class WordCloudMaker {
 
                         // Calculate bounding box overlap with padding
                         val padding = 8.0
-                        val horizontalOverlap = abs(dx) < (wordWidth + placedWord.width) / 2 + padding
-                        val verticalOverlap = abs(dy) < (wordHeight + placedWord.height) / 2 + padding
+                        val horizontalOverlap = abs(dx) < (effectiveWidth + placedWord.width) / 2 + padding
+                        val verticalOverlap = abs(dy) < (effectiveHeight + placedWord.height) / 2 + padding
 
                         horizontalOverlap && verticalOverlap
                     }
 
                     if (!overlaps) {
-                        positions.add(WordPosition(x, y))
-                        placedWords.add(PlacedWord(x, y, wordWidth, wordHeight))
+                        positions.add(WordPosition(x, y, isRotated))
+                        placedWords.add(PlacedWord(x, y, effectiveWidth, effectiveHeight))
                         isPlaced = true
                     }
                 }
@@ -260,21 +333,21 @@ class WordCloudMaker {
                     val x = centerX + (Random.nextDouble() - 0.5) * 600
                     val y = centerY + (Random.nextDouble() - 0.5) * 400
 
-                    if (x - wordWidth / 2 > 60 && x + wordWidth / 2 < 740 &&
-                        y - wordHeight / 2 > 90 && y + wordHeight / 2 < 570) {
+                    if (x - effectiveWidth / 2 > 40 && x + effectiveWidth / 2 < 760 &&
+                        y - effectiveHeight / 2 > 70 && y + effectiveHeight / 2 < 580) {
 
                         val overlaps = placedWords.any { placedWord ->
                             val dx = x - placedWord.x
                             val dy = y - placedWord.y
                             val padding = 8.0
-                            val horizontalOverlap = abs(dx) < (wordWidth + placedWord.width) / 2 + padding
-                            val verticalOverlap = abs(dy) < (wordHeight + placedWord.height) / 2 + padding
+                            val horizontalOverlap = abs(dx) < (effectiveWidth + placedWord.width) / 2 + padding
+                            val verticalOverlap = abs(dy) < (effectiveHeight + placedWord.height) / 2 + padding
                             horizontalOverlap && verticalOverlap
                         }
 
                         if (!overlaps) {
-                            positions.add(WordPosition(x, y))
-                            placedWords.add(PlacedWord(x, y, wordWidth, wordHeight))
+                            positions.add(WordPosition(x, y, isRotated))
+                            placedWords.add(PlacedWord(x, y, effectiveWidth, effectiveHeight))
                             isPlaced = true
                         }
                     }
@@ -282,17 +355,19 @@ class WordCloudMaker {
                 }
             }
 
-            // Final fallback: place at center (should rarely happen)
+            // Final fallback: place near center with dispersed jitter if spiral fails
             if (!isPlaced) {
-                positions.add(WordPosition(centerX, centerY))
-                placedWords.add(PlacedWord(centerX, centerY, wordWidth, wordHeight))
+                val jitterX = (Random.nextDouble() - 0.5) * 200.0
+                val jitterY = (Random.nextDouble() - 0.5) * 150.0
+                positions.add(WordPosition(centerX + jitterX, centerY + jitterY, false))
+                placedWords.add(PlacedWord(centerX + jitterX, centerY + jitterY, wordWidth, wordHeight))
             }
         }
 
         return positions
     }
 
-    private data class WordPosition(val x: Double, val y: Double)
+    private data class WordPosition(val x: Double, val y: Double, val rotated: Boolean = false)
 
 
 
