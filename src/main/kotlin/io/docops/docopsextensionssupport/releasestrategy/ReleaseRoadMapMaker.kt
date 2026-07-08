@@ -21,8 +21,9 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 /**
- * ReleaseRoadMapMaker creates a distinctive, mechanical release roadmap SVG.
- * It features a "push-down" reveal interaction and follows high-end typography rules.
+ * Deterministic top-to-bottom roadmap renderer.
+ * Each release card is followed by its details tray (no nested collapsing layout).
+ * CSS and defs are fully scoped to the SVG id to prevent cross-SVG collisions in shared DOM.
  */
 class ReleaseRoadMapMaker {
 
@@ -30,206 +31,225 @@ class ReleaseRoadMapMaker {
         return createSvg(releaseStrategy, isPdf, animate)
     }
 
+    private data class ItemLayout(
+        val trayHeight: Int,
+        val blockHeight: Int
+    )
+
     @OptIn(ExperimentalUuidApi::class)
     private fun createSvg(releaseStrategy: ReleaseStrategy, isPdf: Boolean = false, animate: String): String {
-        val id = Uuid.random().toHexString().replace("-", "")
+        val rawId = Uuid.random().toHexString().replace("-", "")
+        val svgId = "release_rm_${slug(releaseStrategy.title)}_${rawId.take(10)}"
+        val idPrefix = svgId.replace("-", "_")
 
-        // Calculate heights dynamically - NOW 8-POINT GRID COMPLIANT
-        val itemBaseHeight = 120      // 15 × 8 ✓
-        val headerHeight = 144        // 18 × 8 (was 140)
-        val footerPadding = 96        // 12 × 8 (was 100)
+        val titleId = "${idPrefix}_title"
+        val descId = "${idPrefix}_desc"
 
-        val totalExpansionHeight = releaseStrategy.releases.sumOf {
-            val trayHeight = 80 + (it.lines.size * 24)  // 24 instead of 26 (3 × 8)
-            trayHeight - 16   // 16 instead of 15 (2 × 8)
+        val animated = !isPdf && animate.uppercase() != "OFF" && animate.uppercase() != "STATIC"
+        val headerHeight = 152
+        val footerPadding = 88
+        val contentWidth = 1008
+        val contentX = 96
+        val cardHeight = 96
+        val trayGap = 16
+        val itemGap = 24
+
+        val itemLayouts = releaseStrategy.releases.map { r ->
+            val linesCount = r.lines.size
+            val trayHeight = if (linesCount <= 0) 104 else 100 + ((linesCount - 1) * 24)
+            val blockHeight = cardHeight + trayGap + trayHeight + itemGap
+            ItemLayout(trayHeight = trayHeight, blockHeight = blockHeight)
         }
-        val totalBaseItemsHeight = releaseStrategy.releases.size * itemBaseHeight
 
-        val height = if (releaseStrategy.releases.isEmpty()) 200 else headerHeight + totalBaseItemsHeight + totalExpansionHeight + footerPadding
+        val contentHeight = itemLayouts.sumOf { it.blockHeight }
+        val minHeight = 320
+        val height = maxOf(minHeight, headerHeight + contentHeight + footerPadding)
 
-        val cardsStr = buildNestedItems(releaseStrategy.releases, 0, id, releaseStrategy)
+        val defs = if (!isPdf) svgDefs(releaseStrategy, svgId, idPrefix) else ""
+        val body = buildItems(
+            releases = releaseStrategy.releases,
+            layouts = itemLayouts,
+            releaseStrategy = releaseStrategy,
+            contentWidth = contentWidth,
+            cardHeight = cardHeight,
+            trayGap = trayGap,
+            animated = animated
+        )
 
-        val bgColor = if(releaseStrategy.useDark) "#09090b" else "#f8fafc"
-        val titleColor = if(releaseStrategy.useDark) "#f4f4f5" else "#0f172a"
+        val bgBase = if (releaseStrategy.useDark) "#09090b" else "#f5f7fb"
+        val titleColor = if (releaseStrategy.useDark) "#f4f4f5" else "#0f172a"
+        val gradientBgId = "${idPrefix}_bg"
+        val glowId = "${idPrefix}_glow"
+        val vignetteId = "${idPrefix}_vignette"
+        val dotsId = "${idPrefix}_dots"
 
         return """
-            <svg xmlns="http://www.w3.org/2000/svg" 
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 id="$svgId"
                  width="${releaseStrategy.scale * 1200}" height="${height * releaseStrategy.scale}"
-                 viewBox="0 0 1200 $height">
-                 <desc>Mechanical Roadmap - DocOps Professional</desc>
-                 ${if (!isPdf) svgDefs(releaseStrategy) else ""}
-                 <g transform="scale(${releaseStrategy.scale})">
-                    <!-- Atmospheric Background -->
-                    <rect width="1200" height="$height" fill="$bgColor"/>
-                    <rect width="1200" height="$height" fill="url(#roadmap_bg)" opacity="${if (releaseStrategy.useDark) "0.8" else "1"}"/>
-                    <rect width="1200" height="$height" fill="url(#roadmap_glow)" opacity="${if (releaseStrategy.useDark) "0.3" else "0.5"}"/>
-                    <rect width="1200" height="$height" fill="url(#pattern_Roadmap_Dots)" opacity="${if (releaseStrategy.useDark) "0.18" else "0.35"}"/>
-                    <rect width="1200" height="$height" fill="url(#roadmap_vignette)" opacity="${if (releaseStrategy.useDark) "0.45" else "0.35"}"/>
+                 viewBox="0 0 1200 $height"
+                 role="img"
+                 aria-labelledby="$titleId $descId">
+                <title id="$titleId">${releaseStrategy.title.escapeXml()}</title>
+                <desc id="$descId">Release roadmap laid out top-to-bottom with deterministic card and details sizing.</desc>
+                $defs
+                <g transform="scale(${releaseStrategy.scale})">
+                    <rect width="1200" height="$height" fill="$bgBase"/>
+                    <rect width="1200" height="$height" fill="url(#$gradientBgId)"/>
+                    <rect width="1200" height="$height" fill="url(#$glowId)" opacity="${if (releaseStrategy.useDark) "0.35" else "0.45"}"/>
+                    <rect width="1200" height="$height" fill="url(#$dotsId)" opacity="${if (releaseStrategy.useDark) "0.14" else "0.16"}"/>
+                    <rect width="1200" height="$height" fill="url(#$vignetteId)" opacity="${if (releaseStrategy.useDark) "0.38" else "0.16"}"/>
 
-                    <!-- Header Section -->
-                    <g transform="translate(96, 56)">
-                        <text class="roadmap-header-title" fill="$titleColor">${releaseStrategy.title.escapeXml()}</text>
-                        <rect y="16" width="48" height="4" fill="#3b82f6" rx="2"/>
+                    <g transform="translate($contentX, 72)">
+                        <text class="rm-title" fill="$titleColor">${releaseStrategy.title.escapeXml()}</text>
+                        <rect y="18" width="56" height="4" rx="2" fill="#3b82f6"/>
                     </g>
-                
-                    <!-- Roadmap Items Container -->
-                    <g transform="translate(96, $headerHeight)">
-                        $cardsStr
+
+                    <g transform="translate($contentX, $headerHeight)">
+                        $body
                     </g>
-                 </g>
+                </g>
             </svg>
         """.trimIndent()
     }
 
-
-    private fun buildNestedItems(releases: List<Release>, index: Int, id: String, releaseStrategy: ReleaseStrategy): String {
-        if (index >= releases.size) return ""
-        val release = releases[index]
-        val nextItems = buildNestedItems(releases, index + 1, id, releaseStrategy)
-
-        val accentColor = releaseStroke(release, releaseStrategy)
-        val cardBg = if(releaseStrategy.useDark) "#18181b" else "#fafafa"  // Changed from #ffffff
-        val textColor = if(releaseStrategy.useDark) "#f4f4f5" else "#1e293b"
-        val secondaryText = "#71717a"
-
-        // Check if this is the GA release for emphasis
-        val isGaRelease = release.type.toString().startsWith("G")
-        val cardClass = if (isGaRelease) "mechanical-card ga-card" else "mechanical-card"
-
-        val trayHeight = 80 + (release.lines.size * 24)  // 24 instead of 26
-        val expansionShift = 120 + trayHeight - 16       // 16 instead of 15
-
-        val detailContent = StringBuilder()
-        release.lines.forEach { line ->
-            detailContent.append("""<tspan x="40" dy="24">• ${line.escapeXml()}</tspan>""")
+    private fun buildItems(
+        releases: List<Release>,
+        layouts: List<ItemLayout>,
+        releaseStrategy: ReleaseStrategy,
+        contentWidth: Int,
+        cardHeight: Int,
+        trayGap: Int,
+        animated: Boolean
+    ): String {
+        if (releases.isEmpty()) {
+            val emptyText = if (releaseStrategy.useDark) "#a1a1aa" else "#64748b"
+            return """
+                <g>
+                    <rect width="$contentWidth" height="120" rx="16" fill="${if (releaseStrategy.useDark) "#18181b" else "#ffffff"}" stroke="${if (releaseStrategy.useDark) "#27272a" else "#cbd5e1"}"/>
+                    <text x="32" y="68" fill="$emptyText" class="rm-date">No releases found.</text>
+                </g>
+            """.trimIndent()
         }
 
-        return """
-                <g class="roadmap-group" style="--expansion-shift: ${expansionShift}px; animation-delay: ${index * 0.1}s">
-                    <g class="item-display">
-                        <g class="details-tray">
-                            <rect width="1000" height="$trayHeight" fill="${if(releaseStrategy.useDark) "#0c0c0e" else "#f8fafc"}" rx="16" stroke="#27272a" stroke-dasharray="4 4"/>
-                            <text class="details-content" fill="${if(releaseStrategy.useDark) "#d4d4d8" else "#475569"}">
-                                <tspan x="40" dy="48" font-weight="700" fill="$accentColor" text-transform="uppercase" font-size="11">Implementation Details</tspan>
-                                $detailContent
-                            </text>
-                        </g>
-                        <g class="$cardClass" onclick="this.closest('.roadmap-group').classList.toggle('collapsed')">
-                            <rect class="card-rect" width="1000" height="96" rx="16" fill="$cardBg"/>                        <g transform="translate(32, 24)">
-                            <rect width="48" height="48" rx="12" fill="$accentColor" opacity="0.1"/>
-                            <text x="24" y="32" text-anchor="middle" class="id-badge" fill="$accentColor">${release.type.toString().take(2).uppercase()}</text>
-                        </g>
-                        <g transform="translate(96, 48)">
-                            <text class="release-goal" fill="$textColor">${release.goal.escapeXml()}</text>
-                            <text y="24" class="release-date" fill="$secondaryText">${release.date.escapeXml()}</text>
-                        </g>
-                        <path class="chevron" d="M0,0 L8,8 L0,16" fill="none" stroke="$secondaryText" stroke-width="2.5" stroke-linecap="round"/>
+        val sb = StringBuilder()
+        var y = 0
+
+        releases.forEachIndexed { index, release ->
+            val layout = layouts[index]
+            val accent = releaseStroke(release, releaseStrategy)
+            val cardBg = if (releaseStrategy.useDark) "#18181b" else "#ffffff"
+            val trayBg = if (releaseStrategy.useDark) "#0c0c0e" else "#f8fafc"
+            val textColor = if (releaseStrategy.useDark) "#f4f4f5" else "#1e293b"
+            val dateColor = if (releaseStrategy.useDark) "#a1a1aa" else "#64748b"
+            val trayText = if (releaseStrategy.useDark) "#d4d4d8" else "#475569"
+            val stroke = if (releaseStrategy.useDark) "#27272a" else "#cbd5e1"
+
+            val isGa = release.type.toString().startsWith("G")
+            val animClass = if (animated) " rm-enter" else ""
+            val animDelay = if (animated) "style=\"animation-delay:${(index * 90)}ms\"" else ""
+
+            val detailsLines = StringBuilder()
+            var lineY = 72
+            release.lines.forEach { line ->
+                detailsLines.append("""<text x="40" y="$lineY" class="rm-details" fill="$trayText">• ${line.escapeXml()}</text>""")
+                lineY += 24
+            }
+
+            sb.append(
+                """
+                <g transform="translate(0,$y)" class="rm-item$animClass" $animDelay>
+                    <rect width="$contentWidth" height="$cardHeight" rx="16" fill="$cardBg" stroke="${if (isGa) accent else stroke}" stroke-width="${if (isGa) "2" else "1.2"}"/>
+
+                    <g transform="translate(28,24)">
+                        <rect width="48" height="48" rx="12" fill="$accent" opacity="0.12"/>
+                        <text x="24" y="32" text-anchor="middle" class="rm-badge" fill="$accent">${release.type.toString().take(2).uppercase()}</text>
+                    </g>
+
+                    <g transform="translate(96,50)">
+                        <text class="rm-goal" fill="$textColor">${release.goal.escapeXml()}</text>
+                        <text y="24" class="rm-date" fill="$dateColor">${release.date.escapeXml()}</text>
+                    </g>
+
+                    <g transform="translate(0,${cardHeight + trayGap})">
+                        <rect width="$contentWidth" height="${layout.trayHeight}" rx="16" fill="$trayBg" stroke="$stroke" stroke-dasharray="4 4"/>
+                        <text x="40" y="40" class="rm-detail-head" fill="$accent">Implementation Details</text>
+                        $detailsLines
                     </g>
                 </g>
-                ${if (nextItems.isNotEmpty()) """
-                <g class="roadmap-nest" transform = "translate(0, ${expansionShift})">
-                $nextItems
-                </g>
-                """.trimIndent() else ""}
-            </g>
+                """.trimIndent()
+            )
+
+            y += layout.blockHeight
+        }
+
+        return sb.toString()
+    }
+
+    private fun svgDefs(releaseStrategy: ReleaseStrategy, svgId: String, idPrefix: String): String {
+        val fontUrl = "https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Alegreya+Sans:wght@400;700;800&amp;display=swap"
+        val bgStart = if (releaseStrategy.useDark) "#0b0b12" else "#f8fafc"
+        val bgMid = if (releaseStrategy.useDark) "#111827" else "#eef2f7"
+        val bgEnd = if (releaseStrategy.useDark) "#09090b" else "#f1f5f9"
+        val glowColor = if (releaseStrategy.useDark) "#1d4ed8" else "#7fb3ff"
+        val dotColor = if (releaseStrategy.useDark) "#ffffff" else "#0f172a"
+        val enterName = "rm_in_$idPrefix"
+
+        return """
+            <defs>
+                <style>
+                    @import url('$fontUrl');
+
+                    #$svgId .rm-title { font-family:'Bebas Neue', sans-serif; font-size:44px; font-weight:400; letter-spacing:-0.01em; }
+                    #$svgId .rm-badge { font-family:'Alegreya Sans', sans-serif; font-size:14px; font-weight:800; letter-spacing:0.08em; }
+                    #$svgId .rm-goal { font-family:'Alegreya Sans', sans-serif; font-size:21px; font-weight:800; letter-spacing:0.005em; }
+                    #$svgId .rm-date { font-family:'Alegreya Sans', sans-serif; font-size:13px; font-weight:700; letter-spacing:0.05em; }
+                    #$svgId .rm-detail-head { font-family:'Alegreya Sans', sans-serif; font-size:12px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; }
+                    #$svgId .rm-details { font-family:'Alegreya Sans', sans-serif; font-size:15px; font-weight:400; }
+
+                    @keyframes $enterName {
+                        from { opacity: 0; transform: translateY(10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+
+                    #$svgId .rm-enter {
+                        animation: $enterName 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+                    }
+                </style>
+
+                <linearGradient id="${idPrefix}_bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="$bgStart"/>
+                    <stop offset="50%" stop-color="$bgMid"/>
+                    <stop offset="100%" stop-color="$bgEnd"/>
+                </linearGradient>
+
+                <radialGradient id="${idPrefix}_glow" cx="0.18" cy="0.08" r="0.65">
+                    <stop offset="0%" stop-color="$glowColor" stop-opacity="${if (releaseStrategy.useDark) "0.28" else "0.24"}"/>
+                    <stop offset="75%" stop-color="$bgStart" stop-opacity="0"/>
+                </radialGradient>
+
+                <radialGradient id="${idPrefix}_vignette" cx="0.5" cy="0.5" r="0.85">
+                    <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="${if (releaseStrategy.useDark) "0.34" else "0.14"}"/>
+                </radialGradient>
+
+                <pattern id="${idPrefix}_dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="2" cy="2" r="1" fill="$dotColor" opacity="${if (releaseStrategy.useDark) "0.11" else "0.12"}"/>
+                </pattern>
+            </defs>
         """.trimIndent()
     }
 
-
-
-    private fun svgDefs(releaseStrategy: ReleaseStrategy): String {
-        val fontUrl = "https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Alegreya+Sans:wght@400;700;800&amp;display=swap"
-
-        return """
-                <defs>
-                    <style>
-                        @import url('$fontUrl');
-                
-                        .roadmap-header-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; font-weight: 400; letter-spacing: 0.02em; }
-                        .id-badge { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; }
-                        .release-goal { font-family: 'Alegreya Sans', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 0.01em; }
-                        .release-date { font-family: 'Alegreya Sans', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; }
-                        .details-content { font-family: 'Alegreya Sans', sans-serif; font-size: 14px; }
-
-                        @keyframes slideIn {
-                            from { opacity: 0; transform: translateY(16px); }
-                            to { opacity: 1; transform: translateY(0); }
-                        }
-                    
-                        .roadmap-group { 
-                            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-                            animation: slideIn 0.5s ease-out forwards;
-                            opacity: 0;
-                        }
-                        .roadmap-nest { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
-                        .mechanical-card { cursor: pointer; pointer-events: auto; }
-                        .card-rect { stroke: #27272a; stroke-opacity: 0.3; transition: all 0.3s ease; }
-                
-                        /* Expanded by default - details tray visible */
-                        .details-tray { 
-                            opacity: 1; 
-                            visibility: visible; 
-                            transition: all 0.4s ease; 
-                            transform: translateY(104px); 
-                            pointer-events: auto;
-                        }
-                
-                        /* Chevron pointing down when expanded */
-                        .chevron { transition: all 0.3s ease; transform-origin: center; transform: translate(944px, 40px) rotate(90deg); }
-
-                        /* Nested items pushed down by default */
-                        .roadmap-nest {
-                            transform: translateY(var(--expansion-shift));
-                        }
-
-                        /* Collapsed States - When user clicks to collapse */
-                        .collapsed > .item-display .details-tray { 
-                            opacity: 0; 
-                            visibility: hidden; 
-                            transform: translateY(80px); 
-                            pointer-events: none;
-                        }
-                        .collapsed > .item-display .chevron { 
-                            transform: translate(944px, 40px) rotate(0deg); 
-                        }
-                        .collapsed > .roadmap-nest {
-                            transform: translateY(120px);
-                        }
-                    
-                        /* GA Card Emphasis - Make it 3x more obvious */
-                        .ga-card .card-rect { 
-                            stroke: ${releaseStrategy.displayConfig.circleColors[2]}; 
-                            stroke-opacity: 0.6;
-                            stroke-width: 2;
-                        }
-                        .ga-card:hover .card-rect {
-                            filter: drop-shadow(0 0 8px ${releaseStrategy.displayConfig.circleColors[2]});
-                        }
-                    </style>
-                    <linearGradient id="roadmap_bg" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="${if(releaseStrategy.useDark) "#0b0b12" else "#f9fafb"}"/>
-                        <stop offset="45%" stop-color="${if(releaseStrategy.useDark) "#111827" else "#eef2f7"}"/>
-                        <stop offset="100%" stop-color="${if(releaseStrategy.useDark) "#09090b" else "#f7f8fb"}"/>
-                    </linearGradient>
-                    <radialGradient id="roadmap_glow" cx="0.2" cy="0.1" r="0.6">
-                        <stop offset="0%" stop-color="${if(releaseStrategy.useDark) "#1d4ed8" else "#93c5fd"}" stop-opacity="0.35"/>
-                        <stop offset="70%" stop-color="${if(releaseStrategy.useDark) "#0b0b12" else "#f9fafb"}" stop-opacity="0"/>
-                    </radialGradient>
-                    <radialGradient id="roadmap_vignette" cx="0.5" cy="0.5" r="0.8">
-                        <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
-                        <stop offset="100%" stop-color="#000000" stop-opacity="${if(releaseStrategy.useDark) "0.35" else "0.18"}"/>
-                    </radialGradient>
-                    <pattern id="pattern_Roadmap_Dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1" fill="${if(releaseStrategy.useDark) "#ffffff" else "#000000"}" opacity="${if (releaseStrategy.useDark) "0.12" else "0.2"}"/>
-                    </pattern>
-                </defs>
-            """.trimIndent()
+    private fun slug(value: String): String {
+        return value.lowercase()
+            .replace(Regex("[^a-z0-9\\s-]"), "")
+            .replace(Regex("\\s+"), "-")
+            .trim('-')
+            .ifBlank { "roadmap" }
+            .take(36)
     }
-
-
-
-
 }
+
 fun releaseStroke(release: Release, releaseStrategy: ReleaseStrategy): String = when {
     release.type.toString().startsWith("M") -> releaseStrategy.displayConfig.circleColors[0]
     release.type.toString().startsWith("R") -> releaseStrategy.displayConfig.circleColors[1]

@@ -30,7 +30,9 @@ class VBarMaker {
         } else {
             ThemeFactory.getThemeByName("modern_editorial", bar.display.useDark)
         }
-        isModern = !theme.name.contains("Classic") && !theme.name.contains("Pro")
+
+        isModern = !isPDf && !theme.name.contains("Classic") && !theme.name.contains("Pro")
+
         if (isModern) {
             width = 960
             height = 560
@@ -46,6 +48,7 @@ class VBarMaker {
             yAxisStart = 80
             yAxisEnd = 380
         }
+
         bar.sorted()
         fontColor = determineTextColor(bar.display.baseColor)
         val sb = StringBuilder()
@@ -197,13 +200,10 @@ class VBarMaker {
                 val svgColor = theme.chartPalette[index % theme.chartPalette.size]
                 sb.append("""
                         <g class="glass-bar">
-                        <!-- Base rectangle with gradient -->
+                        <!-- Base rectangle with static PDF-safe fill -->
                         <rect x="$barX" y="$barY" width="$barWidth" height="$barHeight" rx="6" ry="6" 
                               fill="${svgColor.lighter()}"
-                              stroke="rgba(255,255,255,0.3)" stroke-width="1">
-                            <animate attributeName="height" from="0" to="$barHeight" dur="1s" fill="freeze"/>
-                            <animate attributeName="y" from="$yAxisEnd" to="$barY" dur="1s" fill="freeze"/>
-                        </rect>
+                              stroke="${theme.accentColor}" stroke-opacity="0.3" stroke-width="1"/>
                         </g>
                         <!-- Create wrapped label text -->
                     <text x="${barX + barWidth / 2}" y="${yAxisEnd + 25}" font-family="${theme.fontFamily}" font-size="12" text-anchor="middle" fill="$labelColor">
