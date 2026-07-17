@@ -38,7 +38,7 @@ class PieSliceMakerImproved {
         sb.append(createEnhancedDefs(pieSlices))
 
         val titleColor = theme.primaryText
-        sb.append("""<text x="${width / 2}" y="35" text-anchor="middle" style="font-size: 12px; font-family: ${theme.fontFamily}; fill: $titleColor; font-weight: 800; text-transform: uppercase;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("""<text x="${width / 2}" y="35" text-anchor="middle" style="font-size: 12px; font-family: ${theme.fontFamily}; fill: $titleColor !important; font-weight: 800; text-transform: uppercase;">${pieSlices.title.escapeXml()}</text>""")
 
         val total = pieSlices.sum()
         val centerX = width / 2.0
@@ -66,7 +66,7 @@ class PieSliceMakerImproved {
                         <animate attributeName="opacity" from="0" to="1" dur="${0.5 + index * 0.1}s" fill="freeze"/>
                         <title>${slice.label}: ${slice.amount}</title>
                     </path>
-                    <text x="$labelX" y="$labelY" font-family="${theme.fontFamily}" font-size="11" font-weight="800" text-anchor="middle" dominant-baseline="middle" fill="white" style="text-shadow: 0 1px 2px rgba(0,0,0,0.8); pointer-events: none;">
+                    <text x="$labelX" y="$labelY" font-family="${theme.fontFamily}" font-size="11" font-weight="800" text-anchor="middle" dominant-baseline="middle" fill="white" style="fill: white !important; text-shadow: 0 1px 2px rgba(0,0,0,0.8); pointer-events: none;">
                         ${formatDecimal((slice.amount/total)*100, 1)}%
                     </text>
                 </g>
@@ -124,8 +124,8 @@ class PieSliceMakerImproved {
             sb.append("""
                 <g class="legend-item" transform="translate($xOffset, ${35 + row * 25})">
                     <rect width="14" height="14" rx="4" fill="${slice.displayColor(index, pieSlices.display.id)}"/>
-                    <text x="22" y="11" style="font-size: 12px; fill: ${theme.primaryText}; font-weight: 500;">${slice.label}</text>
-                    <text x="160" y="11" text-anchor="end" style="font-size: 11px; fill: ${theme.secondaryText};">${slice.amount.toInt()} (${formatDecimal(percent, 1)}%)</text>
+                    <text x="22" y="11" style="font-size: 12px; fill: ${theme.primaryText} !important; font-weight: 500;">${slice.label}</text>
+                    <text x="160" y="11" text-anchor="end" style="font-size: 11px; fill: ${theme.secondaryText} !important;">${slice.amount.toInt()} (${formatDecimal(percent, 1)}%)</text>
                 </g>
             """.trimIndent())
         }

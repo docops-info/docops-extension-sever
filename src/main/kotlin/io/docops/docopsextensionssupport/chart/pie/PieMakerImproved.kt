@@ -85,7 +85,7 @@ class PieMakerImproved {
                     <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1.2s" cubic-bezier(0.4, 0, 0.2, 1) fill="freeze"/>
                 </path>
 
-                <text x="18" y="19" dy="0.3em" text-anchor="middle" style="font-family: 'JetBrains Mono', monospace; font-size: 7px; font-weight: 800; fill: ${theme.primaryText}; letter-spacing: -0.5px;">
+                <text x="18" y="19" dy="0.3em" text-anchor="middle" style="fill: ${theme.primaryText} !important; font-family: 'JetBrains Mono', monospace; font-size: 7px; font-weight: 800; letter-spacing: -0.5px;">
                     ${pie.percent}%
                 </text>
             </svg>
@@ -96,7 +96,7 @@ class PieMakerImproved {
         val fontSize = 7 / theme.fontWidthMultiplier
         val sb = StringBuilder("""<text x="40" y="60" text-anchor="middle" style="font-family: ${theme.fontFamily}; font-size: ${fontSize}px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">""")
         pie.label.split(" ").forEachIndexed { i, line ->
-            sb.append("""<tspan x="40" dy="${if(i==0) 0 else 8}" fill="${theme.secondaryText}">${line.escapeXml()}</tspan>""")
+            sb.append("""<tspan x="40" dy="${if(i==0) 0 else 8}" fill="${theme.secondaryText}" style="fill: ${theme.secondaryText} !important;">${line.escapeXml()}</tspan>""")
         }
         sb.append("</text>")
         return sb.toString()

@@ -105,7 +105,7 @@ class PieMaker {
                 </path>
 
                 <!-- Distinctive Percentage Text -->
-                <text x="18" y="18" dy="0.35em" style="font-family: ${theme.fontFamily}; font-size: 6px; font-weight: 800; text-anchor: middle; fill: ${theme.primaryText}; opacity: 0;">
+                <text x="18" y="18" dy="0.35em" style="fill: ${theme.primaryText} !important; font-family: ${theme.fontFamily}; font-size: 6px; font-weight: 800; text-anchor: middle; opacity: 0;">
                     ${pie.percent}%
                     <animate attributeName="opacity" values="0;1" dur="1s" delay="0.5s" fill="freeze"/>
                 </text>
@@ -123,7 +123,7 @@ class PieMaker {
                 dy = 0
             }
             sb.append("""
-                <tspan x="30" dy="$dy" style="fill: ${theme.secondaryText};">${s.escapeXml()}</tspan>
+                <tspan x="30" dy="$dy" style="fill: ${theme.secondaryText} !important;">${s.escapeXml()}</tspan>
                 """.trimIndent())
         }
         sb.append("</text>")

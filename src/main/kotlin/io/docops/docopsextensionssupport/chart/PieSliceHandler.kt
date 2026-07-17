@@ -11,6 +11,7 @@ class PieSliceHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
 
     fun handleSVGInternal(payload: String, backend: String, useDark: Boolean) : String {
         val isPdf = backend == "pdf"
+
         val pieChartImproved = PieChartImproved()
         val svg = pieChartImproved.makePieSvg(payload, isPdf, useDark)
         csvResponse.update(payloadToSimpleCsv(svg.second))

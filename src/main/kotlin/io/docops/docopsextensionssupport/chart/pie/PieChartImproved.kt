@@ -75,16 +75,40 @@ class PieChartImproved {
             return Pair(maker.makeDonut(pieSlices = pieSlicesObj), pieData)
         }
         if(!isDonut) {
-            val maker = PieSliceMakerImproved()
-            val slices = pieData.map { segment ->
-                PieSlice(
-                    label = segment.label,
-                    amount = segment.value,
-                    itemDisplay = SliceItemDisplay(color = segment.color)
+            if (display.visualVersion == 4) {
+                val maker =   PieDashboardMaker(useDark = useDark)
+                val pieDisplay = PieDisplay(
+                    id = display.id,
+                    baseColor = config.getOrDefault("baseColor", "#3ABEF9"),
+                    outlineColor = config.getOrDefault("outlineColor", "#050C9C"),
+                    scale = config.getOrDefault("scale", "1.0").toFloatOrNull() ?: 1.0f,
+                    theme = display.theme,
+                    useDark = display.useDark,
+                    visualVersion = display.visualVersion
                 )
-            }.toMutableList()
-            val pieSlicesObj = PieSlices(title = title, slices = slices, display = display)
-            return Pair(maker.makePie(pieSlices = pieSlicesObj), pieData)
+                val pies = Pies(
+                    pies = pieData.map { segment ->
+                        Pie(
+                            percent = segment.value.toFloat(),
+                            label = segment.label
+                        )
+                    }.toMutableList(),
+                    pieDisplay = pieDisplay
+                )
+                return Pair(maker.makePies(pies, title), pieData)
+            } else {
+                val maker  = PieSliceMakerImproved()
+                val slices = pieData.map { segment ->
+                    PieSlice(
+                        label = segment.label,
+                        amount = segment.value,
+                        itemDisplay = SliceItemDisplay(color = segment.color)
+                    )
+                }.toMutableList()
+                val pieSlicesObj = PieSlices(title = title, slices = slices, display = display)
+                return Pair(maker.makePie(pieSlices = pieSlicesObj), pieData)
+            }
+
         }
         // Generate SVG
         val svg = generatePieChartSvg(
@@ -387,7 +411,7 @@ class PieChartImproved {
                           text-anchor="middle" 
                           dominant-baseline="middle"
                           fill="white" 
-                          style="text-shadow: 0 1px 2px rgba(0,0,0,0.8); pointer-events: none;">
+                          style="fill: white !important; text-shadow: 0 1px 2px rgba(0,0,0,0.8); pointer-events: none;">
                         ${formatDecimal(segmentData.percentage, 1)}%
                     </text>
                 """.trimIndent())
@@ -413,6 +437,7 @@ class PieChartImproved {
                   font-size="22" 
                   font-weight="800"
                   fill="${theme.primaryText}"
+                  style="fill: ${theme.primaryText} !important;"
                   class="glass-title chart-title">$title</text>
                   <rect x="10" y="45" width="60" height="5" fill="${theme.accentColor}" rx="2"/>
         """.trimIndent())
@@ -523,7 +548,8 @@ class PieChartImproved {
                       font-size="13" 
                       font-weight="500"
                       dominant-baseline="middle"
-                      fill="${theme.primaryText}">
+                      fill="${theme.primaryText}"
+                      style="fill: ${theme.primaryText} !important;">
                     ${segment.segment.label}
                 </text>
 
@@ -533,7 +559,8 @@ class PieChartImproved {
                       font-size="11" 
                       font-weight="400"
                       dominant-baseline="middle"
-                      fill="${theme.secondaryText}">
+                      fill="${theme.secondaryText}"
+                      style="fill: ${theme.secondaryText} !important;">
                     ${formatDecimal(segment.percentage, 1)}%
                 </text>
 
@@ -544,7 +571,8 @@ class PieChartImproved {
                       font-weight="600"
                       text-anchor="end"
                       dominant-baseline="middle"
-                      fill="${theme.secondaryText}">
+                      fill="${theme.secondaryText}"
+                      style="fill: ${theme.secondaryText} !important;">
                     ${segment.segment.value.toInt()}
                 </text>
             </g>

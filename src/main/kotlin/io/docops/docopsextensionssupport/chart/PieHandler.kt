@@ -11,9 +11,9 @@ class PieHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
 
     fun handleSVGInternal(payload: String, context: DocOpsContext): String {
-        val pies = parseTabularInput(payload.trim(), context.useDark)
+        val (pies, title) = parseTabularInput(payload.trim(), context.useDark)
 
-        val svg =  if (pies.pieDisplay.visualVersion >= 3) {
+        val svg = if (pies.pieDisplay.visualVersion >= 3) {
             PieMakerImproved().makePies(pies.copy(pieDisplay = pies.pieDisplay))
         } else {
             PieMaker().makePies(pies.copy(pieDisplay = pies.pieDisplay))
@@ -37,13 +37,14 @@ class PieHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
      * baseColor=#A6AEBF
      * outlineColor=#FA4032
      * scale=4
+     * title=Revenue Mix
      * useDark=true
      * ---
      * Label | Percent
      * Toys | 14
      * Furniture | 43
      */
-    private fun parseTabularInput(payload: String, useDark: Boolean): Pies {
+    private fun parseTabularInput(payload: String, useDark: Boolean): Pair<Pies, String> {
         val (config, data) = ParsingUtils.parseConfigAndData(payload)
         val piesList = mutableListOf<Pie>()
 
@@ -65,6 +66,8 @@ class PieHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
             visualVersion = config.getOrDefault("visualVersion", "1").toIntOrNull() ?: 1
         )
 
-        return Pies(pies = piesList, pieDisplay = display)
+        val title = config["title"] ?: "Pie Chart"
+
+        return Pair(Pies(pies = piesList, pieDisplay = display), title)
     }
 }
