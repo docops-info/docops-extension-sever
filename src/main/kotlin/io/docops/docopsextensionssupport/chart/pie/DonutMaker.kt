@@ -39,7 +39,7 @@ class DonutMaker : PieSliceMaker(){
 
         // Use dark mode text color if enabled
         val titleColor = if (pieSlices.display.useDark) "#f9fafb" else "#333333"
-        sb.append("""<text x="${(width * pieSlices.display.scale)/2}" y="10" text-anchor="middle" style="font-size: 24px; font-family: Arial, Helvetica, sans-serif; fill: $titleColor;">${pieSlices.title.escapeXml()}</text>""")
+        sb.append("""<text x="${(width * pieSlices.display.scale)/2}" y="10" text-anchor="middle" style="fill: $titleColor !important; font-size: 24px; font-family: Arial, Helvetica, sans-serif;">${pieSlices.title.escapeXml()}</text>""")
         sb.append("</g>")
         val donuts = pieSlices.toDonutSlices()
         sb.append(createDonutCommands(donuts, pieSlices))
@@ -147,7 +147,7 @@ class DonutMaker : PieSliceMaker(){
             val labelY = viewBox/2 - midRadius * sin(toRadians(midAngle * 3.6))
 
             sb.append("""
-                <text x="$labelX" y="$labelY" text-anchor="middle" fill="$textColor" style="font-size: 12px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">
+                <text x="$labelX" y="$labelY" text-anchor="middle" fill="$textColor" style="fill: $textColor !important; font-size: 12px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">
                     ${slices[index].valueFmt(it.percent)}%
                 </text>
             """.trimIndent())
@@ -158,8 +158,8 @@ class DonutMaker : PieSliceMaker(){
         val totalTextColor = if (pieSlices.display.useDark) "#f9fafb" else "#333333"
 
         sb.append("""
-            <text x="${viewBox/2}" y="${viewBox/2 - 10}" text-anchor="middle" fill="$totalTextColor" style="font-size: 16px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">Total</text>
-            <text x="${viewBox/2}" y="${viewBox/2 + 15}" text-anchor="middle" fill="$totalTextColor" style="font-size: 20px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">${slices[0].valueFmt(totalValue)}</text>
+            <text x="${viewBox/2}" y="${viewBox/2 - 10}" text-anchor="middle" fill="$totalTextColor" style="fill: $totalTextColor !important; font-size: 16px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">Total</text>
+            <text x="${viewBox/2}" y="${viewBox/2 + 15}" text-anchor="middle" fill="$totalTextColor" style="fill: $totalTextColor !important; font-size: 20px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">${slices[0].valueFmt(totalValue)}</text>
         """.trimIndent())
 
         sb.append("</svg>")
@@ -177,7 +177,7 @@ class DonutMaker : PieSliceMaker(){
         // Create a more modern legend with rounded rectangle background below the chart
         sb.append("""<g transform='translate(${(width / 2) * pieSlices.display.scale},${330 * pieSlices.display.scale})'>""")
         sb.append("""<rect x="-150" y="10" width="300" height="${donuts.size * 20 + 20}" rx="10" ry="10" fill="$legendBgColor" opacity="0.8" filter="url(#dropShadow)"/>""")
-        sb.append("""<text x="0" y="30" text-anchor="middle" style="font-size: 14px; font-weight: bold; font-family: Arial, Helvetica, sans-serif; fill: $legendTextColor;">Legend</text>""")
+        sb.append("""<text x="0" y="30" text-anchor="middle" style="fill: $legendTextColor !important; font-size: 14px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">Legend</text>""")
 
         donuts.forEachIndexed { index, donutSlice ->
             // Calculate position for a two-column layout if there are more than 3 items
@@ -188,7 +188,7 @@ class DonutMaker : PieSliceMaker(){
             sb.append("""
                 <g class="legend-item">
                     <rect x="${xOffset}" y="${40 + row * 20}" width="15" height="15" rx="3" ry="3" fill="url(#svgGradientColor_$index)"/>
-                    <text x="${xOffset + 20}" y="${52 + row * 20}" text-anchor="start" style="font-size: 12px; font-family: Arial, Helvetica, sans-serif; fill: $legendTextColor;">
+                    <text x="${xOffset + 20}" y="${52 + row * 20}" text-anchor="start" style="fill: $legendTextColor !important; font-size: 12px; font-family: Arial, Helvetica, sans-serif;">
                         ${donutSlice.label} (${donutSlice.valueFmt(donutSlice.amount)}) | ${donutSlice.valueFmt(donutSlice.percent)}%
                     </text>
                 </g>
