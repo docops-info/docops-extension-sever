@@ -17,9 +17,9 @@ class PieDashboardMaker(val useDark: Boolean) {
     private lateinit var theme: DocOpsTheme
 
     private val width = 600.0
-    private val height = 588.0
+    private var height = 600.0
     private val chartCenterX = 300.0
-    private val chartCenterY = 242.0
+    private var chartCenterY = 310.0
     private val radius = 154.0
 
     fun makePies(pies: Pies, title: String = "Pie Chart"): String {
@@ -31,6 +31,17 @@ class PieDashboardMaker(val useDark: Boolean) {
 
         val id = pies.pieDisplay.id
         val total = pies.pies.sumOf { it.percent.toDouble() }.takeIf { it > 0.0 } ?: 1.0
+
+        if (pies.pieDisplay.showLegend) {
+            val itemsPerRow = 2
+            val rows = ceil(pies.pies.size / itemsPerRow.toDouble()).toInt().coerceAtLeast(1)
+            val rowHeight = 26
+            val legendHeight = 48 + rows * rowHeight + 16
+            height = 510.0 + legendHeight + 40.0 // Pie area + legend + padding
+        } else {
+            height = 600.0
+        }
+
         val scaledWidth = (width * pies.pieDisplay.scale) / DISPLAY_RATIO_16_9
         val scaledHeight = (height * pies.pieDisplay.scale) / DISPLAY_RATIO_16_9
 
@@ -42,7 +53,9 @@ class PieDashboardMaker(val useDark: Boolean) {
             append(createTotalBadge(total))
             append(createRings(id))
             append(createPie(pies, total, id))
-            append(createLegend(pies, total, id))
+            if (pies.pieDisplay.showLegend) {
+                append(createLegend(pies, total, id))
+            }
             append("</svg>")
         }
     }
@@ -100,6 +113,16 @@ class PieDashboardMaker(val useDark: Boolean) {
               50% { opacity: 0.36; stroke-width: 1.6; }
             }
 
+            @keyframes labelLineReveal_$id {
+              from { stroke-dashoffset: 100; opacity: 0; }
+              to { stroke-dashoffset: 0; opacity: 1; }
+            }
+
+            @keyframes labelBadgeReveal_$id {
+              from { opacity: 0; transform: translateX(${if (useDark) "-10" else "10"}px); }
+              to { opacity: 1; transform: translateX(0); }
+            }
+
             #id_$id .header-motion {
               animation: titleReveal_$id 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
             }
@@ -144,6 +167,17 @@ class PieDashboardMaker(val useDark: Boolean) {
               animation: pulseRing_$id 3.8s ease-in-out infinite;
             }
 
+            #id_$id .label-line {
+              stroke-dasharray: 100;
+              stroke-dashoffset: 100;
+              animation: labelLineReveal_$id 800ms ease forwards;
+            }
+
+            #id_$id .label-badge {
+              opacity: 0;
+              animation: labelBadgeReveal_$id 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            }
+
             @media (prefers-reduced-motion: reduce) {
               #id_$id .header-motion,
               #id_$id .pie-segment,
@@ -156,7 +190,7 @@ class PieDashboardMaker(val useDark: Boolean) {
 
           ${createBackgroundDefs(id)}
           ${createSliceGradients(id, pies)}
-          <!-- ... existing code ... -->
+          ${createEffectDefs(id)}
         </defs>
     """.trimIndent()
     }
@@ -325,48 +359,129 @@ class PieDashboardMaker(val useDark: Boolean) {
 
             append("</g>")
             append(createCenterPin())
-            append(createLabelChips(pies, total, id))
+            if (pies.pieDisplay.showLabels) {
+                append(createExternalLabels(pies, total, id))
+            }
         }
     }
 
-    private fun createLabelChips(pies: Pies, total: Double, id: String): String {
+    private fun createExternalLabels(pies: Pies, total: Double, id: String): String {
         var startAngle = -90.0
+        val lineExtension = 25.0
+        val horizontalExtension = 20.0
 
         return buildString {
-            append("""<g pointer-events="none">""")
+            append("""<g class="external-labels" pointer-events="none">""")
 
-            pies.pies.forEach { pie ->
+            pies.pies.forEachIndexed { index, pie ->
                 val value = pie.percent.toDouble()
-                val share = if (total == 0.0) 0.0 else (value / total) * 100.0
                 val sweep = (value / total) * 360.0
                 val midAngle = startAngle + sweep / 2.0
-                val labelRadius = radius * 0.66
-                val point = polarToCartesian(chartCenterX, chartCenterY, labelRadius, midAngle)
-                val label = "${formatDecimal(share, 1)}%"
-                val chipWidth = max(58.0, label.length * 8.5 + 20.0)
-                val halfChip = chipWidth / 2.0
+
+                val p1 = polarToCartesian(chartCenterX, chartCenterY, radius, midAngle)
+                val p2 = polarToCartesian(chartCenterX, chartCenterY, radius + lineExtension, midAngle)
+
+                val isRightSide = cos(midAngle * PI / 180.0) >= 0
+                val p3X = if (isRightSide) p2.first + horizontalExtension else p2.first - horizontalExtension
+                val p3Y = p2.second
+
+                val share = if (total == 0.0) 0.0 else (value / total) * 100.0
+                val percentage = "${formatDecimal(share, 1)}%"
+                val labelText = pie.label
+
+                val delay = 0.8 + index * 0.1
+
+                // Path
+                append("""
+                <path class="label-line" d="M ${formatDecimal(p1.first, 1)} ${formatDecimal(p1.second, 1)} L ${formatDecimal(p2.first, 1)} ${formatDecimal(p2.second, 1)} L ${formatDecimal(p3X, 1)} ${formatDecimal(p3Y, 1)}"
+                      fill="none"
+                      stroke="${theme.secondaryText}"
+                      stroke-width="1.2"
+                      stroke-opacity="0.4"
+                      style="animation-delay: ${formatDecimal(delay, 2)}s;"/>
+                """.trimIndent())
+
+                // Badge
+                val textAnchor = if (isRightSide) "start" else "end"
+                val badgeX = if (isRightSide) p3X + 4 else p3X - 4
+
+                val badgeWidth = max(40.0, percentage.length * 7.0 + 10.0)
+                val rectX = if (isRightSide) badgeX else badgeX - badgeWidth
 
                 append("""
-                <g transform="translate(${point.first}, ${point.second})">
-                  <rect x="-$halfChip" y="-14" width="$chipWidth" height="26" rx="13"
-                        fill="${chipFill()}"
-                        opacity="0.94"/>
-                  <text x="0" y="-1"
+                <g class="label-badge" style="animation-delay: ${formatDecimal(delay + 0.1, 2)}s;">
+                  <rect x="${formatDecimal(rectX, 1)}" y="${formatDecimal(p3Y - 10, 1)}" width="${formatDecimal(badgeWidth, 1)}" height="20" rx="10"
+                        fill="${chipFill()}" opacity="0.9"/>
+                  <text x="${formatDecimal(if (isRightSide) badgeX + badgeWidth/2 else badgeX - badgeWidth/2, 1)}" y="${formatDecimal(p3Y, 1)}"
                         text-anchor="middle"
                         dominant-baseline="middle"
-                        font-family="${theme.fontFamily}"
-                        font-size="14"
-                        font-weight="900"
                         fill="${chipTextColor()}"
-                        style="fill: ${chipTextColor()} !important;">$label</text>
+                        style="fill: ${chipTextColor()} !important;"
+                        font-size="11"
+                        font-weight="900">$percentage</text>
+                  <text x="${formatDecimal(if (isRightSide) rectX + badgeWidth + 8 else rectX - 8, 1)}" y="${formatDecimal(p3Y, 1)}"
+                        text-anchor="$textAnchor"
+                        dominant-baseline="middle"
+                        fill="${theme.primaryText}"
+                        style="fill: ${theme.primaryText} !important;"
+                        font-size="12"
+                        font-weight="700">${labelText.escapeXml()}</text>
                 </g>
-            """.trimIndent())
+                """.trimIndent())
 
                 startAngle += sweep
             }
-
             append("</g>")
         }
+    }
+
+    private fun createEffectDefs(id: String): String {
+        return """
+            <filter id="sliceShadow_$id" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+              <feOffset in="blur" dx="0" dy="2" result="offsetblur"/>
+              <feComponentTransfer>
+                <feFuncA type="linear" slope="0.3"/>
+              </feComponentTransfer>
+              <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <linearGradient id="sliceGlass_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45"/>
+              <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.1"/>
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.05"/>
+            </linearGradient>
+
+            <filter id="sliceGlow_$id">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+
+            <filter id="cardShadow_$id" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+              <feOffset in="blur" dx="0" dy="4" result="offsetblur"/>
+              <feComponentTransfer>
+                <feFuncA type="linear" slope="0.15"/>
+              </feComponentTransfer>
+              <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <linearGradient id="legendSurface_$id" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${surfaceLift()}" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="${surfaceLift()}" stop-opacity="0.85"/>
+            </linearGradient>
+
+            <linearGradient id="legendStroke_$id" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${theme.accentColor}" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="${secondaryAccent()}" stop-opacity="0.1"/>
+            </linearGradient>
+        """.trimIndent()
     }
 
     private fun createCenterPin(): String {
@@ -395,6 +510,7 @@ class PieDashboardMaker(val useDark: Boolean) {
 
                 <text x="32" y="26"
                       fill="${legendSecondaryColor()}"
+                      style="fill: ${legendSecondaryColor()} !important;"
                       font-size="10"
                       font-weight="900"
                       letter-spacing="1.4">LEGEND</text>
@@ -402,6 +518,7 @@ class PieDashboardMaker(val useDark: Boolean) {
                 <text x="408" y="26"
                       text-anchor="end"
                       fill="${legendAccentColor()}"
+                      style="fill: ${legendAccentColor()} !important;"
                       font-size="10"
                       font-weight="900"
                       letter-spacing="0.8">VALUES / SHARE</text>
