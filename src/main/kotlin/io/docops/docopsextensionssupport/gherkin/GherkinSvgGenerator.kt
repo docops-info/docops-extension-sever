@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service
 import java.util.Locale
 import java.util.Locale.getDefault
 
-class GherkinMaker(val useDark: Boolean) {
+class GherkinMaker(val useDark: Boolean, val isPdf: Boolean = false) {
     // Resolve the theme once for the entire generator
     private lateinit var theme: DocOpsTheme
+    private var isModern = false
 
     private fun wrapText(text: String, maxWidthPx: Int, fontSizePx: Int): List<String> {
         val avgCharWidth = fontSizePx * 0.55 // Heuristic for sans-serif
@@ -117,6 +118,7 @@ class GherkinMaker(val useDark: Boolean) {
     fun makeGherkin(spec: GherkinSpec, scale: String = "1.0"): String {
         // Initialize the design system theme based on the incoming spec
         theme = ThemeFactory.getTheme(spec.theme)
+        isModern = !isPdf && !theme.name.contains("Classic") && !theme.name.contains("Pro")
 
         val totalHeight = calculateTotalHeight(spec, spec.theme)
         val width = spec.theme.layout.width
@@ -128,7 +130,11 @@ class GherkinMaker(val useDark: Boolean) {
         return buildString {
             append(createSvgHeader(scaledWidth, scaledHeight, width, totalHeight))
             append(createDefinitions())
-            append(createBackground(width, totalHeight))
+            if (isModern) {
+                append(makeModernBackground(width, totalHeight))
+            } else {
+                append(createBackground(width, totalHeight))
+            }
 
             // Feature Header
             val (headerSvg, headerHeight) = createFeatureHeader(spec.feature, spec.theme)
@@ -136,7 +142,7 @@ class GherkinMaker(val useDark: Boolean) {
 
             var yOffset = 40 + headerHeight + 30
             spec.scenarios.forEachIndexed { index, scenario ->
-                append(createScenario(scenario, spec.theme, yOffset))
+                append(createScenario(scenario, spec.theme, yOffset, index + 1))
                 yOffset += calculateScenarioHeight(scenario, spec.theme) + 40
             }
 
@@ -157,8 +163,27 @@ class GherkinMaker(val useDark: Boolean) {
         val shadowColor = if (useDark) "#000000" else SVGColor(theme.canvas).darker() ?: "#cbd5e1"
         val shadowOpacity = if (useDark) "0.5" else "0.3"
 
-        return """
-                <defs>
+        return buildString {
+            append("<defs>")
+            if (isModern) {
+                append("""
+                    <linearGradient id="bgGlow" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="${if (useDark) "#1f2937" else "#dbe8f8"}" stop-opacity="0.65"/>
+                        <stop offset="100%" stop-color="${theme.canvas}" stop-opacity="0"/>
+                    </linearGradient>
+                    <pattern id="fineGrid" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+                        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="${theme.accentColor}" stroke-width="0.5" opacity="0.2"/>
+                    </pattern>
+                    <radialGradient id="vignette" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+                        <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+                        <stop offset="100%" stop-color="#000000" stop-opacity="0.1"/>
+                    </radialGradient>
+                    <filter id="glassBlur" x="-10%" y="-10%" width="120%" height="120%">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+                    </filter>
+                """.trimIndent())
+            }
+            append("""
                     <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" style="stop-color:$accentStart;stop-opacity:1" />
                         <stop offset="100%" style="stop-color:$accentEnd;stop-opacity:1" />
@@ -166,7 +191,56 @@ class GherkinMaker(val useDark: Boolean) {
                     <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="140%">
                         <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="$shadowColor" flood-opacity="$shadowOpacity"/>
                     </filter>
-                </defs>
+                """.trimIndent())
+            
+            append("<style>")
+            if (isModern) {
+                append("""
+                    @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&amp;family=Archivo:wght@400;700;900&amp;display=swap');
+                    :root {
+                        --bg: ${theme.canvas};
+                        --surface: ${if (useDark) "#161b22" else "#ffffff"};
+                        --text: ${theme.primaryText};
+                        --text-soft: ${theme.secondaryText};
+                        --accent: ${theme.accentColor};
+                        --card-radius: 16px;
+                        --step-gap: 20px;
+                        --accent-width: 6px;
+                    }
+                    text { font-family: ${theme.fontFamily}; }
+                    .feature-title { font-family: 'Archivo', sans-serif; font-weight: 900; fill: var(--text) !important; }
+                    .feature-label { font-family: 'Monaco', monospace; font-size: 11px; font-weight: bold; fill: var(--accent) !important; letter-spacing: 2px; }
+                    .scenario-title { font-family: 'Monaco', monospace; font-size: 14px; font-weight: bold; fill: var(--accent) !important; letter-spacing: 1px; }
+                    .step-text { font-family: 'Lexend', sans-serif; font-size: 14px; fill: var(--text) !important; }
+                    .step-keyword { font-weight: bold; fill: var(--text) !important; }
+                    
+                    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                    @keyframes riseUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                    
+                    .feature-header { animation: slideDown 0.6s ease-out both; opacity: 0; }
+                    .scenario-wrap { transition: transform 0.3s ease, filter 0.3s ease; opacity: 0; animation: riseUp 0.6s ease-out both; }
+                    .scenario-wrap:hover { transform: scale(1.01); filter: brightness(1.02); }
+                    
+                    ${(1..30).joinToString("\n                    ") { ".anim-delay-$it { animation-delay: ${it * 0.1}s; }" }}
+                """.trimIndent())
+            }
+            if (isPdf) {
+                append("""
+                    .feature-header, .scenario-wrap { animation: none !important; opacity: 1 !important; }
+                    path { stroke-dashoffset: 0 !important; }
+                """.trimIndent())
+            }
+            append("</style>")
+            append("</defs>")
+        }
+    }
+
+    private fun makeModernBackground(width: Int, height: Int): String {
+        return """
+                <rect width="$width" height="$height" fill="var(--bg)" rx="${theme.cornerRadius}"/>
+                <circle cx="140" cy="80" r="220" fill="url(#bgGlow)"/>
+                <rect width="$width" height="$height" fill="url(#fineGrid)" opacity="0.1"/>
+                <rect width="$width" height="$height" fill="url(#vignette)" opacity="0.1"/>
             """.trimIndent()
     }
 
@@ -183,33 +257,33 @@ class GherkinMaker(val useDark: Boolean) {
         val bgHeight = (lines.size * lineHeight) + 60
 
         // DESIGN SYSTEM TRANSITION: Industrial/Corporate Aesthetic
-        val bgColor = theme.canvas
-        val strokeColor = theme.accentColor
-        val textColor = theme.primaryText
-        val labelColor = theme.accentColor
+        val bgColor = if (isModern) "var(--surface)" else theme.canvas
+        val strokeColor = if (isModern) "var(--accent)" else theme.accentColor
+        val textColor = if (isModern) "var(--text)" else theme.primaryText
+        val labelColor = if (isModern) "var(--accent)" else theme.accentColor
 
         val sb = StringBuilder()
         sb.append("""
-                <g transform="translate(40, 40)">
+                <g transform="translate(40, 40)" ${if (isModern) "class=\"feature-header\"" else ""}>
                     <rect width="$width" height="$bgHeight" fill="$bgColor" rx="12" stroke="$strokeColor" stroke-width="2"/>
-                    <rect width="6" height="${bgHeight - 40}" x="0" y="20" fill="url(#accentGradient)" rx="3"/>
-                    <text x="30" y="35" font-family="Monaco, monospace" font-size="11" font-weight="bold" fill="$labelColor" letter-spacing="2">FEATURE</text>
+                    <rect width="${if (isModern) "var(--accent-width)" else "6"}" height="${bgHeight - 40}" x="0" y="20" fill="url(#accentGradient)" rx="3"/>
+                    <text x="30" y="35" ${if (isModern) "class=\"feature-label\"" else "font-family=\"Monaco, monospace\" font-size=\"11\" font-weight=\"bold\" letter-spacing=\"2\""} fill="$labelColor" style="fill: $labelColor !important;">FEATURE</text>
             """)
 
         lines.forEachIndexed { idx, line ->
-            sb.append("""<text x="30" y="${65 + (idx * lineHeight)}" font-family="sans-serif" font-size="24" font-weight="800" fill="$textColor">$line</text>""")
+            sb.append("""<text x="30" y="${65 + (idx * lineHeight)}" ${if (isModern) "class=\"feature-title\"" else "font-family=\"sans-serif\" font-weight=\"800\""} font-size="24" fill="$textColor" style="fill: $textColor !important;">$line</text>""")
         }
         sb.append("</g>")
         return Pair(sb.toString(), bgHeight)
     }
 
-    private fun createScenario(scenario: GherkinScenario, gherkinTheme: GherkinTheme, yOffset: Int): String {
+    private fun createScenario(scenario: GherkinScenario, gherkinTheme: GherkinTheme, yOffset: Int, index: Int): String {
         val width = gherkinTheme.layout.width - 80
-        val textColor = theme.primaryText
-        val highlightColor = theme.primaryText
-        val metaColor = theme.accentColor
-        val bgColor = theme.canvas
-        val strokeColor = theme.accentColor
+        val textColor = if (isModern) "var(--text)" else theme.primaryText
+        val highlightColor = if (isModern) "var(--text)" else theme.primaryText
+        val metaColor = if (isModern) "var(--accent)" else theme.accentColor
+        val bgColor = if (isModern) "var(--surface)" else theme.canvas
+        val strokeColor = if (isModern) "var(--accent)" else theme.accentColor
 
         // 1. Wrap Scenario Title - Increased font size to 14px
         val titleFontSize = 14
@@ -228,12 +302,12 @@ class GherkinMaker(val useDark: Boolean) {
         val scenarioHeight = calculateScenarioHeight(scenario, gherkinTheme)
 
         return buildString {
-            append("""<g transform="translate(40, $yOffset)" filter="url(#cardShadow)">""")
-            append("""<rect width="$width" height="$scenarioHeight" fill="$bgColor" rx="12" stroke="$strokeColor" stroke-width="1.5"/>""")
+            append("""<g transform="translate(40, $yOffset)" ${if (isModern) "class=\"scenario-wrap anim-delay-$index\"" else "filter=\"url(#cardShadow)\""}>""")
+            append("""<rect width="$width" height="$scenarioHeight" fill="$bgColor" rx="${if (isModern) "16" else "12"}" stroke="$strokeColor" stroke-width="1.5"/>""")
 
             // Render Wrapped Scenario Title
             titleLines.forEachIndexed { idx, line ->
-                append("""<text x="30" y="${35 + (idx * titleLineHeight)}" font-family="Monaco, monospace" font-size="$titleFontSize" font-weight="bold" fill="$metaColor" letter-spacing="1">$line</text>""")
+                append("""<text x="30" y="${35 + (idx * titleLineHeight)}" ${if (isModern) "class=\"scenario-title\"" else "font-family=\"Monaco, monospace\" font-size=\"$titleFontSize\" font-weight=\"bold\" letter-spacing=\"1\""} fill="$metaColor" style="fill: $metaColor !important;">$line</text>""")
             }
 
             // Status Badge
@@ -241,7 +315,7 @@ class GherkinMaker(val useDark: Boolean) {
             append("""
                     <g transform="translate(${width - 100}, 25)">
                         <rect width="80" height="24" rx="12" fill="${statusColors.bg}" stroke="${statusColors.stroke}" stroke-width="1"/>
-                        <text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="${statusColors.text}" text-anchor="middle">${scenario.status.name}</text>
+                        <text x="40" y="16" font-family="Monaco, monospace" font-size="10" font-weight="bold" fill="${statusColors.text}" style="fill: ${statusColors.text} !important;" text-anchor="middle">${scenario.status.name}</text>
                     </g>
                 """)
 
@@ -254,15 +328,20 @@ class GherkinMaker(val useDark: Boolean) {
                 
                 // Enhanced Accessibility: Icon in circle
                 append("""<circle cx="0" cy="0" r="10" fill="$stepColor"/>""")
-                append("""<text x="0" y="0" font-family="sans-serif" font-size="10" font-weight="bold" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">$stepIcon</text>""")
+                append("""<text x="0" y="0" font-family="sans-serif" font-size="10" font-weight="bold" fill="#FFFFFF" style="fill: #FFFFFF !important;" text-anchor="middle" dominant-baseline="central">$stepIcon</text>""")
 
                 lines.forEachIndexed { lIdx, line ->
                     val escapedLine = line.escapeXml()
-                    val content = if (lIdx == 0) """<tspan fill="$highlightColor" font-weight="bold">${
-                        step.type.name.lowercase()
+                    val keyword = step.type.name.lowercase()
                             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() }
-                    }</tspan> $escapedLine""" else escapedLine
-                    append("""<text x="25" y="${5 + (lIdx * 22)}" font-family="sans-serif" font-size="14" fill="$textColor">$content</text>""")
+                    
+                    if (isModern) {
+                        val content = if (lIdx == 0) """<tspan class="step-keyword">$keyword</tspan> $escapedLine""" else escapedLine
+                        append("""<text x="25" y="${5 + (lIdx * 22)}" class="step-text" fill="$textColor" style="fill: $textColor !important;">$content</text>""")
+                    } else {
+                        val content = if (lIdx == 0) """<tspan fill="$highlightColor" font-weight="bold">$keyword</tspan> $escapedLine""" else escapedLine
+                        append("""<text x="25" y="${5 + (lIdx * 22)}" font-family="sans-serif" font-size="14" fill="$textColor" style="fill: $textColor !important;">$content</text>""")
+                    }
                 }
 
                 if (idx < stepData.size - 1) {

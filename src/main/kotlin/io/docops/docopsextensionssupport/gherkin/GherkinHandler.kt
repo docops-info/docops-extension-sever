@@ -116,7 +116,7 @@ class GherkinHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) 
         context: DocOpsContext
     ): String {
         return try {
-            val gherkinMaker = GherkinMaker(context.useDark)
+            val gherkinMaker = GherkinMaker(context.useDark, context.type.equals("pdf", ignoreCase = true) || context.backend.equals("pdf", ignoreCase = true))
             val gherkinSpec = parseGherkinText(payload)
             val finalSpec = gherkinSpec.copy(
                 theme = gherkinSpec.theme.copy(useDark = context.useDark)
