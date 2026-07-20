@@ -28,7 +28,11 @@ class DonutMakerImproved {
         val legendRows = ceil(donuts.size / 2.0).toInt().coerceAtLeast(1)
 
         width = 760.0
-        height = max(660.0, 548.0 + legendRows * 34.0)
+        height = if (pieSlices.display.showLegend) {
+            max(660.0, 548.0 + legendRows * 34.0)
+        } else {
+            600.0
+        }
 
         val scaledWidth = width * pieSlices.display.scale
         val scaledHeight = height * pieSlices.display.scale
@@ -129,6 +133,27 @@ class DonutMakerImproved {
             #id_$id .legend-item:hover {
                 transform: translateY(-1px);
                 opacity: 0.94;
+            }
+
+            @keyframes labelLineReveal_$id {
+                from { stroke-dashoffset: 100; opacity: 0; }
+                to { stroke-dashoffset: 0; opacity: 1; }
+            }
+
+            @keyframes labelBadgeReveal_$id {
+                from { opacity: 0; transform: translateX(${if (dark) "-10" else "10"}px); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+
+            #id_$id .label-line {
+                stroke-dasharray: 100;
+                stroke-dashoffset: 100;
+                animation: labelLineReveal_$id 800ms ease forwards;
+            }
+
+            #id_$id .label-badge {
+                opacity: 0;
+                animation: labelBadgeReveal_$id 600ms cubic-bezier(.18,.9,.24,1.12) forwards;
             }
             """.trimIndent()
         }
@@ -296,7 +321,7 @@ class DonutMakerImproved {
         val dark = pieSlices.display.useDark
 
         val chartCenterX = 380.0
-        val chartCenterY = 278.0
+        val chartCenterY = 310.0
         val radius = 128.0
         val strokeWidth = 52.0
         val innerRadius = radius - strokeWidth
@@ -369,7 +394,8 @@ class DonutMakerImproved {
             }
         }
 
-        return """
+        return buildString {
+            append("""
             <g transform="translate(0 0)">
                 <circle cx="$chartCenterX" cy="$chartCenterY" r="168" fill="$chartSurface" opacity="$chartSurfaceOpacity" $filter/>
                 <circle cx="$chartCenterX" cy="$chartCenterY" r="154" fill="none" stroke="$trackStroke" stroke-width="1.1" stroke-dasharray="2 8"/>
@@ -412,7 +438,11 @@ class DonutMakerImproved {
                     ${slices.size} segments
                 </text>
             </g>
-        """.trimIndent()
+            """.trimIndent())
+            if (pieSlices.display.showLabels) {
+                append(createExternalLabels(slices, pieSlices, chartCenterX, chartCenterY, radius, isPdf))
+            }
+        }
     }
 
     private fun addLegend(
@@ -420,6 +450,7 @@ class DonutMakerImproved {
         pieSlices: PieSlices,
         isPdf: Boolean
     ): String {
+        if (!pieSlices.display.showLegend) return ""
         val id = pieSlices.display.id
         val dark = pieSlices.display.useDark
 
@@ -428,7 +459,7 @@ class DonutMakerImproved {
         val rowHeight = 30
         val legendHeight = 56 + rows * rowHeight + 18
         val legendX = 80.0
-        val legendY = max(500.0, height - legendHeight - 34.0)
+        val legendY = max(480.0, height - legendHeight - 24.0)
 
         val primary = if (dark) "#ffffff" else "#111827"
         val secondary = if (dark) "#d1d5db" else "#475569"
@@ -525,6 +556,90 @@ class DonutMakerImproved {
                 $items
             </g>
         """.trimIndent()
+    }
+
+    private fun createExternalLabels(
+        slices: List<DonutSlice>,
+        pieSlices: PieSlices,
+        centerX: Double,
+        centerY: Double,
+        radius: Double,
+        isPdf: Boolean
+    ): String {
+        var startAngle = -90.0
+        val totalValue = slices.sumOf { it.amount }
+        val safeTotal = if (totalValue <= 0.0) 1.0 else totalValue
+        val lineExtension = 30.0
+        val horizontalExtension = 25.0
+        val dark = pieSlices.display.useDark
+
+        return buildString {
+            append("""<g class="external-labels" pointer-events="none">""")
+            slices.forEachIndexed { index, slice ->
+                val percent = (slice.amount / safeTotal) * 100.0
+                val sweep = percent * 3.6
+                val midAngle = startAngle + sweep / 2.0
+
+                val p1 = polarToCartesian(centerX, centerY, radius, midAngle)
+                val p2 = polarToCartesian(centerX, centerY, radius + lineExtension, midAngle)
+
+                val isRightSide = cos(midAngle * PI / 180.0) >= 0
+                val p3X = if (isRightSide) p2.x + horizontalExtension else p2.x - horizontalExtension
+                val p3Y = p2.y
+
+                val percentage = "${slice.valueFmt(percent)}%"
+                val labelText = slice.label
+                val delay = if (isPdf) "" else "style=\"animation-delay: ${800 + index * 100}ms;\""
+                val badgeDelay = if (isPdf) "" else "style=\"animation-delay: ${900 + index * 100}ms;\""
+
+                // Path
+                append(
+                    """
+                <path class="label-line" d="M ${format(p1.x)} ${format(p1.y)} L ${format(p2.x)} ${format(p2.y)} L ${format(p3X)} ${format(p3Y)}"
+                      fill="none"
+                      stroke="${if (dark) "#5eead4" else "#0f766e"}"
+                      stroke-width="1.2"
+                      stroke-opacity="0.4"
+                      $delay/>
+                """.trimIndent()
+                )
+
+                // Badge
+                val textAnchor = if (isRightSide) "start" else "end"
+                val badgeX = if (isRightSide) p3X + 4 else p3X - 4
+                val badgeWidth = max(42.0, percentage.length * 7.5 + 10.0)
+                val rectX = if (isRightSide) badgeX else badgeX - badgeWidth
+                val chipFill = if (dark) "#06191E" else "#172033"
+                val chipTextColor = if (dark) "#F7FBFF" else "#FFFFFF"
+                val labelColor = if (dark) "#cbd5e1" else "#475569"
+
+                append(
+                    """
+                <g class="label-badge" $badgeDelay>
+                  <rect x="${format(rectX)}" y="${format(p3Y - 10)}" width="${format(badgeWidth)}" height="20" rx="10"
+                        fill="$chipFill" opacity="0.9"/>
+                  <text x="${format(if (isRightSide) badgeX + badgeWidth / 2 else badgeX - badgeWidth / 2)}" y="${format(p3Y)}"
+                        text-anchor="middle"
+                        dominant-baseline="middle"
+                        fill="$chipTextColor"
+                        style="fill: $chipTextColor !important;"
+                        font-size="11"
+                        font-weight="900">$percentage</text>
+                  <text x="${format(if (isRightSide) rectX + badgeWidth + 8 else rectX - 8)}" y="${format(p3Y)}"
+                        text-anchor="$textAnchor"
+                        dominant-baseline="middle"
+                        fill="$labelColor"
+                        style="fill: $labelColor !important;"
+                        font-size="12"
+                        font-weight="700">${labelText.escapeXml()}</text>
+                </g>
+                """.trimIndent()
+                )
+
+                startAngle += sweep
+            }
+            append("</g>")
+        }
     }
 
     private fun arcPath(
