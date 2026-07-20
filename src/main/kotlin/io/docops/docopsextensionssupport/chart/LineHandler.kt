@@ -7,9 +7,9 @@ import io.docops.docopsextensionssupport.web.DocOpsContext
 
 class LineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
 
-    fun handleSVG(payload: String, useDark: Boolean) : String {
+    fun handleSVG(payload: String, useDark: Boolean, isPdf: Boolean = false) : String {
         val lineChartImproved= LineChartImproved()
-        val svg = lineChartImproved.makeLineSvg(payload, csvResponse, useDark)
+        val svg = lineChartImproved.makeLineSvg(payload, csvResponse, useDark, isPdf)
         return svg
     }
 
@@ -17,6 +17,6 @@ class LineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse) {
         payload: String,
         context: DocOpsContext
     ): String {
-        return handleSVG(payload, context.useDark)
+        return handleSVG(payload, context.useDark, context.backend == "pdf")
     }
 }
