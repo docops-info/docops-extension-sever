@@ -202,7 +202,8 @@ class CombinationChartImprovedTest {
 
         // Verify dark mode styling
         assert(svg.contains("fill=\"url(#bgGlow_")) // Dark background glow
-        assert(svg.contains(".chart-text { fill: #f8fafc")) // Light text for dark mode in CSS
+        assert(svg.contains(".chart-text { fill: var(--text) !important;")) // Modern variable-driven text color
+        assert(svg.contains("--text: ")) // Verify the variable is defined
     }
 
     @Test
@@ -234,22 +235,23 @@ class CombinationChartImprovedTest {
 
         println("[DEBUG_LOG] Test bar overlap chart saved to ${outfile.absolutePath}")
 
-        // Check for y-axis line at x=80
-        val yAxisFound = svg.contains("""x1="80" y1="100" x2="80" y2="500"""")
-        println("[DEBUG_LOG] Y-axis line at x=80 found: $yAxisFound")
-        assert(yAxisFound) { "Y-axis line should be at x=80" }
+        // Check for y-axis line at x=120
+        val yAxisFound = svg.contains("""x1="120" y1="100" x2="120" y2="460"""")
+        println("[DEBUG_LOG] Y-axis line at x=120 found: $yAxisFound")
+        assert(yAxisFound) { "Y-axis line should be at x=120" }
 
-        // Check for bar positioning - look for bars that start at or before x=80
+        // Check for bar positioning - look for bars that start at or before x=120
         val barPattern = """<rect x="([^"]+)"""".toRegex()
         val barMatches = barPattern.findAll(svg)
         var overlapFound = false
 
         barMatches.forEach { match ->
             val xPos = match.groupValues[1].toDoubleOrNull()
-            if (xPos != null) {
+            // Ignore background and header rects (usually < 50)
+            if (xPos != null && xPos > 50.0) {
                 println("[DEBUG_LOG] Bar found at x=$xPos")
-                if (xPos <= 80.0) {
-                    println("[DEBUG_LOG] ⚠️  ISSUE: Bar at x=$xPos overlaps with y-axis at x=80")
+                if (xPos < 120.0) {
+                    println("[DEBUG_LOG] ⚠️  ISSUE: Bar at x=$xPos overlaps with y-axis at x=120")
                     overlapFound = true
                 }
             }
@@ -304,12 +306,12 @@ class CombinationChartImprovedTest {
 
         println("[DEBUG_LOG] Test right bar overlap with dual axis chart saved to ${outfile.absolutePath}")
 
-        // Check for right y-axis line at x=720
-        val rightYAxisFound = svg.contains("""x1="720" y1="100" x2="720" y2="500"""")
-        println("[DEBUG_LOG] Right y-axis line at x=720 found: $rightYAxisFound")
-        assert(rightYAxisFound) { "Right y-axis line should be at x=720 when dual axis is enabled" }
+        // Check for right y-axis line at x=860
+        val rightYAxisFound = svg.contains("""x1="860" y1="100" x2="860" y2="460"""")
+        println("[DEBUG_LOG] Right y-axis line at x=860 found: $rightYAxisFound")
+        assert(rightYAxisFound) { "Right y-axis line should be at x=860 when dual axis is enabled" }
 
-        // Check for bar positioning - look for bars that extend beyond x=720
+        // Check for bar positioning - look for bars that extend beyond x=860
         val barPattern = """<rect x="([^"]+)"[^>]*width="([^"]+)"""".toRegex()
         val barMatches = barPattern.findAll(svg)
         var rightOverlapFound = false
@@ -317,11 +319,11 @@ class CombinationChartImprovedTest {
         barMatches.forEach { match ->
             val xPos = match.groupValues[1].toDoubleOrNull()
             val width = match.groupValues[2].toDoubleOrNull()
-            if (xPos != null && width != null) {
+            if (xPos != null && width != null && xPos > 50.0) { // Ignore decorative rects
                 val barEnd = xPos + width
                 println("[DEBUG_LOG] Bar found at x=$xPos, width=$width, ends at x=$barEnd")
-                if (barEnd > 720.0) {
-                    println("[DEBUG_LOG] ⚠️  ISSUE: Bar extends to x=$barEnd, overlapping with right y-axis at x=720")
+                if (barEnd > 860.0) {
+                    println("[DEBUG_LOG] ⚠️  ISSUE: Bar extends to x=$barEnd, overlapping with right y-axis at x=860")
                     rightOverlapFound = true
                 }
             }

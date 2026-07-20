@@ -12,7 +12,7 @@ class CombinationChartHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvR
         payload: String,
         context: DocOpsContext
     ): String {
-        val maker = CombinationChartImproved(context.useDark)
+        val maker = CombinationChartImproved(useDark = context.useDark, isPdf = context.backend == "pdf")
         return maker.makeCombinationChartSvg(payload, csvResponse )
     }
 

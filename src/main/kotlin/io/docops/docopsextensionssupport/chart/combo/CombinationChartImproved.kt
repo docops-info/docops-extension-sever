@@ -5,7 +5,7 @@ import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.update
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-class CombinationChartImproved(val useDark: Boolean) {
+class CombinationChartImproved(val useDark: Boolean, val isPdf: Boolean = false) {
 
     private val logger = KotlinLogging.logger {}
 
@@ -18,10 +18,10 @@ class CombinationChartImproved(val useDark: Boolean) {
             val combinationChart = createCombinationChartFromData(config, chartData)
             csvResponse.update(combinationChart.toCsv())
             // Use CombinationChartMaker to generate SVG
-            val combinationChartMaker = CombinationChartMaker()
+            val combinationChartMaker = CombinationChartMaker(isPdf = isPdf)
             return combinationChartMaker.makeChart(combinationChart)
         } catch (e: Exception) {
-            logger.error(e) { "Error creating chart: $payload" }
+            logger.error(e) { "Error creating chart: ${payload.take(100)}..." }
             throw e
         }
     }
