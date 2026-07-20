@@ -72,11 +72,11 @@ class PieChartImproved {
             }.toMutableList()
             // Construct the PieSlices wrapper
             val pieSlicesObj = PieSlices(title = title, slices = slices, display = display)
-            return Pair(maker.makeDonut(pieSlices = pieSlicesObj), pieData)
+            return Pair(maker.makeDonut(pieSlices = pieSlicesObj, isPdf = isPdf), pieData)
         }
         if(!isDonut) {
             if (display.visualVersion == 4) {
-                val maker =   PieDashboardMaker(useDark = useDark)
+                val maker =   PieDashboardMaker(useDark = useDark, isPdf = isPdf)
                 val pieDisplay = PieDisplay(
                     id = display.id,
                     baseColor = config.getOrDefault("baseColor", "#3ABEF9"),

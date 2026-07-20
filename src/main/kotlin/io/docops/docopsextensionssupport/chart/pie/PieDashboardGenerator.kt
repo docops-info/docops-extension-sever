@@ -12,7 +12,7 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-class PieDashboardMaker(val useDark: Boolean) {
+class PieDashboardMaker(val useDark: Boolean, val isPdf: Boolean = false) {
 
     private lateinit var theme: DocOpsTheme
 
@@ -124,14 +124,15 @@ class PieDashboardMaker(val useDark: Boolean) {
             }
 
             #id_$id .header-motion {
-              animation: titleReveal_$id 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+              animation: ${if (isPdf) "none" else "titleReveal_$id 520ms cubic-bezier(0.22, 1, 0.36, 1) both"};
+              opacity: 1;
             }
 
             #id_$id .pie-segment {
               opacity: 1;
               transform-box: fill-box;
               transform-origin: center;
-              animation: pieReveal_$id 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+              animation: ${if (isPdf) "none" else "pieReveal_$id 680ms cubic-bezier(0.22, 1, 0.36, 1) both"};
             }
 
             #id_$id .slice-motion {
@@ -149,7 +150,8 @@ class PieDashboardMaker(val useDark: Boolean) {
             }
 
             #id_$id .legend-motion {
-              animation: legendReveal_$id 620ms cubic-bezier(0.22, 1, 0.36, 1) 780ms both;
+              animation: ${if (isPdf) "none" else "legendReveal_$id 620ms cubic-bezier(0.22, 1, 0.36, 1) 780ms both"};
+              opacity: 1;
             }
 
             #id_$id .legend-item {
@@ -164,18 +166,19 @@ class PieDashboardMaker(val useDark: Boolean) {
             }
 
             #id_$id .pulse-ring {
-              animation: pulseRing_$id 3.8s ease-in-out infinite;
+              animation: ${if (isPdf) "none" else "pulseRing_$id 3.8s ease-in-out infinite"};
             }
 
             #id_$id .label-line {
               stroke-dasharray: 100;
-              stroke-dashoffset: 100;
-              animation: labelLineReveal_$id 800ms ease forwards;
+              stroke-dashoffset: ${if (isPdf) "0" else "100"};
+              animation: ${if (isPdf) "none" else "labelLineReveal_$id 800ms ease forwards"};
+              opacity: 1;
             }
 
             #id_$id .label-badge {
-              opacity: 0;
-              animation: labelBadgeReveal_$id 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+              opacity: 1;
+              animation: ${if (isPdf) "none" else "labelBadgeReveal_$id 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards"};
             }
 
             @media (prefers-reduced-motion: reduce) {
@@ -390,6 +393,7 @@ class PieDashboardMaker(val useDark: Boolean) {
                 val labelText = pie.label
 
                 val delay = 0.8 + index * 0.1
+                val delayStr = if (isPdf) "" else "style=\"animation-delay: ${formatDecimal(delay, 2)}s;\""
 
                 // Path
                 append("""
@@ -398,7 +402,7 @@ class PieDashboardMaker(val useDark: Boolean) {
                       stroke="${theme.secondaryText}"
                       stroke-width="1.2"
                       stroke-opacity="0.4"
-                      style="animation-delay: ${formatDecimal(delay, 2)}s;"/>
+                      $delayStr/>
                 """.trimIndent())
 
                 // Badge
@@ -407,9 +411,10 @@ class PieDashboardMaker(val useDark: Boolean) {
 
                 val badgeWidth = max(40.0, percentage.length * 7.0 + 10.0)
                 val rectX = if (isRightSide) badgeX else badgeX - badgeWidth
+                val badgeDelayStr = if (isPdf) "" else "style=\"animation-delay: ${formatDecimal(delay + 0.1, 2)}s;\""
 
                 append("""
-                <g class="label-badge" style="animation-delay: ${formatDecimal(delay + 0.1, 2)}s;">
+                <g class="label-badge" $badgeDelayStr>
                   <rect x="${formatDecimal(rectX, 1)}" y="${formatDecimal(p3Y - 10, 1)}" width="${formatDecimal(badgeWidth, 1)}" height="20" rx="10"
                         fill="${chipFill()}" opacity="0.9"/>
                   <text x="${formatDecimal(if (isRightSide) badgeX + badgeWidth/2 else badgeX - badgeWidth/2, 1)}" y="${formatDecimal(p3Y, 1)}"

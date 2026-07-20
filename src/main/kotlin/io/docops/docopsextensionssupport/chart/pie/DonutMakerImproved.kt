@@ -87,14 +87,30 @@ class DonutMakerImproved {
             }
         }
 
-        val animationCss = if (isPdf) {
-            """
+        val animationCss = """
             #id_$id .reveal {
                 opacity: 1;
+                ${if (!isPdf) """
+                opacity: 0;
+                transform-box: fill-box;
+                transform-origin: center;
+                animation: orbitReveal_$id 720ms cubic-bezier(.18,.9,.24,1.12) forwards;
+                """.trimIndent() else ""}
             }
-            """.trimIndent()
-        } else {
-            """
+            
+            #id_$id .label-line {
+                stroke-dasharray: 100;
+                stroke-dashoffset: ${if (isPdf) "0" else "100"};
+                animation: ${if (isPdf) "none" else "labelLineReveal_$id 800ms ease forwards"};
+                opacity: 1;
+            }
+
+            #id_$id .label-badge {
+                opacity: 1;
+                animation: ${if (isPdf) "none" else "labelBadgeReveal_$id 600ms cubic-bezier(.18,.9,.24,1.12) forwards"};
+            }
+
+            ${if (!isPdf) """
             @keyframes orbitReveal_$id {
                 from {
                     opacity: 0;
@@ -105,14 +121,7 @@ class DonutMakerImproved {
                     transform: scale(1) rotate(0deg);
                 }
             }
-
-            #id_$id .reveal {
-                opacity: 0;
-                transform-box: fill-box;
-                transform-origin: center;
-                animation: orbitReveal_$id 720ms cubic-bezier(.18,.9,.24,1.12) forwards;
-            }
-
+            
             #id_$id .slice-shell {
                 transform-box: fill-box;
                 transform-origin: center;
@@ -144,19 +153,8 @@ class DonutMakerImproved {
                 from { opacity: 0; transform: translateX(${if (dark) "-10" else "10"}px); }
                 to { opacity: 1; transform: translateX(0); }
             }
-
-            #id_$id .label-line {
-                stroke-dasharray: 100;
-                stroke-dashoffset: 100;
-                animation: labelLineReveal_$id 800ms ease forwards;
-            }
-
-            #id_$id .label-badge {
-                opacity: 0;
-                animation: labelBadgeReveal_$id 600ms cubic-bezier(.18,.9,.24,1.12) forwards;
-            }
-            """.trimIndent()
-        }
+            """.trimIndent() else ""}
+        """.trimIndent()
 
         return """
             <defs>
