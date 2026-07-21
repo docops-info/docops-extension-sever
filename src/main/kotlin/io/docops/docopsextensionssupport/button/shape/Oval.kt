@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.button.shape
 
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
 
@@ -33,6 +34,19 @@ import io.docops.docopsextensionssupport.svgsupport.itemTextWidth
  */
 class Oval(buttons: Buttons) : Regular(buttons) {
 
+    override fun createShape(type: String): String {
+        val width = width()
+        val height = height()
+        val sb = StringBuilder()
+        sb.append(start(width, height))
+        sb.append(standardDefs())
+        sb.append(shapeDefs())
+        sb.append(makeModernBackground(width, height))
+        sb.append(draw())
+        sb.append(end())
+        return sb.toString()
+    }
+
     /**
      * Renders the buttons with the oval shape and modern visual effects.
      *
@@ -43,35 +57,19 @@ class Oval(buttons: Buttons) : Regular(buttons) {
         buttons.theme?.let {
             scale = it.scale
         }
-        var back =""
-        if(buttons.useDark) {
-            back = "<rect width=\"100%\" height=\"100%\" fill=\"#1f2937\"/>"
-        }
-        val sb = StringBuilder("""
-            $back
-            <g transform="scale($scale)">
-            """)
+        val id = "btn-${buttons.id}"
+        val sb = StringBuilder("<g id=\"$id\" transform=\"scale($scale)\">")
         val rows = toRows()
-        var count = 0
+        var staggerIdx = 0
         rows.forEachIndexed { index, buttons ->
-
-            sb.append(drawButtonInternal(index, buttons, count))
-            count += buttons.size
+            sb.append(drawButton(index, buttons, staggerIdx))
+            staggerIdx += buttons.size
         }
         sb.append("</g>")
         return sb.toString()
     }
 
-    /**
-     * Renders a row of oval buttons with modern visual effects.
-     *
-     * @param index The index of the row
-     * @param buttonList The list of buttons to render in this row
-     * @param count The total count of buttons rendered so far
-     * @return The SVG string representation of the buttons in this row
-     */
-    private fun drawButtonInternal(index: Int, buttonList: MutableList<Button>, count: Int): Any {
-
+    override fun drawButton(index: Int, buttonList: MutableList<Button>, rowStartStagger: Int): String {
         val btns = StringBuilder()
         var win = "_top"
         buttons.theme?.let {
@@ -79,14 +77,19 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 10
+        var startX = 20
 
-        var startY = 10
+        var startY = 20
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
+            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + 20
         }
 
-        buttonList.forEach { button: Button ->
+        buttonList.forEachIndexed { i, button: Button ->
+            val delay = (rowStartStagger + i) * 0.05
+            val baseColor = button.color ?: docOpsTheme.accentColor
+            val textColor = determineTextColor(baseColor)
+            val labelStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "")
+            
             val text = itemTextWidth(button.label, 245F, 24)
             val tspan = StringBuilder()
             var dy = 0
@@ -103,45 +106,28 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                 tspan.append("""<tspan x="125" dy="$dy">${s.escapeXml()}</tspan>""")
             }
 
-            var fill = "class=\"btn_${button.id}_cls\""
-            var overlay = "url(#overlayGrad)"
-            if(isPdf) {
-                fill = "fill='${button.color}'"
-                overlay = "${button.color}"
-            }
-
-            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
+            var href = """onclick="window.open('${button.link}', '$win')" """
             if(!button.enabled) {
                 href = ""
             }
             btns.append("""
-                <g role="button" transform="translate($startX,$startY)" $href>
-                    <rect id="button" x="0" y="0" width="250" height="90" rx="36" ry="36" $fill filter="url(#buttonBlur)" />
-                    <rect id="buttongrad" x="0" y="0" width="250" height="90" rx="36" ry="36" fill="$overlay" />
-                    <rect id="buttontop" x="10" y="5" width="230" height="40" rx="30" ry="30" fill="url(#topshineGrad)" filter="url(#topshineBlur)" />
-                    <rect id="buttonbottom" x="20" y="70" width="210" height="15" rx="30" ry="7" fill="#ffffff" fill-opacity="0.3" filter="url(#bottomshine)" />
-                    <text id="label" x="125" y="0" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">
+                <g transform="translate($startX,$startY)">
+                    <g class="button-stagger" style="animation-delay: ${delay}s">
+                    <g role="button" tabindex="0" class="button-hover" $href>
+                    <rect id="button" x="0" y="0" width="250" height="90" rx="36" ry="36" fill="url(#btn_${button.id})" filter="url(#cardShadow_${buttons.id})" />
+                    <rect id="buttontop" x="10" y="5" width="230" height="40" rx="30" ry="30" fill="url(#topshineGrad)" fill-opacity="0.15" />
+                    <rect id="buttonbottom" x="20" y="70" width="210" height="15" rx="30" ry="7" fill="#ffffff" fill-opacity="0.1" />
+                    <text id="label" x="125" y="0" text-anchor="middle" fill="$textColor" style="font-weight: 700; $labelStyle">
                         $tspan
                     </text>
+                    </g>
+                    </g>
                 </g>
             """.trimIndent())
 
             startX += BUTTON_WIDTH + BUTTON_PADDING + 5
         }
         return btns.toString()
-    }
-
-    override fun width(): Float {
-        var columns = 3
-        var scale = 1.0f
-        buttons.theme?.let {
-            columns = it.columns
-            scale = it.scale
-        }
-        // Adjusted to account for the button width (250px) plus padding
-        // Each button takes BUTTON_WIDTH + BUTTON_PADDING + 5 horizontal space (line 121)
-        // Adding extra padding (10px) for the initial left margin
-        return (columns * (BUTTON_WIDTH + BUTTON_PADDING + 5) + 10) * scale
     }
 
     override fun height(): Float {
@@ -151,18 +137,26 @@ class Oval(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
         }
         if (size > 1) {
-            // Adjusted to account for the button height (90px) plus padding
-            // Adding extra padding to ensure the bottom shine effect is visible
-            return (size * BUTTON_HEIGHT + (size * BUTTON_PADDING) + 20) * scale
+            return (size * BUTTON_HEIGHT + (size * BUTTON_PADDING) + 40) * scale
         }
-        // For a single row, add extra padding for the bottom shine effect
         val h = BUTTON_HEIGHT + 40
         return h * scale
     }
 
-    override fun defs(): String {
+    override fun width(): Float {
+        var columns = 3
+        var scale = 1.0f
+        buttons.theme?.let {
+            columns = it.columns
+            scale = it.scale
+        }
+        return (columns * (BUTTON_WIDTH + BUTTON_PADDING + 5) + 40) * scale
+    }
+
+    protected fun shapeDefs(): String {
+        val accent = docOpsTheme.accentColor
         val gradientDefs = buttons.buttons.mapIndexed { index, button ->
-            val color = button.color ?: "#38bdf8"
+            val color = button.color ?: accent
             """
                 <linearGradient id="btn_${button.id}" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="$color" />
@@ -170,23 +164,13 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                 </linearGradient>
                 """.trimIndent()
         }.joinToString("\n")
-        val style = StringBuilder()
-        buttons.buttons.forEach { button ->
-            style.append("""
-                #btn_${buttons.id} .btn_${button.id}_cls {
-                    fill: url(#btn_${button.id});
-                }
-            """.trimIndent())
-        }
+        
         return """
-            <defs>
-            ${filters()}
+            <linearGradient id="topshineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </linearGradient>
             $gradientDefs
-            <style>
-            ${fontImport()}
-            $style
-            </style>
-            </defs>
         """.trimIndent()
     }
     companion object {

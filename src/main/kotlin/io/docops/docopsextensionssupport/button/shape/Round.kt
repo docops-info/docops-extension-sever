@@ -20,6 +20,7 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.SVGColor
 import java.awt.Color
 
@@ -36,35 +37,37 @@ class Round(buttons: Buttons) : Regular(buttons) {
             counter++
         }
     }
+    override fun createShape(type: String): String {
+        val width = width()
+        val height = height()
+        val sb = StringBuilder()
+        sb.append(start(width, height))
+        sb.append(standardDefs())
+        sb.append(shapeDefs())
+        sb.append(makeModernBackground(width, height))
+        sb.append(draw())
+        sb.append(end())
+        return sb.toString()
+    }
+
     override fun draw() : String{
         var scale = 1.0f
         buttons.theme?.let {
             scale = it.scale
         }
-        val sb = StringBuilder("<g transform=\"scale($scale)\">")
+        val id = "btn-${buttons.id}"
+        val sb = StringBuilder("<g id=\"$id\" transform=\"scale($scale)\">")
         val rows = toRows()
-        val itemNumber = ItemCount(0)
+        var staggerIdx = 0
         rows.forEachIndexed { index, buttons ->
-            sb.append(drawButtons(index, buttons, itemNumber))
+            sb.append(drawButton(index, buttons, staggerIdx))
+            staggerIdx += buttons.size
         }
         sb.append("</g>")
-        if(buttons.useDark) {
-            val rect = StringBuilder("""
-                $sb
-            """.trimIndent())
-            return rect.toString()
-        } else {
-            return sb.toString()
-        }
+        return sb.toString()
     }
-    /**
-     * Draws a series of buttons based on the given index and list of buttons.
-     *
-     * @param index The starting index.
-     * @param buttonList The list of buttons.
-     * @return The HTML code representing the buttons.
-     */
-     fun drawButtons(index: Int, buttonList: MutableList<Button>, itemNumber: ItemCount): String {
+
+    override fun drawButton(index: Int, buttonList: MutableList<Button>, rowStartStagger: Int): String {
         val btns = StringBuilder()
         var win = "_top"
         buttons.theme?.let {
@@ -72,76 +75,80 @@ class Round(buttons: Buttons) : Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 70
+        var startX = 80
 
-        var startY = 65
+        var startY = 80
         if (index > 0) {
-            if(index == 1) {
-                startY = index * BUTTON_HEIGHT + BUTTON_SPACING + 60
-            } else {
-                startY = index * BUTTON_HEIGHT + BUTTON_SPACING + 60 + (index * 5)
-            }
+            startY = index * 140 + 80
         }
 
-        buttonList.forEach {button: Button ->
+        buttonList.forEachIndexed { i, button: Button ->
+            val delay = (rowStartStagger + i) * 0.05
             val lines = wrapText(button.label, 15f)
             var lineY = 0
             if(lines.isNotEmpty()) {
                 lineY = lines.size * - 6
             }
-            val title = linesToMultiLineText(button.buttonStyle?.labelStyle,
+            val baseColor = button.color ?: docOpsTheme.accentColor
+            val textColor = determineTextColor(baseColor)
+            val labelStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "")
+
+            val title = linesToMultiLineText(labelStyle,
                 lines, 12, 0)
 
-            val accentColor = button.color ?: docOpsTheme.accentColor
+            val accentColor = button.color ?: "var(--accent)"
 
-            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
+            var href = """onclick="window.open('${button.link}', '$win')" """
             if(!button.enabled) {
                 href = ""
             }
             btns.append("""
-                <g transform="translate($startX,$startY)" $href class="orb-group">
-                        <!-- STATIC LAYER: The Glow Ring stays behind -->
-                        <circle r="62" cx="0" cy="0" fill="none" stroke="$accentColor" stroke-width="2" class="glow-ring" filter="url(#neonGlow)"/>
+                <g transform="translate($startX,$startY)">
+                    <g class="button-stagger" style="animation-delay: ${delay}s">
+                    <g role="button" tabindex="0" class="button-hover orb-group" $href>
+                        <!-- STATIC LAYER: Glow Ring -->
+                        <circle r="62" cx="0" cy="0" fill="none" stroke="$accentColor" stroke-width="2" class="glow-ring" stroke-opacity="0.3"/>
                     
                         <g class="moving-group">
                         <!-- SHIFTING LAYER: The Shadow -->
-                        <circle r="55" cx="0" cy="0" fill="black" opacity="0.4" filter="url(#buttonShadow)"/>
+                        <circle r="55" cx="0" cy="0" fill="black" opacity="0.15" filter="url(#cardShadow_${buttons.id})"/>
                         
                         <!-- SHIFTING LAYER: The Orb -->
                         <circle r="55" cx="0" cy="0" fill="url(#raisedButton_${button.id})" 
-                                stroke="${button.color}" 
+                                stroke="$accentColor" 
                                 stroke-width="1.5"
+                                stroke-opacity="0.2"
                         />
-                        <!-- Glass Shine Reflection (Hidden for PDF) -->
-                        ${if(!isPdf) """<circle r="50" cx="0" cy="-2" fill="url(#glassReflection)"/>""" else ""}
+                        <!-- Glass Shine Reflection -->
+                        ${if(!isPdf) """<circle r="50" cx="0" cy="-2" fill="url(#glassReflection)" pointer-events="none"/>""" else ""}
                         
                         <!-- Top-Left Specular Highlight Dot -->
-                        <circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.6"/>
+                        <circle r="4" cx="-18" cy="-18" fill="white" fill-opacity="0.4" pointer-events="none"/>
                     </g>
                     
                     <!-- Content -->
                     <g class="moving-group">
-                            <text x="0" y="$lineY" text-anchor="middle" class="orb-text" style="fill: ${docOpsTheme.primaryText}; font-family: ${docOpsTheme.fontFamily}">
+                            <text x="0" y="$lineY" text-anchor="middle" class="orb-text" fill="$textColor" style="font-weight: 700;">
                                 $title
                             </text>
                         </g>
+                    </g>
+                    </g>
                 </g>
-                """.trimIndent())
+            """.trimIndent())
 
-            startX += BUTTON_WIDTH + BUTTON_PADDING + 5
-            itemNumber.inc()
-
+            startX += 140
         }
         return btns.toString()
     }
 
     override fun height(): Float {
+        val size = toRows().size
         var scale = 1.0f
         buttons.theme?.let {
             scale = it.scale
         }
-        val size = toRows().size
-        return (((size * 125) + (size * 5)) + size * 5) * scale
+        return (size * 140.0f + 20.0f) * scale
     }
 
     override fun width(): Float {
@@ -151,94 +158,53 @@ class Round(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
             cols = it.columns
         }
-        return (((cols * 125)+ (cols * 5)) + (cols * 7)) * scale
+        return (cols * 140.0f + 20.0f) * scale
     }
-    companion object {
-        const val BUTTON_HEIGHT: Int = 125
-        const val BUTTON_WIDTH = 125
-        const val BUTTON_PADDING = 0
-    }
-    override fun defs() : String {
-        var strokeColor = "gold"
-        buttons.theme?.let {
-            strokeColor = it.strokeColor
-        }
+
+    protected fun shapeDefs() : String {
+        val id = "btn-${buttons.id}"
         val linGrad = StringBuilder()
-        buttons.buttons.forEachIndexed {
-            i, b ->
-            val grad = SVGColor(b.color!!, "nnneon-grad$i-${buttons.id}")
-            val gradientDef = createRaisedButtonGradient(b)
-            linGrad.append(gradientDef)
-            linGrad.append(grad.linearGradient)
+        buttons.buttons.forEach { b ->
+            linGrad.append(createRaisedButtonGradient(b))
         }
-        var style = """
-                 <style>
-                ${fontImport()}
-                .orb-group { cursor: pointer; }
-                
-                .orb-group .moving-group {
+        val style = """
+                [id='$id'] .moving-group {
                     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
                 }
-                
-                
 
-                .glow-ring {
-                    transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease;
+                [id='$id'] .glow-ring {
                     stroke-dasharray: 400;
                     stroke-dashoffset: ${if(isPdf) "0" else "400"};
-                    opacity: ${if(isPdf) "1" else "0.2"};
+                    opacity: ${if(isPdf) "1" else "0.3"};
+                    transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease;
                 }
                 
-                .orb-group:hover .glow-ring {
+                [id='$id'] .button-hover:hover .glow-ring {
                     stroke-dashoffset: 0;
-                    opacity: 1;
+                    opacity: 0.8;
                 }
 
-                .orb-text {
-                    font-family: 'JetBrains Mono', monospace;
+                [id='$id'] .orb-text {
                     font-weight: 800;
                     font-size: 12px;
                     text-transform: uppercase;
                     letter-spacing: 0.05em;
                     pointer-events: none;
                 }
-                
-                </style>
-            """.trimIndent()
-
-        if(isPdf) {
-            style = ".orb-text { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 12px; text-transform: uppercase; }"
-        }
+        """.trimIndent()
 
         return """
-                <defs>
-                    <!-- Background Atmosphere Pattern -->
-                    <pattern id="dotPattern_${buttons.id}" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1" fill="${if(buttons.useDark) "#3b82f6" else "#cbd5e1"}" fill-opacity="0.15" />
-                    </pattern>
-
-                    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="4" result="blur" />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-
-                    <!-- Glass Reflection Gradient -->
-                    <linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="white" stop-opacity="0.4"/>
-                        <stop offset="50%" stop-color="white" stop-opacity="0.05"/>
-                        <stop offset="100%" stop-color="white" stop-opacity="0"/>
-                    </linearGradient>
-
-                    <filter id="buttonShadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="5" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
-                    </filter>
-        
-                    $linGrad
-                    $style
-                </defs>
-                <!-- Apply atmospheric pattern background -->
-                <rect width="${width()}" height="${height()}" fill="url(#dotPattern_${buttons.id})" rx="12" pointer-events="none"/>
-            """.trimIndent()
+            <style>
+                $style
+            </style>
+            <!-- Glass Reflection Gradient -->
+            <linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="white" stop-opacity="0.4"/>
+                <stop offset="50%" stop-color="white" stop-opacity="0.05"/>
+                <stop offset="100%" stop-color="white" stop-opacity="0"/>
+            </linearGradient>
+            $linGrad
+        """.trimIndent()
     }
     // In the Round class, modify the gradient definition method
     private fun createRaisedButtonGradient(button: Button): String {

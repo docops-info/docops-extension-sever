@@ -109,6 +109,91 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     // Resolve the global design system theme
     open protected var docOpsTheme = ThemeFactory.getTheme(ButtonVisualDisplay(buttons.useDark, buttons.visualVersion))
 
+    protected fun makeModernBackground(width: Float, height: Float): String {
+        val id = buttons.id
+        return """
+        <rect width="$width" height="$height" rx="18" fill="url(#bgSurface_$id)"/>
+        <rect width="$width" height="$height" rx="18" fill="url(#bgGlowA_$id)"/>
+        <rect width="$width" height="$height" rx="18" fill="url(#bgGlowB_$id)"/>
+        <rect width="$width" height="$height" rx="18" fill="url(#fineGrid_$id)"/>
+        <rect width="$width" height="$height" rx="18" fill="url(#sonarDots_$id)"/>
+        <rect width="$width" height="$height" rx="18" fill="url(#vignette_$id)"/>
+        """.trimIndent()
+    }
+
+    protected fun standardDefs(): String {
+        val id = "btn-${buttons.id}"
+        val accent = docOpsTheme.accentColor
+        val bg = if (buttons.useDark) "#172033" else "#afc0c0"
+        val surface = if (buttons.useDark) "#1E293B" else "#DBF0F1"
+        val text = if (buttons.useDark) "#E2E8F0" else "#1190A1"
+
+        return """
+        <defs>
+            <style>
+                ${fontImport()}
+                [id='$id'] {
+                    --accent: $accent;
+                    --bg: $bg;
+                    --surface: $surface;
+                    --text: $text;
+                    --card-radius: 12px;
+                    --stagger-delay: 0.05s;
+                }
+                [id='$id'] text { 
+                    font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; 
+                }
+                @keyframes riseIn_$id {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                [id='$id'] .button-stagger {
+                    opacity: 0;
+                    animation: riseIn_$id 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                }
+                [id='$id'] .button-hover {
+                    transition: transform 0.2s ease, filter 0.2s ease;
+                    cursor: pointer;
+                }
+                [id='$id'] .button-hover:hover {
+                    transform: translateY(-2px) scale(1.02);
+                    filter: brightness(1.1);
+                }
+                ${if (isPdf) ".button-stagger { opacity: 1 !important; animation: none !important; }" else ""}
+            </style>
+            <linearGradient id="bgSurface_${buttons.id}" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="$bg"/>
+                <stop offset="46%" stop-color="$surface"/>
+                <stop offset="100%" stop-color="$bg"/>
+            </linearGradient>
+            <radialGradient id="bgGlowA_${buttons.id}" cx="18%" cy="10%" r="70%">
+                <stop offset="0%" stop-color="$accent" stop-opacity="0.16"/>
+                <stop offset="100%" stop-color="$accent" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="bgGlowB_${buttons.id}" cx="84%" cy="22%" r="58%">
+                <stop offset="0%" stop-color="$accent" stop-opacity="0.12"/>
+                <stop offset="100%" stop-color="$accent" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="vignette_${buttons.id}" cx="50%" cy="48%" r="78%">
+                <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+                <stop offset="100%" stop-color="#000000" stop-opacity="0.10"/>
+            </radialGradient>
+            <pattern id="sonarDots_${buttons.id}" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="$accent" opacity="0.12"/>
+            </pattern>
+            <pattern id="fineGrid_${buttons.id}" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
+                <path d="M48 0 H0 V48" fill="none" stroke="$accent" stroke-opacity="0.055" stroke-width="1"/>
+            </pattern>
+            <filter id="cardShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+                <feOffset in="blur" dx="0" dy="2" result="offsetblur"/>
+                <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+        </defs>
+        """.trimIndent()
+    }
+
     /**
      * Implements the [ButtonShape.drawShape] method by calling the abstract [createShape] method
      * and joining the resulting XML lines.
@@ -246,7 +331,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
          * The default height of a button in pixels.
          * This value is used as the base height for calculating the overall height of button rows.
          */
-        const val BUTTON_HEIGHT: Int = 30
+        const val BUTTON_HEIGHT: Int = 44
 
         /**
          * The default width of a button in pixels.

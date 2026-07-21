@@ -335,7 +335,7 @@ class ButtonDisplay(
     var strokeColor: String = "gold",
     var sortBy: Sort = Sort(ButtonSortBy.LABEL, SortDirection.ASCENDING),
     val buttonStyle: ButtonStyle = ButtonStyle(
-        labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #000000; letter-spacing: normal;",
+        labelStyle = "font-family: Arial, Helvetica, sans-serif; font-size: 12px; letter-spacing: normal;",
         fontSize = 12
     ),
     val hexLinesEnabled: Boolean = false,

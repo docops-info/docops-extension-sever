@@ -4,6 +4,7 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.roadmap.wrapText
+import io.docops.docopsextensionssupport.support.determineTextColor
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.util.BackgroundHelper
@@ -44,9 +45,23 @@ class Circle(buttons: Buttons): Regular(buttons) {
         const val BUTTON_SPACING = 20      // Additional spacing
     }
 
+    override fun createShape(type: String): String {
+        val width = width()
+        val height = height()
+        val sb = StringBuilder()
+        sb.append(start(width, height))
+        sb.append(standardDefs())
+        sb.append(shapeDefs())
+        sb.append(makeModernBackground(width, height))
+        sb.append(draw())
+        sb.append(end())
+        return sb.toString()
+    }
+
     override fun drawButton(
         index: Int,
-        buttonList: MutableList<Button>
+        buttonList: MutableList<Button>,
+        rowStartStagger: Int
     ): String {
         val btns = StringBuilder()
         var win = "_top"
@@ -59,55 +74,61 @@ class Circle(buttons: Buttons): Regular(buttons) {
         var startY = 30 // Start with some top padding
 
         // Calculate Y position based on row index
-        // Each circle needs 120px height (diameter 100px + 20px padding)
         if (index > 0) {
-            startY = 30 + (index * 130) // 20px top padding + 120px per row
+            startY = 30 + (index * 130)
         }
 
         buttonList.forEachIndexed { idx, button: Button ->
+            val delay = (rowStartStagger + idx) * 0.05
             val lines = wrapText(button.label, 15f)
 
-            val title = linesToMultiLineTextInternal(button.buttonStyle?.labelStyle,
+            val baseColor = button.color ?: docOpsTheme.accentColor
+            val textColor = determineTextColor(baseColor)
+            val labelStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "")
+
+            val title = linesToMultiLineTextInternal(labelStyle,
                 lines, 12, 60)
 
-            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
+            var href = """onclick="window.open('${button.link}', '$win')" """
             if(!button.enabled) {
                 href = ""
             }
 
             // Aesthetic logic driven by ThemeFactory
-            val accentColor = button.color ?: docOpsTheme.accentColor
-            val textColor = docOpsTheme.primaryText
-            val labelColor = docOpsTheme.secondaryText
+            val accentColor = button.color ?: "var(--accent)"
 
             btns.append(
                 """
-            <g role="button" transform="translate($startX,$startY)" class="circle-group" $href>
+            <g transform="translate($startX,$startY)">
+                <g class="button-stagger" style="animation-delay: ${delay}s">
+                <g role="button" tabindex="0" class="button-hover circle-group" $href>
                     <title class="description">${button.description?.escapeXml() ?: ""}</title>
             
                     <!-- FIXED Shadow Layer -->
-                    <circle r="50" cx="60" cy="60" fill="black" opacity="0.2" filter="url(#dropShadow)"/>
+                    <circle r="50" cx="60" cy="60" fill="black" opacity="0.15" filter="url(#cardShadow_${buttons.id})"/>
 
                     <!-- SHIFTING Technical Ring -->
-                    <circle class="moving-orb tech-ring" r="58" cx="60" cy="60" fill="none" stroke="$accentColor" stroke-width="2" filter="url(#ringGlow)"/>
+                    <circle class="tech-ring" r="58" cx="60" cy="60" fill="none" stroke="$accentColor" stroke-width="2" stroke-opacity="0.3"/>
 
                     <!-- SHIFTING Body -->
-                    <circle class="moving-orb" r="50" cx="60" cy="60" fill="url(#circleGradient_${button.id})" stroke="$accentColor" stroke-width="1.5"/>
+                    <circle class="orb-body" r="50" cx="60" cy="60" fill="url(#circleGradient_${button.id})" stroke="$accentColor" stroke-width="1.5" stroke-opacity="0.2"/>
                      
-                <!-- SHIFTING Glass Layer (Aligned to center 60,60) -->
-                ${if(!isPdf) """<circle class="moving-orb" r="46" cx="60" cy="60" fill="url(#glassReflection)" pointer-events="none"/>""" else ""}
+                <!-- SHIFTING Glass Layer -->
+                ${if(!isPdf) """<circle class="orb-glass" r="46" cx="60" cy="60" fill="url(#glassReflection)" pointer-events="none"/>""" else ""}
 
                 <!-- SHIFTING Content Group -->
                 <g class="moving-text">
                         <!-- Technical Corner Accent -->
                         <path d="M 25 35 L 25 25 L 35 25" fill="none" stroke="$accentColor" stroke-width="2.5" opacity="0.8"/>
                     
-                        <text x="60" y="60" text-anchor="middle" dominant-baseline="central" class="label-text" fill="$textColor" style="font-family: ${docOpsTheme.fontFamily}">
+                        <text x="60" y="60" text-anchor="middle" dominant-baseline="central" class="label-text" fill="$textColor">
                             $title
                         </text>
-                        <text x="60" y="78" text-anchor="middle" class="label-text technical-id" fill="$labelColor" style="font-family: ${docOpsTheme.fontFamily}">ID: 0x${idx + 100}</text>
+                        <text x="60" y="78" text-anchor="middle" class="label-text technical-id" fill="$textColor" fill-opacity="0.6">ID: 0x${idx + rowStartStagger + 100}</text>
                     </g>
+                </g>
             </g>
+        </g>
             """.trimIndent()
             )
 
@@ -156,101 +177,66 @@ class Circle(buttons: Buttons): Regular(buttons) {
         return ((cols * 130) + 60) * scale
     }
 
-    override fun defs(): String {
+    protected fun shapeDefs(): String {
+        val id = buttons.id
+        val accent = docOpsTheme.accentColor
+        
         val gradientDefs = StringBuilder()
-        val styleDefs = StringBuilder()
-
-        // Create gradients for each button
         buttons.buttons.forEach { button ->
-            val baseColor = button.color ?: "#3498db"
             gradientDefs.append(createCircleGradient(button))
-            gradientDefs.append(createCircleHighlight(button))
         }
-        val darkModeDefs = BackgroundHelper.getBackgroundGradient(useDark = buttons.useDark, buttons.id)
 
         val style = """
-                <style>
-                    ${fontImport()}
-                    #btn_${buttons.id} .circle-group { cursor: pointer; }
-                    
-                    /* MOTION: All moving parts share the same base transition logic */
-                    #btn_${buttons.id} .moving-orb {
+                    #btn_$id .orb-body, #btn_$id .orb-glass, #btn_$id .tech-ring {
                         transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
                     }
                     
-                    /* Shift X/Y coordinates directly for top-left movement */
-                    #btn_${buttons.id} .circle-group:hover .moving-orb {
-                        cx: 52;
-                        cy: 52;
+                    #btn_$id .button-hover:hover .orb-body, #btn_$id .button-hover:hover .orb-glass {
+                        cx: 56;
+                        cy: 56;
                     }
 
-                    #btn_${buttons.id} .tech-ring {
-                        transition: stroke-dashoffset 0.6s ease, opacity 0.4s ease;
-                        stroke-dasharray: 314;
-                        stroke-dashoffset: ${if(isPdf) "0" else "314"};
-                        opacity: ${if(isPdf) "1" else "0.2"};
+                    #btn_$id .tech-ring {
+                        stroke-dasharray: 365;
+                        stroke-dashoffset: ${if(isPdf) "0" else "365"};
+                        opacity: ${if(isPdf) "1" else "0.3"};
                     }
-                    #btn_${buttons.id} .circle-group:hover .tech-ring {
+                    #btn_$id .button-hover:hover .tech-ring {
                         stroke-dashoffset: 0;
-                        opacity: 1;
+                        opacity: 0.8;
                     }
 
-                    #btn_${buttons.id} .moving-text {
+                    #btn_$id .moving-text {
                         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
                     }
-                    #btn_${buttons.id} .circle-group:hover .moving-text {
-                        transform: translate(-8px, -8px);
+                    #btn_$id .button-hover:hover .moving-text {
+                        transform: translate(-4px, -4px);
                     }
 
-                    #btn_${buttons.id} .label-text {
-                        font-family: 'JetBrains Mono', monospace;
+                    #btn_$id .label-text {
+                        font-family: 'Lexend', sans-serif;
                         font-weight: 800;
                         font-size: 11px;
                         text-transform: uppercase;
                         letter-spacing: 0.05em;
                         pointer-events: none;
                     }
-                    #btn_${buttons.id} .technical-id {
+                    #btn_$id .technical-id {
                         font-size: 7px;
                         font-weight: 400;
                     }
-                </style>
-            """.trimIndent()
+        """.trimIndent()
 
         return """
-                <defs>
-                    <!-- Atmosphere Grid Pattern -->
-                    <pattern id="techGrid_${buttons.id}" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-                        <circle cx="2" cy="2" r="1" fill="${if(buttons.useDark) "#3b82f6" else "#cbd5e1"}" fill-opacity="0.1" />
-                    </pattern>
-
-                    <filter id="ringGlow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="3" result="blur" />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-
-                    <linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="white" stop-opacity="0.2"/>
-                        <stop offset="100%" stop-color="white" stop-opacity="0"/>
-                    </linearGradient>
-
-                    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-                        <feOffset dx="0" dy="2" result="offset" />
-                        <feFlood flood-color="rgba(0,0,0,0.3)"/>
-                        <feComposite in2="offset" operator="in"/>
-                        <feMerge>
-                            <feMergeNode/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                    </filter>
-                    $darkModeDefs
-                    $gradientDefs
-                    ${if(!isPdf) style else ""}
-                </defs>
-                <!-- Background Pattern -->
-                <rect width="${width()}" height="${height()}" fill="url(#techGrid_${buttons.id})" rx="12" pointer-events="none"/>
-            """.trimIndent()
+            <style>
+                $style
+            </style>
+            <linearGradient id="glassReflection" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="white" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="white" stop-opacity="0"/>
+            </linearGradient>
+            $gradientDefs
+        """.trimIndent()
     }
 
     /**

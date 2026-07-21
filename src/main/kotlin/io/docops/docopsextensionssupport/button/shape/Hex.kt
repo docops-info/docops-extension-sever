@@ -38,41 +38,49 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         }
         // Use 255 for the internal step calculation
         val rowStep = 255
-        val internalHeight = (rows.size * rowStep + 100.0f)
+        val internalHeight = (rows.size * rowStep + 130.0f)
 
         // Match the physical height to the scaled internal coordinate height
         return internalHeight * scale
     }
-    override fun draw() : String {
-
+    override fun createShape(type: String): String {
+        val width = width()
+        val height = height()
         val sb = StringBuilder()
-        //isDark = buttons.theme?.useDark == true
-        val bgColor = if (isDark) "#020617" else "#f1f5f9"
+        sb.append(start(width, height))
+        sb.append(standardDefs())
+        sb.append(shapeDefs())
+        sb.append(makeModernBackground(width, height))
+        sb.append(draw())
+        sb.append(end())
+        return sb.toString()
+    }
 
-        // Pro Tip: Instead of a solid rect, add an "Ambient Light Source"
-        // Resolve aesthetic from Factory
-        val atmosphereColor = docOpsTheme.accentColor
+    override fun draw() : String {
+        val id = "btn-${buttons.id}"
+        val sb = StringBuilder()
 
-        sb.append("""
-                <circle cx="50%" cy="50%" r="400" fill="$atmosphereColor" fill-opacity="${if (isDark) "0.03" else "0.02"}" />
-            """.trimIndent())
-
-        sb.append("""<g>""")
+        var scale = 1.0f
+        buttons.theme?.let {
+            scale = it.scale
+        }
+        sb.append("""<g id="$id" transform="scale($scale)">""")
 
         var startX: Int
-        var startY = 10
+        var startY = 20
+        var staggerIdx = 0
         rows.forEachIndexed { index, buttonsI ->
             startX = if(index == 0 || isEven(index)) {
-                10
+                20
             } else {
-                155
+                165
             }
-            buttonsI.forEach {  button ->
-                val x = startX
-                val y = startY
-                sb.append(createSingleHoneyComb(button, x, y, buttons.theme!!))
+            buttonsI.forEachIndexed { i, button ->
+                val delay = (staggerIdx + i) * 0.05
+                sb.append(createSingleHoneyComb(button, startX, startY, delay))
                 startX += BUTTON_WIDTH
             }
+            staggerIdx += buttonsI.size
             // Vertical step for perfect honeycomb tessellation
             startY += 255
         }
@@ -80,10 +88,11 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         return sb.toString()
     }
 
-    override fun defs(): String {
-        val atmosphereColor = docOpsTheme.accentColor
+    protected fun shapeDefs(): String {
+        val id = buttons.id
+        val accent = docOpsTheme.accentColor
         val gradientDefs = buttons.buttons.mapIndexed { index, button ->
-            val color = button.color ?: docOpsTheme.accentColor
+            val color = button.color ?: accent
             """
                 <linearGradient id="hexGrad_${button.id}" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="$color" />
@@ -91,68 +100,37 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                 </linearGradient>
                 """.trimIndent()
         }.joinToString("\n")
-        return """
-                <defs>
-                <style>
-                    ${fontImport()}
-                    /* Typography driven by ThemeFactory */
-                    .hex-label {
-                        font-family: ${docOpsTheme.fontFamily};
+        
+        val style = """
+                    #btn_$id .hex-label {
                         font-weight: 800;
                         text-transform: uppercase;
                     }
                 
-                    @keyframes hexEntrance {
-                        from { opacity: 0; transform: scale(0.9) translateY(20px); }
-                        to { opacity: 1; transform: scale(1) translateY(0); }
-                    }
-
-                    .hex-container {
-                        cursor: pointer;
+                    #btn_$id .hex-container {
                         transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                         transform-box: fill-box;
                         transform-origin: center;
-                        animation: hexEntrance 0.6s ease-out backwards;
                     }
                 
-                    .hex-container:hover {
+                    #btn_$id .hex-container:hover {
                         transform: scale(1.05);
                     }
-               
-                    /* Neon Pulse Animation for Active State using Theme Accent */
-                    @keyframes neonPulse {
-                        0% { filter: drop-shadow(0 0 2px $atmosphereColor); opacity: 0.9; }
-                        50% { filter: drop-shadow(0 0 12px $atmosphereColor); opacity: 1; }
-                        100% { filter: drop-shadow(0 0 2px $atmosphereColor); opacity: 0.9; }
-                    }
-                </style>
-             $gradientDefs
-            ${
-            if (!isPdf) """
-            <filter id="hexShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="${if (isDark) "rgba(0,0,0,0.5)" else "rgba(99,102,241,0.12)"}"/>
-            </filter>
-            """.trimIndent() else ""
-        }
-        </defs>
+        """.trimIndent()
+        
+        return """
+            <style>
+                $style
+            </style>
+            $gradientDefs
         """.trimIndent()
     }
 
-    override fun start(): String {
-        // We keep the VIEWBOX at the large coordinate size, but the WIDTH/HEIGHT at the smaller physical size
-        val physicalWidth = width()
-        val physicalHeight = height()
-
-        // Calculate the internal coordinate bounds (viewbox)
-        val columns = buttons.theme?.columns ?: 3
-        val internalW = (columns * BUTTON_WIDTH + columns * BUTTON_PADDING)
-        val internalH = (rows.size * 255 + 100.0f)
-
+    override fun start(width: Float, height: Float): String {
         return """
-        <svg xmlns="http://www.w3.org/2000/svg" width="$physicalWidth" height="$physicalHeight" viewBox="0 0 $internalW $internalH" xmlns:xlink="http://www.w3.org/1999/xlink" id="${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width / 1.77}" height="${height / 1.77}" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">
     """.trimIndent()
     }
-
 
     override fun width(): Float {
         var columns = 3
@@ -161,27 +139,21 @@ class Hex(buttons: Buttons) : Regular(buttons) {
             columns = it.columns
             scale = it.scale
         }
-        val internalWidth = (columns * BUTTON_WIDTH + columns * BUTTON_PADDING)
-
-        // Match the physical width to the scaled internal coordinate width
+        val internalWidth = (columns * BUTTON_WIDTH + 80)
         return internalWidth * scale
     }
-    private fun createSingleHoneyComb(button: Button, x: Int, y: Int, theme: ButtonDisplay): String {
-        val isDark = buttons.useDark
+    private fun createSingleHoneyComb(button: Button, x: Int, y: Int, delay: Double): String {
         val isActive = button.active
         val actualColor = button.color ?: docOpsTheme.accentColor
-
-
-        // Calculate a staggered delay based on coordinates or a global index
-
-        val primaryTextColor = docOpsTheme.primaryText
-        val secondaryTextColor = docOpsTheme.secondaryText
+        val textColor = determineTextColor(actualColor)
+        val primaryTextColor = textColor
+        val secondaryTextColor = textColor
 
         // Reference the gradient ID instead of the solid color
         val cardFill = "url(#hexGrad_${button.id})"
 
         // Sharp Accents driven by Theme
-        val cardStroke = if (isDark) "#ffffff" else docOpsTheme.primaryText
+        val cardStroke = "var(--accent)"
         val cardStrokeOpacity = if (isDark) "0.4" else "1.0"
         val cardStrokeWidth = if (isActive) "4" else "1"
 
@@ -206,15 +178,11 @@ class Hex(buttons: Buttons) : Regular(buttons) {
             // Use the calculated verticalStep for dy instead of raw lineSpacing
             val calculatedDy = if (index > 0) verticalStep else 0
 
-            spans.append("""<tspan x="149" text-anchor="middle" dy="$calculatedDy" style="font-family: ${docOpsTheme.fontFamily} !important; letter-spacing: 0.5px; fill: ${docOpsTheme.primaryText} !important; $cleanUserStyle">${s.escapeXml()}</tspan>""")
+            spans.append("""<tspan x="149" text-anchor="middle" dy="$calculatedDy" style="font-family: 'Lexend', sans-serif !important; letter-spacing: 0.5px; fill: $textColor !important; $cleanUserStyle">${s.escapeXml()}</tspan>""")
         }
 
         var win = "_top"
         buttons.theme?.let { if (it.newWin) { win = "_blank" } }
-
-        // Determine active status: Force check if useActiveColor is on
-
-        val additionalClass = if (isActive) "active-neon" else ""
 
         var img = ""
         button.embeddedImage?.let { img = getIcon(it.ref) }
@@ -226,27 +194,26 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         var typeText = ""
         button.type?.let { typeText = it.uppercase() }
 
-        val delay = (x / 100 * 0.1) + (y / 100 * 0.1)
-
         return """
                 <g transform="translate($x,$y)">
-                    <g class="hex-container $additionalClass" $href style="animation-delay: ${delay}s;cursor: pointer;">
+                    <g class="button-stagger" style="animation-delay: ${delay}s">
+                    <g class="hex-container button-hover" $href role="button" tabindex="0">
                         <title>${descriptionOrLabel(button)}</title>
             
-                        <!-- Layer 1: The 'Pro' Ambient Glow (Only visible in Dark Mode) -->
-                        ${if (isDark) """<circle cx="149" cy="170" r="120" fill="$actualColor" fill-opacity="0.15" filter="blur(20px)"/>""" else ""}
+                        <!-- Ambient Glow -->
+                        <circle cx="149" cy="170" r="120" fill="$actualColor" fill-opacity="0.1" filter="url(#cardShadow_${buttons.id})"/>
 
-                        <!-- Layer 2: Hexagon Base -->
+                        <!-- Hexagon Base -->
                         <polygon points="291,254 149,336 7,254 7,90 149,8 291,90" 
                                  fill="$cardFill" 
                                  stroke="$cardStroke" 
                                  stroke-opacity="$cardStrokeOpacity"
                                  stroke-width="${if(button.active) "4" else cardStrokeWidth}"
-                                 ${if (!isPdf && !button.active) "filter=\"url(#hexShadow_${buttons.id})\"" else ""}/>
+                                 ${if (!isPdf && !button.active) "filter=\"url(#cardShadow_${buttons.id})\"" else ""}/>
 
-                        <!-- Layer 3: Glass highlight -->
+                        <!-- Glass highlight -->
                         <polygon points="149,15 280,95 149,175 18,95" 
-                                 fill="white" fill-opacity="${if (isDark) "0.08" else "0.03"}" pointer-events="none"/>
+                                 fill="white" fill-opacity="0.05" pointer-events="none"/>
                     <!-- Icon Wrapper -->
                     <g transform="translate(120,50) scale(0.8)">
                      $img 
@@ -257,23 +224,23 @@ class Hex(buttons: Buttons) : Regular(buttons) {
                                   fill="$primaryTextColor" 
                                   class="hex-label" 
                                   font-size="$fontSize"
-                                  style="fill: $primaryTextColor !important;">$spans</text>
+                                  style="fill: $textColor !important;">$spans</text>
             
-                            <!-- Sharp Accent Line: Uses secondary accent color -->
+                            <!-- Accent Line -->
                             ${if (button.enabled) """
                             <line x1 ="110" y1 = "${endY+5}" x2 = "190" y2 = "${endY+5}"
-                            stroke = "$secondaryTextColor" stroke -width = "2" stroke -linecap = "round" stroke -opacity = "0.8" / >
+                            stroke = "$secondaryTextColor" stroke-width = "2" stroke-linecap = "round" stroke-opacity = "0.5" / >
                             """.trimIndent() else ""}
                                 
-                                                <!-- Type Text: Uses secondary accent color -->
+                                                <!-- Type Text -->
                                                 <text x="149" y="${endY + 28}" text-anchor="middle" 
                                                       fill="$secondaryTextColor" 
-                                                      font-family="${docOpsTheme.fontFamily}" 
                                                       font-size="14" 
                                                       font-weight="800"
-                                                      style="letter-spacing: 2px; fill: $secondaryTextColor !important; opacity: 0.9;">$typeText</text>
+                                                      style="letter-spacing: 2px; fill: $textColor !important; opacity: 0.6;">$typeText</text>
                                         </g>
-            </g>
+                    </g>
+                </g>
             """.trimIndent()
     }
 

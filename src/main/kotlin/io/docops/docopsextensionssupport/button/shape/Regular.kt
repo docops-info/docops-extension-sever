@@ -55,9 +55,12 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
      * @return the shape as a string representation
      */
     override fun createShape(type: String): String {
+        val width = width()
+        val height = height()
         val sb = StringBuilder()
-        sb.append(start())
-        sb.append(defs())
+        sb.append(start(width, height))
+        sb.append(standardDefs())
+        sb.append(makeModernBackground(width, height))
         sb.append(draw())
         sb.append(end())
         return sb.toString()
@@ -67,16 +70,18 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         buttons.theme?.let {
             scale = it.scale
         }
-        val sb = StringBuilder("<g transform=\"scale($scale)\">")
+        val sb = StringBuilder("<g id=\"btn-${buttons.id}\" transform=\"scale($scale)\">")
         val rows = toRows()
+        var staggerIdx = 0
         rows.forEachIndexed { index, buttons ->
-            sb.append(drawButton(index, buttons))
+            sb.append(drawButton(index, buttons, staggerIdx))
+            staggerIdx += buttons.size
         }
         sb.append("</g>")
         return sb.toString()
     }
 
-    open fun drawButton(index: Int, buttonList: MutableList<Button>): String {
+    open fun drawButton(index: Int, buttonList: MutableList<Button>, rowStartStagger: Int): String {
         val btns = StringBuilder()
         var win = "_top"
         buttons.theme?.let {
@@ -84,15 +89,18 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 10
-        var startY = 10
+        var startX = 20
+        var startY = 20
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + BUTTON_SPACING
+            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + 20
         }
 
-        buttonList.forEach { button ->
+        buttonList.forEachIndexed { i, button ->
+            val delay = (rowStartStagger + i) * 0.05
             btns.append("""<g transform="translate($startX,$startY)">""")
+            btns.append("""<g class="button-stagger" style="animation-delay: ${delay}s">""")
             btns.append(drawSingleButton(button, win))
+            btns.append("</g>")
             btns.append("</g>")
             startX += BUTTON_WIDTH + BUTTON_PADDING
         }
@@ -100,14 +108,12 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
 
     private fun drawSingleButton(button: Button, win: String): String {
-        val accentColor = button.color ?: docOpsTheme.accentColor
-        val bodyFill = if (buttons.useDark) docOpsTheme.surfaceImpact else "#FFFFFF"
-        val textFillColor = docOpsTheme.primaryText
+        val accentColor = button.color ?: "var(--accent)"
         val isPdfMode = isPdf
         val buttonOpacity = if (button.enabled) 1.0 else 0.55
         
         // Accessibility and Interaction
-        val groupClass = if (isPdfMode) "" else """class="btn-group""""
+        val groupClass = if (isPdfMode) "" else """class="button-hover""""
         val role = if (isPdfMode) "" else "role=\"button\""
         val tabIndex = if (isPdfMode) "" else "tabindex=\"0\""
         val cursor = if (button.enabled) "pointer" else "not-allowed"
@@ -123,9 +129,8 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         sb.append("""<g $groupClass $role $tabIndex $interaction opacity="$buttonOpacity">""")
         sb.append("""<title>${button.label.escapeXml()}</title>""")
         
-        // Main Button Body (Option A: Ghost)
-        val filter = if (!isPdfMode) "filter: drop-shadow(0 1px 2px rgba(0,0,0,0.06));" else ""
-        sb.append("""<rect x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" rx="${docOpsTheme.cornerRadius}" fill="$bodyFill" stroke="#E5E7EB" stroke-width="1" class="btn-main" style="$filter"/>""")
+        // Main Button Body
+        sb.append("""<rect x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" rx="12" fill="var(--surface)" stroke="var(--accent)" stroke-opacity="0.2" stroke-width="1" filter="url(#cardShadow_${buttons.id})"/>""")
         
         // Brand Accent Strip
         sb.append(drawAccentStrip(accentColor))
@@ -136,8 +141,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         }
         
         // Label
-        val font = docOpsTheme.fontFamily
-        sb.append("""<text x="${BUTTON_WIDTH / 2}" y="25" text-anchor="middle" fill="$textFillColor" style="font-family: $font !important; font-size: 14px; font-weight: 500; $cleanUserStyle">""")
+        sb.append("""<text x="${BUTTON_WIDTH / 2}" y="${BUTTON_HEIGHT / 2 + 5}" text-anchor="middle" fill="var(--text)" style="font-size: 14px; font-weight: 600; $cleanUserStyle">""")
         sb.append(button.label.escapeXml())
         sb.append("</text>")
         
@@ -170,9 +174,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
 
 
-    protected open fun start() : String {
-        val height = height()
-        val width = width()
+    protected open fun start(width: Float, height: Float) : String {
         val svgWidth = String.format("%.1f", width / DISPLAY_RATIO_16_9)
         val svgHeight = String.format("%.1f", height / DISPLAY_RATIO_16_9)
         return """<svg xmlns="http://www.w3.org/2000/svg" width="$svgWidth" height="$svgHeight" viewBox="0 0 $width $height" xmlns:xlink="http://www.w3.org/1999/xlink" id="btn_${buttons.id}" zoomAndPan="magnify" preserveAspectRatio="xMidYMid meet">"""
@@ -180,32 +182,26 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
 
     protected fun end() = """</svg>"""
 
-    protected open fun defs(): String {
-        val accentColor = docOpsTheme.accentColor
-        val customStyle = if (isPdf) "" else """
-            ${fontImport()}
-            .btn-group { cursor: pointer; outline: none; }
-            .btn-main { transition: fill 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1); }
-            .btn-group:hover .btn-main, .btn-group:focus-visible .btn-main { transform: translateY(-1px); }
-            .btn-group:focus-visible .btn-main { outline: 2px solid $accentColor; outline-offset: 2px; }
-        """.trimIndent()
-
-        var style = """
-             <style>
-            $customStyle
-            </style>
-        """.trimIndent()
-
-        if (isPdf) {
-            style = ""
+    override fun height(): Float {
+        val rows = toRows()
+        val rowCount = rows.size
+        var scale = 1.0f
+        buttons.theme?.let {
+            scale = it.scale
         }
+        val h = 20 + rowCount * BUTTON_HEIGHT + (rowCount) * BUTTON_PADDING + 10
+        return h * scale
+    }
 
-        return """
-            <defs>
-            ${uses()}
-            $style
-            </defs>
-        """.trimIndent()
+    override fun width(): Float {
+        val rows = toRows()
+        val maxInRow = if(rows.isEmpty()) 0 else rows.maxOf { it.size }
+        var scale = 1.0f
+        buttons.theme?.let {
+            scale = it.scale
+        }
+        val w = 20 + maxInRow * BUTTON_WIDTH + (maxInRow) * BUTTON_PADDING + 10
+        return w * scale
     }
     companion object {
         const val BUTTON_PADDING = 10

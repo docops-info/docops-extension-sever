@@ -19,6 +19,7 @@ package io.docops.docopsextensionssupport.button.shape
 import io.docops.docopsextensionssupport.button.Button
 import io.docops.docopsextensionssupport.button.Buttons
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
+import io.docops.docopsextensionssupport.support.determineTextColor
 
 /**
  * Implements a pill-shaped button with enhanced visual effects and rounded ends.
@@ -53,14 +54,37 @@ import io.docops.docopsextensionssupport.svgsupport.escapeXml
 class Pill(buttons: Buttons) : Regular(buttons) {
 
 
-    /**
-     * Generates the SVG code for rendering a list of buttons.
-     *
-     * @param index The index of the first button.
-     * @param buttonList The list of buttons to be rendered.
-     * @return The SVG code for rendering the buttons.
-     */
-    override fun drawButton(index: Int, buttonList: MutableList<Button>): String {
+    override fun createShape(type: String): String {
+        val width = width()
+        val height = height()
+        val sb = StringBuilder()
+        sb.append(start(width, height))
+        sb.append(standardDefs())
+        sb.append(shapeDefs())
+        sb.append(makeModernBackground(width, height))
+        sb.append(draw())
+        sb.append(end())
+        return sb.toString()
+    }
+
+    override fun draw(): String {
+        var scale = 1.0f
+        buttons.theme?.let {
+            scale = it.scale
+        }
+        val id = "btn-${buttons.id}"
+        val sb = StringBuilder("<g id=\"$id\" transform=\"scale($scale)\">")
+        val rows = toRows()
+        var staggerIdx = 0
+        rows.forEachIndexed { index, buttons ->
+            sb.append(drawButton(index, buttons, staggerIdx))
+            staggerIdx += buttons.size
+        }
+        sb.append("</g>")
+        return sb.toString()
+    }
+
+    override fun drawButton(index: Int, buttonList: MutableList<Button>, rowStartStagger: Int): String {
         val btns = StringBuilder()
         var win = "_top"
         buttons.theme?.let {
@@ -69,38 +93,37 @@ class Pill(buttons: Buttons) : Regular(buttons) {
             }
         }
 
-        var startX = 0
-
-        var startY = 0
+        var startX = 20
+        var startY = 20
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + (index * 10)
+            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + 20
         }
-        buttonList.forEach { button: Button ->
-            var fill = "class=\"btn_${button.id}_cls\""
-            var overlay = "url(#overlayGrad)"
-            if(isPdf) {
-                fill = "fill='${button.color}'"
-                overlay = "${button.color}"
-            }
-            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
+        buttonList.forEachIndexed { i, button: Button ->
+            val delay = (rowStartStagger + i) * 0.05
+            val baseColor = button.color ?: docOpsTheme.accentColor
+            val textColor = determineTextColor(baseColor)
+            val labelStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "")
+            var href = """onclick="window.open('${button.link}', '$win')" """
             if(!button.enabled) {
                 href = ""
             }
 
             btns.append(
                 """
-                <g role="button" transform="translate($startX, $startY)" $href>
-                    <rect id="button" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" $fill filter="url(#buttonBlur)" />
-                    <rect id="buttongrad" x="5" y="5" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" fill="$overlay"/>
-                    <rect id="buttontop" x="15" y="10.5" width="280" height="25" ry="24" rx="24" fill="url(#topshineGrad)" filter="url(#topshineBlur)"/>
-                    <rect id="buttonbottom" x="25" y="50" width="260" height="7" fill="#ffffff" ry="24" rx="24" fill-opacity="0.3" filter="url(#bottomshine)"/>
-                    <text id="label" x="150" y="43" text-anchor="middle" style="${button.buttonStyle?.labelStyle}">${button.label.escapeXml()}</text>
+                <g transform="translate($startX, $startY)">
+                    <g class="button-stagger" style="animation-delay: ${delay}s">
+                    <g role="button" tabindex="0" class="button-hover" $href>
+                    <rect id="button" x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" ry="26" rx="26" fill="url(#btn_${button.id})" filter="url(#cardShadow_${buttons.id})" />
+                    <rect id="buttontop" x="10" y="5" width="280" height="25" ry="24" rx="24" fill="url(#topshineGrad)" fill-opacity="0.15"/>
+                    <rect id="buttonbottom" x="20" y="44" width="260" height="7" fill="#ffffff" ry="24" rx="24" fill-opacity="0.1"/>
+                    <text id="label" x="150" y="33" text-anchor="middle" fill="$textColor" style="font-weight: 700; $labelStyle">${button.label.escapeXml()}</text>
+                    </g>
+                    </g>
                 </g>
                 """
             )
 
             startX += BUTTON_WIDTH + BUTTON_PADDING
-
         }
         return btns.toString()
     }
@@ -111,9 +134,9 @@ class Pill(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
         }
         if (size > 1) {
-            return (size * BUTTON_HEIGHT + (size * 10)) * scale + 10
+            return (size * BUTTON_HEIGHT + (size * BUTTON_PADDING) + 40) * scale
         }
-        val h = BUTTON_HEIGHT + 30
+        val h = BUTTON_HEIGHT + 40
         return h * scale
     }
 
@@ -124,12 +147,13 @@ class Pill(buttons: Buttons) : Regular(buttons) {
             columns = it.columns
             scale = it.scale
         }
-        return (columns * BUTTON_WIDTH + columns * BUTTON_PADDING + columns * BUTTON_PADDING) * scale
+        return (columns * BUTTON_WIDTH + (columns - 1) * BUTTON_PADDING + 40) * scale
     }
 
-    override fun defs(): String {
+    protected fun shapeDefs(): String {
+        val accent = docOpsTheme.accentColor
         val gradientDefs = buttons.buttons.mapIndexed { index, button ->
-            val color = button.color ?: "#38bdf8"
+            val color = button.color ?: accent
             """
                 <linearGradient id="btn_${button.id}" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stop-color="$color" />
@@ -137,23 +161,13 @@ class Pill(buttons: Buttons) : Regular(buttons) {
                 </linearGradient>
                 """.trimIndent()
         }.joinToString("\n")
-        val style = StringBuilder()
-        buttons.buttons.forEach { button ->
-            style.append("""
-                #btn_${buttons.id} .btn_${button.id}_cls {
-                    fill: url(#btn_${button.id});
-                }
-            """.trimIndent())
-        }
+        
         return """
-            <defs>
-            ${filters()}
+            <linearGradient id="topshineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </linearGradient>
             $gradientDefs
-            <style>
-            ${fontImport()}
-            $style
-            </style>
-            </defs>
         """.trimIndent()
     }
 

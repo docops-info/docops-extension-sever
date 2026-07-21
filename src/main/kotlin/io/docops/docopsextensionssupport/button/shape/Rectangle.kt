@@ -53,6 +53,18 @@ import kotlin.times
  */
 class Rectangle(buttons: Buttons) : Regular(buttons) {
 
+    override fun createShape(type: String): String {
+        val width = width()
+        val height = height()
+        val sb = StringBuilder()
+        sb.append(start(width, height))
+        sb.append(standardDefs())
+        sb.append(makeModernBackground(width, height))
+        sb.append(draw())
+        sb.append(end())
+        return sb.toString()
+    }
+
     /**
      * Draws the buttons using the specified theme scale and returns the generated SVG code as a string.
      */
@@ -62,19 +74,19 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             scale = it.scale
         }
 
-        val sb = StringBuilder("<g transform=\"scale($scale)\">")
+        val sb = StringBuilder("<g id=\"btn-${buttons.id}\" transform=\"scale($scale)\">")
         val rows = toRows()
-        var count = 0
+        var staggerIdx = 0
 
         rows.forEachIndexed { index, buttons ->
-            sb.append(drawButtonInternal(index, buttons, count))
-            count += buttons.size
+            sb.append(drawButton(index, buttons, staggerIdx))
+            staggerIdx += buttons.size
         }
         sb.append("</g>")
         return sb.toString()
     }
 
-    private fun drawButtonInternal(index: Int, buttonList: MutableList<Button>, count: Int): String {
+    override fun drawButton(index: Int, buttonList: MutableList<Button>, rowStartStagger: Int): String {
         val btns = StringBuilder()
         var win = "_top"
         buttons.theme?.let {
@@ -83,19 +95,15 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             }
         }
 
-        var startX = 10
-        var startY = 10
+        var startX = 20
+        var startY = 20
         if (index > 0) {
-            startY = index * CARD_HEIGHT + (index * CARD_PADDING) + CARD_SPACING
+            startY = index * CARD_HEIGHT + (index * CARD_PADDING) + 20
         }
-        var localCount = count
 
-        buttonList.forEach { button: Button ->
-            localCount++
-
+        buttonList.forEachIndexed { i, button: Button ->
+            val delay = (rowStartStagger + i) * 0.05
             val isDark = buttons.useDark
-            val cardColors = getCardColors(isDark)
-            val textColors = getTextColors(isDark)
 
             // Strip any hardcoded fill from user style to prevent dark mode invisibility
             val cleanUserStyle = button.buttonStyle?.labelStyle?.replace(Regex("fill\\s*:\\s*[^;]+;?"), "") ?: ""
@@ -105,39 +113,41 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             val truncatedLabel = truncateText(button.label, maxLabelWidth.toFloat(), 18)
             val showTooltip = truncatedLabel != button.label
 
-            var href = """onclick="window.open('${button.link}', '$win')" style="cursor: pointer;""""
+            var href = """onclick="window.open('${button.link}', '$win')" """
             if (!button.enabled) {
                 href = ""
             }
             btns.append(
                 """
-    <g transform="translate($startX,$startY)" class="card-button" $href>
+    <g transform="translate($startX,$startY)">
+        <g class="button-stagger" style="animation-delay: ${delay}s">
+        <g class="button-hover" role="button" tabindex="0" $href>
         ${if (showTooltip) """<title>${button.label.escapeXml()}</title>""" else ""}
     
         <!-- Card Background -->
-        ${if (isPdf) """<rect x="0" y="4" width="$CARD_WIDTH" height="$CARD_HEIGHT" rx="$CARD_RADIUS" ry="$CARD_RADIUS" fill="black" opacity="0.12"/>""" else ""}
         <rect x="0" y="0" width="$CARD_WIDTH" height="$CARD_HEIGHT" 
               rx="$CARD_RADIUS" ry="$CARD_RADIUS"
-              fill="${cardColors.background}"
-              stroke="${cardColors.border}"
+              fill="var(--surface)"
+              stroke="var(--accent)"
+              stroke-opacity="0.15"
               stroke-width="1"
               ${if (!isPdf) "filter=\"url(#cardShadow_${buttons.id})\"" else ""}/>
     
-        <!-- Vertical Accent Bar instead of Circle -->
+        <!-- Vertical Accent Bar -->
         <rect x="0" y="20" width="4" height="60" 
-              fill="${button.color ?: "#3498db"}" rx="2"/>
+              fill="${button.color ?: "var(--accent)"}" rx="2"/>
     
-        <!-- Main label with Syne-like fallback -->
+        <!-- Main label -->
         <text x="20" y="$MAIN_LABEL_Y"
-                fill="${textColors.primary}"
-              font-family="'Syne', 'Inter', sans-serif"
+                fill="var(--text)"
               font-size="18"
               font-weight="800"
               style="$cleanUserStyle">${truncatedLabel.escapeXml()}</text>
     
         <!-- Additional links as Chips -->
-        ${renderAdditionalLinks(button.links, textColors, win)}
-    
+        ${renderAdditionalLinks(button.links, win)}
+        </g>
+        </g>
     </g>
     """.trimIndent()
             )
@@ -147,7 +157,7 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         return btns.toString()
     }
 
-    private fun renderAdditionalLinks(links: MutableList<Link>?, textColors: TextColors, win: String): String {
+    private fun renderAdditionalLinks(links: MutableList<Link>?, win: String): String {
         if (links.isNullOrEmpty()) return ""
 
         val sb = StringBuilder()
@@ -165,11 +175,9 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
             val chipHtml = if (isPdf) {
                 """
-                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="${textColors.link}" fill-opacity="${if(buttons.useDark) "0.15" else "0.1"}"/>
+                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="var(--accent)" fill-opacity="0.1"/>
                 <text x="${currentX + textWidth / 2}" y="${linkY - 4}"
-
-                  fill="${textColors.link}"
-                  font-family="'Inter', 'Segoe UI', sans-serif"
+                  fill="var(--text)"
                   font-size="$fontSize"
                   font-weight="600"
                   text-anchor="middle"
@@ -180,10 +188,9 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             } else {
                 """
              <a xlink:href="${link.href}" href="${link.href}" target="$win">
-                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="${textColors.link}" fill-opacity="${if(buttons.useDark) "0.15" else "0.1"}" class="link-chip"/>
+                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="var(--accent)" fill-opacity="0.1" class="link-chip"/>
                 <text x="${currentX + textWidth / 2}" y="${linkY - 4}"
-                      fill="${textColors.link}"
-                      font-family="'Inter', 'Segoe UI', sans-serif"
+                      fill="var(--text)"
                       font-size="$fontSize"
                       font-weight="600"
                       text-anchor="middle"
@@ -258,59 +265,26 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         }
     }
 
-    override fun defs(): String {
-        val isDark = buttons.useDark
-        return """
-        <defs>
-            <style>
-                ${fontImport()}
-                .card-button {
-                    transition: transform 0.2s ease-in-out;
-                    transform-box: fill-box;
-                    transform-origin: center;
-                }
-                
-                .link-chip {
-                    transition: fill-opacity 0.2s;
-                }
-                .link-chip:hover {
-                    fill-opacity: 0.2;
-                }
-            </style>
-            <filter id="cardShadow_${buttons.id}" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
-                <feOffset dx="0" dy="4" result="offsetblur"/>
-                <feFlood flood-color="${if (isDark) "black" else "#333333"}" flood-opacity="${if (isDark) "0.4" else "0.08"}"/>
-                <feComposite in2="offsetblur" operator="in"/>
-                <feMerge>
-                    <feMergeNode/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        </defs>
-    """.trimIndent()
-    }
-
     override fun height(): Float {
-        val size = toRows().size
+        val rows = toRows()
+        val rowCount = rows.size
         var scale = 1.0f
         buttons.theme?.let {
             scale = it.scale
         }
-        if (size > 1) {
-            return (size * CARD_HEIGHT + (size * CARD_PADDING) + CARD_SPACING * 2) * scale
-        }
-        return (CARD_HEIGHT + 40) * scale
+        val h = 20 + rowCount * CARD_HEIGHT + (rowCount) * CARD_PADDING + 10
+        return h * scale
     }
 
     override fun width(): Float {
-        var columns = 3
+        val rows = toRows()
+        val maxInRow = if(rows.isEmpty()) 0 else rows.maxOf { it.size }
         var scale = 1.0f
         buttons.theme?.let {
-            columns = it.columns
             scale = it.scale
         }
-        return (columns * CARD_WIDTH + (columns - 1) * CARD_PADDING + 20) * scale
+        val w = 20 + maxInRow * CARD_WIDTH + (maxInRow) * CARD_PADDING + 10
+        return w * scale
     }
 
     private data class CardColors(
