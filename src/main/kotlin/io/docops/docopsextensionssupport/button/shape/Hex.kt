@@ -66,30 +66,30 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         }
         sb.append("""<g id="$id" transform="scale($scale)">""")
 
-        var startX: Int
-        var startY = 20
+        var startX: Double
+        var startY = 20.0
         var staggerIdx = 0
         rows.forEachIndexed { index, buttonsI ->
             startX = if(index == 0 || isEven(index)) {
-                20
+                38.5
             } else {
-                165
+                186.0
             }
             buttonsI.forEachIndexed { i, button ->
                 val delay = (staggerIdx + i) * 0.05
-                sb.append(createSingleHoneyComb(button, startX, startY, delay))
+                sb.append(createHoneyComb(button, startX, startY, delay))
                 startX += BUTTON_WIDTH
             }
             staggerIdx += buttonsI.size
             // Vertical step for perfect honeycomb tessellation
-            startY += 255
+            startY += 255.0
         }
         sb.append("</g>")
         return sb.toString()
     }
 
     protected fun shapeDefs(): String {
-        val id = buttons.id
+        val id = "btn-${buttons.id}"
         val accent = docOpsTheme.accentColor
         val gradientDefs = buttons.buttons.mapIndexed { index, button ->
             val color = button.color ?: accent
@@ -102,18 +102,18 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         }.joinToString("\n")
         
         val style = """
-                    #btn_$id .hex-label {
+                    [id='$id'] .hex-label {
                         font-weight: 800;
                         text-transform: uppercase;
                     }
                 
-                    #btn_$id .hex-container {
+                    [id='$id'] .hex-container {
                         transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                         transform-box: fill-box;
                         transform-origin: center;
                     }
                 
-                    #btn_$id .hex-container:hover {
+                    [id='$id'] .hex-container:hover {
                         transform: scale(1.05);
                     }
         """.trimIndent()
@@ -142,7 +142,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         val internalWidth = (columns * BUTTON_WIDTH + 80)
         return internalWidth * scale
     }
-    private fun createSingleHoneyComb(button: Button, x: Int, y: Int, delay: Double): String {
+    private fun createHoneyComb(button: Button, x: Double, y: Double, delay: Double): String {
         val isActive = button.active
         val actualColor = button.color ?: docOpsTheme.accentColor
         val textColor = determineTextColor(actualColor)
@@ -153,7 +153,7 @@ class Hex(buttons: Buttons) : Regular(buttons) {
         val cardFill = "url(#hexGrad_${button.id})"
 
         // Sharp Accents driven by Theme
-        val cardStroke = "var(--accent)"
+        val cardStroke = themeColor("--accent")
         val cardStrokeOpacity = if (isDark) "0.4" else "1.0"
         val cardStrokeWidth = if (isActive) "4" else "1"
 
