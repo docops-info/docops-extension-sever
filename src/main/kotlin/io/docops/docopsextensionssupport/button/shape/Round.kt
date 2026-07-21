@@ -96,7 +96,7 @@ class Round(buttons: Buttons) : Regular(buttons) {
             val title = linesToMultiLineText(labelStyle,
                 lines, 12, 0)
 
-            val accentColor = button.color ?: "var(--accent)"
+            val accentColor = button.color ?: themeColor("--accent")
 
             var href = """onclick="window.open('${button.link}', '$win')" """
             if(!button.enabled) {

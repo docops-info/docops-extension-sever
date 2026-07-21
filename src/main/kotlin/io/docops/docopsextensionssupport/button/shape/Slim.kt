@@ -115,7 +115,7 @@ class Slim(buttons: Buttons) : Regular(buttons) {
                 <g class="button-stagger" style="animation-delay: ${delay}s">
                 <g class="button-hover" onclick="$href" role="button" tabindex="0">
                 <!-- Fixed Shadow Layer -->
-                <rect x="2" y="2" width="150" height="150" rx="4" fill="var(--surface)" filter="url(#cardShadow_${buttons.id})"/>
+                <rect x="2" y="2" width="150" height="150" rx="4" fill="${themeColor("--surface")}" filter="url(#cardShadow_${buttons.id})"/>
             
                 <!-- Shifting Body Group -->
                 <g class="moving-group">

@@ -108,7 +108,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
     }
 
     private fun drawSingleButton(button: Button, win: String): String {
-        val accentColor = button.color ?: "var(--accent)"
+        val accentColor = button.color ?: themeColor("--accent")
         val isPdfMode = isPdf
         val buttonOpacity = if (button.enabled) 1.0 else 0.55
         
@@ -130,7 +130,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         sb.append("""<title>${button.label.escapeXml()}</title>""")
         
         // Main Button Body
-        sb.append("""<rect x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" rx="12" fill="var(--surface)" stroke="var(--accent)" stroke-opacity="0.2" stroke-width="1" filter="url(#cardShadow_${buttons.id})"/>""")
+        sb.append("""<rect x="0" y="0" width="$BUTTON_WIDTH" height="$BUTTON_HEIGHT" rx="12" fill="${themeColor("--surface")}" stroke="${themeColor("--accent")}" stroke-opacity="0.2" stroke-width="1" filter="url(#cardShadow_${buttons.id})"/>""")
         
         // Brand Accent Strip
         sb.append(drawAccentStrip(accentColor))
@@ -141,7 +141,7 @@ open class Regular(buttons: Buttons) : AbstractButtonShape(buttons) {
         }
         
         // Label
-        sb.append("""<text x="${BUTTON_WIDTH / 2}" y="${BUTTON_HEIGHT / 2 + 5}" text-anchor="middle" fill="var(--text)" style="font-size: 14px; font-weight: 600; $cleanUserStyle">""")
+        sb.append("""<text x="${BUTTON_WIDTH / 2}" y="${BUTTON_HEIGHT / 2 + 5}" text-anchor="middle" fill="${themeColor("--text")}" style="font-size: 14px; font-weight: 600; $cleanUserStyle">""")
         sb.append(button.label.escapeXml())
         sb.append("</text>")
         
