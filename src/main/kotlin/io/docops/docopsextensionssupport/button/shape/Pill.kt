@@ -94,9 +94,9 @@ class Pill(buttons: Buttons) : Regular(buttons) {
         }
 
         var startX = 20
-        var startY = 20
+        var startY = 26.0
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + 20
+            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + 26.0
         }
         buttonList.forEachIndexed { i, button: Button ->
             val delay = (rowStartStagger + i) * 0.05
@@ -151,6 +151,7 @@ class Pill(buttons: Buttons) : Regular(buttons) {
     }
 
     protected fun shapeDefs(): String {
+        val id = "btn-${buttons.id}"
         val accent = docOpsTheme.accentColor
         val gradientDefs = buttons.buttons.mapIndexed { index, button ->
             val color = button.color ?: accent

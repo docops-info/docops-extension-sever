@@ -95,10 +95,10 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             }
         }
 
-        var startX = 20
-        var startY = 20
+        var startX = 22.5
+        var startY = 22.5
         if (index > 0) {
-            startY = index * CARD_HEIGHT + (index * CARD_PADDING) + 20
+            startY = index * CARD_HEIGHT + (index * CARD_PADDING) + 22.5
         }
 
         buttonList.forEachIndexed { i, button: Button ->
@@ -127,19 +127,19 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
         <!-- Card Background -->
         <rect x="0" y="0" width="$CARD_WIDTH" height="$CARD_HEIGHT" 
               rx="$CARD_RADIUS" ry="$CARD_RADIUS"
-              fill="var(--surface)"
-              stroke="var(--accent)"
+              fill="${themeColor("--surface")}"
+              stroke="${themeColor("--accent")}"
               stroke-opacity="0.15"
               stroke-width="1"
               ${if (!isPdf) "filter=\"url(#cardShadow_${buttons.id})\"" else ""}/>
     
         <!-- Vertical Accent Bar -->
         <rect x="0" y="20" width="4" height="60" 
-              fill="${button.color ?: "var(--accent)"}" rx="2"/>
+              fill="${button.color ?: themeColor("--accent")}" rx="2"/>
     
         <!-- Main label -->
         <text x="20" y="$MAIN_LABEL_Y"
-                fill="var(--text)"
+                fill="${themeColor("--text")}"
               font-size="18"
               font-weight="800"
               style="$cleanUserStyle">${truncatedLabel.escapeXml()}</text>
@@ -175,9 +175,9 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
 
             val chipHtml = if (isPdf) {
                 """
-                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="var(--accent)" fill-opacity="0.1"/>
+                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="${themeColor("--accent")}" fill-opacity="0.1"/>
                 <text x="${currentX + textWidth / 2}" y="${linkY - 4}"
-                  fill="var(--text)"
+                  fill="${themeColor("--text")}"
                   font-size="$fontSize"
                   font-weight="600"
                   text-anchor="middle"
@@ -188,9 +188,9 @@ class Rectangle(buttons: Buttons) : Regular(buttons) {
             } else {
                 """
              <a xlink:href="${link.href}" href="${link.href}" target="$win">
-                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="var(--accent)" fill-opacity="0.1" class="link-chip"/>
+                <rect x="$currentX" y="${linkY - 14}" width="$textWidth" height="20" rx="6" fill="${themeColor("--accent")}" fill-opacity="0.1" class="link-chip"/>
                 <text x="${currentX + textWidth / 2}" y="${linkY - 4}"
-                      fill="var(--text)"
+                      fill="${themeColor("--text")}"
                       font-size="$fontSize"
                       font-weight="600"
                       text-anchor="middle"

@@ -108,6 +108,25 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
 
     // Resolve the global design system theme
     open protected var docOpsTheme = ThemeFactory.getTheme(ButtonVisualDisplay(buttons.useDark, buttons.visualVersion))
+    
+    protected val accent get() = docOpsTheme.accentColor
+    protected val bg get() = if (buttons.useDark) "#172033" else "#afc0c0"
+    protected val surface get() = if (buttons.useDark) "#1E293B" else "#DBF0F1"
+    protected val text get() = if (buttons.useDark) "#E2E8F0" else "#1190A1"
+
+    protected fun themeColor(variable: String): String {
+        return if (isPdf) {
+            when (variable) {
+                "--accent" -> accent
+                "--bg" -> bg
+                "--surface" -> surface
+                "--text" -> text
+                else -> "var($variable)"
+            }
+        } else {
+            "var($variable)"
+        }
+    }
 
     protected fun makeModernBackground(width: Float, height: Float): String {
         val id = buttons.id
@@ -159,7 +178,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
                     transform: translateY(-2px) scale(1.02);
                     filter: brightness(1.1);
                 }
-                ${if (isPdf) ".button-stagger { opacity: 1 !important; animation: none !important; }" else ""}
+                ${if (isPdf) "[id='$id'] .button-stagger { opacity: 1 !important; animation: none !important; }" else ""}
             </style>
             <linearGradient id="bgSurface_${buttons.id}" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="$bg"/>

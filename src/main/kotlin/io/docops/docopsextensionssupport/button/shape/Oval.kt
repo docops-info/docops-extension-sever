@@ -77,11 +77,10 @@ class Oval(buttons: Buttons) : Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 20
-
-        var startY = 20
+        var startX = 27.5
+        var startY = 25.0
         if (index > 0) {
-            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + 20
+            startY = index * BUTTON_HEIGHT + (index * BUTTON_PADDING) + 25.0
         }
 
         buttonList.forEachIndexed { i, button: Button ->
@@ -154,6 +153,7 @@ class Oval(buttons: Buttons) : Regular(buttons) {
     }
 
     protected fun shapeDefs(): String {
+        val id = "btn-${buttons.id}"
         val accent = docOpsTheme.accentColor
         val gradientDefs = buttons.buttons.mapIndexed { index, button ->
             val color = button.color ?: accent

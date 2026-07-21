@@ -89,10 +89,10 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 20
-        var startY = 20
+        var startX = 26
+        var startY = 25
         if (index > 0) {
-            startY = index * buttonHeight + (index * rowSpacing) + 20
+            startY = index * (buttonHeight + rowSpacing) + 25
         }
 
         buttonList.forEachIndexed { i, button ->
@@ -112,14 +112,14 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         val id = buttons.id
         val sb = StringBuilder()
         
-        val accentColor = button.color ?: "var(--accent)"
+        val accentColor = button.color ?: themeColor("--accent")
 
         sb.append("""<g class="button-hover modern-card-button" role="button" tabindex="0" onclick="window.open('${button.link.escapeXml()}', '$win')" onkeydown="if(event.key==='Enter'||event.key===' '){window.open('${button.link.escapeXml()}', '$win')}">""")
         sb.append("""<title>${button.label.escapeXml()} — ${button.type?.escapeXml() ?: "Component"}</title>""")
 
         val radius = 12
         val filterAttr = if (!isPdf) "filter=\"url(#cardShadow_$id)\"" else ""
-        sb.append("""<rect x="0" y="0" width="$buttonWidth" height="$buttonHeight" rx="$radius" fill="var(--surface)" $filterAttr/>""")
+        sb.append("""<rect x="0" y="0" width="$buttonWidth" height="$buttonHeight" rx="$radius" fill="${themeColor("--surface")}" $filterAttr/>""")
 
         // Top Header Section
         sb.append("""<path d="M0 $radius A$radius $radius 0 0 1 $radius 0 L${buttonWidth - radius} 0 A$radius $radius 0 0 1 $buttonWidth $radius L$buttonWidth $headerHeight L0 $headerHeight Z" fill="url(#$gradientId)"/>""")
@@ -167,7 +167,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         }
 
         // Divider line
-        sb.append("""<line x1="$cardPadding" y1="$headerHeight" x2="${buttonWidth - cardPadding}" y2="$headerHeight" stroke="var(--text)" stroke-width="0.5" opacity="0.2"/>""")
+        sb.append("""<line x1="$cardPadding" y1="$headerHeight" x2="${buttonWidth - cardPadding}" y2="$headerHeight" stroke="${themeColor("--text")}" stroke-width="0.5" opacity="0.2"/>""")
 
         // Text content
         sb.append(createTextContent(button))
@@ -211,7 +211,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
     private fun createTextContent(button: Button): String {
         val sb = StringBuilder()
-        val accent = button.color ?: "var(--accent)"
+        val accent = button.color ?: themeColor("--accent")
 
         sb.append("""<g transform="translate($cardPadding, $textStartY)">""")
 
@@ -225,7 +225,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         // Title
         val titleFontSize = computeTitleFontSize(button.label)
         sb.append(
-            """<text x="0" y="50" font-size="$titleFontSize" font-weight="800" fill="var(--text)" style="text-transform: uppercase; letter-spacing: -0.5px;">"""
+            """<text x="0" y="50" font-size="$titleFontSize" font-weight="800" fill="${themeColor("--text")}" style="text-transform: uppercase; letter-spacing: -0.5px;">"""
         )
         sb.append(createWrappedTitle(button.label, maxCharsPerLine = 18, maxLines = 2))
         sb.append("</text>")
@@ -245,7 +245,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         // Date / Author
         button.date?.let {
             sb.append(
-                """<text x="260" y="170" text-anchor="end" font-size="10" font-weight="600" fill="var(--text)" opacity="0.65" style="text-transform: uppercase; letter-spacing: 1px;">"""
+                """<text x="260" y="170" text-anchor="end" font-size="10" font-weight="600" fill="${themeColor("--text")}" opacity="0.65" style="text-transform: uppercase; letter-spacing: 1px;">"""
             )
             sb.append(it.escapeXml())
             sb.append("</text>")
@@ -320,7 +320,7 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
         }
         if (currentLine.isNotEmpty()) lines.add(currentLine)
 
-        sb.append("""<text y="$startY" font-size="13" fill="var(--text)" opacity="0.8">""")
+        sb.append("""<text y="$startY" font-size="13" fill="${themeColor("--text")}" opacity="0.8">""")
         lines.take(4).forEachIndexed { index, line ->
             val dy = if (index == 0) 0 else 18
             sb.append("""<tspan x="0" dy="$dy">""")
@@ -333,13 +333,13 @@ class Large(buttons: Buttons) : AbstractButtonShape(buttons) {
 
     private fun shapeDefs(): String {
         val sb = StringBuilder()
-        val id = buttons.id
+        val id = "btn-${buttons.id}"
         
         val style = """
-                #btn_$id .modern-card-button {
+                [id='$id'] .modern-card-button {
                     transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 }
-                #btn_$id .button-hover:hover {
+                [id='$id'] .button-hover:hover {
                     transform: translateY(-4px);
                 }
         """.trimIndent()

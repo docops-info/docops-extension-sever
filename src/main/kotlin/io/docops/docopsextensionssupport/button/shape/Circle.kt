@@ -70,12 +70,12 @@ class Circle(buttons: Buttons): Regular(buttons) {
                 win = "_blank"
             }
         }
-        var startX = 30
-        var startY = 30 // Start with some top padding
+        var startX = 35.0
+        var startY = 35.0 // Start with some top padding
 
         // Calculate Y position based on row index
         if (index > 0) {
-            startY = 30 + (index * 130)
+            startY = 35.0 + (index * 130)
         }
 
         buttonList.forEachIndexed { idx, button: Button ->
@@ -95,7 +95,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
             }
 
             // Aesthetic logic driven by ThemeFactory
-            val accentColor = button.color ?: "var(--accent)"
+            val accentColor = button.color ?: themeColor("--accent")
 
             btns.append(
                 """
@@ -178,7 +178,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
     }
 
     protected fun shapeDefs(): String {
-        val id = buttons.id
+        val id = "btn-${buttons.id}"
         val accent = docOpsTheme.accentColor
         
         val gradientDefs = StringBuilder()
@@ -187,33 +187,33 @@ class Circle(buttons: Buttons): Regular(buttons) {
         }
 
         val style = """
-                    #btn_$id .orb-body, #btn_$id .orb-glass, #btn_$id .tech-ring {
+                    [id='$id'] .orb-body, [id='$id'] .orb-glass, [id='$id'] .tech-ring {
                         transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
                     }
                     
-                    #btn_$id .button-hover:hover .orb-body, #btn_$id .button-hover:hover .orb-glass {
+                    [id='$id'] .button-hover:hover .orb-body, [id='$id'] .button-hover:hover .orb-glass {
                         cx: 56;
                         cy: 56;
                     }
 
-                    #btn_$id .tech-ring {
+                    [id='$id'] .tech-ring {
                         stroke-dasharray: 365;
                         stroke-dashoffset: ${if(isPdf) "0" else "365"};
                         opacity: ${if(isPdf) "1" else "0.3"};
                     }
-                    #btn_$id .button-hover:hover .tech-ring {
+                    [id='$id'] .button-hover:hover .tech-ring {
                         stroke-dashoffset: 0;
                         opacity: 0.8;
                     }
 
-                    #btn_$id .moving-text {
+                    [id='$id'] .moving-text {
                         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
                     }
-                    #btn_$id .button-hover:hover .moving-text {
+                    [id='$id'] .button-hover:hover .moving-text {
                         transform: translate(-4px, -4px);
                     }
 
-                    #btn_$id .label-text {
+                    [id='$id'] .label-text {
                         font-family: 'Lexend', sans-serif;
                         font-weight: 800;
                         font-size: 11px;
@@ -221,7 +221,7 @@ class Circle(buttons: Buttons): Regular(buttons) {
                         letter-spacing: 0.05em;
                         pointer-events: none;
                     }
-                    #btn_$id .technical-id {
+                    [id='$id'] .technical-id {
                         font-size: 7px;
                         font-weight: 400;
                     }
