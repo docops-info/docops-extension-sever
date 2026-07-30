@@ -80,6 +80,7 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
             throw IllegalArgumentException("No valid company data found. Expected format: Name | X | Y | Description | Size | URL")
         }
 
+        val dark = configMap["useDark"]?.toBoolean() ?: useDark
         return MagicQuadrantConfig(
             title,
             xAxisLabel = xAxisLabel,
@@ -92,18 +93,19 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
             visionariesLabel = visionariesLabel,
             nichePlayersLabel = nichePlayersLabel,
             visualVersion = visualVersion,
-            useDark = useDark
+            useDark = dark
         )
     }
 
     fun generateSvg(
         config: MagicQuadrantConfig,
-        scale: String = "1.0"
+        scale: String = "1.0",
+        isPdf: Boolean = false
     ): String {
 
         val generator = MagicQuadrantSvgGenerator()
 
-        return generator.generateMagicQuadrant(config,  scale)
+        return generator.generateMagicQuadrant(config,  scale, isPdf)
     }
 
 
@@ -114,7 +116,8 @@ class MagicQuadrantHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResp
     ): String {
         val config = parseTabularData(payload, context.useDark)
         csvResponse.update(config.toCsvResponse())
-        val svg = generateSvg(config, context.scale)
+        val isPdf = "pdf".equals(context.type, true) || "pdf".equals(context.backend, true)
+        val svg = generateSvg(config, context.scale, isPdf)
         return svg
     }
 }

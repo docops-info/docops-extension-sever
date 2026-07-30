@@ -20,11 +20,8 @@ val DOCOPS_BRANDING_COLORS = listOf(
 class PlannerMaker {
     private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
 
-    private val fontFamily = "'Inter', 'Segoe UI', ui-sans-serif, system-ui, sans-serif"
-    private val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@450;500;600;700;800&amp;display=swap');"
-
     private val leftPadding = 48
-    private val topPadding = 140
+    private val topPadding = 144
     private val laneWidth = 352
     private val laneGap = 24
 
@@ -46,11 +43,11 @@ class PlannerMaker {
 
         sb.append(
             """
-            <g transform="translate(48,44)">
+            <g transform="translate(48,48)">
                 <g class="reveal d1">
-                    <text class="title" x="0" y="34">${title.escapeXml()}</text>
-                    <text class="sub" x="0" y="54">${if (useDark) "Glass Night" else "Glass Day"} • compact ${cols.size}-lane board</text>
-                    <line x1="0" y1="68" x2="${width - 96}" y2="68" stroke="var(--line)" stroke-width="1"/>
+                    <text class="title" x="0" y="32">${title.escapeXml()}</text>
+                    <text class="sub" x="0" y="56">${if (useDark) "Glass Night" else "Glass Day"} • compact ${cols.size}-lane board</text>
+                    <line x1="0" y1="72" x2="${width - 96}" y2="72" stroke="var(--line)" stroke-width="1"/>
                 </g>
             </g>
             """.trimIndent()
@@ -84,7 +81,7 @@ class PlannerMaker {
             """
             <g class="reveal $revealClass">
                 <text class="col" x="0" y="0">${"%02d".format(index + 1)} // ${key.escapeXml()}</text>
-                <rect x="${laneWidth - 60}" y="-14" width="60" height="18" rx="9" fill="$laneColor" fill-opacity="${if (useDark) "0.20" else "0.16"}" stroke="$laneColor" stroke-opacity="${if (useDark) "0.55" else "0.50"}"/>
+                <rect x="${laneWidth - 64}" y="-16" width="64" height="16" rx="8" fill="$laneColor" fill-opacity="${if (useDark) "0.20" else "0.16"}" stroke="$laneColor" stroke-opacity="${if (useDark) "0.55" else "0.50"}"/>
             </g>
             """.trimIndent()
         )
@@ -100,26 +97,26 @@ class PlannerMaker {
             sb.append(
                 """
                 <g class="reveal $cardRevealClass">
-                    <rect x="8" y="8" width="$laneWidth" height="$cardHeight" rx="18" fill="$cardTint" fill-opacity="${if (useDark) "0.10" else "0.24"}" filter="url(#${ids.glassBlur})"/>
-                    <rect x="0" y="0" width="$laneWidth" height="$cardHeight" rx="18" fill="var(--glass)" stroke="var(--stroke)" filter="url(#${ids.softShadow})"/>
-                    <path d="M14 12 H${laneWidth - 14} C${laneWidth - 22} 28 ${laneWidth - 46} 38 ${laneWidth - 84} 41 H14 Z" fill="${if (useDark) "rgba(255,255,255,0.16)" else "rgba(255,255,255,0.54)"}"/>
-                    <rect x="0" y="50" width="5" height="${minOf(62, cardHeight - 64)}" rx="2.5" fill="$laneColor"/>
-                    <text class="meta" x="16" y="30">${key.uppercase().escapeXml()} • item ${itemIndex + 1}</text>
+                    <rect x="8" y="8" width="$laneWidth" height="$cardHeight" rx="16" fill="$cardTint" fill-opacity="${if (useDark) "0.10" else "0.24"}" filter="url(#${ids.glassBlur})"/>
+                    <rect x="0" y="0" width="$laneWidth" height="$cardHeight" rx="16" fill="var(--glass)" stroke="var(--stroke)" filter="url(#${ids.softShadow})"/>
+                    <path d="M16 16 H${laneWidth - 16} C${laneWidth - 24} 24 ${laneWidth - 48} 40 ${laneWidth - 80} 40 H16 Z" fill="${if (useDark) "rgba(255,255,255,0.16)" else "rgba(255,255,255,0.54)"}"/>
+                    <rect x="0" y="48" width="8" height="${minOf(64, cardHeight - 64)}" rx="4" fill="$laneColor"/>
+                    <text class="meta" x="16" y="32">${key.uppercase().escapeXml()} • item ${itemIndex + 1}</text>
                 """.trimIndent()
             )
 
             if (!item.title.isNullOrBlank()) {
-                sb.append("""<text class="cardTitle" x="16" y="58">${item.title.escapeXml()}</text>""")
+                sb.append("""<text class="cardTitle" x="16" y="56">${item.title.escapeXml()}</text>""")
             }
 
-            val contentY = if (!item.title.isNullOrBlank()) 84f else 58f
+            val contentY = if (!item.title.isNullOrBlank()) 88f else 56f
             if (!item.content.isNullOrBlank()) {
                 sb.append(renderTextWithBullets(item.content!!, 16f, contentY, item.urlMap, useDark, ids))
             }
 
             sb.append("</g>")
             sb.append("</g>")
-            currentY += cardHeight + 12
+            currentY += cardHeight + 16
         }
         sb.append("</g>")
         sb.append("</g>")
@@ -133,7 +130,7 @@ class PlannerMaker {
         urlMap: MutableMap<String, String>,
         useDark: Boolean,
         ids: DefIds,
-        lineHeight: Float = 18f
+        lineHeight: Float = 16f
     ): String {
         val lines = text.split("\n").filter { it.isNotBlank() }
         val result = StringBuilder()
@@ -156,14 +153,16 @@ class PlannerMaker {
                 else -> line
             }
 
-            val wrapped = itemTextWidth(cleanLine, 320F, 11, "Inter")
+            val fontName = theme.fontFamily.split(",").first().trim('\'', ' ')
+            val fontSize = (12 / theme.fontWidthMultiplier).toInt()
+            val wrapped = itemTextWidth(cleanLine, 320F, fontSize, fontName)
             val processed = linesToUrlIfExist(wrapped, urlMap)
 
             processed.forEachIndexed { idx, wrappedLine ->
                 if (idx == 0 && bulletType != null) {
                     result.append("""<use href="#$bulletType" x="$x" y="${currentY - 8}" width="8" height="8" style="color: ${if (useDark) "#A8B8DA" else "#4B638C"}"/>""")
                 }
-                val tx = if (bulletType != null) x + 12 else x
+                val tx = if (bulletType != null) x + 16 else x
                 if (wrappedLine.contains("<a xlink:href=")) {
                     result.append("""<text x="$tx" y="$currentY" class="body" fill="$bodyColor">$wrappedLine</text>""")
                 } else {
@@ -177,8 +176,10 @@ class PlannerMaker {
     }
 
     private fun calculateCardHeight(item: PlanItem): Int {
-        val base = if (!item.title.isNullOrBlank()) 96 else 70
+        val base = if (!item.title.isNullOrBlank()) 96 else 72
         var lineCount = 0
+        val fontName = theme.fontFamily.split(",").first().trim('\'', ' ')
+        val fontSize = (12 / theme.fontWidthMultiplier).toInt()
 
         item.content?.split("\n")
             ?.filter { it.isNotBlank() }
@@ -188,10 +189,10 @@ class PlannerMaker {
                     .replace("[BULLET_CHEVRON]", "")
                     .replace("[BULLET_PLUS]", "")
                     .replace("[BULLET_DASH]", "")
-                lineCount += itemTextWidth(clean, 320F, 11, "Inter").size
+                lineCount += itemTextWidth(clean, 320F, fontSize, fontName).size
             }
 
-        return base + (lineCount * 18) + 12
+        return base + (lineCount * 16) + 16
     }
 
     private fun determineWidth(columnCount: Int): Int {
@@ -201,10 +202,10 @@ class PlannerMaker {
 
     private fun determineHeight(cols: Map<String, List<PlanItem>>): Int {
         val maxColHeight = cols.values.maxOfOrNull { list ->
-            list.sumOf { calculateCardHeight(it) + 12 }
+            list.sumOf { calculateCardHeight(it) + 16 }
         } ?: 0
         val contentHeight = topPadding + 16 + maxColHeight + 24
-        return maxOf(430, contentHeight)
+        return maxOf(432, contentHeight)
     }
 
     private fun cardTintFor(color: String, index: Int, useDark: Boolean): String {
@@ -239,12 +240,12 @@ class PlannerMaker {
         val auroraAOpacity = if (useDark) "0.26" else "0.16"
         val auroraBOpacity = if (useDark) "0.20" else "0.12"
 
-        val gridStroke = if (useDark) "#BFD0FF" else "#2C4A7A"
-        val text = if (useDark) "#EAF1FF" else "#0E1A33"
-        val muted = if (useDark) "#A8B8DA" else "#4B638C"
-        val line = if (useDark) "rgba(197,212,255,0.28)" else "rgba(42,73,124,0.22)"
-        val glass = if (useDark) "rgba(255,255,255,0.10)" else "rgba(255,255,255,0.58)"
-        val stroke = if (useDark) "rgba(219,230,255,0.34)" else "rgba(141,171,218,0.62)"
+        val gridStroke = theme.primaryText
+        val text = theme.primaryText
+        val muted = theme.secondaryText
+        val line = theme.surfaceImpact
+        val glass = theme.glassEffect
+        val stroke = theme.surfaceImpact
 
         val shadowBlur = if (useDark) 8 else 6
         val shadowOffset = if (useDark) 6 else 4
@@ -287,14 +288,14 @@ class PlannerMaker {
                         </feMerge>
                     </filter>
 
-                    <pattern id="${ids.gridPattern}" width="28" height="28" patternUnits="userSpaceOnUse">
-                        <path d="M28 0H0V28" fill="none" stroke="$gridStroke" stroke-opacity="0.08" stroke-width="1"/>
+                    <pattern id="${ids.gridPattern}" width="32" height="32" patternUnits="userSpaceOnUse">
+                        <path d="M32 0H0V32" fill="none" stroke="$gridStroke" stroke-opacity="0.08" stroke-width="1"/>
                     </pattern>
 
                     ${createBulletSymbols(ids)}
 
                     <style>
-                        $fontImport
+                        ${theme.fontImport}
                         #$svgId{
                             --text:$text;
                             --muted:$muted;
@@ -304,23 +305,23 @@ class PlannerMaker {
                         }
 
                         #$svgId .title{
-                            font-family:$fontFamily;
-                            font-size:38px;
+                            font-family:${theme.fontFamily};
+                            font-size:${40 / theme.fontWidthMultiplier}px;
                             font-weight:800;
                             letter-spacing:-0.01em;
                             fill:var(--text);
                         }
 
                         #$svgId .sub{
-                            font-family:$fontFamily;
-                            font-size:12px;
+                            font-family:${theme.fontFamily};
+                            font-size:${12 / theme.fontWidthMultiplier}px;
                             font-weight:500;
                             fill:var(--muted);
                         }
 
                         #$svgId .col{
-                            font-family:$fontFamily;
-                            font-size:10px;
+                            font-family:${theme.fontFamily};
+                            font-size:${12 / theme.fontWidthMultiplier}px;
                             font-weight:700;
                             letter-spacing:0.14em;
                             text-transform:uppercase;
@@ -328,8 +329,8 @@ class PlannerMaker {
                         }
 
                         #$svgId .meta{
-                            font-family:$fontFamily;
-                            font-size:9px;
+                            font-family:${theme.fontFamily};
+                            font-size:${9 / theme.fontWidthMultiplier}px;
                             font-weight:600;
                             letter-spacing:0.08em;
                             text-transform:uppercase;
@@ -337,15 +338,15 @@ class PlannerMaker {
                         }
 
                         #$svgId .cardTitle{
-                            font-family:$fontFamily;
-                            font-size:14px;
+                            font-family:${theme.fontFamily};
+                            font-size:${16 / theme.fontWidthMultiplier}px;
                             font-weight:700;
                             fill:var(--text);
                         }
 
                         #$svgId .body{
-                            font-family:$fontFamily;
-                            font-size:11px;
+                            font-family:${theme.fontFamily};
+                            font-size:${12 / theme.fontWidthMultiplier}px;
                             font-weight:450;
                             fill:$bodyDefault;
                         }
