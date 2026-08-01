@@ -2,6 +2,8 @@ package io.docops.docopsextensionssupport.recipe
 
 import io.docops.docopsextensionssupport.support.DocOpsTheme
 import io.docops.docopsextensionssupport.support.FoodTheme
+import io.docops.docopsextensionssupport.support.PremiumDarkTheme
+import io.docops.docopsextensionssupport.support.PremiumTheme
 import io.docops.docopsextensionssupport.support.SpringTheme
 import io.docops.docopsextensionssupport.support.SummerTheme
 import io.docops.docopsextensionssupport.support.ThemeFactory
@@ -36,7 +38,9 @@ class RecipeSvgGenerator(
         val ingredientsLines: List<List<String>>,
         val stepLines: List<List<String>>,
         val noteLines: List<List<String>>,
-        val bodyPanelY: Int
+        val bodyPanelY: Int,
+        val sideMargin: Int,
+        val columnGap: Int
     )
 
     private data class SectionLine(
@@ -76,21 +80,23 @@ class RecipeSvgGenerator(
                     }}
                     
                     <!-- Decorative Borders -->
-                    <rect x="14" y="14" width="${width - 28}" height="${layout.totalHeight - 28}" rx="6" fill="none" stroke="${theme.accentColor}" stroke-width="1.5" stroke-opacity="0.35"/>
-                    <rect x="20" y="20" width="${width - 40}" height="${layout.totalHeight - 40}" rx="4" fill="none" stroke="${theme.accentColor}" stroke-width="0.5" stroke-opacity="0.25"/>
+                    ${when (theme) {
+                        is PremiumTheme, is PremiumDarkTheme -> """<rect x="16" y="16" width="${width - 32}" height="${layout.totalHeight - 32}" rx="${theme.cornerRadius}" fill="${theme.canvas}" filter="url(#${defId("shadow")})"/>"""
+                        else -> if (theme !is PremiumTheme && theme !is PremiumDarkTheme) """<rect x="14" y="14" width="${width - 28}" height="${layout.totalHeight - 28}" rx="${theme.cornerRadius}" fill="none" stroke="${theme.accentColor}" stroke-width="1.2" stroke-opacity="0.5" stroke-dasharray="8 4"/>""" else ""
+                    }}
 
                     ${buildCornerOrnaments(width, layout.totalHeight)}
-                    ${buildHeader(title, tags)}
-                    ${buildMetaInfoStrip(yield, prep, cook, summary, layout.summaryHeight)}
+                    ${buildHeader(title, tags, layout.sideMargin)}
+                    ${buildMetaInfoStrip(yield, prep, cook, summary, layout)}
                     ${buildBodyPanels(recipe.ingredients, recipe.steps, layout)}
                     ${buildNotesAndTags(recipe.tags, recipe.notes, layout)}
-                    ${buildFooter(layout)}
                 </g>
             </svg>
         """.trimIndent()
     }
 
     private fun buildCornerOrnaments(w: Int, h: Int): String {
+        if (theme is PremiumTheme || theme is PremiumDarkTheme) return ""
         return when(theme) {
             is SpringTheme -> buildSpringCorners(w, h)
             is SummerTheme -> buildSummerCorners(w, h)
@@ -99,20 +105,22 @@ class RecipeSvgGenerator(
     }
 
     private fun buildDefaultCorners(w: Int, h: Int): String {
+        val ornamentOpacity = if (useDark) "0.45" else "0.55"
+        val circleOpacity = if (useDark) "0.3" else "0.4"
         return """
-            <g fill="none" stroke="${theme.accentColor}" stroke-width="1" stroke-opacity="0.55">
+            <g fill="none" stroke="${theme.accentColor}" stroke-width="1" stroke-opacity="$ornamentOpacity">
                 <!-- Top Left -->
                 <path d="M14 50 L14 14 L50 14"/>
-                <circle cx="14" cy="14" r="3.5" fill="${theme.accentColor}" fill-opacity="0.4" stroke="none"/>
+                <circle cx="14" cy="14" r="3.5" fill="${theme.accentColor}" fill-opacity="$circleOpacity" stroke="none"/>
                 <!-- Top Right -->
                 <path d="M${w-14} 50 L${w-14} 14 L${w-50} 14"/>
-                <circle cx="${w-14}" cy="14" r="3.5" fill="${theme.accentColor}" fill-opacity="0.4" stroke="none"/>
+                <circle cx="${w-14}" cy="14" r="3.5" fill="${theme.accentColor}" fill-opacity="$circleOpacity" stroke="none"/>
                 <!-- Bottom Left -->
                 <path d="M14 ${h-50} L14 ${h-14} L50 ${h-14}"/>
-                <circle cx="14" cy="${h-14}" r="3.5" fill="${theme.accentColor}" fill-opacity="0.4" stroke="none"/>
+                <circle cx="14" cy="${h-14}" r="3.5" fill="${theme.accentColor}" fill-opacity="$circleOpacity" stroke="none"/>
                 <!-- Bottom Right -->
                 <path d="M${w-14} ${h-50} L${w-14} ${h-14} L${w-50} ${h-14}"/>
-                <circle cx="${w-14}" cy="${h-14}" r="3.5" fill="${theme.accentColor}" fill-opacity="0.4" stroke="none"/>
+                <circle cx="${w-14}" cy="${h-14}" r="3.5" fill="${theme.accentColor}" fill-opacity="$circleOpacity" stroke="none"/>
             </g>
         """.trimIndent()
     }
@@ -166,18 +174,32 @@ class RecipeSvgGenerator(
 
     private fun measureLayout(recipe: Recipe): Layout {
         val width = 680
-        val contentWidth = width - 88 // 44px margin on each side
-        val columnWidth = (contentWidth - 20) / 2 // 20px gap between columns
+        val sideMargin = if (theme is PremiumTheme || theme is PremiumDarkTheme) 32 else 44
+        val columnGap = if (theme is PremiumTheme || theme is PremiumDarkTheme) 24 else 20
+        val contentWidth = width - (sideMargin * 2)
+        val columnWidth = (contentWidth - columnGap) / 2
 
-        val summaryLines = wrapTextToWidth(recipe.summary.orEmpty(), contentWidth.toFloat(), avgCharWidth() * 0.9f)
+        val isPremium = theme is PremiumTheme || theme is PremiumDarkTheme
+        val textMultiplier = if (isPremium) 1.05f else 1.0f
+
+        val allSummaryLines = wrapTextToWidth(recipe.summary.orEmpty(), contentWidth.toFloat() - 32, avgCharWidth() * textMultiplier)
             .ifEmpty { listOf(recipe.summary.orEmpty()) }
-            .take(3)
+        
+        val summaryLines = if (allSummaryLines.size > 3) {
+            val lines = allSummaryLines.take(3).toMutableList()
+            lines[2] = lines[2].let { line ->
+                if (line.length > 3) line.dropLast(3) + "..." else line + "..."
+            }
+            lines
+        } else {
+            allSummaryLines
+        }
 
         val ingredientRowGap = 24
         val ingredientLinesNested = mutableListOf<List<String>>()
         var totalIngredientLines = 0
         recipe.ingredients.forEach { line ->
-            val wrapped = wrapTextToWidth(line, (columnWidth - 50).toFloat(), avgCharWidth() * 0.9f)
+            val wrapped = wrapTextToWidth(line, (columnWidth - 64).toFloat(), avgCharWidth() * textMultiplier)
             ingredientLinesNested.add(wrapped)
             totalIngredientLines += wrapped.size
         }
@@ -185,7 +207,7 @@ class RecipeSvgGenerator(
             ingredientLinesNested.add(listOf("No ingredients provided."))
             totalIngredientLines = 1
         }
-        val ingredientsHeight = max(340, 60 + totalIngredientLines * ingredientRowGap)
+        val ingredientsHeight = max(240, 60 + totalIngredientLines * ingredientRowGap)
 
         val stepRowGap = 24
         val stepLinesNested = mutableListOf<List<String>>()
@@ -196,7 +218,7 @@ class RecipeSvgGenerator(
                 .removePrefix("* ")
                 .trim()
                 .replace(Regex("^\\d+[.)]\\s*"), "")
-            val wrapped = wrapTextToWidth(clean, (columnWidth - 40).toFloat(), avgCharWidth() * 0.9f).ifEmpty { listOf("") }
+            val wrapped = wrapTextToWidth(clean, (columnWidth - 70).toFloat(), avgCharWidth() * textMultiplier).ifEmpty { listOf("") }
             stepLinesNested.add(wrapped)
             totalStepLines += wrapped.size
         }
@@ -204,11 +226,11 @@ class RecipeSvgGenerator(
             stepLinesNested.add(listOf("No steps provided."))
             totalStepLines = 1
         }
-        val stepsHeight = max(340, 60 + totalStepLines * stepRowGap)
+        val stepsHeight = max(240, 60 + totalStepLines * stepRowGap)
 
         // Notes height calculation
         val noteLinesNested = recipe.notes.map { note ->
-            wrapTextToWidth(note, contentWidth.toFloat() - 40, avgCharWidth() * 0.9f)
+            wrapTextToWidth(note, contentWidth.toFloat() - 44, avgCharWidth() * textMultiplier)
         }
         val noteLineHeight = 24
         val noteGap = 12
@@ -245,13 +267,13 @@ class RecipeSvgGenerator(
 
         val headerHeight = 200
         val metaStripHeight = 72
-        val gap = 14
-        val summaryPadding = 20
+        val gap = if (theme is PremiumTheme || theme is PremiumDarkTheme) 16 else 14
+        val summaryPadding = if (theme is PremiumTheme || theme is PremiumDarkTheme) 24 else 20
         
         val bodyPanelY = headerHeight + metaStripHeight + gap + summaryHeight + summaryPadding
-        val notesY = bodyPanelY + middleHeight + 30
+        val notesY = bodyPanelY + middleHeight + (if (theme is PremiumTheme || theme is PremiumDarkTheme) 32 else 30)
         
-        val tagsY = if (notesHeight > 0) notesY + notesHeight + 20 else notesY
+        val tagsY = if (notesHeight > 0) notesY + notesHeight + (if (theme is PremiumTheme || theme is PremiumDarkTheme) 24 else 20) else notesY
         
         val footerPadding = 60
         val finalContentY = if (tagsHeight > 0) tagsY + tagsHeight else if (notesHeight > 0) notesY + notesHeight else notesY
@@ -262,7 +284,7 @@ class RecipeSvgGenerator(
             middleHeight = middleHeight,
             notesHeight = notesHeight,
             tagsHeight = tagsHeight,
-            totalHeight = max(920, totalHeight),
+            totalHeight = max(800, totalHeight),
             notesY = notesY,
             tagsY = tagsY,
             ingredientsHeight = ingredientsHeight,
@@ -270,12 +292,26 @@ class RecipeSvgGenerator(
             ingredientsLines = ingredientLinesNested,
             stepLines = stepLinesNested,
             noteLines = noteLinesNested,
-            bodyPanelY = bodyPanelY
+            bodyPanelY = bodyPanelY,
+            sideMargin = sideMargin,
+            columnGap = columnGap
         )
     }
 
     private fun svgDefs(): String = """
         <defs>
+            ${theme.fontImport}
+            <filter id="${defId("shadow")}" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                <feOffset dx="0" dy="2" result="offsetblur"/>
+                <feComponentTransfer>
+                    <feFuncA type="linear" slope="0.1"/>
+                </feComponentTransfer>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
             <pattern id="${defId("linen")}" width="8" height="8" patternUnits="userSpaceOnUse">
                 <line x1="0" y1="8" x2="8" y2="0" stroke="${theme.accentColor}" stroke-width="0.4" stroke-opacity="0.18"/>
                 <line x1="-2" y1="2" x2="2" y2="-2" stroke="${theme.accentColor}" stroke-width="0.4" stroke-opacity="0.1"/>
@@ -307,7 +343,7 @@ class RecipeSvgGenerator(
                     }
                     #$id .recipe-title {
                         font-family: ${theme.fontFamily};
-                        font-size: 34px;
+                        font-size: ${if (theme is PremiumTheme || theme is PremiumDarkTheme) "36px" else "34px"};
                         font-weight: 700;
                         letter-spacing: -0.5px;
                     }
@@ -320,9 +356,9 @@ class RecipeSvgGenerator(
                     }
                     #$id .meta-label {
                         font-family: ${theme.fontFamily};
-                        font-size: 9.5px;
+                        font-size: 12px;
                         font-weight: 700;
-                        letter-spacing: 2.5px;
+                        letter-spacing: 1.5px;
                         text-transform: uppercase;
                     }
                     #$id .meta-value {
@@ -352,39 +388,44 @@ class RecipeSvgGenerator(
         </defs>
     """.trimIndent()
 
-    private fun buildHeader(title: String, tags: String): String {
+    private fun buildHeader(title: String, tags: String, sideMargin: Int): String {
         val (titleColor, subtitleColor, tagColor) = when(theme) {
             is SpringTheme -> Triple("#FFF0F5", "#7A2848", "#FCE4EE")
             is SummerTheme -> Triple("#FFFFFF", "#A8D0F8", "#E8F4FF")
+            is PremiumTheme, is PremiumDarkTheme -> Triple("var(--primary)", "var(--secondary)", "var(--secondary)")
             else -> Triple("#FFF8EE", "#FDEBD0", "#FDDDB8")
         }
         val headerRectFill = when(theme) {
             is SpringTheme -> "#EDA0BA"
             is SummerTheme -> theme.accentColor
+            is PremiumTheme, is PremiumDarkTheme -> theme.canvas
             else -> theme.secondaryText
         }
         val headerPattern = when(theme) {
             is SpringTheme -> defId("sp_stripe")
             is SummerTheme -> defId("su_check")
+            is PremiumTheme, is PremiumDarkTheme -> ""
             else -> defId("dots")
         }
+        val headerWidth = 680 - (sideMargin * 2)
+        val headerY = if (theme is PremiumTheme || theme is PremiumDarkTheme) 32 else 30
         
         return """
         <g>
-            <rect x="30" y="30" width="620" height="148" rx="5" fill="$headerRectFill" fill-opacity="0.92"/>
-            <rect x="30" y="30" width="620" height="148" rx="5" fill="url(#$headerPattern)"/>
+            <rect x="$sideMargin" y="$headerY" width="$headerWidth" height="148" rx="${theme.cornerRadius}" fill="$headerRectFill" fill-opacity="0.92"/>
+            ${if (headerPattern.isNotEmpty()) """<rect x="$sideMargin" y="$headerY" width="$headerWidth" height="148" rx="${theme.cornerRadius}" fill="url(#$headerPattern)"/>""" else ""}
             
-            <text x="340" y="80" text-anchor="middle" class="recipe-subtitle" fill="$subtitleColor" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text>
-            <text x="340" y="125" text-anchor="middle" class="recipe-title" fill="$titleColor" letter-spacing="-0.5">${escapeXml(title)}</text>
-            <text x="340" y="156" text-anchor="middle" font-family="${theme.fontFamily}" font-size="12" fill="$tagColor" letter-spacing="2" opacity="0.85">${escapeXml(tags)}</text>
+            <text x="340" y="${headerY + 50}" text-anchor="middle" class="recipe-subtitle" fill="$subtitleColor" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text>
+            <text x="340" y="${headerY + 95}" text-anchor="middle" class="recipe-title" fill="$titleColor" letter-spacing="-0.5">${escapeXml(title)}</text>
+            <text x="340" y="${headerY + 126}" text-anchor="middle" font-family="${theme.fontFamily}" font-size="12" fill="$tagColor" letter-spacing="2" opacity="0.85">${escapeXml(tags)}</text>
 
             <!-- Decorative divider under header -->
-            ${buildDecorativeDivider(188)}
+            ${buildDecorativeDivider(headerY + 158, sideMargin)}
         </g>
         """.trimIndent()
     }
 
-    private fun buildDecorativeDivider(y: Int): String {
+    private fun buildDecorativeDivider(y: Int, sideMargin: Int): String {
         return when(theme) {
             is SpringTheme -> """
                 <g transform="translate(0, $y)">
@@ -402,6 +443,11 @@ class RecipeSvgGenerator(
                     <circle cx="520" cy="-4" r="3" fill="#F5D840" fill-opacity="0.65"/>
                 </g>
             """.trimIndent()
+            is PremiumTheme, is PremiumDarkTheme -> """
+                <g transform="translate(0, $y)">
+                    <line x1="$sideMargin" y1="0" x2="${680 - sideMargin}" y2="0" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.1"/>
+                </g>
+            """.trimIndent()
             else -> """
                 <g transform="translate(0, $y)">
                     <line x1="80" y1="0" x2="300" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/>
@@ -413,18 +459,30 @@ class RecipeSvgGenerator(
         }
     }
 
-    private fun buildMetaInfoStrip(yield: String, prep: String, cook: String, summary: String, summaryHeight: Int): String {
+    private fun buildMetaInfoStrip(yield: String, prep: String, cook: String, summary: String, layout: Layout): String {
         val (stripFill, stripStroke, labelColor, valueColor) = when(theme) {
             is SpringTheme -> listOf("#F0FAF0", "#90C890", "#3A7040", "#1E4820")
             is SummerTheme -> listOf("#E8F4FF", "#5090C8", "#1058A0", "#0A3870")
+            is PremiumTheme, is PremiumDarkTheme -> listOf("var(--canvas)", "var(--accent)", "var(--secondary)", "var(--primary)")
             else -> listOf("var(--accent)", "var(--accent)", "var(--secondary)", "var(--primary)")
         }
-        val stripFillOpacity = if (theme is SpringTheme || theme is SummerTheme) "0.8" else "0.1"
-        val stripStrokeOpacity = if (theme is SpringTheme || theme is SummerTheme) "0.5" else "0.3"
+        val stripFillOpacity = if (theme is SpringTheme || theme is SummerTheme) "0.8" else if (theme is PremiumTheme || theme is PremiumDarkTheme) "1.0" else "0.1"
+        val stripStrokeOpacity = if (theme is SpringTheme || theme is SummerTheme) "0.5" else if (theme is PremiumTheme || theme is PremiumDarkTheme) "0.1" else "0.3"
         
-        val summaryLines = wrapTextToWidth(summary, 592f, avgCharWidth() * 0.9f)
+        val contentWidth = 680 - (layout.sideMargin * 2)
+        val textMultiplier = if (theme is PremiumTheme || theme is PremiumDarkTheme) 1.05f else 1.0f
+        val allSummaryLines = wrapTextToWidth(summary, contentWidth.toFloat() - 32, avgCharWidth() * textMultiplier)
             .ifEmpty { listOf(summary) }
-            .take(3)
+        
+        val summaryLines = if (allSummaryLines.size > 3) {
+            val lines = allSummaryLines.take(3).toMutableList()
+            lines[2] = lines[2].let { line ->
+                if (line.length > 3) line.dropLast(3) + "..." else line + "..."
+            }
+            lines
+        } else {
+            allSummaryLines
+        }
         
         val summarySvg = summaryLines.mapIndexed { index, line ->
             val y = 296 + (index * 22)
@@ -436,44 +494,46 @@ class RecipeSvgGenerator(
             """<text x="340" y="$y" text-anchor="middle" class="summary-text" fill="$summaryColor" fill-opacity="0.85">${escapeXml(line)}</text>"""
         }.joinToString("\n")
 
+        val itemWidth = contentWidth / 3.0
+        
         return """
         <g>
-            <rect x="44" y="202" width="592" height="72" rx="4" fill="$stripFill" fill-opacity="$stripFillOpacity" stroke="$stripStroke" stroke-width="0.5" stroke-opacity="$stripStrokeOpacity"/>
+            <rect x="${layout.sideMargin}" y="202" width="$contentWidth" height="72" rx="${theme.cornerRadius}" fill="$stripFill" fill-opacity="$stripFillOpacity" stroke="$stripStroke" stroke-width="0.5" stroke-opacity="$stripStrokeOpacity"/>
             
-            <g transform="translate(44, 202)">
+            <g transform="translate(${layout.sideMargin}, 202)">
                 <!-- Yield -->
-                <text x="100" y="26" text-anchor="middle" class="meta-label" fill="$labelColor">YIELD</text>
-                <text x="100" y="50" text-anchor="middle" class="meta-value" fill="$valueColor">${escapeXml(yield)}</text>
+                <text x="${itemWidth / 2}" y="26" text-anchor="middle" class="meta-label" fill="$labelColor">YIELD</text>
+                <text x="${itemWidth / 2}" y="50" text-anchor="middle" class="meta-value" fill="$valueColor">${escapeXml(yield)}</text>
                 
-                <line x1="200" y1="12" x2="200" y2="60" stroke="$stripStroke" stroke-width="0.5" stroke-opacity="0.35"/>
+                <line x1="$itemWidth" y1="12" x2="$itemWidth" y2="60" stroke="$stripStroke" stroke-width="0.5" stroke-opacity="0.35"/>
                 
                 <!-- Prep -->
-                <text x="300" y="26" text-anchor="middle" class="meta-label" fill="$labelColor">PREP TIME</text>
-                <text x="300" y="50" text-anchor="middle" class="meta-value" fill="$valueColor">${escapeXml(prep)}</text>
+                <text x="${itemWidth + itemWidth / 2}" y="26" text-anchor="middle" class="meta-label" fill="$labelColor">PREP TIME</text>
+                <text x="${itemWidth + itemWidth / 2}" y="50" text-anchor="middle" class="meta-value" fill="$valueColor">${escapeXml(prep)}</text>
                 
-                <line x1="400" y1="12" x2="400" y2="60" stroke="$stripStroke" stroke-width="0.5" stroke-opacity="0.35"/>
+                <line x1="${itemWidth * 2}" y1="12" x2="${itemWidth * 2}" y2="60" stroke="$stripStroke" stroke-width="0.5" stroke-opacity="0.35"/>
                 
                 <!-- Cook -->
-                <text x="500" y="26" text-anchor="middle" class="meta-label" fill="$labelColor">COOK TIME</text>
-                <text x="500" y="50" text-anchor="middle" class="meta-value" fill="$valueColor">${escapeXml(cook)}</text>
+                <text x="${itemWidth * 2 + itemWidth / 2}" y="26" text-anchor="middle" class="meta-label" fill="$labelColor">COOK TIME</text>
+                <text x="${itemWidth * 2 + itemWidth / 2}" y="50" text-anchor="middle" class="meta-value" fill="$valueColor">${escapeXml(cook)}</text>
             </g>
             
             $summarySvg
             
-            <line x1="44" y1="${285 + summaryHeight}" x2="636" y2="${285 + summaryHeight}" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/>
+            <line x1="${layout.sideMargin}" y1="${285 + layout.summaryHeight}" x2="${680 - layout.sideMargin}" y2="${285 + layout.summaryHeight}" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/>
         </g>
         """.trimIndent()
     }
 
     private fun buildBodyPanels(ingredients: List<String>, steps: List<String>, layout: Layout): String {
         val panelY = layout.bodyPanelY
-        val contentWidth = 680 - 88
-        val columnWidth = (contentWidth - 20) / 2
+        val contentWidth = 680 - (layout.sideMargin * 2)
+        val columnWidth = (contentWidth - layout.columnGap) / 2
         
         return """
-        <g transform="translate(44, $panelY)">
+        <g transform="translate(${layout.sideMargin}, $panelY)">
             ${buildSection(0, 0, columnWidth, layout.middleHeight, "INGREDIENTS", layout.ingredientsLines, false)}
-            <g transform="translate(${columnWidth + 20}, 0)">
+            <g transform="translate(${columnWidth + layout.columnGap}, 0)">
                 ${buildSection(0, 0, columnWidth, layout.middleHeight, "STEPS", layout.stepLines, true)}
             </g>
         </g>
@@ -484,12 +544,13 @@ class RecipeSvgGenerator(
         val accentColor = when(theme) {
             is SpringTheme -> if (!isSteps) "#3A7040" else "#8C3055"
             is SummerTheme -> if (!isSteps) "#F5C820" else theme.accentColor
+            is PremiumTheme, is PremiumDarkTheme -> theme.accentColor
             else -> if (!isSteps) "#4A8A38" else theme.accentColor
         }
         val sb = StringBuilder()
         
         sb.append("""
-            <rect x="$x" y="$y" width="$w" height="$h" rx="5" fill="${theme.canvas}" fill-opacity="0.4" stroke="${theme.accentColor}" stroke-width="1" stroke-opacity="0.5"/>
+            <rect x="$x" y="$y" width="$w" height="$h" rx="${theme.cornerRadius}" fill="${theme.canvas}" fill-opacity="${if (theme is PremiumTheme || theme is PremiumDarkTheme) "1.0" else "0.4"}" stroke="${theme.accentColor}" stroke-width="1" stroke-opacity="0.5"/>
             <rect x="$x" y="$y" width="6" height="$h" rx="3" fill="$accentColor" fill-opacity="0.7"/>
             <text x="${x + 28}" y="${y + 32}" class="section-title" fill="$accentColor">${escapeXml(title)}</text>
             <line x1="${x + 28}" y1="${y + 39}" x2="${x + w - 40}" y2="${y + 39}" stroke="$accentColor" stroke-width="1.2" stroke-opacity="0.6"/>
@@ -510,7 +571,7 @@ class RecipeSvgGenerator(
                     if (lineIndex == 0) {
                         sb.append("""
                             <circle cx="${x + 36}" cy="${currentY - 5}" r="11" fill="$stepAccent" fill-opacity="0.85"/>
-                            <text x="${x + 36}" y="${currentY}" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="Georgia, serif">${itemNum}</text>
+                            <text x="${x + 36}" y="${currentY}" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="${theme.fontFamily}">${itemNum}</text>
                         """.trimIndent())
                     }
                     sb.append("""
@@ -542,6 +603,7 @@ class RecipeSvgGenerator(
         if (notes.isEmpty() && tags.isEmpty()) return ""
         
         val sb = StringBuilder()
+        val contentWidth = 680 - (layout.sideMargin * 2)
         
         if (notes.isNotEmpty()) {
             val h = layout.notesHeight
@@ -549,14 +611,15 @@ class RecipeSvgGenerator(
             val (noteRectFill, noteRectStroke, noteTitleColor, noteLineColor) = when(theme) {
                 is SpringTheme -> listOf("#F5FAF0", "#80C080", "#3A7040", "#80C080")
                 is SummerTheme -> listOf("#E8F4FF", "#5090C8", "#1058A0", "#5090C8")
+                is PremiumTheme, is PremiumDarkTheme -> listOf("var(--canvas)", "var(--accent)", "var(--secondary)", "var(--accent)")
                 else -> listOf(theme.accentColor, theme.accentColor, "var(--secondary)", theme.accentColor)
             }
-            val noteRectOpacity = if (theme is SpringTheme || theme is SummerTheme) "0.7" else "0.05"
-            val noteRectStrokeDash = if (theme is SpringTheme || theme is SummerTheme) "5 5" else "6 4"
+            val noteRectOpacity = if (theme is SpringTheme || theme is SummerTheme) "0.7" else if (theme is PremiumTheme || theme is PremiumDarkTheme) "1.0" else "0.05"
+            val noteRectStrokeDash = if (theme is SpringTheme || theme is SummerTheme) "5 5" else if (theme is PremiumTheme || theme is PremiumDarkTheme) "" else "6 4"
             
             sb.append("""
-                <g transform="translate(44, $notesY)">
-                    <rect width="592" height="$h" rx="5" fill="$noteRectFill" fill-opacity="$noteRectOpacity" stroke="$noteRectStroke" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="$noteRectStrokeDash"/>
+                <g transform="translate(${layout.sideMargin}, $notesY)">
+                    <rect width="$contentWidth" height="$h" rx="${theme.cornerRadius}" fill="$noteRectFill" fill-opacity="$noteRectOpacity" stroke="$noteRectStroke" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="$noteRectStrokeDash"/>
                     <text x="28" y="28" class="section-title" fill="$noteTitleColor">COOK'S NOTES</text>
                     <line x1="28" y1="35" x2="150" y2="35" stroke="$noteLineColor" stroke-width="1" stroke-opacity="0.5"/>
             """.trimIndent())
@@ -579,25 +642,30 @@ class RecipeSvgGenerator(
         
         if (tags.isNotEmpty()) {
             val tagsY = layout.tagsY
-            sb.append("""<g transform="translate(44, $tagsY)">""")
+            sb.append("""<g transform="translate(${layout.sideMargin}, $tagsY)">""")
             var tx = 0
             var ty = 0
             tags.forEach { tag ->
                 val tw = (tag.length * 8) + 34
-                if (tx + tw > 592) {
+                if (tx + tw > contentWidth) {
                     tx = 0
                     ty += 44
                 }
                 val (tagFill, tagStroke, tagTextColor) = when(theme) {
                     is SpringTheme -> Triple("#F2B8CC", "#D47898", "#7A2848")
                     is SummerTheme -> Triple(theme.accentColor, theme.accentColor, "#0A3870")
+                    is PremiumTheme, is PremiumDarkTheme -> {
+                        val secondary = if (theme.chartPalette.size > 1) theme.chartPalette[1].color else "#8B5CF6"
+                        Triple(secondary, "none", "var(--primary)")
+                    }
                     else -> Triple(theme.accentColor, theme.accentColor, "var(--primary)")
                 }
-                val tagFillOpacity = if (theme is SummerTheme) "0.12" else "0.35"
+                val tagFillOpacity = if (theme is SummerTheme) "0.12" else if (theme is PremiumTheme || theme is PremiumDarkTheme) "0.1" else "0.35"
+                val tagStrokeOpacity = if (theme is PremiumTheme || theme is PremiumDarkTheme) "0.0" else "0.4"
                 
                 sb.append("""
-                    <rect x="$tx" y="$ty" width="$tw" height="32" rx="16" fill="$tagFill" fill-opacity="$tagFillOpacity" stroke="$tagStroke" stroke-width="0.8" stroke-opacity="0.4"/>
-                    <text x="${tx + tw/2}" y="${ty + 21}" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="$tagTextColor" font-weight="700">${escapeXml(tag)}</text>
+                    <rect x="$tx" y="$ty" width="$tw" height="32" rx="16" fill="$tagFill" fill-opacity="$tagFillOpacity" stroke="$tagStroke" stroke-width="0.8" stroke-opacity="$tagStrokeOpacity"/>
+                    <text x="${tx + tw/2}" y="${ty + 21}" text-anchor="middle" font-family="${theme.fontFamily}" font-size="12" fill="$tagTextColor" font-weight="700">${escapeXml(tag)}</text>
                 """.trimIndent())
                 tx += tw + 10
             }
@@ -609,12 +677,12 @@ class RecipeSvgGenerator(
                      else layout.notesY
         
         // Decorative divider
-        sb.append(buildBottomDivider(finalY))
+        sb.append(buildBottomDivider(finalY, layout.sideMargin))
         
         return sb.toString()
     }
 
-    private fun buildBottomDivider(y: Int): String {
+    private fun buildBottomDivider(y: Int, sideMargin: Int): String {
         return when(theme) {
             is SpringTheme -> """
                 <g transform="translate(0, $y)">
@@ -628,6 +696,11 @@ class RecipeSvgGenerator(
                 <g transform="translate(0, $y)">
                     <path d="M44 14 Q120 6 200 14 Q280 22 360 14 Q440 6 520 14 Q580 20 636 14" fill="none" stroke="${theme.accentColor}" stroke-width="0.8" stroke-opacity="0.35"/>
                     <rect x="333" y="8" width="14" height="14" rx="1" transform="rotate(45 340 15)" fill="#F5D840" fill-opacity="0.55"/>
+                </g>
+            """.trimIndent()
+            is PremiumTheme, is PremiumDarkTheme -> """
+                <g transform="translate(0, $y)">
+                    <line x1="$sideMargin" y1="14" x2="${680 - sideMargin}" y2="14" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.1"/>
                 </g>
             """.trimIndent()
             else -> """
@@ -646,7 +719,7 @@ class RecipeSvgGenerator(
     private fun buildFooter(layout: Layout): String {
         return """
         <g transform="translate(340, ${layout.totalHeight - 30})">
-            <text text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="var(--secondary)" letter-spacing="2" fill-opacity="0.6">RECIPE DOSSIER</text>
+            <text text-anchor="middle" font-family="${theme.fontFamily}" font-size="10" fill="var(--secondary)" letter-spacing="2" fill-opacity="0.6">RECIPE DOSSIER</text>
         </g>
         """.trimIndent()
     }

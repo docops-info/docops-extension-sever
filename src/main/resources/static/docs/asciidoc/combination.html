@@ -8,7 +8,7 @@
 <link rel="icon" type="image/05" href="../images/favicon.svg?v=2025.05">
 <title>Combination Charts</title>
 <style>
-@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap);@keyframes docops-reveal{to{opacity:1;transform:translateY(0)}}:root{--brand-ink:#0B1220;--brand-cloud:#F6F8FB;--brand-slate:#2A3447;--brand-steel:#8A96AD;--brand-cyan:#00B7D6;--brand-gold:#C9A227;--semantic-success:#16A34A;--semantic-warning:#D97706;--semantic-error:#DC2626;--semantic-info:#2563EB;--canvas:var(--brand-cloud);--surface-1:#FFFFFF;--surface-2:#EEF2F7;--border:rgba(11, 18, 32, 0.12);--text-1:var(--brand-ink);--text-2:var(--brand-slate);--text-3:var(--brand-steel);--accent:var(--brand-cyan);--font-sans:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;--font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;--content-max:1100px;--content-reading:920px;--r-sm:8px;--r-md:12px;--r-lg:16px;--shadow-sm:0 6px 18px rgba(11, 18, 32, 0.08);--shadow-md:0 16px 40px rgba(11, 18, 32, 0.12);--focus-glow:0 0 0 4px rgba(0, 183, 214, 0.22);--dur-fast:120ms;--dur-base:220ms;--dur-slow:420ms;--ease-standard:cubic-bezier(0.16, 1, 0.3, 1);--grid-ink:rgba(11, 18, 32, 0.05);--halo-cyan:rgba(0, 183, 214, 0.10);--halo-gold:rgba(201, 162, 39, 0.08)}:root.dark-mode{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--canvas:#070B14;--surface-1:#0B1220;--surface-2:#111A2D;--border:rgba(241, 245, 255, 0.14);--text-1:#F1F5FF;--text-2:#B7C2D9;--text-3:#8EA0C4;--accent:#28D9F5;--grid-ink:rgba(241, 245, 255, 0.06);--halo-cyan:rgba(40, 217, 245, 0.16);--halo-gold:rgba(201, 162, 39, 0.12)}}html{box-sizing:border-box;text-size-adjust:100%;scroll-behavior:smooth}*,::after,::before{box-sizing:inherit}::selection{background:rgba(0,183,214,.22)}body{margin:0;font-family:var(--font-sans);color:var(--text-2);background:var(--canvas);line-height:1.6;background-image:radial-gradient(1200px 800px at 12% -10%,var(--halo-cyan),transparent 55%),radial-gradient(900px 700px at 100% 10%,var(--halo-gold),transparent 50%),linear-gradient(to right,var(--grid-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-ink) 1px,transparent 1px);background-size:auto,auto,28px 28px,28px 28px;background-attachment:fixed}#header{max-width:var(--content-max)}#content,#footer,#footnotes,#header{margin:0 auto;padding:28px 20px}#footer,#footnotes{max-width:var(--content-max)}#content{max-width:var(--content-reading)}#content,#footer,#footnotes,#header>h1:first-child,#toc{opacity:0;transform:translateY(10px);animation:docops-reveal var(--dur-slow) var(--ease-standard) forwards}#header>h1:first-child{animation-delay:40ms}#toc{animation-delay:90ms}#content{animation-delay:140ms}#footnotes{animation-delay:190ms}#footer{animation-delay:240ms}@media (prefers-reduced-motion:reduce){#content,#footer,#footnotes,#header>h1:first-child,#toc{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}h1,h2,h3,h4{color:var(--text-1)}h1,h4,h5{letter-spacing:-.01em}h1,h2,h3,h4,h5,h6{line-height:1.2;margin:2.2rem 0 .9rem;scroll-margin-top:96px}#header>h1:first-child{margin:0 0 12px;font-size:40px;font-weight:600;letter-spacing:-.6px;padding:18px 18px 18px 16px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.2));border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative}#header>h1:first-child::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;border-radius:var(--r-lg)0 0 var(--r-lg);background:linear-gradient(180deg,var(--accent),rgba(0,183,214,.35))}h2,h4,h5,h6{font-weight:600}h2{font-size:28px;letter-spacing:-.3px;border-bottom:1px solid var(--border);padding-bottom:10px}h3{font-size:22px;font-weight:500;letter-spacing:-.2px}h4,h5,h6{font-size:16px}h5,h6{font-size:14px;color:var(--text-2)}h6{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.12em}p{margin:0 0 1rem}a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,183,214,.35);transition:border-color var(--dur-base) var(--ease-standard),color var(--dur-base) var(--ease-standard)}a:focus,a:hover{color:var(--accent);border-bottom-color:var(--accent)}hr{border:0;height:1px;background:var(--border);margin:2rem 0}ol,ul{margin:0 0 1rem;padding-left:1.25rem}li{margin:.3rem 0}code,kbd,pre{font-family:var(--font-mono);font-variant-ligatures:none}code{font-size:.92em;color:var(--text-1);background:rgba(0,183,214,.1);border:1px solid rgba(0,183,214,.18);padding:.16em .4em;border-radius:10px}blockquote,pre{border:1px solid var(--border);box-shadow:var(--shadow-sm)}pre{margin:0 0 1.25rem;padding:16px 18px;border-radius:var(--r-lg);background:linear-gradient(180deg,rgba(11,18,32,.92),rgba(11,18,32,.84));color:#eaf0ff;overflow:auto;line-height:1.55}blockquote{margin:1.5rem 0;padding:14px 16px;border-radius:var(--r-md);background:var(--surface-1);position:relative}blockquote::before{content:"";position:absolute;inset:10px auto 10px 10px;width:3px;border-radius:999px;background:rgba(138,150,173,.55)}blockquote p:last-child{margin-bottom:0}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);box-shadow:var(--shadow-sm)}td,th{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top}th{font-weight:600;color:var(--text-1);background:linear-gradient(180deg,var(--surface-2),rgba(238,242,247,.25));text-transform:uppercase;letter-spacing:.08em;font-size:12px}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(0,183,214,.06)}#toc,.admonitionblock,.exampleblock,.sidebarblock{border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}#toc{background:color-mix(in srgb,var(--surface-1) 78%,transparent);backdrop-filter:blur(10px);border:1px solid var(--border);padding:16px}#toc .title,#toctitle,.admonitionblock .title{color:var(--text-1);font-weight:600;font-size:12px;text-transform:uppercase}#toc .title,#toctitle{margin:0 0 10px;letter-spacing:.12em;display:flex;align-items:center;gap:10px}#toc .title::after,#toctitle::after{content:"";flex:1;height:1px;background:var(--border)}#toc ul{list-style:none;padding-left:0;margin:0}#toc li{margin:6px 0}#toc a{color:var(--text-2);border-bottom:0;display:inline-block;padding:2px 0}#toc a:hover{color:var(--text-1)}#toc ul ul{padding-left:14px;border-left:1px solid var(--border);margin-left:6px}#toc.toc2{position:fixed!important;top:20px;left:20px;width:320px;max-height:calc(100vh - 40px);overflow:auto;z-index:5000}body.toc2{padding-left:360px;max-width:none}@media (max-width:1100px){#toc.toc2{position:static!important;width:auto;max-height:none;left:auto;top:auto;margin:0 0 16px}body.toc2{padding-left:0}}.admonitionblock,.exampleblock,.sidebarblock{margin:1.5rem 0;background:var(--surface-1)}.admonitionblock{overflow:hidden;border:1px solid var(--border)}.admonitionblock>table{border:0;margin:0;box-shadow:none}.admonitionblock td.icon{width:52px;padding:14px 10px;text-align:center;background:var(--surface-2);border-right:1px solid var(--border)}.admonitionblock td.content{padding:14px 16px}.admonitionblock .title{letter-spacing:.1em;margin-bottom:6px}.admonitionblock.note{border-left:4px solid var(--semantic-info)}.admonitionblock.tip{border-left:4px solid var(--semantic-success)}.admonitionblock.warning{border-left:4px solid var(--semantic-warning)}.admonitionblock.caution{border-left:4px solid var(--semantic-error)}.admonitionblock.important{border-left:4px solid var(--brand-gold)}.admonitionblock.important td.icon{background:color-mix(in srgb,var(--brand-gold) 14%,var(--surface-2))}.exampleblock,.sidebarblock{padding:16px}.exampleblock>.content>.title,.sidebarblock>.content>.title{margin:0 0 10px;font-weight:600;color:var(--text-1)}.exampleblock,.sidebarblock,img,kbd{border:1px solid var(--border)}kbd{display:inline-block;padding:.14rem .4rem;border-radius:10px;background:var(--surface-2);color:var(--text-1);font-size:.85em;box-shadow:0 2px 0 rgba(11,18,32,.08)}img{max-width:100%;height:auto;border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}.docops-extension img,.docops.imageblock img,.docops.inlineimg img{border:0!important;box-shadow:none!important;background:0 0!important;padding:0!important;border-radius:0!important}#footer,.page-navigation{border-top:1px solid var(--border)}.page-navigation{width:100%;margin-top:5rem;padding:2rem 0}.nav-container{max-width:var(--content-max);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem}.nav-next,.nav-prev{font-family:var(--font-sans);font-weight:600;font-size:.9rem;color:var(--brand-cyan);text-transform:uppercase;letter-spacing:.05em;padding:.75rem 1.5rem;border-radius:var(--r-md);background:var(--surface-1);border:1px solid var(--border);transition:all var(--dur-base) var(--ease-standard);box-shadow:var(--shadow-sm);border-bottom:1px solid var(--border)}.nav-next:hover,.nav-prev:hover{color:var(--surface-1);background:var(--brand-cyan);border-color:var(--brand-cyan);transform:translateY(-2px);box-shadow:var(--shadow-md);border-bottom:1px solid var(--brand-cyan)}#footer{color:var(--text-3)}#footer-text{opacity:.9}:focus{outline:2px solid var(--accent);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--focus-glow)}@media print{body{background:#fff!important}#toc.toc2{display:none!important}a,body,pre{color:#000!important}a{border-bottom:0!important;text-decoration:underline!important}pre{background:#f6f8fb!important}}.theme-toggle{position:fixed;top:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--surface-1);border:1px solid var(--border);box-shadow:var(--shadow-md);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all var(--dur-base) var(--ease-standard);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(11,18,32,.2);border-color:var(--accent)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;line-height:1;transition:all var(--dur-base) ease}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.admonitionblock td.icon i.fa{font-family:"Font Awesome 6 Free";font-weight:900;font-style:normal;display:inline-block;line-height:1;font-size:18px;color:var(--text-1)}.admonitionblock td.icon i.fa::before{display:inline-block}.admonitionblock td.icon i.fa.icon-note::before{content:"";color:var(--semantic-info)}.admonitionblock td.icon i.fa.icon-tip::before{content:"";color:var(--semantic-success)}.admonitionblock td.icon i.fa.icon-warning::before{content:"";color:var(--semantic-warning)}.admonitionblock td.icon i.fa.icon-caution::before{content:"";color:var(--semantic-error)}.admonitionblock td.icon i.fa.icon-important::before{content:"";color:var(--brand-gold)}pre code.hll{background-color:#ffc}pre code.c{color:#09f;font-style:italic}pre code.err{color:#a00}pre code.k{color:#069;font-weight:700}pre code.o{color:#555}pre code.cm{color:#35586c;font-style:italic}pre code.cp{color:#099}pre code.c1,pre code.cs{color:#35586c;font-style:italic}pre code.cs{font-weight:700}pre code.gd{background-color:#fcc}pre code.ge{font-style:italic}pre code.gr{color:red}pre code.gh{color:#030;font-weight:700}pre code.gi{background-color:#cfc}pre code.go{color:#000}pre code.gp{color:#009}pre code.gp,pre code.gs,pre code.gu{font-weight:700}pre code.gu{color:#030}pre code.gt{color:#9c6}pre code.kc,pre code.kd,pre code.kn{color:#069;font-weight:700}pre code.kp{color:#069}pre code.kr,pre code.kt{color:#069;font-weight:700}pre code.kt{color:#078}pre code.m{color:#f60}pre code.s{color:#c30}pre code.na{color:#309}pre code.nb{color:#366}pre code.nc{color:#0a8;font-weight:700}pre code.no{color:#360}pre code.nd{color:#99f}pre code.ne,pre code.ni{color:#999;font-weight:700}pre code.ne{color:#c00}pre code.nf{color:#c0f}pre code.nl{color:#99f}pre code.nn,pre code.nt{color:#0cf;font-weight:700}pre code.nt{color:#309}pre code.nv{color:#033}pre code.ow{color:#000;font-weight:700}pre code.w{color:#bbb}pre code.mf,pre code.mh,pre code.mi,pre code.mo{color:#f60}pre code.sb,pre code.sc{color:#c30}pre code.sd{color:#c30;font-style:italic}pre code.s2{color:#c30}pre code.se{color:#c30;font-weight:700}pre code.sh{color:#c30}pre code.si{color:#a00}pre code.sx{color:#c30}pre code.sr{color:#3aa}pre code.s1{color:#c30}pre code.ss{color:#a60}pre code.bp{color:#366}pre code.vc,pre code.vg,pre code.vi{color:#033}pre code.il{color:#f60}pre code.g{color:#050}pre code.l{color:#f90}pre code.n,pre code.nx{color:#008}pre code.py{color:#96f}pre code.p{color:#000}pre code.x{color:#f06}pre[data-code-language=console]{background:#ddd;padding:10px}pre[data-code-language=console] code.go{color:#555;font-size:1em}pre[data-code-language=console] code.gp{color:#090;font-weight:700}
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap);@keyframes premium-reveal{to{opacity:1;transform:translateY(0)}}:root{--brand-primary:#3B82F6;--brand-secondary:#8B5CF6;--brand-success:#16A34A;--brand-warning:#D97706;--brand-error:#DC2626;--brand-neutral:#6B7280;--semantic-success:var(--brand-success);--semantic-warning:var(--brand-warning);--semantic-error:var(--brand-error);--semantic-info:var(--brand-primary);--canvas:#FFFFFF;--surface-1:#FFFFFF;--surface-2:#F9FAFB;--border:rgba(17, 24, 39, 0.08);--text-1:#111827;--text-2:#374151;--text-3:#6B7280;--accent:var(--brand-primary);--font-sans:"Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;--font-mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;--content-max:1100px;--content-reading:880px;--r-sm:4px;--r-md:8px;--r-lg:16px;--shadow-sm:0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);--shadow-md:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);--focus-glow:0 0 0 3px rgba(59, 130, 246, 0.3);--dur-fast:120ms;--dur-base:220ms;--dur-slow:420ms;--ease-standard:cubic-bezier(0.16, 1, 0.3, 1);--grid-ink:rgba(17, 24, 39, 0.03);--halo-primary:rgba(59, 130, 246, 0.06);--halo-secondary:rgba(139, 92, 246, 0.04)}:root.dark-mode{--canvas:#0F172A;--surface-1:#1E293B;--surface-2:#334155;--border:rgba(248, 250, 252, 0.1);--text-1:#F9FAFB;--text-2:#D1D5DB;--text-3:#9CA3AF;--accent:#60A5FA;--grid-ink:rgba(248, 250, 252, 0.04);--halo-primary:rgba(59, 130, 246, 0.12);--halo-secondary:rgba(139, 92, 246, 0.08)}@media (prefers-color-scheme:dark){:root.dark-mode-auto{--canvas:#0F172A;--surface-1:#1E293B;--surface-2:#334155;--border:rgba(248, 250, 252, 0.1);--text-1:#F9FAFB;--text-2:#D1D5DB;--text-3:#9CA3AF;--accent:#60A5FA;--grid-ink:rgba(248, 250, 252, 0.04);--halo-primary:rgba(59, 130, 246, 0.12);--halo-secondary:rgba(139, 92, 246, 0.08)}}html{box-sizing:border-box;text-size-adjust:100%;scroll-behavior:smooth}*,::after,::before{box-sizing:inherit}::selection{background:rgba(59,130,246,.15)}body{margin:0;font-family:var(--font-sans);color:var(--text-2);background:var(--canvas);line-height:1.6;background-image:radial-gradient(1200px 800px at 0% -10%,var(--halo-primary),transparent 60%),radial-gradient(800px 600px at 100% 20%,var(--halo-secondary),transparent 50%),linear-gradient(to right,var(--grid-ink) 1px,transparent 1px),linear-gradient(to bottom,var(--grid-ink) 1px,transparent 1px);background-size:auto,auto,32px 32px,32px 32px;background-attachment:fixed}#header{max-width:var(--content-max);padding:32px 24px}#content,#header{margin:0 auto}#content,#footnotes{padding:32px 24px}#footer,#footnotes{max-width:var(--content-max);margin:0 auto}#content{max-width:var(--content-reading)}#content,#footer,#footnotes,#header>h1:first-child,#toc{opacity:0;transform:translateY(12px);animation:premium-reveal var(--dur-slow) var(--ease-standard) forwards}#header>h1:first-child{animation-delay:60ms}#toc{animation-delay:120ms}#content{animation-delay:180ms}#footnotes{animation-delay:240ms}#footer{animation-delay:300ms}@media (prefers-reduced-motion:reduce){#content,#footer,#footnotes,#header>h1:first-child,#toc{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}h1,h2,h3,h4{color:var(--text-1)}h1,h4,h5{letter-spacing:-.02em}h1,h2,h3,h4,h5,h6{line-height:1.2;margin:2.5rem 0 1rem;scroll-margin-top:100px}#header>h1:first-child{margin:0 0 24px;font-size:36px;font-weight:800;letter-spacing:-.04em;padding-bottom:24px;border-bottom:1px solid var(--border);position:relative}h2,h6{font-weight:700}h2{font-size:30px;letter-spacing:-.03em;border-bottom:1px solid var(--border);padding-bottom:12px}h3,h4,h5{font-weight:600}h3{font-size:24px;letter-spacing:-.02em}h4,h5{font-size:18px}h5{font-size:16px;color:var(--text-2)}h6{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em}p{margin:0 0 1.2rem}a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:all var(--dur-base) var(--ease-standard)}a:focus,a:hover{border-bottom-color:var(--accent)}hr{border:0;height:1px;background:var(--border);margin:3rem 0}ol,ul{margin:0 0 1.2rem;padding-left:1.5rem}li{margin:.4rem 0}blockquote{margin:2rem 0;padding:24px;border-radius:var(--r-md);background:var(--surface-1);border:1px solid var(--border);box-shadow:var(--shadow-sm);position:relative}blockquote::before{content:"";position:absolute;inset:12px auto 12px 0;width:4px;border-radius:0 var(--r-sm) var(--r-sm)0;background:var(--brand-primary)}blockquote p:last-child{margin-bottom:0}table{width:100%;border-collapse:separate;border-spacing:0;margin:2rem 0;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border);background:var(--surface-1);box-shadow:var(--shadow-sm)}td,th{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:top}th{font-weight:600;color:var(--text-1);background:var(--surface-2);text-transform:uppercase;letter-spacing:.05em;font-size:12px}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(59,130,246,.02)}#toc,.admonitionblock,.exampleblock,.sidebarblock{border-radius:var(--r-md);background:var(--surface-1);box-shadow:var(--shadow-sm)}#toc{border:1px solid var(--border);padding:24px;margin-bottom:32px}#toc .title,#toctitle,.admonitionblock .title{color:var(--text-1);font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase}#toc .title,#toctitle{margin:0 0 16px;display:flex;align-items:center;gap:12px}#toc .title::after,#toctitle::after{content:"";flex:1;height:1px;background:var(--border)}#toc ul{list-style:none;padding-left:0;margin:0}#toc li{margin:8px 0}#toc a{color:var(--text-2);border-bottom:0;display:inline-block;padding:2px 0;font-weight:500}#toc a:hover{color:var(--accent)}#toc ul ul{padding-left:16px;border-left:1px solid var(--border);margin-left:4px}#toc.toc2{position:fixed!important;top:32px;left:32px;width:280px;max-height:calc(100vh - 64px);overflow:auto;z-index:5000}body.toc2{padding-left:344px;max-width:none}@media (max-width:1200px){#toc.toc2{position:static!important;width:auto;max-height:none;margin:0 0 24px}body.toc2{padding-left:0}}.admonitionblock,.exampleblock,.sidebarblock{margin:2rem 0}.admonitionblock{overflow:hidden;border:1px solid var(--border)}.admonitionblock>table{border:0;margin:0;box-shadow:none}.admonitionblock td.icon{width:64px;padding:24px 12px;text-align:center;background:var(--surface-2);border-right:1px solid var(--border)}.admonitionblock td.content{padding:24px}.admonitionblock .title{margin-bottom:8px}.admonitionblock.note{border-left:4px solid var(--brand-primary)}.admonitionblock.tip{border-left:4px solid var(--brand-success)}.admonitionblock.warning{border-left:4px solid var(--brand-warning)}.admonitionblock.caution{border-left:4px solid var(--brand-error)}.admonitionblock.important{border-left:4px solid var(--brand-secondary)}.exampleblock,.sidebarblock{padding:24px}.exampleblock>.content>.title,.sidebarblock>.content>.title{margin:0 0 12px;font-weight:700;color:var(--text-1)}.exampleblock,.sidebarblock,img,kbd{border:1px solid var(--border)}kbd{display:inline-block;padding:2px 6px;border-radius:var(--r-sm);background:var(--surface-2);color:var(--text-1);font-family:var(--font-mono);font-size:.85em;box-shadow:0 2px 0 var(--border)}img{max-width:100%;height:auto;border-radius:var(--r-md);box-shadow:var(--shadow-md)}.docops-extension img,.docops.imageblock img,.docops.inlineimg img{border:0!important;box-shadow:none!important;background:0 0!important;padding:0!important;border-radius:0!important}#footer,.page-navigation{border-top:1px solid var(--border)}.page-navigation{width:100%;margin-top:6rem;padding:3rem 0}.nav-container{max-width:var(--content-max);margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 24px}.nav-next,.nav-prev{font-family:var(--font-sans);font-weight:600;font-size:.9rem;color:var(--text-1);text-transform:uppercase;letter-spacing:.05em;padding:12px 24px;border-radius:var(--r-md);background:var(--surface-1);border:1px solid var(--border);transition:all var(--dur-base) var(--ease-standard);box-shadow:var(--shadow-sm);border-bottom:1px solid var(--border)}.nav-next:hover,.nav-prev:hover{color:var(--surface-1);background:var(--accent);border-color:var(--accent);border-bottom-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-md)}#footer{color:var(--text-3);padding:48px 24px;text-align:center;font-size:.9rem}#footer-text{opacity:.8}:focus{outline:2px solid var(--accent);outline-offset:2px}:focus:not(:focus-visible){outline:0}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;box-shadow:var(--focus-glow)}@media print{a,body{color:#000!important}body{background:#fff!important}#toc.toc2{display:none!important}a{border-bottom:0!important;text-decoration:underline!important}}.theme-toggle{position:fixed;top:2rem;right:2rem;width:3.5rem;height:3.5rem;border-radius:50%;background:var(--surface-1);border:1px solid var(--border);box-shadow:var(--shadow-md);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:6000;transition:all var(--dur-base) var(--ease-standard);backdrop-filter:blur(12px)}.theme-toggle:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 15px 30px -5px rgba(0,0,0,.1);border-color:var(--accent)}.theme-toggle:active{transform:scale(.95)}.theme-toggle span{font-size:1.25rem;transition:all var(--dur-base) ease}.theme-toggle .dark-icon{display:none}.theme-toggle .light-icon{display:block}:root.dark-mode .theme-toggle .dark-icon{display:block}:root.dark-mode .theme-toggle .light-icon{display:none}@media (prefers-color-scheme:light){:root.dark-mode-auto .theme-toggle .dark-icon{display:none}:root.dark-mode-auto .theme-toggle .light-icon{display:block}}@media (prefers-color-scheme:dark){:root.dark-mode-auto .theme-toggle .dark-icon{display:block}:root.dark-mode-auto .theme-toggle .light-icon{display:none}}.admonitionblock td.icon i.fa{font-family:"Font Awesome 6 Free";font-weight:900;font-style:normal;display:inline-block;line-height:1;font-size:20px;color:var(--text-1)}.admonitionblock td.icon i.fa.icon-note::before{content:"";color:var(--brand-primary)}.admonitionblock td.icon i.fa.icon-tip::before{content:"";color:var(--brand-success)}.admonitionblock td.icon i.fa.icon-warning::before{content:"";color:var(--brand-warning)}.admonitionblock td.icon i.fa.icon-caution::before{content:"";color:var(--brand-error)}.admonitionblock td.icon i.fa.icon-important::before{content:"";color:var(--brand-secondary)}pre{background:var(--surface-1)!important;border:1px solid var(--border)!important;border-radius:var(--r-md)!important;padding:24px!important;box-shadow:var(--shadow-sm);overflow-x:auto}code{font-family:var(--font-mono);font-size:.9em;color:var(--brand-primary);background:var(--surface-2);padding:.2em .4em;border-radius:var(--r-sm)}pre code{color:inherit;background:0 0;padding:0;border-radius:0}pre code.hll{background-color:#f1f5f9}pre code.c{color:#64748b;font-style:italic}pre code.k{color:#3b82f6;font-weight:600}pre code.s{color:#059669}pre code.na{color:#8b5cf6}pre code.nc{color:#3b82f6;font-weight:600}pre code.nf{color:#8b5cf6}pre code.nt{color:#3b82f6;font-weight:600}pre code.nv{color:#111827}pre code.o,pre code.p{color:#64748b}pre[data-code-language=console]{background:#1e293b!important;color:#f8fafc}pre[data-code-language=console] code.go{color:#cbd5e1}pre[data-code-language=console] code.gp{color:#38bdf8;font-weight:700}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
@@ -2051,7 +2051,7 @@
             const printWindow = window.open('', '_blank');
             printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
             printWindow.document.write(svgData);
-            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <' + '/script><nav class="page-navigation">
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <\/script><nav class="page-navigation">
   <div class="nav-container">
     <a href="callout.html" class="nav-prev">&larr; Callout</a>
           <a href="connectors.html" class="nav-next">Connectors &rarr;</a>
@@ -2429,66 +2429,75 @@ window.onload = function() {
 
 <script src='https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+<script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+<script src ="https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js"></script>        
 <style>
-/*! Asciidoctor Tabs | Editorial Light Theme */
+/*! Asciidoctor Tabs | Accent Theme
+ *  Drop-in replacement — swap your existing tabs CSS with this file.
+ *  Accent color is a single CSS variable; change --tabs-accent to any hue.
+ */
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
-  /* Typography */
-  --tabs-font-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
-  --tabs-font-ui: "IBM Plex Sans", "Avenir Next", "Segoe UI", sans-serif;
-  --tabs-font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+  --tabs-accent:        #4f46e5;   /* indigo — change to any hex */
+  --tabs-accent-hover:  #4338ca;
+  --tabs-accent-rail:   #f5f3ff;
+  --tabs-accent-text:   #ffffff;
+  --tabs-accent-muted:  #4338ca;   /* inactive tab label */
+  --tabs-accent-soft:   rgba(99, 102, 241, 0.12);
 
-  /* Editorial palette (paper + ink + vermilion accent) */
-  --tabs-paper: #f8f5ef;
-  --tabs-paper-elev: #fffdf8;
-  --tabs-ink: #1f2328;
-  --tabs-ink-muted: #616a76;
-  --tabs-rule: #d6cec0;
-  --tabs-rule-strong: #b5aa97;
+  --tabs-bg:            #ffffff;
+  --tabs-rail-border:   #4f46e5;
+  --tabs-border:        #4f46e5;
+  --tabs-text:          #111827;
+  --tabs-text-muted:    #6b7280;
+  --tabs-panel-bg:      #ffffff;
 
-  --tabs-accent: #d9482b;       /* dominant */
-  --tabs-accent-soft: #f3c8b7;  /* subtle fill */
-  --tabs-accent-ink: #fffaf5;
-
-  --tabs-radius-lg: 14px;
-  --tabs-radius-md: 10px;
-  --tabs-gap: 8px;
-  --tabs-shadow: 0 10px 24px rgba(45, 39, 30, 0.11);
-
-  --tabs-focus: #1f7a8c;
+  --tabs-radius-outer:  12px;
+  --tabs-radius-btn:    8px;
+  --tabs-gap:           6px;
+  --tabs-focus:         #6366f1;
 }
 
-/* container */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabs-accent:        #6366f1;
+    --tabs-accent-hover:  #818cf8;
+    --tabs-accent-rail:   #1e1b4b;
+    --tabs-accent-text:   #ffffff;
+    --tabs-accent-muted:  #a5b4fc;
+    --tabs-accent-soft:   rgba(99, 102, 241, 0.18);
+
+    --tabs-bg:            #0f0f10;
+    --tabs-rail-border:   #4338ca;
+    --tabs-border:        #4338ca;
+    --tabs-text:          #f3f4f6;
+    --tabs-text-muted:    #9ca3af;
+    --tabs-panel-bg:      #111113;
+  }
+}
+
+/* ── Container ───────────────────────────────────────────────────────── */
 .tabs {
   margin: 1.75rem 0;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-lg);
-  box-shadow: var(--tabs-shadow);
+  border: 1px solid var(--tabs-border);
+  border-radius: var(--tabs-radius-outer);
   overflow: hidden;
-  background:
-          radial-gradient(circle at 10% -40%, rgba(217, 72, 43, 0.07), transparent 52%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.35)),
-          var(--tabs-paper);
-  color: var(--tabs-ink);
-  animation: tabsEditorialEnter 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: var(--tabs-bg);
+  color: var(--tabs-text);
+  animation: tabsAccentEnter 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* tab rail */
+/* ── Tab rail ────────────────────────────────────────────────────────── */
 .tablist > ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   margin: 0;
-  padding: 10px;
+  padding: 8px;
   gap: var(--tabs-gap);
-  border-bottom: 1px solid var(--tabs-rule);
-  background:
-          repeating-linear-gradient(
-                  90deg,
-                  rgba(40, 38, 34, 0.03) 0 1px,
-                  transparent 1px 18px
-          ),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.28)),
-          var(--tabs-paper-elev);
+  border-bottom: 1px solid var(--tabs-rail-border);
+  background: var(--tabs-accent-rail);
 }
 
 .tablist.ulist,
@@ -2500,38 +2509,31 @@ window.onload = function() {
   margin-left: 0;
 }
 
-/* tabs */
+/* ── Tab buttons ─────────────────────────────────────────────────────── */
 .tablist > ul li {
-  align-items: center;
   display: inline-flex;
+  align-items: center;
   position: relative;
   cursor: pointer;
 
-  font-family: var(--tabs-font-ui);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.012em;
+  font-size: 0.8125rem;   /* 13px */
+  font-weight: 500;
+  line-height: 1.2;
 
-  color: var(--tabs-ink-muted);
+  color: var(--tabs-accent-muted);
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  padding: 0.5rem 0.95rem;
+  border: none;
+  border-radius: var(--tabs-radius-btn);
+  padding: 0.4rem 1rem;
 
   transition:
-          color 180ms ease,
-          background-color 180ms ease,
-          border-color 180ms ease,
-          transform 180ms ease,
-          box-shadow 180ms ease,
-          opacity 180ms ease;
+          color 130ms ease,
+          background-color 130ms ease;
 }
 
 .tablist > ul li:hover {
-  color: var(--tabs-ink);
-  border-color: var(--tabs-rule);
-  background: rgba(255, 255, 255, 0.72);
-  transform: translateY(-1px);
+  color: var(--tabs-text);
+  background: var(--tabs-accent-soft);
 }
 
 .tablist > ul li:focus-visible {
@@ -2539,85 +2541,53 @@ window.onload = function() {
   outline-offset: 2px;
 }
 
-/* underline indicator */
-.tabs .tablist li::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: -7px;
-  height: 2px;
-  border-radius: 99px;
-  background: transparent;
-  transform: scaleX(0.3);
-  opacity: 0;
-  transition: transform 220ms ease, opacity 220ms ease, background-color 220ms ease;
-}
-
-/* active tab */
+/* ── Active tab ──────────────────────────────────────────────────────── */
 .tabs.is-loading .tablist li:first-child,
 .tabs:not(.is-loading) .tablist li.is-selected {
   background: var(--tabs-accent);
-  color: var(--tabs-accent-ink);
-  border-color: transparent;
-  box-shadow: 0 6px 16px rgba(217, 72, 43, 0.28);
-  transform: translateY(-1px);
+  color: var(--tabs-accent-text);
 }
 
-.tabs.is-loading .tablist li:first-child::after,
-.tabs:not(.is-loading) .tablist li.is-selected::after {
-  background: var(--tabs-accent);
-  transform: scaleX(1);
-  opacity: 1;
+/* no underline indicator needed for this style */
+.tabs .tablist li::after {
+  display: none;
 }
 
 /* reduce inactive visual weight */
 .tabs:not(.is-loading) .tablist li:not(.is-selected) {
-  opacity: 0.86;
+  opacity: 0.9;
 }
 
-/* loading/hidden panel behavior */
+/* ── Panel visibility ────────────────────────────────────────────────── */
 .tabs.is-loading .tabpanel + .tabpanel,
 .tabs:not(.is-loading) .tabpanel.is-hidden {
   display: none;
 }
 
-/* panel */
+/* ── Panel ───────────────────────────────────────────────────────────── */
 .tabpanel {
-  padding: 1.2rem 1.3rem;
-  color: var(--tabs-ink);
-  background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.32)),
-          var(--tabs-paper-elev);
-  border: 0;
-  animation: tabPanelReveal 280ms ease;
+  padding: 1.25rem 1.375rem;
+  color: var(--tabs-text);
+  background: var(--tabs-panel-bg);
+  animation: tabPanelReveal 200ms ease;
 }
 
 .tabpanel > :first-child {
   margin-top: 0;
 }
 
-/* subtle editorial heading treatment in panel */
-.tabpanel h2,
-.tabpanel h3,
-.tabpanel h4 {
-  font-family: var(--tabs-font-head);
-  letter-spacing: -0.01em;
-}
-
-/* keep standalone Asciidoctor spacing tidy */
+/* tidy trailing margin in Asciidoctor context */
 #content .tabpanel > :last-child,
 #content .tabpanel > :last-child > :last-child,
 #content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
   margin-bottom: 0;
 }
 
-/* table support */
+/* ── Table support ───────────────────────────────────────────────────── */
 .tablecontainer {
   overflow-x: auto;
-  border: 1px solid var(--tabs-rule);
-  border-radius: var(--tabs-radius-md);
-  background: #fffdf9;
+  border: 1px solid color-mix(in srgb, var(--tabs-border) 30%, transparent);
+  border-radius: 6px;
 }
 
 #content .tablecontainer {
@@ -2628,79 +2598,23 @@ window.onload = function() {
   margin-bottom: 0;
 }
 
-/* tasteful motion */
-@keyframes tabsEditorialEnter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-    filter: saturate(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: saturate(1);
-  }
+/* ── Motion ──────────────────────────────────────────────────────────── */
+@keyframes tabsAccentEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
 @keyframes tabPanelReveal {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
-/* accessibility */
 @media (prefers-reduced-motion: reduce) {
   .tabs,
   .tabpanel,
-  .tablist > ul li,
-  .tabs .tablist li::after {
+  .tablist > ul li {
     animation: none !important;
     transition: none !important;
-  }
-}
-
-/* dark fallback for user preference (keeps editorial identity) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tabs-paper: #151618;
-    --tabs-paper-elev: #1a1c20;
-    --tabs-ink: #ece8de;
-    --tabs-ink-muted: #a6adba;
-    --tabs-rule: #2d323a;
-    --tabs-rule-strong: #4c5561;
-
-    --tabs-accent: #e05b3f;
-    --tabs-accent-soft: #5b2e24;
-    --tabs-accent-ink: #fff6f0;
-
-    --tabs-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
-    --tabs-focus: #49b5c8;
-  }
-
-  .tabs {
-    background:
-            radial-gradient(circle at 10% -35%, rgba(224, 91, 63, 0.16), transparent 55%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
-            var(--tabs-paper);
-  }
-
-  .tablist > ul li:hover {
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  .tabpanel {
-    background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
-            var(--tabs-paper-elev);
-  }
-
-  .tablecontainer {
-    background: #171a1e;
   }
 }
 </style>
@@ -3032,7 +2946,7 @@ window.onload = function() {
 })();
 </script>
 <div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="sv-605d5fdfcac309e4" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=combination&payload=H4sIAB5yEmoA_5WPXQuCMBSG7_crBhXUhZJTa114YR-E0JfzqsupBxLEYM1K8Md3pIQgBNvFu7PxPmOPznQOXlhKpUHlFRVwh6IEKouUbtX1oS9USA3kuZMx5G2RVO9j2x4PJ5-rCJJrkUpVeV80HY8mJC1lfvaf2c3TqgRiGAZp8ZoufYEZWhjuFBfuA9tZ8DTG6SSCvS_Ov3WGMXN7122Mef_XHQzeWf_Wq-kuOGxaAcs13QaBuZPYCU7RZnU8rLuhRsPiJvsLamQYM_lfUKPEeNf3XlTeonAMAgAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=combination&filename=ghi.svg" data-original-content="title=Quarterly Revenue and Growth Rate
+<div class="svg-with-controls docops-media-card" id="sv-9b44ab61bbe12ba2" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=combination&payload=H4sIAC_UbWoA_5WPXQuCMBSG7_crBhXUhZJTa114YR-E0JfzqsupBxLEYM1K8Md3pIQgBNvFu7PxPmOPznQOXlhKpUHlFRVwh6IEKouUbtX1oS9USA3kuZMx5G2RVO9j2x4PJ5-rCJJrkUpVeV80HY8mJC1lfvaf2c3TqgRiGAZp8ZoufYEZWhjuFBfuA9tZ8DTG6SSCvS_Ov3WGMXN7122Mef_XHQzeWf_Wq-kuOGxaAcs13QaBuZPYCU7RZnU8rLuhRsPiJvsLamQYM_lfUKPEeNf3XlTeonAMAgAA&scale=1.0&type=SVG&useDark=false&title=&useGlass=false&backend=html5&docname=combination&filename=ghi.svg" data-original-content="title=Quarterly Revenue and Growth Rate
 xLabel=Quarter
 yLabel=Revenue ($)
 yLabelSecondary=Growth Rate (%)
@@ -3046,42 +2960,42 @@ Growth Rate | LINE | Q1 | 15.5 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q2 | 18.2 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q3 | 22.8 | #e74c3c | SECONDARY
 Growth Rate | LINE | Q4 | 28.5 | #e74c3c | SECONDARY" data-kind="combination">
-<?xml version="1.0" encoding="UTF-8"?><svg id="combo_chart_3e96cee3-d5d1-426f-b9ff-c5d82f54c111" width="590.6249999926172" height="337.49999999578125" viewBox="0 0 1050 600" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Combination Chart'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-05-23</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Series","Type","X","Y","Color"],"rows":[["Revenue","BAR","Q1","50000.0","#3498db"],["Revenue","BAR","Q2","65000.0","#3498db"],["Revenue","BAR","Q3","70000.0","#3498db"],["Revenue","BAR","Q4","80000.0","#3498db"],["Growth Rate","LINE","Q1","15.5","#e74c3c"],["Growth Rate","LINE","Q2","18.2","#e74c3c"],["Growth Rate","LINE","Q3","22.8","#e74c3c"],["Growth Rate","LINE","Q4","28.5","#e74c3c"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="barGradient_Revenue_3e96cee3-d5d1-426f-b9ff-c5d82f54c111" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3498db"/><stop offset="100%" stop-color="#246a99"/></linearGradient><linearGradient id="lineGradient_Growth_Rate_3e96cee3-d5d1-426f-b9ff-c5d82f54c111" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e74c3c" stop-opacity="0.3"/><stop offset="100%" stop-color="#e74c3c" stop-opacity="0.1"/></linearGradient><filter id="dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="glow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="legendGlass_3e96cee3-d5d1-426f-b9ff-c5d82f54c111" x="0" y="0" width="100%" height="100%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" /></filter><pattern id="dotPattern_3e96cee3-d5d1-426f-b9ff-c5d82f54c111" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#cbd5e1" fill-opacity="0.4" /></pattern><style>#combo_chart_3e96cee3-d5d1-426f-b9ff-c5d82f54c111 .chart-text { fill: #111111; font-family: Arial, Helvetica, sans-serif; letter-spacing: -0.5px; } #combo_chart_3e96cee3-d5d1-426f-b9ff-c5d82f54c111 .chart-grid { stroke: #2563eb; stroke-dasharray: 3,3; stroke-opacity: 0.2; } #combo_chart_3e96cee3-d5d1-426f-b9ff-c5d82f54c111 .chart-axis { stroke: #2563eb; stroke-width: 1.5; stroke-opacity: 0.5; } @keyframes revealBar { from { transform: scaleY(0); opacity: 0; } to { transform: scaleY(1); opacity: 1; } } @keyframes revealPoint { from { r: 0; opacity: 0; } to { r: 5; opacity: 1; } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .bar-reveal { animation: revealBar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-origin: bottom; } .point-reveal { animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; } .fade-in { animation: fadeIn 0.8s ease-out forwards; } #combo_chart_3e96cee3-d5d1-426f-b9ff-c5d82f54c111 .glass-bar { transition: all 0.3s ease; } #combo_chart_3e96cee3-d5d1-426f-b9ff-c5d82f54c111 .glass-bar:hover { filter: url(#glassGlow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111); transform: scale(1.02); cursor: pointer; }</style></defs><rect width="100%" height="100%" fill="#ffffff" rx="10" ry="10"/><rect width="100%" height="100%" fill="url(#dotPattern_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" rx="10" ry="10" opacity="0.5"/><g class="fade-in"><rect x="200" y="10" width="400" height="40" rx="10" ry="10" fill="rgba(255, 255, 255, 0.9)" stroke="#2563eb" stroke-opacity="0.2"/><text x="400" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#111111" font-family="Arial, Helvetica, sans-serif">Quarterly Revenue and Growth Rate</text></g><g class="chart-grid fade-in"><line x1="80" y1="150" x2="720" y2="150"/><line x1="80" y1="200" x2="720" y2="200"/><line x1="80" y1="250" x2="720" y2="250"/><line x1="80" y1="300" x2="720" y2="300"/><line x1="80" y1="350" x2="720" y2="350"/><line x1="80" y1="400" x2="720" y2="400"/><line x1="80" y1="450" x2="720" y2="450"/><line x1="80" y1="500" x2="720" y2="500"/><line x1="180" y1="100" x2="180" y2="500"/><line x1="280" y1="100" x2="280" y2="500"/><line x1="380" y1="100" x2="380" y2="500"/><line x1="480" y1="100" x2="480" y2="500"/><line x1="580" y1="100" x2="580" y2="500"/><line x1="680" y1="100" x2="680" y2="500"/></g><g class="chart-axis fade-in"><line x1="80" y1="100" x2="80" y2="500"/><line x1="80" y1="500" x2="720" y2="500"/><line x1="720" y1="100" x2="720" y2="500"/></g><g class="chart-text fade-in"><text x="400" y="550" text-anchor="middle" font-size="14" font-weight="bold">Quarter</text><text x="30" y="300" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(-90, 30, 300)">Revenue ($)</text><text x="770" y="300" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(90, 770, 300)">Growth Rate (%)</text></g><g class="chart-text fade-in"><line x1="80.0" y1="500" x2="80.0" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="80.0" y="525" text-anchor="middle" font-size="12">Q1</text><line x1="293.33333333333337" y1="500" x2="293.33333333333337" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="293.33333333333337" y="525" text-anchor="middle" font-size="12">Q2</text><line x1="506.6666666666667" y1="500" x2="506.6666666666667" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="506.6666666666667" y="525" text-anchor="middle" font-size="12">Q3</text><line x1="720.0" y1="500" x2="720.0" y2="510" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="720.0" y="525" text-anchor="middle" font-size="12">Q4</text><line x1="75" y1="500" x2="80" y2="500" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="500" text-anchor="end" font-size="12" dominant-baseline="middle">50000</text><line x1="75" y1="450" x2="80" y2="450" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="450" text-anchor="end" font-size="12" dominant-baseline="middle">53750</text><line x1="75" y1="400" x2="80" y2="400" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="400" text-anchor="end" font-size="12" dominant-baseline="middle">57500</text><line x1="75" y1="350" x2="80" y2="350" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="350" text-anchor="end" font-size="12" dominant-baseline="middle">61250</text><line x1="75" y1="300" x2="80" y2="300" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="300" text-anchor="end" font-size="12" dominant-baseline="middle">65000</text><line x1="75" y1="250" x2="80" y2="250" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="250" text-anchor="end" font-size="12" dominant-baseline="middle">68750</text><line x1="75" y1="200" x2="80" y2="200" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="200" text-anchor="end" font-size="12" dominant-baseline="middle">72500</text><line x1="75" y1="150" x2="80" y2="150" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="150" text-anchor="end" font-size="12" dominant-baseline="middle">76250</text><line x1="75" y1="100" x2="80" y2="100" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="70" y="100" text-anchor="end" font-size="12" dominant-baseline="middle">80000</text><line x1="720" y1="500" x2="725" y2="500" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="500" text-anchor="start" font-size="12" dominant-baseline="middle">15.5</text><line x1="720" y1="450" x2="725" y2="450" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="450" text-anchor="start" font-size="12" dominant-baseline="middle">17.1</text><line x1="720" y1="400" x2="725" y2="400" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="400" text-anchor="start" font-size="12" dominant-baseline="middle">18.8</text><line x1="720" y1="350" x2="725" y2="350" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="350" text-anchor="start" font-size="12" dominant-baseline="middle">20.4</text><line x1="720" y1="300" x2="725" y2="300" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="300" text-anchor="start" font-size="12" dominant-baseline="middle">22</text><line x1="720" y1="250" x2="725" y2="250" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="250" text-anchor="start" font-size="12" dominant-baseline="middle">23.6</text><line x1="720" y1="200" x2="725" y2="200" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="200" text-anchor="start" font-size="12" dominant-baseline="middle">25.3</text><line x1="720" y1="150" x2="725" y2="150" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="150" text-anchor="start" font-size="12" dominant-baseline="middle">26.9</text><line x1="720" y1="100" x2="725" y2="100" stroke="#6b7280" stroke-width="2" class="chart-axis"/><text x="730" y="100" text-anchor="start" font-size="12" dominant-baseline="middle">28.5</text></g><rect x="90.0" y="500.0" width="96.0" height="0.0" fill="url(#barGradient_Revenue_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q1 = 50000</title></rect><rect x="264.66666666666663" y="300.0" width="96.0" height="200.0" fill="url(#barGradient_Revenue_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q2 = 65000</title></rect><text x="312.66666666666663" y="295.0" text-anchor="middle" font-size="10" class="chart-text fade-in">65000</text><rect x="439.3333333333333" y="233.33333333333337" width="96.0" height="266.66666666666663" fill="url(#barGradient_Revenue_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q3 = 70000</title></rect><text x="487.3333333333333" y="228.33333333333337" text-anchor="middle" font-size="10" class="chart-text fade-in">70000</text><rect x="614.0" y="100.0" width="96.0" height="400.0" fill="url(#barGradient_Revenue_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q4 = 80000</title></rect><text x="662.0" y="95.0" text-anchor="middle" font-size="10" class="chart-text fade-in">80000</text><path d="M 138.0 500.0 C 196.2222222222222 500.0 254.44444444444443 416.9230769230769 312.66666666666663 416.9230769230769 C 370.88888888888886 416.9230769230769 429.1111111111111 275.38461538461536 487.3333333333333 275.38461538461536 C 545.5555555555555 275.38461538461536 603.7777777777778 100.0 662.0 100.0 L 662.0 500 L 138.0 500 Z" fill="url(#lineGradient_Growth_Rate_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" opacity="0.3" class="fade-in"/><path d="M 138.0 500.0 C 196.2222222222222 500.0 254.44444444444443 416.9230769230769 312.66666666666663 416.9230769230769 C 370.88888888888886 416.9230769230769 429.1111111111111 275.38461538461536 487.3333333333333 275.38461538461536 C 545.5555555555555 275.38461538461536 603.7777777777778 100.0 662.0 100.0" fill="none" stroke="#e74c3c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" class="fade-in"/><circle cx="138.0" cy="500.0" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" class="point-reveal" style="animation-delay: 0.0s"><title>Growth Rate: Q1 = 15.5</title></circle><text x="138.0" y="490.0" text-anchor="middle" font-size="10" class="chart-text fade-in">15.5</text><circle cx="312.66666666666663" cy="416.9230769230769" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" class="point-reveal" style="animation-delay: 0.05s"><title>Growth Rate: Q2 = 18.2</title></circle><text x="312.66666666666663" y="406.9230769230769" text-anchor="middle" font-size="10" class="chart-text fade-in">18.2</text><circle cx="487.3333333333333" cy="275.38461538461536" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" class="point-reveal" style="animation-delay: 0.1s"><title>Growth Rate: Q3 = 22.8</title></circle><text x="487.3333333333333" y="265.38461538461536" text-anchor="middle" font-size="10" class="chart-text fade-in">22.8</text><circle cx="662.0" cy="100.0" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)" class="point-reveal" style="animation-delay: 0.15000000000000002s"><title>Growth Rate: Q4 = 28.5</title></circle><text x="662.0" y="90.0" text-anchor="middle" font-size="10" class="chart-text fade-in">28.5</text><g class="fade-in"><rect x="820" y="60" width="200" height="70" fill="rgba(255, 255, 255, 0.9)" stroke="#2563eb" stroke-width="1" stroke-opacity="0.3" rx="8" ry="8" filter="url(#legendGlass_3e96cee3-d5d1-426f-b9ff-c5d82f54c111)"/><rect x="830" y="72" width="15" height="15" fill="#3498db" rx="2" ry="2"/><text x="855" y="84" font-size="12" class="chart-text">Revenue</text><line x1="830" y1="105" x2="845" y2="105" stroke="#e74c3c" stroke-width="3"/><circle cx="837" cy="105" r="3" fill="#e74c3c"/><text x="855" y="109" font-size="12" class="chart-text">Growth Rate (R)</text></g></svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="combo_chart_7422f4c4-1c2e-434d-8e32-eb15889bc0c8" width="652.4999999918438" height="314.9999999960625" viewBox="0 0 1160 560" xmlns="http://www.w3.org/2000/svg" aria-label='DocOps: Combination Chart'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Series","Type","X","Y","Color"],"rows":[["Revenue","BAR","Q1","50000.0","#3498db"],["Revenue","BAR","Q2","65000.0","#3498db"],["Revenue","BAR","Q3","70000.0","#3498db"],["Revenue","BAR","Q4","80000.0","#3498db"],["Growth Rate","LINE","Q1","15.5","#e74c3c"],["Growth Rate","LINE","Q2","18.2","#e74c3c"],["Growth Rate","LINE","Q3","22.8","#e74c3c"],["Growth Rate","LINE","Q4","28.5","#e74c3c"]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><linearGradient id="barGradient_Revenue_7422f4c4-1c2e-434d-8e32-eb15889bc0c8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3498db"/><stop offset="100%" stop-color="#246a99"/></linearGradient><linearGradient id="lineGradient_Growth_Rate_7422f4c4-1c2e-434d-8e32-eb15889bc0c8" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e74c3c" stop-opacity="0.3"/><stop offset="100%" stop-color="#e74c3c" stop-opacity="0.1"/></linearGradient><linearGradient id="bgGlow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dbe8f8" stop-opacity="0.65"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></linearGradient><filter id="dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/></filter><filter id="glow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="legendGlass_7422f4c4-1c2e-434d-8e32-eb15889bc0c8" x="0" y="0" width="100%" height="100%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" /></filter><style>#combo_chart_7422f4c4-1c2e-434d-8e32-eb15889bc0c8 { --bg: #ffffff; --surface: #ffffff; --text: #111111; --text-soft: #475569; --grid: rgba(0, 0, 0, 0.05); --axis: #475569; --accent: #2563eb; --bar-1: #e60049; --bar-2: #0bb4ff; --bar-3: #50e991; --bar-4: #e6d800; --bar-5: #9b19f5; --bar-6: #ffa300; --bar-7: #dc0ab4; --bar-8: #00bfa0; --bar-radius: 4; } #combo_chart_7422f4c4-1c2e-434d-8e32-eb15889bc0c8 .chart-text { fill: var(--text) !important; font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.5px; } #combo_chart_7422f4c4-1c2e-434d-8e32-eb15889bc0c8 .chart-grid { stroke: var(--grid); stroke-dasharray: 4,8; stroke-opacity: 0.12; } #combo_chart_7422f4c4-1c2e-434d-8e32-eb15889bc0c8 .chart-axis { stroke: var(--axis); stroke-width: 1.4; stroke-opacity: 0.35; } @keyframes revealBar { from { transform: scaleY(0); opacity: 0; } to { transform: scaleY(1); opacity: 1; } } @keyframes revealPoint { from { r: 0; opacity: 0; } to { r: 5; opacity: 1; } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .bar-reveal { animation: revealBar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; transform-origin: bottom; opacity: 1; } .point-reveal { animation: revealPoint 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 1; } .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 1; } .bar-inner { transform-box: fill-box; transform-origin: 50% 100%; transition: transform 220ms ease, filter 220ms ease; } .bar-wrap:focus .bar-inner, .bar-wrap:hover .bar-inner { transform: scale(1.03); filter: saturate(1.08); } .value-label { font-size: 11px; font-weight: 600; fill: var(--text) !important; opacity: 0; transition: opacity 180ms ease, transform 180ms ease; pointer-events: none; } .bar-wrap:focus .value-label, .bar-wrap:hover .value-label { opacity: 1; transform: translateY(-2px); } #combo_chart_7422f4c4-1c2e-434d-8e32-eb15889bc0c8 .glass-bar { transition: all 0.3s ease; } #combo_chart_7422f4c4-1c2e-434d-8e32-eb15889bc0c8 .glass-bar:hover { filter: url(#glassGlow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8); transform: scale(1.02); cursor: pointer; }</style></defs><!-- Atmosphere --><rect width="100%" height="100%" fill="var(--bg, #ffffff)" rx="18" ry="18"/><circle cx="140" cy="80" r="220" fill="url(#bgGlow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)"/><rect x="36" y="36" width="1088" height="488" rx="18" fill="#ffffff" opacity="0.6"/><g class="fade-in"><text x="120" y="60" text-anchor="start" font-size="28" font-weight="900" fill="#111111" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif" style="fill: #111111 !important;">Quarterly Revenue and Growth Rate</text></g><g class="chart-grid fade-in"><line x1="120" y1="460.0" x2="860" y2="460.0"/><line x1="120" y1="340.0" x2="860" y2="340.0"/><line x1="120" y1="220.0" x2="860" y2="220.0"/><line x1="120" y1="100.0" x2="860" y2="100.0"/></g><g class="chart-axis fade-in"><line x1="120" y1="100" x2="120" y2="460"/><line x1="120" y1="460" x2="860" y2="460"/><line x1="860" y1="100" x2="860" y2="460"/></g><g class="chart-text fade-in"><text x="490" y="540" text-anchor="middle" font-size="14" font-weight="bold" style="fill: #111111 !important;">Quarter</text><text x="30" y="280" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(-90, 30, 280)" style="fill: #111111 !important;">Revenue ($)</text><text x="1130" y="280" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(90, 1130, 280)" style="fill: #111111 !important;">Growth Rate (%)</text></g><g class="chart-text fade-in"><line x1="212.5" y1="460" x2="212.5" y2="468" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="212.5" y="484" text-anchor="middle" font-size="12" style="fill: #111111 !important;">Q1</text><line x1="397.5" y1="460" x2="397.5" y2="468" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="397.5" y="484" text-anchor="middle" font-size="12" style="fill: #111111 !important;">Q2</text><line x1="582.5" y1="460" x2="582.5" y2="468" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="582.5" y="484" text-anchor="middle" font-size="12" style="fill: #111111 !important;">Q3</text><line x1="767.5" y1="460" x2="767.5" y2="468" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="767.5" y="484" text-anchor="middle" font-size="12" style="fill: #111111 !important;">Q4</text><line x1="112" y1="460.0" x2="120" y2="460.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="108" y="460.0" text-anchor="end" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">50000</text><line x1="112" y1="340.0" x2="120" y2="340.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="108" y="340.0" text-anchor="end" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">60000</text><line x1="112" y1="220.0" x2="120" y2="220.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="108" y="220.0" text-anchor="end" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">70000</text><line x1="112" y1="100.0" x2="120" y2="100.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="108" y="100.0" text-anchor="end" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">80000</text><line x1="860" y1="460.0" x2="868" y2="460.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="460.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">14</text><line x1="860" y1="415.0" x2="868" y2="415.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="415.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">16</text><line x1="860" y1="370.0" x2="868" y2="370.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="370.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">18</text><line x1="860" y1="325.0" x2="868" y2="325.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="325.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">20</text><line x1="860" y1="280.0" x2="868" y2="280.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="280.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">22</text><line x1="860" y1="235.0" x2="868" y2="235.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="235.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">24</text><line x1="860" y1="190.0" x2="868" y2="190.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="190.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">26</text><line x1="860" y1="145.0" x2="868" y2="145.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="145.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">28</text><line x1="860" y1="100.0" x2="868" y2="100.0" stroke="#6b7280" stroke-width="1.4" stroke-opacity="0.35"/><text x="872" y="100.0" text-anchor="start" font-size="12" dominant-baseline="middle" style="fill: #111111 !important;">30</text></g><rect x="147.75" y="460.0" width="129.5" height="0.0" fill="url(#barGradient_Revenue_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q1 = 50000</title></rect><rect x="332.75" y="280.0" width="129.5" height="180.0" fill="url(#barGradient_Revenue_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q2 = 65000</title></rect><text x="397.5" y="272.0" text-anchor="middle" font-size="10" class="chart-text fade-in" style="fill: #111111 !important;">65000</text><rect x="517.75" y="220.0" width="129.5" height="240.0" fill="url(#barGradient_Revenue_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q3 = 70000</title></rect><text x="582.5" y="212.0" text-anchor="middle" font-size="10" class="chart-text fade-in" style="fill: #111111 !important;">70000</text><rect x="702.75" y="100.0" width="129.5" height="360.0" fill="url(#barGradient_Revenue_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" rx="3" ry="3" class="bar-reveal"><title>Revenue: Q4 = 80000</title></rect><text x="767.5" y="92.0" text-anchor="middle" font-size="10" class="chart-text fade-in" style="fill: #111111 !important;">80000</text><path d="M 212.5 426.25 C 274.1666666666667 426.25 335.8333333333333 365.5 397.5 365.5 C 459.1666666666667 365.5 520.8333333333334 262.0 582.5 262.0 C 644.1666666666666 262.0 705.8333333333334 133.75 767.5 133.75 L 767.5 460.0 L 212.5 460.0 Z" fill="url(#lineGradient_Growth_Rate_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" opacity="0.3" class="fade-in"/><path d="M 212.5 426.25 C 274.1666666666667 426.25 335.8333333333333 365.5 397.5 365.5 C 459.1666666666667 365.5 520.8333333333334 262.0 582.5 262.0 C 644.1666666666666 262.0 705.8333333333334 133.75 767.5 133.75" fill="none" stroke="#e74c3c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" class="fade-in"/><circle cx="212.5" cy="426.25" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" class="point-reveal" style="animation-delay: 0.0s"><title>Growth Rate: Q1 = 15.5</title></circle><text x="212.5" y="414.25" text-anchor="middle" font-size="10" class="chart-text fade-in" style="fill: #111111 !important;">15.5</text><circle cx="397.5" cy="365.5" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" class="point-reveal" style="animation-delay: 0.05s"><title>Growth Rate: Q2 = 18.2</title></circle><text x="397.5" y="353.5" text-anchor="middle" font-size="10" class="chart-text fade-in" style="fill: #111111 !important;">18.2</text><circle cx="582.5" cy="262.0" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" class="point-reveal" style="animation-delay: 0.1s"><title>Growth Rate: Q3 = 22.8</title></circle><text x="582.5" y="250.0" text-anchor="middle" font-size="10" class="chart-text fade-in" style="fill: #111111 !important;">22.8</text><circle cx="767.5" cy="133.75" r="5" fill="#e74c3c" stroke="#ffffff" stroke-width="2" filter="url(#dropShadow_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)" class="point-reveal" style="animation-delay: 0.15000000000000002s"><title>Growth Rate: Q4 = 28.5</title></circle><text x="767.5" y="121.75" text-anchor="middle" font-size="10" class="chart-text fade-in" style="fill: #111111 !important;">28.5</text><g class="fade-in"><rect x="920" y="100" width="180" height="80" fill="rgba(255, 255, 255, 0.7)" stroke="#2563eb" stroke-width="1" stroke-opacity="0.2" rx="12" ry="12" filter="url(#legendGlass_7422f4c4-1c2e-434d-8e32-eb15889bc0c8)"/><rect x="935" y="115" width="16" height="16" fill="#3498db" rx="4" ry="4"/><text x="965" y="130" font-size="12" font-weight="500" class="chart-text" style="fill: #111111 !important;">Revenue</text><line x1="930" y1="155" x2="950" y2="155" stroke="#e74c3c" stroke-width="3" stroke-linecap="round"/><circle cx="940" cy="155" r="4" fill="#e74c3c" stroke="#ffffff" stroke-width="1.5"/><text x="965" y="160" font-size="12" font-weight="500" class="chart-text" style="fill: #111111 !important;">Growth Rate (R)</text></g></svg>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgViewer.openModal('sv-605d5fdfcac309e4')">VIEW</button>
-<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-605d5fdfcac309e4')">DATA</button>
+<button class="svg-control-btn" onclick="svgViewer.openModal('sv-9b44ab61bbe12ba2')">VIEW</button>
+<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-9b44ab61bbe12ba2')">DATA</button>
 <button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-605d5fdfcac309e4')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-605d5fdfcac309e4')">PNG</button>
-<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-605d5fdfcac309e4')">PRINT</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-9b44ab61bbe12ba2')">SVG</button>
+<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-9b44ab61bbe12ba2')">PNG</button>
+<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-9b44ab61bbe12ba2')">PRINT</button>
 </div>
-<div id="modal-sv-605d5fdfcac309e4" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-605d5fdfcac309e4')">
+<div id="modal-sv-9b44ab61bbe12ba2" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-9b44ab61bbe12ba2')">
     <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-605d5fdfcac309e4')">×</button>
-        <div id="modal-body-sv-605d5fdfcac309e4" class="svg-modal-body docops-svg-modal-body"></div>
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-9b44ab61bbe12ba2')">×</button>
+        <div id="modal-body-sv-9b44ab61bbe12ba2" class="svg-modal-body docops-svg-modal-body"></div>
     </div>
 </div>
 
-<div id="csv-modal-sv-605d5fdfcac309e4" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-605d5fdfcac309e4')">
+<div id="csv-modal-sv-9b44ab61bbe12ba2" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-9b44ab61bbe12ba2')">
     <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-605d5fdfcac309e4')">×</button>
+        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-9b44ab61bbe12ba2')">×</button>
         <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
         </div>
-        <div id="csv-content-sv-605d5fdfcac309e4" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+        <div id="csv-content-sv-9b44ab61bbe12ba2" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
         </div>
     </div>
 </div>
 
-<div id="source-modal-sv-605d5fdfcac309e4" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-605d5fdfcac309e4')">
+<div id="source-modal-sv-9b44ab61bbe12ba2" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-9b44ab61bbe12ba2')">
     <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-605d5fdfcac309e4')">×</button>
+        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-9b44ab61bbe12ba2')">×</button>
         <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
             <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
         </div>
-        <div id="source-content-sv-605d5fdfcac309e4" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
+        <div id="source-content-sv-9b44ab61bbe12ba2" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
             <div class="source-modal-body"></div>
         </div>
     </div>

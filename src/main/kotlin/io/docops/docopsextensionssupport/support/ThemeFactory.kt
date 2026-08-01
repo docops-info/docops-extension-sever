@@ -82,6 +82,7 @@ object ThemeFactory {
             "food" -> FoodTheme()
             "spring" -> SpringTheme()
             "summer" -> SummerTheme()
+            "premium" -> if (useDark) PremiumDarkTheme() else PremiumTheme()
             "guyana", "goldenarrowhead", "goldenarrowheadtheme" -> GoldenArrowheadTheme()
             "classic" -> if (useDark) ProDarkTheme() else ClassicLightTheme()
             "modern_editorial", "modern_editorial_theme", "redesign" -> if(useDark) ModernEditorialDarkTheme() else ModernEditorialTheme()
@@ -712,5 +713,49 @@ class ModernEditorialDarkTheme : DocOpsTheme {
     override val chartPalette = listOf(
         SVGColor("#58a6ff"), SVGColor("#388bfd"), SVGColor("#1f6feb"),
         SVGColor("#1158c7"), SVGColor("#0d419d"), SVGColor("#092b71")
+    )
+}
+
+class PremiumTheme : DocOpsTheme {
+    override val name = "PremiumTheme"
+    override val canvas = "#FFFFFF"
+    override val primaryText = "#111827"
+    override val secondaryText = "#6B7280"
+    override val accentColor = "#3B82F6"
+    override val glassEffect = "rgba(255, 255, 255, 0.8)"
+    override val surfaceImpact = "rgba(0, 0, 0, 0.05)"
+    override val fontFamily = "'Inter', ui-sans-serif, system-ui, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap');"
+    override val fontWidthMultiplier = 1.0f
+    override val fontLineHeight = 1.6f
+    override val cornerRadius = 8
+    override val chartPalette = listOf(
+        SVGColor("#3B82F6", "Primary"),
+        SVGColor("#8B5CF6", "Secondary"),
+        SVGColor("#16A34A", "Success"),
+        SVGColor("#D97706", "Warning"),
+        SVGColor("#DC2626", "Danger")
+    )
+}
+
+class PremiumDarkTheme : DocOpsTheme {
+    override val name = "PremiumDarkTheme"
+    override val canvas = "#0F172A"
+    override val primaryText = "#F9FAFB"
+    override val secondaryText = "#9CA3AF"
+    override val accentColor = "#3B82F6"
+    override val glassEffect = "rgba(15, 23, 42, 0.8)"
+    override val surfaceImpact = "rgba(255, 255, 255, 0.05)"
+    override val fontFamily = "'Inter', ui-sans-serif, system-ui, sans-serif"
+    override val fontImport = "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap');"
+    override val fontWidthMultiplier = 1.0f
+    override val fontLineHeight = 1.6f
+    override val cornerRadius = 8
+    override val chartPalette = listOf(
+        SVGColor("#3B82F6", "Primary"),
+        SVGColor("#8B5CF6", "Secondary"),
+        SVGColor("#16A34A", "Success"),
+        SVGColor("#D97706", "Warning"),
+        SVGColor("#DC2626", "Danger")
     )
 }

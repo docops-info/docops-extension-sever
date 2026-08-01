@@ -10,457 +10,378 @@
                 <title>DocOps Metrics Cards</title>
                 
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* DocOps Design System — Signal (v1) : Markdown Light
-   Goals: calm, audit-friendly, high-contrast, “ink as authority”, cyan as action. */
+/* Premium Food Blog — Modern Markdown Theme
+   Apple-inspired aesthetic with precise spacing and refined typography.
+   Scoped to .markdown-body. */
 
 .markdown-body {
-  /* -----------------------------
-     1) Core tokens (DocOps Signal)
-     ----------------------------- */
-  --ds-brand-ink: #0b1220;
-  --ds-brand-cloud: #f6f8fb;
-  --ds-brand-slate: #2a3447;
-  --ds-brand-steel: #8a96ad;
-  --ds-brand-cyan: #00b7d6;
-  --ds-brand-gold: #c9a227;
+    /* -------------------------------------------------------
+       1) Core brand tokens — Premium Palette
+       ------------------------------------------------------- */
+    --p-primary:      #3B82F6;
+    --p-secondary:    #8B5CF6;
+    --p-success:      #16A34A;
+    --p-warning:      #D97706;
+    --p-danger:       #DC2626;
+    --p-surface:      #FFFFFF;
+    --p-text:         #111827;
+    --p-neutral:      #F9FAFB;
+    --p-border:       rgba(0, 0, 0, 0.1);
 
-  --ds-semantic-success: #16a34a;
-  --ds-semantic-warning: #d97706;
-  --ds-semantic-error: #dc2626;
-  --ds-semantic-info: #2563eb;
+    /* Semantic roles */
+    --p-surface-1:   var(--p-surface);
+    --p-surface-2:   var(--p-neutral);
 
-  --ds-canvas: var(--ds-brand-cloud);
-  --ds-surface-1: #ffffff;
-  --ds-surface-2: #eef2f7;
-  --ds-border: rgba(11, 18, 32, 0.12);
+    --p-text-primary:   var(--p-text);
+    --p-text-secondary: #374151;
+    --p-text-tertiary:  #6B7280;
 
-  --ds-text-primary: var(--ds-brand-ink);
-  --ds-text-secondary: var(--ds-brand-slate);
-  --ds-text-tertiary: var(--ds-brand-steel);
+    --p-accent:      var(--p-primary);
 
-  --ds-accent: var(--ds-brand-cyan);
+    /* -------------------------------------------------------
+       2) Markdown-specific roles
+       ------------------------------------------------------- */
+    --md-max-width:   840px;
+    --md-pad-x:       32px;
+    --md-pad-y:       32px;
 
-  --ds-radius-sm: 8px;
-  --ds-radius-md: 12px;
-  --ds-radius-lg: 16px;
-  --ds-radius-pill: 999px;
+    --md-prose:       var(--p-text-secondary);
+    --md-heading:     var(--p-text-primary);
+    --md-muted:       var(--p-text-tertiary);
 
-  --ds-shadow-sm: 0 6px 18px rgba(11, 18, 32, 0.08);
-  --ds-shadow-md: 0 16px 40px rgba(11, 18, 32, 0.12);
-  --ds-focus-glow: 0 0 0 4px rgba(0, 183, 214, 0.22);
+    --md-link:              var(--p-primary);
+    --md-link-underline:    rgba(59, 130, 246, 0.2);
+    --md-link-hover-bg:     rgba(59, 130, 246, 0.05);
 
-  --ds-dur-fast: 120ms;
-  --ds-dur-base: 220ms;
-  --ds-dur-slow: 420ms;
-  --ds-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-  --ds-ease-snappy: cubic-bezier(0.2, 0.9, 0.2, 1);
+    --md-inline-code-bg:     rgba(0, 0, 0, 0.04);
+    --md-inline-code-border: rgba(0, 0, 0, 0.08);
 
-  /* -----------------------------
-     2) Markdown-specific roles
-     ----------------------------- */
-  --md-max-width: 920px;
-  --md-pad-x: 48px;
-  --md-pad-y: 48px;
+    --md-code-bg:    #1F2937;
+    --md-code-fg:    #F9FAFB;
+    --md-code-border: rgba(0, 0, 0, 0.2);
 
-  --md-prose: var(--ds-text-secondary);
-  --md-heading: var(--ds-text-primary);
-  --md-muted: var(--ds-text-tertiary);
+    --md-table-stripe: rgba(0, 0, 0, 0.02);
 
-  --md-link: var(--ds-accent);
-  --md-link-underline: rgba(0, 183, 214, 0.28);
-  --md-link-hover-bg: rgba(0, 183, 214, 0.10);
+    /* Radii */
+    --p-radius-sm:  4px;
+    --p-radius-md:  8px;
+    --p-radius-lg:  12px;
+    --p-radius-pill: 999px;
 
-  --md-inline-code-bg: rgba(11, 18, 32, 0.06);
-  --md-inline-code-border: rgba(11, 18, 32, 0.12);
+    /* Shadows */
+    --p-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --p-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --p-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-  --md-code-bg: var(--ds-brand-ink);
-  --md-code-fg: #f1f5ff;
-  --md-code-border: rgba(11, 18, 32, 0.20);
+    /* Motion */
+    --p-dur-fast:    100ms;
+    --p-dur-base:    200ms;
+    --p-dur-slow:    300ms;
+    --p-ease:        cubic-bezier(0.4, 0, 0.2, 1);
 
-  --md-table-stripe: rgba(11, 18, 32, 0.03);
+    /* Focus */
+    --p-focus-glow: 0 0 0 3px rgba(59, 130, 246, 0.4);
 
-  /* Atmosphere: “calm corporate depth” (subtle, not noisy) */
-  background:
-    radial-gradient(900px 420px at 12% 0%, rgba(0, 183, 214, 0.08), transparent 55%),
-    radial-gradient(760px 360px at 92% 18%, rgba(201, 162, 39, 0.08), transparent 58%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.70)),
-    var(--ds-canvas);
+    /* -------------------------------------------------------
+       Atmosphere — Clean, minimal surface
+       ------------------------------------------------------- */
+    background: var(--p-surface);
+    color: var(--md-prose);
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.625;
 
-  color: var(--md-prose);
-  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
+    max-width: var(--md-max-width);
+    margin: 32px auto;
+    padding: var(--md-pad-y) var(--md-pad-x);
 
-  max-width: var(--md-max-width);
-  margin: 40px auto;
-  padding: var(--md-pad-y) var(--md-pad-x);
+    border-radius: var(--p-radius-lg);
+    border: 1px solid var(--p-border);
+    box-shadow: var(--p-shadow-md);
 
-  border-radius: 24px;
-  border: 1px solid var(--ds-border);
-  box-shadow: var(--ds-shadow-sm);
-
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-
-  /* Let long IDs/URLs behave */
-  overflow-wrap: anywhere;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-wrap: anywhere;
 }
 
-/* Responsive padding (keeps 8px rhythm while respecting smaller screens) */
+/* Responsive */
 @media (max-width: 768px) {
-  .markdown-body {
-    --md-pad-x: 20px;
-    --md-pad-y: 28px;
-    margin: 16px;
-    border-radius: 18px;
-  }
+    .markdown-body {
+        --md-pad-x: 20px;
+        --md-pad-y: 24px;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
 }
 
-/* -----------------------------
-   3) Page-load motion (restrained)
-   ----------------------------- */
-@keyframes docops-reveal {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+/* -------------------------------------------------------
+   3) Page-load reveal
+   ------------------------------------------------------- */
+@keyframes p-reveal {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .markdown-body {
-  animation: docops-reveal var(--ds-dur-slow) var(--ds-ease-standard) both;
+    animation: p-reveal var(--p-dur-slow) var(--p-ease) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .markdown-body { animation: none; }
-  .markdown-body * { scroll-behavior: auto; transition: none !important; }
+    .markdown-body { animation: none; }
+    .markdown-body * { scroll-behavior: auto; transition: none !important; }
 }
 
-/* -----------------------------
-   4) Typography (DocOps scale)
-   ----------------------------- */
+/* -------------------------------------------------------
+   4) Typography
+   ------------------------------------------------------- */
 .markdown-body h1,
 .markdown-body h2,
 .markdown-body h3,
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
-  color: var(--md-heading);
-  font-weight: 600; /* Headline/Display mapping */
-  letter-spacing: -0.2px;
-  line-height: 1.2;
-  margin-top: 32px;
-  margin-bottom: 12px;
-  scroll-margin-top: 96px;
+    font-family: "Inter", sans-serif;
+    color: var(--md-heading);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    scroll-margin-top: 2rem;
 }
 
 .markdown-body h1 {
-  font-size: 40px;        /* Display (desktop) */
-  line-height: 48px;
-  letter-spacing: -0.6px;
-  margin-top: 0;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--ds-border);
+    font-size: 2.25rem;
+    margin-top: 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--p-border);
 }
 
 .markdown-body h2 {
-  font-size: 28px;        /* Headline (desktop) */
-  line-height: 34px;
-  letter-spacing: -0.3px;
-  padding-top: 8px;
+    font-size: 1.875rem;
+    padding-top: 0.5rem;
 }
 
 .markdown-body h3 {
-  font-size: 22px;        /* Title (desktop) */
-  line-height: 28px;
-  letter-spacing: -0.2px;
+    font-size: 1.5rem;
 }
 
 .markdown-body h4 {
-  font-size: 16px;        /* Body as “section label” */
-  line-height: 24px;
-  letter-spacing: 0;
-  font-weight: 600;
-  color: var(--ds-text-primary);
+    font-size: 1.25rem;
 }
 
 .markdown-body p {
-  margin: 0 0 16px 0;
+    margin: 0 0 1.25rem 0;
 }
 
 .markdown-body strong {
-  color: var(--ds-text-primary);
-  font-weight: 600;
+    color: var(--p-text-primary);
+    font-weight: 600;
+}
+
+.markdown-body em {
+    font-style: italic;
 }
 
 .markdown-body small {
-  color: var(--md-muted);
-  font-size: 12px;
-  line-height: 18px;
+    color: var(--md-muted);
+    font-size: 0.875rem;
 }
 
-/* -----------------------------
-   5) Links + focus visibility
-   ----------------------------- */
+/* Editorial touch — subtle drop-cap */
+.markdown-body > p:first-of-type::first-letter {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: var(--p-text-primary);
+}
+
+/* -------------------------------------------------------
+   5) Links + focus
+   ------------------------------------------------------- */
 .markdown-body a {
-  color: var(--md-link);
-  text-decoration: none;
-  font-weight: 600;
-  border-bottom: 2px solid var(--md-link-underline);
-  transition: background-color var(--ds-dur-fast) var(--ds-ease-standard),
-              border-color var(--ds-dur-fast) var(--ds-ease-standard),
-              color var(--ds-dur-fast) var(--ds-ease-standard);
-  padding: 0 2px;
-  border-radius: 6px;
+    color: var(--md-link);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--p-dur-fast) var(--p-ease);
+    border-bottom: 1px solid var(--md-link-underline);
 }
 
 .markdown-body a:hover {
-  background: var(--md-link-hover-bg);
-  border-bottom-color: rgba(0, 183, 214, 0.55);
+    border-bottom-color: var(--p-primary);
+    background-color: var(--md-link-hover-bg);
 }
 
 .markdown-body a:focus-visible {
-  outline: 2px solid var(--ds-accent);
-  box-shadow: var(--ds-focus-glow);
-  border-bottom-color: transparent;
+    outline: none;
+    box-shadow: var(--p-focus-glow);
+    border-radius: 2px;
 }
 
-/* Selection should feel “system-level” */
 .markdown-body ::selection {
-  background: rgba(0, 183, 214, 0.18);
+    background: rgba(59, 130, 246, 0.2);
 }
 
-/* -----------------------------
-   6) Lists, rules, and spacing
-   ----------------------------- */
+/* -------------------------------------------------------
+   6) Lists, rules, spacing
+   ------------------------------------------------------- */
 .markdown-body ul,
 .markdown-body ol {
-  margin: 0 0 16px 0;
-  padding-left: 24px;
+    margin: 0 0 1.25rem 0;
+    padding-left: 1.5rem;
 }
 
 .markdown-body li {
-  margin: 6px 0;
+    margin: 0.5rem 0;
+}
+
+.markdown-body ul li::marker {
+    color: var(--p-text-tertiary);
+}
+
+.markdown-body ol li::marker {
+    color: var(--p-text-secondary);
+    font-weight: 600;
 }
 
 .markdown-body hr {
-  border: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--ds-border), transparent);
-  margin: 24px 0;
+    border: 0;
+    height: 1px;
+    background: var(--p-border);
+    margin: 2.5rem 0;
 }
 
-/* -----------------------------
+/* -------------------------------------------------------
    7) Inline code + code blocks
-   ----------------------------- */
+   ------------------------------------------------------- */
 .markdown-body code {
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 0.95em;
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875em;
 }
 
 .markdown-body :not(pre) > code {
-  background: var(--md-inline-code-bg);
-  border: 1px solid var(--md-inline-code-border);
-  color: var(--ds-text-primary);
-  padding: 2px 8px;
-  border-radius: 10px;
-  white-space: break-spaces;
+    background: var(--md-inline-code-bg);
+    border: 1px solid var(--md-inline-code-border);
+    color: var(--p-danger);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--p-radius-sm);
 }
 
 .markdown-body pre {
-  background: var(--md-code-bg);
-  color: var(--md-code-fg);
-  border: 1px solid var(--md-code-border);
-  box-shadow: var(--ds-shadow-sm);
-  padding: 16px;
-  border-radius: var(--ds-radius-lg);
-  overflow: auto;
-  margin: 0 0 24px 0;
-  line-height: 1.55;
+    background: var(--md-code-bg);
+    color: var(--md-code-fg);
+    padding: 1.25rem;
+    border-radius: var(--p-radius-md);
+    overflow: auto;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+    border: 1px solid var(--md-code-border);
 }
 
 .markdown-body pre code {
-  color: inherit;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  border-radius: 0;
-  font-size: 13px;
-  white-space: pre;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 0.8125rem;
 }
 
-/* -----------------------------
-   8) Quotes / callouts
-   ----------------------------- */
+/* -------------------------------------------------------
+   8) Blockquote
+   ------------------------------------------------------- */
 .markdown-body blockquote {
-  margin: 24px 0;
-  padding: 16px 16px 16px 18px;
-
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
-              var(--ds-surface-2);
-
-  border: 1px solid var(--ds-border);
-  border-left: 4px solid var(--ds-brand-gold); /* Gold = governance/attention (not error) */
-  border-radius: var(--ds-radius-lg);
-  box-shadow: none;
-
-  color: var(--ds-text-secondary);
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background: var(--p-neutral);
+    border-left: 4px solid var(--p-primary);
+    border-radius: var(--p-radius-sm);
+    color: var(--p-text-secondary);
+    font-style: italic;
 }
 
 .markdown-body blockquote > :first-child { margin-top: 0; }
-.markdown-body blockquote > :last-child { margin-bottom: 0; }
+.markdown-body blockquote > :last-child  { margin-bottom: 0; }
 
-/* -----------------------------
-   9) Tables (audit-friendly)
-   ----------------------------- */
+/* -------------------------------------------------------
+   9) Tables
+   ------------------------------------------------------- */
 .markdown-body table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 0 0 24px 0;
-
-  background: rgba(255, 255, 255, 0.70);
-  border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-lg);
-  overflow: hidden;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 1.5rem 0;
+    font-size: 0.875rem;
 }
 
 .markdown-body thead th {
-  text-align: left;
-  font-weight: 600;
-  color: var(--ds-text-primary);
-  background: linear-gradient(180deg, rgba(238, 242, 247, 0.95), rgba(238, 242, 247, 0.78));
-  border-bottom: 1px solid var(--ds-border);
-  padding: 12px 16px;
-  font-size: 14px;
-  line-height: 20px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--p-text-primary);
+    border-bottom: 2px solid var(--p-border);
+    padding: 0.75rem 1rem;
 }
 
 .markdown-body tbody td {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(11, 18, 32, 0.08);
-  color: var(--ds-text-secondary);
-  vertical-align: top;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--p-border);
+    color: var(--md-prose);
 }
 
 .markdown-body tbody tr:nth-child(even) td {
-  background: var(--md-table-stripe);
+    background: var(--md-table-stripe);
 }
 
-.markdown-body tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-/* Numeric density: make tables/KPIs scanable if author uses <code> or numbers */
-.markdown-body td code,
-.markdown-body th code {
-  font-size: 0.92em;
-}
-
-/* -----------------------------
+/* -------------------------------------------------------
    10) Media, kbd, mark
-   ----------------------------- */
+   ------------------------------------------------------- */
 .markdown-body img {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--ds-radius-lg);
-  border: 1px solid var(--ds-border);
-  background: var(--ds-surface-1);
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--p-radius-md);
+    box-shadow: var(--p-shadow-sm);
 }
 
 .markdown-body kbd {
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--ds-text-primary);
-
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(11, 18, 32, 0.18);
-  border-bottom-color: rgba(11, 18, 32, 0.28);
-  border-radius: 10px;
-
-  padding: 2px 8px;
-  box-shadow: 0 1px 0 rgba(11, 18, 32, 0.08);
+    font-family: inherit;
+    font-size: 0.75rem;
+    background: var(--p-neutral);
+    border: 1px solid var(--p-border);
+    border-radius: var(--p-radius-sm);
+    padding: 0.125rem 0.375rem;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
 }
 
 .markdown-body mark {
-  background: rgba(201, 162, 39, 0.22); /* audit gold, soft */
-  color: var(--ds-text-primary);
-  padding: 0 3px;
-  border-radius: 6px;
+    background: rgba(217, 119, 6, 0.2);
+    color: var(--p-text-primary);
+    padding: 0 0.125rem;
 }
 
-/* -----------------------------
-   11) GitHub-ish conveniences (without cloning GitHub)
-   ----------------------------- */
+/* -------------------------------------------------------
+   11) Task lists + anchor links
+   ------------------------------------------------------- */
 .markdown-body .task-list-item {
-  list-style: none;
+    list-style: none;
 }
 
 .markdown-body .task-list-item input[type="checkbox"] {
-  transform: translateY(1px);
-  accent-color: var(--ds-accent);
+    accent-color: var(--p-primary);
 }
 
-/* Make anchor icons / autolinks not ugly if present */
-.markdown-body a.anchor {
-  border-bottom: 0;
-  padding: 0;
-  border-radius: 0;
-}
-
-/* -----------------------------
-   12) Print: keep it “audit export” ready
-   ----------------------------- */
+/* -------------------------------------------------------
+   12) Print
+   ------------------------------------------------------- */
 @media print {
-  .markdown-body {
-    background: #ffffff;
-    box-shadow: none;
-    border: 0;
-    margin: 0;
-    max-width: none;
-    padding: 0;
-  }
-
-  .markdown-body a {
-    color: var(--ds-text-primary);
-    border-bottom-color: rgba(11, 18, 32, 0.22);
-  }
-
-  .markdown-body pre {
-    box-shadow: none;
-  }
-}
-
-/* Redoc wrapper emitted by macro */
-.markdown-body .redocly-wrap {
-  /* break out of centered column */
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-
-  /* optional vertical spacing */
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
-
-  /* give Redoc some breathing room at viewport edges */
-  padding-left: 12px;
-  padding-right: 12px;
-  box-sizing: border-box;
-}
-
-/* Ensure inner Redoc container uses full width */
-.markdown-body .redocly-wrap > [id^="redoc-container-"] {
-  width: 100%;
-  max-width: none;
-}
-
-/* Optional: slightly reduce side nav width pressure on small screens */
-@media (max-width: 1100px) {
-  .markdown-body .redocly-wrap {
-    padding-left: 6px;
-    padding-right: 6px;
-  }
+    .markdown-body {
+        background: #ffffff;
+        box-shadow: none;
+        border: 0;
+        margin: 0;
+        max-width: none;
+        padding: 0;
+    }
 }
                 </style>
                 <style>
@@ -1466,7 +1387,7 @@
 </ul>
 <hr />
 <h2 id="default-look">Default Look</h2>
-<div id="docops-metricscard-1780528842984-666" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=H4sIAAAAAAAA_zWOTQvCMAyG7_0VObjjRMv8OuyiiAyc6AbCjtUFV9jakaYbgj_eqnh5XsiTkJc1t5jCRYKcyQS23mmDzkGOTPruBDfYYao8WVIijmPxE_CCq2o9hiz9rVU3bEWBA5rvaJJMZR5yvo6gshUcyI7ciBOOsPOObYfkPnqxDEwk7A0j9aQdir-HAhkNa2vCyiaJAmUEWdeTHUIjw-J0LqG8W_o8XMmAzNThmJ5wRFVr83gDKFB7v9sAAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Q2 2024 Business Metrics
+<div id="docops-metricscard-1785582251772-923" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=H4sIAAAAAAAA_zWOTQvCMAyG7_0VObjjRMv8OuyiiAyc6AbCjtUFV9jakaYbgj_eqnh5XsiTkJc1t5jCRYKcyQS23mmDzkGOTPruBDfYYao8WVIijmPxE_CCq2o9hiz9rVU3bEWBA5rvaJJMZR5yvo6gshUcyI7ciBOOsPOObYfkPnqxDEwk7A0j9aQdir-HAhkNa2vCyiaJAmUEWdeTHUIjw-J0LqG8W_o8XMmAzNThmJ5wRFVr83gDKFB7v9sAAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Q2 2024 Business Metrics
 theme=aurora
 ---
 Metric | Value | Sublabel
@@ -1476,12 +1397,12 @@ Customer Retention | 94% | 2% Improvement
 NPS Score | 72 | Industry Leading" data-kind="metricscard">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_0b02ce04adb140a28626af56821503c9" width="924" height="336" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 924 336" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Q2 2024 Business Metrics","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","$4.2M","Revenue","18% YoY Growth","aurora","false"],["","2","156","New Customers","42 Enterprise","",""],["","3","94%","Customer Retention","2% Improvement","",""],["","4","72","NPS Score","Industry Leading","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .metric-value_0b02ce04adb140a28626af56821503c9 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; fill: #0f172a; } .metric-label_0b02ce04adb140a28626af56821503c9 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; fill: #4338ca; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_0b02ce04adb140a28626af56821503c9 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #818cf8; } .title-text_0b02ce04adb140a28626af56821503c9 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 27.826088px; fill: #0f172a; }</style><pattern id="grid_0b02ce04adb140a28626af56821503c9" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#0f172a" stroke-width="0.3" opacity="0.1"/></pattern><filter id="shadow_0b02ce04adb140a28626af56821503c9" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#0f172a" flood-opacity="0.3"/></filter></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#f1f5f9" rx="16"/><rect width="100%" height="100%" fill="url(#grid_0b02ce04adb140a28626af56821503c9)"/><!-- Title Section --><g transform="translate(28, 56)"><text x="0" y="0" class="title-text_0b02ce04adb140a28626af56821503c9">Q2 2024 Business Metrics</text><rect x="0" y="18" width="60" height="8" fill="#818cf8" rx="2"/></g><g class="metrics"><g class="metric-card" transform="translate(28, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_0b02ce04adb140a28626af56821503c9)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e60049" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_0b02ce04adb140a28626af56821503c9">$4.2M</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_0b02ce04adb140a28626af56821503c9"><tspan x="20" dy="0">Revenue</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_0b02ce04adb140a28626af56821503c9">> 18% YoY Growth</text></g><g class="metric-card" transform="translate(252, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_0b02ce04adb140a28626af56821503c9)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#0bb4ff" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_0b02ce04adb140a28626af56821503c9">156</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_0b02ce04adb140a28626af56821503c9"><tspan x="20" dy="0">New Customers</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_0b02ce04adb140a28626af56821503c9">> 42 Enterprise</text></g><g class="metric-card" transform="translate(476, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_0b02ce04adb140a28626af56821503c9)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#50e991" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_0b02ce04adb140a28626af56821503c9">94%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_0b02ce04adb140a28626af56821503c9"><tspan x="20" dy="0">Customer Retention</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_0b02ce04adb140a28626af56821503c9">> 2% Improvement</text></g><g class="metric-card" transform="translate(700, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_0b02ce04adb140a28626af56821503c9)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e6d800" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_0b02ce04adb140a28626af56821503c9">72</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_0b02ce04adb140a28626af56821503c9"><tspan x="20" dy="0">NPS Score</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_0b02ce04adb140a28626af56821503c9">> Industry Leading</text></g>    </g></svg>
+<svg id="ID_469e4940cf2e49efb929b0bf0f542f06" width="924" height="336" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 924 336" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Q2 2024 Business Metrics","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","$4.2M","Revenue","18% YoY Growth","aurora","false"],["","2","156","New Customers","42 Enterprise","",""],["","3","94%","Customer Retention","2% Improvement","",""],["","4","72","NPS Score","Industry Leading","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .metric-value_469e4940cf2e49efb929b0bf0f542f06 { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 700; fill: #0f172a; } .metric-label_469e4940cf2e49efb929b0bf0f542f06 { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 400; fill: #475569; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_469e4940cf2e49efb929b0bf0f542f06 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #818cf8; } .title-text_469e4940cf2e49efb929b0bf0f542f06 { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 700; font-size: 27.826088px; fill: #0f172a; }</style><pattern id="grid_469e4940cf2e49efb929b0bf0f542f06" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#0f172a" stroke-width="0.3" opacity="0.1"/></pattern><filter id="shadow_469e4940cf2e49efb929b0bf0f542f06" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#0f172a" flood-opacity="0.3"/></filter></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#f1f5f9" rx="16"/><rect width="100%" height="100%" fill="url(#grid_469e4940cf2e49efb929b0bf0f542f06)"/><!-- Title Section --><g transform="translate(28, 56)"><text x="0" y="0" class="title-text_469e4940cf2e49efb929b0bf0f542f06">Q2 2024 Business Metrics</text><rect x="0" y="18" width="60" height="8" fill="#818cf8" rx="2"/></g><g class="metrics"><g class="metric-card" transform="translate(28, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_469e4940cf2e49efb929b0bf0f542f06)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e60049" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_469e4940cf2e49efb929b0bf0f542f06">$4.2M</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_469e4940cf2e49efb929b0bf0f542f06"><tspan x="20" dy="0">Revenue</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_469e4940cf2e49efb929b0bf0f542f06">> 18% YoY Growth</text></g><g class="metric-card" transform="translate(252, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_469e4940cf2e49efb929b0bf0f542f06)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#0bb4ff" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_469e4940cf2e49efb929b0bf0f542f06">156</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_469e4940cf2e49efb929b0bf0f542f06"><tspan x="20" dy="0">New Customers</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_469e4940cf2e49efb929b0bf0f542f06">> 42 Enterprise</text></g><g class="metric-card" transform="translate(476, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_469e4940cf2e49efb929b0bf0f542f06)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#50e991" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_469e4940cf2e49efb929b0bf0f542f06">94%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_469e4940cf2e49efb929b0bf0f542f06"><tspan x="20" dy="0">Customer Retention</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_469e4940cf2e49efb929b0bf0f542f06">> 2% Improvement</text></g><g class="metric-card" transform="translate(700, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_469e4940cf2e49efb929b0bf0f542f06)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e6d800" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_469e4940cf2e49efb929b0bf0f542f06">72</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_469e4940cf2e49efb929b0bf0f542f06"><tspan x="20" dy="0">NPS Score</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_469e4940cf2e49efb929b0bf0f542f06">> Industry Leading</text></g>    </g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-metricscard-1780528842984-666').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-metricscard-1785582251772-923').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1499,7 +1420,7 @@ NPS Score | 72 | Industry Leading" data-kind="metricscard">
 </div>
 <hr />
 <h2 id="sustainability-metrics-example">Sustainability Metrics Example</h2>
-<div id="docops-metricscard-1780528842994-811" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=H4sIAAAAAAAA_02OT0_DMAzF7_kUvnAsqgrjz2EH2IADINA6sbPbupuFm0yJE1RpH55k4sDF78nv6Wcrq9AS2hgU2WLHwjrDQ39gSjSR1WD0kM1S3ffsTFVV5p3Ucw8n-EKJlLWNnWBHYlboO2dhQ0PslbM7QXN3kWcKl9DUTQ2PGEjYktmQpR_shODJkt_PuXTblOrHCFunKLByNsTpWDhmh0r-vCGf8A99tahfs7ygSA6gxURDbgYlWHMirzTk-P66UJ-9m-AN7TCyiPnEY8b9f_NmUVpr3nM5vfVow-j8dD71C-cHHbYjAQAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Sustainability Achievements
+<div id="docops-metricscard-1785582251809-835" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=H4sIAAAAAAAA_02OT0_DMAzF7_kUvnAsqgrjz2EH2IADINA6sbPbupuFm0yJE1RpH55k4sDF78nv6Wcrq9AS2hgU2WLHwjrDQ39gSjSR1WD0kM1S3ffsTFVV5p3Ucw8n-EKJlLWNnWBHYlboO2dhQ0PslbM7QXN3kWcKl9DUTQ2PGEjYktmQpR_shODJkt_PuXTblOrHCFunKLByNsTpWDhmh0r-vCGf8A99tahfs7ygSA6gxURDbgYlWHMirzTk-P66UJ-9m-AN7TCyiPnEY8b9f_NmUVpr3nM5vfVow-j8dD71C-cHHbYjAQAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Sustainability Achievements
 theme=tokyo
 ---
 Metric | Value | Sublabel
@@ -1510,12 +1431,12 @@ Waste Diverted | 94% | From Landfill
 Paper Reduction | 65% | Digital Transformation" data-kind="metricscard">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_287872630a6f443985caaa5a7f89f859" width="1148" height="336" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1148 336" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Sustainability Achievements","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","28%","Carbon Reduction","vs. 2020 Baseline","tokyo","false"],["","2","72%","Renewable Energy","Of Total Consumption","",""],["","3","350K","Water Conservation","Gallons Saved","",""],["","4","94%","Waste Diverted","From Landfill","",""],["","5","65%","Paper Reduction","Digital Transformation","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .metric-value_287872630a6f443985caaa5a7f89f859 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; fill: #0f172a; } .metric-label_287872630a6f443985caaa5a7f89f859 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 400; fill: #4338ca; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_287872630a6f443985caaa5a7f89f859 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #818cf8; } .title-text_287872630a6f443985caaa5a7f89f859 { font-family: 'Archivo', -apple-system, sans-serif; font-weight: 700; font-size: 27.826088px; fill: #0f172a; }</style><pattern id="grid_287872630a6f443985caaa5a7f89f859" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#0f172a" stroke-width="0.3" opacity="0.1"/></pattern><filter id="shadow_287872630a6f443985caaa5a7f89f859" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#0f172a" flood-opacity="0.3"/></filter></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#f1f5f9" rx="16"/><rect width="100%" height="100%" fill="url(#grid_287872630a6f443985caaa5a7f89f859)"/><!-- Title Section --><g transform="translate(28, 56)"><text x="0" y="0" class="title-text_287872630a6f443985caaa5a7f89f859">Sustainability Achievements</text><rect x="0" y="18" width="60" height="8" fill="#818cf8" rx="2"/></g><g class="metrics"><g class="metric-card" transform="translate(28, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_287872630a6f443985caaa5a7f89f859)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e60049" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_287872630a6f443985caaa5a7f89f859">28%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_287872630a6f443985caaa5a7f89f859"><tspan x="20" dy="0">Carbon Reduction</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_287872630a6f443985caaa5a7f89f859">> vs. 2020 Baseline</text></g><g class="metric-card" transform="translate(252, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_287872630a6f443985caaa5a7f89f859)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#0bb4ff" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_287872630a6f443985caaa5a7f89f859">72%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_287872630a6f443985caaa5a7f89f859"><tspan x="20" dy="0">Renewable Energy</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_287872630a6f443985caaa5a7f89f859">> Of Total Consumption</text></g><g class="metric-card" transform="translate(476, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_287872630a6f443985caaa5a7f89f859)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#50e991" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_287872630a6f443985caaa5a7f89f859">350K</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_287872630a6f443985caaa5a7f89f859"><tspan x="20" dy="0">Water Conservation</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_287872630a6f443985caaa5a7f89f859">> Gallons Saved</text></g><g class="metric-card" transform="translate(700, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_287872630a6f443985caaa5a7f89f859)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e6d800" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_287872630a6f443985caaa5a7f89f859">94%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_287872630a6f443985caaa5a7f89f859"><tspan x="20" dy="0">Waste Diverted</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_287872630a6f443985caaa5a7f89f859">> From Landfill</text></g><g class="metric-card" transform="translate(924, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_287872630a6f443985caaa5a7f89f859)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#9b19f5" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_287872630a6f443985caaa5a7f89f859">65%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_287872630a6f443985caaa5a7f89f859"><tspan x="20" dy="0">Paper Reduction</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_287872630a6f443985caaa5a7f89f859">> Digital Transformation</text></g>    </g></svg>
+<svg id="ID_98185795555e40bd9208fc0cf0f690ee" width="1148" height="336" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1148 336" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Sustainability Achievements","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","28%","Carbon Reduction","vs. 2020 Baseline","tokyo","false"],["","2","72%","Renewable Energy","Of Total Consumption","",""],["","3","350K","Water Conservation","Gallons Saved","",""],["","4","94%","Waste Diverted","From Landfill","",""],["","5","65%","Paper Reduction","Digital Transformation","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&amp;display=swap'); .metric-value_98185795555e40bd9208fc0cf0f690ee { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 700; fill: #0f172a; } .metric-label_98185795555e40bd9208fc0cf0f690ee { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 400; fill: #475569; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_98185795555e40bd9208fc0cf0f690ee { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #818cf8; } .title-text_98185795555e40bd9208fc0cf0f690ee { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 700; font-size: 27.826088px; fill: #0f172a; }</style><pattern id="grid_98185795555e40bd9208fc0cf0f690ee" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#0f172a" stroke-width="0.3" opacity="0.1"/></pattern><filter id="shadow_98185795555e40bd9208fc0cf0f690ee" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#0f172a" flood-opacity="0.3"/></filter></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#f1f5f9" rx="16"/><rect width="100%" height="100%" fill="url(#grid_98185795555e40bd9208fc0cf0f690ee)"/><!-- Title Section --><g transform="translate(28, 56)"><text x="0" y="0" class="title-text_98185795555e40bd9208fc0cf0f690ee">Sustainability Achievements</text><rect x="0" y="18" width="60" height="8" fill="#818cf8" rx="2"/></g><g class="metrics"><g class="metric-card" transform="translate(28, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_98185795555e40bd9208fc0cf0f690ee)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e60049" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_98185795555e40bd9208fc0cf0f690ee">28%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_98185795555e40bd9208fc0cf0f690ee"><tspan x="20" dy="0">Carbon Reduction</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_98185795555e40bd9208fc0cf0f690ee">> vs. 2020 Baseline</text></g><g class="metric-card" transform="translate(252, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_98185795555e40bd9208fc0cf0f690ee)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#0bb4ff" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_98185795555e40bd9208fc0cf0f690ee">72%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_98185795555e40bd9208fc0cf0f690ee"><tspan x="20" dy="0">Renewable Energy</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_98185795555e40bd9208fc0cf0f690ee">> Of Total Consumption</text></g><g class="metric-card" transform="translate(476, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_98185795555e40bd9208fc0cf0f690ee)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#50e991" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_98185795555e40bd9208fc0cf0f690ee">350K</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_98185795555e40bd9208fc0cf0f690ee"><tspan x="20" dy="0">Water Conservation</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_98185795555e40bd9208fc0cf0f690ee">> Gallons Saved</text></g><g class="metric-card" transform="translate(700, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_98185795555e40bd9208fc0cf0f690ee)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e6d800" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_98185795555e40bd9208fc0cf0f690ee">94%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_98185795555e40bd9208fc0cf0f690ee"><tspan x="20" dy="0">Waste Diverted</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_98185795555e40bd9208fc0cf0f690ee">> From Landfill</text></g><g class="metric-card" transform="translate(924, 112)"><!-- Card Background --><rect width="196" height="196" rx="12" fill="rgba(255, 255, 255, 0.7)" stroke="#0f172a" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_98185795555e40bd9208fc0cf0f690ee)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#9b19f5" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="36.52174" class="metric-value_98185795555e40bd9208fc0cf0f690ee">65%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="11.304348" class="metric-label_98185795555e40bd9208fc0cf0f690ee"><tspan x="20" dy="0">Paper Reduction</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_98185795555e40bd9208fc0cf0f690ee">> Digital Transformation</text></g>    </g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-metricscard-1780528842994-811').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-metricscard-1785582251809-835').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1533,7 +1454,7 @@ Paper Reduction | 65% | Digital Transformation" data-kind="metricscard">
 </div>
 <hr />
 <h2 id="modern-snapshot-example">Modern Snapshot Example</h2>
-<div id="docops-metricscard-1780528843002-331" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=H4sIAAAAAAAA_z2MMQvCMBSE9_yKt2SSlDatUgcHEYogBaXVPa0P-jA1JXlx8sfbdnC64767Y2KLB7jloFNdwNW7Z-wZzmgsD0IpJWpkTz184WFsxFmb2FnToRXHnumDcA_ow5zrorzMssm0hNrVoqURgR1U5AP_1zsY6b3UVZZsVy9O3oRBVR4RGgyB3Mr3-6SQy1-a5FI0cZqcZ2ipfyEvPCv1-lLKH93rz1HEAAAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Q3 2024 Product Health
+<div id="docops-metricscard-1785582251828-668" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=metricscard&payload=H4sIAAAAAAAA_z2MMQvCMBSE9_yKt2SSlDatUgcHEYogBaXVPa0P-jA1JXlx8sfbdnC64767Y2KLB7jloFNdwNW7Z-wZzmgsD0IpJWpkTz184WFsxFmb2FnToRXHnumDcA_ow5zrorzMssm0hNrVoqURgR1U5AP_1zsY6b3UVZZsVy9O3oRBVR4RGgyB3Mr3-6SQy1-a5FI0cZqcZ2ipfyEvPCv1-lLKH93rz1HEAAAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="title= Q3 2024 Product Health
 ---
 Metric | Value | Sublabel
 Active Users | 248K | +12% MoM
@@ -1542,12 +1463,12 @@ Crash-Free Sessions | 99.4% | +0.3%
 Support Tickets | 182 | -18%" data-kind="metricscard">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg id="ID_5c02add809534a5f8c6069ccfb1c888e" width="700" height="336" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 336" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Q3 2024 Product Health","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","248K","Active Users","+12% MoM","classic","false"],["","2","99.4%","Crash-Free Sessions","+0.3%","",""],["","3","182","Support Tickets","-18%","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.metric-value_5c02add809534a5f8c6069ccfb1c888e { font-family: Arial, Helvetica, sans-serif; font-weight: 700; fill: #111111; } .metric-label_5c02add809534a5f8c6069ccfb1c888e { font-family: Arial, Helvetica, sans-serif; font-weight: 400; fill: #4338ca; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_5c02add809534a5f8c6069ccfb1c888e { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #2563eb; } .title-text_5c02add809534a5f8c6069ccfb1c888e { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 32.0px; fill: #111111; }</style><pattern id="grid_5c02add809534a5f8c6069ccfb1c888e" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#111111" stroke-width="0.3" opacity="0.1"/></pattern><filter id="shadow_5c02add809534a5f8c6069ccfb1c888e" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#111111" flood-opacity="0.3"/></filter></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#ffffff" rx="16"/><rect width="100%" height="100%" fill="url(#grid_5c02add809534a5f8c6069ccfb1c888e)"/><!-- Title Section --><g transform="translate(28, 56)"><text x="0" y="0" class="title-text_5c02add809534a5f8c6069ccfb1c888e">Q3 2024 Product Health</text><rect x="0" y="18" width="60" height="8" fill="#2563eb" rx="2"/></g><g class="metrics"><g class="metric-card" transform="translate(28, 112)"><!-- Card Background --><rect width="196" height="196" rx="4" fill="rgba(255, 255, 255, 0.9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_5c02add809534a5f8c6069ccfb1c888e)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e60049" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="42.0" class="metric-value_5c02add809534a5f8c6069ccfb1c888e">248K</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="13.0" class="metric-label_5c02add809534a5f8c6069ccfb1c888e"><tspan x="20" dy="0">Active Users</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_5c02add809534a5f8c6069ccfb1c888e">> +12% MoM</text></g><g class="metric-card" transform="translate(252, 112)"><!-- Card Background --><rect width="196" height="196" rx="4" fill="rgba(255, 255, 255, 0.9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_5c02add809534a5f8c6069ccfb1c888e)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#0bb4ff" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="42.0" class="metric-value_5c02add809534a5f8c6069ccfb1c888e">99.4%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="13.0" class="metric-label_5c02add809534a5f8c6069ccfb1c888e"><tspan x="20" dy="0">Crash-Free Sessions</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_5c02add809534a5f8c6069ccfb1c888e">> +0.3%</text></g><g class="metric-card" transform="translate(476, 112)"><!-- Card Background --><rect width="196" height="196" rx="4" fill="rgba(255, 255, 255, 0.9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_5c02add809534a5f8c6069ccfb1c888e)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#50e991" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="42.0" class="metric-value_5c02add809534a5f8c6069ccfb1c888e">182</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="13.0" class="metric-label_5c02add809534a5f8c6069ccfb1c888e"><tspan x="20" dy="0">Support Tickets</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_5c02add809534a5f8c6069ccfb1c888e">> -18%</text></g>    </g></svg>
+<svg id="ID_3398ccff8704441f83637010a50eedc4" width="700" height="336" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 336" preserveAspectRatio='xMidYMid meet'>      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Q3 2024 Product Health","Metric Number","Value","Label","Sublabel","Theme","Use Glass"],"rows":[["","1","248K","Active Users","+12% MoM","classic","false"],["","2","99.4%","Crash-Free Sessions","+0.3%","",""],["","3","182","Support Tickets","-18%","",""]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><style>.metric-value_3398ccff8704441f83637010a50eedc4 { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 700; fill: #111111; } .metric-label_3398ccff8704441f83637010a50eedc4 { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 400; fill: #475569; letter-spacing: 0.05em; text-transform: uppercase; } .metric-sub_3398ccff8704441f83637010a50eedc4 { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #2563eb; } .title-text_3398ccff8704441f83637010a50eedc4 { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-weight: 700; font-size: 32.0px; fill: #111111; }</style><pattern id="grid_3398ccff8704441f83637010a50eedc4" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M 28 0 L 0 0 0 28" fill="none" stroke="#111111" stroke-width="0.3" opacity="0.1"/></pattern><filter id="shadow_3398ccff8704441f83637010a50eedc4" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#111111" flood-opacity="0.3"/></filter></defs><!-- Background Layering: Preservation of depth --><rect width="100%" height="100%" fill="#ffffff" rx="16"/><rect width="100%" height="100%" fill="url(#grid_3398ccff8704441f83637010a50eedc4)"/><!-- Title Section --><g transform="translate(28, 56)"><text x="0" y="0" class="title-text_3398ccff8704441f83637010a50eedc4">Q3 2024 Product Health</text><rect x="0" y="18" width="60" height="8" fill="#2563eb" rx="2"/></g><g class="metrics"><g class="metric-card" transform="translate(28, 112)"><!-- Card Background --><rect width="196" height="196" rx="4" fill="rgba(255, 255, 255, 0.9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_3398ccff8704441f83637010a50eedc4)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#e60049" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="42.0" class="metric-value_3398ccff8704441f83637010a50eedc4">248K</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="13.0" class="metric-label_3398ccff8704441f83637010a50eedc4"><tspan x="20" dy="0">Active Users</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_3398ccff8704441f83637010a50eedc4">> +12% MoM</text></g><g class="metric-card" transform="translate(252, 112)"><!-- Card Background --><rect width="196" height="196" rx="4" fill="rgba(255, 255, 255, 0.9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_3398ccff8704441f83637010a50eedc4)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#0bb4ff" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="42.0" class="metric-value_3398ccff8704441f83637010a50eedc4">99.4%</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="13.0" class="metric-label_3398ccff8704441f83637010a50eedc4"><tspan x="20" dy="0">Crash-Free Sessions</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_3398ccff8704441f83637010a50eedc4">> +0.3%</text></g><g class="metric-card" transform="translate(476, 112)"><!-- Card Background --><rect width="196" height="196" rx="4" fill="rgba(255, 255, 255, 0.9)" stroke="#111111" stroke-opacity="0.1" stroke-width="1" filter="url(#shadow_3398ccff8704441f83637010a50eedc4)"/><!-- Cyber Accent Tab --><path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="#50e991" opacity="0.9"/><!-- Metric Value --><text x="20" y="85" text-anchor="start" font-size="42.0" class="metric-value_3398ccff8704441f83637010a50eedc4">182</text><!-- Metric Label (Wrapped) --><text x="20" y="110" text-anchor="start" font-size="13.0" class="metric-label_3398ccff8704441f83637010a50eedc4"><tspan x="20" dy="0">Support Tickets</tspan></text><!-- Metric Sublabel --><text x="20" y="145" text-anchor="start" class="metric-sub_3398ccff8704441f83637010a50eedc4">> -18%</text></g>    </g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-metricscard-1780528843002-331').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-metricscard-1785582251828-668').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>

@@ -10,457 +10,378 @@
                 <title>Process Flow Connectors</title>
                 
                                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* DocOps Design System — Signal (v1) : Markdown Light
-   Goals: calm, audit-friendly, high-contrast, “ink as authority”, cyan as action. */
+/* Premium Food Blog — Modern Markdown Theme
+   Apple-inspired aesthetic with precise spacing and refined typography.
+   Scoped to .markdown-body. */
 
 .markdown-body {
-  /* -----------------------------
-     1) Core tokens (DocOps Signal)
-     ----------------------------- */
-  --ds-brand-ink: #0b1220;
-  --ds-brand-cloud: #f6f8fb;
-  --ds-brand-slate: #2a3447;
-  --ds-brand-steel: #8a96ad;
-  --ds-brand-cyan: #00b7d6;
-  --ds-brand-gold: #c9a227;
+    /* -------------------------------------------------------
+       1) Core brand tokens — Premium Palette
+       ------------------------------------------------------- */
+    --p-primary:      #3B82F6;
+    --p-secondary:    #8B5CF6;
+    --p-success:      #16A34A;
+    --p-warning:      #D97706;
+    --p-danger:       #DC2626;
+    --p-surface:      #FFFFFF;
+    --p-text:         #111827;
+    --p-neutral:      #F9FAFB;
+    --p-border:       rgba(0, 0, 0, 0.1);
 
-  --ds-semantic-success: #16a34a;
-  --ds-semantic-warning: #d97706;
-  --ds-semantic-error: #dc2626;
-  --ds-semantic-info: #2563eb;
+    /* Semantic roles */
+    --p-surface-1:   var(--p-surface);
+    --p-surface-2:   var(--p-neutral);
 
-  --ds-canvas: var(--ds-brand-cloud);
-  --ds-surface-1: #ffffff;
-  --ds-surface-2: #eef2f7;
-  --ds-border: rgba(11, 18, 32, 0.12);
+    --p-text-primary:   var(--p-text);
+    --p-text-secondary: #374151;
+    --p-text-tertiary:  #6B7280;
 
-  --ds-text-primary: var(--ds-brand-ink);
-  --ds-text-secondary: var(--ds-brand-slate);
-  --ds-text-tertiary: var(--ds-brand-steel);
+    --p-accent:      var(--p-primary);
 
-  --ds-accent: var(--ds-brand-cyan);
+    /* -------------------------------------------------------
+       2) Markdown-specific roles
+       ------------------------------------------------------- */
+    --md-max-width:   840px;
+    --md-pad-x:       32px;
+    --md-pad-y:       32px;
 
-  --ds-radius-sm: 8px;
-  --ds-radius-md: 12px;
-  --ds-radius-lg: 16px;
-  --ds-radius-pill: 999px;
+    --md-prose:       var(--p-text-secondary);
+    --md-heading:     var(--p-text-primary);
+    --md-muted:       var(--p-text-tertiary);
 
-  --ds-shadow-sm: 0 6px 18px rgba(11, 18, 32, 0.08);
-  --ds-shadow-md: 0 16px 40px rgba(11, 18, 32, 0.12);
-  --ds-focus-glow: 0 0 0 4px rgba(0, 183, 214, 0.22);
+    --md-link:              var(--p-primary);
+    --md-link-underline:    rgba(59, 130, 246, 0.2);
+    --md-link-hover-bg:     rgba(59, 130, 246, 0.05);
 
-  --ds-dur-fast: 120ms;
-  --ds-dur-base: 220ms;
-  --ds-dur-slow: 420ms;
-  --ds-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-  --ds-ease-snappy: cubic-bezier(0.2, 0.9, 0.2, 1);
+    --md-inline-code-bg:     rgba(0, 0, 0, 0.04);
+    --md-inline-code-border: rgba(0, 0, 0, 0.08);
 
-  /* -----------------------------
-     2) Markdown-specific roles
-     ----------------------------- */
-  --md-max-width: 920px;
-  --md-pad-x: 48px;
-  --md-pad-y: 48px;
+    --md-code-bg:    #1F2937;
+    --md-code-fg:    #F9FAFB;
+    --md-code-border: rgba(0, 0, 0, 0.2);
 
-  --md-prose: var(--ds-text-secondary);
-  --md-heading: var(--ds-text-primary);
-  --md-muted: var(--ds-text-tertiary);
+    --md-table-stripe: rgba(0, 0, 0, 0.02);
 
-  --md-link: var(--ds-accent);
-  --md-link-underline: rgba(0, 183, 214, 0.28);
-  --md-link-hover-bg: rgba(0, 183, 214, 0.10);
+    /* Radii */
+    --p-radius-sm:  4px;
+    --p-radius-md:  8px;
+    --p-radius-lg:  12px;
+    --p-radius-pill: 999px;
 
-  --md-inline-code-bg: rgba(11, 18, 32, 0.06);
-  --md-inline-code-border: rgba(11, 18, 32, 0.12);
+    /* Shadows */
+    --p-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --p-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --p-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-  --md-code-bg: var(--ds-brand-ink);
-  --md-code-fg: #f1f5ff;
-  --md-code-border: rgba(11, 18, 32, 0.20);
+    /* Motion */
+    --p-dur-fast:    100ms;
+    --p-dur-base:    200ms;
+    --p-dur-slow:    300ms;
+    --p-ease:        cubic-bezier(0.4, 0, 0.2, 1);
 
-  --md-table-stripe: rgba(11, 18, 32, 0.03);
+    /* Focus */
+    --p-focus-glow: 0 0 0 3px rgba(59, 130, 246, 0.4);
 
-  /* Atmosphere: “calm corporate depth” (subtle, not noisy) */
-  background:
-    radial-gradient(900px 420px at 12% 0%, rgba(0, 183, 214, 0.08), transparent 55%),
-    radial-gradient(760px 360px at 92% 18%, rgba(201, 162, 39, 0.08), transparent 58%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.70)),
-    var(--ds-canvas);
+    /* -------------------------------------------------------
+       Atmosphere — Clean, minimal surface
+       ------------------------------------------------------- */
+    background: var(--p-surface);
+    color: var(--md-prose);
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.625;
 
-  color: var(--md-prose);
-  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
+    max-width: var(--md-max-width);
+    margin: 32px auto;
+    padding: var(--md-pad-y) var(--md-pad-x);
 
-  max-width: var(--md-max-width);
-  margin: 40px auto;
-  padding: var(--md-pad-y) var(--md-pad-x);
+    border-radius: var(--p-radius-lg);
+    border: 1px solid var(--p-border);
+    box-shadow: var(--p-shadow-md);
 
-  border-radius: 24px;
-  border: 1px solid var(--ds-border);
-  box-shadow: var(--ds-shadow-sm);
-
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-
-  /* Let long IDs/URLs behave */
-  overflow-wrap: anywhere;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-wrap: anywhere;
 }
 
-/* Responsive padding (keeps 8px rhythm while respecting smaller screens) */
+/* Responsive */
 @media (max-width: 768px) {
-  .markdown-body {
-    --md-pad-x: 20px;
-    --md-pad-y: 28px;
-    margin: 16px;
-    border-radius: 18px;
-  }
+    .markdown-body {
+        --md-pad-x: 20px;
+        --md-pad-y: 24px;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
 }
 
-/* -----------------------------
-   3) Page-load motion (restrained)
-   ----------------------------- */
-@keyframes docops-reveal {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+/* -------------------------------------------------------
+   3) Page-load reveal
+   ------------------------------------------------------- */
+@keyframes p-reveal {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .markdown-body {
-  animation: docops-reveal var(--ds-dur-slow) var(--ds-ease-standard) both;
+    animation: p-reveal var(--p-dur-slow) var(--p-ease) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .markdown-body { animation: none; }
-  .markdown-body * { scroll-behavior: auto; transition: none !important; }
+    .markdown-body { animation: none; }
+    .markdown-body * { scroll-behavior: auto; transition: none !important; }
 }
 
-/* -----------------------------
-   4) Typography (DocOps scale)
-   ----------------------------- */
+/* -------------------------------------------------------
+   4) Typography
+   ------------------------------------------------------- */
 .markdown-body h1,
 .markdown-body h2,
 .markdown-body h3,
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
-  color: var(--md-heading);
-  font-weight: 600; /* Headline/Display mapping */
-  letter-spacing: -0.2px;
-  line-height: 1.2;
-  margin-top: 32px;
-  margin-bottom: 12px;
-  scroll-margin-top: 96px;
+    font-family: "Inter", sans-serif;
+    color: var(--md-heading);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    scroll-margin-top: 2rem;
 }
 
 .markdown-body h1 {
-  font-size: 40px;        /* Display (desktop) */
-  line-height: 48px;
-  letter-spacing: -0.6px;
-  margin-top: 0;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--ds-border);
+    font-size: 2.25rem;
+    margin-top: 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--p-border);
 }
 
 .markdown-body h2 {
-  font-size: 28px;        /* Headline (desktop) */
-  line-height: 34px;
-  letter-spacing: -0.3px;
-  padding-top: 8px;
+    font-size: 1.875rem;
+    padding-top: 0.5rem;
 }
 
 .markdown-body h3 {
-  font-size: 22px;        /* Title (desktop) */
-  line-height: 28px;
-  letter-spacing: -0.2px;
+    font-size: 1.5rem;
 }
 
 .markdown-body h4 {
-  font-size: 16px;        /* Body as “section label” */
-  line-height: 24px;
-  letter-spacing: 0;
-  font-weight: 600;
-  color: var(--ds-text-primary);
+    font-size: 1.25rem;
 }
 
 .markdown-body p {
-  margin: 0 0 16px 0;
+    margin: 0 0 1.25rem 0;
 }
 
 .markdown-body strong {
-  color: var(--ds-text-primary);
-  font-weight: 600;
+    color: var(--p-text-primary);
+    font-weight: 600;
+}
+
+.markdown-body em {
+    font-style: italic;
 }
 
 .markdown-body small {
-  color: var(--md-muted);
-  font-size: 12px;
-  line-height: 18px;
+    color: var(--md-muted);
+    font-size: 0.875rem;
 }
 
-/* -----------------------------
-   5) Links + focus visibility
-   ----------------------------- */
+/* Editorial touch — subtle drop-cap */
+.markdown-body > p:first-of-type::first-letter {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: var(--p-text-primary);
+}
+
+/* -------------------------------------------------------
+   5) Links + focus
+   ------------------------------------------------------- */
 .markdown-body a {
-  color: var(--md-link);
-  text-decoration: none;
-  font-weight: 600;
-  border-bottom: 2px solid var(--md-link-underline);
-  transition: background-color var(--ds-dur-fast) var(--ds-ease-standard),
-              border-color var(--ds-dur-fast) var(--ds-ease-standard),
-              color var(--ds-dur-fast) var(--ds-ease-standard);
-  padding: 0 2px;
-  border-radius: 6px;
+    color: var(--md-link);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--p-dur-fast) var(--p-ease);
+    border-bottom: 1px solid var(--md-link-underline);
 }
 
 .markdown-body a:hover {
-  background: var(--md-link-hover-bg);
-  border-bottom-color: rgba(0, 183, 214, 0.55);
+    border-bottom-color: var(--p-primary);
+    background-color: var(--md-link-hover-bg);
 }
 
 .markdown-body a:focus-visible {
-  outline: 2px solid var(--ds-accent);
-  box-shadow: var(--ds-focus-glow);
-  border-bottom-color: transparent;
+    outline: none;
+    box-shadow: var(--p-focus-glow);
+    border-radius: 2px;
 }
 
-/* Selection should feel “system-level” */
 .markdown-body ::selection {
-  background: rgba(0, 183, 214, 0.18);
+    background: rgba(59, 130, 246, 0.2);
 }
 
-/* -----------------------------
-   6) Lists, rules, and spacing
-   ----------------------------- */
+/* -------------------------------------------------------
+   6) Lists, rules, spacing
+   ------------------------------------------------------- */
 .markdown-body ul,
 .markdown-body ol {
-  margin: 0 0 16px 0;
-  padding-left: 24px;
+    margin: 0 0 1.25rem 0;
+    padding-left: 1.5rem;
 }
 
 .markdown-body li {
-  margin: 6px 0;
+    margin: 0.5rem 0;
+}
+
+.markdown-body ul li::marker {
+    color: var(--p-text-tertiary);
+}
+
+.markdown-body ol li::marker {
+    color: var(--p-text-secondary);
+    font-weight: 600;
 }
 
 .markdown-body hr {
-  border: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--ds-border), transparent);
-  margin: 24px 0;
+    border: 0;
+    height: 1px;
+    background: var(--p-border);
+    margin: 2.5rem 0;
 }
 
-/* -----------------------------
+/* -------------------------------------------------------
    7) Inline code + code blocks
-   ----------------------------- */
+   ------------------------------------------------------- */
 .markdown-body code {
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 0.95em;
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875em;
 }
 
 .markdown-body :not(pre) > code {
-  background: var(--md-inline-code-bg);
-  border: 1px solid var(--md-inline-code-border);
-  color: var(--ds-text-primary);
-  padding: 2px 8px;
-  border-radius: 10px;
-  white-space: break-spaces;
+    background: var(--md-inline-code-bg);
+    border: 1px solid var(--md-inline-code-border);
+    color: var(--p-danger);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--p-radius-sm);
 }
 
 .markdown-body pre {
-  background: var(--md-code-bg);
-  color: var(--md-code-fg);
-  border: 1px solid var(--md-code-border);
-  box-shadow: var(--ds-shadow-sm);
-  padding: 16px;
-  border-radius: var(--ds-radius-lg);
-  overflow: auto;
-  margin: 0 0 24px 0;
-  line-height: 1.55;
+    background: var(--md-code-bg);
+    color: var(--md-code-fg);
+    padding: 1.25rem;
+    border-radius: var(--p-radius-md);
+    overflow: auto;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+    border: 1px solid var(--md-code-border);
 }
 
 .markdown-body pre code {
-  color: inherit;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  border-radius: 0;
-  font-size: 13px;
-  white-space: pre;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 0.8125rem;
 }
 
-/* -----------------------------
-   8) Quotes / callouts
-   ----------------------------- */
+/* -------------------------------------------------------
+   8) Blockquote
+   ------------------------------------------------------- */
 .markdown-body blockquote {
-  margin: 24px 0;
-  padding: 16px 16px 16px 18px;
-
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.62)),
-              var(--ds-surface-2);
-
-  border: 1px solid var(--ds-border);
-  border-left: 4px solid var(--ds-brand-gold); /* Gold = governance/attention (not error) */
-  border-radius: var(--ds-radius-lg);
-  box-shadow: none;
-
-  color: var(--ds-text-secondary);
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background: var(--p-neutral);
+    border-left: 4px solid var(--p-primary);
+    border-radius: var(--p-radius-sm);
+    color: var(--p-text-secondary);
+    font-style: italic;
 }
 
 .markdown-body blockquote > :first-child { margin-top: 0; }
-.markdown-body blockquote > :last-child { margin-bottom: 0; }
+.markdown-body blockquote > :last-child  { margin-bottom: 0; }
 
-/* -----------------------------
-   9) Tables (audit-friendly)
-   ----------------------------- */
+/* -------------------------------------------------------
+   9) Tables
+   ------------------------------------------------------- */
 .markdown-body table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 0 0 24px 0;
-
-  background: rgba(255, 255, 255, 0.70);
-  border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-lg);
-  overflow: hidden;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 1.5rem 0;
+    font-size: 0.875rem;
 }
 
 .markdown-body thead th {
-  text-align: left;
-  font-weight: 600;
-  color: var(--ds-text-primary);
-  background: linear-gradient(180deg, rgba(238, 242, 247, 0.95), rgba(238, 242, 247, 0.78));
-  border-bottom: 1px solid var(--ds-border);
-  padding: 12px 16px;
-  font-size: 14px;
-  line-height: 20px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--p-text-primary);
+    border-bottom: 2px solid var(--p-border);
+    padding: 0.75rem 1rem;
 }
 
 .markdown-body tbody td {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(11, 18, 32, 0.08);
-  color: var(--ds-text-secondary);
-  vertical-align: top;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--p-border);
+    color: var(--md-prose);
 }
 
 .markdown-body tbody tr:nth-child(even) td {
-  background: var(--md-table-stripe);
+    background: var(--md-table-stripe);
 }
 
-.markdown-body tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-/* Numeric density: make tables/KPIs scanable if author uses <code> or numbers */
-.markdown-body td code,
-.markdown-body th code {
-  font-size: 0.92em;
-}
-
-/* -----------------------------
+/* -------------------------------------------------------
    10) Media, kbd, mark
-   ----------------------------- */
+   ------------------------------------------------------- */
 .markdown-body img {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--ds-radius-lg);
-  border: 1px solid var(--ds-border);
-  background: var(--ds-surface-1);
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--p-radius-md);
+    box-shadow: var(--p-shadow-sm);
 }
 
 .markdown-body kbd {
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--ds-text-primary);
-
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(11, 18, 32, 0.18);
-  border-bottom-color: rgba(11, 18, 32, 0.28);
-  border-radius: 10px;
-
-  padding: 2px 8px;
-  box-shadow: 0 1px 0 rgba(11, 18, 32, 0.08);
+    font-family: inherit;
+    font-size: 0.75rem;
+    background: var(--p-neutral);
+    border: 1px solid var(--p-border);
+    border-radius: var(--p-radius-sm);
+    padding: 0.125rem 0.375rem;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
 }
 
 .markdown-body mark {
-  background: rgba(201, 162, 39, 0.22); /* audit gold, soft */
-  color: var(--ds-text-primary);
-  padding: 0 3px;
-  border-radius: 6px;
+    background: rgba(217, 119, 6, 0.2);
+    color: var(--p-text-primary);
+    padding: 0 0.125rem;
 }
 
-/* -----------------------------
-   11) GitHub-ish conveniences (without cloning GitHub)
-   ----------------------------- */
+/* -------------------------------------------------------
+   11) Task lists + anchor links
+   ------------------------------------------------------- */
 .markdown-body .task-list-item {
-  list-style: none;
+    list-style: none;
 }
 
 .markdown-body .task-list-item input[type="checkbox"] {
-  transform: translateY(1px);
-  accent-color: var(--ds-accent);
+    accent-color: var(--p-primary);
 }
 
-/* Make anchor icons / autolinks not ugly if present */
-.markdown-body a.anchor {
-  border-bottom: 0;
-  padding: 0;
-  border-radius: 0;
-}
-
-/* -----------------------------
-   12) Print: keep it “audit export” ready
-   ----------------------------- */
+/* -------------------------------------------------------
+   12) Print
+   ------------------------------------------------------- */
 @media print {
-  .markdown-body {
-    background: #ffffff;
-    box-shadow: none;
-    border: 0;
-    margin: 0;
-    max-width: none;
-    padding: 0;
-  }
-
-  .markdown-body a {
-    color: var(--ds-text-primary);
-    border-bottom-color: rgba(11, 18, 32, 0.22);
-  }
-
-  .markdown-body pre {
-    box-shadow: none;
-  }
-}
-
-/* Redoc wrapper emitted by macro */
-.markdown-body .redocly-wrap {
-  /* break out of centered column */
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-
-  /* optional vertical spacing */
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
-
-  /* give Redoc some breathing room at viewport edges */
-  padding-left: 12px;
-  padding-right: 12px;
-  box-sizing: border-box;
-}
-
-/* Ensure inner Redoc container uses full width */
-.markdown-body .redocly-wrap > [id^="redoc-container-"] {
-  width: 100%;
-  max-width: none;
-}
-
-/* Optional: slightly reduce side nav width pressure on small screens */
-@media (max-width: 1100px) {
-  .markdown-body .redocly-wrap {
-    padding-left: 6px;
-    padding-right: 6px;
-  }
+    .markdown-body {
+        background: #ffffff;
+        box-shadow: none;
+        border: 0;
+        margin: 0;
+        max-width: none;
+        padding: 0;
+    }
 }
                 </style>
                 <style>
@@ -1501,7 +1422,7 @@
 <hr />
 <h2 id="basic-cicd-pipeline">Basic CI/CD Pipeline</h2>
 <p>A common use case—documenting your continuous integration and deployment pipeline:</p>
-<div id="docops-connector-1780528843024-372" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_4WSwU7DMAyG732KqFx3KBOMwQ26KxJocEIc3MQrEWkcJe5gmvbuJGFiaO3g1ibK__mzvS1KSdaiZPKhvBEvxbYoGT85fpc1KRQ1dZ3mclKUDQSsyZBPd2dTVVWrq3SuMEivHWuy6WaBazTk0AvXhzcMQqYYJuHRUdARtCmL3eQ36LZn6oBRiScMHIawGUTYxQjs2WoWYJXQlrH1kM4FpxDhe3vMyUKPPRjNmyFkfh0h0xHIkmOujBgwm6BD5mUpj2uNH8eUu14bNYyH8xPxscNOG23bHOxAvkOb_5wzWmalQcM86xVIFsvYTmhxSGsiDeejMuRTepOqFLAPCseE6JyLWKAzNNKsRlaVUqPjTw_S0zjysE9Bu9aebIeWBypSomOwEk8NX0UVdT6COqwNHELS8CPyGPPgSfUyr8cpJdVUVTP7T8kdgv6wuiervxs95OBlVcHYMtdkY-k99UF0P-_zUoBBv7cqXovdFwyhkeq2AwAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
+<div id="docops-connector-1785582251811-190" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_4WSwU7DMAyG732KqFx3KBOMwQ26KxJocEIc3MQrEWkcJe5gmvbuJGFiaO3g1ibK__mzvS1KSdaiZPKhvBEvxbYoGT85fpc1KRQ1dZ3mclKUDQSsyZBPd2dTVVWrq3SuMEivHWuy6WaBazTk0AvXhzcMQqYYJuHRUdARtCmL3eQ36LZn6oBRiScMHIawGUTYxQjs2WoWYJXQlrH1kM4FpxDhe3vMyUKPPRjNmyFkfh0h0xHIkmOujBgwm6BD5mUpj2uNH8eUu14bNYyH8xPxscNOG23bHOxAvkOb_5wzWmalQcM86xVIFsvYTmhxSGsiDeejMuRTepOqFLAPCseE6JyLWKAzNNKsRlaVUqPjTw_S0zjysE9Bu9aebIeWBypSomOwEk8NX0UVdT6COqwNHELS8CPyGPPgSfUyr8cpJdVUVTP7T8kdgv6wuiervxs95OBlVcHYMtdkY-k99UF0P-_zUoBBv7cqXovdFwyhkeq2AwAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
 &amp;quot;connectors&amp;quot;: [
 {
 &amp;quot;text&amp;quot;: &amp;quot;Code Commit&amp;quot;,
@@ -1552,12 +1473,12 @@
 }" data-kind="connector">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_c1835358-3ae4-492d-a674-01028f44a9f7" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_c1835358-3ae4-492d-a674-01028f44a9f7 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_c1835358-3ae4-492d-a674-01028f44a9f7 .module-card:hover { transform: translate(-2px, -2px); } #diag_c1835358-3ae4-492d-a674-01028f44a9f7 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_398f45b5-4813-4438-8aee-761daecce2dd" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_398f45b5-4813-4438-8aee-761daecce2dd .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_398f45b5-4813-4438-8aee-761daecce2dd .module-card:hover { transform: translate(-2px, -2px); } #diag_398f45b5-4813-4438-8aee-761daecce2dd .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1780528843024-372').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1785582251811-190').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1576,7 +1497,7 @@
 <hr />
 <h2 id="software-development-lifecycle">Software Development Lifecycle</h2>
 <p>Illustrate traditional SDLC phases with distinct color coding:</p>
-<div id="docops-connector-1780528843028-856" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_3WRsU7DMBBAd39FFNYOoSG0YS0SYkBIFYIBMVztS2op9bn2RRCq_juxWdrGHSzZvvN7vruDyCUZg5LJ-fwh-xQHkTP-8LjP17jvtcMdGvb5TOQb8LiijlwI3tyV97eI4V6hl05b1mRC5Al4i06bNgOjxgXd8BtO7hQnjrNT1SN63ZqppIRCQpmQrBwCB6qnhr_BYQZObjWPlfThMJrVP_PC9LyzXfwDRNTEuJgX9WaRMH44HYWSFGbhjcrIXJG8oQ-5U3qzmFfLKkF_HzvWDGcF7XvoNA_TVtmOhlBBYiZS1k2RwK-xQ_BneKbMOlK9jDkXkhfQhtGAkZiwLOsKm4Tl1bQUHb215DhOobcKGMPAxZc4_gGbFE2McAIAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
+<div id="docops-connector-1785582251836-344" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_3WRsU7DMBBAd39FFNYOoSG0YS0SYkBIFYIBMVztS2op9bn2RRCq_juxWdrGHSzZvvN7vruDyCUZg5LJ-fwh-xQHkTP-8LjP17jvtcMdGvb5TOQb8LiijlwI3tyV97eI4V6hl05b1mRC5Al4i06bNgOjxgXd8BtO7hQnjrNT1SN63ZqppIRCQpmQrBwCB6qnhr_BYQZObjWPlfThMJrVP_PC9LyzXfwDRNTEuJgX9WaRMH44HYWSFGbhjcrIXJG8oQ-5U3qzmFfLKkF_HzvWDGcF7XvoNA_TVtmOhlBBYiZS1k2RwK-xQ_BneKbMOlK9jDkXkhfQhtGAkZiwLOsKm4Tl1bQUHb215DhOobcKGMPAxZc4_gGbFE2McAIAAA%3D%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
 &amp;quot;connectors&amp;quot;: [
 {
 &amp;quot;text&amp;quot;: &amp;quot;Requirements&amp;quot;,
@@ -1612,12 +1533,12 @@
 }" data-kind="connector">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_3b8b0015-57e0-45e6-a25a-27aa79b14017" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_3b8b0015-57e0-45e6-a25a-27aa79b14017 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_3b8b0015-57e0-45e6-a25a-27aa79b14017 .module-card:hover { transform: translate(-2px, -2px); } #diag_3b8b0015-57e0-45e6-a25a-27aa79b14017 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_3a227da9-a818-4b9f-9cd8-eeadbbf61a91" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_3a227da9-a818-4b9f-9cd8-eeadbbf61a91 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_3a227da9-a818-4b9f-9cd8-eeadbbf61a91 .module-card:hover { transform: translate(-2px, -2px); } #diag_3a227da9-a818-4b9f-9cd8-eeadbbf61a91 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1780528843028-856').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1785582251836-344').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1636,7 +1557,7 @@
 <hr />
 <h2 id="test-documentation-workflow">Test Documentation Workflow</h2>
 <p>Show how automated tests generate documentation:</p>
-<div id="docops-connector-1780528843031-84" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_22QwU7DMAyG73kKK1x3GGVaB7epTSUOCA5MHBCHkRgUqY2rxIVJ096dJEiotL1Z_uz_k30WUpNzqJl8kHfwKs5CMp441rLGL2ypRy9XQr4fA1bUkk_kSl1v6mKf-gaD9rZnSy6RF28ZAwzOMsSCgxSX1Tj0kMhzJrPUXVHVm3Ih9fAXB70nM-iowJPGdpr-YLWnQB8MKuOZYrsrVdMsKPI82AAhvgINWJeFgO7TOpx60gGgftHMUa2L8uZ2wTHagu_0KDCkhw4dH_PIRLJ_uod6PACPA_cDz42NqortesH4fz1ep6nrLDOaKBNv4vIDuVOYaQECAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
+<div id="docops-connector-1785582251841-136" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_22QwU7DMAyG73kKK1x3GGVaB7epTSUOCA5MHBCHkRgUqY2rxIVJ096dJEiotL1Z_uz_k30WUpNzqJl8kHfwKs5CMp441rLGL2ypRy9XQr4fA1bUkk_kSl1v6mKf-gaD9rZnSy6RF28ZAwzOMsSCgxSX1Tj0kMhzJrPUXVHVm3Ih9fAXB70nM-iowJPGdpr-YLWnQB8MKuOZYrsrVdMsKPI82AAhvgINWJeFgO7TOpx60gGgftHMUa2L8uZ2wTHagu_0KDCkhw4dH_PIRLJ_uod6PACPA_cDz42NqortesH4fz1ep6nrLDOaKBNv4vIDuVOYaQECAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
 &amp;quot;connectors&amp;quot;: [
 {
 &amp;quot;text&amp;quot;: &amp;quot;Developer&amp;quot;,
@@ -1667,12 +1588,12 @@
 }" data-kind="connector">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_a7b32f27-9e65-44c6-9057-addc4b9a398e" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_a7b32f27-9e65-44c6-9057-addc4b9a398e .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_a7b32f27-9e65-44c6-9057-addc4b9a398e .module-card:hover { transform: translate(-2px, -2px); } #diag_a7b32f27-9e65-44c6-9057-addc4b9a398e .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_eca8ad1f-6dd1-4408-aef6-805964acac04" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_eca8ad1f-6dd1-4408-aef6-805964acac04 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_eca8ad1f-6dd1-4408-aef6-805964acac04 .module-card:hover { transform: translate(-2px, -2px); } #diag_eca8ad1f-6dd1-4408-aef6-805964acac04 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1780528843031-84').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1785582251841-136').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1691,7 +1612,7 @@
 <hr />
 <h2 id="data-processing-pipeline">Data Processing Pipeline</h2>
 <p>Visualize ETL (Extract, Transform, Load) processes:</p>
-<div id="docops-connector-1780528843033-236" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_23RPVMCMRAG4P5-RSa2FCDHIXaIdhaOOlo4FnvJAhlzCe5uBhiG_-7d0TBeukw-nnd3cyq0iSGgkUis79VXcSq04EHatX4EAfUWExnUo0LXwLiKPlJ3djOu6sqW3b5FNuR24mLoTl5hr2z3ck2xUU3y4nYeFfcO6-I8us54OgiBkYx_t5jUtxn_JXl_FXBxFR9ZsBnwH-BdezdXP87LxTjj913_pvahHJXZovkZqO8EgdeRmiE7mc1wPsuwK48QFASrWCgZSYR9F4OBBHJmm4GrEqtpBl5aqwx4k3zbp1Vrh95yH9SgQC7iOYLNDXw6LXMf-klOUEm8DH0PhNuYGP-rywD-KM5whjYlVJihHxK7gMzKBUHv3QZD-5dd7YS7SOLCpo0pvovzH6UNaJepAgAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
+<div id="docops-connector-1785582251851-237" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_23RPVMCMRAG4P5-RSa2FCDHIXaIdhaOOlo4FnvJAhlzCe5uBhiG_-7d0TBeukw-nnd3cyq0iSGgkUis79VXcSq04EHatX4EAfUWExnUo0LXwLiKPlJ3djOu6sqW3b5FNuR24mLoTl5hr2z3ck2xUU3y4nYeFfcO6-I8us54OgiBkYx_t5jUtxn_JXl_FXBxFR9ZsBnwH-BdezdXP87LxTjj913_pvahHJXZovkZqO8EgdeRmiE7mc1wPsuwK48QFASrWCgZSYR9F4OBBHJmm4GrEqtpBl5aqwx4k3zbp1Vrh95yH9SgQC7iOYLNDXw6LXMf-klOUEm8DH0PhNuYGP-rywD-KM5whjYlVJihHxK7gMzKBUHv3QZD-5dd7YS7SOLCpo0pvovzH6UNaJepAgAA&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
 &amp;quot;connectors&amp;quot;: [
 {
 &amp;quot;text&amp;quot;: &amp;quot;Data Source&amp;quot;,
@@ -1732,12 +1653,12 @@
 }" data-kind="connector">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_e4c4a22c-ec3f-49d5-a332-9a977d8616d1" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_e4c4a22c-ec3f-49d5-a332-9a977d8616d1 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_e4c4a22c-ec3f-49d5-a332-9a977d8616d1 .module-card:hover { transform: translate(-2px, -2px); } #diag_e4c4a22c-ec3f-49d5-a332-9a977d8616d1 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_fa5f0d85-6fe0-4c81-8096-3637c9ad4a32" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_fa5f0d85-6fe0-4c81-8096-3637c9ad4a32 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_fa5f0d85-6fe0-4c81-8096-3637c9ad4a32 .module-card:hover { transform: translate(-2px, -2px); } #diag_fa5f0d85-6fe0-4c81-8096-3637c9ad4a32 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1780528843033-236').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1785582251851-237').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1826,7 +1747,7 @@
 <hr />
 <h2 id="advanced-examples">Advanced Examples</h2>
 <h3 id="multi-environment-deployment">Multi-Environment Deployment</h3>
-<div id="docops-connector-1780528843048-240" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_4WSwU7DMAyG73mKqFyH1Im2W7nBhsQBJCaOiEOaul3UNI6StGKa-u40BVHUBXFz7Pj_7F8-k4ijUsAdGhvd0jdyJpGDDzfG0X0nZBmtSFQwCzuUaHz2ah0X-Xbt8yVYboR2ApWv7LDVQgJlqqSa8YbVY6y1FJxNX8iw-i2_h54-qF4YVC0odwmK0zzL8gBoD1riiTqkJfQgUft-WqGhDqwTql6iDnf_kJLNNt0ESIeOSeFOlFnbGaY4_EV4daz26UvpLK2SLCD9YrDsuH9dS9EAhXnAaZVKKCYpPwJv7JI294aACdwUAeCT6IHqn87RO-_iZMhC_hmVGA8iuE-V5hCH5B-BSXf8HvjrBsCMi7STbe0sSQbyToZPuseXZXoCAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
+<div id="docops-connector-1785582251856-712" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_4WSwU7DMAyG73mKqFyH1Im2W7nBhsQBJCaOiEOaul3UNI6StGKa-u40BVHUBXFz7Pj_7F8-k4ijUsAdGhvd0jdyJpGDDzfG0X0nZBmtSFQwCzuUaHz2ah0X-Xbt8yVYboR2ApWv7LDVQgJlqqSa8YbVY6y1FJxNX8iw-i2_h54-qF4YVC0odwmK0zzL8gBoD1riiTqkJfQgUft-WqGhDqwTql6iDnf_kJLNNt0ESIeOSeFOlFnbGaY4_EV4daz26UvpLK2SLCD9YrDsuH9dS9EAhXnAaZVKKCYpPwJv7JI294aACdwUAeCT6IHqn87RO-_iZMhC_hmVGA8iuE-V5hCH5B-BSXf8HvjrBsCMi7STbe0sSQbyToZPuseXZXoCAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
 &amp;quot;connectors&amp;quot;: [
 {
 &amp;quot;text&amp;quot;: &amp;quot;Build&amp;quot;,
@@ -1862,12 +1783,12 @@
 }" data-kind="connector">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_fa73c6e3-2b86-4977-9903-323b843264a5" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_fa73c6e3-2b86-4977-9903-323b843264a5 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_fa73c6e3-2b86-4977-9903-323b843264a5 .module-card:hover { transform: translate(-2px, -2px); } #diag_fa73c6e3-2b86-4977-9903-323b843264a5 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_b0511570-e5b1-4ec7-9ec6-88ef0a2463b5" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_b0511570-e5b1-4ec7-9ec6-88ef0a2463b5 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_b0511570-e5b1-4ec7-9ec6-88ef0a2463b5 .module-card:hover { transform: translate(-2px, -2px); } #diag_b0511570-e5b1-4ec7-9ec6-88ef0a2463b5 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1780528843048-240').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1785582251856-712').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
@@ -1884,7 +1805,7 @@
 </div>
 </div>
 <h3 id="microservices-architecture-flow">Microservices Architecture Flow</h3>
-<div id="docops-connector-1780528843049-806" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_3WSPU8DMQyG9_wK61g79PPaskFBCKlDVSQWxJBLXBpxTQ7bVziq_ndypQu9sEW2_DzW6xxUZoL3aCQQZ9fwog4qE_yS-M5uVo_woAU_dZP1VFZoxkUoA7W9q1kxMZu8rVtkQ64SF3zbufdCDVTBeYFNINBlCYQfNbJwpo69P4ZatujFGX2a7kimZqTRJiTPSG7TQM1IYAhtC9Flkh_Iff-Dz-1wZucJ_GKL5h0qpJ1jjrUO-Alp7wzCOtSC1CVPiuGgSKVzGgAJoKuKQkUu5gs7ZyjwL_LSdFuz88gMy_DmTNc0NgM7nyRMKwqmnTtnf8m906JhqZvU9qOiP83HKSYSOxaIZyUUcrhHsBF0CV8jVzE17KKHOOjnqXXXKDX59sfstAjaKDgz1FG9quMP7NWII6oCAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
+<div id="docops-connector-1785582251860-336" class="docops-media-card svg-with-controls" data-url="http://localhost:8010/extension/api/docops/svg?kind=connector&payload=H4sIAAAAAAAA_3WSPU8DMQyG9_wK61g79PPaskFBCKlDVSQWxJBLXBpxTQ7bVziq_ndypQu9sEW2_DzW6xxUZoL3aCQQZ9fwog4qE_yS-M5uVo_woAU_dZP1VFZoxkUoA7W9q1kxMZu8rVtkQ64SF3zbufdCDVTBeYFNINBlCYQfNbJwpo69P4ZatujFGX2a7kimZqTRJiTPSG7TQM1IYAhtC9Flkh_Iff-Dz-1wZucJ_GKL5h0qpJ1jjrUO-Alp7wzCOtSC1CVPiuGgSKVzGgAJoKuKQkUu5gs7ZyjwL_LSdFuz88gMy_DmTNc0NgM7nyRMKwqmnTtnf8m906JhqZvU9qOiP83HKSYSOxaIZyUUcrhHsBF0CV8jVzE17KKHOOjnqXXXKDX59sfstAjaKDgz1FG9quMP7NWII6oCAAA%3D&scale=1.0&type=svg&useDark=false&useGlass=false&backend=html5&filename=generated.svg" data-original-content="{
 &amp;quot;connectors&amp;quot;: [
 {
 &amp;quot;text&amp;quot;: &amp;quot;API Gateway&amp;quot;,
@@ -1925,12 +1846,12 @@
 }" data-kind="connector">
 <figure class="docops-figure-card">
 <div class="svg-container">
-<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_6a70ee52-7da0-4f21-8243-c4c9b141e9a1" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-06-03</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_6a70ee52-7da0-4f21-8243-c4c9b141e9a1 .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_6a70ee52-7da0-4f21-8243-c4c9b141e9a1 .module-card:hover { transform: translate(-2px, -2px); } #diag_6a70ee52-7da0-4f21-8243-c4c9b141e9a1 .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="112.49999999859375" height="56.249999999296875" viewBox="0 0 200.0 100.0" xmlns:xlink="http://www.w3.org/1999/xlink" id="diag_d0e7279a-279c-48af-865a-5d124217e39f" preserveAspectRatio="xMidYMid meet">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Text","Description","Base Color"],"rows":[]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><defs><pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#E5E7EB" /></pattern><!-- Hard offset shadow for depth --><filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%"><feOffset dx="6" dy="6" in="SourceAlpha" result="offset" /><feFlood flood-color="#000000" flood-opacity="0.8" result="color" /><feComposite in="color" in2="offset" operator="in" result="shadow" /><feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge></filter><!-- Subtle noise/texture pattern --><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" /><feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1"><feDistantLight azimuth="45" elevation="60" /></feDiffuseLighting></filter><style>#diag_d0e7279a-279c-48af-865a-5d124217e39f .module-card { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; } #diag_d0e7279a-279c-48af-865a-5d124217e39f .module-card:hover { transform: translate(-2px, -2px); } #diag_d0e7279a-279c-48af-865a-5d124217e39f .accent-bar { transition: width 0.3s ease; } @keyframes slideIn { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }</style><polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" /></defs><rect width="100%" height="100%" fill="#ffffff"/><rect width="100%" height="100%" fill="url(#dotPattern)" /><g transform="translate(100,40)"></g><g transform='translate(100,60.0)'></g></svg>
 </div>
 <figcaption></figcaption>
 </figure>
 <div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1780528843049-806').querySelector('.svg-container'))">VIEW</button>
+<button class="svg-control-btn" onclick="if (typeof openModal === 'function') openModal(document.getElementById('docops-connector-1785582251860-336').querySelector('.svg-container'))">VIEW</button>
 <button class="svg-control-btn" onclick="if (window.docopsData) window.docopsData.toggle(this)">DATA</button>
 <button class="svg-control-btn" onclick="if (window.docopsSource) window.docopsSource.toggle(this)">SOURCE</button>
 <button class="svg-control-btn" onclick="if (window.docopsCopy) window.docopsCopy.url(this)">LINK</button>
