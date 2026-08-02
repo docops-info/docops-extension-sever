@@ -15,7 +15,7 @@ class ScoreCardParser {
         var initiativeTitle = "BEFORE"
         var outcomeTitle = "AFTER"
         var visualVersion = 1
-        var theme = "classic"
+        var theme = "premium"
         val beforeSections: MutableList<BeforeSection> = mutableListOf()
         val afterSections: MutableList<AfterSection> = mutableListOf()
         val outcomeItems: MutableList<ScoreCardItem> = mutableListOf()
