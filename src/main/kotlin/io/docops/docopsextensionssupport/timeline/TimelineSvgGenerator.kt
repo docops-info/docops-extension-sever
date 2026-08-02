@@ -1,5 +1,7 @@
 package io.docops.docopsextensionssupport.timeline
 
+import io.docops.docopsextensionssupport.support.DocOpsTheme
+import io.docops.docopsextensionssupport.support.ThemeFactory
 import io.docops.docopsextensionssupport.svgsupport.DISPLAY_RATIO_16_9
 import kotlin.math.max
 import kotlin.uuid.ExperimentalUuidApi
@@ -7,47 +9,34 @@ import kotlin.uuid.Uuid
 
 class TimelineSvgGenerator {
 
-    data class TimelineColor(val stroke: String, val text: String)
-
-    private val darkModeColors = listOf(
-        TimelineColor("#00d4ff", "#00d4ff"),
-        TimelineColor("#4f8cff", "#4f8cff"),
-        TimelineColor("#b58cff", "#b58cff"),
-        TimelineColor("#ff4fd8", "#ff4fd8"),
-        TimelineColor("#22d3ee", "#22d3ee")
-    )
-
-    private val lightModeColors = listOf(
-        TimelineColor("#00b7d6", "#00b7d6"),
-        TimelineColor("#2563eb", "#2563eb"),
-        TimelineColor("#7c3aed", "#7c3aed"),
-        TimelineColor("#db2777", "#db2777"),
-        TimelineColor("#0891b2", "#0891b2")
-    )
+    private var theme: DocOpsTheme = ThemeFactory.getTheme(false)
+    private var isDark: Boolean = false
 
     @OptIn(ExperimentalUuidApi::class)
-    fun generateTimeline(config: TimelineConfig, isDarkMode: Boolean = false, scale: String): String {
+    fun generateTimeline(config: TimelineConfig, isDarkMode: Boolean = false, scale: String, theme: String = "premium"): String {
+        this.isDark = isDarkMode
+        this.theme = ThemeFactory.getThemeByName(theme, isDarkMode)
         return if (config.orientation == Orientation.HORIZONTAL) {
-            generateTimelineHorizontal(config, isDarkMode, scale)
+            generateTimelineHorizontal(config, scale)
         } else {
-            generateTimelineVertical(config, isDarkMode, scale)
+            generateTimelineVertical(config, scale)
         }
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    private fun generateTimelineVertical(config: TimelineConfig, isDarkMode: Boolean, scale: String): String {
+    private fun generateTimelineVertical(config: TimelineConfig, scale: String): String {
         val svgId = "timeline_${Uuid.random().toHexString()}"
-        val colors = if (isDarkMode) darkModeColors else lightModeColors
+        val colors = theme.chartPalette
         val scaleFactor = scale.toDoubleOrNull() ?: 1.0
 
         val baseWidth = 1200
-        val topMargin = 130
+        val topMargin = 140
         val bottomMargin = 100
-        val itemSpacing = 150
+        val itemSpacing = 160
         val centerX = baseWidth / 2
-        val maxCardWidth = 428
+        val maxCardWidth = 420
 
-        val itemHeights = config.events.map { calculateVerticalItemHeight(it, maxCardWidth - 40) }
+        val itemHeights = config.events.map { calculateVerticalItemHeight(it, maxCardWidth - 64) }
         val totalHeight = topMargin + itemHeights.sum() + (config.events.size - 1).coerceAtLeast(0) * itemSpacing + bottomMargin
         val baseHeight = totalHeight.coerceAtLeast(820)
 
@@ -59,28 +48,26 @@ class TimelineSvgGenerator {
         sb.append("""<svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $baseWidth $baseHeight" id="$svgId" role="img" aria-label="${escapeXml(config.title.ifBlank { "Timeline" })}">""")
         sb.append("""<!-- orientation: vertical -->""")
 
-        appendDefs(sb, svgId, isDarkMode)
+        appendDefs(sb, svgId)
 
         sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_bg)"/>""")
-        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_grid)"/>""")
-        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_washA)"/>""")
-        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_washB)"/>""")
+        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_grid)" opacity="0.05"/>""")
 
         sb.append("""<g transform="translate(56,64)">""")
         sb.append("""<text class="title">${escapeXml(config.title.ifBlank { "Timeline" })}</text>""")
         if (config.subtitle.isNotBlank()) {
-            sb.append("""<text y="30" class="subtitle">${escapeXml(config.subtitle)}</text>""")
+            sb.append("""<text y="38" class="subtitle">${escapeXml(config.subtitle)}</text>""")
         }
-        sb.append("""<line x1="0" y1="52" x2="${baseWidth - 112}" y2="52" class="header-rule"/>""")
+        sb.append("""<line x1="0" y1="64" x2="${baseWidth - 112}" y2="64" class="header-rule"/>""")
         sb.append("</g>")
 
         sb.append(
-            """<line x1="$centerX" y1="$topMargin" x2="$centerX" y2="${baseHeight - 60}" stroke="url(#${svgId}_spine)" stroke-width="3" stroke-dasharray="8 6"/>"""
+            """<line x1="$centerX" y1="$topMargin" x2="$centerX" y2="${baseHeight - 60}" stroke="${theme.accentColor}" stroke-width="3" stroke-dasharray="8 6" stroke-opacity="0.5"/>"""
         )
 
-        var y = 170
+        var y = 180
         config.events.forEachIndexed { index, event ->
-            val color = colors[index % colors.size]
+            val color = colors[index % colors.size].color
             val isRight = index % 2 == 0
             val itemHeight = itemHeights[index]
             appendVerticalItem(
@@ -103,17 +90,17 @@ class TimelineSvgGenerator {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    private fun generateTimelineHorizontal(config: TimelineConfig, isDarkMode: Boolean, scale: String): String {
+    private fun generateTimelineHorizontal(config: TimelineConfig, scale: String): String {
         val svgId = "timeline_${Uuid.random().toHexString()}"
-        val colors = if (isDarkMode) darkModeColors else lightModeColors
+        val colors = theme.chartPalette
         val scaleFactor = scale.toDoubleOrNull() ?: 1.0
 
         val leftMargin = 80
         val rightMargin = 80
-        val itemSpacing = 220
+        val itemSpacing = 240
         val n = config.events.size.coerceAtLeast(1)
 
-        val baseWidth = (leftMargin + rightMargin + (n - 1) * itemSpacing + 220).coerceAtLeast(1200)
+        val baseWidth = (leftMargin + rightMargin + (n - 1) * itemSpacing + 280).coerceAtLeast(1200)
         val baseHeight = 560
         val axisY = baseHeight / 2
 
@@ -124,42 +111,40 @@ class TimelineSvgGenerator {
         sb.append("""<svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="0 0 $baseWidth $baseHeight" id="$svgId" role="img" aria-label="${escapeXml(config.title.ifBlank { "Timeline" })}">""")
         sb.append("""<!-- orientation: horizontal -->""")
 
-        appendDefs(sb, svgId, isDarkMode)
+        appendDefs(sb, svgId)
 
         sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_bg)"/>""")
-        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_grid)"/>""")
-        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_washA)"/>""")
-        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_washB)"/>""")
+        sb.append("""<rect width="100%" height="100%" fill="url(#${svgId}_grid)" opacity="0.05"/>""")
 
         val lineStartX = leftMargin
         val lineEndX = baseWidth - rightMargin
         sb.append(
-            """<rect x="$lineStartX" y="${axisY - 1.5}" width="${lineEndX - lineStartX}" height="3" fill="url(#${svgId}_line)" rx="1.5" opacity="0.75"/>"""
+            """<rect x="$lineStartX" y="${axisY - 1.0}" width="${lineEndX - lineStartX}" height="2" fill="url(#${svgId}_line)" rx="1.0" opacity="0.6"/>"""
         )
 
-        var x = lineStartX + 100
+        var x = lineStartX + 120
         config.events.forEachIndexed { index, event ->
-            val color = colors[index % colors.size]
+            val color = colors[index % colors.size].color
             val above = index % 2 == 0
 
             val connectorEndY = if (above) axisY - 12 else axisY + 12
-            sb.append("""<line x1="$x" y1="$axisY" x2="$x" y2="$connectorEndY" stroke="${color.stroke}" stroke-width="2" opacity="0.82"/>""")
-            sb.append("""<circle cx="$x" cy="$axisY" r="6" fill="${color.stroke}"/>""")
-            sb.append("""<circle cx="$x" cy="$axisY" r="6" fill="none" stroke="${color.stroke}" stroke-width="2" opacity="0.6">""")
+            sb.append("""<line x1="$x" y1="$axisY" x2="$x" y2="$connectorEndY" stroke="$color" stroke-width="2" opacity="0.82"/>""")
+            sb.append("""<circle cx="$x" cy="$axisY" r="6" fill="$color"/>""")
+            sb.append("""<circle cx="$x" cy="$axisY" r="6" fill="none" stroke="$color" stroke-width="2" opacity="0.6">""")
             sb.append("""<animate attributeName="r" from="6" to="20" dur="2s" begin="${index * 0.3}s" repeatCount="indefinite"/>""")
             sb.append("""<animate attributeName="opacity" from="0.6" to="0" dur="2s" begin="${index * 0.3}s" repeatCount="indefinite"/>""")
             sb.append("</circle>")
 
             val dateText = escapeXml(event.date)
-            val dateWidth = estimateTextWidth(dateText, 13) + 20
+            val dateWidth = estimateTextWidth(dateText, 14) + 24
             val datePillX = x - dateWidth / 2
             val datePillY = if (above) axisY - 38 else axisY + 14
 
             sb.append(
-                """<rect x="$datePillX" y="$datePillY" rx="4" ry="4" width="$dateWidth" height="24" fill="${if (isDarkMode) "#0b1528" else "#ffffff"}" opacity="0.95" stroke="${color.stroke}" stroke-width="1.5"/>"""
+                """<rect x="$datePillX" y="$datePillY" rx="12" ry="12" width="$dateWidth" height="24" fill="${theme.canvas}" stroke="$color" stroke-width="1.5"/>"""
             )
             sb.append(
-                """<text x="$x" y="${datePillY + 17}" text-anchor="middle" font-family="'Inter', -apple-system, sans-serif" font-size="13" font-weight="800" fill="${color.text}">$dateText</text>"""
+                """<text x="$x" y="${datePillY + 17}" text-anchor="middle" font-family="${theme.fontFamily}" font-size="13" font-weight="800" fill="$color">$dateText</text>"""
             )
 
             val maxTextWidth = 260
@@ -167,21 +152,21 @@ class TimelineSvgGenerator {
             val bulletLines = event.bullets.sumOf { wrapText(it, maxTextWidth - 16).size }
             val bulletHeight = if (event.bullets.isNotEmpty()) bulletLines * 16 + 8 else 0
             val textHeight = lines.size * 18
-            val cardWidth = maxTextWidth + 24
+            val cardWidth = maxTextWidth + 32
             val cardHeight = textHeight + 24 + bulletHeight
             val cardX = x - cardWidth / 2
-            val cardY = if (above) datePillY - cardHeight - 10 else datePillY + 34
+            val cardY = if (above) datePillY - cardHeight - 12 else datePillY + 36
 
-            val textColor = if (isDarkMode) "#e8f2ff" else "#1f2f4a"
-            val bulletColor = if (isDarkMode) "#9db3d6" else "#5d7598"
+            val textColor = theme.primaryText
+            val bulletColor = theme.secondaryText
 
             sb.append("""<g transform="translate($cardX,$cardY)">""")
-            sb.append("""<g class="reveal d${(index % 6) + 1}">""")
-            sb.append("""<rect x="0" y="0" rx="6" ry="6" width="$cardWidth" height="$cardHeight" class="card" stroke="${color.stroke}"/>""")
+            sb.append("""<g class="reveal d${(index % 6) + 1}" filter="url(#${svgId}_cardShadow)">""")
+            sb.append("""<rect x="0" y="0" rx="8" ry="8" width="$cardWidth" height="$cardHeight" class="card" stroke="$color" stroke-opacity="0.3"/>""")
 
-            var ty = 20
+            var ty = 24
             lines.forEach { line ->
-                appendTextWithLinks(sb, line, 12, ty, textColor, color.text)
+                appendTextWithLinks(sb, line, 16, ty, textColor, color)
                 ty += 18
             }
 
@@ -191,10 +176,10 @@ class TimelineSvgGenerator {
                     val bLines = wrapText(bullet, maxTextWidth - 16)
                     bLines.forEachIndexed { i, bLine ->
                         if (i == 0) {
-                            sb.append("""<circle cx="17" cy="${ty - 4}" r="2.5" fill="$bulletColor"/>""")
-                            sb.append("""<text x="26" y="$ty" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
+                            sb.append("""<circle cx="21" cy="${ty - 4}" r="2.5" fill="$bulletColor"/>""")
+                            sb.append("""<text x="30" y="$ty" font-family="${theme.fontFamily}" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
                         } else {
-                            sb.append("""<text x="26" y="$ty" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
+                            sb.append("""<text x="30" y="$ty" font-family="${theme.fontFamily}" font-size="12" fill="$bulletColor">${escapeXml(bLine)}</text>""")
                         }
                         ty += 16
                     }
@@ -211,20 +196,18 @@ class TimelineSvgGenerator {
         return sb.toString()
     }
 
-    private fun appendDefs(sb: StringBuilder, svgId: String, isDarkMode: Boolean) {
-        val bgStart = if (isDarkMode) "#060b16" else "#f7fbff"
-        val bgEnd = if (isDarkMode) "#0d1629" else "#edf3ff"
-        val gridStroke = if (isDarkMode) "rgba(171,196,239,0.12)" else "rgba(33,76,140,0.08)"
-        val washA = if (isDarkMode) "#00d4ff" else "#00b7d6"
-        val washB = if (isDarkMode) "#ff4fd8" else "#7c3aed"
-        val text = if (isDarkMode) "#eaf3ff" else "#102542"
-        val muted = if (isDarkMode) "#9eb2d4" else "#4d678d"
-        val cardBg = if (isDarkMode) "rgba(16,28,49,0.80)" else "rgba(255,255,255,0.78)"
-        val cardStroke = if (isDarkMode) "rgba(138,171,225,0.38)" else "rgba(112,149,205,0.45)"
-        val headerRule = if (isDarkMode) "rgba(124,156,212,0.26)" else "rgba(44,88,148,0.22)"
-        val spineStart = if (isDarkMode) "#00d4ff" else "#00b7d6"
-        val spineEnd = if (isDarkMode) "#4f8cff" else "#2563eb"
-        val shadowOpacity = if (isDarkMode) "0.28" else "0.14"
+    private fun appendDefs(sb: StringBuilder, svgId: String) {
+        val bgStart = theme.canvas
+        val bgEnd = if (isDark) "#0d1629" else "#f8fafc"
+        val gridStroke = theme.accentColor
+        val text = theme.primaryText
+        val muted = theme.secondaryText
+        val cardBg = if (isDark) "rgba(30, 41, 59, 0.85)" else "rgba(255, 255, 255, 0.90)"
+        val cardStroke = theme.primaryText
+        val headerRule = theme.accentColor
+        val spineStart = theme.accentColor
+        val spineEnd = theme.accentColor
+        val shadowOpacity = if (isDark) "0.4" else "0.12"
 
         sb.append("<defs>")
 
@@ -239,36 +222,9 @@ class TimelineSvgGenerator {
 
         sb.append(
             """
-            <radialGradient id="${svgId}_washA" cx="14%" cy="14%" r="44%">
-              <stop offset="0%" stop-color="$washA" stop-opacity="${if (isDarkMode) "0.18" else "0.15"}"/>
-              <stop offset="100%" stop-color="$washA" stop-opacity="0"/>
-            </radialGradient>
-            """.trimIndent()
-        )
-
-        sb.append(
-            """
-            <radialGradient id="${svgId}_washB" cx="88%" cy="86%" r="42%">
-              <stop offset="0%" stop-color="$washB" stop-opacity="${if (isDarkMode) "0.14" else "0.12"}"/>
-              <stop offset="100%" stop-color="$washB" stop-opacity="0"/>
-            </radialGradient>
-            """.trimIndent()
-        )
-
-        sb.append(
-            """
-            <pattern id="${svgId}_grid" width="28" height="28" patternUnits="userSpaceOnUse">
-              <path d="M28 0H0V28" fill="none" stroke="$gridStroke" stroke-width="1"/>
+            <pattern id="${svgId}_grid" width="32" height="32" patternUnits="userSpaceOnUse">
+              <path d="M32 0H0V32" fill="none" stroke="$gridStroke" stroke-width="0.5"/>
             </pattern>
-            """.trimIndent()
-        )
-
-        sb.append(
-            """
-            <linearGradient id="${svgId}_spine" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="$spineStart"/>
-              <stop offset="100%" stop-color="$spineEnd"/>
-            </linearGradient>
             """.trimIndent()
         )
 
@@ -276,7 +232,7 @@ class TimelineSvgGenerator {
             """
             <linearGradient id="${svgId}_line" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stop-color="$spineStart" stop-opacity="0.65"/>
-              <stop offset="100%" stop-color="$spineEnd" stop-opacity="0.65"/>
+              <stop offset="100%" stop-color="$spineEnd" stop-opacity="0.2"/>
             </linearGradient>
             """.trimIndent()
         )
@@ -284,10 +240,10 @@ class TimelineSvgGenerator {
         sb.append(
             """
             <filter id="${svgId}_cardShadow" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="$shadowOpacity"/>
+              <feDropShadow dx="0" dy="12" stdDeviation="12" flood-opacity="$shadowOpacity"/>
             </filter>
             <filter id="${svgId}_nodeGlow" x="-80%" y="-80%" width="260%" height="260%">
-              <feGaussianBlur stdDeviation="3.4" result="b"/>
+              <feGaussianBlur stdDeviation="3" result="b"/>
               <feMerge>
                 <feMergeNode in="b"/>
                 <feMergeNode in="SourceGraphic"/>
@@ -299,6 +255,7 @@ class TimelineSvgGenerator {
         sb.append(
             """
             <style>
+              ${theme.fontImport}
               #$svgId {
                 --text: $text;
                 --muted: $muted;
@@ -307,34 +264,35 @@ class TimelineSvgGenerator {
               }
 
               #$svgId .title {
-                font: 800 42px Inter, system-ui, sans-serif;
-                letter-spacing: -0.01em;
+                font: 800 36px ${theme.fontFamily};
+                letter-spacing: -0.02em;
                 fill: var(--text);
               }
 
               #$svgId .subtitle {
-                font: 500 15px Inter, system-ui, sans-serif;
+                font: 400 16px ${theme.fontFamily};
                 fill: var(--muted);
               }
 
               #$svgId .header-rule {
                 stroke: $headerRule;
+                stroke-opacity: 0.2;
+                stroke-width: 1.5;
               }
 
               #$svgId .date {
-                font: 800 18px Inter, system-ui, sans-serif;
+                font: 700 14px ${theme.fontFamily};
               }
 
               #$svgId .body {
-                font: 400 13px Inter, system-ui, sans-serif;
+                font: 400 14px ${theme.fontFamily};
                 fill: var(--muted);
               }
 
               #$svgId .card {
                 fill: var(--card-bg);
                 stroke: var(--card-stroke);
-                stroke-width: 1;
-                filter: url(#${svgId}_cardShadow);
+                stroke-width: 0.5;
               }
 
               #$svgId .reveal {
@@ -364,7 +322,7 @@ class TimelineSvgGenerator {
         sb: StringBuilder,
         svgId: String,
         event: TimelineEvent,
-        color: TimelineColor,
+        color: String,
         centerX: Int,
         y: Int,
         isRight: Boolean,
@@ -372,49 +330,48 @@ class TimelineSvgGenerator {
         cardHeight: Int,
         index: Int
     ) {
-        val connector = 86
+        val connector = 80
         val cardX = if (isRight) centerX + connector else centerX - connector - cardWidth
         val cardY = y - 46
-        val textX = cardX + 30
+        val textX = cardX + 32
         val dateY = cardY + 36
         val bodyStartY = cardY + 60
 
         val lineEndX = if (isRight) centerX + connector else centerX - connector
         val accentX = if (isRight) cardX + 16 else cardX + 16
 
-        val bodyLines = wrapText(event.text, cardWidth - 58)
+        val bodyLines = wrapText(event.text, cardWidth - 64)
 
-        // ... existing code ...
         sb.append("""<g transform="translate($centerX,$y)">""")
-        sb.append("""<g class="reveal d${(index % 6) + 1}">""")
-        sb.append("""<line x1="0" y1="0" x2="${if (isRight) connector else -connector}" y2="0" stroke="${color.stroke}" stroke-width="2" opacity="0.55"/>""")
-        sb.append("""<circle cx="0" cy="0" r="11" fill="var(--card-bg)" stroke="${color.stroke}" stroke-width="3" filter="url(#${svgId}_nodeGlow)"/>""")
-        sb.append("""<circle cx="0" cy="0" r="5" fill="${color.stroke}"/>""")
+        sb.append("""<g class="reveal d${(index % 6) + 1}" filter="url(#${svgId}_cardShadow)">""")
+        sb.append("""<line x1="0" y1="0" x2="${if (isRight) connector else -connector}" y2="0" stroke="$color" stroke-width="2" opacity="0.3"/>""")
+        sb.append("""<circle cx="0" cy="0" r="8" fill="${theme.canvas}" stroke="$color" stroke-width="2.5" filter="url(#${svgId}_nodeGlow)"/>""")
+        sb.append("""<circle cx="0" cy="0" r="4" fill="$color"/>""")
 
         val cardLocalX = if (isRight) connector else -connector - cardWidth
-        sb.append("""<rect x="$cardLocalX" y="${cardY - y}" width="$cardWidth" height="$cardHeight" rx="14" class="card"/>""")
-        sb.append("""<rect x="${accentX - centerX}" y="${cardY - y + 16}" width="4" height="${(cardHeight - 32).coerceAtLeast(40)}" rx="2" fill="${color.stroke}"/>""")
+        sb.append("""<rect x="$cardLocalX" y="${cardY - y}" width="$cardWidth" height="$cardHeight" rx="8" class="card" stroke="$color" stroke-opacity="0.3"/>""")
+        sb.append("""<rect x="${accentX - centerX}" y="${cardY - y + 16}" width="4" height="${(cardHeight - 32).coerceAtLeast(40)}" rx="2" fill="$color"/>""")
         sb.append("</g>")
         sb.append("</g>")
 
-        sb.append("""<text x="$textX" y="$dateY" class="date" fill="${color.text}">${escapeXml(event.date)}</text>""")
+        sb.append("""<text x="$textX" y="$dateY" class="date" fill="$color">${escapeXml(event.date)}</text>""")
 
         var ty = bodyStartY
         bodyLines.forEach { line ->
-            appendTextWithLinks(sb, line, textX, ty, "var(--muted)", color.text)
+            appendTextWithLinks(sb, line, textX, ty, "var(--text)", color)
             ty += 20
         }
 
         if (event.bullets.isNotEmpty()) {
-            ty += 2
+            ty += 4
             event.bullets.forEach { bullet ->
                 val bulletLines = wrapText(bullet, cardWidth - 72)
                 bulletLines.forEachIndexed { i, bLine ->
                     if (i == 0) {
-                        sb.append("""<circle cx="${textX + 3}" cy="${ty - 4}" r="2.5" fill="var(--muted)"/>""")
-                        sb.append("""<text x="${textX + 14}" y="$ty" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="var(--muted)">${escapeXml(bLine)}</text>""")
+                        sb.append("""<circle cx="${textX + 4}" cy="${ty - 4}" r="2.5" fill="var(--muted)"/>""")
+                        sb.append("""<text x="${textX + 16}" y="$ty" font-family="${theme.fontFamily}" font-size="12" fill="var(--muted)">${escapeXml(bLine)}</text>""")
                     } else {
-                        sb.append("""<text x="${textX + 14}" y="$ty" font-family="'Inter', -apple-system, sans-serif" font-size="12" fill="var(--muted)">${escapeXml(bLine)}</text>""")
+                        sb.append("""<text x="${textX + 16}" y="$ty" font-family="${theme.fontFamily}" font-size="12" fill="var(--muted)">${escapeXml(bLine)}</text>""")
                     }
                     ty += 16
                 }
@@ -433,7 +390,7 @@ class TimelineSvgGenerator {
         val linkPattern = """\[\[([^\s]+)\s+([^\]]+)\]\]""".toRegex()
         var lastIndex = 0
 
-        sb.append("""<text x="$x" y="$y" font-family="'Inter', -apple-system, sans-serif" font-size="13" fill="$textColor">""")
+        sb.append("""<text x="$x" y="$y" font-family="${theme.fontFamily}" font-size="14" fill="$textColor">""")
 
         linkPattern.findAll(text).forEach { match ->
             if (match.range.first > lastIndex) {
@@ -462,8 +419,8 @@ class TimelineSvgGenerator {
     private fun calculateVerticalItemHeight(item: TimelineEvent, maxWidth: Int): Int {
         val lines = wrapText(item.text, maxWidth)
         val textHeight = lines.size * 20
-        val bulletLines = item.bullets.sumOf { wrapText(it, maxWidth - 14).size }
-        val bulletHeight = if (item.bullets.isNotEmpty()) bulletLines * 16 + 6 else 0
+        val bulletLines = item.bullets.sumOf { wrapText(it, maxWidth - 16).size }
+        val bulletHeight = if (item.bullets.isNotEmpty()) bulletLines * 16 + 8 else 0
         return (108 + textHeight + bulletHeight).coerceAtLeast(108)
     }
 
@@ -484,7 +441,7 @@ class TimelineSvgGenerator {
 
         words.forEach { word ->
             val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
-            val width = estimateTextWidth(testLine, 13)
+            val width = estimateTextWidth(testLine, 14)
 
             if (width > maxWidth) {
                 if (currentLine.isNotEmpty()) {

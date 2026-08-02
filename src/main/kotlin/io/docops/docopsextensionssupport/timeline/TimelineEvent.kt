@@ -21,7 +21,8 @@ data class TimelineConfig(
     val lightColorIndex: Int? = null,
     val orientation: Orientation = Orientation.VERTICAL,
     val title: String = "",
-    val subtitle: String = ""
+    val subtitle: String = "",
+    val theme: String = "classic"
 ) {
     fun timelineEventsToCsv(): CsvResponse {
         val headers = listOf("Date", "Text")

@@ -79,7 +79,8 @@ class TimelineParser {
             events = events,
             lightColor = lightColor,
             lightColorIndex = lightColorIndex?.toIntOrNull(),
-            orientation = orientation
+            orientation = orientation,
+            theme = configMap["theme"] ?: "classic"
         )
     }
 }

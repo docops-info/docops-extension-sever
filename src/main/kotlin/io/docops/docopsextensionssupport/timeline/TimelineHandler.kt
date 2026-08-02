@@ -13,12 +13,13 @@ class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
         useDark: Boolean,
         scale: String,
         backend: String,
-        useGlass: Boolean = false
+        useGlass: Boolean = false,
+        theme: String = "classic"
     ): String {
         val parser = TimelineParser()
         val config = parser.parse(payload)
         val maker = TimelineSvgGenerator()
-        val svg = maker.generateTimeline(config, useDark, scale = scale )
+        val svg = maker.generateTimeline(config, useDark, scale = scale, theme = theme)
         csvResponse.update(config.timelineEventsToCsv())
         return svg
     }
@@ -34,7 +35,8 @@ class TimelineHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse)
             useDark = context.useDark,
             context.scale,
             context.backend,
-            context.useGlass
+            context.useGlass,
+            context.theme
         )
     }
 
