@@ -67,7 +67,7 @@ data class SocialMedia(
 )
 
 data class VCardConfig(
-    val design: String = "business_card_design",
+    val design: String = "premium",
     val theme: String = "light"
 )
 

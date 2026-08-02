@@ -30,7 +30,8 @@ data class DocOpsContext(
     val useDark: Boolean = false,
     val backend: String = "html",
     val useGlass: Boolean = false,
-    val docname: String = ""
+    val docname: String = "",
+    val theme: String = "classic"
 )
 
 abstract class BaseDocOpsHandler(

@@ -116,6 +116,7 @@ class DocOpsRouter(
         @RequestParam("useGlass", defaultValue = "false") useGlass: Boolean,
         @RequestParam("docname", defaultValue = "unknown") docname: String,
         @RequestParam("backend", required = false, defaultValue = "html") backend: String,
+        @RequestParam("theme", required = false, defaultValue = "classic") theme: String,
         httpServletRequest: HttpServletRequest
     ): ResponseEntity<ByteArray> {
         val context = DocOpsContext(
@@ -125,7 +126,8 @@ class DocOpsRouter(
             useDark = useDark,
             useGlass = useGlass,
             backend = backend,
-            docname = docname
+            docname = docname,
+            theme = theme
         )
 
         //println(buildDocOpsSvgUriWithBuilder(httpServletRequest, kind= kind, payload = payload, scale = scale, type = type, title = title, useDark = useDark, useGlass = useGlass, docname = docname, backend = backend))
@@ -220,14 +222,14 @@ class DocOpsRouter(
         useDark: Boolean = false,
         useGlass: Boolean = false,
         docname: String = "unknown",
-        backend: String = "html"
+        backend: String = "html",
+        theme: String = "classic"
     ): String {
         val baseUrl = "${request.scheme}://${request.serverName}" +
                 (if (request.serverPort != 80 && request.serverPort != 443)
                     ":${request.serverPort}" else "") +
                 request.contextPath
-
-        return UriComponentsBuilder.fromUriString(baseUrl)
+        val builder = UriComponentsBuilder.fromUriString(baseUrl)
             .path("/api/docops/svg")
             .queryParam("kind", kind)
             .queryParam("payload", payload)
@@ -238,8 +240,10 @@ class DocOpsRouter(
             .queryParam("useGlass", useGlass)
             .queryParam("docname", docname)
             .queryParam("backend", backend)
-            .build()
-            .toUriString()
+        if (theme != "classic") {
+            builder.queryParam("theme", theme)
+        }
+        return builder.build().toUriString()
     }
 
 

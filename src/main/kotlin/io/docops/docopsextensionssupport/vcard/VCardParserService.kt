@@ -13,6 +13,7 @@ class VCardParserService {
     companion object {
         private const val CONFIG_SEPARATOR = "---"
         private val VALID_DESIGNS = setOf(
+            "premium",
             "tech_pattern_background",
             "neo_brutalist",
             "modern_card"
@@ -39,7 +40,7 @@ class VCardParserService {
     }
 
     private fun parseConfigSection(configSection: String): VCardConfig {
-        var design = "business_card_design"
+        var design = "premium"
         var theme = "light"
 
         configSection.lines().forEach { line ->
@@ -67,7 +68,7 @@ class VCardParserService {
     }
 
     private fun validateDesign(design: String): String {
-        return if (VALID_DESIGNS.contains(design)) design else "business_card_design"
+        return if (VALID_DESIGNS.contains(design)) design else "premium"
     }
 
     private fun validateTheme(theme: String): String {

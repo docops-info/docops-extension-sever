@@ -29,14 +29,14 @@ class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
      * @param useDark A boolean indicating whether to use dark mode for the SVG image.
      * @return The ResponseEntity containing the SVG image as a byte array.
      */
-    fun handleSVGInternal(payload: String, type: String, scale: String, useDark: Boolean, backend: String): Pair<ShapeResponse, CsvResponse> {
-        val svg = fromRequestToConnector(payload, scale = scale.toFloat(), useDark = useDark, "SVG", backend)
+    fun handleSVGInternal(payload: String, type: String, scale: String, useDark: Boolean, backend: String, theme: String): Pair<ShapeResponse, CsvResponse> {
+        val svg = fromRequestToConnector(payload, scale = scale.toFloat(), useDark = useDark, "SVG", backend, theme)
         return svg
     }
 
 
 
-    fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG", backend: String): Pair<ShapeResponse, CsvResponse> {
+    fun fromRequestToConnector(contents: String, scale: Float, useDark: Boolean, type: String = "SVG", backend: String, theme: String): Pair<ShapeResponse, CsvResponse> {
         val isPDF = "pdf".equals(backend, ignoreCase = true)
         val connectors = parseTableData(contents)
         val resp = connectors.connectors.toCsv()
@@ -45,7 +45,7 @@ class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
         if(isPDF) {
             docType = "PDF"
         }
-        val maker = createConnectorMaker(connectors.connectors, useDark, docType, isPDF)
+        val maker = createConnectorMaker(connectors.connectors, useDark, docType, isPDF, theme)
         return Pair(makeConnectorImage(maker, scale), resp)
     }
 
@@ -83,9 +83,10 @@ class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
         connectors: MutableList<Connector>,
         useDark: Boolean,
         type: String,
-        isPDF: Boolean
+        isPDF: Boolean,
+        theme: String
     ): ConnectorMaker {
-        return ConnectorMaker(connectors, useDark, type, isPdf = isPDF)
+        return ConnectorMaker(connectors, useDark, type, isPdf = isPDF, themeName = theme)
     }
 
     private fun makeConnectorImage(maker: ConnectorMaker, scale: Float): ShapeResponse {
@@ -96,7 +97,7 @@ class ConnectorHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse
         payload: String,
         context: DocOpsContext
     ): String {
-        val resp = handleSVGInternal(payload, type = context.type, context.scale, context.useDark, context.backend)
+        val resp = handleSVGInternal(payload, type = context.type, context.scale, context.useDark, context.backend, context.theme)
         csvResponse.update(resp.second)
         return resp.first.shapeSvg
     }

@@ -21,7 +21,7 @@ import java.util.*
  * @property bgColor The background color of the image.
  * @property baseColors A list of base colors for the connectors.
  */
-class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false, val type: String, var useGlassEffect: Boolean = true, val isPdf : Boolean = false) {
+class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolean = false, val type: String, var useGlassEffect: Boolean = true, val isPdf : Boolean = false, val themeName: String = "classic") {
     private val alphabets = ('A'..'Z') + ('a'..'z') + ('0'..'9').toMutableList()
     private val colors = mutableListOf<String>()
     private var useGrad = true
@@ -30,7 +30,10 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
     private var fill = ""
     private val baseColors = mutableListOf("#E14D2A", "#82CD47", "#687EFF", "#C02739", "#FEC260", "#e9d3ff", "#7fc0b7")
 
-    private var theme: DocOpsTheme = ThemeFactory.getTheme(useDark)
+    private var theme: DocOpsTheme = ThemeFactory.getThemeByName(themeName, useDark)
+    private val isPremium = theme.name.contains("Premium", ignoreCase = true)
+    private val horizontalStep = if (isPremium) 352 else 340
+    private val verticalStep = if (isPremium) 160 else 150
 
 
     fun makeConnectorImage(scale: Float = 1.0f): ShapeResponse {
@@ -44,10 +47,11 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         val sb = StringBuilder()
 
         // Brutalist specific dimensions: 340 horizontal step, 150 vertical step
+        // Premium dimensions: 352 horizontal step, 160 vertical step
         val columns = 5
         val maxCols = if (connectors.size < columns) connectors.size else columns
-        val width: Float = (maxCols * 340).toFloat() + 200
-        val bodyHeight = (Math.ceil(connectors.size / columns.toDouble()).toInt() * 150).toFloat()
+        val width: Float = (maxCols * horizontalStep).toFloat() + 200
+        val bodyHeight = (Math.ceil(connectors.size / columns.toDouble()).toInt() * verticalStep).toFloat()
         val descriptionHeight = (connectors.size * 32) + 100
 
         val totalHeight = bodyHeight + descriptionHeight
@@ -101,15 +105,15 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             sb.append("""<g transform="translate(0, $y)">""")
             sb.append("""
                     <g style="animation: slideIn 0.4s ease-out ${animationDelay}s both;">
-                        <rect x="0" y="0" width="24" height="24" fill="#000000" />
-                        <rect x="2" y="2" width="20" height="20" fill="$boxColor" />
-                        <text x="12" y="17" fill="white" text-anchor="middle" style="font-family: ${theme.fontFamily}; font-size: 12px; font-weight: 800;">${alphabets[i]}</text>
-                        <text x="36" y="17" fill="$textColor" style="font-family: ${theme.fontFamily}; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">${item.description}</text>
+                        <rect x="0" y="0" width="24" height="24" fill="#000000" ${if (isPremium) "rx=\"16\"" else ""} />
+                        <rect x="2" y="2" width="20" height="20" fill="$boxColor" ${if (isPremium) "rx=\"16\"" else ""} />
+                        <text x="12" y="17" fill="white" text-anchor="middle" style="font-family: ${theme.fontFamily}; font-size: 12px; font-weight: ${if (isPremium) "600" else "800"};">${alphabets[i]}</text>
+                        <text x="36" y="17" fill="$textColor" style="font-family: ${theme.fontFamily}; font-size: 14px; font-weight: 600; ${if (!isPremium) "text-transform: uppercase;" else ""} letter-spacing: 0.03em;">${item.description}</text>
                         <line x1="0" y1="28" x2="400" y2="28" stroke="$textColor" stroke-width="1" stroke-opacity="0.1" />
                     </g>
                 """.trimIndent())
             sb.append("</g>")
-            y += 36
+            y += if (isPremium) 40 else 36
         }
         sb.append("</g>")
         return sb.toString()
@@ -153,8 +157,22 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             }
         }
 
-        val brutalistDefs = """
-                <!-- Hard offset shadow for depth -->
+        val shadowFilter = if (isPremium) {
+            """
+                <filter id="premiumShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
+                    <feOffset dx="0" dy="4" result="offsetblur"/>
+                    <feComponentTransfer>
+                        <feFuncA type="linear" slope="0.1"/>
+                    </feComponentTransfer>
+                    <feMerge>
+                        <feMergeNode/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            """
+        } else {
+            """
                 <filter id="brutalistShadow" x="-20%" y="-20%" width="150%" height="150%">
                     <feOffset dx="6" dy="6" in="SourceAlpha" result="offset" />
                     <feFlood flood-color="#000000" flood-opacity="0.8" result="color" />
@@ -164,15 +182,8 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
                         <feMergeNode in="SourceGraphic" />
                     </feMerge>
                 </filter>
-                
-                <!-- Subtle noise/texture pattern -->
-                <filter id="noise">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" />
-                    <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="1">
-                        <feDistantLight azimuth="45" elevation="60" />
-                    </feDiffuseLighting>
-                </filter>
             """
+        }
 
         val styles = """
                 <style>
@@ -201,10 +212,14 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         return """
                 <defs>
                 <pattern id="dotPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="1" fill="${if(useDark) "#374151" else "#E5E7EB"}" />
+                    <circle cx="2" cy="2" r="1" fill="${if (isPremium) "#64748b" else if(useDark) "#374151" else "#E5E7EB"}" fill-opacity="${if (isPremium) "0.1" else "1.0"}"/>
                 </pattern>
+                <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="${theme.canvas}" stop-opacity="0.9"/>
+                    <stop offset="100%" stop-color="${theme.canvas}" stop-opacity="0.7"/>
+                </linearGradient>
                 $grad
-                $brutalistDefs
+                $shadowFilter
                 $styles
                 <polygon id="ppoint" points="0,5 1.6666666666666667,2.5 0,0 5,2.5" stroke-width="2" />
                 </defs>
@@ -217,13 +232,17 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
         var y = 0
         val connectorColor = theme.accentColor
         val textColor = theme.primaryText
+        val shadowId = if (isPremium) "premiumShadow" else "brutalistShadow"
+        val strokeWidth = if (isPremium) 1 else 3
+        val cardStroke = if (isPremium) theme.accentColor else "#000000"
+        val cardStrokeOpacity = if (isPremium) "0.1" else "1.0"
 
         connectors.forEachIndexed { i, conn ->
             val boxColor = colors[i]
             val animationDelay = i * 0.08
 
             val lines = conn.textToLines()
-            val textContent = StringBuilder("""<text x="25" y="48" fill="$textColor" style="font-family: ${theme.fontFamily}; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">""")
+            val textContent = StringBuilder("""<text x="25" y="48" fill="$textColor" style="font-family: ${theme.fontFamily}; font-size: 16px; font-weight: ${if (isPremium) "700" else "800"}; ${if (!isPremium) "text-transform: uppercase;" else ""} letter-spacing: 0.02em;">""")
             lines.forEachIndexed { j, content ->
                 val dy = if (j > 0) "20" else "0"
                 textContent.append("""<tspan x="25" dy="$dy">$content</tspan>""")
@@ -236,18 +255,19 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             // Animation group (handles entry effect separately to avoid coordinate overlap)
             sb.append("""
                 <g class="module-card" style="animation: slideIn 0.5s ease-out ${animationDelay}s both;">
-                    <!-- The "Module" Base with hard shadow -->
-                    <rect x="0" y="0" width="260" height="100" fill="${theme.canvas}" stroke="#000000" stroke-width="3" filter="url(#brutalistShadow)" />
+                    <!-- The "Module" Base -->
+                    <rect x="0" y="0" width="260" height="100" rx="${theme.cornerRadius}" fill="${if (isPremium) "url(#glassGradient)" else theme.canvas}" stroke="$cardStroke" stroke-width="$strokeWidth" stroke-opacity="$cardStrokeOpacity" filter="url(#$shadowId)" />
         
                     <!-- Color Header/Accent Area -->
-                    <rect x="0" y="0" width="260" height="12" fill="$boxColor" stroke="#000000" stroke-width="3" />
+                    <rect x="0" y="0" width="260" height="12" rx="${theme.cornerRadius}" fill="$boxColor" stroke="$cardStroke" stroke-width="$strokeWidth" stroke-opacity="$cardStrokeOpacity" />
+                    ${if (isPremium) """<rect x="0" y="6" width="260" height="6" fill="$boxColor" />""" else ""}
         
                     <!-- Decorative corner notch -->
-                    <path d="M 240 100 L 260 80 L 260 100 Z" fill="#000000" />
+                    ${if (!isPremium) """<path d="M 240 100 L 260 80 L 260 100 Z" fill="#000000" />""" else ""}
         
-                    <!-- Identifier Tab -->
-                    <rect x="220" y="12" width="40" height="25" fill="#000000" />
-                    <text x="240" y="30" fill="white" text-anchor="middle" style="font-family: ${theme.fontFamily}; font-size: 14px; font-weight: 800;">${alphabets[i]}</text>
+                    <!-- Identifier Tab / Badge -->
+                    <rect x="${if (isPremium) 230 else 220}" y="${if (isPremium) -12 else 12}" width="40" height="${if (isPremium) 24 else 25}" rx="${if (isPremium) 12 else 0}" fill="${if (isPremium) theme.accentColor else "#000000"}" />
+                    <text x="${if (isPremium) 250 else 240}" y="${if (isPremium) 5 else 30}" fill="white" text-anchor="middle" style="font-family: ${theme.fontFamily}; font-size: 14px; font-weight: 800;">${alphabets[i]}</text>
    
                     $textContent
             
@@ -259,24 +279,31 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             if (i < connectors.lastIndex) {
                 if ((i + 1) % 5 == 0) {
                     // Row-wrapping connector
+                    val wrapGap = horizontalStep - 260
+                    val wrapDown = verticalStep / 2.0
+                    val arrowHeadX = -(4 * horizontalStep + 260)
+                    val wrapBack = arrowHeadX - 40
+                    val arrowX = arrowHeadX - 5
+                    
                     sb.append("""
                              <g transform="translate(260,50)">
-                                    <path d="M0,0 L60,0" stroke-width="3" stroke="$connectorColor" fill="none"/>
-                                    <line x1="60" x2="60" y1="0" y2="80" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
-                                    <line x1="60" x2="-1540" y1="80" y2="80" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
-                                    <line x1="-1540" x2="-1540" y1="150" y2="80" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
-                                    <line x1="-1540" x2="-1535" y1="150" y2="150" stroke-width="3" stroke="$connectorColor" stroke-linecap="square"/>
-                                    <g transform="translate(-1535,147.5)">
+                                    <path d="M0,0 L${wrapGap/2.0},0" stroke-width="$strokeWidth" stroke="$connectorColor" fill="none"/>
+                                    <line x1="${wrapGap/2.0}" x2="${wrapGap/2.0}" y1="0" y2="$wrapDown" stroke-width="$strokeWidth" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <line x1="${wrapGap/2.0}" x2="$wrapBack" y1="$wrapDown" y2="$wrapDown" stroke-width="$strokeWidth" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <line x1="$wrapBack" x2="$wrapBack" y1="$verticalStep" y2="$wrapDown" stroke-width="$strokeWidth" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <line x1="$wrapBack" x2="$arrowHeadX" y1="$verticalStep" y2="$verticalStep" stroke-width="$strokeWidth" stroke="$connectorColor" stroke-linecap="square"/>
+                                    <g transform="translate($arrowX,${verticalStep - 2.5})">
                                         <use xlink:href="#ppoint" fill="$connectorColor" stroke="$connectorColor"/>
                                     </g>
                                 </g>
                         """.trimIndent())
                 } else {
                     // Normal horizontal connector
-                    // Moved line end to 337 (closer to the 340 step) and arrow to 332
+                    val lineEnd = horizontalStep - 260 - 3
+                    val arrowX = lineEnd - 5
                     sb.append("""
-                            <line x1="260" y1="50" x2="337" y2="50" stroke="$connectorColor" stroke-width="3" />
-                            <g transform="translate(332,47.5)">
+                            <line x1="260" y1="50" x2="${260 + lineEnd}" y2="50" stroke="$connectorColor" stroke-width="$strokeWidth" />
+                            <g transform="translate(${260 + arrowX},47.5)">
                                 <use xlink:href="#ppoint" fill="$connectorColor" stroke="$connectorColor"/>
                             </g>
                         """.trimIndent())
@@ -285,12 +312,12 @@ class ConnectorMaker(val connectors: MutableList<Connector>, val useDark: Boolea
             // Close both groups
             sb.append("</g></g>")
 
-            // Updated grid spacing for the Brutalist style
+            // Updated grid spacing
             if ((i + 1) % 5 == 0) {
                 x = 0
-                y += 150
+                y += verticalStep
             } else {
-                x += 340
+                x += horizontalStep
             }
         }
         return sb.toString()
