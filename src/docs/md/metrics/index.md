@@ -31,7 +31,7 @@ Metrics cards turn small KPI tables into clean, consistent summary visuals you c
 
 [docops:metricscard]
 title= Q2 2024 Business Metrics
-theme=aurora
+theme=premium
 ---
 Metric | Value | Sublabel
 Revenue | $4.2M | 18% YoY Growth
@@ -46,7 +46,7 @@ NPS Score | 72 | Industry Leading
 
 [docops:metricscard]
 title= Sustainability Achievements
-theme=tokyo
+theme=premium
 ---
 Metric | Value | Sublabel
 Carbon Reduction | 28% | vs. 2020 Baseline
