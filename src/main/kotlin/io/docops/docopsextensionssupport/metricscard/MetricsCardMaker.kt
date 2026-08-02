@@ -120,12 +120,13 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
      */
     @OptIn(ExperimentalUuidApi::class)
     private fun generateMetricsCardSvg(metricsCardData: MetricsCardData, width: Int, height: Int, useDark: Boolean): String {
+        val isPremium = theme.name.contains("Premium")
         // Calculate dynamic width based on number of metrics
         val metricsCount = metricsCardData.metrics.size
         val cardWidth = 196
-        val cardMargin = 28
+        val cardMargin = if(isPremium) 24 else 28
 
-        val horizontalPadding = 56
+        val horizontalPadding = if(isPremium) 64 else 56
         val totalCardWidth = metricsCount * (cardWidth + cardMargin) - cardMargin
 
         val idealWidth = totalCardWidth + horizontalPadding
@@ -134,6 +135,8 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
 
         return buildString {
             val id = Uuid.random().toHexString()
+            val shadowColor = if (useDark) "#000000" else if (isPremium) "#0F172A" else theme.primaryText
+            val shadowOpacity = if (useDark) "0.5" else if (isPremium) "0.12" else "0.3"
 
             append("""
                     <svg id="ID_$id" width="$finalWidth" height="$finalHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $finalWidth $finalHeight" preserveAspectRatio='xMidYMid meet'>
@@ -142,8 +145,8 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
                                 ${theme.fontImport}
                                 .metric-value_$id { font-family: ${theme.fontFamily}; font-weight: 700; fill: ${theme.primaryText}; }
                                 .metric-label_$id { font-family: ${theme.fontFamily}; font-weight: 400; fill: ${theme.secondaryText}; letter-spacing: 0.05em; text-transform: uppercase; }
-                                .metric-sub_$id { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: ${theme.accentColor}; }
-                                .title-text_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: ${32/theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; }
+                                .metric-sub_$id { font-family: 'JetBrains Mono', monospace; font-size: ${if (isPremium) 12 else 11}px; fill: ${theme.accentColor}; }
+                                .title-text_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: ${(if (isPremium) 36 else 32)/theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; }
                             </style>
                     
                             <pattern id="grid_$id" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -151,18 +154,25 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
                             </pattern>
                         
                             <filter id="shadow_$id" x="-20%" y="-20%" width="140%" height="140%">
-                                <feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="${theme.primaryText}" flood-opacity="0.3"/>
+                                <feDropShadow dx="${if (isPremium) 0 else 6}" dy="${if (isPremium) 12 else 6}" stdDeviation="${if (isPremium) 12 else 0}" flood-color="$shadowColor" flood-opacity="$shadowOpacity"/>
                             </filter>
+                            
+                            ${if (isPremium) """
+                            <linearGradient id="cardGradient_$id" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="${if (useDark) "#1e293b" else "#ffffff"}" stop-opacity="0.9"/>
+                                <stop offset="100%" stop-color="${if (useDark) "#0f172a" else "#f8fafc"}" stop-opacity="0.95"/>
+                            </linearGradient>
+                            """.trimIndent() else ""}
                         </defs>
 
                         <!-- Background Layering: Preservation of depth -->
-                        <rect width="100%" height="100%" fill="${theme.canvas}" rx="16"/>
-                        <rect width="100%" height="100%" fill="url(#grid_$id)"/>
+                        <rect width="100%" height="100%" fill="${theme.canvas}" rx="${if (isPremium) 8 else 16}"/>
+                        ${if (!isPremium) """<rect width="100%" height="100%" fill="url(#grid_$id)"/>""" else ""}
                 
                         <!-- Title Section -->
-                        <g transform="translate(28, 56)">
+                        <g transform="translate(${if (isPremium) 32 else 28}, 56)">
                             <text x="0" y="0" class="title-text_$id">${metricsCardData.title.escapeXml()}</text>
-                            <rect x="0" y="18" width="60" height="8" fill="${theme.accentColor}" rx="2"/>
+                            <rect x="0" y="${if (isPremium) 12 else 18}" width="${if (isPremium) 40 else 60}" height="${if (isPremium) 4 else 8}" fill="${theme.accentColor}" rx="2"/>
                         </g>
 
                         <g class="metrics">
@@ -186,33 +196,37 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
                 append("""
                                 <g class="metric-card" transform="translate($x, $y)">
                                     <!-- Card Background -->
-                                    <rect width="$cardWidth" height="196" rx="${theme.cornerRadius}" 
-                                          fill="${theme.glassEffect}" stroke="${theme.primaryText}" stroke-opacity="0.1" stroke-width="1"
+                                    <rect width="$cardWidth" height="${if (isPremium) 200 else 196}" rx="${if (isPremium) 8 else theme.cornerRadius}" 
+                                          fill="${if (isPremium) "url(#cardGradient_$id)" else theme.glassEffect}" stroke="${theme.primaryText}" stroke-opacity="0.1" stroke-width="1"
                                           filter="url(#shadow_$id)"/>
                         
                                     <!-- Cyber Accent Tab -->
-                                    <path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="$accentColor" opacity="0.9"/>
+                                    ${if (isPremium) """<rect width="$cardWidth" height="4" rx="2" fill="$accentColor" opacity="0.8"/>""" else """<path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="$accentColor" opacity="0.9"/>"""}
 
                                     <!-- Metric Value -->
-                                    <text x="20" y="85" text-anchor="start" 
-                                          font-size="${42/theme.fontWidthMultiplier}" class="metric-value_$id">${metric.value.escapeXml()}</text>
+                                    <text x="${if (isPremium) 24 else 20}" y="${if (isPremium) 80 else 85}" text-anchor="start" 
+                                          font-size="${(if (isPremium) 36 else 42)/theme.fontWidthMultiplier}" class="metric-value_$id">${metric.value.escapeXml()}</text>
 
                                     <!-- Metric Label (Wrapped) -->
-                                    <text x="20" y="110" text-anchor="start" font-size="${13 / theme.fontWidthMultiplier}" class="metric-label_$id">
+                                    <text x="${if (isPremium) 24 else 20}" y="${if (isPremium) 112 else 110}" text-anchor="start" font-size="${(if (isPremium) 14 else 13) / theme.fontWidthMultiplier}" class="metric-label_$id">
                             """.trimIndent())
 
                 wrappedLabel.forEachIndexed { i, line ->
-                    append("""<tspan x="20" dy="${if (i == 0) 0 else 14}">${line.escapeXml()}</tspan>""")
+                    append("""<tspan x="${if (isPremium) 24 else 20}" dy="${if (i == 0) 0 else (if (isPremium) 16 else 14)}">${line.escapeXml()}</tspan>""")
                 }
 
                 append("</text>")
 
                 if (metric.sublabel != null) {
                     // Adjust Y based on if the label wrapped to 2 lines
-                    val sublabelY = if (wrappedLabel.size > 1) 155 else 145
+                    val sublabelY = if (wrappedLabel.size > 1) {
+                        if (isPremium) 160 else 155
+                    } else {
+                        if (isPremium) 144 else 145
+                    }
                     append("""
                                     <!-- Metric Sublabel -->
-                                    <text x="20" y="$sublabelY" text-anchor="start" 
+                                    <text x="${if (isPremium) 24 else 20}" y="$sublabelY" text-anchor="start" 
                                           class="metric-sub_$id">> ${metric.sublabel.escapeXml()}</text>
                                 """.trimIndent())
                 }
