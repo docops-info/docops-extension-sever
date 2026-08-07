@@ -195,13 +195,18 @@ class MetricsCardMaker(val csvResponse: CsvResponse, val isPdf: Boolean, val use
 
                 append("""
                                 <g class="metric-card" transform="translate($x, $y)">
+                                    <defs>
+                                        <clipPath id="cardClip_${id}_$index">
+                                            <rect width="$cardWidth" height="${if (isPremium) 200 else 196}" rx="${if (isPremium) 8 else theme.cornerRadius}"/>
+                                        </clipPath>
+                                    </defs>
                                     <!-- Card Background -->
                                     <rect width="$cardWidth" height="${if (isPremium) 200 else 196}" rx="${if (isPremium) 8 else theme.cornerRadius}" 
                                           fill="${if (isPremium) "url(#cardGradient_$id)" else theme.glassEffect}" stroke="${theme.primaryText}" stroke-opacity="0.1" stroke-width="1"
                                           filter="url(#shadow_$id)"/>
                         
                                     <!-- Cyber Accent Tab -->
-                                    ${if (isPremium) """<rect width="$cardWidth" height="4" rx="2" fill="$accentColor" opacity="0.8"/>""" else """<path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="$accentColor" opacity="0.9"/>"""}
+                                    ${if (isPremium) """<rect width="$cardWidth" height="4" fill="$accentColor" opacity="0.8" clip-path="url(#cardClip_${id}_$index)"/>""" else """<path d="M 0 16 Q 0 0 16 0 L 60 0 L 45 15 L 0 15 Z" fill="$accentColor" opacity="0.9"/>"""}
 
                                     <!-- Metric Value -->
                                     <text x="${if (isPremium) 24 else 20}" y="${if (isPremium) 80 else 85}" text-anchor="start" 

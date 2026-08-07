@@ -1,5 +1,8 @@
 package io.docops.docopsextensionssupport.adr
 
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 class DecisionRailAdrSvgGenerator(
     private val useDark: Boolean,
     private val themeName: String
@@ -14,20 +17,23 @@ class DecisionRailAdrSvgGenerator(
         val url: String? = null
     )
 
-    private val leftRailWidth = 38
+    private val leftRailWidth = 40
     private val contentX = 80
     private val contentWidth = 760
     private val sectionX = 108
     private val sectionCardX = 34
     private val sectionCardWidth = 698
-    private val sectionGap = 70
+    private val sectionGap = 64
     private val mastheadHeight = 210
     private val mastheadTitleMaxChars = 34
-    private val sectionTextMaxChars = 82
+    private val sectionTextMaxChars = 80
+    private val cardRadius = 24
 
+    @OptIn(ExperimentalUuidApi::class)
     fun generate(adr: Adr, width: Int = 900): String {
+        val id = Uuid.random().toHexString()
         val statusColor = statusColor(adr.status)
-        val renderedSections = renderSections(adr, statusColor)
+        val renderedSections = renderSections(adr, statusColor, id)
 
         val sectionsStartY = 320
         val sectionsHeight = renderedSections.sumOf { it.height } +
@@ -37,12 +43,14 @@ class DecisionRailAdrSvgGenerator(
 
         return """
             <svg width="$width" height="$height" viewBox="0 0 $width $height" xmlns="http://www.w3.org/2000/svg">
+                <title>${escapeXml(adr.title)} [${escapeXml(adr.status.name)}]</title>
+                <desc>Architecture Decision Record for ${escapeXml(adr.title)} - Status: ${adr.status.name}</desc>
                 <defs>
                     ${defs(statusColor)}
                 </defs>
                 ${canvas(width, height)}
                 ${statusRail(height, statusColor)}
-                ${masthead(adr, statusColor)}
+                ${masthead(adr, statusColor, id)}
                 ${positionSections(renderedSections, sectionsStartY)}
             </svg>
         """.trimIndent()
@@ -70,8 +78,13 @@ class DecisionRailAdrSvgGenerator(
     }
 
     private fun defs(statusColor: String): String {
+        val washStart = if (useDark) "#111827" else "#F9FAFB"
+        val washEnd = if (useDark) "#080B12" else "#EEF2F7"
+        
         return """
             <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+                
                 .adr-reference-link:hover rect {
                     fill: $statusColor;
                     opacity: 0.08;
@@ -86,20 +99,33 @@ class DecisionRailAdrSvgGenerator(
             </style>
 
             <filter id="adrSoftShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#0B1220" flood-opacity="0.10"/>
+                <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#000000" flood-opacity="0.1"/>
+                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.05"/>
             </filter>
 
             <pattern id="adrPaperGrid" width="32" height="32" patternUnits="userSpaceOnUse">
-                <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#E7EAF0" stroke-width="1" opacity="0.45"/>
+                <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#E7EAF0" stroke-width="1" opacity="0.05"/>
             </pattern>
 
             <linearGradient id="adrCanvasWash" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="${if (useDark) "#080B12" else "#F8FAFC"}"/>
-                <stop offset="100%" stop-color="${if (useDark) "#111827" else "#EEF2F7"}"/>
+                <stop offset="10%" stop-color="$washStart"/>
+                <stop offset="90%" stop-color="$washEnd"/>
+            </linearGradient>
+
+            <linearGradient id="adrRailSeparatorGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0B1220" stop-opacity="0.05"/>
+                <stop offset="50%" stop-color="#0B1220" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#0B1220" stop-opacity="0.05"/>
             </linearGradient>
 
             <filter id="adrRailGlow">
-                <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="$statusColor" flood-opacity="${if (useDark) "0.35" else "0.0"}"/>
+                <feGaussianBlur stdDeviation="${if (useDark) "12" else "0"}" result="blur"/>
+                <feFlood flood-color="$statusColor" flood-opacity="${if (useDark) "0.35" else "0.0"}" result="color"/>
+                <feComposite in="color" in2="blur" operator="in" result="glow"/>
+                <feMerge>
+                    <feMergeNode in="glow"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
             </filter>
         """.trimIndent()
     }
@@ -113,25 +139,27 @@ class DecisionRailAdrSvgGenerator(
 
     private fun statusRail(height: Int, statusColor: String): String {
         return """
-            <rect x="0" y="0" width="38" height="$height" fill="$statusColor" filter="url(#adrRailGlow)"/>
-            <rect x="38" y="0" width="1" height="$height" fill="#0B1220" opacity="0.25"/>
+            <rect x="0" y="0" width="40" height="$height" fill="$statusColor" filter="url(#adrRailGlow)"/>
+            <rect x="0" y="0" width="1" height="$height" fill="white" opacity="0.15"/>
+            <rect x="40" y="0" width="1" height="$height" fill="url(#adrRailSeparatorGradient)"/>
         """.trimIndent()
     }
 
-    private fun masthead(adr: Adr, statusColor: String): String {
-        val textColor = if (useDark) "#F8FAFC" else "#0B1220"
-        val mutedColor = if (useDark) "#94A3B8" else "#64748B"
+    private fun masthead(adr: Adr, statusColor: String, id: String): String {
+        val textColor = if (useDark) "#F9FAFB" else "#111827"
+        val mutedColor = if (useDark) "#94A3B8" else "#6B7280"
         val cardColor = if (useDark) "rgba(15,23,42,0.92)" else "rgba(255,255,255,0.96)"
         val statusInitial = adr.status.name.first().uppercaseChar()
         val titleLines = wrapText(adr.title, mastheadTitleMaxChars).take(2)
 
         val titleSvg = titleLines.mapIndexed { index, line ->
-            val y = 104 + index * 38
+            val y = 104 + index * 36
             """
                 <text x="32" y="$y"
                       font-family="Inter, SF Pro Display, system-ui, sans-serif"
-                      font-size="32"
-                      font-weight="800"
+                      font-size="30"
+                      font-weight="700"
+                      letter-spacing="-0.02em"
                       fill="$textColor">
                     ${escapeXml(line)}
                 </text>
@@ -142,14 +170,30 @@ class DecisionRailAdrSvgGenerator(
 
         return """
             <g transform="translate($contentX,64)">
-                <rect x="0" y="0" width="$contentWidth" height="$mastheadHeight" rx="28" fill="$cardColor" filter="url(#adrSoftShadow)"/>
-                <rect x="0" y="0" width="$contentWidth" height="10" rx="5" fill="$statusColor"/>
+                <defs>
+                    <clipPath id="mastheadClip_$id">
+                        <rect x="0" y="0" width="$contentWidth" height="$mastheadHeight" rx="$cardRadius"/>
+                    </clipPath>
+                </defs>
+                <rect x="0" y="0" width="$contentWidth" height="$mastheadHeight" rx="$cardRadius" fill="$cardColor" filter="url(#adrSoftShadow)"/>
+                
+                <text x="690" y="142"
+                      text-anchor="middle"
+                      font-family="Inter, SF Pro Display, system-ui, sans-serif"
+                      font-size="92"
+                      font-weight="900"
+                      fill="$statusColor"
+                      opacity="0.10">
+                    $statusInitial
+                </text>
+
+                <rect x="0" y="0" width="$contentWidth" height="8" fill="$statusColor" clip-path="url(#mastheadClip_$id)"/>
 
                 <text x="32" y="54"
                       font-family="Inter, SF Pro Display, system-ui, sans-serif"
                       font-size="13"
                       font-weight="800"
-                      letter-spacing="2.8"
+                      letter-spacing="0.15em"
                       fill="$statusColor">
                     ${escapeXml(adr.status.name.uppercase())}
                 </text>
@@ -158,20 +202,10 @@ class DecisionRailAdrSvgGenerator(
 
                 <text x="32" y="$metaY"
                       font-family="Inter, SF Mono, ui-monospace, monospace"
-                      font-size="13"
+                      font-size="12"
                       font-weight="500"
                       fill="$mutedColor">
                     ${escapeXml(adr.date)}
-                </text>
-
-                <text x="690" y="142"
-                      text-anchor="middle"
-                      font-family="Inter, SF Pro Display, system-ui, sans-serif"
-                      font-size="92"
-                      font-weight="900"
-                      fill="$statusColor"
-                      opacity="0.22">
-                    $statusInitial
                 </text>
             </g>
         """.trimIndent()
@@ -187,14 +221,14 @@ class DecisionRailAdrSvgGenerator(
             .replace("'", "&apos;")
     }
 
-    private fun renderSections(adr: Adr, statusColor: String): List<RenderedSection> {
+    private fun renderSections(adr: Adr, statusColor: String, id: String): List<RenderedSection> {
         val sections = mutableListOf<RenderedSection>()
 
-        sections.add(section("01", "CONTEXT", adr.context, statusColor))
+        sections.add(section("01", "CONTEXT", adr.context, statusColor, id = id))
 
-        sections.add(section("02", "DECISION", adr.decision, statusColor, emphasize = true))
+        sections.add(section("02", "DECISION", adr.decision, statusColor, emphasize = true, id = id))
 
-        sections.add(section("03", "CONSEQUENCES", adr.consequences, statusColor))
+        sections.add(section("03", "CONSEQUENCES", adr.consequences, statusColor, id = id))
 
         if (adr.participants.isNotEmpty()) {
             sections.add(
@@ -206,7 +240,8 @@ class DecisionRailAdrSvgGenerator(
                             .filter { it.isNotBlank() }
                             .joinToString(" — ")
                     },
-                    statusColor
+                    statusColor,
+                    id = id
                 )
             )
         }
@@ -217,7 +252,8 @@ class DecisionRailAdrSvgGenerator(
                     "05",
                     "REFERENCES",
                     adr.references,
-                    statusColor
+                    statusColor,
+                    id = id
                 )
             )
         }
@@ -246,15 +282,16 @@ class DecisionRailAdrSvgGenerator(
         lines: List<String>,
         statusColor: String,
         emphasize: Boolean = false,
-        references: Boolean = false
+        references: Boolean = false,
+        id: String
     ): RenderedSection {
-        val textColor = if (useDark) "#F8FAFC" else "#1E293B"
-        val labelColor = if (useDark) "#CBD5E1" else "#334155"
-        val ruleColor = if (useDark) "#334155" else "#CBD5E1"
+        val textColor = if (useDark) "#D1D5DB" else "#1F2937"
+        val labelColor = if (useDark) "#94A3B8" else "#4B5563"
+        val ruleColor = if (useDark) "#334155" else "#E5E7EB"
         val cardColor = if (useDark) "rgba(15,23,42,0.92)" else "rgba(255,255,255,0.96)"
-        val bodySize = if (emphasize) 17 else 14
-        val bodyWeight = if (emphasize) 650 else 450
-        val lineHeight = if (emphasize) 30 else 25
+        val bodySize = 15
+        val bodyWeight = if (emphasize) 600 else 400
+        val lineHeight = 24
         val paragraphGap = if (references) 12 else 8
 
         val wrappedParagraphs = lines.ifEmpty { listOf("") }.map { line ->
@@ -265,7 +302,7 @@ class DecisionRailAdrSvgGenerator(
             paragraph.size * lineHeight + paragraphGap
         }
 
-        val cardHeight = 56 + bodyHeight + 34
+        val cardHeight = 56 + bodyHeight + 24
         val totalSectionHeight = 28 + cardHeight
 
         var currentY = 68
@@ -288,7 +325,12 @@ class DecisionRailAdrSvgGenerator(
         }.joinToString("\n")
 
         val svg = """
-            <g transform="translate($sectionX,0)">
+            <g id="section-$number" transform="translate($sectionX,0)">
+                <defs>
+                    <clipPath id="sectionClip-${number}_$id">
+                        <rect x="$sectionCardX" y="28" width="$sectionCardWidth" height="$cardHeight" rx="$cardRadius"/>
+                    </clipPath>
+                </defs>
                 <circle cx="0" cy="0" r="15" fill="$statusColor"/>
                 <text x="0" y="5"
                       text-anchor="middle"
@@ -301,13 +343,14 @@ class DecisionRailAdrSvgGenerator(
                       font-family="Inter, system-ui, sans-serif"
                       font-size="13"
                       font-weight="800"
-                      letter-spacing="2.4"
+                      letter-spacing="0.15em"
                       fill="$labelColor">$label</text>
 
-                <line x1="180" y1="0" x2="732" y2="0" stroke="$ruleColor" stroke-width="1"/>
+                <line x1="180" y1="0" x2="716" y2="0" stroke="$ruleColor" stroke-width="1"/>
 
-                <rect x="$sectionCardX" y="28" width="$sectionCardWidth" height="$cardHeight" rx="22" fill="$cardColor" filter="url(#adrSoftShadow)"/>
-                <rect x="$sectionCardX" y="28" width="5" height="$cardHeight" rx="2.5" fill="$statusColor"/>
+                <rect x="$sectionCardX" y="28" width="$sectionCardWidth" height="$cardHeight" rx="$cardRadius" fill="$cardColor" filter="url(#adrSoftShadow)"/>
+                ${if (emphasize) """<rect x="$sectionCardX" y="28" width="2" height="$cardHeight" fill="$statusColor" clip-path="url(#sectionClip-${number}_$id)"/>""" else ""}
+                <rect x="$sectionCardX" y="28" width="5" height="$cardHeight" fill="$statusColor" opacity="0.15" clip-path="url(#sectionClip-${number}_$id)"/>
 
                 $body
             </g>
@@ -321,12 +364,13 @@ class DecisionRailAdrSvgGenerator(
         number: String,
         label: String,
         references: List<WikiLink>,
-        statusColor: String
+        statusColor: String,
+        id: String
     ): RenderedSection {
-        val textColor = if (useDark) "#F8FAFC" else "#1E293B"
-        val mutedColor = if (useDark) "#94A3B8" else "#64748B"
-        val labelColor = if (useDark) "#CBD5E1" else "#334155"
-        val ruleColor = if (useDark) "#334155" else "#CBD5E1"
+        val textColor = if (useDark) "#D1D5DB" else "#1F2937"
+        val mutedColor = if (useDark) "#94A3B8" else "#6B7280"
+        val labelColor = if (useDark) "#94A3B8" else "#4B5563"
+        val ruleColor = if (useDark) "#334155" else "#E5E7EB"
         val cardColor = if (useDark) "rgba(15,23,42,0.92)" else "rgba(255,255,255,0.96)"
 
         val referenceBlockHeight = 58
@@ -345,22 +389,22 @@ class DecisionRailAdrSvgGenerator(
                         <rect x="62" y="${y - 24}" width="628" height="46" rx="10" fill="transparent"/>
                         <text x="62" y="$y"
                               font-family="Inter, SF Mono, ui-monospace, monospace"
-                              font-size="13"
+                              font-size="12"
                               font-weight="800"
                               fill="$statusColor">
                             ${escapeXml(numberLabel)}
                         </text>
                         <text x="102" y="$y"
                               font-family="Inter, system-ui, sans-serif"
-                              font-size="14"
-                              font-weight="650"
+                              font-size="15"
+                              font-weight="600"
                               fill="$textColor">
                             ${escapeXml(wrappedLabel)}
                         </text>
                         <text x="102" y="${y + 22}"
                               font-family="Inter, SF Mono, ui-monospace, monospace"
                               font-size="12"
-                              font-weight="450"
+                              font-weight="400"
                               fill="$mutedColor">
                             ${escapeXml(wrappedUrl)}
                         </text>
@@ -370,7 +414,12 @@ class DecisionRailAdrSvgGenerator(
         }.joinToString("\n")
 
         val svg = """
-            <g transform="translate($sectionX,0)">
+            <g id="section-$number" transform="translate($sectionX,0)">
+                <defs>
+                    <clipPath id="sectionClip-${number}_$id">
+                        <rect x="$sectionCardX" y="28" width="$sectionCardWidth" height="$cardHeight" rx="$cardRadius"/>
+                    </clipPath>
+                </defs>
                 <circle cx="0" cy="0" r="15" fill="$statusColor"/>
                 <text x="0" y="5"
                       text-anchor="middle"
@@ -383,13 +432,13 @@ class DecisionRailAdrSvgGenerator(
                       font-family="Inter, system-ui, sans-serif"
                       font-size="13"
                       font-weight="800"
-                      letter-spacing="2.4"
+                      letter-spacing="0.15em"
                       fill="$labelColor">$label</text>
 
-                <line x1="180" y1="0" x2="732" y2="0" stroke="$ruleColor" stroke-width="1"/>
+                <line x1="180" y1="0" x2="716" y2="0" stroke="$ruleColor" stroke-width="1"/>
 
-                <rect x="$sectionCardX" y="28" width="$sectionCardWidth" height="$cardHeight" rx="22" fill="$cardColor" filter="url(#adrSoftShadow)"/>
-                <rect x="$sectionCardX" y="28" width="5" height="$cardHeight" rx="2.5" fill="$statusColor"/>
+                <rect x="$sectionCardX" y="28" width="$sectionCardWidth" height="$cardHeight" rx="$cardRadius" fill="$cardColor" filter="url(#adrSoftShadow)"/>
+                <rect x="$sectionCardX" y="28" width="5" height="$cardHeight" fill="$statusColor" opacity="0.15" clip-path="url(#sectionClip-${number}_$id)"/>
 
                 $body
             </g>

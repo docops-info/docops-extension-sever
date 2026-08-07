@@ -25,22 +25,38 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
         private const val BACK_CARD = """<rect x="0" y="0" width="100%" height="100%" class="card" rx="10" ry="10"/>"""
         // Default dimensions and spacing
         private const val DEFAULT_WIDTH = 700
-        private const val DEFAULT_PADDING = 20
-        private const val CARD_SPACING = 20
-        private const val SECTION_SPACING = 15
+        private const val DEFAULT_PADDING = 24
+        private const val CARD_SPACING = 16
+        private const val SECTION_SPACING = 16
         private const val TEXT_LINE_HEIGHT = 20
-        private const val CARD_PADDING = 15
-        private const val MAX_CARD_WIDTH = DEFAULT_WIDTH - 2*DEFAULT_PADDING  // DEFAULT_WIDTH - 2*DEFAULT_PADDING
-        private const val MAX_TEXT_WIDTH = MAX_CARD_WIDTH - 2*CARD_PADDING  // MAX_CARD_WIDTH - 2*CARD_PADDING
+        private const val CARD_PADDING = 24
+        private const val MAX_CARD_WIDTH = DEFAULT_WIDTH - 2*DEFAULT_PADDING
+        private const val MAX_TEXT_WIDTH = MAX_CARD_WIDTH - 2*CARD_PADDING
         private const val CHARS_PER_LINE = 80   // Approximate characters per line
 
-        // Status colors
-        private val STATUS_COLORS = mapOf(
-            AdrStatus.Proposed to "#FF9500",    // Orange
-            AdrStatus.Accepted to "#34C759",    // Green
-            AdrStatus.Superseded to "#AF52DE",  // Purple
-            AdrStatus.Deprecated to "#FF3B30",  // Red
-            AdrStatus.Rejected to "#FF3B30"     // Red
+        // Status colors (Tint + High Contrast Text)
+        private val STATUS_BG_COLORS = mapOf(
+            AdrStatus.Proposed to "#FEF3C7",    // Yellow 100
+            AdrStatus.Accepted to "#DCFCE7",    // Green 100
+            AdrStatus.Superseded to "#F3E8FF",  // Purple 100
+            AdrStatus.Deprecated to "#FEE2E2",  // Red 100
+            AdrStatus.Rejected to "#FEE2E2"     // Red 100
+        )
+
+        private val STATUS_TEXT_COLORS = mapOf(
+            AdrStatus.Proposed to "#92400E",    // Yellow 800
+            AdrStatus.Accepted to "#166534",    // Green 800
+            AdrStatus.Superseded to "#6B21A8",  // Purple 800
+            AdrStatus.Deprecated to "#991B1B",  // Red 800
+            AdrStatus.Rejected to "#991B1B"     // Red 800
+        )
+
+        private val STATUS_ACCENT_COLORS = mapOf(
+            AdrStatus.Proposed to "#FF9500",
+            AdrStatus.Accepted to "#34C759",
+            AdrStatus.Superseded to "#AF52DE",
+            AdrStatus.Deprecated to "#FF3B30",
+            AdrStatus.Rejected to "#FF3B30"
         )
     }
 
@@ -136,7 +152,8 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
 
             // Add bullet if needed
             if (isBullet) {
-                svg.append("""<circle cx="${x + 5}" cy="${currentY - 5}" r="3" fill="#333333" />""")
+                val bulletColor = if (useDark) "#9CA3AF" else "#4B5563"
+                svg.append("""<circle cx="${x + 5}" cy="${currentY - 5}" r="3" fill="$bulletColor" />""")
             }
 
             // Wrap text if needed
@@ -199,9 +216,10 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
             }
 
             // Add the link with proper SVG link styling
+            val linkColor = if (useDark) "#60A5FA" else "#3B82F6"
             svg.append("""<tspan>""")
             svg.append("""<a href="${escapeXml(url)}" target="_blank">""")
-            svg.append("""<tspan style="fill:#007AFF; text-decoration:underline;">${escapeXml(label)}</tspan>""")
+            svg.append("""<tspan style="fill:$linkColor; text-decoration:underline;">${escapeXml(label)}</tspan>""")
             svg.append("""</a>""")
             svg.append("""</tspan>""")
 
@@ -216,11 +234,13 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
      * Renders a status badge with appropriate color.
      */
     private fun renderStatusBadge(svg: StringBuilder, status: AdrStatus, x: Int, y: Int): Int {
-        val statusText = status.name.lowercase().capitalize()
-        val color = STATUS_COLORS[status] ?: "#999999"
+        val statusText = status.name
+        val bgColor = STATUS_BG_COLORS[status] ?: "#F3F4F6"
+        val textColor = STATUS_TEXT_COLORS[status] ?: "#4B5563"
 
-        svg.append("""<rect x="$x" y="${y - 15}" width="80" height="20" rx="10" ry="10" fill="$color" />""")
-        svg.append("""<text x="${x + 40}" y="${y}" class="status" text-anchor="middle">$statusText</text>""")
+        val badgeWidth = statusText.length * 7 + 16
+        svg.append("""<rect x="$x" y="${y - 14}" width="$badgeWidth" height="20" rx="6" fill="$bgColor" />""")
+        svg.append("""<text x="${x + badgeWidth / 2}" y="${y}" class="status" text-anchor="middle" fill="$textColor">$statusText</text>""")
 
         return y + 10
     }
@@ -289,15 +309,15 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
             sb.append("""<g>""")
         }
 
-        // Emoji icon (centered)
-        val color = if (participant.color.isNotEmpty()) participant.color else (STATUS_COLORS[status] ?: "#999999")
-        sb.append("""<circle cx="${x + (width/2)}" cy="$y" r="15" fill="$color" class="participant-icon" />""")
+        // Emoji icon (centered) - 32px diameter circles (radius 16)
+        val color = if (participant.color.isNotEmpty()) participant.color else (STATUS_BG_COLORS[status] ?: "#F3F4F6")
+        sb.append("""<circle cx="${x + (width/2)}" cy="$y" r="16" fill="$color" class="participant-icon" />""")
         sb.append("""<text x="${x + (width/2)}" y="${y + 5}" text-anchor="middle" font-size="16">${participant.emoji}</text>""")
 
         // Name (centered under icon)
         val escapedName = escapeXml(participant.name)
         val wrappedName = wrapText(escapedName, 20)
-        var currentY = y + 30
+        var currentY = y + 36
 
         for (line in wrappedName) {
             if (participant.email.isNotEmpty()) {
@@ -336,7 +356,7 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
 
         // Calculate the height based on the number of lines in the name and if title is present
         val wrappedName = wrapText(participant.name, 20)
-        var currentY = y + 30 + (wrappedName.size * 15)
+        var currentY = y + 36 + (wrappedName.size * 15)
 
         // Add extra height if title is present
         if (participant.title.isNotEmpty()) {
@@ -380,49 +400,90 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
                           participantsHeight + referencesHeight + 
                           (if (adr.references.isEmpty()) 4 else 5) * CARD_SPACING + (2 * DEFAULT_PADDING)
 
-        val color = STATUS_COLORS[adr.status] ?: "#999999"
+        val color = STATUS_BG_COLORS[adr.status] ?: "#F3F4F6"
+        val accentColor = STATUS_ACCENT_COLORS[adr.status] ?: "#D1D5DB"
         // Add SVG header with dark mode support
-        svg.append(makeSvgHeader(width, totalHeight, color, useDark, id))
+        svg.append(makeSvgHeader(width, totalHeight, color, useDark, id, adr))
 
         // Add background card
         svg.append("""<rect width="100%" height="100%" fill="${theme.canvas}"/> """)
         // Title Card
-        svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$titleHeight" class="card" rx="10" ry="10"/>""")
-        svg.append("""<text x="$contentX" y="${currentY + 30}" class="title">${escapeXml(adr.title)}</text>""")
+        svg.append("""
+            <defs>
+                <clipPath id="titleClip_$id">
+                    <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$titleHeight" rx="12" ry="12"/>
+                </clipPath>
+            </defs>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$titleHeight" class="card" rx="12" ry="12"/>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="6" fill="$accentColor" clip-path="url(#titleClip_$id)"/>
+        """)
+        svg.append("""<text x="$contentX" y="${currentY + 32}" class="title">${escapeXml(adr.title)}</text>""")
 
         // Date and Status
-        svg.append("""<text x="$contentX" y="${currentY + 50}" class="subtitle">Date: ${escapeXml(adr.date)}</text>""")
-        renderStatusBadge(svg, adr.status, contentX + 200, currentY + 50)
+        svg.append("""<text x="$contentX" y="${currentY + 52}" class="subtitle">Date: ${escapeXml(adr.date)}</text>""")
+        renderStatusBadge(svg, adr.status, contentX + 180, currentY + 52)
 
         currentY += titleHeight + CARD_SPACING
 
         // Context Card
-        svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$contextHeight" class="card" rx="10" ry="10"/>""")
-        svg.append("""<text x="$contentX" y="${currentY + 25}" class="section-title">Context</text>""")
-        renderTextSection(svg, adr.context, contentX, currentY + 50, MAX_TEXT_WIDTH, adr = adr)
+        svg.append("""
+            <defs>
+                <clipPath id="contextClip_$id">
+                    <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$contextHeight" rx="12" ry="12"/>
+                </clipPath>
+            </defs>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$contextHeight" class="card" rx="12" ry="12"/>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="4" height="$contextHeight" fill="$accentColor" clip-path="url(#contextClip_$id)"/>
+        """)
+        svg.append("""<text x="$contentX" y="${currentY + 28}" class="section-title">Context</text>""")
+        renderTextSection(svg, adr.context, contentX, currentY + 52, MAX_TEXT_WIDTH, adr = adr)
 
         currentY += contextHeight + CARD_SPACING
 
         // Decision Card
-        svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$decisionHeight" class="card" rx="10" ry="10"/>""")
-        svg.append("""<text x="$contentX" y="${currentY + 25}" class="section-title">Decision</text>""")
-        renderTextSection(svg, adr.decision, contentX, currentY + 50, MAX_TEXT_WIDTH, adr = adr)
+        svg.append("""
+            <defs>
+                <clipPath id="decisionClip_$id">
+                    <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$decisionHeight" rx="12" ry="12"/>
+                </clipPath>
+            </defs>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$decisionHeight" class="card" rx="12" ry="12"/>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="4" height="$decisionHeight" fill="$accentColor" clip-path="url(#decisionClip_$id)"/>
+        """)
+        svg.append("""<text x="$contentX" y="${currentY + 28}" class="section-title">Decision</text>""")
+        renderTextSection(svg, adr.decision, contentX, currentY + 52, MAX_TEXT_WIDTH, adr = adr)
 
         currentY += decisionHeight + CARD_SPACING
 
         // Consequences Card
-        svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$consequencesHeight" class="card" rx="10" ry="10"/>""")
-        svg.append("""<text x="$contentX" y="${currentY + 25}" class="section-title">Consequences</text>""")
-        renderTextSection(svg, adr.consequences, contentX, currentY + 50, MAX_TEXT_WIDTH, adr = adr)
+        svg.append("""
+            <defs>
+                <clipPath id="consequencesClip_$id">
+                    <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$consequencesHeight" rx="12" ry="12"/>
+                </clipPath>
+            </defs>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$consequencesHeight" class="card" rx="12" ry="12"/>
+            <rect x="$DEFAULT_PADDING" y="$currentY" width="4" height="$consequencesHeight" fill="$accentColor" clip-path="url(#consequencesClip_$id)"/>
+        """)
+        svg.append("""<text x="$contentX" y="${currentY + 28}" class="section-title">Consequences</text>""")
+        renderTextSection(svg, adr.consequences, contentX, currentY + 52, MAX_TEXT_WIDTH, adr = adr)
 
         currentY += consequencesHeight + CARD_SPACING
 
         // Participants Card (if any)
         if (adr.participants.isNotEmpty()) {
-            svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$participantsHeight" class="card" rx="10" ry="10"/>""")
-            svg.append("""<text x="$contentX" y="${currentY + 25}" class="section-title">Participants</text>""")
+            svg.append("""
+                <defs>
+                    <clipPath id="participantsClip_$id">
+                        <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$participantsHeight" rx="12" ry="12"/>
+                    </clipPath>
+                </defs>
+                <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$participantsHeight" class="card" rx="12" ry="12"/>
+                <rect x="$DEFAULT_PADDING" y="$currentY" width="4" height="$participantsHeight" fill="$accentColor" clip-path="url(#participantsClip_$id)"/>
+            """)
+            svg.append("""<text x="$contentX" y="${currentY + 28}" class="section-title">Participants</text>""")
 
-            var participantY = currentY + 50
+            var participantY = currentY + 52
             var participantX = contentX
 
             // Collect emails for group chat link
@@ -459,10 +520,18 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
         if (adr.references.isNotEmpty()) {
             currentY += participantsHeight + CARD_SPACING
 
-            svg.append("""<rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$referencesHeight" class="card" rx="10" ry="10"/>""")
-            svg.append("""<text x="$contentX" y="${currentY + 25}" class="section-title">References</text>""")
+            svg.append("""
+                <defs>
+                    <clipPath id="referencesClip_$id">
+                        <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$referencesHeight" rx="12" ry="12"/>
+                    </clipPath>
+                </defs>
+                <rect x="$DEFAULT_PADDING" y="$currentY" width="$MAX_CARD_WIDTH" height="$referencesHeight" class="card" rx="12" ry="12"/>
+                <rect x="$DEFAULT_PADDING" y="$currentY" width="4" height="$referencesHeight" fill="$accentColor" clip-path="url(#referencesClip_$id)"/>
+            """)
+            svg.append("""<text x="$contentX" y="${currentY + 28}" class="section-title">References</text>""")
 
-            var linkY = currentY + 50
+            var linkY = currentY + 52
 
             // Render each reference as a link
             for (reference in adr.references) {
@@ -479,7 +548,7 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
     }
 
     @OptIn(ExperimentalUuidApi::class)
-    private fun makeSvgHeader(width: Int, height: Int, color: String, darkMode: Boolean = false, id: String): String {
+    private fun makeSvgHeader(width: Int, height: Int, color: String, darkMode: Boolean = false, id: String, adr: Adr): String {
 
 
         val styles = if (darkMode) {
@@ -490,6 +559,8 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
 
         return  """
         |<svg xmlns="http://www.w3.org/2000/svg" id="id_$id" width="$width" height="$height" viewBox="0 0 $width $height" preserveAspectRatio='xMidYMid meet'>
+        |<title>${escapeXml(adr.title)}</title>
+        |<desc>Architecture Decision Record: ${escapeXml(adr.title)} - Status: ${adr.status.name}</desc>
         |<defs>
         |  <style type="text/css">
         |  ${theme.fontImport}
@@ -511,96 +582,95 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
     private fun createLightModeStyles(id: String, color: String): String {
         return """
         |    #id_$id .card { 
-        |      fill: rgba(255, 255, 255, 0.95); 
-        |      stroke: rgba(11, 18, 32, 0.12); 
+        |      fill: rgba(255, 255, 255, 0.8); 
+        |      stroke: #E5E7EB; 
         |      stroke-width: 1; 
-        |      filter: drop-shadow(0 6px 18px rgba(11,18,32,0.08));
+        |      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
         |    }
         |    #id_$id .title { 
         |      font-family: ${theme.fontFamily}; 
-        |      font-weight: 600; 
-        |      font-size: 20px; 
-        |      fill: #000000; 
+        |      font-weight: 700; 
+        |      font-size: 24px; 
+        |      fill: #111827;
+        |      letter-spacing: -0.02em;
         |    }
         |    #id_$id .subtitle { 
         |      font-family: ${theme.fontFamily}; 
         |      font-weight: 500; 
-        |      font-size: 16px; 
-        |      fill: #666666; 
+        |      font-size: 12px; 
+        |      fill: #6B7280; 
         |    }
         |    #id_$id .status { 
         |      font-family: ${theme.fontFamily}; 
-        |      font-weight: 500; 
-        |      font-size: 14px; 
-        |      fill: #ffffff; 
+        |      font-weight: 600; 
+        |      font-size: 12px; 
         |    }
         |    #id_$id .content { 
         |      font-family: ${theme.fontFamily}; 
         |      font-weight: 400; 
         |      font-size: 14px; 
-        |      fill: #333333; 
+        |      fill: #4B5563; 
         |    }
         |    #id_$id .section-title { 
         |      font-family: ${theme.fontFamily}; 
         |      font-weight: 600; 
         |      font-size: 16px; 
-        |      fill: #333333; 
+        |      fill: #111827; 
+        |      letter-spacing: -0.01em;
         |    }
         |    #id_$id .participant-title {
         |       font-family: ${theme.fontFamily};
         |       font-weight: 600;
         |       font-size: 12px;
-        |       fill: #333333;
+        |       fill: #4B5563;
         |    }
         |    #id_$id .participant-name { 
         |      font-family: ${theme.fontFamily}; 
-        |      font-weight: 400; 
+        |      font-weight: 500; 
         |      font-size: 12px; 
-        |      fill: #333333; 
+        |      fill: #111827; 
         |      text-anchor: middle; 
         |    }
         |    #id_$id .participant-name-with-email {
         |      font-family: ${theme.fontFamily};
         |      font-weight: 500;
         |      font-size: 12px;
-        |      fill: #007AFF;
+        |      fill: #3B82F6;
         |      text-anchor: middle;
-        |      border-bottom: 1px dotted #007AFF;
         |    }
         |    #id_$id .participant-name-with-email:hover {
-        |      fill: #0056CC;
-        |      font-weight: 600;
+        |      fill: #2563EB;
+        |      text-decoration: underline;
         |    }
         |    #id_$id .participant-container {
         |      cursor: pointer;
         |    }
         |    #id_$id .participant-container:hover .participant-icon {
-        |      filter: drop-shadow(0px 0px 3px rgba(0, 122, 255, 0.5));
+        |      filter: drop-shadow(0px 0px 4px rgba(59, 130, 246, 0.5));
         |      transition: filter 0.3s ease;
         |    }
         |    #id_$id .participant-container:hover .participant-name {
-        |      fill: #007AFF;
+        |      fill: #3B82F6;
         |      transition: fill 0.3s ease;
         |    }
         |    #id_$id .group-chat-link {
         |      font-family: ${theme.fontFamily};
-        |      font-weight: 400;
+        |      font-weight: 500;
         |      font-size: 12px;
-        |      fill: #007AFF;
+        |      fill: #3B82F6;
         |      text-decoration: underline;
         |      cursor: pointer;
         |    }
         |    #id_$id .reference-link {
         |      font-family: ${theme.fontFamily};
-        |      font-weight: 400;
+        |      font-weight: 500;
         |      font-size: 14px;
-        |      fill: #007AFF;
+        |      fill: #3B82F6;
         |      text-decoration: underline;
         |      cursor: pointer;
         |    }
         |    #id_$id .reference-link:hover {
-        |      fill: #0056CC;
-        |      font-weight: 500;
+        |      fill: #2563EB;
         |    }
         |    #id_$id a {
         |      cursor: pointer;
@@ -610,65 +680,65 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
     private fun createDarkModeStyles(id: String, color: String): String {
         return """
         |    #id_$id .card { 
-        |      fill: #1f2937; 
+        |      fill: rgba(31, 41, 55, 0.8); 
         |      stroke: #374151; 
         |      stroke-width: 1; 
         |      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.3));
         |    }
         |    #id_$id .title { 
         |      font-family: ${theme.fontFamily}; 
-        |      font-weight: 600; 
-        |      font-size: 20px; 
-        |      fill: #f9fafb; 
+        |      font-weight: 700; 
+        |      font-size: 24px; 
+        |      fill: #F9FAFB;
+        |      letter-spacing: -0.02em;
         |    }
         |    #id_$id .subtitle { 
         |      font-family: ${theme.fontFamily}; 
         |      font-weight: 500; 
-        |      font-size: 16px; 
-        |      fill: #9ca3af; 
+        |      font-size: 12px; 
+        |      fill: #9CA3AF; 
         |    }
         |    #id_$id .status { 
         |      font-family: ${theme.fontFamily}; 
-        |      font-weight: 500; 
-        |      font-size: 14px; 
-        |      fill: #ffffff; 
+        |      font-weight: 600; 
+        |      font-size: 12px; 
         |    }
         |    #id_$id .content { 
         |      font-family: ${theme.fontFamily}; 
         |      font-weight: 400; 
         |      font-size: 14px; 
-        |      fill: #e5e7eb; 
+        |      fill: #D1D5DB; 
         |    }
         |    #id_$id .section-title { 
         |      font-family: ${theme.fontFamily}; 
         |      font-weight: 600; 
         |      font-size: 16px; 
-        |      fill: #f3f4f6; 
+        |      fill: #F9FAFB; 
+        |      letter-spacing: -0.01em;
         |    }
         |    #id_$id .participant-title {
         |       font-family: ${theme.fontFamily};
         |       font-weight: 600;
         |       font-size: 12px;
-        |       fill: #f3f4f6;
+        |       fill: #D1D5DB;
         |    }
         |    #id_$id .participant-name { 
         |      font-family: ${theme.fontFamily}; 
-        |      font-weight: 400; 
+        |      font-weight: 500; 
         |      font-size: 12px; 
-        |      fill: #d1d5db; 
+        |      fill: #F9FAFB; 
         |      text-anchor: middle; 
         |    }
         |    #id_$id .participant-name-with-email {
         |      font-family: ${theme.fontFamily};
         |      font-weight: 500;
         |      font-size: 12px;
-        |      fill: #60a5fa;
+        |      fill: #60A5FA;
         |      text-anchor: middle;
-        |      border-bottom: 1px dotted #60a5fa;
         |    }
         |    #id_$id .participant-name-with-email:hover {
-        |      fill: #93c5fd;
-        |      font-weight: 600;
+        |      fill: #93C5FD;
+        |      text-decoration: underline;
         |    }
         |    #id_$id .participant-container {
         |      cursor: pointer;
@@ -678,28 +748,27 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
         |      transition: filter 0.3s ease;
         |    }
         |    #id_$id .participant-container:hover .participant-name {
-        |      fill: #60a5fa;
+        |      fill: #60A5FA;
         |      transition: fill 0.3s ease;
         |    }
         |    #id_$id .group-chat-link {
         |      font-family: ${theme.fontFamily};
-        |      font-weight: 400;
+        |      font-weight: 500;
         |      font-size: 12px;
-        |      fill: #60a5fa;
+        |      fill: #60A5FA;
         |      text-decoration: underline;
         |      cursor: pointer;
         |    }
         |    #id_$id .reference-link {
         |      font-family: ${theme.fontFamily};
-        |      font-weight: 400;
+        |      font-weight: 500;
         |      font-size: 14px;
-        |      fill: #60a5fa;
+        |      fill: #60A5FA;
         |      text-decoration: underline;
         |      cursor: pointer;
         |    }
         |    #id_$id .reference-link:hover {
-        |      fill: #93c5fd;
-        |      font-weight: 500;
+        |      fill: #93C5FD;
         |    }
         |    #id_$id a {
         |      cursor: pointer;
