@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.adr
 
+import io.docops.docopsextensionssupport.button.getResourceFromUrl
 import io.docops.docopsextensionssupport.web.BaseDocOpsHandler
 import io.docops.docopsextensionssupport.web.CsvResponse
 import io.docops.docopsextensionssupport.web.DocOpsContext
@@ -11,13 +12,14 @@ class AdrHandler(csvResponse: CsvResponse) : BaseDocOpsHandler(csvResponse){
         val adr = AdrParser().parseContent(payload)
 
         val isBrutalist = adr.template == "brutalist"
+        val isApple = adr.template == "apple"
         val svg = when {
             isBrutalist -> {
                 val generator = CyberBrutalistAdrSvgGenerator(useDark = useDark, themeName = adr.theme)
                 generator.generate(adr)
             }
-            adr.visualVersion == 2 -> {
-                val generator = DecisionRailAdrSvgGenerator(useDark = useDark, themeName = adr.theme)
+            isApple || adr.visualVersion == 2 -> {
+                val generator = AppleInspiredAdrSvgGenerator(useDark = useDark, themeName = adr.theme)
                 generator.generate(adr, width = 900)
             }
             else -> {

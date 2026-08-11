@@ -310,7 +310,8 @@ class AdrParser {
         for (line in referencesLines) {
             extractWikiLinks(line, references)
         }
-        if(template != "brutalist") {
+        val validTemplates = listOf("classic", "brutalist", "apple")
+        if(template !in validTemplates) {
             template = "classic"
         }
         return Adr(
