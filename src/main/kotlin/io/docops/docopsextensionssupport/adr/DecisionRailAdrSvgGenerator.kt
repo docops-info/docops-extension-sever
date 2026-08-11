@@ -12,11 +12,6 @@ class DecisionRailAdrSvgGenerator(
         val height: Int
     )
 
-    private data class InlineSegment(
-        val text: String,
-        val url: String? = null
-    )
-
     private val leftRailWidth = 40
     private val contentX = 80
     private val contentWidth = 760
@@ -83,7 +78,7 @@ class DecisionRailAdrSvgGenerator(
         
         return """
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
                 
                 .adr-reference-link:hover rect {
                     fill: $statusColor;
@@ -447,42 +442,8 @@ class DecisionRailAdrSvgGenerator(
         return RenderedSection(svg, totalSectionHeight)
     }
 
-    private fun parseInlineWikiLinks(value: String): List<InlineSegment> {
-        val pattern = Regex("\\[\\[([^\\s\\]]+)\\s+([^\\]]+)\\]\\]")
-        val segments = mutableListOf<InlineSegment>()
-        var currentIndex = 0
-
-        pattern.findAll(value).forEach { match ->
-            if (match.range.first > currentIndex) {
-                segments.add(
-                    InlineSegment(
-                        text = value.substring(currentIndex, match.range.first)
-                    )
-                )
-            }
-
-            val url = match.groupValues[1]
-            val label = match.groupValues[2]
-
-            segments.add(
-                InlineSegment(
-                    text = label,
-                    url = url
-                )
-            )
-
-            currentIndex = match.range.last + 1
-        }
-
-        if (currentIndex < value.length) {
-            segments.add(
-                InlineSegment(
-                    text = value.substring(currentIndex)
-                )
-            )
-        }
-
-        return segments.filter { it.text.isNotEmpty() }
+    private fun parseInlineWikiLinks(value: String): List<WikiLinkParser.LinkSegment> {
+        return WikiLinkParser.parse(value)
     }
     private fun renderInlineTextLine(
         value: String,
@@ -536,11 +497,7 @@ class DecisionRailAdrSvgGenerator(
     }
 
     private fun wrapText(value: String, maxChars: Int): List<String> {
-        if (value.length <= maxChars) {
-            return listOf(value)
-        }
-
-        val tokens = tokenizePreservingWikiLinks(value)
+        val tokens = WikiLinkParser.tokenize(value)
         val lines = mutableListOf<String>()
         var currentLine = StringBuilder()
 
@@ -560,34 +517,5 @@ class DecisionRailAdrSvgGenerator(
         }
 
         return lines
-    }
-
-    private fun tokenizePreservingWikiLinks(value: String): List<String> {
-        val pattern = Regex("\\[\\[[^\\]]+\\]\\]")
-        val tokens = mutableListOf<String>()
-        var currentIndex = 0
-
-        pattern.findAll(value).forEach { match ->
-            if (match.range.first > currentIndex) {
-                tokens.addAll(
-                    value.substring(currentIndex, match.range.first)
-                        .split(Regex("\\s+"))
-                        .filter { it.isNotBlank() }
-                )
-            }
-
-            tokens.add(match.value)
-            currentIndex = match.range.last + 1
-        }
-
-        if (currentIndex < value.length) {
-            tokens.addAll(
-                value.substring(currentIndex)
-                    .split(Regex("\\s+"))
-                    .filter { it.isNotBlank() }
-            )
-        }
-
-        return tokens
     }
 }
