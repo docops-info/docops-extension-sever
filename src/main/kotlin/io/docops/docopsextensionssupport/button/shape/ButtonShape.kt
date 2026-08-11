@@ -93,7 +93,7 @@ abstract class AbstractButtonShape(val buttons: Buttons): ButtonShape {
     protected fun fontImport(): String {
         if (isPdf) return ""
         val themeImport = docOpsTheme.fontImport.replace("&amp;", "&")
-        val brandedFonts = "@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=JetBrains+Mono:wght@600&family=Syne:wght@800&display=swap');"
+        val brandedFonts = "@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&amp;family=JetBrains+Mono:wght@600&amp;family=Syne:wght@800&amp;display=swap');"
         return if (themeImport.contains("fonts.googleapis.com")) {
             // Merge theme fonts with branded fonts if they are both Google Fonts
             // For now, just return both. Browsers handle multiple imports.
