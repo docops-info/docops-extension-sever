@@ -91,32 +91,19 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
      * Wraps text to fit within the specified width, preserving wiki links.
      */
     private fun wrapText(text: String, maxCharsPerLine: Int): List<String> {
-        // First, extract wiki links and replace them with placeholders
-        val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
-        val links = mutableListOf<String>()
-        var modifiedText = text
-
-        linkPattern.findAll(text).forEach { matchResult ->
-            val link = matchResult.value
-            links.add(link)
-            // Replace the link with a placeholder that won't be split
-            modifiedText = modifiedText.replace(link, "LINK_PLACEHOLDER_${links.size - 1}")
-        }
-
-        // Now wrap the text with placeholders
-        val words = modifiedText.split(" ")
+        val tokens = WikiLinkParser.tokenize(text)
         val lines = mutableListOf<String>()
         var currentLine = StringBuilder()
 
-        for (word in words) {
-            if (currentLine.length + word.length + 1 <= maxCharsPerLine) {
+        for (token in tokens) {
+            if (currentLine.length + token.length + 1 <= maxCharsPerLine) {
                 if (currentLine.isNotEmpty()) {
                     currentLine.append(" ")
                 }
-                currentLine.append(word)
+                currentLine.append(token)
             } else {
                 lines.add(currentLine.toString())
-                currentLine = StringBuilder(word)
+                currentLine = StringBuilder(token)
             }
         }
 
@@ -124,16 +111,7 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
             lines.add(currentLine.toString())
         }
 
-        // Finally, replace the placeholders with the actual links
-        val resultLines = lines.map { line ->
-            var result = line
-            for (i in links.indices) {
-                result = result.replace("LINK_PLACEHOLDER_$i", links[i])
-            }
-            result
-        }
-
-        return resultLines
+        return lines
     }
 
     /**
@@ -160,17 +138,14 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
             val wrappedLines = wrapText(textToRender, CHARS_PER_LINE)
 
             for (wrappedLine in wrappedLines) {
-                // Check if this line contains wiki links using the same pattern as AdrParser
-                // Pattern to match wiki links with format [[url label]]
-                // This pattern will match any characters for the URL until the first space,
-                // then capture the rest as the label until the closing brackets
-                val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
-                val containsWikiLink = linkPattern.containsMatchIn(wrappedLine)
+                // Check if this line contains wiki links
+                val segments = WikiLinkParser.parse(wrappedLine)
+                val hasLink = segments.any { it.url != null }
 
 
-                if (containsWikiLink) {
+                if (hasLink) {
                     // Render line with links
-                    renderLineWithLinks(svg, wrappedLine, textX, currentY, linkPattern)
+                    renderLineWithLinks(svg, wrappedLine, textX, currentY)
                 } else {
                     // Render normal text
                     val escapedLine = escapeXml(wrappedLine)
@@ -187,44 +162,24 @@ class AdrSvgGenerator(val useDark: Boolean, val themeName: String = "aurora") {
     /**
      * Renders a line of text that contains wiki-style links.
      */
-    private fun renderLineWithLinks(svg: StringBuilder, line: String, x: Int, y: Int, linkPattern: Regex) {
+    private fun renderLineWithLinks(svg: StringBuilder, line: String, x: Int, y: Int) {
         // Create a text element as a container
         svg.append("""<text x="$x" y="$y" class="content">""")
 
-        var remainingText = line
-        var currentX = 0
+        val segments = WikiLinkParser.parse(line)
 
-        // Process all links in the line
-        while (true) {
-            val matchResult = linkPattern.find(remainingText)
-
-            if (matchResult == null) {
-                // No more links, add remaining text
-                if (remainingText.isNotEmpty()) {
-                    svg.append("""<tspan>${escapeXml(remainingText)}</tspan>""")
-                }
-                break
+        segments.forEach { segment ->
+            if (segment.url == null) {
+                svg.append("""<tspan>${escapeXml(segment.text)}</tspan>""")
+            } else {
+                // Add the link with proper SVG link styling
+                val linkColor = if (useDark) "#60A5FA" else "#3B82F6"
+                svg.append("""<tspan>""")
+                svg.append("""<a href="${escapeXml(segment.url)}" target="_blank">""")
+                svg.append("""<tspan style="fill:$linkColor; text-decoration:underline;">${escapeXml(segment.text)}</tspan>""")
+                svg.append("""</a>""")
+                svg.append("""</tspan>""")
             }
-
-            val beforeLink = remainingText.substring(0, matchResult.range.first)
-            val url = matchResult.groupValues[1]
-            val label = matchResult.groupValues[2]
-
-            // Add text before the link
-            if (beforeLink.isNotEmpty()) {
-                svg.append("""<tspan>${escapeXml(beforeLink)}</tspan>""")
-            }
-
-            // Add the link with proper SVG link styling
-            val linkColor = if (useDark) "#60A5FA" else "#3B82F6"
-            svg.append("""<tspan>""")
-            svg.append("""<a href="${escapeXml(url)}" target="_blank">""")
-            svg.append("""<tspan style="fill:$linkColor; text-decoration:underline;">${escapeXml(label)}</tspan>""")
-            svg.append("""</a>""")
-            svg.append("""</tspan>""")
-
-            // Update remaining text to everything after this match
-            remainingText = remainingText.substring(matchResult.range.last + 1)
         }
 
         svg.append("""</text>""")
