@@ -209,28 +209,11 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean, themeName: String) {
         val sb = StringBuilder()
         var currentY = startY
         lines.forEach { line ->
-            // 1. Extract links to placeholders to prevent wrapping mid-link
-            val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
-            val links = mutableListOf<String>()
-            var protectedLine = line
-
-            linkPattern.findAll(line).forEach { match ->
-                val placeholder = "___LINK_${links.size}___"
-                links.add(match.value)
-                protectedLine = protectedLine.replace(match.value, placeholder)
-            }
-
-            // 2. Wrap the protected text
-            val wrapped = wrapText(protectedLine, limit)
+            // 1. Wrap the text preserving wiki links as single tokens
+            val wrapped = wrapText(line, limit)
 
             wrapped.forEach { wrappedLine ->
-                // 3. Restore the links into the line
-                var restoredLine = wrappedLine
-                links.forEachIndexed { i, originalLink ->
-                    restoredLine = restoredLine.replace("___LINK_${i}___", originalLink)
-                }
-
-                sb.append(renderLineWithLinks(restoredLine, x, currentY, fillColor))
+                sb.append(renderLineWithLinks(wrappedLine, x, currentY, fillColor))
                 currentY += 20
             }
         }
@@ -238,28 +221,18 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean, themeName: String) {
     }
 
     private fun renderLineWithLinks(line: String, x: Int, y: Int, fillColor: String?): String {
-        val linkPattern = "\\[\\[([^\\s]+)\\s+(.*?)\\]\\]".toRegex()
-        var lastIndex = 0
+        val segments = WikiLinkParser.parse(line)
         // Use tspan inside text to handle mixed content accurately
         val sb = StringBuilder("""<text x="$x" y="$y" class="mono-text" ${if (fillColor != null) "style=\"fill:$fillColor\"" else ""}>""")
 
-        val matches = linkPattern.findAll(line).toList()
-        if (matches.isEmpty()) {
-            sb.append(escapeXml(line))
-        } else {
-            matches.forEach { match ->
-                sb.append(escapeXml(line.substring(lastIndex, match.range.first)))
-
-                val url = match.groupValues[1]
-                val label = match.groupValues[2]
-
-                sb.append("""<a href="${escapeXml(url)}" target="_blank">""")
-                sb.append("""<tspan style="fill:#818cf8; text-decoration:underline;">${escapeXml(label)}</tspan>""")
+        segments.forEach { segment ->
+            if (segment.url == null) {
+                sb.append(escapeXml(segment.text))
+            } else {
+                sb.append("""<a href="${escapeXml(segment.url)}" target="_blank">""")
+                sb.append("""<tspan style="fill:#818cf8; text-decoration:underline;">${escapeXml(segment.text)}</tspan>""")
                 sb.append("""</a>""")
-
-                lastIndex = match.range.last + 1
             }
-            sb.append(escapeXml(line.substring(lastIndex)))
         }
 
         sb.append("</text>")
@@ -267,17 +240,17 @@ class CyberBrutalistAdrSvgGenerator(val useDark: Boolean, themeName: String) {
     }
 
     private fun wrapText(text: String, limit: Int): List<String> {
-        val words = text.split(" ")
+        val tokens = WikiLinkParser.tokenize(text)
         val result = mutableListOf<String>()
         var currentLine = StringBuilder()
 
-        for (word in words) {
-            if (currentLine.length + word.length + 1 > limit) {
+        for (token in tokens) {
+            if (currentLine.length + token.length + 1 > limit) {
                 result.add(currentLine.toString())
-                currentLine = StringBuilder(word)
+                currentLine = StringBuilder(token)
             } else {
                 if (currentLine.isNotEmpty()) currentLine.append(" ")
-                currentLine.append(word)
+                currentLine.append(token)
             }
         }
         if (currentLine.isNotEmpty()) result.add(currentLine.toString())
