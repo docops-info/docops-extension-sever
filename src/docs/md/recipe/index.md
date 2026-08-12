@@ -30,7 +30,7 @@ Recipes are ideal for:
 ## Default Look
 
 [docops:recipe]
-theme=food
+theme=premium
 title= Curry Mango
 yield= 4 servings
 prep= 15 minutes
@@ -60,7 +60,7 @@ ingredients=
 ## Warm Comfort Food Look
 
 [docops:recipe]
-theme=food
+theme=premium
 title= Root Vegetables with Salted Fish
 yield= 3 servings
 prep= 20 minutes
@@ -113,7 +113,7 @@ The recipe macro accepts simple key/value fields and multiline list sections.
 ```text 
 [docops:recipe] 
 title= Recipe Title 
-theme=food
+theme=premium
 yield= 4 servings 
 prep= 15 minutes 
 cook= 30 minutes tags= tag1, tag2, tag3 
