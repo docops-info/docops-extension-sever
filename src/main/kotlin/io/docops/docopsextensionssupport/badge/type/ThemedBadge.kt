@@ -21,6 +21,7 @@ abstract class ThemedBadge(darkMode: Boolean)
             BadgeStyle.GRADIENT -> 170 to 34
             BadgeStyle.MINIMAL -> 190 to 28
             BadgeStyle.NEUMORPHIC -> 180 to 38
+            BadgeStyle.PREMIUM -> 0 to 24
         }
 
         // Calculate layout
@@ -94,6 +95,7 @@ abstract class ThemedBadge(darkMode: Boolean)
             BadgeStyle.MINIMAL -> ((badge.label.length + badge.message.length) * 8) + 40
             BadgeStyle.NEUMORPHIC -> ((badge.label.length + badge.message.length) * 8.5).toInt() + 60
             BadgeStyle.GLASSMORPHIC -> ((badge.label.length + badge.message.length) * 8) + 40
+            BadgeStyle.PREMIUM -> ((badge.label.length + badge.message.length) * 8) + 24
         }
     }
 

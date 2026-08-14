@@ -1,7 +1,7 @@
 package io.docops.docopsextensionssupport.badge
 
 data class BadgeConfig(
-    var type: String = "classic",
+    var type: String = "premium",
     var theme: String = "auto", // auto, light, dark, both
     var spacing: Int = 2,
     var fontFamily: String = "",
@@ -15,6 +15,6 @@ enum class BadgeStyle {
     BRUTALIST,
     GRADIENT,
     MINIMAL,
-    NEUMORPHIC
-
+    NEUMORPHIC,
+    PREMIUM
 }

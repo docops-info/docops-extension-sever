@@ -2439,47 +2439,47 @@ window.onload = function() {
 
 /* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --tabs-accent:        #4f46e5;   /* indigo — change to any hex */
-  --tabs-accent-hover:  #4338ca;
-  --tabs-accent-rail:   #f5f3ff;
+  --tabs-accent:        #3B82F6;   /* premium blue */
+  --tabs-accent-hover:  #2563EB;
+  --tabs-accent-rail:   #F3F8FF;
   --tabs-accent-text:   #ffffff;
-  --tabs-accent-muted:  #4338ca;   /* inactive tab label */
-  --tabs-accent-soft:   rgba(99, 102, 241, 0.12);
+  --tabs-accent-muted:  #374151;   /* p-text-secondary */
+  --tabs-accent-soft:   rgba(59, 130, 246, 0.08);
 
   --tabs-bg:            #ffffff;
-  --tabs-rail-border:   #4f46e5;
-  --tabs-border:        #4f46e5;
+  --tabs-rail-border:   rgba(0, 0, 0, 0.08);
+  --tabs-border:        rgba(0, 0, 0, 0.1);
   --tabs-text:          #111827;
-  --tabs-text-muted:    #6b7280;
+  --tabs-text-muted:    #6B7280;
   --tabs-panel-bg:      #ffffff;
 
   --tabs-radius-outer:  12px;
   --tabs-radius-btn:    8px;
-  --tabs-gap:           6px;
-  --tabs-focus:         #6366f1;
+  --tabs-gap:           8px;
+  --tabs-focus:         rgba(59, 130, 246, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --tabs-accent:        #6366f1;
-    --tabs-accent-hover:  #818cf8;
-    --tabs-accent-rail:   #1e1b4b;
+    --tabs-accent:        #3B82F6;
+    --tabs-accent-hover:  #60A5FA;
+    --tabs-accent-rail:   #1F2937;
     --tabs-accent-text:   #ffffff;
-    --tabs-accent-muted:  #a5b4fc;
-    --tabs-accent-soft:   rgba(99, 102, 241, 0.18);
+    --tabs-accent-muted:  #9CA3AF;
+    --tabs-accent-soft:   rgba(59, 130, 246, 0.15);
 
-    --tabs-bg:            #0f0f10;
-    --tabs-rail-border:   #4338ca;
-    --tabs-border:        #4338ca;
-    --tabs-text:          #f3f4f6;
-    --tabs-text-muted:    #9ca3af;
-    --tabs-panel-bg:      #111113;
+    --tabs-bg:            #111827;
+    --tabs-rail-border:   rgba(255, 255, 255, 0.1);
+    --tabs-border:        rgba(255, 255, 255, 0.1);
+    --tabs-text:          #F9FAFB;
+    --tabs-text-muted:    #9CA3AF;
+    --tabs-panel-bg:      #111827;
   }
 }
 
 /* ── Container ───────────────────────────────────────────────────────── */
 .tabs {
-  margin: 1.75rem 0;
+  margin: 2rem 0;
   border: 1px solid var(--tabs-border);
   border-radius: var(--tabs-radius-outer);
   overflow: hidden;
@@ -2516,7 +2516,8 @@ window.onload = function() {
   position: relative;
   cursor: pointer;
 
-  font-size: 0.8125rem;   /* 13px */
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;   /* 14px */
   font-weight: 500;
   line-height: 1.2;
 
@@ -2524,7 +2525,7 @@ window.onload = function() {
   background: transparent;
   border: none;
   border-radius: var(--tabs-radius-btn);
-  padding: 0.4rem 1rem;
+  padding: 0.5rem 1rem;
 
   transition:
           color 130ms ease,
@@ -2566,7 +2567,7 @@ window.onload = function() {
 
 /* ── Panel ───────────────────────────────────────────────────────────── */
 .tabpanel {
-  padding: 1.25rem 1.375rem;
+  padding: 2rem;
   color: var(--tabs-text);
   background: var(--tabs-panel-bg);
   animation: tabPanelReveal 200ms ease;
@@ -2796,6 +2797,7 @@ window.onload = function() {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-asciidoc hljs" data-lang="asciidoc">[docops,recipe,controls="true"]
 ----
+theme=premium
 title=Classic Pancakes
 yield=4 servings
 prep=10 min
@@ -2983,77 +2985,7 @@ notes=
   });
 })();
 </script>
-<div class="imageblock center"><div class="svg-viewer-container" style="display: block; text-align: center;">
-<div class="svg-with-controls docops-media-card" id="sv-4e66302637ba5993" data-theme="light" data-url="http://localhost:8010/extension/api/docops/svg?kind=recipe&payload=H4sIAC_UbWoA_1VSS27cMAzd6xQ8gON2ksnSi6JF0UUCBOgJZIm2GcuiK1GZzu1LyS7QriRR5PuQFJKAw9dgcyYHbzY6u2I2d8LghytkTB8U52z2hPtw-QwbReOY1-Hy3O5i5zyMCe062Swd5BuiHr8KudXksm023YfvoUzTHfYTHW4kC1iYOXiM4FLJAjZ6DWWetFowekzgMAqm3hhVkNCTPvNgHuACl0-P4MqeYQpckoaeWkjyDqNdNR12vilES67RbIMcj7G-ymzTCXQ9gDYKa4vgPDe8ljgWUQUdbBgEvTFZcFcJlx5-0iQHe_c_Zde4uuan8QBFYbUWbJoRRr6F3jz28Kqd0OgNQ9AMkAVPv0cnvG-SuqrnADs0nJJ686QahBKUKBRa-WjrD1CGvDHXDmvVe-2t422kiL431x5-oJUqh-ZFwh2YgqLOibwPCJzqlIA_FGjTlpftYdFEWLSoN889vKnjv0xcjVXmhUW9psk6bKR1QU5h54w5qnOVlMlj1olGFmyz_Mag90a40e9_fPT6-YLSIlXSVIKq1TWsUmDEiRM2Im19zf2iHRtDwRFTIt0xdeIWdhysaN5COmOaQNlJV6n_A8mutP73AgAA&scale=1.0&type=SVG&useDark=true&title=&useGlass=false&backend=html5&docname=recipe&filename=ghi.svg" data-original-content="title=Classic Pancakes
-yield=4 servings
-prep=10 min
-cook=15 min
-tags=breakfast, sweet, quick
-summary=Fluffy pancakes with a golden crust and a soft, tender center.
-
-ingredients=
-- 1 1/2 cups flour
-- 3 1/2 tsp baking powder
-- 1 tsp salt
-- 1 tbsp sugar
-- 1 1/4 cups milk
-- 1 egg
-- 3 tbsp butter, melted
-
-steps=
-1. Sift flour, baking powder, salt, and sugar into a large bowl.
-2. Make a well in the center and add milk, egg, and melted butter.
-3. Stir until the batter is smooth and just combined.
-4. Heat a lightly oiled griddle or pan over medium-high heat.
-5. Pour batter onto the hot surface and cook until golden on both sides.
-
-notes=
-- Do not overmix the batter.
-- Let the pan fully preheat before cooking.
-- Add blueberries or chocolate chips if desired." data-kind="recipe">
-<svg xmlns="http://www.w3.org/2000/svg" width="680" height="1052" viewBox="0 0 680 1052" id="recipe_c18c80dc338440e6a3ba8005d3842a13">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-01</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","classic","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1½ cups flour | 3½ tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1¼ cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><title>Classic Pancakes — Recipe Card</title><desc>A styled recipe card with warm tones and decorative borders</desc><defs><filter id="recipe_c18c80dc338440e6a3ba8005d3842a13_shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="3"/><feOffset dx="0" dy="2" result="offsetblur"/><feComponentTransfer><feFuncA type="linear" slope="0.1"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="recipe_c18c80dc338440e6a3ba8005d3842a13_linen" width="8" height="8" patternUnits="userSpaceOnUse"><line x1="0" y1="8" x2="8" y2="0" stroke="#6366f1" stroke-width="0.4" stroke-opacity="0.18"/><line x1="-2" y1="2" x2="2" y2="-2" stroke="#6366f1" stroke-width="0.4" stroke-opacity="0.1"/></pattern><pattern id="recipe_c18c80dc338440e6a3ba8005d3842a13_dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#6366f1" fill-opacity="0.12"/></pattern><pattern id="recipe_c18c80dc338440e6a3ba8005d3842a13_sp_dot" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="1.2" fill="#6366f1" fill-opacity="0.13"/></pattern><pattern id="recipe_c18c80dc338440e6a3ba8005d3842a13_sp_stripe" width="10" height="10" patternUnits="userSpaceOnUse"><line x1="0" y1="10" x2="10" y2="0" stroke="#A8D4A0" stroke-width="0.5" stroke-opacity="0.2"/></pattern><pattern id="recipe_c18c80dc338440e6a3ba8005d3842a13_su_wave" width="20" height="10" patternUnits="userSpaceOnUse"><path d="M0 5 Q5 0 10 5 Q15 10 20 5" fill="none" stroke="#6366f1" stroke-width="0.5" stroke-opacity="0.12"/></pattern><pattern id="recipe_c18c80dc338440e6a3ba8005d3842a13_su_check" width="16" height="16" patternUnits="userSpaceOnUse"><line x1="8" y1="0" x2="8" y2="16" stroke="#6366f1" stroke-width="0.5" stroke-opacity="0.08"/><line x1="0" y1="8" x2="16" y2="8" stroke="#6366f1" stroke-width="0.5" stroke-opacity="0.08"/></pattern><style><![CDATA[ #recipe_c18c80dc338440e6a3ba8005d3842a13 { --primary: #ffffff; --secondary: #94a3b8; --accent: #6366f1; --canvas: #1e293b; } #recipe_c18c80dc338440e6a3ba8005d3842a13 .recipe-title { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; } #recipe_c18c80dc338440e6a3ba8005d3842a13 .recipe-subtitle { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 2px; opacity: 0.85; } #recipe_c18c80dc338440e6a3ba8005d3842a13 .meta-label { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; } #recipe_c18c80dc338440e6a3ba8005d3842a13 .meta-value { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-size: 17px; font-weight: 600; } #recipe_c18c80dc338440e6a3ba8005d3842a13 .section-title { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 3.5px; } #recipe_c18c80dc338440e6a3ba8005d3842a13 .body-text { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-size: 14px; line-height: 1.6; } #recipe_c18c80dc338440e6a3ba8005d3842a13 .summary-text { font-family: 'Lexend', ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-style: italic; } ]]></style></defs><g transform="scale(1.0)"><!-- Background --><rect width="680" height="1052" fill="#1e293b"/><!-- Decorative Borders --><rect x="14" y="14" width="652" height="1024" rx="4" fill="none" stroke="#6366f1" stroke-width="1.2" stroke-opacity="0.5" stroke-dasharray="8 4"/><g fill="none" stroke="#6366f1" stroke-width="1" stroke-opacity="0.45"><!-- Top Left --><path d="M14 50 L14 14 L50 14"/><circle cx="14" cy="14" r="3.5" fill="#6366f1" fill-opacity="0.3" stroke="none"/><!-- Top Right --><path d="M666 50 L666 14 L630 14"/><circle cx="666" cy="14" r="3.5" fill="#6366f1" fill-opacity="0.3" stroke="none"/><!-- Bottom Left --><path d="M14 1002 L14 1038 L50 1038"/><circle cx="14" cy="1038" r="3.5" fill="#6366f1" fill-opacity="0.3" stroke="none"/><!-- Bottom Right --><path d="M666 1002 L666 1038 L630 1038"/><circle cx="666" cy="1038" r="3.5" fill="#6366f1" fill-opacity="0.3" stroke="none"/></g><g><rect x="44" y="30" width="592" height="148" rx="4" fill="#94a3b8" fill-opacity="0.92"/><rect x="44" y="30" width="592" height="148" rx="4" fill="url(#recipe_c18c80dc338440e6a3ba8005d3842a13_dots)"/><text x="340" y="80" text-anchor="middle" class="recipe-subtitle" fill="#FDEBD0" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text><text x="340" y="125" text-anchor="middle" class="recipe-title" fill="#FFF8EE" letter-spacing="-0.5">Classic Pancakes</text><text x="340" y="156" text-anchor="middle" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#FDDDB8" letter-spacing="2" opacity="0.85">breakfast · sweet · quick</text><!-- Decorative divider under header --><g transform="translate(0, 188)"><line x1="80" y1="0" x2="300" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><circle cx="340" cy="0" r="4" fill="var(--accent)" fill-opacity="0.5"/><line x1="380" y1="0" x2="600" y2="0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/><path d="M320 0 Q330 -5 340 -4 Q350 -5 360 0" fill="none" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.4"/></g></g><g><rect x="44" y="202" width="592" height="72" rx="4" fill="var(--accent)" fill-opacity="0.1" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/><g transform="translate(44, 202)"><!-- Yield --><text x="98.66666666666667" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">YIELD</text><text x="98.66666666666667" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">4 servings</text><line x1="197.33333333333334" y1="12" x2="197.33333333333334" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Prep --><text x="296.0" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">PREP TIME</text><text x="296.0" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">10 min</text><line x1="394.6666666666667" y1="12" x2="394.6666666666667" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Cook --><text x="493.33333333333337" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">COOK TIME</text><text x="493.33333333333337" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">15 min</text></g><text x="340" y="296" text-anchor="middle" class="summary-text" fill="var(--secondary)" fill-opacity="0.85">Fluffy pancakes with a golden crust and a soft, tender center.</text><line x1="44" y1="327" x2="636" y2="327" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/></g><g transform="translate(44, 348)"><rect x="0" y="0" width="286" height="396" rx="4" fill="#1e293b" fill-opacity="0.4" stroke="#6366f1" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="396" rx="3" fill="#4A8A38" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#4A8A38">INGREDIENTS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#4A8A38" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="34" cy="61" r="2.5" fill="#6366f1" fill-opacity="0.7"/><text x="48" y="66" class="body-text" fill="var(--primary)">1½ cups flour</text><circle cx="34" cy="85" r="2.5" fill="#6366f1" fill-opacity="0.7"/><text x="48" y="90" class="body-text" fill="var(--primary)">3½ tsp baking powder</text><circle cx="34" cy="109" r="2.5" fill="#6366f1" fill-opacity="0.7"/><text x="48" y="114" class="body-text" fill="var(--primary)">1 tsp salt</text><circle cx="34" cy="133" r="2.5" fill="#6366f1" fill-opacity="0.7"/><text x="48" y="138" class="body-text" fill="var(--primary)">1 tbsp sugar</text><circle cx="34" cy="157" r="2.5" fill="#6366f1" fill-opacity="0.7"/><text x="48" y="162" class="body-text" fill="var(--primary)">1¼ cups milk</text><circle cx="34" cy="181" r="2.5" fill="#6366f1" fill-opacity="0.7"/><text x="48" y="186" class="body-text" fill="var(--primary)">1 egg</text><circle cx="34" cy="205" r="2.5" fill="#6366f1" fill-opacity="0.7"/><text x="48" y="210" class="body-text" fill="var(--primary)">3 tbsp butter, melted</text><g transform="translate(306, 0)"><rect x="0" y="0" width="286" height="396" rx="4" fill="#1e293b" fill-opacity="0.4" stroke="#6366f1" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="396" rx="3" fill="#6366f1" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#6366f1">STEPS</text><line x1="28" y1="39" x2="246" y2="39" stroke="#6366f1" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="36" cy="61" r="11" fill="#6366f1" fill-opacity="0.85"/><text x="36" y="66" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif">1</text><text x="54" y="66" class="body-text" fill="var(--primary)">Sift flour, baking powder,</text><text x="54" y="90" class="body-text" fill="var(--primary)">salt, and sugar into a large</text><text x="54" y="114" class="body-text" fill="var(--primary)">bowl.</text><circle cx="36" cy="133" r="11" fill="#6366f1" fill-opacity="0.85"/><text x="36" y="138" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif">2</text><text x="54" y="138" class="body-text" fill="var(--primary)">Make a well in the center</text><text x="54" y="162" class="body-text" fill="var(--primary)">and add milk, egg, and</text><text x="54" y="186" class="body-text" fill="var(--primary)">melted butter.</text><circle cx="36" cy="205" r="11" fill="#6366f1" fill-opacity="0.85"/><text x="36" y="210" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif">3</text><text x="54" y="210" class="body-text" fill="var(--primary)">Stir until the batter is</text><text x="54" y="234" class="body-text" fill="var(--primary)">smooth and just combined.</text><circle cx="36" cy="253" r="11" fill="#6366f1" fill-opacity="0.85"/><text x="36" y="258" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif">4</text><text x="54" y="258" class="body-text" fill="var(--primary)">Heat a lightly oiled griddle</text><text x="54" y="282" class="body-text" fill="var(--primary)">or pan over medium-high</text><text x="54" y="306" class="body-text" fill="var(--primary)">heat.</text><circle cx="36" cy="325" r="11" fill="#6366f1" fill-opacity="0.85"/><text x="36" y="330" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif">5</text><text x="54" y="330" class="body-text" fill="var(--primary)">Pour batter onto the hot</text><text x="54" y="354" class="body-text" fill="var(--primary)">surface and cook until</text><text x="54" y="378" class="body-text" fill="var(--primary)">golden on both sides.</text></g></g><g transform="translate(44, 774)"><rect width="592" height="162" rx="4" fill="#6366f1" fill-opacity="0.05" stroke="#6366f1" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray="6 4"/><text x="28" y="28" class="section-title" fill="var(--secondary)">COOK'S NOTES</text><line x1="28" y1="35" x2="150" y2="35" stroke="#6366f1" stroke-width="1" stroke-opacity="0.5"/><text x="28" y="60" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Do not overmix the batter.</text><text x="28" y="96" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Let the pan fully preheat before cooking.</text><text x="28" y="132" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Add blueberries or chocolate chips if desired.</text></g><g transform="translate(44, 956)"><rect x="0" y="0" width="106" height="32" rx="16" fill="#6366f1" fill-opacity="0.35" stroke="#6366f1" stroke-width="0.8" stroke-opacity="0.4"/><text x="53" y="21" text-anchor="middle" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="var(--primary)" font-weight="700">breakfast</text><rect x="116" y="0" width="74" height="32" rx="16" fill="#6366f1" fill-opacity="0.35" stroke="#6366f1" stroke-width="0.8" stroke-opacity="0.4"/><text x="153" y="21" text-anchor="middle" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="var(--primary)" font-weight="700">sweet</text><rect x="200" y="0" width="74" height="32" rx="16" fill="#6366f1" fill-opacity="0.35" stroke="#6366f1" stroke-width="0.8" stroke-opacity="0.4"/><text x="237" y="21" text-anchor="middle" font-family="'Lexend', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="var(--primary)" font-weight="700">quick</text></g><g transform="translate(0, 1002)"><line x1="44" y1="14" x2="280" y2="14" stroke="#6366f1" stroke-width="0.6" stroke-opacity="0.35"/><g transform="translate(318, 6)" fill="#6366f1" fill-opacity="0.45"><path d="M0 8 Q6 0 12 8 Q18 0 24 8" fill="none" stroke="#6366f1" stroke-width="1" stroke-opacity="0.5"/><circle cx="12" cy="8" r="2"/></g><line x1="400" y1="14" x2="636" y2="14" stroke="#6366f1" stroke-width="0.6" stroke-opacity="0.35"/></g></g></svg>
-<div class="svg-bottom-controls">
-<button class="svg-control-btn" onclick="svgViewer.openModal('sv-4e66302637ba5993')">VIEW</button>
-<button class="svg-control-btn" onclick="svgViewer.openCsvModal('sv-4e66302637ba5993')">DATA</button>
-<button class="svg-control-btn" onclick="docopsSource.toggle(this)">SOURCE</button>
-<button class="svg-control-btn" onclick="docopsCopy.url(this)">LINK</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsSvg('sv-4e66302637ba5993')">SVG</button>
-<button class="svg-control-btn" onclick="svgViewer.copyAsPng('sv-4e66302637ba5993')">PNG</button>
-<button class="svg-control-btn" onclick="svgViewer.printSvg('sv-4e66302637ba5993')">PRINT</button>
-</div>
-<div id="modal-sv-4e66302637ba5993" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeModal('sv-4e66302637ba5993')">
-    <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeModal('sv-4e66302637ba5993')">×</button>
-        <div id="modal-body-sv-4e66302637ba5993" class="svg-modal-body docops-svg-modal-body"></div>
-    </div>
-</div>
-
-<div id="csv-modal-sv-4e66302637ba5993" class="svg-modal docops-svg-modal" onclick="if(event.target === this) svgViewer.closeCsvModal('sv-4e66302637ba5993')">
-    <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="svgViewer.closeCsvModal('sv-4e66302637ba5993')">×</button>
-        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Data Source</h3>
-        </div>
-        <div id="csv-content-sv-4e66302637ba5993" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
-            <div class="csv-loading" style="color: rgba(255,255,255,0.7);">Loading CSV data...</div>
-        </div>
-    </div>
-</div>
-
-<div id="source-modal-sv-4e66302637ba5993" class="svg-modal docops-svg-modal" onclick="if(event.target === this) docopsSource.close('sv-4e66302637ba5993')">
-    <div class="svg-modal-content docops-svg-modal-content">
-        <button class="svg-modal-close docops-svg-modal-close" onclick="docopsSource.close('sv-4e66302637ba5993')">×</button>
-        <div class="svg-modal-header" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-            <h3 style="margin:0; color:white; font-family:'JetBrains Mono', monospace;">Original Source</h3>
-        </div>
-        <div id="source-content-sv-4e66302637ba5993" class="svg-modal-body docops-svg-modal-body" style="display: block; overflow: auto;">
-            <div class="source-modal-body"></div>
-        </div>
-    </div>
-</div>
-
-</div>
-</div></div>
+<div class="imageblock center"><div class="content"><div style="display: block; text-align: center;"><div style="display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" width="680" height="1064" viewBox="0 0 680 1064" id="recipe_3977c68bbd5a4562b3f222b4afd3feea">      <metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"><cc:Work rdf:about=""><dc:creator>DocOps.io</dc:creator><dc:rights>MIT License</dc:rights><dc:source>https://docops.io</dc:source><dc:date>2026-08-12</dc:date></cc:Work></rdf:RDF></metadata><metadata type="text/csv"><![CDATA[ {"headers":["Title","Yield","Prep","Cook","Theme","Tags","Summary","Ingredients","Steps","Notes"],"rows":[["Classic Pancakes","4 servings","10 min","15 min","premium","breakfast; sweet; quick","Fluffy pancakes with a golden crust and a soft, tender center.","1½ cups flour | 3½ tsp baking powder | 1 tsp salt | 1 tbsp sugar | 1¼ cups milk | 1 egg | 3 tbsp butter, melted","Sift flour, baking powder, salt, and sugar into a large bowl. | Make a well in the center and add milk, egg, and melted butter. | Stir until the batter is smooth and just combined. | Heat a lightly oiled griddle or pan over medium-high heat. | Pour batter onto the hot surface and cook until golden on both sides.","Do not overmix the batter. | Let the pan fully preheat before cooking. | Add blueberries or chocolate chips if desired."]]} ]]></metadata><desc>Generated by DocOps.io - Licensed under MIT License</desc><title>Classic Pancakes — Recipe Card</title><desc>A styled recipe card with warm tones and decorative borders</desc><defs>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap');<filter id="recipe_3977c68bbd5a4562b3f222b4afd3feea_shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="3"/><feOffset dx="0" dy="2" result="offsetblur"/><feComponentTransfer><feFuncA type="linear" slope="0.1"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="recipe_3977c68bbd5a4562b3f222b4afd3feea_linen" width="8" height="8" patternUnits="userSpaceOnUse"><line x1="0" y1="8" x2="8" y2="0" stroke="#3B82F6" stroke-width="0.4" stroke-opacity="0.18"/><line x1="-2" y1="2" x2="2" y2="-2" stroke="#3B82F6" stroke-width="0.4" stroke-opacity="0.1"/></pattern><pattern id="recipe_3977c68bbd5a4562b3f222b4afd3feea_dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1" fill="#3B82F6" fill-opacity="0.12"/></pattern><pattern id="recipe_3977c68bbd5a4562b3f222b4afd3feea_sp_dot" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="1.2" fill="#3B82F6" fill-opacity="0.13"/></pattern><pattern id="recipe_3977c68bbd5a4562b3f222b4afd3feea_sp_stripe" width="10" height="10" patternUnits="userSpaceOnUse"><line x1="0" y1="10" x2="10" y2="0" stroke="#A8D4A0" stroke-width="0.5" stroke-opacity="0.2"/></pattern><pattern id="recipe_3977c68bbd5a4562b3f222b4afd3feea_su_wave" width="20" height="10" patternUnits="userSpaceOnUse"><path d="M0 5 Q5 0 10 5 Q15 10 20 5" fill="none" stroke="#3B82F6" stroke-width="0.5" stroke-opacity="0.12"/></pattern><pattern id="recipe_3977c68bbd5a4562b3f222b4afd3feea_su_check" width="16" height="16" patternUnits="userSpaceOnUse"><line x1="8" y1="0" x2="8" y2="16" stroke="#3B82F6" stroke-width="0.5" stroke-opacity="0.08"/><line x1="0" y1="8" x2="16" y2="8" stroke="#3B82F6" stroke-width="0.5" stroke-opacity="0.08"/></pattern><style><![CDATA[ #recipe_3977c68bbd5a4562b3f222b4afd3feea { --primary: #F9FAFB; --secondary: #9CA3AF; --accent: #3B82F6; --canvas: #0F172A; } #recipe_3977c68bbd5a4562b3f222b4afd3feea .recipe-title { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -0.5px; } #recipe_3977c68bbd5a4562b3f222b4afd3feea .recipe-subtitle { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 2px; opacity: 0.85; } #recipe_3977c68bbd5a4562b3f222b4afd3feea .meta-label { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; } #recipe_3977c68bbd5a4562b3f222b4afd3feea .meta-value { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 17px; font-weight: 600; } #recipe_3977c68bbd5a4562b3f222b4afd3feea .section-title { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 3.5px; } #recipe_3977c68bbd5a4562b3f222b4afd3feea .body-text { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 14px; line-height: 1.6; } #recipe_3977c68bbd5a4562b3f222b4afd3feea .summary-text { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-style: italic; } ]]></style></defs><g transform="scale(1.0)"><!-- Background --><rect width="680" height="1064" fill="#0F172A"/><!-- Decorative Borders --><rect x="16" y="16" width="648" height="1032" rx="8" fill="#0F172A" filter="url(#recipe_3977c68bbd5a4562b3f222b4afd3feea_shadow)"/><g><rect x="32" y="32" width="616" height="148" rx="8" fill="#0F172A" fill-opacity="0.92"/><text x="340" y="82" text-anchor="middle" class="recipe-subtitle" fill="var(--secondary)" letter-spacing="5" opacity="0.9">RECIPE DOSSIER</text><text x="340" y="127" text-anchor="middle" class="recipe-title" fill="var(--primary)" letter-spacing="-0.5">Classic Pancakes</text><text x="340" y="158" text-anchor="middle" font-family="'Inter', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="var(--secondary)" letter-spacing="2" opacity="0.85">breakfast · sweet · quick</text><!-- Decorative divider under header --><g transform="translate(0, 190)"><line x1="32" y1="0" x2="648" y2="0" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.1"/></g></g><g><rect x="32" y="202" width="616" height="72" rx="8" fill="var(--canvas)" fill-opacity="1.0" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.1"/><g transform="translate(32, 202)"><!-- Yield --><text x="102.66666666666667" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">YIELD</text><text x="102.66666666666667" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">4 servings</text><line x1="205.33333333333334" y1="12" x2="205.33333333333334" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Prep --><text x="308.0" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">PREP TIME</text><text x="308.0" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">10 min</text><line x1="410.6666666666667" y1="12" x2="410.6666666666667" y2="60" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.35"/><!-- Cook --><text x="513.3333333333334" y="26" text-anchor="middle" class="meta-label" fill="var(--secondary)">COOK TIME</text><text x="513.3333333333334" y="50" text-anchor="middle" class="meta-value" fill="var(--primary)">15 min</text></g><text x="340" y="296" text-anchor="middle" class="summary-text" fill="var(--secondary)" fill-opacity="0.85">Fluffy pancakes with a golden crust and a soft, tender center.</text><line x1="32" y1="327" x2="648" y2="327" stroke="var(--accent)" stroke-width="0.5" stroke-opacity="0.3"/></g><g transform="translate(32, 354)"><rect x="0" y="0" width="296" height="396" rx="8" fill="#0F172A" fill-opacity="1.0" stroke="#3B82F6" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="396" rx="3" fill="#3B82F6" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#3B82F6">INGREDIENTS</text><line x1="28" y1="39" x2="256" y2="39" stroke="#3B82F6" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="34" cy="61" r="2.5" fill="#3B82F6" fill-opacity="0.7"/><text x="48" y="66" class="body-text" fill="var(--primary)">1½ cups flour</text><circle cx="34" cy="85" r="2.5" fill="#3B82F6" fill-opacity="0.7"/><text x="48" y="90" class="body-text" fill="var(--primary)">3½ tsp baking powder</text><circle cx="34" cy="109" r="2.5" fill="#3B82F6" fill-opacity="0.7"/><text x="48" y="114" class="body-text" fill="var(--primary)">1 tsp salt</text><circle cx="34" cy="133" r="2.5" fill="#3B82F6" fill-opacity="0.7"/><text x="48" y="138" class="body-text" fill="var(--primary)">1 tbsp sugar</text><circle cx="34" cy="157" r="2.5" fill="#3B82F6" fill-opacity="0.7"/><text x="48" y="162" class="body-text" fill="var(--primary)">1¼ cups milk</text><circle cx="34" cy="181" r="2.5" fill="#3B82F6" fill-opacity="0.7"/><text x="48" y="186" class="body-text" fill="var(--primary)">1 egg</text><circle cx="34" cy="205" r="2.5" fill="#3B82F6" fill-opacity="0.7"/><text x="48" y="210" class="body-text" fill="var(--primary)">3 tbsp butter, melted</text><g transform="translate(320, 0)"><rect x="0" y="0" width="296" height="396" rx="8" fill="#0F172A" fill-opacity="1.0" stroke="#3B82F6" stroke-width="1" stroke-opacity="0.5"/><rect x="0" y="0" width="6" height="396" rx="3" fill="#3B82F6" fill-opacity="0.7"/><text x="28" y="32" class="section-title" fill="#3B82F6">STEPS</text><line x1="28" y1="39" x2="256" y2="39" stroke="#3B82F6" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="36" cy="61" r="11" fill="#3B82F6" fill-opacity="0.85"/><text x="36" y="66" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Inter', ui-sans-serif, system-ui, sans-serif">1</text><text x="54" y="66" class="body-text" fill="var(--primary)">Sift flour, baking powder,</text><text x="54" y="90" class="body-text" fill="var(--primary)">salt, and sugar into a large</text><text x="54" y="114" class="body-text" fill="var(--primary)">bowl.</text><circle cx="36" cy="133" r="11" fill="#3B82F6" fill-opacity="0.85"/><text x="36" y="138" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Inter', ui-sans-serif, system-ui, sans-serif">2</text><text x="54" y="138" class="body-text" fill="var(--primary)">Make a well in the center</text><text x="54" y="162" class="body-text" fill="var(--primary)">and add milk, egg, and</text><text x="54" y="186" class="body-text" fill="var(--primary)">melted butter.</text><circle cx="36" cy="205" r="11" fill="#3B82F6" fill-opacity="0.85"/><text x="36" y="210" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Inter', ui-sans-serif, system-ui, sans-serif">3</text><text x="54" y="210" class="body-text" fill="var(--primary)">Stir until the batter is</text><text x="54" y="234" class="body-text" fill="var(--primary)">smooth and just combined.</text><circle cx="36" cy="253" r="11" fill="#3B82F6" fill-opacity="0.85"/><text x="36" y="258" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Inter', ui-sans-serif, system-ui, sans-serif">4</text><text x="54" y="258" class="body-text" fill="var(--primary)">Heat a lightly oiled griddle</text><text x="54" y="282" class="body-text" fill="var(--primary)">or pan over medium-high</text><text x="54" y="306" class="body-text" fill="var(--primary)">heat.</text><circle cx="36" cy="325" r="11" fill="#3B82F6" fill-opacity="0.85"/><text x="36" y="330" text-anchor="middle" font-size="11" fill="#FFF5EE" font-weight="700" font-family="'Inter', ui-sans-serif, system-ui, sans-serif">5</text><text x="54" y="330" class="body-text" fill="var(--primary)">Pour batter onto the hot</text><text x="54" y="354" class="body-text" fill="var(--primary)">surface and cook until</text><text x="54" y="378" class="body-text" fill="var(--primary)">golden on both sides.</text></g></g><g transform="translate(32, 782)"><rect width="616" height="162" rx="8" fill="var(--canvas)" fill-opacity="1.0" stroke="var(--accent)" stroke-width="0.8" stroke-opacity="0.45" stroke-dasharray=""/><text x="28" y="28" class="section-title" fill="var(--secondary)">COOK'S NOTES</text><line x1="28" y1="35" x2="150" y2="35" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.5"/><text x="28" y="60" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Do not overmix the batter.</text><text x="28" y="96" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Let the pan fully preheat before cooking.</text><text x="28" y="132" class="summary-text" fill="var(--primary)" fill-opacity="0.9">· Add blueberries or chocolate chips if desired.</text></g><g transform="translate(32, 968)"><rect x="0" y="0" width="106" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.1" stroke="none" stroke-width="0.8" stroke-opacity="0.0"/><text x="53" y="21" text-anchor="middle" font-family="'Inter', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="var(--primary)" font-weight="700">breakfast</text><rect x="116" y="0" width="74" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.1" stroke="none" stroke-width="0.8" stroke-opacity="0.0"/><text x="153" y="21" text-anchor="middle" font-family="'Inter', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="var(--primary)" font-weight="700">sweet</text><rect x="200" y="0" width="74" height="32" rx="16" fill="#8B5CF6" fill-opacity="0.1" stroke="none" stroke-width="0.8" stroke-opacity="0.0"/><text x="237" y="21" text-anchor="middle" font-family="'Inter', ui-sans-serif, system-ui, sans-serif" font-size="12" fill="var(--primary)" font-weight="700">quick</text></g><g transform="translate(0, 1014)"><line x1="32" y1="14" x2="648" y2="14" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.1"/></g></g></svg></div></div></div></div>
 <div class="paragraph back-to-top">
 <p><a href="#top">🔝</a></p>
 </div>

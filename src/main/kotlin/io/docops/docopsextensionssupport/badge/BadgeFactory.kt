@@ -7,6 +7,7 @@ import io.docops.docopsextensionssupport.badge.type.Gradient
 import io.docops.docopsextensionssupport.badge.type.Minimal
 import io.docops.docopsextensionssupport.badge.type.Neon
 import io.docops.docopsextensionssupport.badge.type.Neumorphic
+import io.docops.docopsextensionssupport.badge.type.Premium
 
 
 object BadgeFactory {
@@ -19,8 +20,9 @@ object BadgeFactory {
             "gradient" -> Gradient(darkMode).generate(badges, config)
             "minimal" -> Minimal(darkMode).generate(badges, config)
             "neumorphic" -> Neumorphic(darkMode).generate(badges, config)
+            "premium" -> Premium(darkMode).generate(badges, config)
             "classic" -> Classic(darkMode).generateClassicBadge(badges, config,)
-            else -> Classic(darkMode).generateClassicBadge(badges, config)
+            else -> Premium(darkMode).generate(badges, config)
         }
     }
 

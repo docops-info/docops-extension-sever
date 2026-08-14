@@ -41,3 +41,9 @@ class Neumorphic(val darkMode: Boolean) : ThemedBadge(darkMode) {
         return super.generate(badges, config, BadgeStyle.NEUMORPHIC)
     }
 }
+
+class Premium(val darkMode: Boolean) : ThemedBadge(darkMode) {
+    override fun generate(badges: MutableList<Badge>, config: BadgeConfig): String {
+        return super.generate(badges, config, BadgeStyle.PREMIUM)
+    }
+}

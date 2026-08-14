@@ -7,7 +7,7 @@ import io.docops.docopsextensionssupport.badge.BadgeStyle
 
 object BadgeStyleGenerator {
 
-     fun generateStyles(style: BadgeStyle, theme: String, fontFamily: String): String {
+    fun generateStyles(style: BadgeStyle, theme: String, fontFamily: String): String {
         val useMediaQuery = theme == "auto" || theme == "both"
 
         return when (style) {
@@ -208,16 +208,47 @@ object BadgeStyleGenerator {
       <feOffset dx="2" dy="2"/>
     </filter>
             """.trimIndent()
+
+            BadgeStyle.PREMIUM -> {
+                val f = fontFamily.ifEmpty { "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }
+                """
+    <style>
+      .premium-label-text { font-family: $f; font-weight: 600; font-size: 12px; }
+      .premium-message-text { font-family: $f; font-weight: 400; font-size: 12px; }
+      ${if (useMediaQuery) """
+      @media (prefers-color-scheme: dark) {
+        .bg-premium-label { fill: #1F2937; }
+        .text-premium-label { fill: #F9FAFB; }
+        .premium-border { stroke: rgba(255, 255, 255, 0.1); }
+      }
+      @media (prefers-color-scheme: light) {
+        .bg-premium-label { fill: #F3F4F6; }
+        .text-premium-label { fill: #1F2937; }
+        .premium-border { stroke: rgba(0, 0, 0, 0.05); }
+      }
+      """ else if (theme == "dark") """
+        .bg-premium-label { fill: #1F2937; }
+        .text-premium-label { fill: #F9FAFB; }
+        .premium-border { stroke: rgba(255, 255, 255, 0.1); }
+      """ else """
+        .bg-premium-label { fill: #F3F4F6; }
+        .text-premium-label { fill: #1F2937; }
+        .premium-border { stroke: rgba(0, 0, 0, 0.05); }
+      """}
+    </style>
+            """.trimIndent()
+            }
         }
     }
-     fun generateBadge(
-         badge: Badge,
-         x: Int,
-         y: Int,
-         width: Int,
-         height: Int,
-         style: BadgeStyle,
-         config: BadgeConfig
+
+    fun generateBadge(
+        badge: Badge,
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int,
+        style: BadgeStyle,
+        config: BadgeConfig
     ): String {
         val fontFamily = config.fontFamily.ifEmpty {
             when (style) {
@@ -227,6 +258,7 @@ object BadgeStyleGenerator {
                 BadgeStyle.GRADIENT -> "'Inter Tight', sans-serif"
                 BadgeStyle.MINIMAL -> "'Söhne', 'Helvetica Now', sans-serif"
                 BadgeStyle.NEUMORPHIC -> "'DM Sans', sans-serif"
+                BadgeStyle.PREMIUM -> "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             }
         }
 
@@ -237,6 +269,7 @@ object BadgeStyleGenerator {
             BadgeStyle.GRADIENT -> generateGradientBadge(badge, x, y, width, height, fontFamily)
             BadgeStyle.MINIMAL -> generateMinimalBadge(badge, x, y, width, height, fontFamily)
             BadgeStyle.NEUMORPHIC -> generateNeumorphicBadge(badge, x, y, width, height, fontFamily)
+            BadgeStyle.PREMIUM -> generatePremiumBadge(badge, x, y, width, height)
         }
     }
 
@@ -322,6 +355,22 @@ object BadgeStyleGenerator {
         <rect class="shadow-light" x="2" y="2" width="${width - 4}" height="${height - 4}" rx="${radius - 2}"/>
         <text class="text-main" x="20" y="${height / 2 + 5}" font-family="$fontFamily" font-size="11" font-weight="500">${badge.label}</text>
         <text class="text-accent" x="${width - 20}" y="${height / 2 + 5}" text-anchor="end" font-family="$fontFamily" font-size="13" font-weight="700">${badge.message}</text>
+      </g>
+            """.trimIndent()
+    }
+
+    private fun generatePremiumBadge(badge: Badge, x: Int, y: Int, width: Int, height: Int): String {
+        val labelW = (badge.label.length * 7.5) + 12.0
+        val messageW = width - labelW
+
+        return """
+      <g transform="translate($x, $y)">
+        <rect class="bg-premium-label" x="0" y="0" width="$labelW" height="$height" rx="6"/>
+        <rect fill="${badge.messageColor}" x="$labelW" y="0" width="$messageW" height="$height" rx="6"/>
+        <rect x="$labelW" y="0" width="6" height="$height" fill="${badge.messageColor}"/> 
+        <rect class="premium-border" x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="5.5" fill="none" stroke-width="1"/>
+        <text class="premium-label-text text-premium-label" x="${labelW / 2}" y="${height / 2 + 4}" text-anchor="middle">${badge.label}</text>
+        <text class="premium-message-text" x="${labelW + messageW / 2}" y="${height / 2 + 4}" text-anchor="middle" fill="${badge.fontColor}">${badge.message}</text>
       </g>
             """.trimIndent()
     }
