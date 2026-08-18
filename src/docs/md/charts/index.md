@@ -133,27 +133,6 @@ Product B | Q3 | 7000.0
 Product B | Q4 | 9000.0
 [/docops]
 [/tab]
-[tab:Brutalist Theme]
-High-contrast styling for bold impact.
-
-[docops:bargroup]
-title=System Performance Analysis
-yLabel=Latency (ms)
-xLabel=Data Centers
-theme=brutalist
-paletteType=OCEAN_BREEZE
----
-Edge Node | Tokyo | 24.5
-Edge Node | London | 45.2
-Edge Node | New York | 38.8
-Core Switch | Tokyo | 12.1
-Core Switch | London | 18.4
-Core Switch | New York | 15.6
-Gateway | Tokyo | 88.3
-Gateway | London | 95.0
-Gateway | New York | 91.2
-[/docops]
-[/tab]
 [/tabs]
 
 
@@ -247,6 +226,7 @@ height=600
 legend=true
 percentages=true
 donut=false
+visualVersion=4
 ---
 Product A | 30
 Product B | 25
@@ -261,7 +241,8 @@ Modern, clean donut style with better visual hierarchy.
 
 [docops:pieslice]
 legend=false
-theme=istanbul
+theme=ayu
+visualVersion=2
 donut=true
 ---
 Product A | 30
@@ -280,6 +261,7 @@ height=600
 legend=true
 percentages=true
 donut=true
+visualVersion=2
 ---
 Product A | 30
 Product B | 25
@@ -314,6 +296,7 @@ legend=true
 percentages=true
 donut=true
 theme=sakura
+visualVersion=2
 ---
 Equity | 30
 Real-estate | 27
