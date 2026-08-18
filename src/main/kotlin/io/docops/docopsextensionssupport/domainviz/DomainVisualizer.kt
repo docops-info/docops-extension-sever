@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.domainviz
 
+import io.docops.docopsextensionssupport.support.*
 import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.svgsupport.textWidth
 import io.docops.docopsextensionssupport.web.CsvResponse
@@ -11,18 +12,19 @@ import kotlin.text.toInt
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-
-
 class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
     val id: String = Uuid.random().toHexString(),
     val useDark: Boolean = false) {
+    
+    private val theme: DocOpsTheme = ThemeFactory.getThemeByName("premium", useDark)
+    
     companion object {
-        private const val MAIN_NODE_Y = 20.0
-        private const val ROW_HEIGHT = 60.0
-        private const val NODE_SPACING = 20.0
-        private const val COLUMN_WIDTH = 140.0
-        private const val START_X = 180.0
-        private const val START_Y = 100.0
+        private const val MAIN_NODE_Y = 24.0
+        private const val ROW_HEIGHT = 72.0
+        private const val NODE_SPACING = 24.0
+        private const val COLUMN_WIDTH = 160.0
+        private const val START_X = 200.0
+        private const val START_Y = 120.0
     }
 
     @OptIn(ExperimentalUuidApi::class)
@@ -33,120 +35,57 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
         val svg = StringBuilder()
         // Compute dynamic SVG dimensions based on positioned nodes
         val (totalWidth, totalHeight) = computeCanvasSize(data)
-        val backgroundColor = if (useDark) """
+        
+        val backgroundGradient = """
             <linearGradient id="backgroundGradient_$id" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
-                      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
-            </linearGradient>""" else """
-            <linearGradient id="backgroundGradient_$id" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop class="stop1" offset="0%" stop-color="#ffffff"/>
-                <stop class="stop2" offset="50%" stop-color="#F8FAFC"/>
-                <stop class="stop3" offset="100%" stop-color="#e2e8f0"/>
-            </linearGradient>"""
-        val glassColors = if (useDark) {
-            """
-                <!-- Glass Border (Dark Mode) -->
-                <linearGradient id="glassBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                </linearGradient>
-                <!-- Link Border (Dark Mode) -->
-                <linearGradient id="linkBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(96,165,250,0.6);stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:rgba(96,165,250,0.4);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(96,165,250,0.2);stop-opacity:1" />
-                </linearGradient>
-                <!-- Apple Glass Effect Gradients (Dark Mode) -->
-                <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.25);stop-opacity:1" />
-                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
-                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.02);stop-opacity:1" />
-                </linearGradient>
-            """
-        } else {
-            """
-                <!-- Glass Border (Light Mode) -->
-                <linearGradient id="glassBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(0,122,255,0.4);stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:rgba(0,122,255,0.2);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(0,122,255,0.1);stop-opacity:1" />
-                </linearGradient>
-                <!-- Link Border (Light Mode) -->
-                <linearGradient id="linkBorderLight_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(37,99,235,0.8);stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:rgba(37,99,235,0.6);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(37,99,235,0.4);stop-opacity:1" />
-                </linearGradient>
-                <!-- Apple Glass Effect Gradients (Light Mode) -->
-                <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1" />
-                    <stop offset="30%" style="stop-color:rgba(255,255,255,0.6);stop-opacity:1" />
-                    <stop offset="70%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
-                </linearGradient>
-            """
-        }
+                <stop offset="0%" style="stop-color:${theme.canvas};stop-opacity:1" />
+                <stop offset="100%" style="stop-color:${theme.surfaceLow};stop-opacity:1" />
+            </linearGradient>
+        """.trimIndent()
 
-        val nodeStyles = if (useDark) {
-            """
-                #id_$id .node-rect { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
-                #id_$id .main-node, .common-node, .specialized-node, .specialized-title { fill: #1f2937; stroke: #111827; stroke-width: 1; rx: 12; ry: 12; filter: url(#dropShadow); }
-                #id_$id .node-text { fill: #e5e7eb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 600; text-anchor: middle; }
-                #id_$id .connection-line { stroke: #6b7280; stroke-width: 2; }
-                #id_$id .dashed-line { stroke: #9ca3af; stroke-width: 2; stroke-dasharray: 6,6; }
-                #id_$id .plus-symbol { fill: #6b7280; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
-                #id_$id .neon-green { fill: #39FF14; }
-                #id_$id .neon-pink { fill: #FF1493; }
-                #id_$id .neon-cyan { fill: #00FFFF; }
-                #id_$id .neon-yellow { fill: #FFFF00; }
-                #id_$id .neon-orange { fill: #FF6600; }
-                #id_$id .neon-purple { fill: #9D00FF; }
-                #id_$id .neon-blue { fill: #0080FF; }
-                #id_$id .neon-lime { fill: #CCFF00; }
-                #id_$id .neon-magenta { fill: #FF00FF; }
-                #id_$id .neon-red { fill: #FF073A; }
-            """
-        } else {
-            """
-                #id_$id .node-rect { fill: rgba(255,255,255,0.9); stroke: rgba(0,122,255,0.3); stroke-width: 1.5; rx: 12; ry: 12; filter: url(#dropShadow); }
-                #id_$id .main-node, .common-node, .specialized-node, .specialized-title { fill: rgba(255,255,255,0.9); stroke: rgba(0,122,255,0.3); stroke-width: 1.5; rx: 12; ry: 12; filter: url(#dropShadow); }
-                #id_$id .node-text { fill: #1a1a1a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-weight: 600; text-anchor: middle; }
-                #id_$id .connection-line { stroke: #4a5568; stroke-width: 2; }
-                #id_$id .dashed-line { stroke: #718096; stroke-width: 2; stroke-dasharray: 6,6; }
-                #id_$id .plus-symbol { fill: #4a5568; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 28px; font-weight: 700; text-anchor: middle; filter: url(#dropShadow);}
-                #id_$id .light-green { fill: #059669; }
-                #id_$id .light-pink { fill: #BE185D; }
-                #id_$id .light-cyan { fill: #0891B2; }
-                #id_$id .light-orange { fill: #C2410C; }
-                #id_$id .light-purple { fill: #7C3AED; }
-                #id_$id .light-blue { fill: #1D4ED8; }
-                #id_$id .light-magenta { fill: #BE185D; }
-                #id_$id .light-red { fill: #DC2626; }
-                #id_$id .light-teal { fill: #0D9488; }
-                #id_$id .light-indigo { fill: #4338CA; }
-                #id_$id .neon-green { fill: #059669; }
-                #id_$id .neon-pink { fill: #BE185D; }
-                #id_$id .neon-cyan { fill: #0891B2; }
-                #id_$id .neon-yellow { fill: #D97706; }
-                #id_$id .neon-orange { fill: #C2410C; }
-                #id_$id .neon-purple { fill: #7C3AED; }
-                #id_$id .neon-blue { fill: #1D4ED8; }
-                #id_$id .neon-lime { fill: #65A30D; }
-                #id_$id .neon-magenta { fill: #BE185D; }
-                #id_$id .neon-red { fill: #DC2626; }
-            """
-        }
+        val glassColors = """
+                <!-- Glass Border -->
+                <linearGradient id="glassBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:${theme.primaryText};stop-opacity:0.2" />
+                    <stop offset="50%" style="stop-color:${theme.primaryText};stop-opacity:0.1" />
+                    <stop offset="100%" style="stop-color:${theme.primaryText};stop-opacity:0.05" />
+                </linearGradient>
+                <!-- Link Border -->
+                <linearGradient id="linkBorder_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:${theme.accentColor};stop-opacity:0.6" />
+                    <stop offset="50%" style="stop-color:${theme.accentColor};stop-opacity:0.4" />
+                    <stop offset="100%" style="stop-color:${theme.accentColor};stop-opacity:0.2" />
+                </linearGradient>
+                <!-- Glass Effect Gradients -->
+                <linearGradient id="glassOverlay_$id" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:${theme.primaryText};stop-opacity:0.05" />
+                    <stop offset="100%" style="stop-color:${theme.primaryText};stop-opacity:0.02" />
+                </linearGradient>
+            """.trimIndent()
+
+        val nodeStyles = """
+                #id_$id .node-rect { fill: ${theme.glassEffect}; stroke: ${theme.secondaryText}; stroke-width: 1; rx: ${theme.cornerRadius}; ry: ${theme.cornerRadius}; filter: url(#dropShadow); }
+                #id_$id .main-node, #id_$id .common-node, #id_$id .specialized-node, #id_$id .specialized-title { fill: ${theme.glassEffect}; stroke: ${theme.secondaryText}; stroke-width: 1; rx: ${theme.cornerRadius}; ry: ${theme.cornerRadius}; filter: url(#dropShadow); }
+                #id_$id .node-text { fill: ${theme.primaryText}; font-family: ${theme.fontFamily}; font-weight: 500; text-anchor: middle; }
+                #id_$id .connection-line { stroke: ${theme.secondaryText}; stroke-width: 2; }
+                #id_$id .dashed-line { stroke: ${theme.secondaryText}; stroke-width: 1.5; stroke-dasharray: 4,4; opacity: 0.6; }
+                #id_$id .plus-symbol { fill: ${theme.accentColor}; font-family: ${theme.fontFamily}; font-size: 24px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+            """.trimIndent()
+
+        // Generate dynamic color classes for specialized groups from theme palette
+        val groupColorStyles = theme.chartPalette.mapIndexed { index, svgColor ->
+            "#id_$id .group-color-$index { fill: ${svgColor.color}; }"
+        }.joinToString("\n")
 
         svg.append("""
-            <svg width="${totalWidth +20}" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth+20} $totalHeight" preserveAspectRatio="xMidYMid meet">
+            <svg width="${totalWidth + 20}" height="$totalHeight" id="id_$id" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth + 20} $totalHeight" preserveAspectRatio="xMidYMid meet">
                 <defs>
+                ${theme.fontImport}
                 <!-- Enhanced filters for glass effect -->
                 <filter id="glassDropShadow_$id" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
-                    <feOffset in="blur" dx="0" dy="8" result="offsetBlur"/>
-                    <feFlood flood-color="rgba(0,0,0,0.15)" result="shadowColor"/>
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+                    <feOffset in="blur" dx="0" dy="4" result="offsetBlur"/>
+                    <feFlood flood-color="rgba(0,0,0,0.1)" result="shadowColor"/>
                     <feComposite in="shadowColor" in2="offsetBlur" operator="in" result="shadow"/>
                     <feMerge>
                         <feMergeNode in="shadow"/>
@@ -157,26 +96,18 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
                 $glassColors
                     <style>
                         $nodeStyles
-                        #id_$id .main-text { font-size: 16px; }
+                        $groupColorStyles
+                        #id_$id .main-text { font-size: 16px; font-weight: 700; }
                         #id_$id .common-text { font-size: 12px; }
                         #id_$id .specialized-text { font-size: 12px; }
-                        #id_$id .neon-green { fill: #39FF14; }
-                        #id_$id .neon-pink { fill: #FF1493; }
-                        #id_$id .neon-cyan { fill: #00FFFF; }
-                        #id_$id .neon-yellow { fill: #FFFF00; }
-                        #id_$id .neon-orange { fill: #FF6600; }
-                        #id_$id .neon-purple { fill: #9D00FF; }
-                        #id_$id .neon-blue { fill: #0080FF; }
-                        #id_$id .neon-lime { fill: #CCFF00; }
-                        #id_$id .neon-magenta { fill: #FF00FF; }
-                        #id_$id .neon-red { fill: #FF073A; }
                         #id_$id .glass-card { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);}
+                        #id_$id .clickable-node:hover { filter: brightness(1.1); }
                     </style>
                     <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="2.5" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.35"/>
+                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.15"/>
                     </filter>
                     
-                    $backgroundColor
+                    $backgroundGradient
                 </defs>
                 <rect width="100%" height="100%" fill="url(#backgroundGradient_$id)"/>
         """.trimIndent())
@@ -225,7 +156,8 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
         // Position specialized groups
         data.specializedGroups.forEach { group ->
             group.rows.forEachIndexed { rowIndex, row ->
-                var currentX = if (rowIndex == 0) START_X else START_X + COLUMN_WIDTH // Second+ rows start at column 1
+                // First row of a group starts at START_X, subsequent rows offset by COLUMN_WIDTH
+                var currentX = if (rowIndex == 0) START_X else START_X + COLUMN_WIDTH 
                 row.forEach { node ->
                     node.x = currentX
                     node.y = currentY
@@ -288,26 +220,23 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
         }
 
         // Draw rect first
-        val fill = if(useDark) "rgba(0,122,255,0.1)" else "rgba(255,255,255,0.8)"
         val strokeColor = if (hasLinks) {
-            if (useDark) "url(#linkBorder_$id)" else "url(#linkBorderLight_$id)"
+            "url(#linkBorder_$id)"
         } else {
             "url(#glassBorder_$id)"
         }
 
         svg.append("""
-            <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="12" ry="12"
-            fill="$fill"
+            <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="${theme.cornerRadius}" ry="${theme.cornerRadius}"
+              fill="${theme.glassEffect}"
               stroke="$strokeColor"
               stroke-width="1.5"
               filter="url(#glassDropShadow_$id)"
           />
-          <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="12" ry="12"
+          <rect x="${node.x}" y="${node.y}" width="${node.width}" height="${node.height}" rx="${theme.cornerRadius}" ry="${theme.cornerRadius}"
             fill="url(#glassOverlay_$id)"
-            opacity="0.7"/>
+            opacity="0.4"/>
         """.trimIndent())
-
-        // ... existing text rendering code ...
 
         // Prepare text content with optional emoji prefix
         val fullText = buildString {
@@ -319,14 +248,12 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
         }
 
         // Simple word wrapping using approximate text width metrics
-        // Assumptions based on CSS in SVG: font-size ~12-14; we choose 12
-        val fontSize = 12
-        val fontFamily = "sans-serif"
-        val sidePadding = 8.0
+        val fontSize = if (rectClass == "main-node") 14 else 12
+        val sidePadding = 12.0
         val maxTextWidth = (node.width - sidePadding * 2).toInt().coerceAtLeast(20)
 
         fun measure(text: String): Int {
-            return text.textWidth(fontFamily, fontSize)
+            return text.textWidth(theme.fontFamily, fontSize)
         }
 
         // Split by spaces, build lines within maxTextWidth
@@ -339,7 +266,7 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
             } else {
                 val candidate = current.toString() + " " + w
                 if (measure(candidate) <= maxTextWidth) {
-                    current.clear(); current.append(candidate)
+                    current.append(" ").append(w)
                 } else {
                     lines.add(current.toString())
                     current.clear(); current.append(w)
@@ -348,7 +275,7 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
         }
         if (current.isNotEmpty()) lines.add(current.toString())
 
-        // Fallback if no spaces: hard cut by characters based on average width
+        // Fallback if no spaces: hard cut by characters
         if (lines.isEmpty() && fullText.isNotEmpty()) {
             val avgCharWidth = (fontSize * 0.6).toInt().coerceAtLeast(1)
             val charsPerLine = (maxTextWidth / avgCharWidth).coerceAtLeast(1)
@@ -360,14 +287,13 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
             }
         }
 
-        // Ensure we don't exceed vertical space: compute line height and cap number of lines
-        val lineHeight = (fontSize + 4)
+        // Ensure we don't exceed vertical space
+        val lineHeight = (fontSize * 1.2).toInt()
         val maxLines = kotlin.math.max(1, (node.height / lineHeight).toInt())
         val finalLines = if (lines.size <= maxLines) {
             lines
         } else {
             val trimmed = lines.take(maxLines).toMutableList()
-            // Ellipsize the last line to fit width
             var last = trimmed.last()
             val ellipsis = "…"
             while (last.isNotEmpty() && measure(last + ellipsis) > maxTextWidth) {
@@ -380,11 +306,10 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
         val startY = (node.y + (node.height - totalTextHeight) / 2 + fontSize).toInt()
         val centerX = (node.x + node.width / 2).toInt()
 
-        // Output text with tspans, centered via text-anchor middle
         val textFill = if (hasLinks) {
-            if (useDark) "#60A5FA" else "#2563EB" // Blue color for linked nodes
+            theme.accentColor
         } else {
-            if (useDark) "#e5e7eb" else "#1a1a1a" // Default colors
+            theme.primaryText
         }
 
         svg.append("""
@@ -407,10 +332,10 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
 
         // Add link indicator icon if node has links
         if (hasLinks) {
-            val iconX = node.x + node.width - 16
-            val iconY = node.y + 8
+            val iconX = node.x + node.width - 12
+            val iconY = node.y + 12
             svg.append("""
-                <text x="$iconX" y="$iconY" class="link-icon" text-anchor="middle" fill="$textFill" font-size="10">🔗</text>
+                <text x="$iconX" y="$iconY" class="link-icon" text-anchor="middle" fill="$textFill" font-size="8" opacity="0.8">🔗</text>
             """.trimIndent())
         }
 
@@ -419,43 +344,12 @@ class DomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
 
 
     private fun drawSpecializedGroup(svg: StringBuilder, group: SpecializedGroup, groupIndex: Int) {
-        // Define neon colors for dark mode and contrasting colors for light mode
-        val darkModeColors = listOf(
-            "neon-green",      // #39FF14 (Electric Green)
-            "neon-pink",       // #FF1493 (Hot Pink)
-            "neon-cyan",       // #00FFFF (Electric Cyan)
-            "neon-yellow",     // #FFFF00 (Electric Yellow)
-            "neon-orange",     // #FF6600 (Electric Orange)
-            "neon-purple",     // #9D00FF (Electric Purple)
-            "neon-blue",       // #0080FF (Electric Blue)
-            "neon-magenta",    // #FF00FF (Electric Magenta)
-            "neon-red",        // #FF073A (Electric Red)
-            "neon-lime",       // #CCFF00 (Electric Lime)
-        )
-
-        val lightModeColors = listOf(
-            "light-green",     // Darker green for light backgrounds
-            "light-pink",      // Darker pink for light backgrounds
-            "light-cyan",      // Darker cyan for light backgrounds
-            "light-orange",    // Darker orange for light backgrounds
-            "light-purple",    // Darker purple for light backgrounds
-            "light-blue",      // Darker blue for light backgrounds
-            "light-magenta",   // Darker magenta for light backgrounds
-            "light-red",       // Darker red for light backgrounds
-            "light-teal",      // Teal for light backgrounds
-            "light-indigo",    // Indigo for light backgrounds
-        )
-
-        val colorClass = if (useDark) {
-            darkModeColors[groupIndex % darkModeColors.size]
-        } else {
-            lightModeColors[groupIndex % lightModeColors.size]
-        }
+        val colorClass = "group-color-${groupIndex % theme.chartPalette.size}"
 
         // Draw plus symbol
         val firstNode = group.rows.first().first()
         val plusX = firstNode.x - 20
-        val plusY = firstNode.y + 28
+        val plusY = firstNode.y + firstNode.height / 2 - 2.0
         svg.append("""
             <text x="$plusX" y="$plusY" class="plus-symbol">+</text>
         """.trimIndent())

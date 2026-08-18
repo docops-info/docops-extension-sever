@@ -23,14 +23,14 @@ class NeuralDomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
     @OptIn(ExperimentalUuidApi::class)
     fun generateSVG(data: DiagramData): String {
         theme = ThemeFactory.getTheme(useDark)
-        val rowHeight = 70.0
+        val rowHeight = 72.0
         val columnWidth = 240.0
         val maxPerRow = 4
 
         // Width is now stable since we wrap at 4
-        val totalWidth = (140 + (maxPerRow * columnWidth) + 40).toInt().coerceAtMost(1100)
+        val totalWidth = (144 + (maxPerRow * columnWidth) + 40).toInt().coerceAtMost(1100)
         val totalHeight = computeNeededHeight(data, rowHeight, maxPerRow)
-        val fontSize = 13/ theme.fontWidthMultiplier
+        val fontSize = 14 / theme.fontWidthMultiplier
 
         return buildString {
             append("""
@@ -38,12 +38,12 @@ class NeuralDomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
                     <defs>
                         <style>
                             ${theme.fontImport}
-                            .main-title_$id { font-family: ${theme.fontFamily}; font-weight: 800; font-size: ${28 / theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; letter-spacing: -1px; }
-                            .group-rail-text_$id { font-family: ${theme.fontFamily}; font-weight: 800; font-size: ${11/theme.fontWidthMultiplier}px; fill: ${theme.accentColor}; text-transform: uppercase; letter-spacing: 2px; }
+                            .main-title_$id { font-family: ${theme.fontFamily}; font-weight: 800; font-size: ${30 / theme.fontWidthMultiplier}px; fill: ${theme.primaryText}; letter-spacing: -1px; }
+                            .group-rail-text_$id { font-family: ${theme.fontFamily}; font-weight: 800; font-size: ${12 / theme.fontWidthMultiplier}px; fill: ${theme.accentColor}; text-transform: uppercase; letter-spacing: 2px; }
                             .node-text_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: ${fontSize}px; fill: ${theme.primaryText}; }
                             .link-text_$id { font-family: ${theme.fontFamily}; font-weight: 800; font-size: ${fontSize}px; fill: ${theme.accentColor}; }
-                            .row-index_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 9px; fill: ${theme.secondaryText}; opacity: 0.7; }
-                            .version-tag_$id { font-family: ${theme.fontFamily}; font-size: 8px; fill: ${theme.secondaryText}; opacity: 0.5; font-weight: 800; }
+                            .row-index_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: ${12 / theme.fontWidthMultiplier}px; fill: ${theme.secondaryText}; opacity: 0.7; }
+                            .version-tag_$id { font-family: ${theme.fontFamily}; font-size: ${12 / theme.fontWidthMultiplier}px; fill: ${theme.secondaryText}; opacity: 0.5; font-weight: 800; }
                         </style>
                         <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="${theme.canvas}" />
@@ -53,16 +53,16 @@ class NeuralDomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
 
                     <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="${theme.cornerRadius}"/>
                 
-                    <path d="M80 140 V${totalHeight - 60}" stroke="${theme.accentColor}" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.2"/>
+                    <path d="M80 144 V${totalHeight - 64}" stroke="${theme.accentColor}" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.2"/>
 
-                    <g transform="translate(60, 70)">
+                    <g transform="translate(64, 72)">
                         <text x="0" y="0" class="main-title_$id">${data.mainNode.title.uppercase()}</text>
-                        <rect x="0" y="15" width="60" height="4" fill="${theme.accentColor}" rx="2"/>
+                        <rect x="0" y="16" width="64" height="4" fill="${theme.accentColor}" rx="2"/>
                     </g>
                     
-                    <text x="${totalWidth - 20}" y="${totalHeight - 20}" text-anchor="end" class="version-tag_$id">NEURAL_DOMAIN_VIZ V2.2 | THEME: ${theme.name.uppercase()}</text>
+                    <text x="${totalWidth - 24}" y="${totalHeight - 24}" text-anchor="end" class="version-tag_$id">NEURAL_DOMAIN_VIZ V2.2 | THEME: ${theme.name.uppercase()}</text>
 
-                    <g transform="translate(140, 160)">
+                    <g transform="translate(144, 160)">
             """.trimIndent())
 
             var currentY = 0.0
@@ -95,8 +95,8 @@ class NeuralDomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
 
                 append("""
                             <g transform="translate(0, $currentY)">
-                                <rect x="-56" y="0" width="3" height="${groupHeight - 20}" fill="${theme.accentColor}" rx="1.5" opacity="0.25"/>
-                                <g transform="translate(-46, ${(groupHeight - 20) / 2}) rotate(-90)">
+                                <rect x="-64" y="0" width="4" height="${groupHeight - 24}" fill="${theme.accentColor}" rx="2" opacity="0.25"/>
+                                <g transform="translate(-48, ${(groupHeight - 24) / 2}) rotate(-90)">
                                     <text x="0" y="0" class="group-rail-text_$id" text-anchor="middle" dominant-baseline="middle" style="letter-spacing: 3px;">
                         """.trimIndent())
 
@@ -142,9 +142,9 @@ class NeuralDomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
             val rowsCount = g.rows.sumOf { it.chunked(maxPerRow).size }
             val titleLines = wrapByWords(g.title.uppercase(), 22).size
             // Factor in both row count and title height
-            maxOf(rowsCount.toDouble(), (titleLines * 14.0 + 20.0) / rowHeight).toInt()
+            maxOf(rowsCount.toDouble(), (titleLines * 16.0 + 24.0) / rowHeight).toInt()
         }
-        val gaps = data.specializedGroups.size * 70.0 // Increased gap buffer
+        val gaps = data.specializedGroups.size * 80.0 // Increased gap buffer
         return (240 + (commonRowWrappedCount + groupRowWrappedCount) * rowHeight + gaps).toInt()
     }
 
@@ -188,12 +188,12 @@ class NeuralDomainVisualizer @OptIn(ExperimentalUuidApi::class) constructor(
 
         sb.append("""
                 <g transform="translate($x, 0)" $pointerStyle $clickHandler>
-                    <rect width="215" height="42" rx="21" 
+                    <rect width="216" height="40" rx="20" 
                           fill="${theme.glassEffect}" 
                           stroke="$strokeColor" 
                       stroke-opacity="$opacity" 
                       stroke-width="${if (isLink) 1.5 else 1}"/>
-                <text x="24" y="26" class="$textClass">
+                <text x="24" y="20" class="$textClass" dominant-baseline="central">
                     ${if (node.emoji != null) "${node.emoji} " else ""}${node.title.escapeXml()}
                 </text>
             </g>

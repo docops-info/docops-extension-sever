@@ -433,6 +433,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -780,6 +781,194 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         }
     }
 
+    .source-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 20, 25, 0.95);
+        backdrop-filter: blur(8px);
+        z-index: 2147483647;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        box-sizing: border-box;
+    }
+
+    .source-modal.active {
+        display: flex;
+    }
+
+    .source-modal-content {
+        width: 95vw;
+        max-width: 1200px;
+        height: 90vh;
+        background: linear-gradient(145deg, #1a1a2e 0%, #0d0d12 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(126, 87, 255, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(126, 87, 255, 0.2);
+        animation: sourceModalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes sourceModalSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .source-modal-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
+        font-weight: 300;
+    }
+
+    .source-modal-close:hover {
+        background: rgba(239, 68, 68, 0.8);
+        transform: rotate(90deg);
+    }
+
+    .source-modal-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 3rem 2rem 2rem 2rem;
+    }
+
+    .source-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1rem;
+    }
+
+    .source-modal-title {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--accent-secondary, #b392ff);
+        font-size: 1rem;
+    }
+
+    .source-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .source-action-btn {
+        background: rgba(126, 87, 255, 0.15);
+        border: 1px solid rgba(126, 87, 255, 0.4);
+        color: var(--accent-secondary, #b392ff);
+        font-family: 'Syne', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .source-action-btn:hover {
+        background: rgba(126, 87, 255, 0.8);
+        color: #fff;
+        border-color: var(--accent-primary, #7e57ff);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(126, 87, 255, 0.4);
+    }
+
+    .btn-icon {
+        font-size: 1em;
+    }
+
+    .source-code-pre {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+        overflow: auto;
+        margin: 0;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .source-code {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: #e2e8f0;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .source-error {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        padding: 1.5rem;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Light mode overrides */
+    @media (prefers-color-scheme: light) {
+        .source-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .source-modal-content {
+            background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .source-modal-title {
+            color: #6a3de8;
+        }
+
+        .source-code-pre {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .source-code {
+            color: #334155;
+        }
+    }
 </style>
 
 <!--slide show style-->
@@ -1060,6 +1249,96 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         display: block; /* Important for scroll calculations */
     }
 
+    .showcase-content-modal-content {
+        max-width: 800px;
+    }
+
+    .showcase-content-pre {
+        margin: 0;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        border: 1px solid rgba(0, 245, 255, 0.1);
+    }
+
+    .showcase-content-code {
+        font-family: 'Berkeley Mono', 'Courier Prime', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        display: block;
+        white-space: pre;
+    }
+
+    .showcase-content-footer {
+        padding: 1rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .showcase-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .showcase-modal-title {
+        font-family: 'Literata', Georgia, serif;
+        font-size: 1.3rem;
+        color: rgba(255, 255, 255, 0.95);
+        letter-spacing: -0.02em;
+        font-weight: 600;
+    }
+
+    .showcase-modal-close {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        line-height: 1;
+    }
+
+    .showcase-modal-close:hover {
+        background: rgba(255, 0, 234, 0.2);
+        border-color: rgba(255, 0, 234, 0.5);
+        color: #ff00ea;
+        transform: rotate(90deg);
+    }
+
+    .showcase-copy-btn {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 6px;
+        color: #00f5ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .showcase-copy-btn:hover {
+        background: rgba(0, 245, 255, 0.2);
+        border-color: rgba(0, 245, 255, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 245, 255, 0.3);
+    }
+
     /* Centering Fix for SVG diagrams */
     .modal-svg-wrapper {
         display: flex;
@@ -1067,12 +1346,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         align-items: center;
         min-height: 100%;
         width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
     }
 
     .modal-svg-wrapper svg {
         max-width: 100%;
-        height: auto !important; /* Allow natural aspect ratio */
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        max-height: 80vh;
+        height: auto !important;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));
     }
 
     /* Body locking when modal is open */
@@ -1112,7 +1394,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             nav.className = 'slideshow-nav';
             slides.forEach((_, i) => {
                 const dot = document.createElement('div');
-                dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
+                dot.className = `nav-dot $\{i === 0 ? 'active' : ''}`;
                 dot.onclick = (e) => {
                     e.stopPropagation();
                     goToSlide(i);
@@ -1122,7 +1404,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             ss.appendChild(nav);
 
             function updateCounter() {
-                counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+                counter.textContent = `$\{String(currentIndex + 1).padStart(2, '0')} / $\{String(slides.length).padStart(2, '0')}`;
             }
 
             function resetProgress() {
@@ -1218,18 +1500,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
         showContent(itemId, title, kind, content) {
             const modal = document.getElementById('showcase-content-modal');
-            modal.querySelector('.showcase-modal-title').textContent = `${kind.toUpperCase()} SOURCE: ${title}`;
-            modal.querySelector('.showcase-content-code').textContent = content;
+            if (!modal) return;
 
-            this.hideTOC(); // Hide TOC before showing modal
+            const modalTitle = modal.querySelector('.showcase-modal-title');
+            const modalCode = modal.querySelector('.showcase-content-code');
+
+            if (modalTitle) modalTitle.textContent = `$\{kind.toUpperCase()} SOURCE: ${title}`;
+            if (modalCode) {
+                const decodedContent = decodeURIComponent(content.replace(/\+/g, ' '));
+                modalCode.textContent = decodedContent;
+            }
+
+            this.hideTOC();
             modal.style.display = 'flex';
             modal.querySelector('.showcase-modal-body').scrollTop = 0;
         },
 
         expandItem(itemId, title) {
             const item = document.getElementById(itemId);
-            const svgContent = item.querySelector('.workbench-canvas').innerHTML;
+            if (!item) return;
+            const canvas = item.querySelector('.svg-canvas') || item.querySelector('.workbench-canvas');
+            if (!canvas) return;
+            const svgContent = canvas.innerHTML;
             const modal = document.getElementById('showcase-gallery-modal');
+            if (!modal) return;
 
             modal.querySelector('.showcase-modal-title').textContent = title;
             modal.querySelector('.showcase-modal-body').innerHTML =
@@ -1270,7 +1564,59 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     });
 </script>
 <script>
-    window.svgViewer = window.svgViewer || {
+    window.svgViewer = window.svgViewer || {};
+    Object.assign(window.svgViewer, {
+        openModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            const sourceContainer = document.getElementById(id);
+            if (!modal || !sourceContainer) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            const sourceSvg = sourceContainer.querySelector('svg');
+            const targetContainer = document.getElementById('modal-body-' + id);
+            if (sourceSvg && targetContainer) {
+                targetContainer.innerHTML = '';
+                const clone = sourceSvg.cloneNode(true);
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.style.width = '100%';
+                clone.style.height = '100%';
+                targetContainer.appendChild(clone);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        },
+
+        closeModal(id) {
+            const modal = document.getElementById('modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        openCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (!modal) return;
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (window.svgViewer && window.svgViewer.loadCsvData) {
+                window.svgViewer.loadCsvData(id);
+            }
+        },
+
+        closeCsvModal(id) {
+            const modal = document.getElementById('csv-modal-' + id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
         toggleControls(id) {
             const panel = document.getElementById(`controls-panel-${id}`);
             const isVisible = panel.classList.contains('show');
@@ -1370,6 +1716,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             }
         },
 
+        printSvg(id) {
+            const container = document.getElementById(id);
+            const svg = container.querySelector('svg');
+
+            if (!svg) {
+                this.showMessage(container, 'No SVG found', 'error');
+                return;
+            }
+
+            const svgClone = svg.cloneNode(true);
+            this.inlineStyles(svgClone);
+            this.suppressAnimations(svgClone);
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+
+            const printWindow = window.open('', '_blank');
+            var doc = printWindow.document;
+            doc.open();
+            var head = '<html><head><title>Print SVG</title>';
+            head += '<style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style>';
+            head += '</head><bo' + 'dy>';
+            doc.write(head);
+            doc.write(svgData);
+            doc.write('</bo' + 'dy></ht' + 'ml>');
+            doc.close();
+            printWindow.onload = function() { printWindow.print(); printWindow.close(); };
+        },
+
         convertSvgToPng(svgElement) {
             return new Promise((resolve, reject) => {
                 // Clone the SVG to avoid modifying the original
@@ -1400,6 +1773,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
                 // Handle external stylesheets and fonts
                 this.inlineStyles(svgClone);
+                this.suppressAnimations(svgClone);
 
                 const svgData = new XMLSerializer().serializeToString(svgClone);
                 const canvas = document.createElement('canvas');
@@ -1444,6 +1818,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             });
         },
 
+        suppressAnimations(svgElement) {
+            // Force all elements to be fully visible (override CSS animations that start with opacity: 0)
+            const allElements = svgElement.querySelectorAll('*');
+            allElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+                el.style.visibility = 'visible';
+            });
+            svgElement.style.opacity = '1';
+            svgElement.style.animation = 'none';
+            svgElement.style.transition = 'none';
+            // Also remove any <animate> or <animateTransform> SVG elements
+            svgElement.querySelectorAll('animate, animateTransform, animateMotion, set').forEach(el => el.remove());
+        },
+
         inlineStyles(svgElement) {
             // Get all stylesheets from the document
             const stylesheets = Array.from(document.styleSheets);
@@ -1481,7 +1871,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             if (existing) existing.remove();
 
             const messageEl = document.createElement('div');
-            messageEl.className = `copy-message '${type === 'error' ? 'error' : ''}`;
+            messageEl.className = `copy-message $\{type === 'error' ? 'error' : ''}`;
 
             // Different background colors for different message types
             if (type === 'info') {
@@ -1560,7 +1950,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             }
 
             // Generate a unique table ID if not provided or make existing ID unique
-            const uniqueTableId = tableId ? `${tableId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : `csv-table-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const uniqueTableId = tableId ? `${tableId}-$\{Date.now()}-$\{Math.random().toString(36).substr(2, 9)}` : `csv-table-$\{Date.now()}-$\{Math.random().toString(36).substr(2, 9)}`;
 
             const table = document.createElement('table');
             table.className = 'csv-table';
@@ -1679,7 +2069,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 document.body.removeChild(textArea);
             });
         }
-    };
+    });
 
     // Close controls when clicking outside
     document.addEventListener('click', function(e) {
@@ -1719,7 +2109,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         setCookie(name, value, days) {
             const expires = new Date();
             expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+            document.cookie = `${name}=${value};expires=$\{expires.toUTCString()};path=/;SameSite=Lax`;
         }
 
         getCookie(name) {
@@ -1792,127 +2182,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </script>
 
 
-<script>
-    class ThemeToggleTop {
-        constructor() {
-            this.init();
-        }
 
-        init() {
-            this.createToggleButton();
-            this.loadSavedTheme();
-            this.setupEventListeners();
-        }
-
-        createToggleButton() {
-            const button = document.createElement('button');
-            button.className = 'theme-toggle';
-            button.setAttribute('aria-label', 'Toggle theme');
-            button.innerHTML = `
-            <span class="light-icon">☀️</span>
-            <span class="dark-icon">🌙</span>
-        `;
-            document.body.appendChild(button);
-            this.toggleButton = button;
-        }
-
-        setupEventListeners() {
-            this.toggleButton.addEventListener('click', () => this.toggleTheme());
-
-            // Listen for system theme changes only when in auto mode
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (this.getThemePreference() === 'auto') {
-                    this.updateTheme();
-                }
-            });
-        }
-
-        toggleTheme() {
-            const currentTheme = this.getThemePreference();
-            let newTheme;
-
-            switch (currentTheme) {
-                case 'light':
-                    newTheme = 'dark';
-                    break;
-                case 'dark':
-                    newTheme = 'auto';
-                    break;
-                case 'auto':
-                    newTheme = 'light';
-                    break;
-                default:
-                    // Check current state of the document
-                    const root = document.documentElement;
-                    if (root.classList.contains('dark-mode') || root.classList.contains('dark-mode-auto')) {
-                        newTheme = 'light';
-                    } else {
-                        newTheme = 'dark';
-                    }
-            }
-
-            this.setTheme(newTheme);
-        }
-
-        setTheme(theme) {
-            localStorage.setItem('theme', theme);
-            this.updateTheme();
-        }
-
-        getThemePreference() {
-            const saved = localStorage.getItem('theme');
-            if (saved) {
-                return saved;
-            }
-
-            // If no saved preference, detect current state from DOM
-            const root = document.documentElement;
-            if (root.classList.contains('dark-mode')) {
-                return 'dark';
-            } else if (root.classList.contains('dark-mode-auto')) {
-                return 'auto';
-            }
-            return 'light';
-        }
-
-        updateTheme() {
-            const theme = this.getThemePreference();
-            const root = document.documentElement;
-
-            // Remove existing theme classes
-            root.classList.remove('dark-mode', 'dark-mode-auto');
-
-            switch (theme) {
-                case 'dark':
-                    root.classList.add('dark-mode');
-                    break;
-                case 'auto':
-                    root.classList.add('dark-mode-auto');
-                    break;
-                // 'light' theme uses default styles
-            }
-
-            // Update button aria-label
-            const themeNames = {
-                light: 'light',
-                dark: 'dark',
-                auto: 'auto (follows system)'
-            };
-            this.toggleButton.setAttribute('aria-label', `Current theme: ${themeNames[theme]}. Click to change.`);
-        }
-
-        loadSavedTheme() {
-            this.updateTheme();
-        }
-    }
-
-    // Initialize theme toggle when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => new ThemeToggleTop());
-    } else {
-        new ThemeToggleTop();
-    }
-</script>
 <style>
     #footer-navigation {
         display: flex;
@@ -2146,7 +2416,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
             closeModal();
         }
     });
-    const docopsCopy = {
+    window.docopsCopy = window.docopsCopy || {};
+    Object.assign(window.docopsCopy, {
         url: (btn) => {
             const url = btn.closest('.docops-media-card').getAttribute('data-url');
             navigator.clipboard.writeText(url).then(() => {
@@ -2183,10 +2454,157 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 });
             };
             img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        },
+        print: (btn) => {
+            const card = btn.closest('.docops-media-card');
+            const svgElement = card.querySelector('svg');
+            if (!svgElement) return;
+
+            const svgClone = svgElement.cloneNode(true);
+            if (window.svgViewer) {
+                if (window.svgViewer.inlineStyles) {
+                    window.svgViewer.inlineStyles(svgClone);
+                }
+                if (window.svgViewer.suppressAnimations) {
+                    window.svgViewer.suppressAnimations(svgClone);
+                }
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgClone);
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print SVG</title><style>body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; } svg { max-width: 100%; max-height: 100%; }</style></head><body>');
+            printWindow.document.write(svgData);
+            printWindow.document.write('<script>window.onload = () => { window.print(); window.close(); }; <\/script></body></html>');
+            printWindow.document.close();
         }
-    };
+    });
 
 </script>
+<script>
+    const docopsSource = {
+        toggle(btn) {
+            const card = btn.closest('.docops-media-card');
+            const id = card.id;
+            const modal = document.getElementById(`source-modal-${id}`);
+
+            if (!modal) {
+                console.error('Source modal not found for', id);
+                return;
+            }
+
+            this.renderSource(card, modal);
+
+            // Move modal to body to avoid z-index/transform issues
+            if (modal.parentNode !== document.body) {
+                document.body.appendChild(modal);
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        },
+
+        close(id) {
+            const modal = document.getElementById(`source-modal-${id}`);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        },
+
+        renderSource(card, modal) {
+            const container = modal.querySelector('.source-modal-body');
+            if (!container || container.dataset.rendered === 'true') return;
+
+            const originalContent = card.getAttribute('data-original-content');
+
+            if (!originalContent || !originalContent.trim()) {
+                container.innerHTML = '<div class="source-error">No source content available.</div>';
+                return;
+            }
+
+            // Decode HTML entities
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            const kind = card.getAttribute('data-kind') || 'source';
+
+            container.innerHTML = `
+            <div class="source-modal-header">
+                <span class="source-modal-title">$\{kind.toUpperCase()} Source</span>
+                <div class="source-modal-actions">
+                    <button class="source-action-btn" onclick="docopsSource.copySource('$\{card.id}')">
+                        <span class="btn-icon">📋</span> COPY
+                    </button>
+                </div>
+            </div>
+            <pre class="source-code-pre"><code class="source-code">$\{this.escapeHtml(decoded)}</code></pre>
+        `;
+
+            container.dataset.rendered = 'true';
+        },
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        },
+
+        copySource(cardId) {
+            const card = document.getElementById(cardId);
+            const originalContent = card.getAttribute('data-original-content');
+            const decoded = originalContent
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>');
+
+            navigator.clipboard.writeText(decoded).then(() => {
+                const btn = document.querySelector(`#source-modal-${cardId} .source-action-btn`);
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<span class="btn-icon">✓</span> COPIED!';
+                    btn.style.background = 'rgba(34, 197, 94, 0.8)';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+    };
+</script>
+<div id="showcase-gallery-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeModal()"></div>
+    <div class="showcase-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body">
+        </div>
+    </div>
+</div>
+
+<div id="showcase-content-modal" class="showcase-modal" style="display: none;">
+    <div class="showcase-modal-overlay" onclick="showcaseGallery.closeContentModal()"></div>
+    <div class="showcase-modal-content showcase-content-modal-content">
+        <div class="showcase-modal-header">
+            <span class="showcase-modal-title"></span>
+            <button class="showcase-modal-close" onclick="showcaseGallery.closeContentModal()" title="Close">×</button>
+        </div>
+        <div class="showcase-modal-body showcase-content-body">
+            <pre class="showcase-content-pre"><code class="showcase-content-code"></code></pre>
+        </div>
+        <div class="showcase-content-footer">
+            <button class="showcase-copy-btn" onclick="showcaseGallery.copyContent()" title="Copy to clipboard">📋 Copy</button>
+        </div>
+    </div>
+</div>
 
 <style>
 .hidden {
@@ -2426,8 +2844,198 @@ window.onload = function() {
 };
 </script>
 
-<script src='https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.min.js'></script>
+<script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+<script src ="https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js"></script>        
+<style>
+/*! Asciidoctor Tabs | Accent Theme
+ *  Drop-in replacement — swap your existing tabs CSS with this file.
+ *  Accent color is a single CSS variable; change --tabs-accent to any hue.
+ */
+
+/* ── Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --tabs-accent:        #3B82F6;   /* premium blue */
+  --tabs-accent-hover:  #2563EB;
+  --tabs-accent-rail:   #F3F8FF;
+  --tabs-accent-text:   #ffffff;
+  --tabs-accent-muted:  #374151;   /* p-text-secondary */
+  --tabs-accent-soft:   rgba(59, 130, 246, 0.08);
+
+  --tabs-bg:            #ffffff;
+  --tabs-rail-border:   rgba(0, 0, 0, 0.08);
+  --tabs-border:        rgba(0, 0, 0, 0.1);
+  --tabs-text:          #111827;
+  --tabs-text-muted:    #6B7280;
+  --tabs-panel-bg:      #ffffff;
+
+  --tabs-radius-outer:  12px;
+  --tabs-radius-btn:    8px;
+  --tabs-gap:           8px;
+  --tabs-focus:         rgba(59, 130, 246, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabs-accent:        #3B82F6;
+    --tabs-accent-hover:  #60A5FA;
+    --tabs-accent-rail:   #1F2937;
+    --tabs-accent-text:   #ffffff;
+    --tabs-accent-muted:  #9CA3AF;
+    --tabs-accent-soft:   rgba(59, 130, 246, 0.15);
+
+    --tabs-bg:            #111827;
+    --tabs-rail-border:   rgba(255, 255, 255, 0.1);
+    --tabs-border:        rgba(255, 255, 255, 0.1);
+    --tabs-text:          #F9FAFB;
+    --tabs-text-muted:    #9CA3AF;
+    --tabs-panel-bg:      #111827;
+  }
+}
+
+/* ── Container ───────────────────────────────────────────────────────── */
+.tabs {
+  margin: 2rem 0;
+  border: 1px solid var(--tabs-border);
+  border-radius: var(--tabs-radius-outer);
+  overflow: hidden;
+  background: var(--tabs-bg);
+  color: var(--tabs-text);
+  animation: tabsAccentEnter 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ── Tab rail ────────────────────────────────────────────────────────── */
+.tablist > ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  gap: var(--tabs-gap);
+  border-bottom: 1px solid var(--tabs-rail-border);
+  background: var(--tabs-accent-rail);
+}
+
+.tablist.ulist,
+.tablist.ulist > ul li {
+  margin: 0;
+}
+
+.tablist.ulist > ul li + li {
+  margin-left: 0;
+}
+
+/* ── Tab buttons ─────────────────────────────────────────────────────── */
+.tablist > ul li {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;   /* 14px */
+  font-weight: 500;
+  line-height: 1.2;
+
+  color: var(--tabs-accent-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--tabs-radius-btn);
+  padding: 0.5rem 1rem;
+
+  transition:
+          color 130ms ease,
+          background-color 130ms ease;
+}
+
+.tablist > ul li:hover {
+  color: var(--tabs-text);
+  background: var(--tabs-accent-soft);
+}
+
+.tablist > ul li:focus-visible {
+  outline: 2px solid var(--tabs-focus);
+  outline-offset: 2px;
+}
+
+/* ── Active tab ──────────────────────────────────────────────────────── */
+.tabs.is-loading .tablist li:first-child,
+.tabs:not(.is-loading) .tablist li.is-selected {
+  background: var(--tabs-accent);
+  color: var(--tabs-accent-text);
+}
+
+/* no underline indicator needed for this style */
+.tabs .tablist li::after {
+  display: none;
+}
+
+/* reduce inactive visual weight */
+.tabs:not(.is-loading) .tablist li:not(.is-selected) {
+  opacity: 0.9;
+}
+
+/* ── Panel visibility ────────────────────────────────────────────────── */
+.tabs.is-loading .tabpanel + .tabpanel,
+.tabs:not(.is-loading) .tabpanel.is-hidden {
+  display: none;
+}
+
+/* ── Panel ───────────────────────────────────────────────────────────── */
+.tabpanel {
+  padding: 2rem;
+  color: var(--tabs-text);
+  background: var(--tabs-panel-bg);
+  animation: tabPanelReveal 200ms ease;
+}
+
+.tabpanel > :first-child {
+  margin-top: 0;
+}
+
+/* tidy trailing margin in Asciidoctor context */
+#content .tabpanel > :last-child,
+#content .tabpanel > :last-child > :last-child,
+#content .tabpanel > :last-child > :last-child > li:last-child > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── Table support ───────────────────────────────────────────────────── */
+.tablecontainer {
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--tabs-border) 30%, transparent);
+  border-radius: 6px;
+}
+
+#content .tablecontainer {
+  margin-bottom: 1.25em;
+}
+
+#content .tablecontainer > table.tableblock {
+  margin-bottom: 0;
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────── */
+@keyframes tabsAccentEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@keyframes tabPanelReveal {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs,
+  .tabpanel,
+  .tablist > ul li {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
 </head>
 <body class="book">
 <div id="header">
@@ -2443,8 +3051,11 @@ type,emoji,rowIndex,nodes
 COMMON,,0,"FRONTEND,BACKEND,DATABASE"
 COMMON,,1,"DEVOPS,DOCOPS"
 COMMON,,2,"SECURITY"
-FRONTEND,🧑🏻‍💻,0,"FRONTEND,HTML,CSS,JAVASCRIPT,TYPESCRIPT,KOTLIN,SWIFT"
-BACKEND,🧑🏻‍💻,1,"BACKEND,KOTLIN,JAVA,.NET,PYTHON,GO,RUST,RUBY,PHP"</pre>
+FRONTEND,‍💻,0,"FRONTEND,HTML,CSS,JAVASCRIPT"
+FRONTEND,💻,1,"TYPESCRIPT,KOTLIN,SWIFT"
+BACKEND,‍💻,1,"BACKEND,KOTLIN,JAVA,.NET"
+BACKEND,‍💻,2,"PYTHON,GO,RUST"
+BACKEND,‍💻,3,"RUBY,PHP"</pre>
 </div>
 </div>
 <div class="literalblock">
@@ -2598,43 +3209,7 @@ if (!hljs.initHighlighting.called) {
   ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
 }
 </script>
-<style>
-/* Reading Time Styles */
-.reading-time {
-    position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    background: var(--bg-base); /* Uses the dynamic background variable */
-    backdrop-filter: blur(12px);
-    border: 2px solid var(--accent-secondary);
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    z-index: 1005;
-    
-    /* Double-accent shadow follows the light/dark mode logic */
-    box-shadow: 6px 6px 0px var(--accent-pink);
-    
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--text-main); /* Switches between grey and dark slate */
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
 
-.reading-time p {
-    margin: 0 !important;
-    font-weight: 600;
-}
-
-/* Light Mode specific opacity tweak */
-body.light-mode .reading-time {
-    background: rgba(255, 255, 255, 0.85); /* Slightly clearer for light backgrounds */
-}
-</style>
-<div class="reading-time">
-    <p>📖 1 min read • 422 words</p>
-</div>
 <style>
 .listingblock {
     position: relative;
@@ -2834,6 +3409,135 @@ mermaid.initialize({
         }
     `
 });
+</script>
+<script>
+;(function () { /*! Asciidoctor Tabs | Copyright (c) 2018-present Dan Allen | MIT License */
+  'use strict'
+
+  var config = (document.currentScript || {}).dataset || {}
+  var forEach = Array.prototype.forEach
+
+  init(document.querySelectorAll('.tabs'))
+
+  function init (tabsBlocks) {
+    if (!tabsBlocks.length) return
+    forEach.call(tabsBlocks, function (tabs) {
+      var syncIds = tabs.classList.contains('is-sync') ? {} : undefined
+      var tablist = tabs.querySelector('.tablist ul')
+      tablist.setAttribute('role', 'tablist')
+      var start
+      forEach.call(tablist.querySelectorAll('li'), function (tab, idx) {
+        tab.tabIndex = -1
+        tab.setAttribute('role', tab.classList.add('tab') || 'tab')
+        var id, anchor, syncId
+        if (!(id = tab.id) && (anchor = tab.querySelector('a[id]'))) {
+          id = tab.id = anchor.parentNode.removeChild(anchor).id
+        }
+        var panel = id && tabs.querySelector('.tabpanel[aria-labelledby~="' + id + '"]')
+        if (!panel) return idx ? undefined : toggleSelected(tab, true) // invalid state
+        syncIds && (((syncId = tab.textContent.trim()) in syncIds) ? (syncId = undefined) : true) &&
+          (syncIds[(tab.dataset.syncId = syncId)] = tab)
+        idx || (syncIds && (start = { tab: tab, panel: panel })) ? toggleHidden(panel, true) : toggleSelected(tab, true)
+        tab.setAttribute('aria-controls', panel.id)
+        panel.setAttribute('role', 'tabpanel')
+        var onClick = syncId === undefined ? activateTab : activateTabSync
+        tab.addEventListener('click', onClick.bind({ tabs: tabs, tab: tab, panel: panel }))
+      })
+      if (!tabs.closest('.tabpanel')) {
+        forEach.call(tabs.querySelectorAll('.tabpanel table.tableblock'), function (table) {
+          var container = Object.assign(document.createElement('div'), { className: 'tablecontainer' })
+          table.parentNode.insertBefore(container, table).appendChild(table)
+        })
+      }
+      if (start) {
+        var syncGroupId
+        for (var i = 0, lst = tabs.classList, len = lst.length, className; i !== len; i++) {
+          if (!(className = lst.item(i)).startsWith('data-sync-group-id=')) continue
+          tabs.dataset.syncGroupId = syncGroupId = lst.remove(className) || className.slice(19).replace(/\u00a0/g, ' ')
+          break
+        }
+        if (syncGroupId === undefined) tabs.dataset.syncGroupId = syncGroupId = Object.keys(syncIds).sort().join('|')
+        var preferredSyncId = 'syncStorageKey' in config &&
+          window[(config.syncStorageScope || 'local') + 'Storage'].getItem(config.syncStorageKey + '-' + syncGroupId)
+        var tab = preferredSyncId && syncIds[preferredSyncId]
+        tab && Object.assign(start, { tab: tab, panel: document.getElementById(tab.getAttribute('aria-controls')) })
+        toggleSelected(start.tab, true) || toggleHidden(start.panel, false)
+      }
+    })
+    onHashChange()
+    toggleClassOnEach(tabsBlocks, 'is-loading', 'remove')
+    window.setTimeout(toggleClassOnEach.bind(null, tabsBlocks, 'is-loaded', 'add'), 0)
+    window.addEventListener('hashchange', onHashChange)
+  }
+
+  function activateTab (e) {
+    var tab = this.tab
+    var tabs = this.tabs || (this.tabs = tab.closest('.tabs'))
+    var panel = this.panel || (this.panel = document.getElementById(tab.getAttribute('aria-controls')))
+    querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (el) {
+      toggleSelected(el, el === tab)
+    })
+    querySelectorWithSiblings(tabs, '.tabpanel', 'tabpanel').forEach(function (el) {
+      toggleHidden(el, el !== panel)
+    })
+    if (!this.isSync && 'syncStorageKey' in config && 'syncGroupId' in tabs.dataset) {
+      var storageKey = config.syncStorageKey + '-' + tabs.dataset.syncGroupId
+      window[(config.syncStorageScope || 'local') + 'Storage'].setItem(storageKey, tab.dataset.syncId)
+    }
+    if (!e) return
+    var loc = window.location
+    var hashIdx = loc.hash ? loc.href.indexOf('#') : -1
+    if (~hashIdx) window.history.replaceState(null, '', loc.href.slice(0, hashIdx))
+    e.preventDefault()
+  }
+
+  function activateTabSync (e) {
+    activateTab.call(this, e)
+    var thisTabs = this.tabs
+    var thisTab = this.tab
+    var initialY = thisTabs.getBoundingClientRect().y
+    forEach.call(document.querySelectorAll('.tabs'), function (tabs) {
+      if (tabs === thisTabs || tabs.dataset.syncGroupId !== thisTabs.dataset.syncGroupId) return
+      querySelectorWithSiblings(tabs, '.tablist .tab', 'tab').forEach(function (tab) {
+        if (tab.dataset.syncId === thisTab.dataset.syncId) activateTab.call({ tabs: tabs, tab: tab, isSync: true })
+      })
+    })
+    var shiftedBy = thisTabs.getBoundingClientRect().y - initialY
+    if (shiftedBy && (shiftedBy = Math.round(shiftedBy))) window.scrollBy({ top: shiftedBy, behavior: 'instant' })
+  }
+
+  function querySelectorWithSiblings (scope, selector, siblingClass) {
+    var el = scope.querySelector(selector)
+    if (!el) return []
+    var result = [el]
+    while ((el = el.nextElementSibling) && el.classList.contains(siblingClass)) result.push(el)
+    return result
+  }
+
+  function toggleClassOnEach (elements, className, method) {
+    forEach.call(elements, function (el) {
+      el.classList[method](className)
+    })
+  }
+
+  function toggleHidden (el, state) {
+    el.classList[(el.hidden = state) ? 'add' : 'remove']('is-hidden')
+  }
+
+  function toggleSelected (el, state) {
+    el.setAttribute('aria-selected', '' + state)
+    el.classList[state ? 'add' : 'remove']('is-selected')
+    el.tabIndex = state ? 0 : -1
+  }
+
+  function onHashChange () {
+    var id = window.location.hash.slice(1)
+    if (!id) return
+    var tab = document.getElementById(~id.indexOf('%') ? decodeURIComponent(id) : id)
+    if (!(tab && tab.classList.contains('tab'))) return
+    'syncId' in tab.dataset ? activateTabSync.call({ tab: tab }) : activateTab.call({ tab: tab })
+  }
+})()
 </script>
 </body>
 </html>
