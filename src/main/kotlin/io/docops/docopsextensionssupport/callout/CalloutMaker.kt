@@ -2,6 +2,7 @@ package io.docops.docopsextensionssupport.callout
 
 import io.docops.docopsextensionssupport.support.SVGColor
 import io.docops.docopsextensionssupport.support.ThemeFactory
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import io.docops.docopsextensionssupport.web.CsvResponse
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -11,7 +12,7 @@ import kotlin.uuid.Uuid
  */
 open class CalloutMaker(val useDark: Boolean) {
 
-    private val theme = ThemeFactory.getThemeByName("brand", useDark)
+    private val theme = ThemeFactory.getThemeByName("premium", useDark)
 
     fun createSystematicApproachFromTable(payload: String, width: Int, height: Int, scale: String = "1.0"): Pair<String, CsvResponse> {
         val calloutData = parseTableData(payload, "systematic", useDark)
@@ -112,10 +113,10 @@ open class CalloutMaker(val useDark: Boolean) {
 
     @OptIn(ExperimentalUuidApi::class)
     private fun generateSystematicSvg(calloutData: CalloutData, width: Int, height: Int, scale: String): String {
-        val stepHeight = 110
+        val stepHeight = 120
         val stepsCount = calloutData.steps.size
         val calculatedHeight = if (stepsCount > 0) {
-            140 + (stepsCount * stepHeight) + 40
+            160 + (stepsCount * stepHeight) + 40
         } else {
             height
         }
@@ -124,23 +125,21 @@ open class CalloutMaker(val useDark: Boolean) {
         val scaledWidth = (width * fScale).toInt()
         val scaledHeight = (finalHeight * fScale).toInt()
 
-        var stopColor = theme.surfaceImpact
-        if(!useDark) {
-            stopColor = SVGColor(theme.canvas).darker()!!
-        }
+        val stopColor = theme.surfaceLow
         return buildString {
             val id = Uuid.random().toHexString()
-            //val theme = if (calloutData.useDark) DarkTheme() else LightTheme()
 
             append("""
-                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
+                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" role="img" aria-labelledby="title_$id desc_$id">
+                    <title id="title_$id">${calloutData.title.escapeXml()}</title>
+                    <desc id="desc_$id">A systematic process diagram with $stepsCount steps</desc>
                     <defs>
                         <style>
                             ${theme.fontImport}
-                            .title_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 26px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
-                            .phase_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 17px; fill: ${theme.primaryText}; }
+                            .title_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: 24px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
+                            .phase_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 18px; fill: ${theme.primaryText}; }
                             .action_$id { font-family: ${theme.fontFamily}; font-weight: 400; font-size: 14px; fill: ${theme.secondaryText}; }
-                            .result_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 13px; fill: ${theme.accentColor}; }
+                            .result_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 14px; fill: ${theme.accentColor}; }
                             .step-num_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 12px; fill: ${theme.accentColor}; }
                         </style>
                         <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -149,45 +148,44 @@ open class CalloutMaker(val useDark: Boolean) {
                         </linearGradient>
                         <linearGradient id="spineGrad_$id" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stop-color="${theme.accentColor}" />
-                            <stop offset="100%" stop-color="${theme.surfaceImpact}" />
+                            <stop offset="100%" stop-color="${theme.surfaceLow}" />
                         </linearGradient>
                     </defs>
 
                     <!-- Background -->
-                    <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="24"/>
+                    <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="${theme.cornerRadius}"/>
                     
                     <!-- Decorative Grid -->
                     <g opacity="0.05" stroke="${theme.primaryText}" stroke-width="1">
-                        <path d="M40 0 L40 $finalHeight M${width - 40} 0 L${width - 40} $finalHeight" stroke-dasharray="4 4"/>
+                        <path d="M48 0 L48 $finalHeight M${width - 48} 0 L${width - 48} $finalHeight" stroke-dasharray="4 4"/>
                     </g>
 
                     <!-- Header -->
-                    <text x="50" y="70" class="title_$id">${calloutData.title}</text>
-                    <rect x="50" y="85" width="40" height="4" fill="${theme.secondaryText}" rx="2"/>
+                    <text x="48" y="64" class="title_$id">${calloutData.title}</text>
+                    <rect x="48" y="80" width="48" height="4" fill="${theme.accentColor}" rx="2"/>
 
                     <!-- Vertical Spine -->
-                    <rect x="68" y="130" width="2" height="${stepsCount * stepHeight}" fill="url(#spineGrad_$id)" opacity="0.3"/>
+                    <rect x="66" y="120" width="2" height="${stepsCount * stepHeight}" fill="url(#spineGrad_$id)" opacity="0.3"/>
 
                     <!-- Steps -->
             """.trimIndent())
 
             calloutData.steps.forEachIndexed { index, step ->
-                val y = 140 + (index * stepHeight)
+                val y = 120 + (index * stepHeight)
                 // Calculate dynamic width for the result pill based on text length
-                // Approx 8.5px per character + 32px padding
                 val resultPillWidth = (step.result.length * 8.5) + 32
 
                 append("""
-                    <g transform="translate(50, $y)">
+                    <g transform="translate(48, $y)">
                         <circle cx="18" cy="18" r="18" fill="${theme.canvas}" stroke="${theme.accentColor}" stroke-width="2"/>
                         <text x="18" y="23" text-anchor="middle" class="step-num_$id">${index + 1}</text>
                         
-                        <text x="55" y="15" class="phase_$id">${step.phase}</text>
-                        <text x="55" y="38" class="action_$id">${step.action}</text>
+                        <text x="56" y="18" class="phase_$id">${step.phase}</text>
+                        <text x="56" y="44" class="action_$id">${step.action}</text>
                         
-                        <g transform="translate(55, 52)">
-                            <rect width="$resultPillWidth" height="28" rx="14" fill="${theme.accentColor}" fill-opacity="0.1"/>
-                            <text x="16" y="19" class="result_$id">${step.result}</text>
+                        <g transform="translate(56, 64)">
+                            <rect width="$resultPillWidth" height="32" rx="16" fill="${theme.accentColor}" fill-opacity="0.1"/>
+                            <text x="16" y="21" class="result_$id">${step.result}</text>
                         </g>
                 """.trimIndent())
 
@@ -195,8 +193,8 @@ open class CalloutMaker(val useDark: Boolean) {
                     // Dynamic width for improvement badge
                     val impWidth = (imp.length * 7.5) + 24
                     append("""
-                        <rect x="${width - impWidth - 50}" y="10" width="$impWidth" height="22" rx="11" fill="${theme.accentColor}" fill-opacity="0.1"/>
-                        <text x="${width - (impWidth/2) - 50}" y="25" text-anchor="middle" font-family="${theme.fontFamily}" font-size="10" font-weight="600" fill="${theme.accentColor}" style="text-transform:uppercase; letter-spacing: 0.5px;">${imp}</text>
+                        <rect x="${width - impWidth - 96}" y="10" width="$impWidth" height="24" rx="12" fill="${theme.accentColor}" fill-opacity="0.1"/>
+                        <text x="${width - (impWidth/2) - 96}" y="26" text-anchor="middle" font-family="${theme.fontFamily}" font-size="12" font-weight="600" fill="${theme.accentColor}" style="text-transform:uppercase; letter-spacing: 0.5px;">${imp}</text>
                     """.trimIndent())
                 }
                 append("</g>")
@@ -207,10 +205,10 @@ open class CalloutMaker(val useDark: Boolean) {
 
     @OptIn(ExperimentalUuidApi::class)
     private fun generateMetricsSvg(calloutData: CalloutData, width: Int, height: Int, scale: String): String {
-        val metricHeight = 90
+        val metricHeight = 96
         val metricsCount = calloutData.metrics.size
         val calculatedHeight = if (metricsCount > 0) {
-            140 + (metricsCount * metricHeight) + 40
+            160 + (metricsCount * metricHeight) + 40
         } else {
             height
         }
@@ -219,19 +217,18 @@ open class CalloutMaker(val useDark: Boolean) {
         val scaledWidth = (width * fScale).toInt()
         val scaledHeight = (finalHeight * fScale).toInt()
 
+        val stopColor = theme.surfaceLow
         return buildString {
             val id = Uuid.random().toHexString()
-            var stopColor = theme.surfaceImpact
-            if(!useDark) {
-                stopColor = SVGColor(theme.canvas).darker()!!
-            }
             append("""
-                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight">
+                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" role="img" aria-labelledby="title_$id desc_$id">
+                    <title id="title_$id">${calloutData.title.escapeXml()}</title>
+                    <desc id="desc_$id">A metrics callout displaying $metricsCount key values</desc>
                     <defs>
                         <style>
                             ${theme.fontImport}
-                            .title_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 26px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
-                            .metric-key_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 15px; fill: ${theme.secondaryText}; text-transform: uppercase; letter-spacing: 1px; }
+                            .title_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: 24px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
+                            .metric-key_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 14px; fill: ${theme.secondaryText}; text-transform: uppercase; letter-spacing: 1px; }
                             .metric-val_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 18px; fill: ${theme.primaryText}; }
                         </style>
                         <linearGradient id="bgGrad_$id" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -240,32 +237,32 @@ open class CalloutMaker(val useDark: Boolean) {
                         </linearGradient>
                     </defs>
 
-                    <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="24"/>
+                    <rect width="100%" height="100%" fill="url(#bgGrad_$id)" rx="${theme.cornerRadius}"/>
                     
                     <g opacity="0.05" stroke="${theme.primaryText}" stroke-width="1">
-                        <path d="M0 110 L$width 110" />
+                        <path d="M0 112 L$width 112" />
                     </g>
 
-                    <text x="50" y="70" class="title_$id">${calloutData.title}</text>
-                    <rect x="50" y="85" width="40" height="4" fill="${theme.accentColor}" rx="2"/>
+                    <text x="48" y="64" class="title_$id">${calloutData.title}</text>
+                    <rect x="48" y="80" width="48" height="4" fill="${theme.accentColor}" rx="2"/>
 
             """.trimIndent())
 
-            var currentY = 140
+            var currentY = 144
             calloutData.metrics.forEach { (key, value) ->
                 // Calculate dynamic width for the value pill
                 val valPillWidth = (value.length * 9.5) + 40
 
                 append("""
-                    <g transform="translate(50, $currentY)">
+                    <g transform="translate(48, $currentY)">
                         <!-- Decorative indicator -->
-                        <rect width="4" height="60" fill="${theme.accentColor}" rx="2" opacity="0.6"/>
+                        <rect width="4" height="64" fill="${theme.accentColor}" rx="2" opacity="0.6"/>
                         
                         <!-- Metric Info -->
-                        <text x="20" y="20" class="metric-key_$id">$key</text>
+                        <text x="24" y="20" class="metric-key_$id">$key</text>
                         
-                        <g transform="translate(20, 30)">
-                            <rect width="$valPillWidth" height="34" rx="17" fill="${theme.accentColor}" fill-opacity="0.08" stroke="${theme.accentColor}" stroke-opacity="0.2"/>
+                        <g transform="translate(24, 32)">
+                            <rect width="$valPillWidth" height="34" rx="8" fill="${theme.accentColor}" fill-opacity="0.08" stroke="${theme.accentColor}" stroke-opacity="0.2"/>
                             <text x="20" y="23" class="metric-val_$id">$value</text>
                         </g>
                     </g>
@@ -281,78 +278,80 @@ open class CalloutMaker(val useDark: Boolean) {
     private fun generateTimelineSvg(calloutData: CalloutData, width: Int, height: Int, scale: String): String {
         val stepsCount = calloutData.steps.size
         // Timeline needs more height for the cards that appear above and below the timeline
-        val baseHeight = 450
+        val baseHeight = 480
         val finalHeight = baseHeight.coerceAtLeast(height)
         val fScale = scale.toDoubleOrNull() ?: 1.0
         val scaledWidth = (width * fScale).toInt()
         val scaledHeight = (finalHeight * fScale).toInt()
         val id = Uuid.random().toHexString()
 
-        // Authored shadow color derived from theme canvas
-        val shadowColor = SVGColor(theme.canvas).darkenColor(theme.canvas, 0.5)
-        val shadowAlpha = if (useDark) 0.5 else 0.2
+        // Neutral shadow derived from surface tokens
+        val shadowColor = if(useDark) "#000000" else "#64748b"
+        val shadowAlpha = if (useDark) 0.5 else 0.15
 
         return buildString {
             append("""
-                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet'>
+                <svg id="ID_$id" width="$scaledWidth" height="$scaledHeight" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 $width $finalHeight" preserveAspectRatio='xMidYMid meet' role="img" aria-labelledby="title_$id desc_$id">
+                    <title id="title_$id">${calloutData.title.escapeXml()}</title>
+                    <desc id="desc_$id">A horizontal timeline with $stepsCount events</desc>
                     <defs>
                         ${theme.fontImport}
                         <style>
                             .title_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: 24px; fill: ${theme.primaryText}; letter-spacing: -0.5px; }
-                            .phase_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 15px; fill: ${theme.primaryText}; }
+                            .phase_$id { font-family: ${theme.fontFamily}; font-weight: 600; font-size: 16px; fill: ${theme.primaryText}; }
                             .action_$id { font-family: ${theme.fontFamily}; font-weight: 400; font-size: 14px; fill: ${theme.secondaryText}; }
-                            .result_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: 11px; fill: ${theme.accentColor}; text-transform: uppercase; letter-spacing: 0.5px; }
+                            .result_$id { font-family: ${theme.fontFamily}; font-weight: 700; font-size: 12px; fill: ${theme.accentColor}; text-transform: uppercase; letter-spacing: 0.5px; }
                         </style>
                         <filter id="shadow_$id">
-                            <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="$shadowColor" flood-opacity="$shadowAlpha"/>
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="$shadowColor" flood-opacity="$shadowAlpha"/>
                         </filter>
                     </defs>
 
                     <!-- Background -->
-                    <rect width="100%" height="100%" fill="${theme.canvas}" rx="16"/>
+                    <rect width="100%" height="100%" fill="${theme.canvas}" rx="${theme.cornerRadius}"/>
 
                     <!-- Header -->
-                    <text x="40" y="55" class="title_$id">${calloutData.title}</text>
-                    <rect x="40" y="70" width="60" height="4" fill="${theme.accentColor}" rx="2"/>
+                    <text x="48" y="64" class="title_$id">${calloutData.title}</text>
+                    <rect x="48" y="80" width="64" height="4" fill="${theme.accentColor}" rx="2"/>
 
                     <!-- Timeline Line -->
-                    <line x1="40" y1="250" x2="${width - 40}" y2="250" stroke="${theme.secondaryText}" stroke-width="2" stroke-opacity="0.3"/>
+                    <line x1="48" y1="256" x2="${width - 48}" y2="256" stroke="${theme.secondaryText}" stroke-width="2" stroke-opacity="0.2"/>
             """.trimIndent())
 
-            val timelineY = 250
-            val timelineLength = width - 100
-            val startX = 50
+            val timelineY = 256
+            val timelineLength = width - 128
+            val startX = 64
 
             if (stepsCount > 0) {
                 val stepSpacing = if (stepsCount > 1) timelineLength / (stepsCount - 1) else timelineLength
                 calloutData.steps.forEachIndexed { index, step ->
                     val x = startX + (index * stepSpacing)
                     val isTop = index % 2 != 0
-                    val cardY = if (isTop) timelineY - 160 else timelineY + 40
-                    val stemY1 = if (isTop) timelineY - 40 else timelineY
-                    val stemY2 = if (isTop) timelineY else timelineY + 40
+                    val cardY = if (isTop) timelineY - 160 else timelineY + 48
+                    val stemY1 = if (isTop) timelineY - 48 else timelineY
+                    val stemY2 = if (isTop) timelineY else timelineY + 48
 
                     append("""
                         <!-- Step ${index + 1} -->
-                        <line x1="$x" y1="$stemY1" x2="$x" y2="$stemY2" stroke="${theme.accentColor}" stroke-width="1.5" stroke-dasharray="2,2"/>
+                        <line x1="$x" y1="$stemY1" x2="$x" y2="$stemY2" stroke="${theme.accentColor}" stroke-width="1.5" stroke-dasharray="4,2"/>
                         
-                        <!-- Status Indicator with Redundant Cue (Industrial Utilitarian) -->
+                        <!-- Status Indicator -->
                         <g transform="translate(${x - 12}, ${timelineY - 12})">
-                            <circle cx="12" cy="12" r="10" fill="${theme.canvas}" stroke="${theme.accentColor}" stroke-width="2"/>
-                            <path d="M8 12l3 3 5-5" stroke="${theme.accentColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <circle cx="12" cy="12" r="10" fill="${theme.canvas}" stroke="${theme.success}" stroke-width="2"/>
+                            <path d="M8 12l3 3 5-5" stroke="${theme.success}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                         </g>
                         
-                        <!-- Content Card (Editorial Style) -->
+                        <!-- Content Card -->
                         <g transform="translate(${x - 90}, $cardY)" filter="url(#shadow_$id)">
-                            <rect width="180" height="110" rx="4" fill="${theme.canvas}" stroke="${theme.surfaceImpact}" stroke-width="1"/>
-                            <rect width="4" height="110" fill="${theme.accentColor}" rx="2"/>
+                            <rect width="180" height="112" rx="${theme.cornerRadius}" fill="${theme.canvas}" stroke="${theme.surfaceLow}" stroke-width="1"/>
+                            <rect width="4" height="112" fill="${theme.accentColor}" rx="2"/>
                             
-                            <text x="15" y="25" class="phase_$id">${step.phase}</text>
-                            <text x="15" y="50" class="action_$id">${step.action}</text>
+                            <text x="16" y="28" class="phase_$id">${step.phase}</text>
+                            <text x="16" y="52" class="action_$id">${step.action}</text>
                             
-                            <g transform="translate(15, 75)">
-                                <rect width="${(step.result.length * 8.0) + 16}" height="22" rx="4" fill="${theme.accentColor}" fill-opacity="0.1"/>
-                                <text x="8" y="15" class="result_$id">${step.result}</text>
+                            <g transform="translate(16, 76)">
+                                <rect width="${(step.result.length * 8.0) + 16}" height="24" rx="4" fill="${theme.accentColor}" fill-opacity="0.1"/>
+                                <text x="8" y="16" class="result_$id">${step.result}</text>
                             </g>
                         </g>
                     """.trimIndent())
