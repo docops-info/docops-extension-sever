@@ -29,6 +29,8 @@ Essentially, ADRs act as a log of important architectural choices, helping teams
 title= Use Elasticsearch for Search Functionality
 status= Accepted
 date= 2024-05-15
+template=apple
+visualVersion=2
 context=
 - Our application needs robust search capabilities across multiple data types
 - We need to support full-text search with relevance ranking
