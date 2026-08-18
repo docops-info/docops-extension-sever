@@ -66,7 +66,8 @@ abstract class AbstractGaugeMaker : GaugeMaker {
                  height="$scaledHeight" 
                  viewBox="0 0 $width $height"
                  id="gauge_${gaugeChart.display.id}"
-                 aria-label="DocOps: Gauge Chart">
+                 role="img"
+                 aria-labelledby="title_${gaugeChart.display.id} desc_${gaugeChart.display.id}">
         """.trimIndent()
     }
 
@@ -83,40 +84,41 @@ abstract class AbstractGaugeMaker : GaugeMaker {
         <defs>
             <style>
                 ${theme.fontImport}
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=JetBrains+Mono:wght@700&amp;display=swap');
                 
                 .gauge-text { 
                     fill: ${theme.primaryText}; 
-                    font-family: ${theme.fontFamily}; 
+                    font-family: 'Inter', ${theme.fontFamily}; 
                 }
                 
                 .gauge-value-large {
-                    font-family: ${theme.fontFamily};
+                    font-family: 'Inter', ${theme.fontFamily};
                     font-weight: 700;
-                    font-size: 64px;
-                    letter-spacing: -0.03em;
-                }
-                
-                .gauge-value-medium {
-                    font-family: ${theme.fontFamily};
-                    font-weight: 700;
-                    font-size: 42px;
+                    font-size: 36px;
                     letter-spacing: -0.02em;
                 }
                 
+                .gauge-value-medium {
+                    font-family: 'Inter', ${theme.fontFamily};
+                    font-weight: 700;
+                    font-size: 24px;
+                    letter-spacing: -0.01em;
+                }
+                
                 .gauge-label {
-                    font-family: ${theme.fontFamily};
-                    font-weight: 400;
-                    font-size: 10px;
+                    font-family: 'Inter', ${theme.fontFamily};
+                    font-weight: 500;
+                    font-size: 12px;
                     fill: ${theme.secondaryText};
                     text-transform: uppercase;
-                    letter-spacing: 0.15em;
+                    letter-spacing: 0.1em;
                 }
                 
                 .range-label {
-                    font-family: ${theme.fontFamily};
+                    font-family: 'JetBrains Mono', monospace;
                     font-weight: 700;
-                    font-size: 11px;
-                    letter-spacing: 0.08em;
+                    font-size: 12px;
+                    letter-spacing: 0.02em;
                 }
                 
                 ${if (gaugeChart.display.animateArc) """
@@ -161,18 +163,18 @@ abstract class AbstractGaugeMaker : GaugeMaker {
             
             <!-- Gradients -->
             <linearGradient id="criticalGrad_$id" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#DC2626"/>
-                <stop offset="100%" stop-color="#EF4444"/>
+                <stop offset="0%" stop-color="${theme.danger}"/>
+                <stop offset="100%" stop-color="${theme.danger}" stop-opacity="0.8"/>
             </linearGradient>
             
             <linearGradient id="warningGrad_$id" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#D97706"/>
-                <stop offset="100%" stop-color="#F59E0B"/>
+                <stop offset="0%" stop-color="${theme.warning}"/>
+                <stop offset="100%" stop-color="${theme.warning}" stop-opacity="0.8"/>
             </linearGradient>
             
             <linearGradient id="successGrad_$id" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#059669"/>
-                <stop offset="100%" stop-color="#10B981"/>
+                <stop offset="0%" stop-color="${theme.success}"/>
+                <stop offset="100%" stop-color="${theme.success}" stop-opacity="0.8"/>
             </linearGradient>
             
             <!-- Glow filter with dynamic intensity -->

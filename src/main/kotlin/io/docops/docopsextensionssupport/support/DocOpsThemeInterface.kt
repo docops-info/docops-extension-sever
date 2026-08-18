@@ -15,6 +15,11 @@ interface DocOpsTheme {
     val glassEffect: String
     val surfaceImpact: String
     
+    val success: String get() = "#16A34A"
+    val warning: String get() = "#D97706"
+    val danger: String get() = "#DC2626"
+    val surfaceLow: String get() = "#e2e8f0"
+    
     // Aesthetic specific (e.g., Lexend for Modern, Arial for Classic fallbacks)
     val fontFamily: String
         get() = "'Lexend', ui-sans-serif, system-ui, sans-serif"

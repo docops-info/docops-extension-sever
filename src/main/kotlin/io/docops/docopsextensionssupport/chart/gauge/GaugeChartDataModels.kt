@@ -73,9 +73,9 @@ data class GaugeRanges(
     val criticalEnd: Double = 100.0
 ) {
     fun getColorForValue(value: Double): String = when {
-        value <= normalEnd -> "#10B981"           // Green
-        value <= cautionEnd -> "#F59E0B"          // Yellow/Orange
-        value <= criticalEnd -> "#EF4444"         // Red
+        value <= normalEnd -> "#16A34A"           // Green
+        value <= cautionEnd -> "#D97706"          // Yellow/Orange
+        value <= criticalEnd -> "#DC2626"         // Red
         else -> "#94a3b8"                         // Gray
     }
 

@@ -1,13 +1,9 @@
 package io.docops.docopsextensionssupport.chart.gauge
 
-import kotlin.collections.get
-import kotlin.compareTo
-import kotlin.div
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.text.toDouble
-import kotlin.times
 
 /**
  * Creates solid filled donut gauge.
@@ -31,6 +27,12 @@ class SolidFillGaugeMaker : AbstractGaugeMaker() {
 
         val sb = StringBuilder()
 
+        // Accessibility
+        val titleId = "title_$id"
+        val descId = "desc_$id"
+        sb.append("<title id=\"$titleId\">${gaugeChart.title.ifEmpty { "Gauge Chart" }.escapeXml()}</title>\n")
+        sb.append("<desc id=\"$descId\">Gauge showing ${gauge.label}: ${gauge.value} ${gauge.unit}</desc>\n")
+
         // Calculate percentage
         val percent = ((gauge.value - gauge.min) / (gauge.max - gauge.min)) * 100
         val angle = (percent / 100) * 360
@@ -43,33 +45,38 @@ class SolidFillGaugeMaker : AbstractGaugeMaker() {
         val color = getGradientForValue(gauge.value, id, gaugeChart.display.showRanges)
         val baseColor = getColorForValue(gauge.value, gauge.color, gaugeChart.display.showRanges)
 
-        // Background circle (darker in dark mode, lighter in light mode)
-        val bgColor = if (gaugeChart.display.useDark) "#1e293b" else "#e2e8f0"
-        sb.append("""<circle cx="$centerX" cy="$centerY" r="$outerRadius" fill="$bgColor"/>""")
+        // Background circle (subtle track)
+        sb.append("""<circle cx="$centerX" cy="$centerY" r="$outerRadius" fill="${theme.surfaceLow}" opacity="0.4"/>""")
 
         // Inner filled circle with semi-transparent color (the shaded percentage area)
         sb.append("""
         <path d="M $centerX,$centerY L $centerX,${centerY - outerRadius} A $outerRadius,$outerRadius 0 $largeArc 1 $x,$y Z"
               fill="$baseColor"
-              opacity="0.25"/>
+              opacity="0.2"/>
     """.trimIndent())
 
         // Outer ring track (full circle, subtle)
         sb.append("""
         <circle cx="$centerX" cy="$centerY" r="$outerRadius" 
                 fill="none" 
-                stroke="${if (gaugeChart.display.useDark) "#334155" else "#cbd5e1"}" 
-                stroke-width="8"/>
+                stroke="${theme.surfaceLow}" 
+                stroke-width="8"
+                opacity="0.8"/>
     """.trimIndent())
 
         // Colored progress arc (outer ring)
         val arcPath = createOuterArcPath(centerX, centerY, outerRadius, 0.0, angle)
+        val totalCircleLength = 2 * PI * outerRadius
+        val progressArcLength = totalCircleLength * (percent / 100.0)
+
         sb.append("""
         <path d="$arcPath" 
               fill="none" 
               stroke="$color" 
               stroke-width="8"
               stroke-linecap="round"
+              class="${if (gaugeChart.display.animateArc) "animated-arc" else ""}"
+              ${if (gaugeChart.display.animateArc) "style=\"--arc-length: ${progressArcLength.toInt()}; --arc-offset: 0;\"" else ""}
               filter="url(#glow_$id)"/>
     """.trimIndent())
 
@@ -78,13 +85,13 @@ class SolidFillGaugeMaker : AbstractGaugeMaker() {
 
         // Value text
         sb.append("""
-        <text x="$centerX" y="${centerY + 10}" 
+        <text x="$centerX" y="${centerY + 16}" 
               text-anchor="middle" 
               class="gauge-value-large ${if (gaugeChart.display.animateArc) "animated-digit" else ""}"
               fill="$baseColor">
             ${formatNumber(gauge.value)}
         </text>
-        <text x="$centerX" y="${centerY + 30}" 
+        <text x="$centerX" y="${centerY + 40}" 
               text-anchor="middle" 
               class="gauge-label">
             ${gauge.label} ${gauge.unit}

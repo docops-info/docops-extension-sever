@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart.gauge
 
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlin.math.PI
 
 /**
@@ -22,13 +23,20 @@ class FullCircleGaugeMaker : AbstractGaugeMaker() {
         val radius = 70.0
         
         val sb = StringBuilder()
+
+        // Accessibility
+        val titleId = "title_$id"
+        val descId = "desc_$id"
+        sb.append("<title id=\"$titleId\">${gaugeChart.title.ifEmpty { "Gauge Chart" }.escapeXml()}</title>\n")
+        sb.append("<desc id=\"$descId\">Gauge showing ${gauge.label}: ${gauge.value} ${gauge.unit}</desc>\n")
         
         // Track
         sb.append("""
             <circle cx="$centerX" cy="$centerY" r="$radius" 
                     fill="none" 
-                    stroke="#1e293b" 
-                    stroke-width="16"/>
+                    stroke="${theme.surfaceLow}" 
+                    stroke-width="16"
+                    opacity="0.4"/>
         """.trimIndent())
         
         // Progress
@@ -63,13 +71,13 @@ class FullCircleGaugeMaker : AbstractGaugeMaker() {
         
         // Value
         sb.append("""
-            <text x="$centerX" y="${centerY + 10}" 
+            <text x="$centerX" y="${centerY + 16}" 
                   text-anchor="middle" 
                   class="gauge-value-medium ${if (gaugeChart.display.animateArc) "animated-digit" else ""}"
                   fill="${getColorForValue(gauge.value, gauge.color, gaugeChart.display.showRanges)}">
                 ${formatNumber(gauge.value)}
             </text>
-            <text x="$centerX" y="${centerY + 30}" 
+            <text x="$centerX" y="${centerY + 40}" 
                   text-anchor="middle" 
                   class="gauge-label">
                 ${gauge.label} ${gauge.unit}

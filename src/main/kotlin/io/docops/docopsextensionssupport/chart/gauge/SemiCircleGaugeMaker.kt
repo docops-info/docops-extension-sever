@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart.gauge
 
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -25,11 +26,17 @@ class SemiCircleGaugeMaker() : AbstractGaugeMaker() {
 
         val sb = StringBuilder()
 
+        // Accessibility
+        val titleId = "title_$id"
+        val descId = "desc_$id"
+        sb.append("<title id=\"$titleId\">${gaugeChart.title.ifEmpty { "Gauge Chart" }.escapeXml()}</title>\n")
+        sb.append("<desc id=\"$descId\">Gauge showing ${gauge.label}: ${gauge.value} ${gauge.unit}</desc>\n")
+
         // Track (background semi-circle from left to right)
         sb.append("""
             <path d="M ${centerX - radius},$centerY A $radius,$radius 0 0,1 ${centerX + radius},$centerY" 
                   fill="none" 
-                  stroke="#1e293b" 
+                  stroke="${theme.surfaceLow}" 
                   stroke-width="20"
                   stroke-linecap="round"/>
         """.trimIndent())
@@ -69,19 +76,20 @@ class SemiCircleGaugeMaker() : AbstractGaugeMaker() {
 
         // Center hub
         sb.append("""
-            <circle cx="$centerX" cy="$centerY" r="12" fill="#0a0e27"/>
+            <circle cx="$centerX" cy="$centerY" r="12" fill="${theme.primaryText}"/>
             <circle cx="$centerX" cy="$centerY" r="8" fill="${getColorForValue(gauge.value, gauge.color, gaugeChart.display.showRanges)}"/>
         """.trimIndent())
 
         // Value display
+        // Using spacing scale: 24px offset for value, then 16px gap to label
         sb.append("""
-    <text x="$centerX" y="${centerY + 15}" 
+    <text x="$centerX" y="${centerY + 32}" 
           text-anchor="middle" 
           class="gauge-value-large ${if (gaugeChart.display.animateArc) "animated-digit" else ""}"
           fill="${getColorForValue(gauge.value, gauge.color, gaugeChart.display.showRanges)}">
         ${formatNumber(gauge.value)}
     </text>
-    <text x="$centerX" y="${centerY + 40}" 
+    <text x="$centerX" y="${centerY + 56}" 
           text-anchor="middle" 
           class="gauge-label">
         ${gauge.label} ${gauge.unit}
@@ -91,18 +99,18 @@ class SemiCircleGaugeMaker() : AbstractGaugeMaker() {
         // Range labels
         if (gaugeChart.display.showRanges) {
             sb.append("""
-                <text x="${centerX - radius}" y="${centerY + 20}" 
+                <text x="${centerX - radius}" y="${centerY + 24}" 
                       class="range-label" 
                       fill="${getColorForValue(gauge.min, null, true)}">
                     ${formatNumber(gauge.min)}
                 </text>
-                <text x="$centerX" y="${centerY - radius + 5}" 
+                <text x="$centerX" y="${centerY - radius + 8}" 
                       text-anchor="middle" 
                       class="range-label" 
-                      fill="#94a3b8">
+                      fill="${theme.secondaryText}">
                     ${formatNumber((gauge.max + gauge.min) / 2.0)}
                 </text>
-                <text x="${centerX + radius}" y="${centerY + 20}" 
+                <text x="${centerX + radius}" y="${centerY + 24}" 
                       text-anchor="end" 
                       class="range-label" 
                       fill="${getColorForValue(gauge.max, null, true)}">

@@ -1,5 +1,6 @@
 package io.docops.docopsextensionssupport.chart.gauge
 
+import io.docops.docopsextensionssupport.svgsupport.escapeXml
 import kotlin.math.PI
 import kotlin.math.ceil
 
@@ -22,6 +23,12 @@ class MultiGaugeMaker : AbstractGaugeMaker() {
         val cols = gaugeChart.display.columns
         val gaugeWidth = 120.0
         val gaugeSpacing = 20.0
+
+        // Accessibility
+        val titleId = "title_$id"
+        val descId = "desc_$id"
+        sb.append("<title id=\"$titleId\">${gaugeChart.title.ifEmpty { "Multi-Gauge Chart" }.escapeXml()}</title>\n")
+        sb.append("<desc id=\"$descId\">Grid of gauges showing ${gaugeChart.gauges.size} metrics</desc>\n")
         
         gaugeChart.gauges.forEachIndexed { index, gauge ->
             val row = index / cols
@@ -35,8 +42,9 @@ class MultiGaugeMaker : AbstractGaugeMaker() {
             sb.append("""
                 <circle cx="$x" cy="$y" r="$radius" 
                         fill="none" 
-                        stroke="#1e293b" 
-                        stroke-width="6"/>
+                        stroke="${theme.surfaceLow}" 
+                        stroke-width="6"
+                        opacity="0.4"/>
             """.trimIndent())
             
             // Progress
@@ -60,17 +68,16 @@ class MultiGaugeMaker : AbstractGaugeMaker() {
             
             // Value
             sb.append("""
-                <text x="$x" y="${y + 8}" 
+                <text x="$x" y="${y + 12}" 
                       text-anchor="middle" 
                       class="gauge-value-medium ${if (gaugeChart.display.animateArc) "animated-digit" else ""}"
                       fill="${getColorForValue(gauge.value, gauge.color, gaugeChart.display.showRanges)}"
-                      style="font-size: 28px; ${if (gaugeChart.display.animateArc) "animation-delay: ${index * 0.1 + 0.6}s;" else ""}">
+                      style="${if (gaugeChart.display.animateArc) "animation-delay: ${index * 0.1 + 0.6}s;" else ""}">
                     ${formatNumber(gauge.value)}
                 </text>
-                <text x="$x" y="${y + 55}" 
+                <text x="$x" y="${y + 40}" 
                       text-anchor="middle" 
-                      class="gauge-label" 
-                      style="font-size: 8px;">
+                      class="gauge-label">
                     ${gauge.label}
                 </text>
             """.trimIndent())

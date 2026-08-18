@@ -186,6 +186,7 @@ open class ModernDarkTheme : DocOpsTheme {
     override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
+    override val surfaceLow = "#1e293b"
 }
 
 /**
@@ -204,6 +205,7 @@ class ModernLightTheme : DocOpsTheme {
     override val fontWidthMultiplier = 1.15f
     override val fontLineHeight = 1.25f // Give Syne some breathing room
     override val cornerRadius = 12
+    override val surfaceLow = "#e2e8f0"
 }
 
 /**
@@ -222,6 +224,7 @@ class ClassicDarkTheme : DocOpsTheme {
     override val fontWidthMultiplier: Float = 1.0f
     override val fontLineHeight = 1.1f // Standard leading
     override val cornerRadius = 4
+    override val surfaceLow = "#334155"
 }
 
 /**
@@ -240,7 +243,7 @@ class ClassicLightTheme : DocOpsTheme {
     override val fontWidthMultiplier: Float = 1.0f
     override val fontLineHeight = 1.1f // Standard leading
     override val cornerRadius = 4
-
+    override val surfaceLow = "#f1f5f9"
 }
 
 class BrutalistDarkTheme : DocOpsTheme {
@@ -736,6 +739,10 @@ class PremiumTheme : DocOpsTheme {
         SVGColor("#D97706", "Warning"),
         SVGColor("#DC2626", "Danger")
     )
+    override val success = "#16A34A"
+    override val warning = "#D97706"
+    override val danger = "#DC2626"
+    override val surfaceLow = "#F3F4F6"
 }
 
 class PremiumDarkTheme : DocOpsTheme {
@@ -758,4 +765,8 @@ class PremiumDarkTheme : DocOpsTheme {
         SVGColor("#D97706", "Warning"),
         SVGColor("#DC2626", "Danger")
     )
+    override val success = "#16A34A"
+    override val warning = "#D97706"
+    override val danger = "#DC2626"
+    override val surfaceLow = "#1E293B"
 }
